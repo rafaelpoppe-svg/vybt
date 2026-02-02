@@ -57,6 +57,11 @@ import Chat from './pages/Chat';
 import AddStory from './pages/AddStory';
 import EditProfile from './pages/EditProfile';
 import Friends from './pages/Friends';
+import UserProfile from './pages/UserProfile';
+import MyPlans from './pages/MyPlans';
+import StoryView from './pages/StoryView';
+import MyStories from './pages/MyStories';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -70,9 +75,14 @@ export const PAGES = {
     "AddStory": AddStory,
     "EditProfile": EditProfile,
     "Friends": Friends,
+    "UserProfile": UserProfile,
+    "MyPlans": MyPlans,
+    "StoryView": StoryView,
+    "MyStories": MyStories,
 }
 
 export const pagesConfig = {
     mainPage: "Onboarding",
     Pages: PAGES,
+    Layout: __Layout,
 };
