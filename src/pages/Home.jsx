@@ -1,0 +1,169 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import { Calendar, Loader2 } from 'lucide-react';
+import StoriesBar from '../components/feed/StoriesBar';
+import PlanCard from '../components/feed/PlanCard';
+import LocationSelector from '../components/common/LocationSelector';
+import BottomNav from '../components/common/BottomNav';
+
+export default function Home() {
+  const navigate = useNavigate();
+  const [city, setCity] = useState('Madrid');
+  const [radius, setRadius] = useState(10);
+  const [storyFilter, setStoryFilter] = useState('All stories');
+
+  // Check onboarding
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      try {
+        const user = await base44.auth.me();
+        const profiles = await base44.entities.UserProfile.filter({ user_id: user.id });
+        if (!profiles || profiles.length === 0) {
+          navigate(createPageUrl('Onboarding'));
+        } else if (profiles[0].city) {
+          setCity(profiles[0].city);
+          setRadius(profiles[0].radius_km || 10);
+        }
+      } catch (e) {
+        // Not logged in
+      }
+    };
+    checkOnboarding();
+  }, []);
+
+  // Fetch plans
+  const { data: plans = [], isLoading: plansLoading } = useQuery({
+    queryKey: ['plans', city],
+    queryFn: () => base44.entities.PartyPlan.filter({ city }, '-created_date', 20),
+  });
+
+  // Fetch stories
+  const { data: stories = [] } = useQuery({
+    queryKey: ['stories'],
+    queryFn: () => base44.entities.ExperienceStory.list('-created_date', 20),
+  });
+
+  // Fetch participants for each plan
+  const { data: allParticipants = [] } = useQuery({
+    queryKey: ['participants'],
+    queryFn: () => base44.entities.PlanParticipant.list('-created_date', 100),
+  });
+
+  // Fetch user profiles for stories
+  const { data: userProfiles = [] } = useQuery({
+    queryKey: ['userProfiles'],
+    queryFn: () => base44.entities.UserProfile.list('-created_date', 50),
+  });
+
+  const profilesMap = userProfiles.reduce((acc, p) => {
+    acc[p.user_id] = p;
+    return acc;
+  }, {});
+
+  const today = format(new Date(), 'yyyy-MM-dd');
+  const todayPlans = plans.filter(p => p.date === today);
+  const upcomingPlans = plans.filter(p => p.date > today);
+
+  const getParticipants = (planId) => {
+    return allParticipants
+      .filter(p => p.plan_id === planId)
+      .map(p => profilesMap[p.user_id])
+      .filter(Boolean);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0b0b0b] pb-24">
+      {/* Header */}
+      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800">
+        <div className="px-4 py-4 flex items-center justify-between">
+          <h1 className="text-2xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
+            Vybt
+          </h1>
+          <LocationSelector
+            city={city}
+            radius={radius}
+            onCityChange={setCity}
+            onRadiusChange={setRadius}
+          />
+        </div>
+
+        {/* Stories */}
+        <div className="pb-4">
+          <StoriesBar
+            stories={stories}
+            userProfiles={profilesMap}
+            currentFilter={storyFilter}
+            onFilterChange={setStoryFilter}
+            onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+            onAddStory={() => navigate(createPageUrl('AddStory'))}
+          />
+        </div>
+      </header>
+
+      {/* Content */}
+      <main className="px-4 py-6 space-y-8">
+        {/* Today Section */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <Calendar className="w-5 h-5 text-[#00fea3]" />
+            <h2 className="text-white font-bold text-lg">Tonight</h2>
+            <span className="text-gray-500 text-sm">{format(new Date(), 'EEE, MMM d')}</span>
+          </div>
+
+          {plansLoading ? (
+            <div className="flex justify-center py-8">
+              <Loader2 className="w-6 h-6 text-[#00fea3] animate-spin" />
+            </div>
+          ) : todayPlans.length > 0 ? (
+            <div className="grid gap-4">
+              {todayPlans.map((plan) => (
+                <PlanCard
+                  key={plan.id}
+                  plan={plan}
+                  participants={getParticipants(plan.id)}
+                  onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                  featured={plan.is_highlighted}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-500">No plans for tonight in {city}</p>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate(createPageUrl('CreatePlan'))}
+                className="mt-4 px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-medium"
+              >
+                Create a plan
+              </motion.button>
+            </div>
+          )}
+        </section>
+
+        {/* Upcoming Section */}
+        {upcomingPlans.length > 0 && (
+          <section>
+            <h2 className="text-white font-bold text-lg mb-4">Upcoming Plans</h2>
+            <div className="grid gap-4">
+              {upcomingPlans.slice(0, 5).map((plan) => (
+                <PlanCard
+                  key={plan.id}
+                  plan={plan}
+                  participants={getParticipants(plan.id)}
+                  onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
+
+      <BottomNav />
+    </div>
+  );
+}
