@@ -1,9 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, Users, Sparkles, Calendar } from 'lucide-react';
+import { MapPin, Clock, Users, Sparkles, Calendar, Heart, Music } from 'lucide-react';
 import { format } from 'date-fns';
 
-export default function PlanCard({ plan, participants = [], onClick, featured = false }) {
+const reasonIcons = {
+  vibes: Music,
+  party_type: Sparkles,
+  friends: Users,
+  location: MapPin
+};
+
+const reasonLabels = {
+  vibes: 'Matches your vibes',
+  party_type: 'Your style',
+  friends: 'Friends going',
+  location: 'Near you'
+};
+
+export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons }) {
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
@@ -27,10 +41,29 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           </div>
         )}
         
-        {plan.is_highlighted && (
+        {matchScore && matchScore > 30 ? (
+          <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-gradient-to-r from-[#00fea3]/80 to-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
+            <Heart className="w-3 h-3 text-white" />
+            <span className="text-[10px] text-white font-medium">{matchScore}% match</span>
+          </div>
+        ) : plan.is_highlighted && (
           <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
             <Sparkles className="w-3 h-3 text-[#00fea3]" />
             <span className="text-[10px] text-white font-medium">Featured</span>
+          </div>
+        )}
+        
+        {matchReasons && matchReasons.length > 0 && (
+          <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+            {matchReasons.slice(0, 2).map((reason) => {
+              const Icon = reasonIcons[reason] || Sparkles;
+              return (
+                <div key={reason} className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm flex items-center gap-1">
+                  <Icon className="w-2.5 h-2.5 text-[#00fea3]" />
+                  <span className="text-[9px] text-white/90">{reasonLabels[reason]}</span>
+                </div>
+              );
+            })}
           </div>
         )}
 

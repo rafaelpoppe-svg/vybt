@@ -10,24 +10,32 @@ import StoriesBar from '../components/feed/StoriesBar';
 import PlanCard from '../components/feed/PlanCard';
 import LocationSelector from '../components/common/LocationSelector';
 import BottomNav from '../components/common/BottomNav';
+import ForYouSection from '../components/feed/ForYouSection';
+import { useRecommendations } from '../components/recommendation/useRecommendations';
 
 export default function Home() {
   const navigate = useNavigate();
   const [city, setCity] = useState('Madrid');
   const [radius, setRadius] = useState(10);
   const [storyFilter, setStoryFilter] = useState('All stories');
+  const [currentUser, setCurrentUser] = useState(null);
+  const [myProfile, setMyProfile] = useState(null);
 
-  // Check onboarding
+  // Check onboarding and get user profile
   useEffect(() => {
     const checkOnboarding = async () => {
       try {
         const user = await base44.auth.me();
+        setCurrentUser(user);
         const profiles = await base44.entities.UserProfile.filter({ user_id: user.id });
         if (!profiles || profiles.length === 0) {
           navigate(createPageUrl('Onboarding'));
-        } else if (profiles[0].city) {
-          setCity(profiles[0].city);
-          setRadius(profiles[0].radius_km || 10);
+        } else {
+          setMyProfile(profiles[0]);
+          if (profiles[0].city) {
+            setCity(profiles[0].city);
+            setRadius(profiles[0].radius_km || 10);
+          }
         }
       } catch (e) {
         // Not logged in
@@ -60,10 +68,39 @@ export default function Home() {
     queryFn: () => base44.entities.UserProfile.list('-created_date', 50),
   });
 
+  // Fetch friendships for recommendations
+  const { data: friendships = [] } = useQuery({
+    queryKey: ['myFriendships', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
+    enabled: !!currentUser?.id
+  });
+
+  // Fetch my participations for past attendance
+  const { data: myParticipations = [] } = useQuery({
+    queryKey: ['myParticipations', currentUser?.id],
+    queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
+    enabled: !!currentUser?.id
+  });
+
   const profilesMap = userProfiles.reduce((acc, p) => {
     acc[p.user_id] = p;
     return acc;
   }, {});
+
+  const friendIds = friendships.map(f => f.friend_id);
+  const pastPlanIds = myParticipations.map(p => p.plan_id);
+
+  // Get personalized recommendations
+  const recommendedPlans = useRecommendations({
+    plans,
+    userProfile: myProfile,
+    friendIds,
+    pastPlanIds,
+    allParticipants,
+    allPlans: plans
+  });
+
+  const forYouPlans = recommendedPlans.filter(p => p.matchScore > 20).slice(0, 10);
 
   const today = format(new Date(), 'yyyy-MM-dd');
   const todayPlans = plans.filter(p => p.date === today);
@@ -107,6 +144,17 @@ export default function Home() {
 
       {/* Content */}
       <main className="px-4 py-6 space-y-8">
+        {/* For You Section */}
+        {forYouPlans.length > 0 && (
+          <ForYouSection
+            plans={forYouPlans}
+            participants={allParticipants}
+            profilesMap={profilesMap}
+            onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+            onSeeAll={() => navigate(createPageUrl('Explore') + '?tab=foryou')}
+          />
+        )}
+
         {/* Today Section */}
         <section>
           <div className="flex items-center gap-2 mb-4">
