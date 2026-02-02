@@ -1,0 +1,197 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
+import { 
+  Settings, Users, PartyPopper, Camera, ChevronRight, 
+  LogOut, Edit2, Loader2 
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import BottomNav from '../components/common/BottomNav';
+
+export default function Profile() {
+  const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const user = await base44.auth.me();
+        setCurrentUser(user);
+      } catch (e) {
+        navigate(createPageUrl('Onboarding'));
+      }
+    };
+    getUser();
+  }, []);
+
+  const { data: profile } = useQuery({
+    queryKey: ['myProfile', currentUser?.id],
+    queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser.id }),
+    select: (data) => data[0],
+    enabled: !!currentUser?.id
+  });
+
+  const { data: friendships = [] } = useQuery({
+    queryKey: ['myFriendships', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser.id, status: 'accepted' }),
+    enabled: !!currentUser?.id
+  });
+
+  const { data: participations = [] } = useQuery({
+    queryKey: ['myParticipations', currentUser?.id],
+    queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser.id }),
+    enabled: !!currentUser?.id
+  });
+
+  const { data: myStories = [] } = useQuery({
+    queryKey: ['myStories', currentUser?.id],
+    queryFn: () => base44.entities.ExperienceStory.filter({ user_id: currentUser.id }),
+    enabled: !!currentUser?.id
+  });
+
+  const handleLogout = () => {
+    base44.auth.logout();
+  };
+
+  if (!currentUser || !profile) {
+    return (
+      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#0b0b0b] pb-24">
+      {/* Header */}
+      <header className="p-4 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-white">Profile</h1>
+        <div className="flex gap-2">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate(createPageUrl('EditProfile'))}
+            className="p-2 rounded-full bg-gray-900"
+          >
+            <Edit2 className="w-5 h-5 text-white" />
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={handleLogout}
+            className="p-2 rounded-full bg-gray-900"
+          >
+            <LogOut className="w-5 h-5 text-gray-400" />
+          </motion.button>
+        </div>
+      </header>
+
+      <main className="px-4 space-y-6">
+        {/* Profile Header */}
+        <div className="flex flex-col items-center text-center">
+          {/* Photos */}
+          <div className="flex gap-2 mb-4">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className={`${i === 0 ? 'w-24 h-24' : 'w-16 h-16'} rounded-2xl overflow-hidden ${
+                  profile.photos?.[i] ? '' : 'bg-gray-800 border-2 border-dashed border-gray-700'
+                }`}
+              >
+                {profile.photos?.[i] ? (
+                  <img 
+                    src={profile.photos[i]} 
+                    alt="" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Camera className="w-5 h-5 text-gray-600" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <h2 className="text-2xl font-bold text-white">{profile.display_name || currentUser.full_name}</h2>
+          <p className="text-gray-500">{profile.city || 'No location set'}</p>
+
+          {/* Stats */}
+          <div className="flex gap-8 mt-6">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-white">{friendships.length}</p>
+              <p className="text-xs text-gray-500">Friends</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-white">{participations.length}</p>
+              <p className="text-xs text-gray-500">Parties</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-white">{myStories.length}</p>
+              <p className="text-xs text-gray-500">Stories</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Vibes */}
+        {profile.vibes?.length > 0 && (
+          <div>
+            <h3 className="text-white font-semibold mb-3">My Vibes</h3>
+            <div className="flex flex-wrap gap-2">
+              {profile.vibes.map((vibe, i) => (
+                <span 
+                  key={i}
+                  className="px-3 py-1.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-sm font-medium"
+                >
+                  {vibe}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Menu Items */}
+        <div className="space-y-2">
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate(createPageUrl('Friends'))}
+            className="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <Users className="w-5 h-5 text-[#00fea3]" />
+              <span className="text-white font-medium">My Friends</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-500" />
+          </motion.button>
+
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate(createPageUrl('MyPlans'))}
+            className="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <PartyPopper className="w-5 h-5 text-[#542b9b]" />
+              <span className="text-white font-medium">Joined Party Plans</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-500" />
+          </motion.button>
+
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate(createPageUrl('MyStories'))}
+            className="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <Camera className="w-5 h-5 text-[#00fea3]" />
+              <span className="text-white font-medium">My Experience Stories</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-500" />
+          </motion.button>
+        </div>
+      </main>
+
+      <BottomNav />
+    </div>
+  );
+}

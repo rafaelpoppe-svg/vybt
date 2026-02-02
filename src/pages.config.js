@@ -49,11 +49,27 @@
  */
 import Onboarding from './pages/Onboarding';
 import Home from './pages/Home';
+import Explore from './pages/Explore';
+import CreatePlan from './pages/CreatePlan';
+import PlanDetails from './pages/PlanDetails';
+import Profile from './pages/Profile';
+import Chat from './pages/Chat';
+import AddStory from './pages/AddStory';
+import EditProfile from './pages/EditProfile';
+import Friends from './pages/Friends';
 
 
 export const PAGES = {
     "Onboarding": Onboarding,
     "Home": Home,
+    "Explore": Explore,
+    "CreatePlan": CreatePlan,
+    "PlanDetails": PlanDetails,
+    "Profile": Profile,
+    "Chat": Chat,
+    "AddStory": AddStory,
+    "EditProfile": EditProfile,
+    "Friends": Friends,
 }
 
 export const pagesConfig = {
