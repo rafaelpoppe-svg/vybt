@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
+import VibeTag from '../components/common/VibeTag';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -140,12 +141,7 @@ export default function Profile() {
             <h3 className="text-white font-semibold mb-3">My Vibes</h3>
             <div className="flex flex-wrap gap-2">
               {profile.vibes.map((vibe, i) => (
-                <span 
-                  key={i}
-                  className="px-3 py-1.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-sm font-medium"
-                >
-                  {vibe}
-                </span>
+                <VibeTag key={i} vibe={vibe} size="md" />
               ))}
             </div>
           </div>

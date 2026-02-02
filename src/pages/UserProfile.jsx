@@ -6,6 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChevronLeft, UserPlus, MessageCircle, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import VibeTag from '../components/common/VibeTag';
 
 export default function UserProfile() {
   const navigate = useNavigate();
@@ -196,12 +197,7 @@ export default function UserProfile() {
             <h3 className="text-white font-semibold mb-3">Vibes</h3>
             <div className="flex flex-wrap gap-2">
               {profile.vibes.map((vibe, i) => (
-                <span 
-                  key={i}
-                  className="px-3 py-1.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-sm font-medium"
-                >
-                  {vibe}
-                </span>
+                <VibeTag key={i} vibe={vibe} size="md" />
               ))}
             </div>
           </div>

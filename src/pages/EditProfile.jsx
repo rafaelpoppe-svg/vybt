@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, Camera, Loader2, Check, X } from 'lucide-react';
+import { ChevronLeft, Camera, Loader2, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import VibeTag from '../components/common/VibeTag';
 
 const vibeOptions = [
   'Techno', 'Reggaeton', 'Pop', 'House', 'Trap', 
@@ -223,25 +224,16 @@ export default function EditProfile() {
         <div>
           <label className="block text-gray-400 text-sm mb-2">Your Vibes (max 5)</label>
           <div className="flex flex-wrap gap-2">
-            {vibeOptions.map((vibe) => {
-              const isSelected = formData.vibes.includes(vibe);
-              return (
-                <motion.button
-                  key={vibe}
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => toggleVibe(vibe)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1 transition-all ${
-                    isSelected
-                      ? 'bg-[#00fea3] text-[#0b0b0b]'
-                      : 'bg-gray-900 text-gray-400 border border-gray-800'
-                  }`}
-                >
-                  {isSelected && <Check className="w-3 h-3" />}
-                  {vibe}
-                </motion.button>
-              );
-            })}
+            {vibeOptions.map((vibe) => (
+              <VibeTag
+                key={vibe}
+                vibe={vibe}
+                size="md"
+                interactive
+                selected={formData.vibes.includes(vibe)}
+                onClick={() => toggleVibe(vibe)}
+              />
+            ))}
           </div>
         </div>
       </main>
