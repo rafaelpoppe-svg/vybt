@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import StoryCircle from './StoryCircle';
+import StoryCard from './StoryCard';
 
 const filters = ['All stories', 'Only friends', 'Highlighted'];
 
-export default function StoriesBar({ stories = [], userProfiles = {}, onStoryClick, onAddStory, currentFilter, onFilterChange }) {
+export default function StoriesBar({ 
+  stories = [], 
+  userProfiles = {}, 
+  onStoryClick, 
+  onAddStory, 
+  currentFilter, 
+  onFilterChange,
+  currentUserId 
+}) {
+  // Separate own stories and others
+  const ownStories = stories.filter(s => s.user_id === currentUserId);
+  const otherStories = stories.filter(s => s.user_id !== currentUserId);
+  
+  // Shuffle other stories for random order
+  const shuffledOthers = [...otherStories].sort(() => Math.random() - 0.5);
+
   return (
     <div className="space-y-3">
       {/* Filter chips */}
@@ -25,14 +40,29 @@ export default function StoriesBar({ stories = [], userProfiles = {}, onStoryCli
         ))}
       </div>
 
-      {/* Stories */}
-      <div className="flex gap-4 px-4 overflow-x-auto scrollbar-hide pb-2">
-        <StoryCircle isAdd onClick={onAddStory} />
+      {/* Stories - Vertical rectangle cards */}
+      <div className="flex gap-3 px-4 overflow-x-auto scrollbar-hide pb-2">
+        <StoryCard isAdd onClick={onAddStory} />
         
-        {stories.map((story) => (
-          <StoryCircle
+        {/* Own stories first with special color */}
+        {ownStories.map((story) => (
+          <StoryCard
             key={story.id}
             user={userProfiles[story.user_id]}
+            story={story}
+            isOwn
+            isHighlighted={story.is_highlighted}
+            onClick={() => onStoryClick(story)}
+          />
+        ))}
+        
+        {/* Other stories with random colors */}
+        {shuffledOthers.map((story, index) => (
+          <StoryCard
+            key={story.id}
+            user={userProfiles[story.user_id]}
+            story={story}
+            colorIndex={index}
             isHighlighted={story.is_highlighted}
             onClick={() => onStoryClick(story)}
           />
