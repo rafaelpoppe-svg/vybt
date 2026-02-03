@@ -17,15 +17,20 @@ const storyColors = [
 // User's own story color
 const ownStoryColor = 'from-[#00fea3] to-[#542b9b]';
 
+// New/unviewed story color (light blue)
+const newStoryColor = 'from-sky-300 to-sky-400';
+
 export default function StoryCard({ 
   user, 
   story,
   isAdd = false, 
   isOwn = false,
   isHighlighted = false,
+  isNew = false,
   colorIndex = 0,
   onClick,
-  size = 'md'
+  size = 'md',
+  currentUserId
 }) {
   const sizes = {
     sm: { width: 'w-16', height: 'h-24', text: 'text-[9px]' },
@@ -34,7 +39,10 @@ export default function StoryCard({
   };
 
   const currentSize = sizes[size];
-  const borderColor = isOwn ? ownStoryColor : storyColors[colorIndex % storyColors.length];
+  
+  // Check if story is new (unviewed by current user)
+  const isUnviewed = story && currentUserId && !story.viewed_by?.includes(currentUserId);
+  const borderColor = isOwn ? ownStoryColor : (isUnviewed || isNew) ? newStoryColor : storyColors[colorIndex % storyColors.length];
 
   if (isAdd) {
     return (
@@ -82,6 +90,9 @@ export default function StoryCard({
       </div>
       <div className="flex items-center gap-1">
         {isHighlighted && <Sparkles className="w-3 h-3 text-[#542b9b]" />}
+        {(isUnviewed || isNew) && !isOwn && (
+          <span className="px-1.5 py-0.5 rounded text-[8px] bg-sky-400 text-white font-bold">NEW</span>
+        )}
         <span className={`${currentSize.text} text-gray-400 max-w-16 truncate`}>
           {isOwn ? 'Your Story' : (user?.display_name || 'User')}
         </span>

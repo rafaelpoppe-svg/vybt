@@ -48,6 +48,7 @@ export default function ChatStoryBar({
           story={story}
           colorIndex={index}
           isHighlighted={story.is_highlighted}
+          currentUserId={currentUserId}
           onClick={() => onStoryClick(story)}
           size="md"
         />

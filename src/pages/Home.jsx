@@ -156,6 +156,38 @@ export default function Home() {
           />
         )}
 
+        {/* My Joined Plans Section */}
+        {myParticipations.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-white font-bold text-lg flex items-center gap-2">
+                🎟️ My Plans
+              </h2>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate(createPageUrl('MyPlans'))}
+                className="text-[#00fea3] text-sm font-medium"
+              >
+                See all
+              </motion.button>
+            </div>
+            <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
+              {plans
+                .filter(p => myParticipations.some(mp => mp.plan_id === p.id))
+                .slice(0, 5)
+                .map((plan) => (
+                  <div key={plan.id} className="min-w-[280px] max-w-[280px]">
+                    <PlanCard
+                      plan={plan}
+                      participants={getParticipants(plan.id)}
+                      onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                    />
+                  </div>
+                ))}
+            </div>
+          </section>
+        )}
+
         {/* Today Section */}
         <section>
           <div className="flex items-center gap-2 mb-4">

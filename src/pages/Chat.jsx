@@ -5,13 +5,14 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { Send, ChevronLeft, Loader2, Sticker } from 'lucide-react';
+import { Send, ChevronLeft, Loader2, Sticker, Info, MoreVertical, MapPin, Clock } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import BottomNav from '../components/common/BottomNav';
 import ChatStoryBar from '../components/chat/ChatStoryBar';
 import ChatMessage from '../components/chat/ChatMessage';
 import StickerPicker from '../components/chat/StickerPicker';
 import PartyTag from '../components/common/PartyTag';
+import GroupAdminActions from '../components/chat/GroupAdminActions';
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function Chat() {
   const [selectedChat, setSelectedChat] = useState(planId || userId || null);
   const [newMessage, setNewMessage] = useState('');
   const [showStickers, setShowStickers] = useState(false);
+  const [showAdminActions, setShowAdminActions] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -50,6 +52,12 @@ export default function Chat() {
   const { data: plans = [] } = useQuery({
     queryKey: ['myPlans'],
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 50),
+  });
+
+  const { data: allParticipants = [] } = useQuery({
+    queryKey: ['planAllParticipants', selectedChat],
+    queryFn: () => base44.entities.PlanParticipant.filter({ plan_id: selectedChat }),
+    enabled: !!selectedChat && activeTab === 'groups'
   });
 
   const myPlanIds = myParticipations.map(p => p.plan_id);
@@ -131,6 +139,10 @@ export default function Chat() {
   const selectedPlan = myPlans.find(p => p.id === selectedChat);
   const selectedFriend = profilesMap[selectedChat];
 
+  // Check if current user is admin
+  const myParticipation = myParticipations.find(p => p.plan_id === selectedChat);
+  const isAdmin = myParticipation?.is_admin || selectedPlan?.creator_id === currentUser?.id;
+
   // Check if plan is currently active (can post stories)
   const isPlanActive = () => {
     if (!selectedPlan) return false;
@@ -142,14 +154,83 @@ export default function Chat() {
   // Get theme color for group chat
   const themeColor = selectedPlan?.theme_color || '#00fea3';
 
+  // Sort stories - pinned first, then new (unviewed) with light blue
+  const sortedStories = [...planStories].sort((a, b) => {
+    if (a.is_pinned && !b.is_pinned) return -1;
+    if (!a.is_pinned && b.is_pinned) return 1;
+    return 0;
+  });
+
+  // Admin actions handlers
+  const handlePinStory = async (storyId) => {
+    await base44.entities.ExperienceStory.update(storyId, { is_pinned: true });
+    const currentPinned = selectedPlan.pinned_stories || [];
+    await base44.entities.PartyPlan.update(selectedChat, {
+      pinned_stories: [...currentPinned, storyId]
+    });
+    queryClient.invalidateQueries(['planStories', selectedChat]);
+  };
+
+  const handleUnpinStory = async (storyId) => {
+    await base44.entities.ExperienceStory.update(storyId, { is_pinned: false });
+    const currentPinned = selectedPlan.pinned_stories || [];
+    await base44.entities.PartyPlan.update(selectedChat, {
+      pinned_stories: currentPinned.filter(id => id !== storyId)
+    });
+    queryClient.invalidateQueries(['planStories', selectedChat]);
+  };
+
+  const handlePinMessage = async (messageId) => {
+    const currentPinned = selectedPlan.pinned_messages || [];
+    await base44.entities.PartyPlan.update(selectedChat, {
+      pinned_messages: [...currentPinned, messageId]
+    });
+    queryClient.invalidateQueries(['plan', selectedChat]);
+  };
+
+  const handleUnpinMessage = async (messageId) => {
+    const currentPinned = selectedPlan.pinned_messages || [];
+    await base44.entities.PartyPlan.update(selectedChat, {
+      pinned_messages: currentPinned.filter(id => id !== messageId)
+    });
+    queryClient.invalidateQueries(['plan', selectedChat]);
+  };
+
+  const handleRemoveMember = async (memberId) => {
+    const participation = allParticipants.find(p => p.user_id === memberId);
+    if (participation) {
+      await base44.entities.PlanParticipant.delete(participation.id);
+      queryClient.invalidateQueries(['planAllParticipants', selectedChat]);
+    }
+  };
+
+  const handleInviteUser = async (email) => {
+    // For now just show a message - in real app would send invite
+    console.log('Invite sent to:', email);
+  };
+
   return (
     <div className="min-h-screen bg-[#0b0b0b] pb-24">
+      {/* Background blur for group chat */}
+      {selectedChat && activeTab === 'groups' && selectedPlan?.group_image && (
+        <div 
+          className="fixed inset-0 z-0"
+          style={{
+            backgroundImage: `url(${selectedPlan.group_image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'blur(50px) brightness(0.3)',
+            opacity: 0.75
+          }}
+        />
+      )}
+
       {/* Header */}
       <header 
-        className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800"
+        className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 relative"
         style={{ 
           backgroundColor: selectedChat && activeTab === 'groups' 
-            ? `${themeColor}10` 
+            ? `${themeColor}15` 
             : 'rgba(11, 11, 11, 0.95)'
         }}
       >
@@ -159,7 +240,7 @@ export default function Chat() {
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setSelectedChat(null)}
-                className="p-2 rounded-full bg-gray-900"
+                className="p-2 rounded-full bg-gray-900/80"
               >
                 <ChevronLeft className="w-5 h-5 text-white" />
               </motion.button>
@@ -167,7 +248,10 @@ export default function Chat() {
               {activeTab === 'groups' && selectedPlan ? (
                 <div className="flex items-center gap-3 flex-1">
                   {/* Group Image */}
-                  <div className="w-10 h-10 rounded-xl overflow-hidden bg-gradient-to-br from-[#542b9b] to-[#00fea3]/50">
+                  <div 
+                    className="w-10 h-10 rounded-xl overflow-hidden"
+                    style={{ background: `linear-gradient(135deg, ${themeColor}50, #542b9b50)` }}
+                  >
                     {selectedPlan.group_image ? (
                       <img src={selectedPlan.group_image} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -187,6 +271,26 @@ export default function Chat() {
                     )}
                     <h1 className="text-lg font-bold text-white truncate">{selectedPlan.title}</h1>
                   </div>
+                  
+                  {/* Action buttons */}
+                  <div className="flex gap-2">
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${selectedChat}`)}
+                      className="p-2 rounded-full bg-gray-900/80"
+                    >
+                      <Info className="w-5 h-5 text-white" />
+                    </motion.button>
+                    {isAdmin && (
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setShowAdminActions(true)}
+                        className="p-2 rounded-full bg-gray-900/80"
+                      >
+                        <MoreVertical className="w-5 h-5 text-white" />
+                      </motion.button>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <h1 className="text-lg font-bold text-white">
@@ -198,6 +302,23 @@ export default function Chat() {
             <h1 className="text-xl font-bold text-white">Messages</h1>
           )}
         </div>
+
+        {/* Plan info bar (time & address) */}
+        {selectedChat && activeTab === 'groups' && selectedPlan && (
+          <div 
+            className="px-4 pb-2 flex items-center gap-4 text-xs"
+            style={{ color: themeColor }}
+          >
+            <div className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              <span>{selectedPlan.time}</span>
+            </div>
+            <div className="flex items-center gap-1 flex-1 truncate">
+              <MapPin className="w-3 h-3" />
+              <span className="truncate">{selectedPlan.location_address}</span>
+            </div>
+          </div>
+        )}
 
         {/* Tabs */}
         {!selectedChat && (
@@ -231,7 +352,7 @@ export default function Chat() {
         {selectedChat && activeTab === 'groups' && (
           <div className="py-3 border-t border-gray-800/50">
             <ChatStoryBar
-              stories={planStories}
+              stories={sortedStories}
               profilesMap={profilesMap}
               currentUserId={currentUser?.id}
               canPost={isPlanActive()}
@@ -243,7 +364,7 @@ export default function Chat() {
       </header>
 
       {/* Content */}
-      <main className="p-4">
+      <main className="p-4 relative z-10">
         {!selectedChat ? (
           // Chat List
           <div className="space-y-2">
@@ -261,7 +382,10 @@ export default function Chat() {
                       {plan.group_image ? (
                         <img src={plan.group_image} alt="" className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00fea3]/50 flex items-center justify-center">
+                        <div 
+                          className="w-full h-full flex items-center justify-center"
+                          style={{ background: `linear-gradient(135deg, ${plan.theme_color || '#542b9b'}50, #00fea350)` }}
+                        >
                           <span className="text-xl">🎉</span>
                         </div>
                       )}
@@ -310,7 +434,7 @@ export default function Chat() {
           </div>
         ) : (
           // Chat Messages
-          <div className="flex flex-col h-[calc(100vh-280px)]">
+          <div className="flex flex-col h-[calc(100vh-320px)]">
             <div className="flex-1 overflow-y-auto space-y-3 pb-4">
               {messagesLoading ? (
                 <div className="flex justify-center py-8">
@@ -368,7 +492,8 @@ export default function Chat() {
                 whileTap={{ scale: 0.9 }}
                 onClick={() => newMessage.trim() && sendMutation.mutate(newMessage)}
                 disabled={!newMessage.trim() || sendMutation.isPending}
-                className="p-3 rounded-full bg-[#00fea3] disabled:opacity-50"
+                className="p-3 rounded-full disabled:opacity-50"
+                style={{ backgroundColor: themeColor }}
               >
                 <Send className="w-5 h-5 text-[#0b0b0b]" />
               </motion.button>
@@ -378,6 +503,26 @@ export default function Chat() {
       </main>
 
       {!selectedChat && <BottomNav />}
+
+      {/* Admin Actions Modal */}
+      <GroupAdminActions
+        isOpen={showAdminActions}
+        onClose={() => setShowAdminActions(false)}
+        participants={allParticipants}
+        profilesMap={profilesMap}
+        stories={planStories}
+        messages={sortedMessages}
+        pinnedStories={selectedPlan?.pinned_stories || []}
+        pinnedMessages={selectedPlan?.pinned_messages || []}
+        onPinStory={handlePinStory}
+        onUnpinStory={handleUnpinStory}
+        onPinMessage={handlePinMessage}
+        onUnpinMessage={handleUnpinMessage}
+        onRemoveMember={handleRemoveMember}
+        onInviteUser={handleInviteUser}
+        currentUserId={currentUser?.id}
+        isAdmin={isAdmin}
+      />
     </div>
   );
 }

@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
-import { X, ChevronLeft, ChevronRight, MapPin, Loader2 } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { X, MapPin, Loader2, ChevronRight } from 'lucide-react';
+import StoryReactions from '../components/story/StoryReactions';
 
 export default function StoryView() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const urlParams = new URLSearchParams(window.location.search);
   const storyId = urlParams.get('id');
   
   const [progress, setProgress] = useState(0);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const user = await base44.auth.me();
+        setCurrentUser(user);
+      } catch (e) {}
+    };
+    getUser();
+  }, []);
 
   const { data: story, isLoading } = useQuery({
     queryKey: ['story', storyId],
@@ -27,7 +40,13 @@ export default function StoryView() {
 
   const { data: plans = [] } = useQuery({
     queryKey: ['allPlans'],
-    queryFn: () => base44.entities.PartyPlan.list('-created_date', 100),
+    queryFn: () => base44.entities.PartyPlan.list('-created_date', 50),
+  });
+
+  const { data: reactions = [] } = useQuery({
+    queryKey: ['storyReactions', storyId],
+    queryFn: () => base44.entities.StoryReaction.filter({ story_id: storyId }),
+    enabled: !!storyId
   });
 
   const profilesMap = userProfiles.reduce((acc, p) => {
@@ -35,25 +54,35 @@ export default function StoryView() {
     return acc;
   }, {});
 
-  const plansMap = plans.reduce((acc, p) => {
-    acc[p.id] = p;
-    return acc;
-  }, {});
-
   const storyUser = story ? profilesMap[story.user_id] : null;
-  const storyPlan = story ? plansMap[story.plan_id] : null;
+  const storyPlan = story ? plans.find(p => p.id === story.plan_id) : null;
+
+  // Mark as viewed
+  useEffect(() => {
+    if (story && currentUser && !story.viewed_by?.includes(currentUser.id)) {
+      const updateViews = async () => {
+        const viewedBy = story.viewed_by || [];
+        await base44.entities.ExperienceStory.update(storyId, {
+          view_count: (story.view_count || 0) + 1,
+          viewed_by: [...viewedBy, currentUser.id]
+        });
+      };
+      updateViews();
+    }
+  }, [story, currentUser, storyId]);
 
   // Progress timer
   useEffect(() => {
     if (!story) return;
     
-    const duration = 5000; // 5 seconds per story
+    const duration = 5000;
     const interval = 50;
     const increment = (interval / duration) * 100;
     
     const timer = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
+          clearInterval(timer);
           navigate(-1);
           return 100;
         }
@@ -61,13 +90,35 @@ export default function StoryView() {
       });
     }, interval);
 
-    // Update view count
-    base44.entities.ExperienceStory.update(storyId, {
-      view_count: (story.view_count || 0) + 1
-    });
-
     return () => clearInterval(timer);
-  }, [story, storyId]);
+  }, [story, navigate]);
+
+  const reactMutation = useMutation({
+    mutationFn: async (emoji) => {
+      // Check if user already reacted
+      const existingReaction = reactions.find(r => r.user_id === currentUser?.id);
+      
+      if (existingReaction) {
+        if (existingReaction.emoji === emoji) {
+          // Remove reaction
+          await base44.entities.StoryReaction.delete(existingReaction.id);
+        } else {
+          // Update reaction
+          await base44.entities.StoryReaction.update(existingReaction.id, { emoji });
+        }
+      } else {
+        // Add new reaction
+        await base44.entities.StoryReaction.create({
+          story_id: storyId,
+          user_id: currentUser.id,
+          emoji
+        });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['storyReactions', storyId]);
+    }
+  });
 
   if (isLoading || !story) {
     return (
@@ -78,58 +129,18 @@ export default function StoryView() {
   }
 
   return (
-    <div className="fixed inset-0 bg-black z-50 flex flex-col">
+    <div className="fixed inset-0 bg-black z-50">
       {/* Progress bar */}
-      <div className="absolute top-0 left-0 right-0 p-2 z-10">
-        <div className="h-1 bg-white/30 rounded-full overflow-hidden">
-          <motion.div 
-            className="h-full bg-white"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gray-800 z-10">
+        <motion.div
+          className="h-full bg-white"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+        />
       </div>
 
-      {/* Header */}
-      <div className="absolute top-6 left-0 right-0 px-4 z-10 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00fea3] to-[#542b9b] p-0.5">
-            <div className="w-full h-full rounded-full bg-black overflow-hidden">
-              {storyUser?.photos?.[0] ? (
-                <img src={storyUser.photos[0]} alt="" className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">
-                    {storyUser?.display_name?.[0] || '?'}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-          <div>
-            <p className="text-white font-medium text-sm">{storyUser?.display_name || 'User'}</p>
-            {storyPlan && (
-              <p className="text-gray-400 text-xs flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                {storyPlan.title}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={() => navigate(-1)}
-          className="p-2 rounded-full bg-black/50"
-        >
-          <X className="w-6 h-6 text-white" />
-        </motion.button>
-      </div>
-
-      {/* Story Content */}
-      <div 
-        className="flex-1 flex items-center justify-center"
-        onClick={() => navigate(-1)}
-      >
+      {/* Media */}
+      <div className="absolute inset-0 flex items-center justify-center">
         {story.media_type === 'video' ? (
           <video 
             src={story.media_url} 
@@ -141,34 +152,66 @@ export default function StoryView() {
         ) : (
           <img 
             src={story.media_url} 
-            alt="Story" 
+            alt="" 
             className="max-w-full max-h-full object-contain"
           />
         )}
       </div>
 
-      {/* Plan info at bottom */}
-      {storyPlan && (
-        <div className="absolute bottom-8 left-4 right-4 z-10">
+      {/* Header */}
+      <div className="absolute top-4 left-0 right-0 px-4 z-10">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800">
+              {storyUser?.photos?.[0] ? (
+                <img src={storyUser.photos[0]} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-white font-bold">{storyUser?.display_name?.[0] || '?'}</span>
+                </div>
+              )}
+            </div>
+            <div>
+              <p className="text-white font-medium">{storyUser?.display_name || 'User'}</p>
+              <p className="text-gray-400 text-xs">{story.view_count || 0} views</p>
+            </div>
+          </div>
+          
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate(-1)}
+            className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
+          >
+            <X className="w-6 h-6 text-white" />
+          </motion.button>
+        </div>
+      </div>
+
+      {/* Bottom section */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent z-10 space-y-4">
+        {/* Reactions */}
+        <StoryReactions
+          reactions={reactions}
+          currentUserId={currentUser?.id}
+          onReact={(emoji) => reactMutation.mutate(emoji)}
+        />
+
+        {/* Plan link */}
+        {storyPlan && (
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${storyPlan.id}`)}
-            className="w-full p-4 rounded-xl bg-black/60 backdrop-blur-sm border border-white/10 flex items-center gap-3"
+            className="w-full p-3 rounded-xl bg-white/10 backdrop-blur-sm flex items-center gap-3"
           >
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#542b9b] to-[#00fea3]/50 flex items-center justify-center">
-              <span className="text-xl">🎉</span>
-            </div>
-            <div className="text-left flex-1">
+            <MapPin className="w-5 h-5 text-[#00fea3]" />
+            <div className="flex-1 text-left">
               <p className="text-white font-medium">{storyPlan.title}</p>
-              <p className="text-gray-400 text-sm flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                {storyPlan.city}
-              </p>
+              <p className="text-gray-400 text-xs">{storyPlan.city}</p>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-400" />
           </motion.button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
