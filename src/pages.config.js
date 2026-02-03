@@ -47,38 +47,38 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Onboarding from './pages/Onboarding';
-import Home from './pages/Home';
-import Explore from './pages/Explore';
+import AddStory from './pages/AddStory';
+import Chat from './pages/Chat';
 import CreatePlan from './pages/CreatePlan';
+import EditProfile from './pages/EditProfile';
+import Explore from './pages/Explore';
+import Friends from './pages/Friends';
+import Home from './pages/Home';
+import MyPlans from './pages/MyPlans';
+import MyStories from './pages/MyStories';
+import Onboarding from './pages/Onboarding';
 import PlanDetails from './pages/PlanDetails';
 import Profile from './pages/Profile';
-import Chat from './pages/Chat';
-import AddStory from './pages/AddStory';
-import EditProfile from './pages/EditProfile';
-import Friends from './pages/Friends';
-import UserProfile from './pages/UserProfile';
-import MyPlans from './pages/MyPlans';
 import StoryView from './pages/StoryView';
-import MyStories from './pages/MyStories';
+import UserProfile from './pages/UserProfile';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Onboarding": Onboarding,
-    "Home": Home,
-    "Explore": Explore,
+    "AddStory": AddStory,
+    "Chat": Chat,
     "CreatePlan": CreatePlan,
+    "EditProfile": EditProfile,
+    "Explore": Explore,
+    "Friends": Friends,
+    "Home": Home,
+    "MyPlans": MyPlans,
+    "MyStories": MyStories,
+    "Onboarding": Onboarding,
     "PlanDetails": PlanDetails,
     "Profile": Profile,
-    "Chat": Chat,
-    "AddStory": AddStory,
-    "EditProfile": EditProfile,
-    "Friends": Friends,
-    "UserProfile": UserProfile,
-    "MyPlans": MyPlans,
     "StoryView": StoryView,
-    "MyStories": MyStories,
+    "UserProfile": UserProfile,
 }
 
 export const pagesConfig = {

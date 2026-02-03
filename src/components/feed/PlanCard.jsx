@@ -17,7 +17,7 @@ const reasonLabels = {
   location: 'Near you'
 };
 
-export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons }) {
+export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false }) {
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
@@ -46,12 +46,12 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
             <Heart className="w-3 h-3 text-white" />
             <span className="text-[10px] text-white font-medium">{matchScore}% match</span>
           </div>
-        ) : plan.is_highlighted && (
-          <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-[#00fea3]" />
-            <span className="text-[10px] text-white font-medium">Featured</span>
+        ) : isOnFire || plan.is_highlighted ? (
+          <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-orange-500/80 backdrop-blur-sm flex items-center gap-1">
+            <span className="text-xs">🔥</span>
+            <span className="text-[10px] text-white font-medium">On Fire</span>
           </div>
-        )}
+        ) : null}
         
         {matchReasons && matchReasons.length > 0 && (
           <div className="absolute top-3 left-3 flex flex-wrap gap-1">

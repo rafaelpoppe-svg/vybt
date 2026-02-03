@@ -3,14 +3,20 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { ChevronLeft, MapPin, Calendar, Clock, Tag, Image as ImageIcon, Loader2, Check } from 'lucide-react';
+import { ChevronLeft, MapPin, Calendar, Clock, Tag, Image as ImageIcon, Loader2, Palette } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import PartyTag from '../components/common/PartyTag';
 
 const partyTags = [
   'Rooftop Afternoon', 'Rooftop Night', 'Techno', 'Bar', 'Luxury', 
   'House Party', 'University', 'Commercial', 'EDM', 'Latin'
+];
+
+const themeColors = [
+  '#00fea3', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1', 
+  '#f7dc6f', '#bb8fce', '#85c1e9', '#f8b500', '#ff69b4'
 ];
 
 export default function CreatePlan() {
@@ -24,7 +30,9 @@ export default function CreatePlan() {
     location_address: '',
     city: '',
     tags: [],
-    cover_image: ''
+    cover_image: '',
+    group_image: '',
+    theme_color: '#00fea3'
   });
 
   const toggleTag = (tag) => {
@@ -35,12 +43,12 @@ export default function CreatePlan() {
     }
   };
 
-  const handleImageUpload = async (e) => {
+  const handleImageUpload = async (e, field) => {
     const file = e.target.files?.[0];
     if (file) {
       try {
         const { file_url } = await base44.integrations.Core.UploadFile({ file });
-        setData({ ...data, cover_image: file_url });
+        setData({ ...data, [field]: file_url });
       } catch (err) {
         console.error(err);
       }
@@ -109,8 +117,49 @@ export default function CreatePlan() {
                 <span className="text-gray-500 text-sm">Add cover image</span>
               </div>
             )}
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+            <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'cover_image')} className="hidden" />
           </label>
+        </div>
+
+        {/* Group Image */}
+        <div>
+          <label className="block text-gray-400 text-sm mb-2">Group Chat Image (optional)</label>
+          <label className="block">
+            <div className="flex items-center gap-4">
+              {data.group_image ? (
+                <div className="relative w-16 h-16 rounded-xl overflow-hidden">
+                  <img src={data.group_image} alt="Group" className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className="w-16 h-16 rounded-xl border-2 border-dashed border-gray-700 flex items-center justify-center cursor-pointer hover:border-gray-600">
+                  <ImageIcon className="w-5 h-5 text-gray-600" />
+                </div>
+              )}
+              <span className="text-gray-500 text-sm">Small icon for group chat</span>
+            </div>
+            <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'group_image')} className="hidden" />
+          </label>
+        </div>
+
+        {/* Theme Color */}
+        <div>
+          <label className="block text-gray-400 text-sm mb-2 flex items-center gap-1.5">
+            <Palette className="w-4 h-4" />
+            Group Theme Color
+          </label>
+          <div className="flex gap-2 flex-wrap">
+            {themeColors.map((color) => (
+              <motion.button
+                key={color}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setData({ ...data, theme_color: color })}
+                className={`w-10 h-10 rounded-xl transition-all ${
+                  data.theme_color === color ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0b0b0b]' : ''
+                }`}
+                style={{ backgroundColor: color }}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Title */}
@@ -191,29 +240,54 @@ export default function CreatePlan() {
         <div>
           <label className="block text-gray-400 text-sm mb-2">
             <Tag className="w-4 h-4 inline mr-1" />
-            Tags (max 5)
+            Party Type Tags (max 5)
           </label>
           <div className="flex flex-wrap gap-2">
-            {partyTags.map((tag) => {
-              const isSelected = data.tags.includes(tag);
-              return (
-                <motion.button
-                  key={tag}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => toggleTag(tag)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1 transition-all ${
-                    isSelected
-                      ? 'bg-[#00fea3] text-[#0b0b0b]'
-                      : 'bg-gray-900 text-gray-400 border border-gray-800'
-                  }`}
-                >
-                  {isSelected && <Check className="w-3 h-3" />}
-                  {tag}
-                </motion.button>
-              );
-            })}
+            {partyTags.map((tag) => (
+              <PartyTag
+                key={tag}
+                tag={tag}
+                size="md"
+                interactive
+                selected={data.tags.includes(tag)}
+                onClick={() => toggleTag(tag)}
+              />
+            ))}
           </div>
         </div>
+
+        {/* Preview */}
+        {data.theme_color && (
+          <div 
+            className="p-4 rounded-xl border"
+            style={{ 
+              borderColor: data.theme_color,
+              backgroundColor: `${data.theme_color}10`
+            }}
+          >
+            <p className="text-sm text-gray-400 mb-2">Group Chat Preview</p>
+            <div className="flex items-center gap-3">
+              {data.group_image ? (
+                <img src={data.group_image} alt="" className="w-10 h-10 rounded-xl object-cover" />
+              ) : (
+                <div 
+                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: data.theme_color }}
+                >
+                  <span>🎉</span>
+                </div>
+              )}
+              <div>
+                <div className="flex gap-1 mb-0.5">
+                  {data.tags.slice(0, 2).map((tag, i) => (
+                    <PartyTag key={i} tag={tag} size="sm" />
+                  ))}
+                </div>
+                <p className="text-white font-medium">{data.title || 'Plan Title'}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Submit Button */}

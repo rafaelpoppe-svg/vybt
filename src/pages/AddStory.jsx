@@ -6,15 +6,14 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { 
   ChevronLeft, Image as ImageIcon, X, Check, 
-  Users, Globe, Sparkles, Lock, Loader2 
+  Users, Sparkles, Lock, Loader2, Clock, AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const visibilityOptions = [
-  { id: 'group_only', label: 'Group Only', icon: Lock, desc: 'Only visible to plan members' },
+  { id: 'group_only', label: 'Group Only', icon: Lock, desc: 'Only visible in the plan group chat' },
   { id: 'friends', label: 'Friends', icon: Users, desc: 'Visible to your friends' },
-  { id: 'all', label: 'Everyone', icon: Globe, desc: 'Visible to all users in your area' },
-  { id: 'highlighted', label: 'Highlight', icon: Sparkles, desc: 'Featured to all users (paid)', isPaid: true }
+  { id: 'highlighted', label: 'Highlight to Everyone', icon: Sparkles, desc: 'Featured to all users (paid)', isPaid: true }
 ];
 
 export default function AddStory() {
@@ -56,6 +55,17 @@ export default function AddStory() {
 
   const myPlanIds = myParticipations.map(p => p.plan_id);
   const myPlans = plans.filter(p => myPlanIds.includes(p.id));
+
+  // Check if plan is active (started)
+  const isPlanActive = (plan) => {
+    if (!plan) return false;
+    const now = new Date();
+    const planDateTime = new Date(`${plan.date}T${plan.time}`);
+    return now >= planDateTime;
+  };
+
+  // Filter to only show active plans
+  const activePlans = myPlans.filter(isPlanActive);
 
   const handleMediaSelect = async (e) => {
     const file = e.target.files?.[0];
@@ -117,6 +127,15 @@ export default function AddStory() {
       </header>
 
       <main className="p-4 pb-32 space-y-6">
+        {/* Info about posting */}
+        <div className="p-3 rounded-xl bg-[#542b9b]/20 border border-[#542b9b]/30 flex items-start gap-3">
+          <Clock className="w-5 h-5 text-[#542b9b] flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-gray-300">
+            You can only post experience stories during or after the plan starts. 
+            Stories are visible based on your visibility choice.
+          </p>
+        </div>
+
         {/* Media Upload */}
         <div>
           <label className="block text-gray-400 text-sm mb-2">Photo or Video</label>
@@ -156,12 +175,12 @@ export default function AddStory() {
           </label>
         </div>
 
-        {/* Select Plan */}
+        {/* Select Plan - Only active plans */}
         <div>
           <label className="block text-gray-400 text-sm mb-2">Which plan is this from?</label>
           <div className="space-y-2 max-h-40 overflow-y-auto">
-            {myPlans.length > 0 ? (
-              myPlans.map((plan) => (
+            {activePlans.length > 0 ? (
+              activePlans.map((plan) => (
                 <motion.button
                   key={plan.id}
                   whileTap={{ scale: 0.98 }}
@@ -185,6 +204,16 @@ export default function AddStory() {
                   )}
                 </motion.button>
               ))
+            ) : myPlans.length > 0 ? (
+              <div className="p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-yellow-500 flex-shrink-0" />
+                <div>
+                  <p className="text-white font-medium">Plans not started yet</p>
+                  <p className="text-gray-500 text-sm mt-1">
+                    You can post stories once your plans start at their scheduled time.
+                  </p>
+                </div>
+              </div>
             ) : (
               <p className="text-gray-500 text-center py-4">
                 You need to join a plan first to add stories

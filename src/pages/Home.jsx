@@ -138,6 +138,7 @@ export default function Home() {
             onFilterChange={setStoryFilter}
             onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
             onAddStory={() => navigate(createPageUrl('AddStory'))}
+            currentUserId={currentUser?.id}
           />
         </div>
       </header>
