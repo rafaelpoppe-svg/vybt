@@ -320,18 +320,21 @@ export default function Explore() {
         ) : activeView === 'plans' ? (
           filteredPlans.length > 0 ? (
             <div className="grid gap-4 sm:grid-cols-2">
-              {filteredPlans.map((plan) => (
-                <PlanCard
-                  key={plan.id}
-                  plan={plan}
-                  participants={getParticipants(plan.id)}
-                  featured={planFilters.sortBy === 'foryou' ? plan.matchScore > 50 : plan.is_highlighted}
-                  matchScore={planFilters.sortBy === 'foryou' ? plan.matchScore : null}
-                  matchReasons={planFilters.sortBy === 'foryou' ? plan.matchReasons : null}
-                  isOnFire={planFilters.sortBy === 'onfire' && plan.is_highlighted}
-                  onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                />
-              ))}
+              {filteredPlans.map((plan) => {
+                const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
+                return (
+                  <PlanCard
+                    key={plan.id}
+                    plan={plan}
+                    participants={getParticipants(plan.id)}
+                    featured={plan.is_highlighted}
+                    matchScore={planFilters.sortBy === 'foryou' ? plan.matchScore : null}
+                    matchReasons={planFilters.sortBy === 'foryou' ? plan.matchReasons : null}
+                    isOnFire={isOnFire}
+                    onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                  />
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-12">

@@ -41,17 +41,27 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           </div>
         )}
         
-        {matchScore && matchScore > 30 ? (
-          <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-gradient-to-r from-[#00fea3]/80 to-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
-            <Heart className="w-3 h-3 text-white" />
-            <span className="text-[10px] text-white font-medium">{matchScore}% match</span>
-          </div>
-        ) : isOnFire || plan.is_highlighted ? (
-          <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-orange-500/80 backdrop-blur-sm flex items-center gap-1">
-            <span className="text-xs">🔥</span>
-            <span className="text-[10px] text-white font-medium">On Fire</span>
-          </div>
-        ) : null}
+        {/* Badges - can show multiple */}
+        <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
+          {plan.is_highlighted && (
+            <div className="px-2 py-1 rounded-full bg-gradient-to-r from-[#00fea3]/80 to-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-white" />
+              <span className="text-[10px] text-white font-medium">Highlighted</span>
+            </div>
+          )}
+          {isOnFire && (
+            <div className="px-2 py-1 rounded-full bg-orange-500/80 backdrop-blur-sm flex items-center gap-1">
+              <span className="text-xs">🔥</span>
+              <span className="text-[10px] text-white font-medium">On Fire</span>
+            </div>
+          )}
+          {matchScore && matchScore > 30 && !plan.is_highlighted && !isOnFire && (
+            <div className="px-2 py-1 rounded-full bg-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
+              <Heart className="w-3 h-3 text-white" />
+              <span className="text-[10px] text-white font-medium">{matchScore}%</span>
+            </div>
+          )}
+        </div>
         
         {matchReasons && matchReasons.length > 0 && (
           <div className="absolute top-3 left-3 flex flex-wrap gap-1">
