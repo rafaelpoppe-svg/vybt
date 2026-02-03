@@ -6,8 +6,10 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChevronLeft, Camera, Loader2, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import VibeTag from '../components/common/VibeTag';
+import PartyTag from '../components/common/PartyTag';
 
 const vibeOptions = [
   'Techno', 'Reggaeton', 'Pop', 'House', 'Trap', 
@@ -16,15 +18,22 @@ const vibeOptions = [
   'Curious to every style'
 ];
 
+const partyTypeOptions = [
+  'Rooftop Afternoon', 'Rooftop Night', 'Techno', 'Bar', 'Luxury', 
+  'House Party', 'University', 'Commercial', 'EDM', 'Latin'
+];
+
 export default function EditProfile() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
   const [formData, setFormData] = useState({
     display_name: '',
+    bio: '',
     city: '',
     radius_km: 10,
     vibes: [],
+    party_types: [],
     photos: []
   });
   const [uploading, setUploading] = useState(false);
@@ -45,27 +54,18 @@ export default function EditProfile() {
     queryKey: ['myProfile', currentUser?.id],
     queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser.id }),
     select: (data) => data[0],
-    enabled: !!currentUser?.id,
-    onSuccess: (data) => {
-      if (data) {
-        setFormData({
-          display_name: data.display_name || '',
-          city: data.city || '',
-          radius_km: data.radius_km || 10,
-          vibes: data.vibes || [],
-          photos: data.photos || []
-        });
-      }
-    }
+    enabled: !!currentUser?.id
   });
 
   useEffect(() => {
     if (profile) {
       setFormData({
         display_name: profile.display_name || '',
+        bio: profile.bio || '',
         city: profile.city || '',
         radius_km: profile.radius_km || 10,
         vibes: profile.vibes || [],
+        party_types: profile.party_types || [],
         photos: profile.photos || []
       });
     }
@@ -108,6 +108,14 @@ export default function EditProfile() {
       setFormData({ ...formData, vibes: formData.vibes.filter(v => v !== vibe) });
     } else if (formData.vibes.length < 5) {
       setFormData({ ...formData, vibes: [...formData.vibes, vibe] });
+    }
+  };
+
+  const togglePartyType = (type) => {
+    if (formData.party_types.includes(type)) {
+      setFormData({ ...formData, party_types: formData.party_types.filter(t => t !== type) });
+    } else if (formData.party_types.length < 5) {
+      setFormData({ ...formData, party_types: [...formData.party_types, type] });
     }
   };
 
@@ -196,6 +204,19 @@ export default function EditProfile() {
           />
         </div>
 
+        {/* Bio */}
+        <div>
+          <label className="block text-gray-400 text-sm mb-2">Bio</label>
+          <Textarea
+            value={formData.bio}
+            onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+            placeholder="Tell others about yourself..."
+            className="bg-gray-900 border-gray-800 text-white min-h-20"
+            maxLength={200}
+          />
+          <p className="text-xs text-gray-500 mt-1 text-right">{formData.bio.length}/200</p>
+        </div>
+
         {/* City */}
         <div>
           <label className="block text-gray-400 text-sm mb-2">City</label>
@@ -232,6 +253,23 @@ export default function EditProfile() {
                 interactive
                 selected={formData.vibes.includes(vibe)}
                 onClick={() => toggleVibe(vibe)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Party Types */}
+        <div>
+          <label className="block text-gray-400 text-sm mb-2">Preferred Party Types (max 5)</label>
+          <div className="flex flex-wrap gap-2">
+            {partyTypeOptions.map((type) => (
+              <PartyTag
+                key={type}
+                tag={type}
+                size="md"
+                interactive
+                selected={formData.party_types.includes(type)}
+                onClick={() => togglePartyType(type)}
               />
             ))}
           </div>
