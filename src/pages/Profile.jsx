@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
 import VibeTag from '../components/common/VibeTag';
+import PartyTag from '../components/common/PartyTag';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -117,6 +118,11 @@ export default function Profile() {
 
           <h2 className="text-2xl font-bold text-white">{profile.display_name || currentUser.full_name}</h2>
           <p className="text-gray-500">{profile.city || 'No location set'}</p>
+          
+          {/* Bio */}
+          {profile.bio && (
+            <p className="text-gray-400 text-sm mt-2 max-w-xs">{profile.bio}</p>
+          )}
 
           {/* Stats */}
           <div className="flex gap-8 mt-6">
@@ -142,6 +148,18 @@ export default function Profile() {
             <div className="flex flex-wrap gap-2">
               {profile.vibes.map((vibe, i) => (
                 <VibeTag key={i} vibe={vibe} size="md" />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Party Types */}
+        {profile.party_types?.length > 0 && (
+          <div>
+            <h3 className="text-white font-semibold mb-3">Preferred Parties</h3>
+            <div className="flex flex-wrap gap-2">
+              {profile.party_types.map((type, i) => (
+                <PartyTag key={i} tag={type} size="md" />
               ))}
             </div>
           </div>
