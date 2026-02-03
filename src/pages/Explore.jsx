@@ -120,18 +120,27 @@ export default function Explore() {
     return matchesSearch && matchesTag && matchesFilters;
   });
 
-  // Sort plans
-  if (planFilters.sortBy === 'onfire') {
-    filteredPlans = filteredPlans.sort((a, b) => {
-      if (a.is_highlighted && !b.is_highlighted) return -1;
-      if (!a.is_highlighted && b.is_highlighted) return 1;
+  // Sort plans - Highlighted plans always first, then apply other sorting
+  filteredPlans = filteredPlans.sort((a, b) => {
+    // Highlighted (paid) plans always come first
+    if (a.is_highlighted && !b.is_highlighted) return -1;
+    if (!a.is_highlighted && b.is_highlighted) return 1;
+    
+    // Then apply specific sort
+    if (planFilters.sortBy === 'onfire') {
+      // OnFire plans (100+ joins in 2 hours) next
+      const aOnFire = a.is_on_fire || (a.recent_joins >= 100);
+      const bOnFire = b.is_on_fire || (b.recent_joins >= 100);
+      if (aOnFire && !bOnFire) return -1;
+      if (!aOnFire && bOnFire) return 1;
       return (b.view_count || 0) - (a.view_count || 0);
-    });
-  } else if (planFilters.sortBy === 'popular') {
-    filteredPlans = filteredPlans.sort((a, b) => 
-      getParticipantCount(b.id) - getParticipantCount(a.id)
-    );
-  }
+    } else if (planFilters.sortBy === 'popular') {
+      return getParticipantCount(b.id) - getParticipantCount(a.id);
+    } else if (planFilters.sortBy === 'foryou') {
+      return (b.matchScore || 0) - (a.matchScore || 0);
+    }
+    return 0;
+  });
 
   // Filter users
   let filteredUsers = userProfiles.filter(profile => {
