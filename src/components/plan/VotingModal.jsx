@@ -1,0 +1,66 @@
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoading }) {
+  if (!isOpen) return null;
+
+  return (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          onClick={onClose}
+        />
+        
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          className="relative bg-gray-900 rounded-2xl p-6 max-w-md w-full border border-gray-800"
+        >
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 rounded-full bg-gray-800 hover:bg-gray-700"
+          >
+            <X className="w-5 h-5 text-gray-400" />
+          </button>
+
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-white mb-2">Como foi o plano?</h2>
+            <p className="text-gray-400 text-sm">"{planTitle}"</p>
+            <p className="text-gray-500 text-xs mt-2">Sua opinião ajuda a melhorar eventos futuros</p>
+          </div>
+
+          <div className="space-y-3">
+            <Button
+              onClick={() => onVote('great')}
+              disabled={isLoading}
+              className="w-full py-6 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold text-lg"
+            >
+              <ThumbsUp className="w-6 h-6 mr-3" />
+              Great Plan! 🎉
+            </Button>
+
+            <Button
+              onClick={() => onVote('bad')}
+              disabled={isLoading}
+              className="w-full py-6 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-semibold text-lg"
+            >
+              <ThumbsDown className="w-6 h-6 mr-3" />
+              Bad Plan 😔
+            </Button>
+          </div>
+
+          <p className="text-xs text-gray-600 text-center mt-4">
+            Votação encerra em 12 horas após o fim do plano
+          </p>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  );
+}

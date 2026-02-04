@@ -4,8 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { X, MapPin, Loader2, ChevronRight } from 'lucide-react';
+import { X, MapPin, Loader2, ChevronRight, ChevronLeft, MoreVertical, Trash2, Volume2, VolumeX } from 'lucide-react';
 import StoryReactions from '../components/story/StoryReactions';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function StoryView() {
   const navigate = useNavigate();
@@ -15,6 +21,9 @@ export default function StoryView() {
   
   const [progress, setProgress] = useState(0);
   const [currentUser, setCurrentUser] = useState(null);
+  const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
+  const [allStories, setAllStories] = useState([]);
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -26,12 +35,12 @@ export default function StoryView() {
     getUser();
   }, []);
 
-  const { data: story, isLoading } = useQuery({
-    queryKey: ['story', storyId],
-    queryFn: () => base44.entities.ExperienceStory.filter({ id: storyId }),
-    select: (data) => data[0],
-    enabled: !!storyId
+  const { data: allStoriesData = [], isLoading } = useQuery({
+    queryKey: ['allStories'],
+    queryFn: () => base44.entities.ExperienceStory.list('-created_date', 100),
   });
+
+  const story = allStories[currentStoryIndex];
 
   const { data: userProfiles = [] } = useQuery({
     queryKey: ['userProfiles'],
@@ -57,6 +66,25 @@ export default function StoryView() {
   const storyUser = story ? profilesMap[story.user_id] : null;
   const storyPlan = story ? plans.find(p => p.id === story.plan_id) : null;
 
+  // Initialize stories list
+  useEffect(() => {
+    if (allStoriesData.length > 0 && storyId) {
+      const currentIndex = allStoriesData.findIndex(s => s.id === storyId);
+      setAllStories(allStoriesData);
+      setCurrentStoryIndex(currentIndex >= 0 ? currentIndex : 0);
+    }
+  }, [allStoriesData, storyId]);
+
+  const deleteMutation = useMutation({
+    mutationFn: () => base44.entities.ExperienceStory.delete(story.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['allStories']);
+      navigate(-1);
+    }
+  });
+
+  const canDelete = story?.user_id === currentUser?.id;
+
   // Mark as viewed
   useEffect(() => {
     if (story && currentUser && !story.viewed_by?.includes(currentUser.id)) {
@@ -75,6 +103,7 @@ export default function StoryView() {
   useEffect(() => {
     if (!story) return;
     
+    setProgress(0);
     const duration = 5000;
     const interval = 50;
     const increment = (interval / duration) * 100;
@@ -83,7 +112,7 @@ export default function StoryView() {
       setProgress(prev => {
         if (prev >= 100) {
           clearInterval(timer);
-          navigate(-1);
+          handleNext();
           return 100;
         }
         return prev + increment;
@@ -91,7 +120,21 @@ export default function StoryView() {
     }, interval);
 
     return () => clearInterval(timer);
-  }, [story, navigate]);
+  }, [story]);
+
+  const handleNext = () => {
+    if (currentStoryIndex < allStories.length - 1) {
+      setCurrentStoryIndex(currentStoryIndex + 1);
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStoryIndex > 0) {
+      setCurrentStoryIndex(currentStoryIndex - 1);
+    }
+  };
 
   const reactMutation = useMutation({
     mutationFn: async (emoji) => {
@@ -130,24 +173,43 @@ export default function StoryView() {
 
   return (
     <div className="fixed inset-0 bg-black z-50">
-      {/* Progress bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gray-800 z-10">
-        <motion.div
-          className="h-full bg-white"
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-        />
+      {/* Progress bars */}
+      <div className="absolute top-0 left-0 right-0 h-1 z-10 flex gap-1 px-2 pt-2">
+        {allStories.map((_, index) => (
+          <div key={index} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-white"
+              initial={{ width: 0 }}
+              animate={{ 
+                width: index === currentStoryIndex ? `${progress}%` : index < currentStoryIndex ? '100%' : '0%'
+              }}
+            />
+          </div>
+        ))}
       </div>
+
+      {/* Navigation areas */}
+      <button
+        onClick={handlePrevious}
+        className="absolute left-0 top-0 bottom-0 w-1/3 z-20"
+        disabled={currentStoryIndex === 0}
+      />
+      <button
+        onClick={handleNext}
+        className="absolute right-0 top-0 bottom-0 w-1/3 z-20"
+      />
 
       {/* Media */}
       <div className="absolute inset-0 flex items-center justify-center">
         {story.media_type === 'video' ? (
           <video 
+            key={story.id}
             src={story.media_url} 
             className="max-w-full max-h-full object-contain"
             autoPlay
-            muted
+            muted={isMuted || !story.has_audio}
             playsInline
+            loop
           />
         ) : (
           <img 
@@ -177,13 +239,51 @@ export default function StoryView() {
             </div>
           </div>
           
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
-          >
-            <X className="w-6 h-6 text-white" />
-          </motion.button>
+          <div className="flex gap-2">
+            {story.media_type === 'video' && story.has_audio && (
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsMuted(!isMuted)}
+                className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
+              >
+                {isMuted ? (
+                  <VolumeX className="w-5 h-5 text-white" />
+                ) : (
+                  <Volume2 className="w-5 h-5 text-white" />
+                )}
+              </motion.button>
+            )}
+
+            {canDelete && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
+                  >
+                    <MoreVertical className="w-5 h-5 text-white" />
+                  </motion.button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-gray-900 border-gray-800">
+                  <DropdownMenuItem 
+                    onClick={() => deleteMutation.mutate()}
+                    className="text-red-400 hover:text-red-300"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Deletar Story
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => navigate(-1)}
+              className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
+            >
+              <X className="w-6 h-6 text-white" />
+            </motion.button>
+          </div>
         </div>
       </div>
 

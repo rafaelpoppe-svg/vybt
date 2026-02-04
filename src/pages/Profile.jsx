@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { 
   Settings, Users, PartyPopper, Camera, ChevronRight, 
-  LogOut, Edit2, Loader2 
+  LogOut, Edit2, Loader2, Bell
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
@@ -72,6 +72,14 @@ export default function Profile() {
       <header className="p-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-white">Profile</h1>
         <div className="flex gap-2">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate(createPageUrl('Notifications'))}
+            className="p-2 rounded-full bg-gray-900 relative"
+          >
+            <Bell className="w-5 h-5 text-white" />
+            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+          </motion.button>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate(createPageUrl('EditProfile'))}
