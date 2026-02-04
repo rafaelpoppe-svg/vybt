@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Sun, Moon, Zap, Wine, Crown, Home, GraduationCap, 
-  Radio, Music2, Drum, Flame
+  Radio, Music2, Drum, Flame, Mic2, Waves
 } from 'lucide-react';
 
 export const partyTagConfig = {
@@ -55,6 +55,31 @@ export const partyTagConfig = {
     icon: Drum, 
     color: 'bg-red-400/20 text-red-300 border-red-400/30',
     gradient: 'from-red-400 to-orange-500'
+  },
+  'Beach Club': { 
+    icon: Sun, 
+    color: 'bg-blue-300/20 text-blue-200 border-blue-300/30',
+    gradient: 'from-blue-300 to-cyan-400'
+  },
+  'Club': { 
+    icon: Music2, 
+    color: 'bg-purple-400/20 text-purple-300 border-purple-400/30',
+    gradient: 'from-purple-400 to-indigo-500'
+  },
+  'Festival': { 
+    icon: Flame, 
+    color: 'bg-orange-400/20 text-orange-300 border-orange-400/30',
+    gradient: 'from-orange-400 to-red-500'
+  },
+  'Karaoke': { 
+    icon: Mic2, 
+    color: 'bg-pink-400/20 text-pink-300 border-pink-400/30',
+    gradient: 'from-pink-400 to-rose-500'
+  },
+  'Pool Party': { 
+    icon: Waves, 
+    color: 'bg-cyan-300/20 text-cyan-200 border-cyan-300/30',
+    gradient: 'from-cyan-300 to-blue-400'
   }
 };
 
@@ -70,14 +95,14 @@ export default function PartyTag({ tag, size = 'md', interactive = false, select
 
   const sizes = {
     sm: 'px-2 py-0.5 text-[10px]',
-    md: 'px-3 py-1.5 text-xs',
-    lg: 'px-4 py-2 text-sm'
+    md: 'px-3 py-2 text-sm',
+    lg: 'px-4 py-2.5 text-base'
   };
 
   const iconSizes = {
     sm: 'w-2.5 h-2.5',
-    md: 'w-3.5 h-3.5',
-    lg: 'w-4 h-4'
+    md: 'w-4 h-4',
+    lg: 'w-5 h-5'
   };
 
   const Tag = interactive ? motion.button : 'span';
