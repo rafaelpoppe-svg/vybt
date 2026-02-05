@@ -157,6 +157,11 @@ export default function Chat() {
   // Check plan status
   const getPlanStatus = () => {
     if (!selectedPlan) return 'upcoming';
+    
+    // If status is already set to 'ended' (e.g., all voted), respect it
+    if (selectedPlan.status === 'ended') return 'ended';
+    if (selectedPlan.status === 'renewed') return 'upcoming';
+    
     const now = new Date();
     const startTime = new Date(`${selectedPlan.date}T${selectedPlan.time}`);
     const endTime = selectedPlan.end_time 
@@ -165,6 +170,13 @@ export default function Chat() {
     
     if (endTime < startTime) endTime.setDate(endTime.getDate() + 1);
     const votingEnds = new Date(endTime.getTime() + 12 * 60 * 60 * 1000);
+    
+    // Check if all participants have voted - end immediately
+    const votedCount = selectedPlan.voted_users?.length || 0;
+    const totalParticipants = allParticipants.length;
+    if (votedCount > 0 && totalParticipants > 0 && votedCount >= totalParticipants) {
+      return 'ended';
+    }
 
     if (now < startTime) return 'upcoming';
     if (now >= startTime && now < endTime) return 'happening';
@@ -243,14 +255,21 @@ export default function Chat() {
   const voteMutation = useMutation({
     mutationFn: async (vote) => {
       const currentVotedUsers = selectedPlan.voted_users || [];
+      const newVotedUsers = [...currentVotedUsers, currentUser.id];
       const updateData = {
-        voted_users: [...currentVotedUsers, currentUser.id]
+        voted_users: newVotedUsers
       };
       if (vote === 'great') {
         updateData.great_votes = (selectedPlan.great_votes || 0) + 1;
       } else {
         updateData.bad_votes = (selectedPlan.bad_votes || 0) + 1;
       }
+      
+      // Check if all participants have voted - if so, end voting immediately
+      if (newVotedUsers.length >= allParticipants.length) {
+        updateData.status = 'ended';
+      }
+      
       await base44.entities.PartyPlan.update(selectedChat, updateData);
     },
     onSuccess: () => {
