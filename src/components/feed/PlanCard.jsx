@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, Users, Sparkles, Calendar, Heart, Music } from 'lucide-react';
+import { MapPin, Clock, Users, Sparkles, Calendar, Heart, Music, Flame } from 'lucide-react';
 import { format } from 'date-fns';
+import PlanCountdown from '../plan/PlanCountdown';
 
 const reasonIcons = {
   vibes: Music,
@@ -78,15 +79,18 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
         )}
 
         <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-          <div className="flex gap-2 flex-wrap">
-            {plan.tags?.slice(0, 3).map((tag, i) => (
-              <span 
-                key={i}
-                className="px-2 py-0.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-[10px] font-medium"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="flex items-center justify-between">
+            <div className="flex gap-2 flex-wrap">
+              {plan.tags?.slice(0, 2).map((tag, i) => (
+                <span 
+                  key={i}
+                  className="px-2 py-0.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-[10px] font-medium"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <PlanCountdown plan={plan} size="sm" />
           </div>
         </div>
       </div>
