@@ -7,12 +7,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { 
   ChevronLeft, MapPin, Calendar, Clock, Users, MessageCircle, 
-  Share2, Check, Plus, Camera, Loader2, Flame, Sparkles
+  Share2, Check, Plus, Camera, Loader2, Flame, Sparkles, Shield, LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import StoryCard from '../components/feed/StoryCard';
 import PartyTag from '../components/common/PartyTag';
 import HighlightPlanModal from '../components/plan/HighlightPlanModal';
+import PlanCountdown from '../components/plan/PlanCountdown';
+import LeavePlanModal from '../components/plan/LeavePlanModal';
 
 export default function PlanDetails() {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ export default function PlanDetails() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isJoined, setIsJoined] = useState(false);
   const [showHighlightModal, setShowHighlightModal] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -190,25 +193,28 @@ export default function PlanDetails() {
         </motion.button>
 
         {/* Status Badge */}
-        {(isOnFire || plan.is_highlighted) && (
-          <div 
-            className={`absolute top-4 right-16 px-3 py-1.5 rounded-full backdrop-blur-sm flex items-center gap-1 ${
-              isOnFire ? 'bg-orange-500/80' : 'bg-[#542b9b]/80'
-            }`}
-          >
-            {isOnFire ? (
-              <>
-                <span className="text-sm">🔥</span>
-                <span className="text-xs text-white font-medium">On Fire</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-4 h-4 text-[#00fea3]" />
-                <span className="text-xs text-white font-medium">Highlighted</span>
-              </>
-            )}
-          </div>
-        )}
+        <div className="absolute top-4 right-16 flex gap-2">
+          <PlanCountdown plan={plan} size="sm" />
+          {(isOnFire || plan.is_highlighted) && (
+            <div 
+              className={`px-3 py-1.5 rounded-full backdrop-blur-sm flex items-center gap-1 ${
+                isOnFire ? 'bg-orange-500/80' : 'bg-[#542b9b]/80'
+              }`}
+            >
+              {isOnFire ? (
+                <>
+                  <span className="text-sm">🔥</span>
+                  <span className="text-xs text-white font-medium">On Fire</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4 text-[#00fea3]" />
+                  <span className="text-xs text-white font-medium">Highlighted</span>
+                </>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Theme color accent bar */}
         <div 
@@ -229,7 +235,7 @@ export default function PlanDetails() {
         {/* Title */}
         <h1 className="text-3xl font-bold text-white">{plan.title}</h1>
 
-        {/* Info */}
+        {/* Info with end_time */}
         <div 
           className="space-y-3 p-4 rounded-xl"
           style={{ backgroundColor: `${themeColor}10`, borderLeft: `3px solid ${themeColor}` }}
@@ -240,7 +246,7 @@ export default function PlanDetails() {
           </div>
           <div className="flex items-center gap-3 text-gray-300">
             <Clock className="w-5 h-5" style={{ color: themeColor }} />
-            <span>{plan.time}</span>
+            <span>{plan.time}{plan.end_time && ` - ${plan.end_time}`}</span>
           </div>
           <div className="flex items-center gap-3 text-gray-300">
             <MapPin className="w-5 h-5" style={{ color: themeColor }} />
@@ -277,15 +283,27 @@ export default function PlanDetails() {
             </h3>
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
-            {participantProfiles.map((profile, i) => (
-              <StoryCard
-                key={profile.id}
-                user={profile}
-                size="sm"
-                colorIndex={i}
-                onClick={() => navigate(createPageUrl('UserProfile') + `?id=${profile.user_id}`)}
-              />
-            ))}
+            {participantProfiles.map((profile, i) => {
+              const participation = participants.find(p => p.user_id === profile.user_id);
+              const isCreator = plan.creator_id === profile.user_id;
+              return (
+                <div key={profile.id} className="relative">
+                  <StoryCard
+                    user={profile}
+                    size="sm"
+                    colorIndex={i}
+                    onClick={() => navigate(createPageUrl('UserProfile') + `?id=${profile.user_id}`)}
+                  />
+                  {isCreator && (
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[#542b9b] text-[10px] text-white font-medium flex items-center gap-1">
+                      <Shield className="w-2.5 h-2.5" />
+                      Admin
+                    </div>
+                  )}
+                  <p className="text-center text-sm text-white mt-1 font-medium">{profile.display_name}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -345,7 +363,7 @@ export default function PlanDetails() {
           
           {isJoined ? (
             <Button
-              onClick={() => leaveMutation.mutate()}
+              onClick={() => setShowLeaveModal(true)}
               disabled={leaveMutation.isPending}
               className="flex-1 py-6 rounded-full bg-gray-800 text-white hover:bg-gray-700"
             >
@@ -353,8 +371,8 @@ export default function PlanDetails() {
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  <Check className="w-5 h-5 mr-2" />
-                  Joined
+                  <LogOut className="w-5 h-5 mr-2" />
+                  Sair
                 </>
               )}
             </Button>
@@ -386,6 +404,18 @@ export default function PlanDetails() {
         planTitle={plan.title}
         planTags={plan.tags || []}
         isLoading={highlightMutation.isPending}
+      />
+
+      {/* Leave Modal */}
+      <LeavePlanModal
+        isOpen={showLeaveModal}
+        onClose={() => setShowLeaveModal(false)}
+        onConfirm={() => {
+          setShowLeaveModal(false);
+          leaveMutation.mutate();
+        }}
+        planTitle={plan.title}
+        isLoading={leaveMutation.isPending}
       />
     </div>
   );

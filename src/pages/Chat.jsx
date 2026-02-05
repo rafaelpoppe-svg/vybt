@@ -5,7 +5,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { Send, ChevronLeft, Loader2, Sticker, Info, MoreVertical, MapPin, Clock } from 'lucide-react';
+import { Send, ChevronLeft, Loader2, Sticker, Info, MoreVertical, MapPin, Clock, Lock, Flame, RefreshCw, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import BottomNav from '../components/common/BottomNav';
 import ChatStoryBar from '../components/chat/ChatStoryBar';
@@ -13,6 +13,12 @@ import ChatMessage from '../components/chat/ChatMessage';
 import StickerPicker from '../components/chat/StickerPicker';
 import PartyTag from '../components/common/PartyTag';
 import GroupAdminActions from '../components/chat/GroupAdminActions';
+import PlanCountdown from '../components/plan/PlanCountdown';
+import VotingModal from '../components/plan/VotingModal';
+import RenewPlanModal from '../components/plan/RenewPlanModal';
+import DeletePlanModal from '../components/plan/DeletePlanModal';
+import LeavePlanModal from '../components/plan/LeavePlanModal';
+import AdminEditModal from '../components/plan/AdminEditModal';
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -28,6 +34,11 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState('');
   const [showStickers, setShowStickers] = useState(false);
   const [showAdminActions, setShowAdminActions] = useState(false);
+  const [showVotingModal, setShowVotingModal] = useState(false);
+  const [showRenewModal, setShowRenewModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [showAdminEditModal, setShowAdminEditModal] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -143,12 +154,31 @@ export default function Chat() {
   const myParticipation = myParticipations.find(p => p.plan_id === selectedChat);
   const isAdmin = myParticipation?.is_admin || selectedPlan?.creator_id === currentUser?.id;
 
+  // Check plan status
+  const getPlanStatus = () => {
+    if (!selectedPlan) return 'upcoming';
+    const now = new Date();
+    const startTime = new Date(`${selectedPlan.date}T${selectedPlan.time}`);
+    const endTime = selectedPlan.end_time 
+      ? new Date(`${selectedPlan.date}T${selectedPlan.end_time}`)
+      : new Date(startTime.getTime() + 6 * 60 * 60 * 1000);
+    
+    if (endTime < startTime) endTime.setDate(endTime.getDate() + 1);
+    const votingEnds = new Date(endTime.getTime() + 12 * 60 * 60 * 1000);
+
+    if (now < startTime) return 'upcoming';
+    if (now >= startTime && now < endTime) return 'happening';
+    if (now >= endTime && now < votingEnds) return 'voting';
+    return 'ended';
+  };
+
+  const planStatus = selectedChat && activeTab === 'groups' ? getPlanStatus() : 'upcoming';
+  const isChatLocked = planStatus === 'voting';
+  const hasVoted = selectedPlan?.voted_users?.includes(currentUser?.id);
+
   // Check if plan is currently active (can post stories)
   const isPlanActive = () => {
-    if (!selectedPlan) return false;
-    const now = new Date();
-    const planDateTime = new Date(`${selectedPlan.date}T${selectedPlan.time}`);
-    return now >= planDateTime;
+    return planStatus === 'happening';
   };
 
   // Get theme color for group chat
@@ -208,6 +238,84 @@ export default function Chat() {
     // For now just show a message - in real app would send invite
     console.log('Invite sent to:', email);
   };
+
+  // Voting mutation
+  const voteMutation = useMutation({
+    mutationFn: async (vote) => {
+      const currentVotedUsers = selectedPlan.voted_users || [];
+      const updateData = {
+        voted_users: [...currentVotedUsers, currentUser.id]
+      };
+      if (vote === 'great') {
+        updateData.great_votes = (selectedPlan.great_votes || 0) + 1;
+      } else {
+        updateData.bad_votes = (selectedPlan.bad_votes || 0) + 1;
+      }
+      await base44.entities.PartyPlan.update(selectedChat, updateData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['myPlans']);
+      setShowVotingModal(false);
+    }
+  });
+
+  // Renew mutation
+  const renewMutation = useMutation({
+    mutationFn: async (renewData) => {
+      await base44.entities.PartyPlan.update(selectedChat, {
+        ...renewData,
+        status: 'renewed',
+        great_votes: 0,
+        bad_votes: 0,
+        voted_users: []
+      });
+      // Send notification
+      await base44.entities.ChatMessage.create({
+        sender_id: currentUser.id,
+        plan_id: selectedChat,
+        message_type: 'group',
+        content: '🔄 Let\'s gooo Again! 😎 O plano foi renovado!',
+        is_read: false
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['myPlans']);
+      queryClient.invalidateQueries(['messages', selectedChat, activeTab]);
+      setShowRenewModal(false);
+    }
+  });
+
+  // Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      // Delete all participants
+      for (const p of allParticipants) {
+        await base44.entities.PlanParticipant.delete(p.id);
+      }
+      // Delete all messages
+      for (const m of messages) {
+        await base44.entities.ChatMessage.delete(m.id);
+      }
+      // Delete plan
+      await base44.entities.PartyPlan.delete(selectedChat);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['myPlans']);
+      setSelectedChat(null);
+      setShowDeleteModal(false);
+    }
+  });
+
+  // Admin edit mutation
+  const adminEditMutation = useMutation({
+    mutationFn: async (data) => {
+      await base44.entities.PartyPlan.update(selectedChat, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['myPlans']);
+      setShowAdminEditModal(false);
+    }
+  });
 
   return (
     <div className="min-h-screen bg-[#0b0b0b] pb-24">
@@ -305,18 +413,58 @@ export default function Chat() {
 
         {/* Plan info bar (time & address) */}
         {selectedChat && activeTab === 'groups' && selectedPlan && (
-          <div 
-            className="px-4 pb-2 flex items-center gap-4 text-xs"
-            style={{ color: themeColor }}
-          >
-            <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              <span>{selectedPlan.time}</span>
+          <div className="px-4 pb-2 space-y-2">
+            {/* Countdown / Status */}
+            <PlanCountdown plan={selectedPlan} size="sm" />
+            
+            <div 
+              className="flex items-center gap-4 text-xs"
+              style={{ color: themeColor }}
+            >
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                <span>{selectedPlan.time}{selectedPlan.end_time && ` - ${selectedPlan.end_time}`}</span>
+              </div>
+              <div className="flex items-center gap-1 flex-1 truncate">
+                <MapPin className="w-3 h-3" />
+                <span className="truncate">{selectedPlan.location_address}</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1 flex-1 truncate">
-              <MapPin className="w-3 h-3" />
-              <span className="truncate">{selectedPlan.location_address}</span>
-            </div>
+
+            {/* Voting Banner */}
+            {isChatLocked && !hasVoted && !isAdmin && (
+              <motion.button
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                onClick={() => setShowVotingModal(true)}
+                className="w-full py-2 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-400 text-sm font-medium flex items-center justify-center gap-2"
+              >
+                <Flame className="w-4 h-4" />
+                Votação aberta! Toque para votar
+              </motion.button>
+            )}
+
+            {/* Admin Actions for ended plan */}
+            {planStatus === 'ended' && isAdmin && (
+              <div className="flex gap-2">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowRenewModal(true)}
+                  className="flex-1 py-2 rounded-lg bg-[#00fea3]/20 border border-[#00fea3]/30 text-[#00fea3] text-sm font-medium flex items-center justify-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Renovar
+                </motion.button>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowDeleteModal(true)}
+                  className="flex-1 py-2 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-medium flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Deletar
+                </motion.button>
+              </div>
+            )}
           </div>
         )}
 
@@ -462,41 +610,50 @@ export default function Chat() {
 
             {/* Input */}
             <div className="relative flex gap-2 pt-2 border-t border-gray-800">
-              <StickerPicker
-                isOpen={showStickers}
-                onClose={() => setShowStickers(false)}
-                onSelect={handleSendSticker}
-                userId={currentUser?.id}
-              />
-              
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setShowStickers(!showStickers)}
-                className="p-3 rounded-full bg-gray-900"
-              >
-                <Sticker className="w-5 h-5 text-gray-400" />
-              </motion.button>
-              
-              <Input
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Type a message..."
-                className="flex-1 bg-gray-900 border-gray-800 text-white"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && newMessage.trim()) {
-                    sendMutation.mutate(newMessage);
-                  }
-                }}
-              />
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={() => newMessage.trim() && sendMutation.mutate(newMessage)}
-                disabled={!newMessage.trim() || sendMutation.isPending}
-                className="p-3 rounded-full disabled:opacity-50"
-                style={{ backgroundColor: themeColor }}
-              >
-                <Send className="w-5 h-5 text-[#0b0b0b]" />
-              </motion.button>
+              {isChatLocked ? (
+                <div className="flex-1 flex items-center justify-center gap-2 py-3 text-gray-500">
+                  <Lock className="w-5 h-5" />
+                  <span className="text-sm">Chat bloqueado durante votação</span>
+                </div>
+              ) : (
+                <>
+                  <StickerPicker
+                    isOpen={showStickers}
+                    onClose={() => setShowStickers(false)}
+                    onSelect={handleSendSticker}
+                    userId={currentUser?.id}
+                  />
+                  
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setShowStickers(!showStickers)}
+                    className="p-3 rounded-full bg-gray-900"
+                  >
+                    <Sticker className="w-5 h-5 text-gray-400" />
+                  </motion.button>
+                  
+                  <Input
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Type a message..."
+                    className="flex-1 bg-gray-900 border-gray-800 text-white"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && newMessage.trim()) {
+                        sendMutation.mutate(newMessage);
+                      }
+                    }}
+                  />
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => newMessage.trim() && sendMutation.mutate(newMessage)}
+                    disabled={!newMessage.trim() || sendMutation.isPending}
+                    className="p-3 rounded-full disabled:opacity-50"
+                    style={{ backgroundColor: themeColor }}
+                  >
+                    <Send className="w-5 h-5 text-[#0b0b0b]" />
+                  </motion.button>
+                </>
+              )}
             </div>
           </div>
         )}
@@ -522,6 +679,55 @@ export default function Chat() {
         onInviteUser={handleInviteUser}
         currentUserId={currentUser?.id}
         isAdmin={isAdmin}
+        onEditPlan={() => {
+          setShowAdminActions(false);
+          setShowAdminEditModal(true);
+        }}
+      />
+
+      {/* Voting Modal */}
+      <VotingModal
+        isOpen={showVotingModal}
+        onClose={() => setShowVotingModal(false)}
+        onVote={(vote) => voteMutation.mutate(vote)}
+        planTitle={selectedPlan?.title || ''}
+        isLoading={voteMutation.isPending}
+      />
+
+      {/* Renew Modal */}
+      <RenewPlanModal
+        isOpen={showRenewModal}
+        onClose={() => setShowRenewModal(false)}
+        onConfirm={(data) => renewMutation.mutate(data)}
+        plan={selectedPlan}
+        isLoading={renewMutation.isPending}
+      />
+
+      {/* Delete Modal */}
+      <DeletePlanModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={() => deleteMutation.mutate()}
+        planTitle={selectedPlan?.title || ''}
+        isLoading={deleteMutation.isPending}
+      />
+
+      {/* Leave Modal */}
+      <LeavePlanModal
+        isOpen={showLeaveModal}
+        onClose={() => setShowLeaveModal(false)}
+        onConfirm={() => {/* handle leave */}}
+        planTitle={selectedPlan?.title || ''}
+        isLoading={false}
+      />
+
+      {/* Admin Edit Modal */}
+      <AdminEditModal
+        isOpen={showAdminEditModal}
+        onClose={() => setShowAdminEditModal(false)}
+        plan={selectedPlan}
+        onSave={(data) => adminEditMutation.mutate(data)}
+        isLoading={adminEditMutation.isPending}
       />
     </div>
   );

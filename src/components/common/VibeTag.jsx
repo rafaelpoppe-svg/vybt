@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Disc3, Music, Radio, Zap, Flame, Drum, 
-  Sparkles, Guitar, PartyPopper, Heart, AudioWaveform
+  Sparkles, Guitar, PartyPopper, Heart, AudioWaveform, Diamond, Flag
 } from 'lucide-react';
 
 export const vibeConfig = {
@@ -27,7 +27,7 @@ export const vibeConfig = {
     gradient: 'from-cyan-500 to-blue-500'
   },
   'Trap': { 
-    icon: Drum, 
+    icon: Diamond, 
     color: 'bg-red-500/20 text-red-400 border-red-500/30',
     gradient: 'from-red-500 to-rose-600'
   },
@@ -37,9 +37,9 @@ export const vibeConfig = {
     gradient: 'from-yellow-500 to-orange-500'
   },
   'Brazilian Funk': { 
-    icon: PartyPopper, 
+    icon: Flag, 
     color: 'bg-green-500/20 text-green-400 border-green-500/30',
-    gradient: 'from-green-500 to-emerald-500'
+    gradient: 'from-green-500 to-yellow-500'
   },
   'Hard Techno': { 
     icon: Zap, 
