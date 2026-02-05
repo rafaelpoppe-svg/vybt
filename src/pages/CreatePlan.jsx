@@ -11,7 +11,8 @@ import PartyTag from '../components/common/PartyTag';
 
 const partyTags = [
   'Rooftop Afternoon', 'Rooftop Night', 'Techno', 'Bar', 'Luxury', 
-  'House Party', 'University', 'Commercial', 'EDM', 'Latin'
+  'House Party', 'University', 'Commercial', 'EDM', 'Latin',
+  'Beach Club', 'Club', 'Festival', 'Karaoke', 'Pool Party'
 ];
 
 const themeColors = [
@@ -27,6 +28,7 @@ export default function CreatePlan() {
     description: '',
     date: '',
     time: '',
+    end_time: '',
     location_address: '',
     city: '',
     tags: [],
@@ -38,7 +40,7 @@ export default function CreatePlan() {
   const toggleTag = (tag) => {
     if (data.tags.includes(tag)) {
       setData({ ...data, tags: data.tags.filter(t => t !== tag) });
-    } else if (data.tags.length < 5) {
+    } else if (data.tags.length < 2) {
       setData({ ...data, tags: [...data.tags, tag] });
     }
   };
@@ -83,7 +85,7 @@ export default function CreatePlan() {
     setLoading(false);
   };
 
-  const isValid = data.title && data.date && data.time && data.location_address && data.city;
+  const isValid = data.title && data.date && data.time && data.end_time && data.location_address && data.city;
 
   return (
     <div className="min-h-screen bg-[#0b0b0b]">
@@ -185,28 +187,41 @@ export default function CreatePlan() {
         </div>
 
         {/* Date & Time */}
+        <div>
+          <label className="block text-gray-400 text-sm mb-2">
+            <Calendar className="w-4 h-4 inline mr-1" />
+            Data *
+          </label>
+          <Input
+            type="date"
+            value={data.date}
+            onChange={(e) => setData({ ...data, date: e.target.value })}
+            className="bg-gray-900 border-gray-800 text-white"
+          />
+        </div>
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-gray-400 text-sm mb-2">
-              <Calendar className="w-4 h-4 inline mr-1" />
-              Date *
+              <Clock className="w-4 h-4 inline mr-1" />
+              Início *
             </label>
             <Input
-              type="date"
-              value={data.date}
-              onChange={(e) => setData({ ...data, date: e.target.value })}
+              type="time"
+              value={data.time}
+              onChange={(e) => setData({ ...data, time: e.target.value })}
               className="bg-gray-900 border-gray-800 text-white"
             />
           </div>
           <div>
             <label className="block text-gray-400 text-sm mb-2">
               <Clock className="w-4 h-4 inline mr-1" />
-              Time *
+              Término *
             </label>
             <Input
               type="time"
-              value={data.time}
-              onChange={(e) => setData({ ...data, time: e.target.value })}
+              value={data.end_time}
+              onChange={(e) => setData({ ...data, end_time: e.target.value })}
               className="bg-gray-900 border-gray-800 text-white"
             />
           </div>
@@ -240,7 +255,7 @@ export default function CreatePlan() {
         <div>
           <label className="block text-gray-400 text-sm mb-2">
             <Tag className="w-4 h-4 inline mr-1" />
-            Party Type Tags (max 5)
+            Party Type Tags (máx. 2)
           </label>
           <div className="flex flex-wrap gap-2">
             {partyTags.map((tag) => (

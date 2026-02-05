@@ -1,0 +1,236 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Clock, MapPin, Image as ImageIcon, Palette, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { base44 } from '@/api/base44Client';
+import PartyTag from '../common/PartyTag';
+
+const partyTags = [
+  'Rooftop Afternoon', 'Rooftop Night', 'Techno', 'Bar', 'Luxury', 
+  'House Party', 'University', 'Commercial', 'EDM', 'Latin',
+  'Beach Club', 'Club', 'Festival', 'Karaoke', 'Pool Party'
+];
+
+const themeColors = [
+  '#00fea3', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1', 
+  '#f7dc6f', '#bb8fce', '#85c1e9', '#f8b500', '#ff69b4'
+];
+
+export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoading }) {
+  const [formData, setFormData] = useState({
+    title: plan?.title || '',
+    time: plan?.time || '',
+    end_time: plan?.end_time || '',
+    location_address: plan?.location_address || '',
+    cover_image: plan?.cover_image || '',
+    theme_color: plan?.theme_color || '#00fea3',
+    tags: plan?.tags || []
+  });
+  const [uploading, setUploading] = useState(false);
+
+  if (!isOpen || !plan) return null;
+
+  const toggleTag = (tag) => {
+    if (formData.tags.includes(tag)) {
+      setFormData({ ...formData, tags: formData.tags.filter(t => t !== tag) });
+    } else if (formData.tags.length < 2) {
+      setFormData({ ...formData, tags: [...formData.tags, tag] });
+    }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploading(true);
+      try {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        setFormData({ ...formData, cover_image: file_url });
+      } catch (err) {
+        console.error(err);
+      }
+      setUploading(false);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
+  return (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          onClick={onClose}
+        />
+        
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          className="relative bg-gray-900 rounded-2xl p-6 max-w-md w-full border border-gray-800 max-h-[90vh] overflow-y-auto"
+        >
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 rounded-full bg-gray-800 hover:bg-gray-700 z-10"
+          >
+            <X className="w-5 h-5 text-gray-400" />
+          </button>
+
+          <h2 className="text-2xl font-bold text-white mb-6">Editar Plano</h2>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Cover Image */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">
+                <ImageIcon className="w-4 h-4 inline mr-2" />
+                Capa do Plano
+              </label>
+              <label className="block cursor-pointer">
+                {formData.cover_image ? (
+                  <div className="relative h-32 rounded-xl overflow-hidden">
+                    <img src={formData.cover_image} alt="" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                      {uploading ? (
+                        <Loader2 className="w-6 h-6 text-white animate-spin" />
+                      ) : (
+                        <span className="text-white text-sm">Alterar</span>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="h-32 rounded-xl border-2 border-dashed border-gray-700 flex items-center justify-center">
+                    {uploading ? (
+                      <Loader2 className="w-6 h-6 text-gray-500 animate-spin" />
+                    ) : (
+                      <span className="text-gray-500 text-sm">Adicionar capa</span>
+                    )}
+                  </div>
+                )}
+                <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+              </label>
+            </div>
+
+            {/* Title */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">Nome do Plano</label>
+              <Input
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="bg-gray-800 border-gray-700 text-white"
+              />
+            </div>
+
+            {/* Times */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">
+                  <Clock className="w-4 h-4 inline mr-1" />
+                  Início
+                </label>
+                <Input
+                  type="time"
+                  value={formData.time}
+                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">
+                  <Clock className="w-4 h-4 inline mr-1" />
+                  Término
+                </label>
+                <Input
+                  type="time"
+                  value={formData.end_time}
+                  onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
+              </div>
+            </div>
+
+            {/* Address */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">
+                <MapPin className="w-4 h-4 inline mr-1" />
+                Endereço
+              </label>
+              <Input
+                value={formData.location_address}
+                onChange={(e) => setFormData({ ...formData, location_address: e.target.value })}
+                className="bg-gray-800 border-gray-700 text-white"
+              />
+            </div>
+
+            {/* Theme Color */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">
+                <Palette className="w-4 h-4 inline mr-1" />
+                Cor do Grupo
+              </label>
+              <div className="flex gap-2 flex-wrap">
+                {themeColors.map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, theme_color: color })}
+                    className={`w-8 h-8 rounded-lg transition-all ${
+                      formData.theme_color === color ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-900' : ''
+                    }`}
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Tags */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">
+                Party Tags (máx. 2)
+              </label>
+              <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+                {partyTags.map((tag) => (
+                  <PartyTag
+                    key={tag}
+                    tag={tag}
+                    size="sm"
+                    interactive
+                    selected={formData.tags.includes(tag)}
+                    onClick={() => toggleTag(tag)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                className="flex-1 bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="flex-1 bg-[#00fea3] text-[#0b0b0b] hover:bg-[#00fea3]/90"
+              >
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  'Salvar'
+                )}
+              </Button>
+            </div>
+          </form>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  );
+}

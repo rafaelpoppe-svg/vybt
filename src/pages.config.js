@@ -56,12 +56,12 @@ import Friends from './pages/Friends';
 import Home from './pages/Home';
 import MyPlans from './pages/MyPlans';
 import MyStories from './pages/MyStories';
+import Notifications from './pages/Notifications';
 import Onboarding from './pages/Onboarding';
 import PlanDetails from './pages/PlanDetails';
 import Profile from './pages/Profile';
 import StoryView from './pages/StoryView';
 import UserProfile from './pages/UserProfile';
-import Notifications from './pages/Notifications';
 import __Layout from './Layout.jsx';
 
 
@@ -75,12 +75,12 @@ export const PAGES = {
     "Home": Home,
     "MyPlans": MyPlans,
     "MyStories": MyStories,
+    "Notifications": Notifications,
     "Onboarding": Onboarding,
     "PlanDetails": PlanDetails,
     "Profile": Profile,
     "StoryView": StoryView,
     "UserProfile": UserProfile,
-    "Notifications": Notifications,
 }
 
 export const pagesConfig = {
