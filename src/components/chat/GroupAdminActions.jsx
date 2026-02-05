@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, Pin, UserMinus, UserPlus, Share2, MoreVertical, 
-  MessageSquare, Camera, Check, Loader2 
+  MessageSquare, Camera, Check, Loader2, Edit 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -63,6 +63,19 @@ export default function GroupAdminActions({
               <X className="w-5 h-5 text-gray-400" />
             </button>
           </div>
+
+          {/* Edit Plan Button */}
+          {onEditPlan && (
+            <div className="p-3 border-b border-gray-800">
+              <Button
+                onClick={onEditPlan}
+                className="w-full bg-[#542b9b] hover:bg-[#542b9b]/80 text-white"
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                Editar Plano
+              </Button>
+            </div>
+          )}
 
           {/* Tabs */}
           <div className="flex border-b border-gray-800">
