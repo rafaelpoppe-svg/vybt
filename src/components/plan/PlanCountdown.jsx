@@ -72,7 +72,7 @@ export default function PlanCountdown({ plan, size = 'md' }) {
         className={`${sizes[size]} rounded-full bg-blue-500 text-white font-medium flex items-center gap-1.5`}
       >
         <Flame className="w-4 h-4 animate-pulse" />
-        <span>Acontecendo Agora</span>
+        <span>Happening Now</span>
         {timeLeft && <span className="opacity-75">• {timeLeft}</span>}
       </motion.div>
     );
