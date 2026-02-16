@@ -19,6 +19,19 @@ export default function Onboarding() {
   });
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      try {
+        const user = await base44.auth.me();
+        const profiles = await base44.entities.UserProfile.filter({ user_id: user.id });
+        if (profiles?.[0]?.onboarding_completed) {
+          navigate(createPageUrl('Home'));
+        }
+      } catch (e) {}
+    };
+    checkOnboarding();
+  }, [navigate]);
+
   const canProceed = () => {
     switch(step) {
       case 0: return data.gender !== '';
