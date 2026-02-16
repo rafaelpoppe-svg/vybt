@@ -117,7 +117,7 @@ export default function Profile() {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Camera className="w-5 h-5 text-gray-600" />
+                    <Camera className="w-7 h-7 text-gray-600" />
                   </div>
                 )}
               </div>
