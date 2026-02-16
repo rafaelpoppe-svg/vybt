@@ -94,15 +94,15 @@ export default function PartyTag({ tag, size = 'md', interactive = false, select
   const Icon = config.icon;
 
   const sizes = {
-    sm: 'px-2 py-0.5 text-[10px]',
-    md: 'px-3 py-2 text-sm',
-    lg: 'px-4 py-2.5 text-base'
+    sm: 'px-1.5 py-0.5 text-[9px]',
+    md: 'px-2 py-1 text-xs',
+    lg: 'px-3 py-1.5 text-sm'
   };
 
   const iconSizes = {
-    sm: 'w-2.5 h-2.5',
-    md: 'w-4 h-4',
-    lg: 'w-5 h-5'
+    sm: 'w-2 h-2',
+    md: 'w-3 h-3',
+    lg: 'w-4 h-4'
   };
 
   const Tag = interactive ? motion.button : 'span';
