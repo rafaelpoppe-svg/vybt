@@ -44,7 +44,26 @@ export default function StoriesBar({
 
       {/* Stories - Vertical rectangle cards */}
       <div className="flex gap-3 px-4 overflow-x-auto scrollbar-hide pb-2">
-        <StoryCard isAdd onClick={onAddStory} />
+        {/* Add Story with tooltip bubble if plan is happening */}
+        <div className="relative flex-shrink-0">
+          <StoryCard isAdd onClick={onAddStory} />
+          <AnimatePresence>
+            {happeningPlan && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 4 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="absolute -top-2 left-1/2 -translate-x-1/2 w-48 z-50 pointer-events-none"
+                style={{ bottom: 'calc(100% + 4px)', top: 'auto' }}
+              >
+                <div className="bg-orange-500 text-white text-[10px] font-bold rounded-xl px-2 py-1.5 text-center leading-tight shadow-lg shadow-orange-500/40">
+                  🔥 Um dos seus planos está acontecendo agora! Poste já os seus stories!!
+                </div>
+                <div className="w-3 h-3 bg-orange-500 rotate-45 mx-auto -mt-1.5 rounded-sm" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
         
         {/* Own stories first with special color */}
         {ownStories.map((story) => (
