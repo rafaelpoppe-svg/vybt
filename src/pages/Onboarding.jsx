@@ -5,6 +5,8 @@ import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import GenderSelect from '../components/onboarding/GenderSelect';
+import DateOfBirthSelect from '../components/onboarding/DateOfBirthSelect';
+import PhotoUploadStep from '../components/onboarding/PhotoUploadStep';
 import VibesSelect from '../components/onboarding/VibesSelect';
 import PartyTypeSelect from '../components/onboarding/PartyTypeSelect';
 import WelcomeComplete from '../components/onboarding/WelcomeComplete';
