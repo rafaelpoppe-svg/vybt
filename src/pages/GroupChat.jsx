@@ -126,17 +126,47 @@ export default function GroupChat() {
   const sendMutation = useMutation({
     mutationFn: async (content) => {
       if (!currentUser?.id || !planId) return;
-      await base44.entities.ChatMessage.create({
+      // Fire notification in background — don't await it
+      const msgPromise = base44.entities.ChatMessage.create({
         sender_id: currentUser.id,
         plan_id: planId,
         message_type: 'group',
         content,
         is_read: false,
       });
-      await notifyNewGroupMessage(
+      notifyNewGroupMessage(
         planId, currentUser.id,
         myProfile?.display_name || currentUser.full_name || 'Alguém'
-      );
+      ); // intentionally not awaited
+      return msgPromise;
+    },
+    onMutate: async (content) => {
+      // Cancel any in-flight refetches
+      await queryClient.cancelQueries(['groupMessages', planId]);
+      // Snapshot current messages
+      const previous = queryClient.getQueryData(['groupMessages', planId]);
+      // Optimistically add the new message
+      const optimisticMsg = {
+        id: `optimistic-${Date.now()}`,
+        sender_id: currentUser?.id,
+        plan_id: planId,
+        message_type: 'group',
+        content,
+        is_read: false,
+        created_date: new Date().toISOString(),
+      };
+      queryClient.setQueryData(['groupMessages', planId], (old = []) => [...old, optimisticMsg]);
+      return { previous };
+    },
+    onError: (_err, _content, context) => {
+      // Rollback on error
+      if (context?.previous) {
+        queryClient.setQueryData(['groupMessages', planId], context.previous);
+      }
+    },
+    onSuccess: () => {
+      // Sync with real data after server confirms
+      queryClient.invalidateQueries(['groupMessages', planId]);
     },
   });
 
