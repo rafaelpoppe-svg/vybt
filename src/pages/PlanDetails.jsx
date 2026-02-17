@@ -93,6 +93,8 @@ export default function PlanDetails() {
 
   const isCreator = plan?.creator_id === currentUser?.id;
   const themeColor = plan?.theme_color || '#00fea3';
+  const isVoting = plan?.status === 'voting';
+  const canJoinOrLeave = !isVoting;
 
   const joinMutation = useMutation({
     mutationFn: async () => {
@@ -342,59 +344,78 @@ export default function PlanDetails() {
         )}
 
         {/* Plan limit warning */}
-        {!canJoinMorePlans && !isJoined && (
+        {!canJoinMorePlans && !isJoined && !isVoting && (
           <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm text-center">
             You've reached the limit of 3 plans in {plan.city}. Leave a plan to join this one.
+          </div>
+        )}
+
+        {/* Voting Period Notice */}
+        {isVoting && (
+          <div className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 text-sm text-center">
+            🗳️ Voting period active - Cannot join or leave during voting (6 hours)
+          </div>
+        )}
+
+        {/* Terminated Notice */}
+        {plan.status === 'terminated' && (
+          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-center">
+            <p className="text-red-400 font-bold text-lg mb-1">❌ Plan Terminated</p>
+            <p className="text-gray-400 text-sm">
+              This plan was terminated by the admin and will be deleted in 24 hours
+            </p>
           </div>
         )}
       </main>
 
       {/* Bottom Actions */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
-        <div className="flex gap-3">
-          <Button
-            onClick={() => navigate(createPageUrl('Chat') + `?planId=${planId}`)}
-            variant="outline"
-            className="flex-1 py-6 rounded-full border-gray-700 bg-gray-900 text-white hover:bg-gray-800"
-          >
-            <MessageCircle className="w-5 h-5 mr-2" />
-            Group Chat
-          </Button>
-          
-          {isJoined ? (
+      {plan.status !== 'terminated' && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
+          <div className="flex gap-3">
             <Button
-              onClick={() => setShowLeaveModal(true)}
-              disabled={leaveMutation.isPending}
-              className="flex-1 py-6 rounded-full bg-gray-800 text-white hover:bg-gray-700"
+              onClick={() => navigate(createPageUrl('Chat') + `?planId=${planId}`)}
+              variant="outline"
+              className="flex-1 py-6 rounded-full border-gray-700 bg-gray-900 text-white hover:bg-gray-800"
             >
-              {leaveMutation.isPending ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <LogOut className="w-5 h-5 mr-2" />
-                  Sair
-                </>
-              )}
+              <MessageCircle className="w-5 h-5 mr-2" />
+              Group Chat
             </Button>
-          ) : (
-            <Button
-              onClick={() => joinMutation.mutate()}
-              disabled={joinMutation.isPending || !canJoinMorePlans}
-              className="flex-1 py-6 rounded-full font-bold"
-              style={{ backgroundColor: themeColor, color: '#0b0b0b' }}
-            >
-              {joinMutation.isPending ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <Plus className="w-5 h-5 mr-2" />
-                  Join Plan
-                </>
-              )}
-            </Button>
-          )}
+            
+            {isJoined ? (
+              <Button
+                onClick={() => setShowLeaveModal(true)}
+                disabled={leaveMutation.isPending || !canJoinOrLeave}
+                className="flex-1 py-6 rounded-full bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-50"
+              >
+                {leaveMutation.isPending ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    <LogOut className="w-5 h-5 mr-2" />
+                    Sair
+                  </>
+                )}
+              </Button>
+            ) : (
+              <Button
+                onClick={() => joinMutation.mutate()}
+                disabled={joinMutation.isPending || !canJoinMorePlans || !canJoinOrLeave}
+                className="flex-1 py-6 rounded-full font-bold disabled:opacity-50"
+                style={{ backgroundColor: themeColor, color: '#0b0b0b' }}
+              >
+                {joinMutation.isPending ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    <Plus className="w-5 h-5 mr-2" />
+                    Join Plan
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Highlight Modal */}
       <HighlightPlanModal

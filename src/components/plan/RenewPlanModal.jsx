@@ -4,7 +4,8 @@ import { X, Calendar, Clock, MapPin, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export default function RenewPlanModal({ isOpen, onClose, onConfirm, plan, isLoading }) {
+export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate, plan, isLoading }) {
+  const [action, setAction] = useState(null); // 'renew' or 'terminate'
   const [formData, setFormData] = useState({
     date: '',
     time: '',
@@ -45,14 +46,77 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, plan, isLoa
             <X className="w-5 h-5 text-gray-400" />
           </button>
 
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-white mb-2">Renovar Plano 🔄</h2>
-            <p className="text-gray-400 text-sm">
-              Todo será renovado com nova data e horário. As experience stories anteriores serão mantidas.
-            </p>
-          </div>
+          {!action ? (
+            <div className="space-y-4">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-white mb-2">Ações do Administrador</h2>
+                <p className="text-gray-400 text-sm">Escolha o que fazer com este plano</p>
+              </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+              <Button
+                onClick={() => setAction('renew')}
+                className="w-full py-6 rounded-xl bg-gradient-to-r from-[#00fea3] to-green-500 hover:from-[#00fea3]/90 hover:to-green-600 text-[#0b0b0b] font-semibold text-lg"
+              >
+                🔄 Renovar Plano
+              </Button>
+
+              <Button
+                onClick={() => setAction('terminate')}
+                className="w-full py-6 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-semibold text-lg"
+              >
+                ❌ Terminar Plano
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={onClose}
+                className="w-full bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
+              >
+                Cancelar
+              </Button>
+            </div>
+          ) : action === 'terminate' ? (
+            <div className="space-y-4">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-white mb-2">Terminar Plano ❌</h2>
+                <p className="text-gray-400 text-sm">
+                  O plano será marcado como terminado e ficará visível por 24 horas antes de ser deletado automaticamente.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30">
+                <p className="text-red-400 text-sm">
+                  ⚠️ Esta ação não pode ser desfeita. Todos os membros verão que o plano foi terminado.
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => setAction(null)}
+                  className="flex-1 bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
+                >
+                  Voltar
+                </Button>
+                <Button
+                  onClick={() => onTerminate()}
+                  disabled={isLoading}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                >
+                  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirmar Término'}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-white mb-2">Renovar Plano 🔄</h2>
+                <p className="text-gray-400 text-sm">
+                  Todo será renovado com nova data e horário. As experience stories anteriores serão mantidas.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-gray-400 text-sm mb-2">
                 <Calendar className="w-4 h-4 inline mr-2" />
@@ -110,28 +174,30 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, plan, isLoa
               />
             </div>
 
-            <div className="flex gap-3 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-                className="flex-1 bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
-              >
-                Cancelar
-              </Button>
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="flex-1 bg-[#00fea3] text-[#0b0b0b] hover:bg-[#00fea3]/90"
-              >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  'Confirmar Renovação'
-                )}
-              </Button>
-            </div>
-          </form>
+                <div className="flex gap-3 pt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setAction(null)}
+                    className="flex-1 bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
+                  >
+                    Voltar
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="flex-1 bg-[#00fea3] text-[#0b0b0b] hover:bg-[#00fea3]/90"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      'Confirmar Renovação'
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </>
+          )}
         </motion.div>
       </div>
     </AnimatePresence>
