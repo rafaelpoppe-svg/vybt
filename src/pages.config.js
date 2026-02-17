@@ -62,6 +62,7 @@ import PlanDetails from './pages/PlanDetails';
 import Profile from './pages/Profile';
 import StoryView from './pages/StoryView';
 import UserProfile from './pages/UserProfile';
+import GroupChat from './pages/GroupChat';
 import __Layout from './Layout.jsx';
 
 
@@ -81,6 +82,7 @@ export const PAGES = {
     "Profile": Profile,
     "StoryView": StoryView,
     "UserProfile": UserProfile,
+    "GroupChat": GroupChat,
 }
 
 export const pagesConfig = {
