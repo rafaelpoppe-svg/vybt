@@ -221,7 +221,7 @@ export default function StoryView() {
       </div>
 
       {/* Header */}
-      <div className="absolute top-4 left-0 right-0 px-4 z-10">
+      <div className="absolute top-4 left-0 right-0 px-4 z-30">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800">
