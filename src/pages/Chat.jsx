@@ -98,7 +98,7 @@ export default function Chat() {
     enabled: !!selectedChat && activeTab === 'groups'
   });
 
-  // Fetch messages
+  // Fetch messages with refetch interval for real-time updates
   const { data: messages = [], isLoading: messagesLoading } = useQuery({
     queryKey: ['messages', selectedChat, activeTab],
     queryFn: () => {
@@ -108,27 +108,9 @@ export default function Chat() {
         return base44.entities.ChatMessage.filter({ message_type: 'direct' });
       }
     },
-    enabled: !!selectedChat
+    enabled: !!selectedChat,
+    refetchInterval: 2000, // Refetch every 2 seconds for instant updates
   });
-
-  // Real-time message subscription
-  useEffect(() => {
-    if (!selectedChat) return;
-
-    const unsubscribe = base44.entities.ChatMessage.subscribe((event) => {
-      // Only update if it's relevant to the current chat
-      const isRelevant = activeTab === 'groups' 
-        ? event.data.plan_id === selectedChat 
-        : (event.data.sender_id === selectedChat || event.data.receiver_id === selectedChat || 
-           event.data.sender_id === currentUser?.id || event.data.receiver_id === currentUser?.id);
-      
-      if (isRelevant) {
-        queryClient.invalidateQueries(['messages', selectedChat, activeTab]);
-      }
-    });
-
-    return unsubscribe;
-  }, [selectedChat, activeTab, currentUser?.id, queryClient]);
 
   const filteredMessages = activeTab === 'direct' 
     ? messages.filter(m => 
@@ -154,7 +136,7 @@ export default function Chat() {
     },
     onSuccess: () => {
       setNewMessage('');
-      // No need to invalidate - real-time subscription handles it
+      queryClient.invalidateQueries(['messages', selectedChat, activeTab]);
     }
   });
 
