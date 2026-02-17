@@ -53,6 +53,7 @@ import CreatePlan from './pages/CreatePlan';
 import EditProfile from './pages/EditProfile';
 import Explore from './pages/Explore';
 import Friends from './pages/Friends';
+import GroupChat from './pages/GroupChat';
 import Home from './pages/Home';
 import MyPlans from './pages/MyPlans';
 import MyStories from './pages/MyStories';
@@ -62,7 +63,6 @@ import PlanDetails from './pages/PlanDetails';
 import Profile from './pages/Profile';
 import StoryView from './pages/StoryView';
 import UserProfile from './pages/UserProfile';
-import GroupChat from './pages/GroupChat';
 import __Layout from './Layout.jsx';
 
 
@@ -73,6 +73,7 @@ export const PAGES = {
     "EditProfile": EditProfile,
     "Explore": Explore,
     "Friends": Friends,
+    "GroupChat": GroupChat,
     "Home": Home,
     "MyPlans": MyPlans,
     "MyStories": MyStories,
@@ -82,7 +83,6 @@ export const PAGES = {
     "Profile": Profile,
     "StoryView": StoryView,
     "UserProfile": UserProfile,
-    "GroupChat": GroupChat,
 }
 
 export const pagesConfig = {

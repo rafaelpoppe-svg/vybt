@@ -11,6 +11,7 @@ import PlanCard from '../components/feed/PlanCard';
 import LocationSelector from '../components/common/LocationSelector';
 import BottomNav from '../components/common/BottomNav';
 import ForYouSection from '../components/feed/ForYouSection';
+import HappeningNowBanner from '../components/feed/HappeningNowBanner';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
 
 export default function Home() {
