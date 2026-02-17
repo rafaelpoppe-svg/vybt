@@ -231,18 +231,11 @@ export default function PlanDetails() {
       </div>
 
       {/* Content */}
-      <main className="px-4 -mt-8 relative z-10 space-y-6">
-        {/* Tags */}
-        <div className="flex gap-2 flex-wrap">
-          {plan.tags?.map((tag, i) => (
-            <PartyTag key={i} tag={tag} size="md" />
-          ))}
-        </div>
-
+      <main className="px-4 pt-6 relative z-10 space-y-6">
         {/* Title */}
         <h1 className="text-3xl font-bold text-white">{plan.title}</h1>
 
-        {/* Info with end_time */}
+        {/* Info card with tags inside */}
         <div 
           className="space-y-3 p-4 rounded-xl"
           style={{ backgroundColor: `${themeColor}10`, borderLeft: `3px solid ${themeColor}` }}
@@ -259,6 +252,16 @@ export default function PlanDetails() {
             <MapPin className="w-5 h-5" style={{ color: themeColor }} />
             <span>{plan.location_address}, {plan.city}</span>
           </div>
+          {/* Tags — below the divider inside the card */}
+          {plan.tags?.length > 0 && (
+            <>
+              <div className="border-t border-white/10 pt-3 flex gap-2 flex-wrap">
+                {plan.tags.map((tag, i) => (
+                  <PartyTag key={i} tag={tag} size="md" />
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Description */}
