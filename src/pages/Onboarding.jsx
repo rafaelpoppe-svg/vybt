@@ -16,6 +16,8 @@ export default function Onboarding() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
     gender: '',
+    date_of_birth: '',
+    photos: [],
     vibes: [],
     party_types: []
   });
@@ -37,8 +39,10 @@ export default function Onboarding() {
   const canProceed = () => {
     switch(step) {
       case 0: return data.gender !== '';
-      case 1: return data.vibes.length >= 2;
-      case 2: return data.party_types.length >= 2;
+      case 1: return data.date_of_birth !== '';
+      case 2: return data.photos.length > 0;
+      case 3: return data.vibes.length >= 2;
+      case 4: return data.party_types.length >= 2;
       default: return true;
     }
   };
@@ -51,12 +55,14 @@ export default function Onboarding() {
         user_id: user.id,
         display_name: user.full_name,
         gender: data.gender,
+        date_of_birth: data.date_of_birth,
+        photos: data.photos,
         vibes: data.vibes,
         party_types: data.party_types,
-        photos: [],
         city: '',
         radius_km: 10,
-        onboarding_completed: true
+        onboarding_completed: true,
+        total_stories_count: 0
       });
       navigate(createPageUrl('Home'));
     } catch (error) {
@@ -69,6 +75,14 @@ export default function Onboarding() {
     <GenderSelect 
       selected={data.gender} 
       onSelect={(gender) => setData({...data, gender})} 
+    />,
+    <DateOfBirthSelect 
+      value={data.date_of_birth}
+      onChange={(date_of_birth) => setData({...data, date_of_birth})}
+    />,
+    <PhotoUploadStep 
+      photos={data.photos}
+      onChange={(photos) => setData({...data, photos})}
     />,
     <VibesSelect 
       selected={data.vibes} 
@@ -104,10 +118,10 @@ export default function Onboarding() {
       </div>
 
       {/* Progress */}
-      {step < 3 && (
+      {step < 5 && (
         <div className="px-6 mb-8">
           <div className="flex gap-2">
-            {[0, 1, 2].map((i) => (
+            {[0, 1, 2, 3, 4].map((i) => (
               <div 
                 key={i}
                 className={`h-1 flex-1 rounded-full transition-all duration-500 ${
@@ -135,7 +149,7 @@ export default function Onboarding() {
       </div>
 
       {/* Footer Button */}
-      {step < 3 && (
+      {step < 5 && (
         <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
           <motion.button
             whileHover={{ scale: canProceed() ? 1.02 : 1 }}
