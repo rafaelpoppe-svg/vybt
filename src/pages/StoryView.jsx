@@ -188,15 +188,15 @@ export default function StoryView() {
         ))}
       </div>
 
-      {/* Navigation areas */}
+      {/* Navigation areas — start below the header area (top-24) so buttons don't block header */}
       <button
         onClick={handlePrevious}
-        className="absolute left-0 top-0 bottom-0 w-1/3 z-20"
+        className="absolute left-0 top-24 bottom-32 w-1/3 z-20"
         disabled={currentStoryIndex === 0}
       />
       <button
         onClick={handleNext}
-        className="absolute right-0 top-0 bottom-0 w-1/3 z-20"
+        className="absolute right-0 top-24 bottom-32 w-1/3 z-20"
       />
 
       {/* Media */}
