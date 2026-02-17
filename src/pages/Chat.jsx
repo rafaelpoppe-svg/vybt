@@ -98,10 +98,11 @@ export default function Chat() {
     enabled: !!selectedChat && activeTab === 'groups'
   });
 
-  // Fetch messages with refetch interval for real-time updates
+  // Fetch messages
   const { data: messages = [], isLoading: messagesLoading } = useQuery({
     queryKey: ['messages', selectedChat, activeTab],
-    queryFn: () => {
+    queryFn: async () => {
+      if (!selectedChat) return [];
       if (activeTab === 'groups') {
         return base44.entities.ChatMessage.filter({ plan_id: selectedChat, message_type: 'group' });
       } else {
@@ -109,8 +110,31 @@ export default function Chat() {
       }
     },
     enabled: !!selectedChat,
-    refetchInterval: 2000, // Refetch every 2 seconds for instant updates
+    staleTime: 0,
   });
+
+  // Real-time message subscription
+  useEffect(() => {
+    if (!selectedChat || !currentUser?.id) return;
+
+    const unsubscribe = base44.entities.ChatMessage.subscribe((event) => {
+      if (event.type === 'create') {
+        // Check if this message is relevant to current chat
+        const isRelevant = activeTab === 'groups' 
+          ? event.data.plan_id === selectedChat 
+          : (event.data.sender_id === selectedChat && event.data.receiver_id === currentUser.id) ||
+            (event.data.receiver_id === selectedChat && event.data.sender_id === currentUser.id);
+        
+        if (isRelevant) {
+          queryClient.invalidateQueries(['messages', selectedChat, activeTab]);
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [selectedChat, activeTab, currentUser?.id, queryClient]);
 
   const filteredMessages = activeTab === 'direct' 
     ? messages.filter(m => 
@@ -125,7 +149,9 @@ export default function Chat() {
 
   const sendMutation = useMutation({
     mutationFn: async (content) => {
-      await base44.entities.ChatMessage.create({
+      if (!currentUser?.id || !selectedChat) return;
+      
+      return await base44.entities.ChatMessage.create({
         sender_id: currentUser.id,
         receiver_id: activeTab === 'direct' ? selectedChat : null,
         plan_id: activeTab === 'groups' ? selectedChat : null,
@@ -136,12 +162,14 @@ export default function Chat() {
     },
     onSuccess: () => {
       setNewMessage('');
-      queryClient.invalidateQueries(['messages', selectedChat, activeTab]);
     }
   });
 
   const handleSendSticker = (sticker) => {
-    sendMutation.mutate(`sticker:${sticker.image_url}`);
+    if (!sendMutation.isPending) {
+      sendMutation.mutate(`sticker:${sticker.image_url}`);
+      setShowStickers(false);
+    }
   };
 
   useEffect(() => {
