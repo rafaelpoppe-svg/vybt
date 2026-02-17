@@ -22,7 +22,7 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true 
         </div>
       )}
 
-      <div className={`max-w-[70%] ${isMe ? 'order-2' : ''}`}>
+      <div className={`max-w-[70%]`}>
         {!isMe && showProfile && (
           <p className="text-xs text-gray-500 mb-1 ml-1">
             {sender?.display_name || 'User'}
