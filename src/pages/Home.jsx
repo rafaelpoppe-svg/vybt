@@ -116,6 +116,12 @@ export default function Home() {
   const todayPlans = visiblePlans.filter(p => p.date === today);
   const upcomingPlans = visiblePlans.filter(p => p.date > today);
 
+  // Detect a plan the user joined that is happening right now
+  const myPlanIds = myParticipations.map(p => p.plan_id);
+  const happeningPlan = visiblePlans.find(p =>
+    myPlanIds.includes(p.id) && p.status === 'happening'
+  ) || null;
+
   const getParticipants = (planId) => {
     return allParticipants
       .filter(p => p.plan_id === planId)
