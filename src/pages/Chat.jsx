@@ -111,6 +111,25 @@ export default function Chat() {
     enabled: !!selectedChat
   });
 
+  // Real-time message subscription
+  useEffect(() => {
+    if (!selectedChat) return;
+
+    const unsubscribe = base44.entities.ChatMessage.subscribe((event) => {
+      // Only update if it's relevant to the current chat
+      const isRelevant = activeTab === 'groups' 
+        ? event.data.plan_id === selectedChat 
+        : (event.data.sender_id === selectedChat || event.data.receiver_id === selectedChat || 
+           event.data.sender_id === currentUser?.id || event.data.receiver_id === currentUser?.id);
+      
+      if (isRelevant) {
+        queryClient.invalidateQueries(['messages', selectedChat, activeTab]);
+      }
+    });
+
+    return unsubscribe;
+  }, [selectedChat, activeTab, currentUser?.id, queryClient]);
+
   const filteredMessages = activeTab === 'direct' 
     ? messages.filter(m => 
         (m.sender_id === currentUser?.id && m.receiver_id === selectedChat) ||
@@ -135,7 +154,7 @@ export default function Chat() {
     },
     onSuccess: () => {
       setNewMessage('');
-      queryClient.invalidateQueries(['messages', selectedChat, activeTab]);
+      // No need to invalidate - real-time subscription handles it
     }
   });
 
