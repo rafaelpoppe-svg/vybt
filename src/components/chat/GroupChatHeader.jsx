@@ -14,7 +14,7 @@ export default function GroupChatHeader({
       style={{ backgroundColor: `color-mix(in srgb, ${themeColor} 8%, #0b0b0b 92%)` }}
     >
       {/* Main row */}
-      <div className="flex items-center gap-3 px-4 pt-12 pb-3">
+      <div className="flex items-center gap-3 px-4 pt-12 pb-2">
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={onBack}
@@ -35,22 +35,15 @@ export default function GroupChatHeader({
           )}
         </div>
 
-        {/* Title */}
+        {/* Title only — tags moved below */}
         <div className="flex-1 min-w-0">
-          {plan?.tags?.length > 0 && (
-            <div className="flex gap-1 mb-0.5 overflow-x-auto scrollbar-hide">
-              {plan.tags.slice(0, 2).map((tag, i) => (
-                <PartyTag key={i} tag={tag} size="sm" />
-              ))}
-            </div>
-          )}
           <h1 className="text-base font-bold text-white truncate leading-tight">
             {plan?.title || '...'}
           </h1>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-1.5">
+        <div className="flex gap-1.5 flex-shrink-0">
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={onInfo}
@@ -69,6 +62,15 @@ export default function GroupChatHeader({
           )}
         </div>
       </div>
+
+      {/* Tags row — full width, no overlap */}
+      {plan?.tags?.length > 0 && (
+        <div className="flex gap-1.5 px-4 pb-2 overflow-x-auto scrollbar-hide">
+          {plan.tags.slice(0, 2).map((tag, i) => (
+            <PartyTag key={i} tag={tag} size="sm" />
+          ))}
+        </div>
+      )}
 
       {/* Meta row */}
       {plan && (
