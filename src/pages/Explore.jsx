@@ -102,6 +102,12 @@ export default function Explore() {
   const basePlans = planFilters.sortBy === 'foryou' ? recommendedPlans : plans;
 
   let filteredPlans = basePlans.filter(plan => {
+    // Hide voting plans from non-members
+    if (plan.status === 'voting') {
+      const isMember = myParticipations.some(p => p.plan_id === plan.id);
+      if (!isMember) return false;
+    }
+    
     const matchesSearch = plan.title.toLowerCase().includes(search.toLowerCase()) ||
       plan.location_address?.toLowerCase().includes(search.toLowerCase());
     const matchesTag = selectedTag === 'All' || plan.tags?.some(t => 

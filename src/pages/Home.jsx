@@ -90,21 +90,30 @@ export default function Home() {
   const friendIds = friendships.map(f => f.friend_id);
   const pastPlanIds = myParticipations.map(p => p.plan_id);
 
+  // Filter out voting plans for non-members
+  const visiblePlans = plans.filter(plan => {
+    if (plan.status === 'voting') {
+      const isMember = myParticipations.some(p => p.plan_id === plan.id);
+      return isMember;
+    }
+    return true;
+  });
+
   // Get personalized recommendations
   const recommendedPlans = useRecommendations({
-    plans,
+    plans: visiblePlans,
     userProfile: myProfile,
     friendIds,
     pastPlanIds,
     allParticipants,
-    allPlans: plans
+    allPlans: visiblePlans
   });
 
   const forYouPlans = recommendedPlans.filter(p => p.matchScore > 20).slice(0, 10);
 
   const today = format(new Date(), 'yyyy-MM-dd');
-  const todayPlans = plans.filter(p => p.date === today);
-  const upcomingPlans = plans.filter(p => p.date > today);
+  const todayPlans = visiblePlans.filter(p => p.date === today);
+  const upcomingPlans = visiblePlans.filter(p => p.date > today);
 
   const getParticipants = (planId) => {
     return allParticipants
@@ -172,7 +181,7 @@ export default function Home() {
               </motion.button>
             </div>
             <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
-              {plans
+              {visiblePlans
                 .filter(p => myParticipations.some(mp => mp.plan_id === p.id))
                 .slice(0, 5)
                 .map((plan) => (
