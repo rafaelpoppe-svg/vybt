@@ -1,4 +1,6 @@
 import React from 'react';
+import { NotificationProvider } from '@/components/notifications/NotificationProvider';
+import { Toaster } from 'sonner';
 
 export default function Layout({ children, currentPageName }) {
   // Pages that should have the dark theme applied
@@ -9,7 +11,9 @@ export default function Layout({ children, currentPageName }) {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b]">
+    <NotificationProvider>
+      <Toaster position="top-center" theme="dark" />
+      <div className="min-h-screen bg-[#0b0b0b]">
       <style>{`
         :root {
           --color-primary: #00fea3;
@@ -57,7 +61,8 @@ export default function Layout({ children, currentPageName }) {
           filter: invert(1);
         }
       `}</style>
-      {children}
-    </div>
+        {children}
+      </div>
+    </NotificationProvider>
   );
 }

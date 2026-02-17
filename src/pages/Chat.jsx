@@ -19,6 +19,7 @@ import RenewPlanModal from '../components/plan/RenewPlanModal';
 import DeletePlanModal from '../components/plan/DeletePlanModal';
 import LeavePlanModal from '../components/plan/LeavePlanModal';
 import AdminEditModal from '../components/plan/AdminEditModal';
+import { notifyNewGroupMessage, notifyNewDirectMessage } from '../components/notifications/NotificationTriggers';
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -151,7 +152,7 @@ export default function Chat() {
     mutationFn: async (content) => {
       if (!currentUser?.id || !selectedChat) return;
       
-      return await base44.entities.ChatMessage.create({
+      const message = await base44.entities.ChatMessage.create({
         sender_id: currentUser.id,
         receiver_id: activeTab === 'direct' ? selectedChat : null,
         plan_id: activeTab === 'groups' ? selectedChat : null,
@@ -159,6 +160,15 @@ export default function Chat() {
         content: content,
         is_read: false
       });
+
+      // Send notifications
+      if (activeTab === 'groups') {
+        await notifyNewGroupMessage(selectedChat, currentUser.id, myProfile?.display_name || currentUser.full_name || 'Alguém');
+      } else {
+        await notifyNewDirectMessage(selectedChat, currentUser.id, myProfile?.display_name || currentUser.full_name || 'Alguém');
+      }
+
+      return message;
     },
     onSuccess: () => {
       setNewMessage('');

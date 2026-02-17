@@ -6,10 +6,12 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   ChevronLeft, MessageCircle, Users, Camera, Flame, 
-  Sparkles, Heart, Calendar, AlertCircle, CheckCircle, Loader2
+  Sparkles, Heart, Calendar, AlertCircle, CheckCircle, Loader2, CheckCheck, UserPlus
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import BottomNav from '../components/common/BottomNav';
+import { useNotifications } from '../components/notifications/NotificationProvider';
 
 const notificationIcons = {
   new_group_message: MessageCircle,
@@ -25,7 +27,10 @@ const notificationIcons = {
   plan_renewed: Calendar,
   plan_unsuccessful: AlertCircle,
   plan_successful: CheckCircle,
-  friend_created_plan: Calendar
+  friend_created_plan: Calendar,
+  friend_request: UserPlus,
+  plan_time_changed: Calendar,
+  plan_location_changed: Calendar
 };
 
 const notificationColors = {
@@ -42,13 +47,17 @@ const notificationColors = {
   plan_renewed: 'bg-cyan-500/20 text-cyan-400',
   plan_unsuccessful: 'bg-red-500/20 text-red-400',
   plan_successful: 'bg-green-500/20 text-green-400',
-  friend_created_plan: 'bg-indigo-500/20 text-indigo-400'
+  friend_created_plan: 'bg-indigo-500/20 text-indigo-400',
+  friend_request: 'bg-[#00fea3]/20 text-[#00fea3]',
+  plan_time_changed: 'bg-yellow-500/20 text-yellow-400',
+  plan_location_changed: 'bg-yellow-500/20 text-yellow-400'
 };
 
 export default function Notifications() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
+  const { markAllAsRead } = useNotifications();
 
   useEffect(() => {
     const getUser = async () => {
@@ -63,8 +72,22 @@ export default function Notifications() {
   const { data: notifications = [], isLoading } = useQuery({
     queryKey: ['notifications', currentUser?.id],
     queryFn: () => base44.entities.Notification.filter({ user_id: currentUser?.id }),
-    enabled: !!currentUser?.id
+    enabled: !!currentUser?.id,
+    staleTime: 0,
   });
+
+  // Real-time subscription for live updates
+  useEffect(() => {
+    if (!currentUser?.id) return;
+
+    const unsubscribe = base44.entities.Notification.subscribe((event) => {
+      if (event.type === 'create' && event.data.user_id === currentUser.id) {
+        queryClient.invalidateQueries(['notifications', currentUser.id]);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [currentUser?.id, queryClient]);
 
   const markAsReadMutation = useMutation({
     mutationFn: (notificationId) => 
@@ -81,13 +104,19 @@ export default function Notifications() {
 
     // Navigate based on notification type
     if (notification.plan_id) {
-      if (['voting_started', 'plan_unsuccessful', 'plan_successful'].includes(notification.type)) {
+      if (['new_group_message', 'voting_started', 'plan_unsuccessful', 'plan_successful'].includes(notification.type)) {
         navigate(createPageUrl('Chat') + `?planId=${notification.plan_id}`);
       } else {
         navigate(createPageUrl('PlanDetails') + `?id=${notification.plan_id}`);
       }
     } else if (notification.related_user_id) {
-      navigate(createPageUrl('UserProfile') + `?id=${notification.related_user_id}`);
+      if (notification.type === 'friend_request') {
+        navigate(createPageUrl('Friends'));
+      } else if (notification.type === 'new_direct_message') {
+        navigate(createPageUrl('Chat') + `?userId=${notification.related_user_id}`);
+      } else {
+        navigate(createPageUrl('UserProfile') + `?id=${notification.related_user_id}`);
+      }
     }
   };
 
@@ -114,6 +143,16 @@ export default function Notifications() {
               <p className="text-sm text-gray-400">{unreadCount} não lidas</p>
             )}
           </div>
+          {unreadCount > 0 && (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => markAllAsRead()}
+              className="px-3 py-1.5 rounded-lg bg-[#00fea3]/20 border border-[#00fea3]/30 flex items-center gap-1.5"
+            >
+              <CheckCheck className="w-4 h-4 text-[#00fea3]" />
+              <span className="text-sm text-[#00fea3]">Marcar todas</span>
+            </motion.button>
+          )}
         </div>
       </header>
 
@@ -151,7 +190,7 @@ export default function Notifications() {
                         <p className="text-sm text-gray-500 mt-1">{notification.message}</p>
                       )}
                       <p className="text-xs text-gray-600 mt-2">
-                        {format(new Date(notification.created_date), 'dd MMM, HH:mm')}
+                        {format(new Date(notification.created_date), "dd 'de' MMM, HH:mm", { locale: ptBR })}
                       </p>
                     </div>
                     {!notification.is_read && (

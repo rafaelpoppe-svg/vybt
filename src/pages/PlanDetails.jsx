@@ -15,6 +15,7 @@ import PartyTag from '../components/common/PartyTag';
 import HighlightPlanModal from '../components/plan/HighlightPlanModal';
 import PlanCountdown from '../components/plan/PlanCountdown';
 import LeavePlanModal from '../components/plan/LeavePlanModal';
+import { notifyNewGroupMember } from '../components/notifications/NotificationTriggers';
 
 export default function PlanDetails() {
   const navigate = useNavigate();
@@ -118,6 +119,10 @@ export default function PlanDetails() {
       await base44.entities.PartyPlan.update(planId, {
         recent_joins: currentJoins + 1
       });
+
+      // Notify other members
+      const profile = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
+      await notifyNewGroupMember(planId, currentUser.id, profile[0]?.display_name || currentUser.full_name || 'Alguém');
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['planParticipants', planId]);
