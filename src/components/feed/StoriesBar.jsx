@@ -1,6 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import StoryCard from './StoryCard';
+import { Camera } from 'lucide-react';
 
 const filters = ['All stories', 'Only friends', 'Highlighted'];
 
@@ -11,7 +12,8 @@ export default function StoriesBar({
   onAddStory, 
   currentFilter, 
   onFilterChange,
-  currentUserId 
+  currentUserId,
+  happeningPlan = null
 }) {
   // Separate own stories and others
   const ownStories = stories.filter(s => s.user_id === currentUserId);
