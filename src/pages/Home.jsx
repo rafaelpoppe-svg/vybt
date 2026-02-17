@@ -147,14 +147,16 @@ export default function Home() {
 
         {/* Stories */}
         <div className="pb-4">
+          {happeningPlan && <HappeningNowBanner plan={happeningPlan} />}
           <StoriesBar
             stories={stories}
             userProfiles={profilesMap}
             currentFilter={storyFilter}
             onFilterChange={setStoryFilter}
             onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
-            onAddStory={() => navigate(createPageUrl('AddStory'))}
+            onAddStory={() => navigate(createPageUrl('AddStory') + (happeningPlan ? `?planId=${happeningPlan.id}` : ''))}
             currentUserId={currentUser?.id}
+            happeningPlan={happeningPlan}
           />
         </div>
       </header>
