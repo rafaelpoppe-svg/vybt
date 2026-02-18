@@ -89,7 +89,9 @@ export default function Layout({ children, currentPageName }) {
             filter: invert(1);
           }
         `}</style>
-        {children}
+        <PageTransition>
+          {children}
+        </PageTransition>
       </div>
     </NotificationProvider>
   );
