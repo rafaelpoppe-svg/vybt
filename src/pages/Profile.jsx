@@ -274,26 +274,10 @@ export default function Profile() {
             <ChevronRight className="w-5 h-5 text-gray-500" />
           </motion.button>
 
-          {/* Delete Account */}
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setShowDeleteModal(true)}
-            className="w-full p-4 rounded-xl bg-red-500/5 border border-red-900/30 flex items-center gap-3"
-          >
-            <Trash2 className="w-5 h-5 text-red-500" />
-            <span className="text-red-400 font-medium">Delete Account</span>
-          </motion.button>
         </div>
       </div>
 
       <BottomNav />
-
-      <DeleteAccountModal
-        isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
-        userId={currentUser?.id}
-        profile={profile}
-      />
     </div>
   );
 }
