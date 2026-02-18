@@ -10,8 +10,8 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
-import VibeTag from '../components/common/VibeTag';
-import PartyTag from '../components/common/PartyTag';
+import VibeTag, { vibeConfig } from '../components/common/VibeTag';
+import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
 
 export default function Profile() {
   const navigate = useNavigate();
