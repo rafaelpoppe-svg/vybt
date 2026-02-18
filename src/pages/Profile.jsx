@@ -112,10 +112,10 @@ export default function Profile() {
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.9 }}
-            onClick={handleLogout}
+            onClick={() => navigate(createPageUrl('Settings'))}
             className="p-2 rounded-full bg-black/40 backdrop-blur-md"
           >
-            <LogOut className="w-5 h-5 text-gray-300" />
+            <Settings className="w-5 h-5 text-gray-300" />
           </motion.button>
         </div>
 
