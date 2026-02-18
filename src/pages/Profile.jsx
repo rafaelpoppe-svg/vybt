@@ -5,8 +5,8 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { 
-  Settings, Users, PartyPopper, Camera, ChevronRight, 
-  LogOut, Edit2, Loader2, Bell, ChevronLeft as ChevronLeftIcon
+  Users, PartyPopper, Camera, ChevronRight, 
+  LogOut, Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
