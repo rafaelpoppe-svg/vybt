@@ -67,16 +67,42 @@ export default function Profile() {
     );
   }
 
+  const photos = profile.photos?.filter(Boolean) || [];
+  const hasPhotos = photos.length > 0;
+
   return (
     <div className="min-h-screen bg-[#0b0b0b] pb-24">
-      {/* Header */}
-      <header className="p-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-white">Profile</h1>
-        <div className="flex gap-2">
+
+      {/* ── Hero Photo Gallery ── */}
+      <div className="relative w-full h-[65vh] bg-gray-900 overflow-hidden">
+        <AnimatePresence mode="wait">
+          {hasPhotos ? (
+            <motion.img
+              key={currentPhotoIndex}
+              src={photos[currentPhotoIndex]}
+              alt=""
+              initial={{ opacity: 0, scale: 1.04 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35 }}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#542b9b]/40 to-[#00fea3]/20">
+              <Camera className="w-20 h-20 text-white/10" />
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/20 to-transparent" />
+
+        {/* Top action buttons */}
+        <div className="absolute top-12 right-4 flex gap-2 z-10">
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate(createPageUrl('Notifications'))}
-            className="p-2 rounded-full bg-gray-900 relative"
+            className="p-2 rounded-full bg-black/40 backdrop-blur-md relative"
           >
             <Bell className="w-5 h-5 text-white" />
             <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
@@ -84,144 +110,131 @@ export default function Profile() {
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate(createPageUrl('EditProfile'))}
-            className="p-2 rounded-full bg-gray-900"
+            className="p-2 rounded-full bg-black/40 backdrop-blur-md"
           >
             <Edit2 className="w-5 h-5 text-white" />
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={handleLogout}
-            className="p-2 rounded-full bg-gray-900"
+            className="p-2 rounded-full bg-black/40 backdrop-blur-md"
           >
-            <LogOut className="w-5 h-5 text-gray-400" />
+            <LogOut className="w-5 h-5 text-gray-300" />
           </motion.button>
         </div>
-      </header>
 
-      <main className="space-y-6">
-        {/* Profile Header */}
-        <div className="flex flex-col items-center text-center">
-          {/* Full-screen Photo Carousel */}
-          <div className="relative w-full h-[70vh] mb-4">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentPhotoIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute inset-0"
-              >
-                {profile.photos?.[currentPhotoIndex] ? (
-                  <img 
-                    src={profile.photos[currentPhotoIndex]} 
-                    alt="" 
-                    className="w-full h-full object-cover rounded-3xl"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-800 rounded-3xl border-2 border-dashed border-gray-700">
-                    <Camera className="w-16 h-16 text-gray-600" />
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Navigation Arrows */}
-            {profile.photos?.filter(Boolean).length > 1 && (
-              <>
-                {currentPhotoIndex > 0 && (
-                  <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setCurrentPhotoIndex(currentPhotoIndex - 1)}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/50 backdrop-blur-sm"
-                  >
-                    <ChevronLeftIcon className="w-6 h-6 text-white" />
-                  </motion.button>
-                )}
-                {currentPhotoIndex < profile.photos.filter(Boolean).length - 1 && (
-                  <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setCurrentPhotoIndex(currentPhotoIndex + 1)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/50 backdrop-blur-sm"
-                  >
-                    <ChevronRight className="w-6 h-6 text-white" />
-                  </motion.button>
-                )}
-              </>
-            )}
-
-            {/* Photo Indicators */}
-            {profile.photos?.filter(Boolean).length > 1 && (
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {profile.photos.filter(Boolean).map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrentPhotoIndex(i)}
-                    className={`h-2 rounded-full transition-all ${
-                      i === currentPhotoIndex 
-                        ? 'w-8 bg-[#00fea3]' 
-                        : 'w-2 bg-gray-600'
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
+        {/* Photo dots */}
+        {photos.length > 1 && (
+          <div className="absolute top-14 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {photos.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPhotoIndex(i)}
+                className={`rounded-full transition-all duration-300 ${
+                  i === currentPhotoIndex ? 'w-5 h-1.5 bg-[#00fea3]' : 'w-1.5 h-1.5 bg-white/40'
+                }`}
+              />
+            ))}
           </div>
+        )}
 
-          <div className="px-4 w-full">
-            <h2 className="text-2xl font-bold text-white">{profile.display_name || currentUser.full_name}</h2>
-            <p className="text-gray-500">{profile.city || 'No location set'}</p>
-          
-            {/* Bio */}
-            {profile.bio && (
-              <p className="text-gray-400 text-sm mt-2 max-w-xs">{profile.bio}</p>
-            )}
+        {/* Tap zones */}
+        {photos.length > 1 && (
+          <>
+            <button
+              className="absolute left-0 top-20 bottom-0 w-1/3 z-20"
+              onClick={() => setCurrentPhotoIndex(i => Math.max(0, i - 1))}
+            />
+            <button
+              className="absolute right-0 top-20 bottom-0 w-1/3 z-20"
+              onClick={() => setCurrentPhotoIndex(i => Math.min(photos.length - 1, i + 1))}
+            />
+          </>
+        )}
 
-            {/* Stats */}
-            <div className="flex gap-8 mt-6">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-white">{friendships.length}</p>
-                <p className="text-xs text-gray-500">Friends</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-white">{participations.length}</p>
-                <p className="text-xs text-gray-500">Parties</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-white">{myStories.length}</p>
-                <p className="text-xs text-gray-500">Stories</p>
-              </div>
+        {/* Name + location pinned to bottom of hero */}
+        <div className="absolute bottom-0 left-0 right-0 px-5 pb-5 z-10">
+          <h1 className="text-3xl font-bold text-white tracking-tight">{profile.display_name || currentUser.full_name}</h1>
+          {profile.city && (
+            <div className="flex items-center gap-1.5 mt-1">
+              <MapPin className="w-3.5 h-3.5 text-[#00fea3]" />
+              <span className="text-gray-300 text-sm">{profile.city}</span>
             </div>
-          </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Content ── */}
+      <div className="px-5 pt-5 space-y-7">
+
+        {/* Stats row */}
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { icon: Users, label: 'Friends', value: friendships.length, color: 'text-[#00fea3]' },
+            { icon: PartyPopper, label: 'Parties', value: participations.length, color: 'text-[#542b9b]' },
+            { icon: Clapperboard, label: 'Stories', value: myStories.length, color: 'text-pink-400' },
+          ].map(({ icon: Icon, label, value, color }) => (
+            <div key={label} className="bg-gray-900/60 border border-gray-800 rounded-2xl py-4 flex flex-col items-center gap-1">
+              <Icon className={`w-5 h-5 ${color}`} />
+              <p className="text-2xl font-bold text-white">{value}</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-widest">{label}</p>
+            </div>
+          ))}
         </div>
 
-        <div className="px-4 space-y-6">
-          {/* Vibes */}
-          {profile.vibes?.length > 0 && (
-            <div>
-              <h3 className="text-white font-semibold mb-3">My Vibes</h3>
-              <div className="flex flex-wrap gap-2">
-                {profile.vibes.map((vibe, i) => (
-                  <VibeTag key={i} vibe={vibe} size="md" />
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Bio */}
+        {profile.bio && (
+          <div className="bg-gray-900/40 border border-gray-800/60 rounded-2xl px-4 py-4">
+            <p className="text-gray-300 text-sm leading-relaxed">{profile.bio}</p>
+          </div>
+        )}
 
-          {/* Party Types */}
-          {profile.party_types?.length > 0 && (
-            <div>
-              <h3 className="text-white font-semibold mb-3">Preferred Parties</h3>
-              <div className="flex flex-wrap gap-2">
-                {profile.party_types.map((type, i) => (
-                  <PartyTag key={i} tag={type} size="md" />
-                ))}
-              </div>
+        {/* My Vibes */}
+        {profile.vibes?.length > 0 && (
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Music2 className="w-4 h-4 text-[#00fea3]" />
+              <h3 className="text-white font-semibold text-sm uppercase tracking-widest">My Vibes</h3>
             </div>
-          )}
+            <div className="flex flex-wrap gap-2">
+              {profile.vibes.map((vibe, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <VibeTag vibe={vibe} size="lg" selected />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
 
-          {/* Menu Items */}
-          <div className="space-y-2">
+        {/* Preferred Parties */}
+        {profile.party_types?.length > 0 && (
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="w-4 h-4 text-[#542b9b]" />
+              <h3 className="text-white font-semibold text-sm uppercase tracking-widest">Preferred Parties</h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {profile.party_types.map((type, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <PartyTag tag={type} size="md" selected />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Menu Items */}
+        <div className="space-y-2">
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(createPageUrl('Friends'))}
@@ -258,8 +271,7 @@ export default function Profile() {
             <ChevronRight className="w-5 h-5 text-gray-500" />
           </motion.button>
         </div>
-        </div>
-      </main>
+      </div>
 
       <BottomNav />
     </div>
