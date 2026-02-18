@@ -6,19 +6,17 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { 
   Users, PartyPopper, Camera, ChevronRight, 
-  LogOut, Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles, Trash2
+  Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles, Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
 import VibeTag, { vibeConfig } from '../components/common/VibeTag';
 import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
-import DeleteAccountModal from '../components/profile/DeleteAccountModal';
 
 export default function Profile() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -56,10 +54,6 @@ export default function Profile() {
     queryFn: () => base44.entities.ExperienceStory.filter({ user_id: currentUser.id }),
     enabled: !!currentUser?.id
   });
-
-  const handleLogout = () => {
-    base44.auth.logout();
-  };
 
   if (!currentUser || !profile) {
     return (
