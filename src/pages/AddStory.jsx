@@ -79,24 +79,46 @@ export default function AddStory() {
   const generateVideoThumbnail = (file) => {
     return new Promise((resolve) => {
       const video = document.createElement('video');
-      video.preload = 'metadata';
+      video.preload = 'auto';
       video.muted = true;
       video.playsInline = true;
+      video.crossOrigin = 'anonymous';
       const url = URL.createObjectURL(file);
       video.src = url;
-      video.addEventListener('loadeddata', () => {
-        video.currentTime = 0.1;
-      });
-      video.addEventListener('seeked', () => {
+
+      const capture = () => {
         const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
+        canvas.width = video.videoWidth || 320;
+        canvas.height = video.videoHeight || 568;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
         canvas.toBlob((blob) => {
           URL.revokeObjectURL(url);
           resolve(blob);
         }, 'image/jpeg', 0.85);
-      });
+      };
+
+      video.addEventListener('seeked', capture, { once: true });
+
+      video.addEventListener('loadedmetadata', () => {
+        video.currentTime = 0.01;
+      }, { once: true });
+
+      // Fallback: if loadedmetadata doesn't fire, try canplay
+      video.addEventListener('canplay', () => {
+        if (video.readyState >= 2 && video.currentTime === 0) {
+          video.currentTime = 0.01;
+        }
+      }, { once: true });
+
+      // Final fallback after 5 seconds
+      setTimeout(() => {
+        if (video.videoWidth > 0) {
+          capture();
+        } else {
+          URL.revokeObjectURL(url);
+          resolve(null);
+        }
+      }, 5000);
     });
   };
 
