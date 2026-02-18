@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Calendar, Loader2 } from 'lucide-react';
 import StoriesBar from '../components/feed/StoriesBar';
@@ -13,6 +13,7 @@ import BottomNav from '../components/common/BottomNav';
 import ForYouSection from '../components/feed/ForYouSection';
 import HappeningNowBanner from '../components/feed/HappeningNowBanner';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
+import PullToRefresh from '../components/common/PullToRefresh';
 
 export default function Home() {
   const navigate = useNavigate();

@@ -6,12 +6,13 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { 
   Users, PartyPopper, Camera, ChevronRight, 
-  LogOut, Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles
+  LogOut, Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles, Trash2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
 import VibeTag, { vibeConfig } from '../components/common/VibeTag';
 import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
+import DeleteAccountModal from '../components/profile/DeleteAccountModal';
 
 export default function Profile() {
   const navigate = useNavigate();
