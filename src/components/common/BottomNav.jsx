@@ -17,13 +17,16 @@ export default function BottomNav() {
   const currentPath = location.pathname;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-[#0b0b0b]/95 backdrop-blur-lg border-t border-gray-800 px-4 py-2 z-50">
-      <div className="flex items-center justify-around max-w-md mx-auto">
+    <nav
+      className="fixed bottom-0 left-0 right-0 bg-[#0b0b0b]/95 backdrop-blur-lg border-t border-gray-800 z-50"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+    >
+      <div className="flex items-center justify-around max-w-md mx-auto px-4 py-2">
         {navItems.map((item) => {
           const Icon = item.icon;
           const url = createPageUrl(item.page);
           const isActive = currentPath === url || currentPath === `/${item.page}`;
-          
+
           if (item.isSpecial) {
             return (
               <Link key={item.page} to={url}>
@@ -44,10 +47,10 @@ export default function BottomNav() {
                 whileTap={{ scale: 0.9 }}
                 className="flex flex-col items-center gap-1 py-2 px-4 relative"
               >
-                <Icon 
+                <Icon
                   className={`w-6 h-6 transition-colors ${
                     isActive ? 'text-[#00fea3]' : 'text-gray-500'
-                  }`} 
+                  }`}
                 />
                 <span className={`text-[10px] transition-colors ${
                   isActive ? 'text-[#00fea3]' : 'text-gray-500'
