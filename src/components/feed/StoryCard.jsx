@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Sparkles } from 'lucide-react';
+import { Plus, Sparkles, Play } from 'lucide-react';
 
 // Random border colors for stories
 const storyColors = [
