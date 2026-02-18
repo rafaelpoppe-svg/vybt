@@ -17,6 +17,7 @@ import PullToRefresh from '../components/common/PullToRefresh';
 
 export default function Home() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [city, setCity] = useState('Madrid');
   const [radius, setRadius] = useState(10);
   const [storyFilter, setStoryFilter] = useState('All stories');

@@ -19,6 +19,7 @@ const partyTags = [
 
 export default function Explore() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const urlParams = new URLSearchParams(window.location.search);
   const initialTab = urlParams.get('tab');
   
