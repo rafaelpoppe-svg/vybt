@@ -31,6 +31,7 @@ export default function EditProfile() {
     display_name: '',
     bio: '',
     city: '',
+    date_of_birth: '',
     radius_km: 10,
     vibes: [],
     party_types: [],
