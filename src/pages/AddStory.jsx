@@ -74,14 +74,52 @@ export default function AddStory() {
   const storiesPosted = currentParticipation?.stories_posted || 0;
   const canPostMore = storiesPosted < 2;
 
+  const [thumbnailUrl, setThumbnailUrl] = useState('');
+
+  const generateVideoThumbnail = (file) => {
+    return new Promise((resolve) => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.muted = true;
+      video.playsInline = true;
+      const url = URL.createObjectURL(file);
+      video.src = url;
+      video.addEventListener('loadeddata', () => {
+        video.currentTime = 0.1;
+      });
+      video.addEventListener('seeked', () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        canvas.toBlob((blob) => {
+          URL.revokeObjectURL(url);
+          resolve(blob);
+        }, 'image/jpeg', 0.85);
+      });
+    });
+  };
+
   const handleMediaSelect = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
       setMedia(file);
       setUploading(true);
       try {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        const isVideo = file.type.startsWith('video');
+        const [{ file_url }] = await Promise.all([
+          base44.integrations.Core.UploadFile({ file })
+        ]);
         setMediaUrl(file_url);
+
+        if (isVideo) {
+          const thumbBlob = await generateVideoThumbnail(file);
+          if (thumbBlob) {
+            const thumbFile = new File([thumbBlob], 'thumbnail.jpg', { type: 'image/jpeg' });
+            const { file_url: thumb_url } = await base44.integrations.Core.UploadFile({ file: thumbFile });
+            setThumbnailUrl(thumb_url);
+          }
+        }
       } catch (err) {
         console.error(err);
       }
