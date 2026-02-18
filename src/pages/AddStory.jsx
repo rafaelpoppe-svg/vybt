@@ -136,11 +136,13 @@ export default function AddStory() {
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + 24);
       
+      const isVideo = media?.type?.startsWith('video');
       const storyData = {
         user_id: currentUser.id,
         plan_id: selectedPlan,
         media_url: mediaUrl,
-        media_type: media?.type?.startsWith('video') ? 'video' : 'image',
+        thumbnail_url: isVideo ? thumbnailUrl : '',
+        media_type: isVideo ? 'video' : 'image',
         visibility: visibility,
         is_highlighted: visibility === 'highlighted',
         view_count: 0,
@@ -221,12 +223,17 @@ export default function AddStory() {
           <label className="block">
             {mediaUrl ? (
               <div className="relative aspect-[9/16] max-h-80 rounded-xl overflow-hidden mx-auto">
-                <img src={mediaUrl} alt="Story" className="w-full h-full object-cover" />
+                {media?.type?.startsWith('video') ? (
+                  <video src={mediaUrl} className="w-full h-full object-cover" muted playsInline autoPlay loop />
+                ) : (
+                  <img src={mediaUrl} alt="Story" className="w-full h-full object-cover" />
+                )}
                 <button
                   onClick={(e) => {
                     e.preventDefault();
                     setMedia(null);
                     setMediaUrl('');
+                    setThumbnailUrl('');
                   }}
                   className="absolute top-3 right-3 p-2 rounded-full bg-black/50"
                 >

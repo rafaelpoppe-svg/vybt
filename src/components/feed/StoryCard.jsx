@@ -69,7 +69,7 @@ export default function StoryCard({
         <div className="w-full h-full rounded-[14px] bg-[#0b0b0b] p-0.5 overflow-hidden">
           {story?.media_url ? (
             <img 
-              src={story.media_url} 
+              src={story.media_type === 'video' && story.thumbnail_url ? story.thumbnail_url : story.media_url} 
               alt=""
               className="w-full h-full rounded-xl object-cover"
             />
