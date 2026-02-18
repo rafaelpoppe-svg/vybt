@@ -219,6 +219,23 @@ export default function EditProfile() {
           <p className="text-xs text-gray-500 mt-1 text-right">{formData.bio.length}/200</p>
         </div>
 
+        {/* Date of Birth */}
+        <div>
+          <label className="block text-gray-400 text-sm mb-2">Date of Birth</label>
+          <Input
+            type="date"
+            value={formData.date_of_birth}
+            onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
+            className="bg-gray-900 border-gray-800 text-white"
+            max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
+          />
+          {formData.date_of_birth && (
+            <p className="text-xs text-gray-500 mt-1">
+              Age: {Math.floor((new Date() - new Date(formData.date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000))} years old
+            </p>
+          )}
+        </div>
+
         {/* City */}
         <div>
           <label className="block text-gray-400 text-sm mb-2">City</label>
