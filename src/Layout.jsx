@@ -1,6 +1,8 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { NotificationProvider } from '@/components/notifications/NotificationProvider';
 import { Toaster } from 'sonner';
+import PageTransition from '@/components/common/PageTransition';
 
 export default function Layout({ children, currentPageName }) {
   return (
