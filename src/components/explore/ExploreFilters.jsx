@@ -90,34 +90,6 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
           />
         </div>
 
-        {/* Vibe Tags */}
-        <div className="mb-4">
-          <label className="text-gray-400 text-sm mb-2 flex items-center gap-1.5">
-            <Music className="w-4 h-4" />
-            Vibes
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {vibeOptions.slice(0, 8).map(vibe => (
-              <VibeTag
-                key={vibe}
-                vibe={vibe}
-                size="sm"
-                interactive
-                selected={filters.vibes?.includes(vibe)}
-                onClick={() => {
-                  const vibes = filters.vibes || [];
-                  setFilters({
-                    ...filters,
-                    vibes: vibes.includes(vibe) 
-                      ? vibes.filter(v => v !== vibe)
-                      : [...vibes, vibe]
-                  });
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
         {/* Party Tags */}
         <div>
           <label className="text-gray-400 text-sm mb-2 block">Party Type</label>
