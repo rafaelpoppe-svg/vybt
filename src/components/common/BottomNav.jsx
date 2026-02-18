@@ -51,16 +51,20 @@ export default function BottomNav() {
                 />
               )}
               {name === 'CreatePlan' ? (
-                <Icon className={`w-7 h-7 ${active ? 'text-[#00fea3]' : 'text-gray-500'}`} />
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#00fea3] to-[#542b9b] flex items-center justify-center shadow-lg shadow-[#00fea3]/20 -mt-5">
+                  <Icon className="w-7 h-7 text-white" strokeWidth={2} />
+                </div>
               ) : (
-                <Icon
-                  className={`w-5 h-5 transition-colors duration-200 ${active ? 'text-[#00fea3]' : 'text-gray-500'}`}
-                  strokeWidth={active ? 2.5 : 1.8}
-                />
+                <>
+                  <Icon
+                    className={`w-5 h-5 transition-colors duration-200 ${active ? 'text-[#00fea3]' : 'text-gray-500'}`}
+                    strokeWidth={active ? 2.5 : 1.8}
+                  />
+                  <span className={`text-[10px] font-medium transition-colors duration-200 ${active ? 'text-[#00fea3]' : 'text-gray-600'}`}>
+                    {label}
+                  </span>
+                </>
               )}
-              <span className={`text-[10px] font-medium transition-colors duration-200 ${active ? 'text-[#00fea3]' : 'text-gray-600'}`}>
-                {label}
-              </span>
             </motion.button>
           );
         })}
