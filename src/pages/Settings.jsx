@@ -79,7 +79,7 @@ export default function Settings() {
             iconColor="text-[#00fea3]"
             label="Notifications"
             sublabel="Manage your alerts"
-            onClick={() => navigate('/Notifications')}
+            onClick={() => navigate(createPageUrl('NotificationSettings'))}
           />
         </Section>
 
