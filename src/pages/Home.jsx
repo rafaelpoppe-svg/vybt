@@ -140,9 +140,12 @@ export default function Home() {
       {/* Header */}
       <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800">
         <div className="px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
-            Vybt
-          </h1>
+          <div className="flex items-center gap-2">
+            <img src="/icon.png" alt="Vybt" className="w-8 h-8 rounded-xl object-contain" onError={(e) => e.target.style.display='none'} />
+            <h1 className="text-3xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
+              Vybt
+            </h1>
+          </div>
           <LocationSelector
             city={city}
             radius={radius}
