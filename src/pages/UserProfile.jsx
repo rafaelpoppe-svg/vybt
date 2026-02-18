@@ -140,15 +140,15 @@ export default function UserProfile() {
           </div>
         )}
 
-        {/* Tap zones to swipe photos */}
+        {/* Tap zones to swipe photos — start below the back button */}
         {photos.length > 1 && (
           <>
             <button
-              className="absolute left-0 top-0 bottom-0 w-1/3 z-20"
+              className="absolute left-0 top-20 bottom-0 w-1/3 z-20"
               onClick={() => setPhotoIndex(i => Math.max(0, i - 1))}
             />
             <button
-              className="absolute right-0 top-0 bottom-0 w-1/3 z-20"
+              className="absolute right-0 top-20 bottom-0 w-1/3 z-20"
               onClick={() => setPhotoIndex(i => Math.min(photos.length - 1, i + 1))}
             />
           </>
