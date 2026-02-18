@@ -63,6 +63,7 @@ import PlanDetails from './pages/PlanDetails';
 import Profile from './pages/Profile';
 import StoryView from './pages/StoryView';
 import UserProfile from './pages/UserProfile';
+import Settings from './pages/Settings';
 import __Layout from './Layout.jsx';
 
 
@@ -83,6 +84,7 @@ export const PAGES = {
     "Profile": Profile,
     "StoryView": StoryView,
     "UserProfile": UserProfile,
+    "Settings": Settings,
 }
 
 export const pagesConfig = {
