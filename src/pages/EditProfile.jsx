@@ -64,6 +64,7 @@ export default function EditProfile() {
         display_name: profile.display_name || '',
         bio: profile.bio || '',
         city: profile.city || '',
+        date_of_birth: profile.date_of_birth || '',
         radius_km: profile.radius_km || 10,
         vibes: profile.vibes || [],
         party_types: profile.party_types || [],
