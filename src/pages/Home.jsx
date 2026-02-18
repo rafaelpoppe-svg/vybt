@@ -131,8 +131,12 @@ export default function Home() {
       .filter(Boolean);
   };
 
+  const handleRefresh = async () => {
+    await queryClient.invalidateQueries();
+  };
+
   return (
-    <div className="min-h-screen bg-[#0b0b0b] pb-24">
+    <div className="min-h-screen bg-[#0b0b0b] pb-24" style={{ overscrollBehavior: 'none' }}>
       {/* Header */}
       <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800">
         <div className="px-4 py-4 flex items-center justify-between">
@@ -163,7 +167,8 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Content */}
+      {/* Content — Pull to Refresh wraps the scrollable area */}
+      <PullToRefresh onRefresh={handleRefresh}>
       <main className="px-4 py-6 space-y-8">
         {/* For You Section */}
         {forYouPlans.length > 0 && (
@@ -264,6 +269,7 @@ export default function Home() {
         )}
       </main>
 
+      </PullToRefresh>
       <BottomNav />
     </div>
   );
