@@ -68,11 +68,20 @@ export default function StoryCard({
       <div className={`${currentSize.width} ${currentSize.height} rounded-2xl p-0.5 bg-gradient-to-b ${borderColor}`}>
         <div className="w-full h-full rounded-[14px] bg-[#0b0b0b] p-0.5 overflow-hidden">
           {story?.media_url ? (
-            <img 
-              src={story.media_type === 'video' && story.thumbnail_url ? story.thumbnail_url : story.media_url} 
-              alt=""
-              className="w-full h-full rounded-xl object-cover"
-            />
+            <>
+              <img 
+                src={story.media_type === 'video' && story.thumbnail_url ? story.thumbnail_url : story.media_url} 
+                alt=""
+                className="w-full h-full rounded-xl object-cover"
+              />
+              {story.media_type === 'video' && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                    <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
+                  </div>
+                </div>
+              )}
+            </>
           ) : user?.photos?.[0] ? (
             <img 
               src={user.photos[0]} 
