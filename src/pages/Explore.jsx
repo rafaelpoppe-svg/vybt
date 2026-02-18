@@ -176,8 +176,12 @@ export default function Explore() {
     });
   }
 
+  const handleRefresh = async () => {
+    await queryClient.invalidateQueries();
+  };
+
   return (
-    <div className="min-h-screen bg-[#0b0b0b] pb-24">
+    <div className="min-h-screen bg-[#0b0b0b] pb-24" style={{ overscrollBehavior: 'none' }}>
       {/* Header */}
       <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4">
         <h1 className="text-xl font-bold text-white mb-4">Explore</h1>
@@ -328,7 +332,8 @@ export default function Explore() {
         </div>
       </header>
 
-      {/* Content */}
+      {/* Content — Pull to Refresh */}
+      <PullToRefresh onRefresh={handleRefresh}>
       <main className="p-4">
         {isLoading ? (
           <div className="flex justify-center py-12">
@@ -405,6 +410,7 @@ export default function Explore() {
         )}
       </main>
 
+      </PullToRefresh>
       <BottomNav />
     </div>
   );
