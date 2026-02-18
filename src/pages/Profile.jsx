@@ -154,7 +154,14 @@ export default function Profile() {
 
         {/* Name + location pinned to bottom of hero */}
         <div className="absolute bottom-0 left-0 right-0 px-5 pb-5 z-10">
-          <h1 className="text-3xl font-bold text-white tracking-tight">{profile.display_name || currentUser.full_name}</h1>
+          <div className="flex items-baseline gap-2">
+            <h1 className="text-3xl font-bold text-white tracking-tight">{profile.display_name || currentUser.full_name}</h1>
+            {profile.date_of_birth && (
+              <span className="text-xl text-gray-300 font-semibold">
+                {Math.floor((new Date() - new Date(profile.date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000))}
+              </span>
+            )}
+          </div>
           {profile.city && (
             <div className="flex items-center gap-1.5 mt-1">
               <MapPin className="w-3.5 h-3.5 text-[#00fea3]" />
