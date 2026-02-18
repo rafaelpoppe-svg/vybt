@@ -66,7 +66,7 @@ export default function StoryCard({
       className="flex flex-col items-center gap-1.5"
     >
       <div className={`${currentSize.width} ${currentSize.height} rounded-2xl p-0.5 bg-gradient-to-b ${borderColor}`}>
-        <div className="w-full h-full rounded-[14px] bg-[#0b0b0b] p-0.5 overflow-hidden">
+        <div className="w-full h-full rounded-[14px] bg-[#0b0b0b] p-0.5 overflow-hidden relative">
           {story?.media_url ? (
             <>
               <img 
