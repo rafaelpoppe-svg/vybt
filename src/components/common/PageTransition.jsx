@@ -16,12 +16,6 @@ function isTabPage(pathname) {
   );
 }
 
-const tabVariants = {
-  initial: { opacity: 0, scale: 0.97 },
-  animate: { opacity: 1, scale: 1 },
-  exit:    { opacity: 0, scale: 0.97 },
-};
-
 const slideVariants = {
   initial: { opacity: 0, x: '6%' },
   animate: { opacity: 1, x: 0 },
@@ -31,13 +25,16 @@ const slideVariants = {
 export default function PageTransition({ children }) {
   const location = useLocation();
   const isTab = isTabPage(location.pathname);
-  const variants = isTab ? tabVariants : slideVariants;
+
+  if (isTab) {
+    return <>{children}</>;
+  }
 
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        variants={variants}
+        variants={slideVariants}
         initial="initial"
         animate="animate"
         exit="exit"
