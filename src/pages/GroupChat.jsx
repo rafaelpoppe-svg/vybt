@@ -413,7 +413,7 @@ export default function GroupChat() {
       <VotingModal
         isOpen={showVotingModal}
         onClose={() => setShowVotingModal(false)}
-        onVote={(vote) => voteMutation.mutate(vote)}
+        onVote={(vote, wantsToLeave) => voteMutation.mutate({ vote, wantsToLeave })}
         planTitle={plan?.title || ''}
         isLoading={voteMutation.isPending}
       />
