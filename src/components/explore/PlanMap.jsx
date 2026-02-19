@@ -61,12 +61,10 @@ function createCustomIcon(color, isHighlighted, isOnFire) {
   });
 }
 
-function MapAutoCenter({ plans }) {
+function FlyToCity({ coords }) {
   const map = useMap();
-  const validPlans = plans.filter(p => p.latitude && p.longitude);
-  if (validPlans.length > 0 && map) {
-    const bounds = L.latLngBounds(validPlans.map(p => [p.latitude, p.longitude]));
-    // Only fit once
+  if (coords) {
+    map.flyTo([coords.lat, coords.lng], 13, { animate: true, duration: 1.2 });
   }
   return null;
 }
@@ -74,11 +72,24 @@ function MapAutoCenter({ plans }) {
 export default function PlanMap({ plans, allParticipants, profilesMap, myParticipations }) {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [citySearch, setCitySearch] = useState('');
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const [flyCoords, setFlyCoords] = useState(null);
 
   const validPlans = plans.filter(p => p.latitude && p.longitude);
   const center = validPlans.length > 0
     ? [validPlans[0].latitude, validPlans[0].longitude]
     : [38.7169, -9.1399]; // Lisboa default
+
+  const filteredCities = CITIES.filter(c =>
+    c.name.toLowerCase().includes(citySearch.toLowerCase())
+  );
+
+  const handleSelectCity = (city) => {
+    setFlyCoords({ lat: city.lat, lng: city.lng });
+    setCitySearch(city.name);
+    setShowCityDropdown(false);
+  };
 
   const getParticipantCount = (planId) => allParticipants.filter(p => p.plan_id === planId).length;
   const isJoined = (planId) => myParticipations.some(p => p.plan_id === planId);
