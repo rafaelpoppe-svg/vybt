@@ -182,9 +182,9 @@ export default function Explore() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] pb-24" style={{ overscrollBehavior: 'none' }}>
+    <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh', overscrollBehavior: 'none' }}>
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4">
+      <header className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4">
         <h1 className="text-xl font-bold text-white mb-4">Explore</h1>
         
         {/* View Toggle */}
