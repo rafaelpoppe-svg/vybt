@@ -97,7 +97,7 @@ export default function GroupChatHeader({
               initial={{ y: -8, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               whileTap={{ scale: 0.97 }}
-              onClick={onVote}
+              onClick={(e) => { e.stopPropagation(); onVote(); }}
               className="w-full py-2.5 rounded-xl bg-orange-500/20 border border-orange-500/30 text-orange-400 text-sm font-semibold flex items-center justify-center gap-2"
             >
               <Flame className="w-4 h-4" />
