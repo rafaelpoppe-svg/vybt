@@ -118,6 +118,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
         zoomControl={false}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {flyCoords && <FlyToCity coords={flyCoords} />}
 
         {validPlans.map((plan) => {
           const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
