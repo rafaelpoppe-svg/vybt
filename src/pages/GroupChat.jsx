@@ -219,6 +219,10 @@ export default function GroupChat() {
       queryClient.invalidateQueries(['allPlans']);
       queryClient.invalidateQueries(['groupMessages', planId]);
       setShowRenewModal(false);
+      // Notify all participants about renewal
+      participants.forEach(p => {
+        if (p.user_id !== currentUser?.id) notifyPlanRenewed(p.user_id, plan);
+      });
     },
   });
 
