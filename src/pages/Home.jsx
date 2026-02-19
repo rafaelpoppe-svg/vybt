@@ -173,8 +173,8 @@ export default function Home() {
           <LocationSelector
             city={city}
             radius={radius}
-            onCityChange={setCity}
-            onRadiusChange={setRadius}
+            onCityChange={(c) => { setCity(c); localStorage.setItem('selectedCity', c); }}
+            onRadiusChange={(r) => { setRadius(r); localStorage.setItem('selectedRadius', r); }}
           />
         </div>
 
