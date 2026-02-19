@@ -171,7 +171,7 @@ export default function GroupChat() {
   });
 
   const voteMutation = useMutation({
-    mutationFn: async (vote) => {
+    mutationFn: async ({ vote, wantsToLeave }) => {
       const currentVotedUsers = plan.voted_users || [];
       const newVotedUsers = [...currentVotedUsers, currentUser.id];
       const updateData = {
@@ -181,10 +181,15 @@ export default function GroupChat() {
       };
       if (newVotedUsers.length >= participants.length) updateData.status = 'ended';
       await base44.entities.PartyPlan.update(planId, updateData);
+      if (wantsToLeave && myParticipation) {
+        await base44.entities.PlanParticipant.delete(myParticipation.id);
+      }
     },
-    onSuccess: () => {
+    onSuccess: (_, { wantsToLeave }) => {
       queryClient.invalidateQueries(['allPlans']);
+      queryClient.invalidateQueries(['planParticipants', planId]);
       setShowVotingModal(false);
+      if (wantsToLeave) navigate(createPageUrl('Chat'));
     },
   });
 
