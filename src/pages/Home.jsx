@@ -132,6 +132,9 @@ export default function Home() {
       .filter(Boolean);
   };
 
+  // Auto-delete terminated plans older than 24h
+  useAutoDeleteTerminated(plans);
+
   const handleRefresh = async () => {
     await queryClient.invalidateQueries();
   };
