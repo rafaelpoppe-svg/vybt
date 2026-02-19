@@ -102,8 +102,8 @@ export default function GroupChatHeader({
             </motion.button>
           )}
 
-          {/* Admin actions at end */}
-          {planStatus === 'ended' && isAdmin && (
+          {/* Admin actions after voting ends */}
+          {planStatus === 'ended' && isAdmin && plan?.status !== 'terminated' && (
             <div className="flex gap-2">
               <motion.button
                 whileTap={{ scale: 0.95 }}
@@ -119,8 +119,15 @@ export default function GroupChatHeader({
                 className="flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
-                Deletar
+                Encerrar
               </motion.button>
+            </div>
+          )}
+
+          {/* Terminated banner */}
+          {plan?.status === 'terminated' && (
+            <div className="w-full py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2">
+              ❌ Plano Encerrado
             </div>
           )}
         </div>
