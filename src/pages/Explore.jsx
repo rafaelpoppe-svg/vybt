@@ -5,13 +5,14 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PullToRefresh from '../components/common/PullToRefresh';
-import { Search, Flame, Users, Loader2, Filter, MapIcon, User } from 'lucide-react';
+import { Search, Flame, Users, Loader2, Filter, Map, LayoutGrid, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import PlanCard from '../components/feed/PlanCard';
 import BottomNav from '../components/common/BottomNav';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
 import { PlanFilters, UserFilters } from '../components/explore/ExploreFilters';
 import PartyTag from '../components/common/PartyTag';
+import PlanMap from '../components/explore/PlanMap';
 
 const partyTags = [
   'All', 'Rooftop Afternoon', 'Rooftop Night', 'Techno', 'Bar', 'Luxury', 'House Party', 'University', 'Commercial', 'EDM', 'Latin'
