@@ -101,8 +101,8 @@ export default function PartyTag({ tag, size = 'md', interactive = false, select
 
   const iconSizes = {
     sm: 'w-2.5 h-2.5',
-    md: 'w-7 h-7',
-    lg: 'w-7 h-7'
+    md: 'w-3.5 h-3.5',
+    lg: 'w-4 h-4'
   };
 
   const Tag = interactive ? motion.button : 'span';
