@@ -57,7 +57,7 @@ export default function GroupChatHeader({
           {isAdmin && (
             <motion.button
               whileTap={{ scale: 0.9 }}
-              onClick={onAdminActions}
+              onClick={(e) => { e.stopPropagation(); onAdminActions(); }}
               className="w-9 h-9 rounded-full bg-gray-900/80 flex items-center justify-center"
             >
               <MoreVertical className="w-4 h-4 text-white" />
