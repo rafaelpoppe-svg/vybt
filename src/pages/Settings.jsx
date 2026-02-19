@@ -116,6 +116,19 @@ export default function Settings() {
           />
         </Section>
 
+        {/* Admin */}
+        {currentUser?.role === 'admin' && (
+          <Section title="Administração">
+            <Row
+              icon={ShieldAlert}
+              iconColor="text-red-400"
+              label="Painel de Moderação"
+              sublabel="Rever denúncias de conteúdo"
+              onClick={() => navigate(createPageUrl('Moderation'))}
+            />
+          </Section>
+        )}
+
         {/* Danger Zone */}
         <Section title="Session">
           <Row
