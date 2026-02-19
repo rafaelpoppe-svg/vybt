@@ -114,7 +114,7 @@ export default function CreatePlan() {
     setLoading(false);
   };
 
-  const isValid = data.title && data.date && data.time && data.end_time && data.location_address && data.city;
+  const isValid = data.title && data.date && data.time && data.end_time && data.location_address && data.city && isEndTimeValid(data.time, data.end_time);
 
   return (
     <div className="min-h-screen bg-[#0b0b0b]">
