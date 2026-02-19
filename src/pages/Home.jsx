@@ -16,6 +16,8 @@ import { useRecommendations } from '../components/recommendation/useRecommendati
 import PullToRefresh from '../components/common/PullToRefresh';
 import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated';
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
+import PlatformTutorial from '../components/onboarding/PlatformTutorial';
+import { AnimatePresence } from 'framer-motion';
 
 export default function Home() {
   const navigate = useNavigate();
