@@ -37,6 +37,35 @@ export default function CreatePlan() {
     theme_color: '#00fea3'
   });
 
+  // Date limits: today → today + 30 days
+  const todayStr = new Date().toISOString().split('T')[0];
+  const maxDate = new Date();
+  maxDate.setDate(maxDate.getDate() + 30);
+  const maxDateStr = maxDate.toISOString().split('T')[0];
+
+  // Compute max end_time: start_time + 8h (wraps past midnight)
+  const getMaxEndTime = (startTime) => {
+    if (!startTime) return '';
+    const [h, m] = startTime.split(':').map(Number);
+    const totalMins = h * 60 + m + 8 * 60;
+    const endH = Math.floor((totalMins % (24 * 60)) / 60);
+    const endM = totalMins % 60;
+    return `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
+  };
+
+  // Validate that end_time is within 8h of start_time
+  const isEndTimeValid = (startTime, endTime) => {
+    if (!startTime || !endTime) return true;
+    const toMins = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+    let diff = toMins(endTime) - toMins(startTime);
+    if (diff < 0) diff += 24 * 60; // overnight
+    return diff > 0 && diff <= 8 * 60;
+  };
+
+  const handleEndTimeChange = (val) => {
+    setData({ ...data, end_time: val });
+  };
+
   const toggleTag = (tag) => {
     if (data.tags.includes(tag)) {
       setData({ ...data, tags: data.tags.filter(t => t !== tag) });
