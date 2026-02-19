@@ -184,7 +184,18 @@ export default function GroupChat() {
         [vote === 'great' ? 'great_votes' : 'bad_votes']:
           (vote === 'great' ? (plan.great_votes || 0) : (plan.bad_votes || 0)) + 1,
       };
-      if (newVotedUsers.length >= participants.length) updateData.status = 'ended';
+      const allVoted = newVotedUsers.length >= participants.length;
+      if (allVoted) {
+        const totalGreat = (vote === 'great' ? (plan.great_votes || 0) : (plan.great_votes || 0)) + (vote === 'great' ? 1 : 0);
+        const totalBad = (vote === 'bad' ? (plan.bad_votes || 0) : (plan.bad_votes || 0)) + (vote === 'bad' ? 1 : 0);
+        updateData.status = 'ended';
+        // Notify all participants of the result
+        const isSuccess = totalGreat >= totalBad;
+        participants.forEach(p => {
+          if (isSuccess) notifyPlanSuccessful(p.user_id, plan);
+          else notifyPlanUnsuccessful(p.user_id, plan);
+        });
+      }
       await base44.entities.PartyPlan.update(planId, updateData);
       if (wantsToLeave && myParticipation) {
         await base44.entities.PlanParticipant.delete(myParticipation.id);
