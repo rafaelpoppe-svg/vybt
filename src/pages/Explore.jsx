@@ -238,13 +238,15 @@ export default function Explore() {
               className="pl-10 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
             />
           </div>
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setShowFilters(!showFilters)}
-            className={`p-3 rounded-xl ${showFilters ? 'bg-[#00fea3] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400'}`}
-          >
-            <Filter className="w-5 h-5" />
-          </motion.button>
+          {activeView !== 'map' && (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowFilters(!showFilters)}
+              className={`p-3 rounded-xl ${showFilters ? 'bg-[#00fea3] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400'}`}
+            >
+              <Filter className="w-5 h-5" />
+            </motion.button>
+          )}
         </div>
 
         {/* Filters Panel */}
