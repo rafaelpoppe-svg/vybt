@@ -312,6 +312,23 @@ export default function Home() {
 
       </PullToRefresh>
       <BottomNav />
+
+      {/* Platform Tutorial Modal */}
+      <AnimatePresence>
+        {showTutorial && (
+          <PlatformTutorial
+            onClose={async () => {
+              setShowTutorial(false);
+              // Mark tutorial as completed in user profile
+              if (myProfile?.id) {
+                await base44.entities.UserProfile.update(myProfile.id, {
+                  tutorial_completed: true
+                });
+              }
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
