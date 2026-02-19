@@ -198,8 +198,20 @@ export default function Explore() {
                 : 'bg-gray-900 text-gray-400 border border-gray-800'
             }`}
           >
-            <MapIcon className="w-4 h-4" />
+            <LayoutGrid className="w-4 h-4" />
             Plans
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setActiveView('map')}
+            className={`flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 ${
+              activeView === 'map'
+                ? 'bg-[#00fea3] text-[#0b0b0b]'
+                : 'bg-gray-900 text-gray-400 border border-gray-800'
+            }`}
+          >
+            <Map className="w-4 h-4" />
+            Map
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.95 }}
