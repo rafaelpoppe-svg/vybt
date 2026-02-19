@@ -266,8 +266,8 @@ export default function Explore() {
           )}
         </div>
 
-        {/* Tags - Only for plans */}
-        {activeView === 'plans' && (
+        {/* Tags - Only for plans/map */}
+        {(activeView === 'plans' || activeView === 'map') && (
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
             {partyTags.map((tag) => (
               tag === 'All' ? (
