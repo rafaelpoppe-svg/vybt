@@ -345,97 +345,103 @@ export default function Explore() {
         </div>
       </header>
 
-      {/* Map View — full bleed, no padding */}
+      {/* Map View — fills remaining space between header and bottom nav */}
       {activeView === 'map' && (
-        <PlanMap
-          plans={filteredPlans}
-          allParticipants={allParticipants}
-          profilesMap={profilesMap}
-          myParticipations={myParticipations}
-        />
+        <div className="flex-1 overflow-hidden">
+          <PlanMap
+            plans={filteredPlans}
+            allParticipants={allParticipants}
+            profilesMap={profilesMap}
+            myParticipations={myParticipations}
+          />
+        </div>
       )}
 
-      {/* Content — Pull to Refresh */}
+      {/* Content — scrollable area */}
       {activeView !== 'map' && (
-      <PullToRefresh onRefresh={handleRefresh}>
-      <main className="p-4">
-        {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
-          </div>
-        ) : activeView === 'plans' ? (
-          filteredPlans.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2">
-              {filteredPlans.map((plan) => {
-                const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
-                return (
-                  <PlanCard
-                    key={plan.id}
-                    plan={plan}
-                    participants={getParticipants(plan.id)}
-                    featured={plan.is_highlighted}
-                    matchScore={planFilters.sortBy === 'foryou' ? plan.matchScore : null}
-                    matchReasons={planFilters.sortBy === 'foryou' ? plan.matchReasons : null}
-                    isOnFire={isOnFire}
-                    onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-500">No plans found</p>
-            </div>
-          )
-        ) : (
-          // Users Grid
-          filteredUsers.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3">
-              {filteredUsers.map((profile) => {
-                const matchingVibes = myProfile?.vibes?.filter(v => profile.vibes?.includes(v)) || [];
-                return (
-                  <motion.button
-                    key={profile.id}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate(createPageUrl('UserProfile') + `?id=${profile.user_id}`)}
-                    className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800"
-                  >
-                    <div className="aspect-square relative">
-                      {profile.photos?.[0] ? (
-                        <img src={profile.photos[0]} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00fea3]/30 flex items-center justify-center">
-                          <span className="text-4xl text-white font-bold">
-                            {profile.display_name?.[0] || '?'}
-                          </span>
-                        </div>
-                      )}
-                      {matchingVibes.length > 0 && (
-                        <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-[#00fea3]/80 text-[#0b0b0b] text-[10px] font-bold">
-                          {matchingVibes.length} vibes match
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-3">
-                      <p className="text-white font-medium truncate">{profile.display_name || 'User'}</p>
-                      {profile.city && (
-                        <p className="text-gray-500 text-xs mt-0.5">{profile.city}</p>
-                      )}
-                    </div>
-                  </motion.button>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-500">No users found</p>
-            </div>
-          )
-        )}
-      </main>
-      </PullToRefresh>
+        <div className="flex-1 overflow-y-auto">
+          <PullToRefresh onRefresh={handleRefresh}>
+            <main className="p-4 pb-4">
+              {isLoading ? (
+                <div className="flex justify-center py-12">
+                  <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+                </div>
+              ) : activeView === 'plans' ? (
+                filteredPlans.length > 0 ? (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {filteredPlans.map((plan) => {
+                      const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
+                      return (
+                        <PlanCard
+                          key={plan.id}
+                          plan={plan}
+                          participants={getParticipants(plan.id)}
+                          featured={plan.is_highlighted}
+                          matchScore={planFilters.sortBy === 'foryou' ? plan.matchScore : null}
+                          matchReasons={planFilters.sortBy === 'foryou' ? plan.matchReasons : null}
+                          isOnFire={isOnFire}
+                          onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                        />
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-gray-500">No plans found</p>
+                  </div>
+                )
+              ) : (
+                filteredUsers.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-3">
+                    {filteredUsers.map((profile) => {
+                      const matchingVibes = myProfile?.vibes?.filter(v => profile.vibes?.includes(v)) || [];
+                      return (
+                        <motion.button
+                          key={profile.id}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => navigate(createPageUrl('UserProfile') + `?id=${profile.user_id}`)}
+                          className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800"
+                        >
+                          <div className="aspect-square relative">
+                            {profile.photos?.[0] ? (
+                              <img src={profile.photos[0]} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00fea3]/30 flex items-center justify-center">
+                                <span className="text-4xl text-white font-bold">
+                                  {profile.display_name?.[0] || '?'}
+                                </span>
+                              </div>
+                            )}
+                            {matchingVibes.length > 0 && (
+                              <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-[#00fea3]/80 text-[#0b0b0b] text-[10px] font-bold">
+                                {matchingVibes.length} vibes match
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-3">
+                            <p className="text-white font-medium truncate">{profile.display_name || 'User'}</p>
+                            {profile.city && (
+                              <p className="text-gray-500 text-xs mt-0.5">{profile.city}</p>
+                            )}
+                          </div>
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-gray-500">No users found</p>
+                  </div>
+                )
+              )}
+            </main>
+          </PullToRefresh>
+        </div>
       )}
-      <BottomNav />
+
+      <div className="flex-shrink-0">
+        <BottomNav />
+      </div>
     </div>
   );
 }
