@@ -223,7 +223,10 @@ export default function StoryView() {
       {/* Header */}
       <div className="absolute top-4 left-0 right-0 px-4 z-30">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div
+            className="flex items-center gap-3 cursor-pointer"
+            onClick={() => story?.user_id && navigate(createPageUrl('UserProfile') + `?id=${story.user_id}`)}
+          >
             <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800">
               {storyUser?.photos?.[0] ? (
                 <img src={storyUser.photos[0]} alt="" className="w-full h-full object-cover" />
