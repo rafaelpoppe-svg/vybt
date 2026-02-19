@@ -118,7 +118,7 @@ export default function GroupChatHeader({
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={onDelete}
+                onClick={(e) => { e.stopPropagation(); onDelete(); }}
                 className="flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
