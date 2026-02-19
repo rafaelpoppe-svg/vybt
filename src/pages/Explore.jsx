@@ -345,7 +345,18 @@ export default function Explore() {
         </div>
       </header>
 
+      {/* Map View — full bleed, no padding */}
+      {activeView === 'map' && (
+        <PlanMap
+          plans={filteredPlans}
+          allParticipants={allParticipants}
+          profilesMap={profilesMap}
+          myParticipations={myParticipations}
+        />
+      )}
+
       {/* Content — Pull to Refresh */}
+      {activeView !== 'map' && (
       <PullToRefresh onRefresh={handleRefresh}>
       <main className="p-4">
         {isLoading ? (
