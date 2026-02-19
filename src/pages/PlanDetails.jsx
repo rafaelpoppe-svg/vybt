@@ -7,7 +7,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { 
   ChevronLeft, MapPin, Calendar, Clock, Users, MessageCircle, 
-  Share2, Check, Plus, Camera, Loader2, Flame, Sparkles, Shield, LogOut
+  Share2, Check, Plus, Camera, Loader2, Flame, Sparkles, Shield, LogOut, Flag
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import StoryCard from '../components/feed/StoryCard';
@@ -15,6 +15,7 @@ import PartyTag from '../components/common/PartyTag';
 import HighlightPlanModal from '../components/plan/HighlightPlanModal';
 import PlanCountdown from '../components/plan/PlanCountdown';
 import LeavePlanModal from '../components/plan/LeavePlanModal';
+import ReportContentModal from '../components/moderation/ReportContentModal';
 import { notifyNewGroupMember } from '../components/notifications/NotificationTriggers';
 
 export default function PlanDetails() {
