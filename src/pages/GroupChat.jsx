@@ -416,6 +416,7 @@ export default function GroupChat() {
         isOpen={showRenewModal}
         onClose={() => setShowRenewModal(false)}
         onConfirm={(data) => renewMutation.mutate(data)}
+        onTerminate={() => { setShowRenewModal(false); setShowDeleteModal(true); }}
         plan={plan}
         isLoading={renewMutation.isPending}
       />
