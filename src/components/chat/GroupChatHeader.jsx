@@ -105,8 +105,8 @@ export default function GroupChatHeader({
             </motion.button>
           )}
 
-          {/* Admin actions after voting ends */}
-          {planStatus === 'ended' && isAdmin && plan?.status !== 'terminated' && (
+          {/* Admin actions — only after plan end time has passed */}
+          {planStatus === 'ended' && isAdmin && plan?.status !== 'terminated' && plan?.status !== 'renewed' && (
             <div className="flex gap-2">
               <motion.button
                 whileTap={{ scale: 0.95 }}
