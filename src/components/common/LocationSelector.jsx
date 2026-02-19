@@ -3,10 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ChevronDown, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
-const popularCities = [
-  'Madrid', 'Barcelona', 'London', 'Berlin', 'Paris', 
-  'Amsterdam', 'Ibiza', 'Miami', 'New York', 'Los Angeles', 'Viseu'
-];
+const popularCities = ['Viseu'];
 
 export default function LocationSelector({ city, radius, onCityChange, onRadiusChange }) {
   const [isOpen, setIsOpen] = useState(false);
