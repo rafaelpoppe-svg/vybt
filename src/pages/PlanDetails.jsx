@@ -459,6 +459,16 @@ export default function PlanDetails() {
         isLoading={highlightMutation.isPending}
       />
 
+      {/* Report Modal */}
+      <ReportContentModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onReport={(data) => reportPlanMutation.mutate(data)}
+        contentType="plan"
+        contentTitle={plan.title}
+        isLoading={reportPlanMutation.isPending}
+      />
+
       {/* Leave Modal */}
       <LeavePlanModal
         isOpen={showLeaveModal}
