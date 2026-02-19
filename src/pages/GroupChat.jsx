@@ -212,6 +212,28 @@ export default function GroupChat() {
     },
   });
 
+  const terminateMutation = useMutation({
+    mutationFn: async () => {
+      const terminatedAt = new Date().toISOString();
+      await base44.entities.PartyPlan.update(planId, {
+        status: 'terminated',
+        terminated_at: terminatedAt,
+      });
+      await base44.entities.ChatMessage.create({
+        sender_id: currentUser.id,
+        plan_id: planId,
+        message_type: 'group',
+        content: '❌ O administrador encerrou este plano. O grupo será removido em 24 horas.',
+        is_read: false,
+      });
+    },
+    onSuccess: () => {
+      setShowDeleteModal(false);
+      queryClient.invalidateQueries(['allPlans']);
+      queryClient.invalidateQueries(['groupMessages', planId]);
+    },
+  });
+
   const deleteMutation = useMutation({
     mutationFn: async () => {
       for (const p of participants) await base44.entities.PlanParticipant.delete(p.id);
