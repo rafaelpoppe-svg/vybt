@@ -234,7 +234,7 @@ export default function Explore() {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={activeView === 'plans' ? 'Search plans...' : 'Search people...'}
+              placeholder={activeView === 'plans' ? 'Search plans...' : activeView === 'map' ? 'Search in the map...' : 'Search people...'}
               className="pl-10 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
             />
           </div>
