@@ -253,9 +253,18 @@ export default function CreatePlan() {
             <Input
               type="time"
               value={data.end_time}
-              onChange={(e) => setData({ ...data, end_time: e.target.value })}
-              className="bg-gray-900 border-gray-800 text-white"
+              onChange={(e) => handleEndTimeChange(e.target.value)}
+              disabled={!data.time}
+              className="bg-gray-900 border-gray-800 text-white disabled:opacity-40"
             />
+            {data.time && (
+              <p className="text-xs text-gray-600 mt-1">
+                Máx. {getMaxEndTime(data.time)}
+              </p>
+            )}
+            {data.time && data.end_time && !isEndTimeValid(data.time, data.end_time) && (
+              <p className="text-xs text-red-500 mt-1">Máximo 8h de duração</p>
+            )}
           </div>
         </div>
 
