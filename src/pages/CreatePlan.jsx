@@ -224,9 +224,12 @@ export default function CreatePlan() {
           <Input
             type="date"
             value={data.date}
+            min={todayStr}
+            max={maxDateStr}
             onChange={(e) => setData({ ...data, date: e.target.value })}
             className="bg-gray-900 border-gray-800 text-white"
           />
+          <p className="text-xs text-gray-600 mt-1">Máximo 30 dias a partir de hoje</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
