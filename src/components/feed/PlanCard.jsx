@@ -47,7 +47,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           {plan.status === 'terminated' && (
             <div className="px-3 py-1.5 rounded-full bg-red-600/90 backdrop-blur-sm flex items-center gap-1">
               <span className="text-xs">❌</span>
-              <span className="text-xs text-white font-bold">TERMINATED</span>
+              <span className="text-xs text-white font-bold">Encerrado</span>
             </div>
           )}
           {plan.status !== 'terminated' && (
