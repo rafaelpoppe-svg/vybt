@@ -146,6 +146,15 @@ export default function Home() {
   // Auto-delete terminated plans older than 24h
   useAutoDeleteTerminated(plans);
 
+  // Smart push-style in-app notifications
+  usePushNotifications({
+    currentUser,
+    userCity: city,
+    plans: visiblePlans,
+    friendIds,
+    myParticipations,
+  });
+
   const handleRefresh = async () => {
     await queryClient.invalidateQueries();
   };
