@@ -351,6 +351,22 @@ export default function UserProfile() {
           </div>
         )}
       </div>
+
+      <ReportUserModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onReport={(data) => reportUserMutation.mutate(data)}
+        userName={profile?.display_name}
+        isLoading={reportUserMutation.isPending}
+      />
+
+      <BlockUserModal
+        isOpen={showBlockModal}
+        onClose={() => setShowBlockModal(false)}
+        onBlock={() => blockUserMutation.mutate()}
+        userName={profile?.display_name}
+        isLoading={blockUserMutation.isPending}
+      />
     </div>
   );
 }
