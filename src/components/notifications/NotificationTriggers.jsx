@@ -168,3 +168,66 @@ export const notifyNewStory = async (planId, userId, userName) => {
     console.error('Failed to notify new story:', error);
   }
 };
+
+// ─── Push-style smart notifications ───────────────────────────────────────────
+
+/**
+ * Notify a user about plans happening now near their city.
+ * Only sends once per plan (checked against existing notifications).
+ */
+export const notifyNearbyPlanHappening = async (userId, plan) => {
+  await createNotification(
+    userId,
+    'plan_happening_now',
+    `🔥 "${plan.title}" está a acontecer agora em ${plan.city}!`,
+    { planId: plan.id, title: 'Plano perto de ti' }
+  );
+};
+
+/**
+ * Notify a user that a friend created a new plan.
+ */
+export const notifyFriendCreatedPlan = async (userId, friendName, plan) => {
+  await createNotification(
+    userId,
+    'friend_created_plan',
+    `${friendName} criou um novo plano: "${plan.title}" em ${plan.city}`,
+    { planId: plan.id, title: 'Novo plano de um amigo', relatedUserId: plan.creator_id }
+  );
+};
+
+/**
+ * Notify a participant about a plan renewal (plan updated/renewed).
+ */
+export const notifyPlanRenewed = async (userId, plan) => {
+  await createNotification(
+    userId,
+    'plan_renewed',
+    `"${plan.title}" foi renovado com nova data e horário! 🎉`,
+    { planId: plan.id, title: 'Plano renovado' }
+  );
+};
+
+/**
+ * Notify a participant that their plan was successful after voting.
+ */
+export const notifyPlanSuccessful = async (userId, plan) => {
+  await createNotification(
+    userId,
+    'plan_successful',
+    `"${plan.title}" foi um sucesso! A comunidade adorou. 🎊`,
+    { planId: plan.id, title: 'Plano bem-sucedido' }
+  );
+};
+
+/**
+ * Notify a participant that their plan was unsuccessful after voting.
+ */
+export const notifyPlanUnsuccessful = async (userId, plan) => {
+  await createNotification(
+    userId,
+    'plan_unsuccessful',
+    `"${plan.title}" não conseguiu votos suficientes desta vez.`,
+    { planId: plan.id, title: 'Plano encerrado' }
+  );
+};
