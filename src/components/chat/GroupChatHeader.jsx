@@ -24,8 +24,10 @@ export default function GroupChatHeader({
         </motion.button>
 
         {/* Avatar */}
-        <div
-          className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0"
+        <motion.div
+          whileTap={{ scale: 0.9 }}
+          onClick={onInfo}
+          className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 cursor-pointer"
           style={{ background: `linear-gradient(135deg, ${themeColor}40, #542b9b40)` }}
         >
           {plan?.group_image ? (
@@ -33,7 +35,7 @@ export default function GroupChatHeader({
           ) : (
             <div className="w-full h-full flex items-center justify-center text-lg">🎉</div>
           )}
-        </div>
+        </motion.div>
 
         {/* Title only — tags moved below */}
         <div className="flex-1 min-w-0">
