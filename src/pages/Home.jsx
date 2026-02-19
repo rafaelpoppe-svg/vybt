@@ -79,6 +79,13 @@ export default function Home() {
     enabled: !!currentUser?.id
   });
 
+  // Also fetch reverse friendships (where current user is the friend)
+  const { data: reverseFriendships = [] } = useQuery({
+    queryKey: ['reverseFriendships', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id, status: 'accepted' }),
+    enabled: !!currentUser?.id
+  });
+
   // Fetch my participations for past attendance
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myParticipations', currentUser?.id],
