@@ -317,7 +317,7 @@ export default function GroupChat() {
         isAdmin={isAdmin}
         themeColor={themeColor}
         onBack={() => navigate(createPageUrl('Chat'))}
-        onInfo={() => navigate(createPageUrl('PlanDetails') + `?id=${planId}`)}
+        onInfo={() => navigate(createPageUrl('PlanDetails') + '?id=' + planId)}
         onAdminActions={() => setShowAdminActions(true)}
         onVote={() => setShowVotingModal(true)}
         onRenew={() => setShowRenewModal(true)}
