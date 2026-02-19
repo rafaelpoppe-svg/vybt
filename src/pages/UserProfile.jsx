@@ -27,6 +27,8 @@ export default function UserProfile() {
 
   const [currentUser, setCurrentUser] = useState(null);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showBlockModal, setShowBlockModal] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
