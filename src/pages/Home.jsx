@@ -14,6 +14,7 @@ import ForYouSection from '../components/feed/ForYouSection';
 import HappeningNowBanner from '../components/feed/HappeningNowBanner';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
 import PullToRefresh from '../components/common/PullToRefresh';
+import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated';
 
 export default function Home() {
   const navigate = useNavigate();
