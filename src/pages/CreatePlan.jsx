@@ -93,11 +93,25 @@ export default function CreatePlan() {
     setLoading(true);
     try {
       const user = await base44.auth.me();
+
+      // Geocode address to get lat/lng for map
+      let latitude = null, longitude = null;
+      try {
+        const query = encodeURIComponent(`${data.location_address}, ${data.city}`);
+        const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`);
+        const geoData = await geoRes.json();
+        if (geoData?.[0]) {
+          latitude = parseFloat(geoData[0].lat);
+          longitude = parseFloat(geoData[0].lon);
+        }
+      } catch (_) {}
+
       const plan = await base44.entities.PartyPlan.create({
         ...data,
         creator_id: user.id,
         view_count: 0,
-        is_highlighted: false
+        is_highlighted: false,
+        ...(latitude && longitude ? { latitude, longitude } : {})
       });
       
       // Auto-join creator
