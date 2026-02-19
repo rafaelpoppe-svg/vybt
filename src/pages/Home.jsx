@@ -20,7 +20,7 @@ import { usePushNotifications } from '../components/notifications/usePushNotific
 export default function Home() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [city, setCity] = useState('Madrid');
+  const [city, setCity] = useState('');
   const [radius, setRadius] = useState(10);
   const [storyFilter, setStoryFilter] = useState('All stories');
   const [currentUser, setCurrentUser] = useState(null);
