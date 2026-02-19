@@ -15,6 +15,7 @@ import HappeningNowBanner from '../components/feed/HappeningNowBanner';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
 import PullToRefresh from '../components/common/PullToRefresh';
 import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated';
+import { usePushNotifications } from '../components/notifications/usePushNotifications';
 
 export default function Home() {
   const navigate = useNavigate();
