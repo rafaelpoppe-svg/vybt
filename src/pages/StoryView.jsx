@@ -272,27 +272,27 @@ export default function StoryView() {
               </motion.button>
             )}
 
-            {canDelete && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
-                  >
-                    <MoreVertical className="w-5 h-5 text-white" />
-                  </motion.button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-gray-900 border-gray-800">
-                  <DropdownMenuItem 
-                    onClick={() => deleteMutation.mutate()}
-                    className="text-red-400 hover:text-red-300"
-                  >
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <motion.button whileTap={{ scale: 0.9 }} className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
+                  <MoreVertical className="w-5 h-5 text-white" />
+                </motion.button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-gray-900 border-gray-800">
+                {canDelete && (
+                  <DropdownMenuItem onClick={() => deleteMutation.mutate()} className="text-red-400 hover:text-red-300">
                     <Trash2 className="w-4 h-4 mr-2" />
                     Deletar Story
                   </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+                )}
+                {!canDelete && currentUser && (
+                  <DropdownMenuItem onClick={() => setShowReportModal(true)} className="text-orange-400 hover:text-orange-300">
+                    <Flag className="w-4 h-4 mr-2" />
+                    Denunciar
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             <motion.button
               whileTap={{ scale: 0.9 }}
