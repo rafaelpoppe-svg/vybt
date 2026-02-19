@@ -228,6 +228,17 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
                 )}
               </Button>
             </div>
+
+            {onDelete && (
+              <button
+                type="button"
+                onClick={onDelete}
+                className="w-full mt-2 py-3 rounded-xl border border-red-500/30 text-red-400 text-sm font-medium flex items-center justify-center gap-2 hover:bg-red-500/10 transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+                Deletar Grupo
+              </button>
+            )}
           </form>
         </motion.div>
       </div>
