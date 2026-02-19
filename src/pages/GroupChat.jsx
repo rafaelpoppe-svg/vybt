@@ -422,9 +422,9 @@ export default function GroupChat() {
       <DeletePlanModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        onConfirm={() => deleteMutation.mutate()}
+        onConfirm={() => terminateMutation.mutate()}
         planTitle={plan?.title || ''}
-        isLoading={deleteMutation.isPending}
+        isLoading={terminateMutation.isPending}
       />
       <AdminEditModal
         isOpen={showAdminEditModal}
