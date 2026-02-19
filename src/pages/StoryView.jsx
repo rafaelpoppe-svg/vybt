@@ -85,6 +85,19 @@ export default function StoryView() {
     }
   });
 
+  const reportMutation = useMutation({
+    mutationFn: ({ reason, details }) => base44.entities.Report.create({
+      reporter_user_id: currentUser.id,
+      reported_user_id: story.user_id,
+      reported_plan_id: story.id,
+      type: 'story',
+      reason,
+      details: details || '',
+      status: 'pending'
+    }),
+    onSuccess: () => setShowReportModal(false)
+  });
+
   const canDelete = story?.user_id === currentUser?.id;
 
   // Mark as viewed
