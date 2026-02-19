@@ -4,11 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, UserPlus, MessageCircle, Check, Loader2, MapPin, Users, PartyPopper, Clapperboard, Music2, Sparkles } from 'lucide-react';
+import { ChevronLeft, UserPlus, MessageCircle, Check, Loader2, MapPin, Users, PartyPopper, Clapperboard, Music2, Sparkles, MoreVertical, Flag, Ban } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import VibeTag, { vibeConfig } from '../components/common/VibeTag';
 import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
 import { notifyFriendRequest } from '../components/notifications/NotificationTriggers';
+import ReportUserModal from '../components/user/ReportUserModal';
+import BlockUserModal from '../components/user/BlockUserModal';
+import { toast } from 'sonner';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function UserProfile() {
   const navigate = useNavigate();
