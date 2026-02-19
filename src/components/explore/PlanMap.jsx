@@ -12,6 +12,7 @@ import L from 'leaflet';
 const CITIES = [
   { name: 'Lisboa', lat: 38.7169, lng: -9.1399 },
   { name: 'Porto', lat: 41.1579, lng: -8.6291 },
+  { name: 'Viseu', lat: 40.6566, lng: -7.9122 },
   { name: 'Faro', lat: 37.0194, lng: -7.9322 },
   { name: 'Madrid', lat: 40.4168, lng: -3.7038 },
   { name: 'Barcelona', lat: 41.3851, lng: 2.1734 },
