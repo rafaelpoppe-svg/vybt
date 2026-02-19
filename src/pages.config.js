@@ -57,14 +57,14 @@ import GroupChat from './pages/GroupChat';
 import Home from './pages/Home';
 import MyPlans from './pages/MyPlans';
 import MyStories from './pages/MyStories';
+import NotificationSettings from './pages/NotificationSettings';
 import Notifications from './pages/Notifications';
 import Onboarding from './pages/Onboarding';
 import PlanDetails from './pages/PlanDetails';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 import StoryView from './pages/StoryView';
 import UserProfile from './pages/UserProfile';
-import Settings from './pages/Settings';
-import NotificationSettings from './pages/NotificationSettings';
 import __Layout from './Layout.jsx';
 
 
@@ -79,14 +79,14 @@ export const PAGES = {
     "Home": Home,
     "MyPlans": MyPlans,
     "MyStories": MyStories,
+    "NotificationSettings": NotificationSettings,
     "Notifications": Notifications,
     "Onboarding": Onboarding,
     "PlanDetails": PlanDetails,
     "Profile": Profile,
+    "Settings": Settings,
     "StoryView": StoryView,
     "UserProfile": UserProfile,
-    "Settings": Settings,
-    "NotificationSettings": NotificationSettings,
 }
 
 export const pagesConfig = {
