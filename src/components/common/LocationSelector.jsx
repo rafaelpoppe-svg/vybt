@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 
 const popularCities = [
   'Madrid', 'Barcelona', 'London', 'Berlin', 'Paris', 
-  'Amsterdam', 'Ibiza', 'Miami', 'New York', 'Los Angeles'
+  'Amsterdam', 'Ibiza', 'Miami', 'New York', 'Los Angeles', 'Viseu'
 ];
 
 export default function LocationSelector({ city, radius, onCityChange, onRadiusChange }) {
