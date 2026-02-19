@@ -75,6 +75,33 @@ export default function UserProfile() {
   const isFriend = existingFriendship?.status === 'accepted';
   const isPending = existingFriendship?.status === 'pending';
 
+  const reportUserMutation = useMutation({
+    mutationFn: ({ reason, details }) => base44.entities.Report.create({
+      reporter_user_id: currentUser.id,
+      reported_user_id: userId,
+      type: 'user',
+      reason,
+      details: details || '',
+      status: 'pending'
+    }),
+    onSuccess: () => {
+      setShowReportModal(false);
+      toast.success('Denúncia enviada');
+    }
+  });
+
+  const blockUserMutation = useMutation({
+    mutationFn: () => base44.entities.BlockedUser.create({
+      user_id: currentUser.id,
+      blocked_user_id: userId
+    }),
+    onSuccess: () => {
+      setShowBlockModal(false);
+      toast.success('Utilizador bloqueado');
+      navigate(-1);
+    }
+  });
+
   const addFriendMutation = useMutation({
     mutationFn: async () => {
       await base44.entities.Friendship.create({
