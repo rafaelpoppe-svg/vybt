@@ -40,6 +40,10 @@ export default function Home() {
           navigate(createPageUrl('Onboarding'));
         } else {
           setMyProfile(profiles[0]);
+          // Show tutorial if user hasn't seen it yet
+          if (!profiles[0].tutorial_completed) {
+            setShowTutorial(true);
+          }
           // Only set from profile if user hasn't manually chosen a city yet
           if (profiles[0].city && !localStorage.getItem('selectedCity')) {
             setCity(profiles[0].city);
