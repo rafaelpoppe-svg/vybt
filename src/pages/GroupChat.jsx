@@ -108,7 +108,7 @@ export default function GroupChat() {
       ? new Date(`${plan.date}T${plan.end_time}`)
       : new Date(startTime.getTime() + 6 * 60 * 60 * 1000);
     if (endTime < startTime) endTime.setDate(endTime.getDate() + 1);
-    const votingEnds = new Date(endTime.getTime() + 12 * 60 * 60 * 1000);
+    const votingEnds = new Date(endTime.getTime() + 6 * 60 * 60 * 1000);
     const votedCount = plan.voted_users?.length || 0;
     if (votedCount > 0 && participants.length > 0 && votedCount >= participants.length) return 'ended';
     if (now < startTime) return 'upcoming';
