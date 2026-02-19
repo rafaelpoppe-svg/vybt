@@ -66,7 +66,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
   const isJoined = (planId) => myParticipations.some(p => p.plan_id === planId);
 
   return (
-    <div className="relative w-full" style={{ height: 'calc(100vh - 284px)' }}>
+    <div className="relative w-full h-full">
       {/* Map styles override for dark theme */}
       <style>{`
         .leaflet-container { background: #1a1a1a !important; }
