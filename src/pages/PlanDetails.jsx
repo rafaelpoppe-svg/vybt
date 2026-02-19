@@ -389,37 +389,39 @@ export default function PlanDetails() {
               Group Chat
             </Button>
             
-            {isJoined ? (
-              <Button
-                onClick={() => setShowLeaveModal(true)}
-                disabled={leaveMutation.isPending || !canJoinOrLeave}
-                className="flex-1 py-6 rounded-full bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-50"
-              >
-                {leaveMutation.isPending ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    <LogOut className="w-5 h-5 mr-2" />
-                    Sair
-                  </>
-                )}
-              </Button>
-            ) : (
-              <Button
-                onClick={() => joinMutation.mutate()}
-                disabled={joinMutation.isPending || !canJoinMorePlans || !canJoinOrLeave}
-                className="flex-1 py-6 rounded-full font-bold disabled:opacity-50"
-                style={{ backgroundColor: themeColor, color: '#0b0b0b' }}
-              >
-                {joinMutation.isPending ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    <Plus className="w-5 h-5 mr-2" />
-                    Join Plan
-                  </>
-                )}
-              </Button>
+            {!isVoting && (
+              isJoined ? (
+                <Button
+                  onClick={() => setShowLeaveModal(true)}
+                  disabled={leaveMutation.isPending}
+                  className="flex-1 py-6 rounded-full bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-50"
+                >
+                  {leaveMutation.isPending ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      <LogOut className="w-5 h-5 mr-2" />
+                      Sair
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => joinMutation.mutate()}
+                  disabled={joinMutation.isPending || !canJoinMorePlans}
+                  className="flex-1 py-6 rounded-full font-bold disabled:opacity-50"
+                  style={{ backgroundColor: themeColor, color: '#0b0b0b' }}
+                >
+                  {joinMutation.isPending ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      <Plus className="w-5 h-5 mr-2" />
+                      Join Plan
+                    </>
+                  )}
+                </Button>
+              )
             )}
           </div>
         </div>
