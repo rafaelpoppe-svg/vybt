@@ -279,7 +279,15 @@ export default function EditProfile() {
 
         {/* Party Types */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Preferred Party Types (max 5)</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-gray-400 text-sm">Preferred Party Types</label>
+            <span className={`text-xs font-medium ${formData.party_types.length >= 5 ? 'text-[#00fea3]' : 'text-gray-500'}`}>
+              {formData.party_types.length}/5
+            </span>
+          </div>
+          {formData.party_types.length >= 5 && (
+            <p className="text-xs text-[#00fea3]/70 mb-2">Limite atingido. Remove um para selecionar outro.</p>
+          )}
           <div className="flex flex-wrap gap-2">
             {partyTypeOptions.map((type) => (
               <PartyTag
