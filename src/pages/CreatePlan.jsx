@@ -226,7 +226,11 @@ export default function CreatePlan() {
             value={data.date}
             min={todayStr}
             max={maxDateStr}
-            onChange={(e) => setData({ ...data, date: e.target.value })}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val < todayStr || val > maxDateStr) return;
+              setData({ ...data, date: val });
+            }}
             className="bg-gray-900 border-gray-800 text-white"
           />
           <p className="text-xs text-gray-600 mt-1">Máximo 30 dias a partir de hoje</p>
