@@ -37,9 +37,12 @@ export default function Home() {
           navigate(createPageUrl('Onboarding'));
         } else {
           setMyProfile(profiles[0]);
-          if (profiles[0].city) {
+          // Only set from profile if user hasn't manually chosen a city yet
+          if (profiles[0].city && !localStorage.getItem('selectedCity')) {
             setCity(profiles[0].city);
+            localStorage.setItem('selectedCity', profiles[0].city);
             setRadius(profiles[0].radius_km || 10);
+            localStorage.setItem('selectedRadius', profiles[0].radius_km || 10);
           }
         }
       } catch (e) {
