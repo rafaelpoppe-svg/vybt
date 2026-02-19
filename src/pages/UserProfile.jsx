@@ -168,6 +168,29 @@ export default function UserProfile() {
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
 
+        {/* More options (report/block) */}
+        {currentUser && currentUser.id !== userId && (
+          <div className="absolute top-12 right-4 z-10">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <motion.button whileTap={{ scale: 0.9 }} className="p-2 rounded-full bg-black/40 backdrop-blur-md">
+                  <MoreVertical className="w-5 h-5 text-white" />
+                </motion.button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-gray-900 border-gray-800">
+                <DropdownMenuItem onClick={() => setShowReportModal(true)} className="text-orange-400 hover:text-orange-300">
+                  <Flag className="w-4 h-4 mr-2" />
+                  Denunciar utilizador
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShowBlockModal(true)} className="text-red-400 hover:text-red-300">
+                  <Ban className="w-4 h-4 mr-2" />
+                  Bloquear utilizador
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
+
         {/* Photo dots */}
         {photos.length > 1 && (
           <div className="absolute top-14 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
