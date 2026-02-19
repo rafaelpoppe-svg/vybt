@@ -433,7 +433,6 @@ export default function Explore() {
           )
         )}
       </main>
-
       </PullToRefresh>
       )}
       <BottomNav />
