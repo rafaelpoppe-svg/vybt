@@ -241,7 +241,7 @@ export default function CreatePlan() {
             <Input
               type="time"
               value={data.time}
-              onChange={(e) => setData({ ...data, time: e.target.value })}
+              onChange={(e) => setData({ ...data, time: e.target.value, end_time: '' })}
               className="bg-gray-900 border-gray-800 text-white"
             />
           </div>
