@@ -43,7 +43,7 @@ export default function GroupChatHeader({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-1.5 flex-shrink-0">
+        <div className="flex gap-1.5 flex-shrink-0 relative z-30">
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={onInfo}
