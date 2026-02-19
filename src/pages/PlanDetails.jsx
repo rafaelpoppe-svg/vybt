@@ -145,6 +145,18 @@ export default function PlanDetails() {
     }
   });
 
+  const reportPlanMutation = useMutation({
+    mutationFn: ({ reason, details }) => base44.entities.Report.create({
+      reporter_user_id: currentUser.id,
+      reported_plan_id: planId,
+      type: 'plan',
+      reason,
+      details: details || '',
+      status: 'pending'
+    }),
+    onSuccess: () => setShowReportModal(false)
+  });
+
   const highlightMutation = useMutation({
     mutationFn: async () => {
       await base44.entities.PartyPlan.update(planId, {
