@@ -8,6 +8,7 @@ import { ChevronLeft, UserPlus, MessageCircle, Check, Loader2, MapPin, Users, Pa
 import { Button } from '@/components/ui/button';
 import VibeTag, { vibeConfig } from '../components/common/VibeTag';
 import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
+import { notifyFriendRequest } from '../components/notifications/NotificationTriggers';
 
 export default function UserProfile() {
   const navigate = useNavigate();
