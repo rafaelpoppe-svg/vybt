@@ -1,13 +1,31 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { MapPin, Users, Clock, ChevronRight, X } from 'lucide-react';
+import { MapPin, Users, Clock, ChevronRight, X, Search } from 'lucide-react';
 import { format } from 'date-fns';
 import PartyTag from '../common/PartyTag';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+
+const CITIES = [
+  { name: 'Lisboa', lat: 38.7169, lng: -9.1399 },
+  { name: 'Porto', lat: 41.1579, lng: -8.6291 },
+  { name: 'Faro', lat: 37.0194, lng: -7.9322 },
+  { name: 'Madrid', lat: 40.4168, lng: -3.7038 },
+  { name: 'Barcelona', lat: 41.3851, lng: 2.1734 },
+  { name: 'Paris', lat: 48.8566, lng: 2.3522 },
+  { name: 'London', lat: 51.5074, lng: -0.1278 },
+  { name: 'Berlin', lat: 52.5200, lng: 13.4050 },
+  { name: 'Amsterdam', lat: 52.3676, lng: 4.9041 },
+  { name: 'Milan', lat: 45.4654, lng: 9.1859 },
+  { name: 'Rome', lat: 41.9028, lng: 12.4964 },
+  { name: 'New York', lat: 40.7128, lng: -74.0060 },
+  { name: 'Miami', lat: 25.7617, lng: -80.1918 },
+  { name: 'Ibiza', lat: 38.9067, lng: 1.4206 },
+  { name: 'Mykonos', lat: 37.4467, lng: 25.3289 },
+];
 
 // Fix default marker icon issue with webpack/vite
 delete L.Icon.Default.prototype._getIconUrl;
