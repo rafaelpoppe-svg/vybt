@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import {
   ChevronLeft, ChevronRight, LogOut, Trash2,
-  Shield, FileText, Lock, Bell, HelpCircle
+  Shield, FileText, Lock, Bell, HelpCircle, ShieldAlert
 } from 'lucide-react';
 import DeleteAccountModal from '../components/profile/DeleteAccountModal';
 
