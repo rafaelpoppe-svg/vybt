@@ -330,6 +330,14 @@ export default function StoryView() {
           </motion.button>
         )}
       </div>
+    <ReportContentModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onReport={(data) => reportMutation.mutate(data)}
+        contentType="story"
+        contentTitle={storyPlan?.title}
+        isLoading={reportMutation.isPending}
+      />
     </div>
   );
 }
