@@ -27,6 +27,7 @@ export default function Home() {
   const [storyFilter, setStoryFilter] = useState('All stories');
   const [currentUser, setCurrentUser] = useState(null);
   const [myProfile, setMyProfile] = useState(null);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   // Check onboarding and get user profile
   useEffect(() => {
