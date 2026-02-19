@@ -130,26 +130,36 @@ export default function Chat() {
     return (
       <div className="flex flex-col h-screen bg-[#0b0b0b]">
         <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 px-4 pt-12 pb-3 flex items-center gap-3">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setSelectedFriendId(null)}
-            className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center"
-          >
-            <ChevronLeft className="w-5 h-5 text-white" />
-          </motion.button>
-          <div className="w-9 h-9 rounded-full bg-gray-800 overflow-hidden flex-shrink-0">
-            {selectedFriendProfile?.photos?.[0] ? (
-              <img src={selectedFriendProfile.photos[0]} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">
-                  {selectedFriendProfile?.display_name?.[0] || '?'}
-                </span>
-              </div>
-            )}
-          </div>
-          <p className="text-white font-semibold">{selectedFriendProfile?.display_name || 'User'}</p>
-        </header>
+           <motion.button
+             whileTap={{ scale: 0.9 }}
+             onClick={() => setSelectedFriendId(null)}
+             className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center"
+           >
+             <ChevronLeft className="w-5 h-5 text-white" />
+           </motion.button>
+           <motion.button
+             whileTap={{ scale: 0.95 }}
+             onClick={() => navigate(createPageUrl('UserProfile') + `?id=${selectedFriendId}`)}
+             className="w-9 h-9 rounded-full bg-gray-800 overflow-hidden flex-shrink-0 cursor-pointer"
+           >
+             {selectedFriendProfile?.photos?.[0] ? (
+               <img src={selectedFriendProfile.photos[0]} alt="" className="w-full h-full object-cover" />
+             ) : (
+               <div className="w-full h-full flex items-center justify-center">
+                 <span className="text-white font-bold text-sm">
+                   {selectedFriendProfile?.display_name?.[0] || '?'}
+                 </span>
+               </div>
+             )}
+           </motion.button>
+           <motion.button
+             whileTap={{ scale: 0.95 }}
+             onClick={() => navigate(createPageUrl('UserProfile') + `?id=${selectedFriendId}`)}
+             className="text-white font-semibold cursor-pointer hover:opacity-80 transition-opacity flex-1 text-left"
+           >
+             {selectedFriendProfile?.display_name || 'User'}
+           </motion.button>
+         </header>
 
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
           {dmLoading ? (
