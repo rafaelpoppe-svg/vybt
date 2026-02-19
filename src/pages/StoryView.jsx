@@ -25,6 +25,7 @@ export default function StoryView() {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [allStories, setAllStories] = useState([]);
   const [isMuted, setIsMuted] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
