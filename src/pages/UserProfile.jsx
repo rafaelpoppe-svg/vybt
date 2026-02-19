@@ -71,6 +71,10 @@ export default function UserProfile() {
         friend_id: userId,
         status: 'pending'
       });
+      // Notify the target user
+      const myProfiles = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
+      const myName = myProfiles[0]?.display_name || currentUser.full_name || 'Alguém';
+      await notifyFriendRequest(userId, currentUser.id, myName);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['friendshipStatus', currentUser?.id, userId]);
