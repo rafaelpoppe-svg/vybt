@@ -13,7 +13,12 @@ import VotingModal from '../components/plan/VotingModal';
 import RenewPlanModal from '../components/plan/RenewPlanModal';
 import DeletePlanModal from '../components/plan/DeletePlanModal';
 import AdminEditModal from '../components/plan/AdminEditModal';
-import { notifyNewGroupMessage } from '../components/notifications/NotificationTriggers';
+import { 
+  notifyNewGroupMessage,
+  notifyPlanRenewed,
+  notifyPlanSuccessful,
+  notifyPlanUnsuccessful,
+} from '../components/notifications/NotificationTriggers';
 
 export default function GroupChat() {
   const navigate = useNavigate();
