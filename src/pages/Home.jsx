@@ -98,7 +98,10 @@ export default function Home() {
     return acc;
   }, {});
 
-  const friendIds = friendships.map(f => f.friend_id);
+  const friendIds = [
+    ...friendships.map(f => f.friend_id),
+    ...reverseFriendships.map(f => f.user_id)
+  ];
   const pastPlanIds = myParticipations.map(p => p.plan_id);
 
   // Filter out voting plans for non-members
