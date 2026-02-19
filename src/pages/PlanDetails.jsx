@@ -28,6 +28,7 @@ export default function PlanDetails() {
   const [isJoined, setIsJoined] = useState(false);
   const [showHighlightModal, setShowHighlightModal] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
