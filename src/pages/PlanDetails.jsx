@@ -378,7 +378,7 @@ export default function PlanDetails() {
 
       {/* Bottom Actions */}
       {plan.status !== 'terminated' && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/95 to-transparent" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)' }}>
           <div className="flex gap-3">
             <Button
               onClick={() => navigate(createPageUrl('Chat') + `?planId=${planId}`)}
