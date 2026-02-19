@@ -143,9 +143,39 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
         </div>
       )}
 
-      {/* Plans count badge */}
-      <div className="absolute top-3 left-3 z-[999] px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-sm border border-gray-700">
-        <span className="text-white text-xs font-medium">{validPlans.length} plans on map</span>
+      {/* City Search */}
+      <div className="absolute top-3 left-3 right-3 z-[999]">
+        <div className="relative">
+          <div className="flex items-center bg-black/80 backdrop-blur-md border border-gray-700 rounded-xl px-3 py-2 gap-2">
+            <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <input
+              value={citySearch}
+              onChange={(e) => { setCitySearch(e.target.value); setShowCityDropdown(true); }}
+              onFocus={() => setShowCityDropdown(true)}
+              placeholder="Go to city..."
+              className="flex-1 bg-transparent text-white text-sm placeholder:text-gray-500 outline-none"
+            />
+            <span className="text-gray-600 text-xs">{validPlans.length} plans</span>
+          </div>
+          {showCityDropdown && filteredCities.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute top-full mt-1 left-0 right-0 bg-[#1a1a1a] border border-gray-700 rounded-xl overflow-hidden shadow-xl max-h-52 overflow-y-auto"
+            >
+              {filteredCities.map(city => (
+                <button
+                  key={city.name}
+                  onMouseDown={() => handleSelectCity(city)}
+                  className="w-full text-left px-4 py-2.5 text-sm text-white hover:bg-gray-800 flex items-center gap-2"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#00fea3]" />
+                  {city.name}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </div>
       </div>
 
       {/* Selected plan bottom sheet */}
