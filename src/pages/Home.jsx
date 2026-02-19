@@ -172,7 +172,11 @@ export default function Home() {
         <div className="pb-4">
           {happeningPlan && <HappeningNowBanner plan={happeningPlan} />}
           <StoriesBar
-            stories={stories}
+            stories={stories.filter(s =>
+              s.user_id === currentUser?.id ||
+              s.is_highlighted ||
+              friendIds.includes(s.user_id)
+            )}
             userProfiles={profilesMap}
             currentFilter={storyFilter}
             onFilterChange={setStoryFilter}
