@@ -167,7 +167,7 @@ export default function PlanDetails() {
   const isOnFire = plan.is_on_fire || (plan.recent_joins && plan.recent_joins >= 100);
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] pb-32">
+    <div className="min-h-screen bg-[#0b0b0b] pb-36">
       {/* Header Image */}
       <div className="relative h-64">
         {plan.cover_image ? (
