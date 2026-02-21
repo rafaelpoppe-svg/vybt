@@ -123,7 +123,9 @@ export default function GroupChat() {
   };
 
   const planStatus = getPlanStatus();
-  const isChatLocked = planStatus === 'voting';
+  // Chat is locked during voting AND after voting ends while admin hasn't acted yet
+  const isAwaitingAdmin = planStatus === 'ended' && plan?.status !== 'terminated' && plan?.status !== 'renewed';
+  const isChatLocked = planStatus === 'voting' || isAwaitingAdmin;
   const hasVoted = plan?.voted_users?.includes(currentUser?.id);
   const themeColor = plan?.theme_color || '#00fea3';
 
