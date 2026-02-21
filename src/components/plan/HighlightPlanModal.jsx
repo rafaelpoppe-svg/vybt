@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Flame, CreditCard, TrendingUp, Eye, Info } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { X, Flame, TrendingUp, Eye, Info } from 'lucide-react';
+import StripeCheckout from '../payment/StripeCheckout';
+import { toast } from 'sonner';
 
 export default function HighlightPlanModal({ 
   isOpen, 
@@ -11,6 +12,19 @@ export default function HighlightPlanModal({
   planTags = [],
   isLoading = false 
 }) {
+  const [paid, setPaid] = useState(false);
+
+  const handleSuccess = () => {
+    setPaid(true);
+    onConfirm();
+    toast.success('Pagamento bem-sucedido! Plano em destaque 🔥');
+    onClose();
+  };
+
+  const handleError = (msg) => {
+    toast.error(msg || 'Erro no pagamento');
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (

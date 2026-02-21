@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Sparkles, Check, CreditCard, Music, PartyPopper, MapPin, Info } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { X, Sparkles, Music, PartyPopper, MapPin, Info } from 'lucide-react';
 import VibeTag, { vibeConfig } from '../common/VibeTag';
 import PartyTag, { partyTagConfig } from '../common/PartyTag';
+import StripeCheckout from '../payment/StripeCheckout';
+import { toast } from 'sonner';
 
 const vibeOptions = Object.keys(vibeConfig);
 const partyTagOptions = Object.keys(partyTagConfig);
