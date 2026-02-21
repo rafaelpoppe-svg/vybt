@@ -75,7 +75,14 @@ export default function EditProfile() {
 
   const updateMutation = useMutation({
     mutationFn: async () => {
-      await base44.entities.UserProfile.update(profile.id, formData);
+      // If photos changed and profile was verified, remove verification
+      const photosChanged = JSON.stringify(formData.photos) !== JSON.stringify(profile.photos || []);
+      const updateData = { ...formData };
+      if (photosChanged && profile.is_verified) {
+        updateData.is_verified = false;
+        updateData.verification_selfie_url = '';
+      }
+      await base44.entities.UserProfile.update(profile.id, updateData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['myProfile', currentUser?.id]);
