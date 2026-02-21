@@ -1,25 +1,34 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Shield, ShieldAlert } from 'lucide-react';
+import { ShieldCheck, ShieldX } from 'lucide-react';
 
-export default function VerificationBadge({ isVerified, onClick }) {
+/**
+ * Shows a blue "Verified" badge or a grey "Not Verified" tag.
+ * size: 'sm' | 'md' | 'lg'
+ * showUnverified: whether to show the "Not Verified" tag for unverified users
+ */
+export default function VerificationBadge({ isVerified, size = 'md', showUnverified = true }) {
+  const sizes = {
+    sm: { icon: 'w-3 h-3', text: 'text-[10px]', padding: 'px-1.5 py-0.5', gap: 'gap-0.5' },
+    md: { icon: 'w-3.5 h-3.5', text: 'text-xs', padding: 'px-2 py-1', gap: 'gap-1' },
+    lg: { icon: 'w-4 h-4', text: 'text-sm', padding: 'px-2.5 py-1', gap: 'gap-1' },
+  };
+  const s = sizes[size];
+
   if (isVerified) {
     return (
-      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#00fea3]/20 border border-[#00fea3]/30">
-        <Shield className="w-4 h-4 text-[#00fea3]" />
-        <span className="text-sm text-[#00fea3] font-medium">Verified</span>
-      </div>
+      <span className={`inline-flex items-center ${s.gap} ${s.padding} rounded-full bg-blue-500/20 border border-blue-500/40`}>
+        <ShieldCheck className={`${s.icon} text-blue-400`} />
+        <span className={`${s.text} text-blue-400 font-semibold`}>Verified</span>
+      </span>
     );
   }
 
+  if (!showUnverified) return null;
+
   return (
-    <motion.button
-      whileTap={{ scale: 0.95 }}
-      onClick={onClick}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/20 border border-red-500/30"
-    >
-      <ShieldAlert className="w-4 h-4 text-red-400" />
-      <span className="text-sm text-red-400 font-medium">Not Verified - Click to Verify</span>
-    </motion.button>
+    <span className={`inline-flex items-center ${s.gap} ${s.padding} rounded-full bg-gray-700/50 border border-gray-600/40`}>
+      <ShieldX className={`${s.icon} text-gray-500`} />
+      <span className={`${s.text} text-gray-500 font-medium`}>Not Verified</span>
+    </span>
   );
 }
