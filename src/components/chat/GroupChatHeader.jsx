@@ -92,7 +92,7 @@ export default function GroupChatHeader({
           </div>
 
           {/* Voting banner */}
-          {isChatLocked && !hasVoted && !isAdmin && (
+          {planStatus === 'voting' && !hasVoted && !isAdmin && (
             <motion.button
               initial={{ y: -8, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -103,6 +103,13 @@ export default function GroupChatHeader({
               <Flame className="w-4 h-4" />
               Votação aberta! Toque para votar
             </motion.button>
+          )}
+
+          {/* Awaiting admin decision banner (non-admin members) */}
+          {planStatus === 'ended' && plan?.status !== 'terminated' && plan?.status !== 'renewed' && !isAdmin && (
+            <div className="w-full py-2.5 rounded-xl bg-gray-800/60 border border-gray-700/50 text-gray-400 text-xs font-medium flex items-center justify-center gap-2">
+              ⏳ Aguardando o administrador renovar ou encerrar o plano
+            </div>
           )}
 
           {/* Admin actions — only after plan end time has passed */}
