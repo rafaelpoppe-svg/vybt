@@ -54,10 +54,12 @@ export default function StoryView() {
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 50),
   });
 
+  const currentStoryId = story?.id || storyId;
+
   const { data: reactions = [] } = useQuery({
-    queryKey: ['storyReactions', storyId],
-    queryFn: () => base44.entities.StoryReaction.filter({ story_id: storyId }),
-    enabled: !!storyId
+    queryKey: ['storyReactions', currentStoryId],
+    queryFn: () => base44.entities.StoryReaction.filter({ story_id: currentStoryId }),
+    enabled: !!currentStoryId
   });
 
   const profilesMap = userProfiles.reduce((acc, p) => {
