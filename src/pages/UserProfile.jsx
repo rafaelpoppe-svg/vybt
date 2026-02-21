@@ -11,6 +11,7 @@ import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
 import { notifyFriendRequest } from '../components/notifications/NotificationTriggers';
 import ReportUserModal from '../components/user/ReportUserModal';
 import BlockUserModal from '../components/user/BlockUserModal';
+import VerificationBadge from '../components/profile/VerificationBadge';
 import { toast } from 'sonner';
 import {
   DropdownMenu,
