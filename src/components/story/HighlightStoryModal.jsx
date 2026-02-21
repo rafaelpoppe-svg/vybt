@@ -35,11 +35,16 @@ export default function HighlightStoryModal({
     }
   };
 
-  const handleConfirm = () => {
+  const handleSuccess = () => {
     onConfirm({
       targetVibes: selectedVibes,
       targetPartyTypes: selectedPartyTypes
     });
+    toast.success('Pagamento bem-sucedido! Story em destaque ✨');
+  };
+
+  const handleError = (msg) => {
+    toast.error(msg || 'Erro no pagamento');
   };
 
   return (

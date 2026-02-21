@@ -116,15 +116,13 @@ export default function HighlightPlanModal({
                 </div>
               </div>
 
-              {/* Confirm Button */}
-              <Button
-                onClick={onConfirm}
-                disabled={isLoading}
-                className="w-full py-6 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold text-lg"
-              >
-                <CreditCard className="w-5 h-5 mr-2" />
-                Pay & Highlight Plan
-              </Button>
+              {/* Stripe Checkout */}
+              <StripeCheckout
+                type="highlight_plan"
+                buttonLabel="Pay €2.99 & Highlight Plan"
+                onSuccess={handleSuccess}
+                onError={handleError}
+              />
 
               <p className="text-xs text-gray-500 text-center">
                 By highlighting, you agree to our terms of service
