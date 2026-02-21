@@ -146,15 +146,13 @@ export default function HighlightStoryModal({
                 </div>
               </div>
 
-              {/* Confirm Button */}
-              <Button
-                onClick={handleConfirm}
-                disabled={isLoading}
-                className="w-full py-6 rounded-full bg-gradient-to-r from-[#00fea3] to-[#542b9b] text-white font-bold text-lg"
-              >
-                <CreditCard className="w-5 h-5 mr-2" />
-                Pay & Highlight Story
-              </Button>
+              {/* Stripe Checkout */}
+              <StripeCheckout
+                type="highlight_story"
+                buttonLabel="Pay €1.59 & Highlight Story"
+                onSuccess={handleSuccess}
+                onError={handleError}
+              />
 
               <p className="text-xs text-gray-500 text-center">
                 By highlighting, you agree to our terms of service
