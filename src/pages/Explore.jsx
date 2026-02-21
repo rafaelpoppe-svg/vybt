@@ -357,6 +357,7 @@ export default function Explore() {
             allParticipants={allParticipants}
             profilesMap={profilesMap}
             myParticipations={myParticipations}
+            selectedCity={selectedCity}
           />
         </div>
       )}
