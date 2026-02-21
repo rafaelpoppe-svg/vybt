@@ -6,12 +6,14 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { 
   Users, PartyPopper, Camera, ChevronRight, 
-  Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles, Settings
+  Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles, Settings, ShieldCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
 import VibeTag, { vibeConfig } from '../components/common/VibeTag';
 import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
+import VerificationBadge from '../components/profile/VerificationBadge';
+import VerificationFlow from '../components/profile/VerificationFlow';
 
 export default function Profile() {
   const navigate = useNavigate();
