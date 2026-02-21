@@ -115,12 +115,16 @@ export default function Home() {
   ];
   const pastPlanIds = myParticipations.map(p => p.plan_id);
 
-  // Filter out voting plans for non-members
+  // Filter plans: hide ended/voting plans from non-members; hide terminated plans from everyone except members
   const visiblePlans = plans.filter(plan => {
-    if (plan.status === 'voting') {
-      const isMember = myParticipations.some(p => p.plan_id === plan.id);
-      return isMember;
-    }
+    const isMember = myParticipations.some(p => p.plan_id === plan.id);
+
+    // Terminated plans: only members can see them
+    if (plan.status === 'terminated') return isMember;
+
+    // Ended plans (awaiting admin decision or voting): only members can see them
+    if (plan.status === 'ended' || plan.status === 'voting') return isMember;
+
     return true;
   });
 
