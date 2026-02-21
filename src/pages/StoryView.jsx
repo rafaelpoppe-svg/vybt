@@ -155,28 +155,27 @@ export default function StoryView() {
 
   const reactMutation = useMutation({
     mutationFn: async (emoji) => {
-      // Check if user already reacted
+      const targetStoryId = story?.id;
+      if (!targetStoryId) return;
+      // Check if user already reacted to THIS story
       const existingReaction = reactions.find(r => r.user_id === currentUser?.id);
       
       if (existingReaction) {
         if (existingReaction.emoji === emoji) {
-          // Remove reaction
           await base44.entities.StoryReaction.delete(existingReaction.id);
         } else {
-          // Update reaction
           await base44.entities.StoryReaction.update(existingReaction.id, { emoji });
         }
       } else {
-        // Add new reaction
         await base44.entities.StoryReaction.create({
-          story_id: storyId,
+          story_id: targetStoryId,
           user_id: currentUser.id,
           emoji
         });
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['storyReactions', storyId]);
+      queryClient.invalidateQueries(['storyReactions', story?.id]);
     }
   });
 
