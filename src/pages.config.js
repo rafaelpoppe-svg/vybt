@@ -55,6 +55,7 @@ import Explore from './pages/Explore';
 import Friends from './pages/Friends';
 import GroupChat from './pages/GroupChat';
 import Home from './pages/Home';
+import Moderation from './pages/Moderation';
 import MyPlans from './pages/MyPlans';
 import MyStories from './pages/MyStories';
 import NotificationSettings from './pages/NotificationSettings';
@@ -65,7 +66,6 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import StoryView from './pages/StoryView';
 import UserProfile from './pages/UserProfile';
-import Moderation from './pages/Moderation';
 import __Layout from './Layout.jsx';
 
 
@@ -78,6 +78,7 @@ export const PAGES = {
     "Friends": Friends,
     "GroupChat": GroupChat,
     "Home": Home,
+    "Moderation": Moderation,
     "MyPlans": MyPlans,
     "MyStories": MyStories,
     "NotificationSettings": NotificationSettings,
@@ -88,7 +89,6 @@ export const PAGES = {
     "Settings": Settings,
     "StoryView": StoryView,
     "UserProfile": UserProfile,
-    "Moderation": Moderation,
 }
 
 export const pagesConfig = {
