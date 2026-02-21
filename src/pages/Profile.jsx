@@ -280,10 +280,43 @@ export default function Profile() {
             <ChevronRight className="w-5 h-5 text-gray-500" />
           </motion.button>
 
+          {/* Verification button */}
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setShowVerification(true)}
+            className={`w-full p-4 rounded-xl border flex items-center justify-between ${
+              profile.is_verified
+                ? 'bg-blue-500/10 border-blue-500/30'
+                : 'bg-gray-900 border-gray-800'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <ShieldCheck className={`w-5 h-5 ${profile.is_verified ? 'text-blue-400' : 'text-gray-500'}`} />
+              <div className="text-left">
+                <span className={`font-medium block ${profile.is_verified ? 'text-blue-400' : 'text-white'}`}>
+                  {profile.is_verified ? 'Profile Verified ✓' : 'Verify Your Profile'}
+                </span>
+                {!profile.is_verified && (
+                  <span className="text-gray-500 text-xs">Get a blue badge to build trust</span>
+                )}
+              </div>
+            </div>
+            {!profile.is_verified && <ChevronRight className="w-5 h-5 text-gray-500" />}
+          </motion.button>
+
         </div>
       </div>
 
       <BottomNav />
+
+      <VerificationFlow
+        isOpen={showVerification}
+        onClose={() => setShowVerification(false)}
+        userProfile={profile}
+        onVerificationComplete={() => {
+          setShowVerification(false);
+        }}
+      />
     </div>
   );
 }
