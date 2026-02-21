@@ -19,6 +19,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [showVerification, setShowVerification] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
