@@ -118,12 +118,20 @@ function FlyToCity({ coords }) {
   return null;
 }
 
-export default function PlanMap({ plans, allParticipants, profilesMap, myParticipations }) {
+export default function PlanMap({ plans, allParticipants, profilesMap, myParticipations, selectedCity }) {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [citySearch, setCitySearch] = useState('');
   const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [flyCoords, setFlyCoords] = useState(null);
+
+  // Fly to city when selectedCity prop changes (from Home LocationSelector)
+  React.useEffect(() => {
+    if (selectedCity) {
+      const match = CITIES.find(c => c.name.toLowerCase() === selectedCity.toLowerCase());
+      if (match) setFlyCoords({ lat: match.lat, lng: match.lng });
+    }
+  }, [selectedCity]);
 
   const validPlans = plans.filter(p => p.latitude && p.longitude);
   const center = validPlans.length > 0
