@@ -20,7 +20,7 @@ export default function GroupChatInput({ isChatLocked, isPending, themeColor = '
       <div className="px-4 py-4 border-t border-gray-800/50 bg-[#0b0b0b]/90 backdrop-blur-xl">
         <div className="flex items-center justify-center gap-2 text-gray-500 py-1">
           <Lock className="w-4 h-4" />
-          <span className="text-sm">Chat bloqueado durante a votação</span>
+          <span className="text-sm">Chat bloqueado — aguardando decisão do administrador</span>
         </div>
       </div>
     );
