@@ -3,7 +3,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ChevronDown, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
-const popularCities = ['Viseu'];
+const popularCities = [
+  // Europe - Capitals
+  'Amsterdam', 'Athens', 'Belgrade', 'Berlin', 'Bern', 'Bratislava', 'Brussels',
+  'Bucharest', 'Budapest', 'Copenhagen', 'Dublin', 'Helsinki', 'Kiev',
+  'Lisbon', 'Ljubljana', 'London', 'Luxembourg', 'Madrid', 'Minsk',
+  'Monaco', 'Nicosia', 'Oslo', 'Paris', 'Podgorica', 'Prague',
+  'Reykjavik', 'Riga', 'Rome', 'San Marino', 'Sarajevo', 'Skopje',
+  'Sofia', 'Stockholm', 'Tallinn', 'Tirana', 'Valletta', 'Vienna',
+  'Vilnius', 'Warsaw', 'Zagreb',
+  // USA - Major cities
+  'New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix',
+  'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose',
+  'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'Charlotte',
+  'Indianapolis', 'San Francisco', 'Seattle', 'Denver', 'Nashville',
+  'Oklahoma City', 'El Paso', 'Washington DC', 'Las Vegas', 'Boston',
+  'Memphis', 'Louisville', 'Portland', 'Baltimore', 'Milwaukee',
+  'Miami', 'Atlanta', 'Minneapolis', 'New Orleans', 'Detroit',
+];
 
 export default function LocationSelector({ city, radius, onCityChange, onRadiusChange }) {
   const [isOpen, setIsOpen] = useState(false);
