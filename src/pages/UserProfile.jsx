@@ -223,7 +223,7 @@ export default function UserProfile() {
 
         {/* Name + location pinned to bottom of hero */}
         <div className="absolute bottom-0 left-0 right-0 px-5 pb-5 z-10">
-          <div className="flex items-baseline gap-2">
+          <div className="flex items-baseline gap-2 flex-wrap">
             <h1 className="text-3xl font-bold text-white tracking-tight">{profile.display_name}</h1>
             {profile.date_of_birth && (
               <span className="text-xl text-gray-300 font-semibold">
@@ -231,12 +231,15 @@ export default function UserProfile() {
               </span>
             )}
           </div>
-          {profile.city && (
-            <div className="flex items-center gap-1.5 mt-1">
-              <MapPin className="w-3.5 h-3.5 text-[#00fea3]" />
-              <span className="text-gray-300 text-sm">{profile.city}</span>
-            </div>
-          )}
+          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+            {profile.city && (
+              <div className="flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-[#00fea3]" />
+                <span className="text-gray-300 text-sm">{profile.city}</span>
+              </div>
+            )}
+            <VerificationBadge isVerified={profile.is_verified} size="sm" />
+          </div>
         </div>
       </div>
 
