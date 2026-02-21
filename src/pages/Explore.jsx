@@ -105,9 +105,10 @@ export default function Explore() {
   const basePlans = planFilters.sortBy === 'foryou' ? recommendedPlans : plans;
 
   let filteredPlans = basePlans.filter(plan => {
-    // Hide voting plans from non-members
-    if (plan.status === 'voting') {
-      const isMember = myParticipations.some(p => p.plan_id === plan.id);
+    const isMember = myParticipations.some(p => p.plan_id === plan.id);
+
+    // Hide terminated, ended, and voting plans from non-members
+    if (plan.status === 'terminated' || plan.status === 'ended' || plan.status === 'voting') {
       if (!isMember) return false;
     }
     
