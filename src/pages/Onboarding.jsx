@@ -219,7 +219,33 @@ function OnboardingInner() {
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.3 }}
           >
-            {steps[step]}
+            {step === 8 ? (
+              <div className="space-y-6 text-center">
+                <div className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto">
+                  <ShieldCheck className="w-12 h-12 text-blue-400" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold text-white mb-2">Verify your profile</h2>
+                  <p className="text-gray-400">Take a live selfie to get a <span className="text-blue-400 font-semibold">blue verified badge</span> and build trust with other users.</p>
+                </div>
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setShowVerification(true)}
+                  className="w-full py-4 rounded-full font-bold text-lg bg-blue-500 text-white flex items-center justify-center gap-2"
+                >
+                  <Camera className="w-5 h-5" />
+                  Verify Now
+                </motion.button>
+                <button
+                  onClick={skipToHome}
+                  className="w-full py-3 text-gray-500 text-sm hover:text-gray-300 transition-colors"
+                >
+                  Skip for now
+                </button>
+              </div>
+            ) : (
+              steps[step]
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -242,6 +268,16 @@ function OnboardingInner() {
             <ChevronRight className="w-5 h-5" />
           </motion.button>
         </div>
+      )}
+
+      {/* Verification Modal */}
+      {createdProfile && (
+        <VerificationFlow
+          isOpen={showVerification}
+          onClose={() => { setShowVerification(false); }}
+          userProfile={createdProfile}
+          onVerificationComplete={skipToHome}
+        />
       )}
     </div>
   );
