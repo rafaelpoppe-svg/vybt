@@ -19,7 +19,8 @@ export default function Onboarding() {
     date_of_birth: '',
     photos: [],
     vibes: [],
-    party_types: []
+    party_types: [],
+    city: ''
   });
   const [loading, setLoading] = useState(false);
   const [detectingCity, setDetectingCity] = useState(false);

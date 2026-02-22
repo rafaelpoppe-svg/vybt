@@ -271,15 +271,33 @@ export default function EditProfile() {
           )}
         </div>
 
-        {/* City */}
+        {/* City / Location */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">City</label>
-          <Input
-            value={formData.city}
-            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-            placeholder="e.g. Madrid"
-            className="bg-gray-900 border-gray-800 text-white"
-          />
+          <label className="block text-gray-400 text-sm mb-2">Your Location</label>
+          <button
+            type="button"
+            onClick={detectLocation}
+            disabled={detectingLocation}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-left disabled:opacity-50"
+          >
+            {detectingLocation ? (
+              <Loader2 className="w-5 h-5 text-[#00fea3] animate-spin flex-shrink-0" />
+            ) : (
+              <Navigation className="w-5 h-5 text-[#00fea3] flex-shrink-0" />
+            )}
+            <div className="flex-1 min-w-0">
+              {formData.city ? (
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#00fea3]" />
+                  <span className="text-white text-sm font-medium truncate">{formData.city}</span>
+                </div>
+              ) : (
+                <span className="text-gray-500 text-sm">
+                  {detectingLocation ? 'Detecting your location...' : 'Tap to use current location'}
+                </span>
+              )}
+            </div>
+          </button>
         </div>
 
         {/* Radius */}
