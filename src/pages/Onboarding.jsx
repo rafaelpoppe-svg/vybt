@@ -73,12 +73,13 @@ function OnboardingInner() {
   const canProceed = () => {
     switch(step) {
       case 0: return data.language !== '';
-      case 1: return data.gender !== '';
-      case 2: return data.date_of_birth !== '';
-      case 3: return data.photos.length > 0;
-      case 4: return data.vibes.length >= 2;
-      case 5: return data.party_types.length >= 2;
-      case 6: return true; // location is optional
+      case 1: return data.display_name.trim().length >= 2;
+      case 2: return data.gender !== '';
+      case 3: return data.date_of_birth !== '';
+      case 4: return data.photos.length > 0;
+      case 5: return data.vibes.length >= 2;
+      case 6: return data.party_types.length >= 2;
+      case 7: return true; // location is optional
       default: return true;
     }
   };
