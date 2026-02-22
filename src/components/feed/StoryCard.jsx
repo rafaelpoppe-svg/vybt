@@ -46,16 +46,48 @@ export default function StoryCard({
   const borderColor = isOwn ? ownStoryColor : (isUnviewed || isNew) ? newStoryColor : storyColors[colorIndex % storyColors.length];
 
   if (isAdd) {
+    const isHappening = !!happeningPlan;
+
     return (
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={onClick}
         className="flex flex-col items-center gap-1.5"
       >
-        <div className={`${currentSize.width} ${currentSize.height} rounded-2xl bg-gray-900 border-2 border-dashed border-[#00fea3] flex items-center justify-center`}>
-          <Plus className="w-6 h-6 text-[#00fea3]" />
+        <div className="relative">
+          {/* Pulsing neon ring when happening */}
+          {isHappening && (
+            <>
+              <motion.div
+                className="absolute inset-0 rounded-2xl"
+                style={{ boxShadow: '0 0 0 0 #00d4ff' }}
+                animate={{ boxShadow: ['0 0 0 0px #00d4ff88', '0 0 0 6px #00d4ff00'] }}
+                transition={{ repeat: Infinity, duration: 1.4, ease: 'easeOut' }}
+              />
+              <motion.div
+                className="absolute inset-0 rounded-2xl border-2 border-[#00d4ff]"
+                animate={{ opacity: [1, 0.4, 1] }}
+                transition={{ repeat: Infinity, duration: 1.4 }}
+              />
+            </>
+          )}
+          <div className={`${currentSize.width} ${currentSize.height} rounded-2xl flex items-center justify-center relative overflow-hidden ${
+            isHappening
+              ? 'bg-[#00d4ff]/10 border-2 border-[#00d4ff]'
+              : 'bg-gray-900 border-2 border-dashed border-[#00fea3]'
+          }`}>
+            {isHappening ? (
+              <Video className="w-6 h-6 text-[#00d4ff]" />
+            ) : (
+              <Plus className="w-6 h-6 text-[#00fea3]" />
+            )}
+          </div>
         </div>
-        <span className={`${currentSize.text} text-gray-400`}>Add</span>
+        <span className={`${currentSize.text} max-w-[80px] text-center leading-tight ${
+          isHappening ? 'text-[#00d4ff] font-semibold' : 'text-gray-400'
+        }`}>
+          {isHappening ? '🔵 Plano ao vivo!' : 'Add'}
+        </span>
       </motion.button>
     );
   }
