@@ -13,10 +13,12 @@ import WelcomeComplete from '../components/onboarding/WelcomeComplete';
 import LanguageSelect from '../components/onboarding/LanguageSelect';
 import { LanguageProvider, useLanguage } from '../components/common/LanguageContext';
 
-export default function Onboarding() {
+function OnboardingInner() {
   const navigate = useNavigate();
+  const { language, changeLanguage, t } = useLanguage();
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
+    language: language,
     gender: '',
     date_of_birth: '',
     photos: [],
