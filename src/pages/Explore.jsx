@@ -11,12 +11,8 @@ import PlanCard from '../components/feed/PlanCard';
 import BottomNav from '../components/common/BottomNav';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
 import { PlanFilters, UserFilters } from '../components/explore/ExploreFilters';
-import PartyTag from '../components/common/PartyTag';
+import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
 import PlanMap from '../components/explore/PlanMap';
-
-const partyTags = [
-  'All', 'Rooftop Afternoon', 'Rooftop Night', 'Techno', 'Bar', 'Luxury', 'House Party', 'University', 'Commercial', 'EDM', 'Latin'
-];
 
 export default function Explore() {
   const navigate = useNavigate();
