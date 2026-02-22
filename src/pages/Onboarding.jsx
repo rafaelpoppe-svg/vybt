@@ -116,6 +116,10 @@ function OnboardingInner() {
       selected={data.language}
       onSelect={(lang) => { changeLanguage(lang); setData({...data, language: lang}); }}
     />,
+    <NameSelect
+      value={data.display_name}
+      onChange={(display_name) => setData({...data, display_name})}
+    />,
     <GenderSelect 
       selected={data.gender} 
       onSelect={(gender) => setData({...data, gender})} 
