@@ -37,7 +37,21 @@ export function usePushNotifications({ currentUser, userCity, plans = [], friend
 
         const alreadyJoined = myPlanIds.includes(plan.id);
 
-        // ── 1. Nearby plan happening now (not joined) ──────────────────────
+        // ── 1. Plan happening now — notify PARTICIPANTS ────────────────────
+        if (plan.status === 'happening' && alreadyJoined) {
+          const key = `plan_happening_now_joined:${plan.id}`;
+          if (!existingPlanNotifIds.has(`plan_happening_now:${plan.id}`) && !firedRef.current.has(key)) {
+            firedRef.current.add(key);
+            await createNotification(
+              currentUser.id,
+              'plan_happening_now',
+              `🔵 "${plan.title}" está acontecendo agora! Poste o teu Experience Story!`,
+              { planId: plan.id, title: 'Plano ao vivo!' }
+            );
+          }
+        }
+
+        // ── 2. Nearby plan happening now (not joined) ──────────────────────
         if (plan.status === 'happening' && !alreadyJoined) {
           const key = `plan_happening_now:${plan.id}`;
           if (!existingPlanNotifIds.has(key) && !firedRef.current.has(key)) {
