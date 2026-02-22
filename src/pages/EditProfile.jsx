@@ -368,20 +368,6 @@ export default function EditProfile() {
           {formData.party_types.length >= 5 && (
             <p className="text-xs text-[#00fea3]/70 mb-2">Limit reached — deselect one to pick another.</p>
           )}
-          {/* Search */}
-          <div className="relative mb-3">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search party types..."
-              onChange={(e) => {
-                const val = e.target.value.toLowerCase();
-                const el = document.getElementById('party-type-list');
-                if (el) el.dataset.search = val;
-              }}
-              className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
-            />
-          </div>
           <PartyTypeFilterList
             allTypes={ALL_PARTY_TYPES}
             selected={formData.party_types}
