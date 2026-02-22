@@ -49,7 +49,7 @@ export default function Welcome() {
         <div className="absolute inset-0 bg-black/35"></div>
 
         {/* Transparent Header */}
-        <header className="relative z-40 p-4 md:p-6">
+        <header className="fixed top-0 left-0 right-0 z-40 p-4 md:p-6">
           <div className="max-w-6xl mx-auto flex items-center justify-between">
             <h1 className="text-3xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
               Vybt
@@ -66,47 +66,52 @@ export default function Welcome() {
           </div>
         </header>
 
-        {/* Main Content - Centered */}
-        <main className="relative z-10 flex-1 flex items-center justify-center px-4">
+        {/* Main Content - Full height with flexbox layout */}
+        <main className="relative z-10 h-screen flex flex-col items-center justify-center px-4 pt-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-8 max-w-2xl text-center"
+            className="space-y-6 max-w-2xl text-center flex-1 flex flex-col justify-center"
           >
-            <h2 className="text-6xl md:text-7xl font-black">
+            <h2 className="text-5xl md:text-6xl font-black">
               Hey, <span className="text-[#00fea3]">mate!</span>
             </h2>
             
-            <p className="text-xl md:text-2xl text-gray-100 font-light leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-100 font-light leading-relaxed">
               Join us: let's connect and create the best plans<br />
               in your area!!!
             </p>
+          </motion.div>
+          
+          {/* App Store Buttons - Bottom */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6 pb-12"
+          >
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className="hover:opacity-80 transition-opacity"
+            >
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/0606aa490_AppStore.png"
+                alt="Download on the App Store"
+                className="h-14 md:h-16 object-contain"
+              />
+            </motion.button>
             
-            {/* App Store Buttons - Larger */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto hover:opacity-80 transition-opacity"
-              >
-                <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/0606aa490_AppStore.png"
-                  alt="Download on the App Store"
-                  className="h-16 md:h-20 object-contain"
-                />
-              </motion.button>
-              
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto hover:opacity-80 transition-opacity"
-              >
-                <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/a7352df16_GooglePlay.png"
-                  alt="Get it on Google Play"
-                  className="h-16 md:h-20 object-contain"
-                />
-              </motion.button>
-            </div>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className="hover:opacity-80 transition-opacity"
+            >
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/a7352df16_GooglePlay.png"
+                alt="Get it on Google Play"
+                className="h-14 md:h-16 object-contain"
+              />
+            </motion.button>
           </motion.div>
         </main>
       </div>
