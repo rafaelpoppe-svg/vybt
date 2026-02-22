@@ -282,6 +282,32 @@ export default function Profile() {
             <ChevronRight className="w-5 h-5 text-gray-500" />
           </motion.button>
 
+          {/* Ambassador button — only if opted in */}
+          {profile.ambassador_opted_in && (
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => navigate(createPageUrl('Ambassador'))}
+              className={`w-full p-4 rounded-xl border flex items-center justify-between ${
+                profile.is_ambassador
+                  ? 'bg-purple-500/10 border-purple-500/40'
+                  : 'bg-gray-900 border-gray-800'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Trophy className={`w-5 h-5 ${profile.is_ambassador ? 'text-purple-400' : 'text-gray-500'}`} />
+                <div className="text-left">
+                  <span className={`font-medium block ${profile.is_ambassador ? 'text-purple-400' : 'text-white'}`}>
+                    {profile.is_ambassador ? '🏆 Vybt Ambassador' : 'Ambassador Program'}
+                  </span>
+                  <span className="text-gray-500 text-xs">
+                    {profile.is_ambassador ? 'All perks unlocked!' : `${profile.referred_count || 0}/10 friends invited`}
+                  </span>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-500" />
+            </motion.button>
+          )}
+
           {/* Verification button */}
           <motion.button
             whileTap={{ scale: 0.98 }}
