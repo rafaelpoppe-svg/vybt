@@ -186,10 +186,10 @@ function OnboardingInner() {
       </div>
 
       {/* Progress */}
-      {step < 6 && (
-      <div className="px-6 mb-8">
-        <div className="flex gap-2">
-          {[0, 1, 2, 3, 4, 5].map((i) => (
+      {step < 7 && (
+        <div className="px-6 mb-8">
+          <div className="flex gap-2">
+            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
               <div 
                 key={i}
                 className={`h-1 flex-1 rounded-full transition-all duration-500 ${
