@@ -358,6 +358,7 @@ export default function Explore() {
             profilesMap={profilesMap}
             myParticipations={myParticipations}
             selectedCity={selectedCity}
+            onCityChange={(c) => setSelectedCity(c)}
           />
         </div>
       )}
