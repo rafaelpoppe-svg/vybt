@@ -159,6 +159,9 @@ export default function Explore() {
   // Filter users
   let filteredUsers = userProfiles.filter(profile => {
     if (profile.user_id === currentUser?.id) return false;
+
+    // Filter by current city
+    if (selectedCity && profile.city?.toLowerCase() !== selectedCity.toLowerCase()) return false;
     
     const matchesSearch = profile.display_name?.toLowerCase().includes(search.toLowerCase());
     
