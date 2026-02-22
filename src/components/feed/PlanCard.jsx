@@ -19,14 +19,18 @@ const reasonLabels = {
 };
 
 export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false }) {
+  const themeColor = plan.theme_color || '#542b9b';
+  const cardBgColor = featured ? `${themeColor}30` : 'rgb(31, 41, 55)';
+  
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
       onClick={onClick}
-      className={`rounded-2xl overflow-hidden cursor-pointer ${
-        featured ? 'bg-gradient-to-br from-[#542b9b]/30 to-[#00fea3]/10' : 'bg-gray-900/50'
-      } border border-gray-800 hover:border-gray-700 transition-all`}
+      className={`rounded-2xl overflow-hidden cursor-pointer border border-gray-800 hover:border-gray-700 transition-all`}
+      style={{
+        backgroundColor: cardBgColor
+      }}
     >
       {/* Cover Image */}
       <div className="relative h-40">
