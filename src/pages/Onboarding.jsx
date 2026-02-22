@@ -21,6 +21,7 @@ function OnboardingInner() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
     language: language,
+    display_name: '',
     gender: '',
     date_of_birth: '',
     photos: [],
