@@ -112,6 +112,9 @@ export default function Explore() {
     if (plan.status === 'terminated' || plan.status === 'ended' || plan.status === 'voting') {
       if (!isMember) return false;
     }
+
+    // Filter by current city
+    if (selectedCity && plan.city?.toLowerCase() !== selectedCity.toLowerCase()) return false;
     
     const matchesSearch = plan.title.toLowerCase().includes(search.toLowerCase()) ||
       plan.location_address?.toLowerCase().includes(search.toLowerCase());
