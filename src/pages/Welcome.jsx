@@ -90,7 +90,7 @@ export default function Welcome() {
                 className="w-full sm:w-auto hover:opacity-80 transition-opacity"
               >
                 <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/b09aec4ee_image.png"
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/0606aa490_AppStore.png"
                   alt="Download on the App Store"
                   className="h-16 md:h-20 object-contain"
                 />
@@ -101,7 +101,7 @@ export default function Welcome() {
                 className="w-full sm:w-auto hover:opacity-80 transition-opacity"
               >
                 <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/0f375ad8a_image.png"
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/a7352df16_GooglePlay.png"
                   alt="Get it on Google Play"
                   className="h-16 md:h-20 object-contain"
                 />
