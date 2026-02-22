@@ -5,13 +5,28 @@ import { base44 } from '@/api/base44Client';
 
 export default function PhotoUploadStep({ photos, onChange }) {
   const [uploading, setUploading] = useState(false);
+  const [moderationError, setModerationError] = useState('');
 
   const handlePhotoUpload = async (e, index) => {
     const file = e.target.files?.[0];
     if (file) {
       setUploading(true);
+      setModerationError('');
       try {
         const { file_url } = await base44.integrations.Core.UploadFile({ file });
+
+        // Moderate the image before accepting it
+        const result = await base44.functions.invoke('moderateImage', {
+          image_url: file_url,
+          context: 'profile_photo'
+        });
+
+        if (!result.data.approved) {
+          setModerationError(result.data.reason || 'This photo is not allowed. Please use a real photo of yourself.');
+          setUploading(false);
+          return;
+        }
+
         const newPhotos = [...photos];
         newPhotos[index] = file_url;
         onChange(newPhotos);
