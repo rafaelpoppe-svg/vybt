@@ -43,12 +43,7 @@ function PartyTypeFilterList({ allTypes, selected, onToggle }) {
   );
 }
 
-const vibeOptions = [
-  'Techno', 'Reggaeton', 'Pop', 'House', 'Trap', 
-  'Afrobeats', 'Brazilian Funk', 'Hard Techno', 
-  '80s Songs', 'EDM', 'Rock', 'Disco', 
-  'Curious to every style'
-];
+
 
 export default function EditProfile() {
   const navigate = useNavigate();
