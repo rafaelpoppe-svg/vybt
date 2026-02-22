@@ -84,7 +84,7 @@ export default function Onboarding() {
         photos: data.photos,
         vibes: data.vibes,
         party_types: data.party_types,
-        city: '',
+        city: data.city || '',
         radius_km: 10,
         onboarding_completed: true,
         total_stories_count: 0
