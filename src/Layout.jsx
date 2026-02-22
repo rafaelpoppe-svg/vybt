@@ -6,6 +6,7 @@ import { LanguageProvider } from '@/components/common/LanguageContext';
 
 export default function Layout({ children, currentPageName }) {
   return (
+    <LanguageProvider>
     <NotificationProvider>
       <Toaster position="top-center" theme="dark" />
       <div className="min-h-screen bg-[#0b0b0b]">
