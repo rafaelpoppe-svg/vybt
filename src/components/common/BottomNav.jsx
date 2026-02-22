@@ -5,13 +5,7 @@ import { createPageUrl } from '@/utils';
 import { Home, Compass, PlusCircle, MessageCircle, User } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 
-const tabs = [
-  { name: 'Home',       icon: Home,          label: 'Home' },
-  { name: 'Explore',    icon: Compass,       label: 'Explore' },
-  { name: 'CreatePlan', icon: PlusCircle,    label: 'Create' },
-  { name: 'Chat',       icon: MessageCircle, label: 'Messages' },
-  { name: 'Profile',    icon: User,          label: 'Profile' },
-];
+// Labels are now dynamic via t(), defined inside component
 
 export default function BottomNav() {
   const navigate = useNavigate();
