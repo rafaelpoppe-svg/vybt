@@ -29,6 +29,8 @@ function OnboardingInner() {
   });
   const [loading, setLoading] = useState(false);
   const [detectingCity, setDetectingCity] = useState(false);
+  const [showVerification, setShowVerification] = useState(false);
+  const [createdProfile, setCreatedProfile] = useState(null);
 
   const detectLocation = () => {
     if (!navigator.geolocation) return;
