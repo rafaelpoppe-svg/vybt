@@ -181,9 +181,9 @@ export default function Profile() {
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { icon: Users, label: 'Friends', value: friendships.length, color: 'text-[#00fea3]' },
-            { icon: PartyPopper, label: 'Parties', value: participations.length, color: 'text-[#542b9b]' },
-            { icon: Clapperboard, label: 'Stories', value: myStories.length, color: 'text-pink-400' },
+            { icon: Users, label: t.friends, value: friendships.length, color: 'text-[#00fea3]' },
+            { icon: PartyPopper, label: t.parties, value: participations.length, color: 'text-[#542b9b]' },
+            { icon: Clapperboard, label: t.stories, value: myStories.length, color: 'text-pink-400' },
           ].map(({ icon: Icon, label, value, color }) => (
             <div key={label} className="bg-gray-900/60 border border-gray-800 rounded-2xl py-4 flex flex-col items-center gap-1">
               <Icon className={`w-5 h-5 ${color}`} />
@@ -205,7 +205,7 @@ export default function Profile() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <Music2 className="w-4 h-4 text-[#00fea3]" />
-              <h3 className="text-white font-semibold text-sm uppercase tracking-widest">My Vibes</h3>
+              <h3 className="text-white font-semibold text-sm uppercase tracking-widest">{t.myVibes || 'My Vibes'}</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {profile.vibes.map((vibe, i) => (
@@ -227,7 +227,7 @@ export default function Profile() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-4 h-4 text-[#542b9b]" />
-              <h3 className="text-white font-semibold text-sm uppercase tracking-widest">Preferred Parties</h3>
+              <h3 className="text-white font-semibold text-sm uppercase tracking-widest">{t.preferredParties || 'Preferred Parties'}</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {profile.party_types.map((type, i) => (
@@ -253,7 +253,7 @@ export default function Profile() {
           >
             <div className="flex items-center gap-3">
               <Users className="w-5 h-5 text-[#00fea3]" />
-              <span className="text-white font-medium">My Friends</span>
+              <span className="text-white font-medium">{t.myFriends}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-500" />
           </motion.button>
@@ -265,7 +265,7 @@ export default function Profile() {
           >
             <div className="flex items-center gap-3">
               <PartyPopper className="w-5 h-5 text-[#542b9b]" />
-              <span className="text-white font-medium">Joined Party Plans</span>
+              <span className="text-white font-medium">{t.joinedPartyPlans}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-500" />
           </motion.button>
@@ -277,7 +277,7 @@ export default function Profile() {
           >
             <div className="flex items-center gap-3">
               <Camera className="w-5 h-5 text-[#00fea3]" />
-              <span className="text-white font-medium">My Experience Stories</span>
+              <span className="text-white font-medium">{t.myExperienceStories}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-500" />
           </motion.button>
@@ -296,10 +296,10 @@ export default function Profile() {
               <ShieldCheck className={`w-5 h-5 ${profile.is_verified ? 'text-blue-400' : 'text-gray-500'}`} />
               <div className="text-left">
                 <span className={`font-medium block ${profile.is_verified ? 'text-blue-400' : 'text-white'}`}>
-                  {profile.is_verified ? 'Profile Verified ✓' : 'Verify Your Profile'}
+                  {profile.is_verified ? t.profileVerified : t.verifyProfile}
                 </span>
                 {!profile.is_verified && (
-                  <span className="text-gray-500 text-xs">Get a blue badge to build trust</span>
+                  <span className="text-gray-500 text-xs">{t.verifyBadge}</span>
                 )}
               </div>
             </div>
