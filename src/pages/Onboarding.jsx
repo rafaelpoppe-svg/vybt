@@ -102,7 +102,7 @@ function OnboardingInner() {
         total_stories_count: 0
       });
       setCreatedProfile(profile);
-      setStep(8); // verification step
+      setStep(9); // verification step
     } catch (error) {
       console.error(error);
     }
