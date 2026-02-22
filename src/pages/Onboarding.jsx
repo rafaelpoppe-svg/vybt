@@ -58,6 +58,11 @@ function OnboardingInner() {
   };
 
   useEffect(() => {
+    // Persist referral code from URL into sessionStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const ref = urlParams.get('ref');
+    if (ref) sessionStorage.setItem('vybt_ref', ref);
+
     const checkOnboarding = async () => {
       try {
         const user = await base44.auth.me();
