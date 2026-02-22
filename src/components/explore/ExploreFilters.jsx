@@ -135,6 +135,7 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
 }
 
 export function UserFilters({ isOpen, onClose, filters, setFilters }) {
+  const [vibeSearch, setVibeSearch] = useState('');
   if (!isOpen) return null;
 
   const ageRanges = ['18-25', '25-30', '25-35'];
