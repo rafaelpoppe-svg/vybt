@@ -75,6 +75,7 @@ export default function AddStory() {
   const canPostMore = storiesPosted < 2;
 
   const [thumbnailUrl, setThumbnailUrl] = useState('');
+  const [moderationError, setModerationError] = useState('');
 
   const generateVideoThumbnail = (file) => {
     return new Promise((resolve) => {
