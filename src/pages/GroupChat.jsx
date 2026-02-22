@@ -431,7 +431,11 @@ export default function GroupChat() {
         currentUserId={currentUser?.id}
         isAdmin={isAdmin}
         planStatus={planStatus}
-        onEditPlan={() => { setShowAdminActions(false); setShowAdminEditModal(true); }}
+        onEditPlan={() => {
+          if (planStatus === 'voting' || planStatus === 'ended') return;
+          setShowAdminActions(false);
+          setShowAdminEditModal(true);
+        }}
       />
       <VotingModal
         isOpen={showVotingModal}
