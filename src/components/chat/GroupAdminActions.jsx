@@ -24,7 +24,8 @@ export default function GroupAdminActions({
   onRemoveMember,
   onInviteUser,
   currentUserId,
-  isAdmin
+  isAdmin,
+  planStatus
 }) {
   const [activeTab, setActiveTab] = useState('stories');
   const [inviteEmail, setInviteEmail] = useState('');
