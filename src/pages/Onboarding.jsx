@@ -239,10 +239,12 @@ function OnboardingInner() {
   );
 }
 
-export default function Onboarding() {
+function Onboarding() {
   return (
     <LanguageProvider>
       <OnboardingInner />
     </LanguageProvider>
   );
 }
+
+export default Onboarding;
