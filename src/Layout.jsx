@@ -2,6 +2,7 @@ import React from 'react';
 import { NotificationProvider } from '@/components/notifications/NotificationProvider';
 import { Toaster } from 'sonner';
 import PageTransition from '@/components/common/PageTransition';
+import { LanguageProvider } from '@/components/common/LanguageContext';
 
 export default function Layout({ children, currentPageName }) {
   return (
