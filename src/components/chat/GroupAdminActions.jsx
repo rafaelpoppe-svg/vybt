@@ -68,13 +68,27 @@ export default function GroupAdminActions({
           {/* Edit Plan Button */}
           {onEditPlan && (
             <div className="p-3 border-b border-gray-800">
-              <Button
-                onClick={onEditPlan}
-                className="w-full bg-[#542b9b] hover:bg-[#542b9b]/80 text-white"
-              >
-                <Edit className="w-4 h-4 mr-2" />
-                Editar Plano
-              </Button>
+              {(planStatus === 'voting' || planStatus === 'ended') ? (
+                <div className="w-full py-3 px-4 rounded-xl bg-gray-800 border border-gray-700 text-center">
+                  <p className="text-gray-400 text-sm font-medium flex items-center justify-center gap-2">
+                    <Edit className="w-4 h-4 text-gray-600" />
+                    Editar Plano
+                  </p>
+                  <p className="text-gray-600 text-xs mt-1">
+                    {planStatus === 'voting'
+                      ? 'Indisponível durante a votação'
+                      : 'Indisponível enquanto o plano está encerrado'}
+                  </p>
+                </div>
+              ) : (
+                <Button
+                  onClick={onEditPlan}
+                  className="w-full bg-[#542b9b] hover:bg-[#542b9b]/80 text-white"
+                >
+                  <Edit className="w-4 h-4 mr-2" />
+                  Editar Plano
+                </Button>
+              )}
             </div>
           )}
 
