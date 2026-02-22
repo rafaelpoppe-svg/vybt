@@ -67,8 +67,8 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import StoryView from './pages/StoryView';
 import UserProfile from './pages/UserProfile';
-import WelcomePrograms from './pages/WelcomePrograms';
 import Welcome from './pages/Welcome';
+import WelcomePrograms from './pages/WelcomePrograms';
 import __Layout from './Layout.jsx';
 
 
@@ -93,8 +93,8 @@ export const PAGES = {
     "Settings": Settings,
     "StoryView": StoryView,
     "UserProfile": UserProfile,
-    "WelcomePrograms": WelcomePrograms,
     "Welcome": Welcome,
+    "WelcomePrograms": WelcomePrograms,
 }
 
 export const pagesConfig = {

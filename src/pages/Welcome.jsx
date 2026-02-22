@@ -52,46 +52,71 @@ export default function Welcome() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-16">
-        {/* Hero Section - Placeholder */}
-        <section className="min-h-[60vh] flex flex-col items-center justify-center text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-5xl md:text-6xl font-black mb-6">
-              Bem-vindo ao <span className="bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">Vybt</span>
-            </h2>
-            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-              [Conteúdo principal será adicionado aqui]
-            </p>
-          </motion.div>
-        </section>
-
-        {/* App Store Buttons */}
-        <section className="flex flex-col md:flex-row items-center justify-center gap-4 mb-20">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-3 px-6 py-3 rounded-lg bg-black border border-white hover:bg-gray-900 transition-all"
-          >
-            <Apple className="w-6 h-6" />
-            <div className="text-left">
-              <div className="text-xs text-gray-400">Download on the</div>
-              <div className="text-lg font-semibold">App Store</div>
-            </div>
-          </motion.button>
-
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-3 px-6 py-3 rounded-lg bg-black border border-white hover:bg-gray-900 transition-all"
-          >
-            <Play className="w-6 h-6 fill-current" />
-            <div className="text-left">
-              <div className="text-xs text-gray-400">GET IT ON</div>
-              <div className="text-lg font-semibold">Google Play</div>
-            </div>
-          </motion.button>
+      <main className="w-full">
+        {/* Hero Section */}
+        <section 
+          className="relative min-h-screen w-full flex flex-col items-center justify-center text-center overflow-hidden"
+          style={{
+            backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/491e75731_image.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed'
+          }}
+        >
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/40"></div>
+          
+          {/* Content */}
+          <div className="relative z-10 px-4 flex flex-col items-center justify-center h-full py-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-6 max-w-2xl"
+            >
+              <h2 className="text-5xl md:text-7xl font-black">
+                Hey, <span className="text-[#00fea3]">mate!</span>
+              </h2>
+              
+              <p className="text-lg md:text-2xl text-gray-100 font-light leading-relaxed">
+                Join us: let's connect and create the best plans<br />
+                in your area!!!
+              </p>
+              
+              {/* Download Now Button */}
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                className="mx-auto mt-8 px-8 py-3 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold text-lg hover:bg-[#00fea3]/90 transition-all"
+              >
+                Download Now!
+              </motion.button>
+              
+              {/* App Store Buttons */}
+              <div className="flex flex-col md:flex-row items-center justify-center gap-4 pt-8">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full md:w-auto hover:opacity-80 transition-opacity"
+                >
+                  <img 
+                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/b09aec4ee_image.png"
+                    alt="Download on the App Store"
+                    className="h-14 object-contain"
+                  />
+                </motion.button>
+                
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full md:w-auto hover:opacity-80 transition-opacity"
+                >
+                  <img 
+                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/0f375ad8a_image.png"
+                    alt="Get it on Google Play"
+                    className="h-14 object-contain"
+                  />
+                </motion.button>
+              </div>
+            </motion.div>
+          </div>
         </section>
 
         {/* Placeholder for additional sections */}
