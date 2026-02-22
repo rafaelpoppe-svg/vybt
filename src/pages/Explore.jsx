@@ -18,6 +18,7 @@ import { useLanguage } from '../components/common/LanguageContext';
 export default function Explore() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
   const urlParams = new URLSearchParams(window.location.search);
   const initialTab = urlParams.get('tab');
   

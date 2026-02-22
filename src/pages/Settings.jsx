@@ -47,6 +47,7 @@ const Row = ({ icon: Icon, iconColor = 'text-[#00fea3]', label, sublabel, onClic
 
 export default function Settings() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
