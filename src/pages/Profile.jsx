@@ -14,6 +14,7 @@ import VibeTag, { vibeConfig } from '../components/common/VibeTag';
 import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
 import VerificationBadge from '../components/profile/VerificationBadge';
 import VerificationFlow from '../components/profile/VerificationFlow';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function Profile() {
   const navigate = useNavigate();

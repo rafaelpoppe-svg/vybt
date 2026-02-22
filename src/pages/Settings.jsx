@@ -9,7 +9,7 @@ import {
   Shield, FileText, Lock, Bell, HelpCircle, ShieldAlert, Globe, Check
 } from 'lucide-react';
 import DeleteAccountModal from '../components/profile/DeleteAccountModal';
-import { translations } from '../components/common/LanguageContext';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const LANGUAGES = [
   { code: 'pt', flag: '🇵🇹', name: 'Português' },

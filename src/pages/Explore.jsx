@@ -13,6 +13,7 @@ import { useRecommendations } from '../components/recommendation/useRecommendati
 import { PlanFilters, UserFilters } from '../components/explore/ExploreFilters';
 import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
 import PlanMap from '../components/explore/PlanMap';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function Explore() {
   const navigate = useNavigate();

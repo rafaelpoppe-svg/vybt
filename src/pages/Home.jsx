@@ -18,6 +18,7 @@ import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated'
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
 import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function Home() {
   const navigate = useNavigate();

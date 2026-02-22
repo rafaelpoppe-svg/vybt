@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Home, Compass, PlusCircle, MessageCircle, User } from 'lucide-react';
+import { useLanguage } from './LanguageContext';
 
 const tabs = [
   { name: 'Home',       icon: Home,          label: 'Home' },
