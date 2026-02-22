@@ -16,6 +16,7 @@ const tabs = [
 export default function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLanguage();
 
   const isActive = (pageName) => {
     const path = location.pathname;
