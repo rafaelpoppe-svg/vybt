@@ -30,7 +30,8 @@ export default function StoryCard({
   colorIndex = 0,
   onClick,
   size = 'md',
-  currentUserId
+  currentUserId,
+  happeningPlan = null
 }) {
   const sizes = {
     sm: { width: 'w-16', height: 'h-24', text: 'text-[9px]' },
