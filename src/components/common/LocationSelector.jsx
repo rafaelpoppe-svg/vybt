@@ -56,10 +56,6 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
     );
   };
 
-  const filteredCities = popularCities.filter(c => 
-    c.toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
     <div className="relative">
       <motion.button
@@ -99,36 +95,32 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
               {detecting ? 'Detecting...' : 'Use my current location'}
             </button>
 
-            <div className="relative mb-3">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-              <Input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search city..."
-                className="pl-9 bg-gray-800 border-gray-700 text-white"
-              />
+            {/* City search + list — locked for Vybt Plus */}
+            <div className="relative rounded-xl overflow-hidden">
+              {/* Blurred / disabled city list */}
+              <div className="pointer-events-none select-none opacity-40">
+                <div className="flex items-center gap-2 px-3 py-2 mb-3 rounded-lg bg-gray-800 border border-gray-700">
+                  <div className="w-4 h-4 rounded bg-gray-600" />
+                  <div className="flex-1 h-4 rounded bg-gray-600" />
+                </div>
+                <div className="space-y-1 max-h-40 overflow-hidden mb-4">
+                  {['London', 'Madrid', 'Paris', 'Berlin', 'Rome'].map((c) => (
+                    <div key={c} className="w-full px-3 py-2 rounded-lg text-sm text-gray-500 bg-gray-800/50">
+                      {c}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Lock overlay */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl px-4 text-center">
+                <Lock className="w-5 h-5 text-[#00fea3] mb-1.5" />
+                <p className="text-white text-xs font-semibold">Vybt Plus members only</p>
+                <p className="text-gray-500 text-[10px] mt-0.5">Coming soon</p>
+              </div>
             </div>
 
-            <div className="space-y-1 max-h-40 overflow-y-auto mb-4">
-              {filteredCities.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => {
-                    onCityChange(c);
-                    setIsOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
-                    city === c
-                      ? 'bg-[#00fea3]/20 text-[#00fea3]'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-
-            <div className="pt-3 border-t border-gray-800">
+            <div className="pt-3 border-t border-gray-800 mt-3">
               <label className="text-xs text-gray-500 mb-2 block">Radius: {radius}km</label>
               <input
                 type="range"
