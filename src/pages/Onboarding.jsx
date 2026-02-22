@@ -258,7 +258,7 @@ function OnboardingInner() {
       </div>
 
       {/* Footer Button */}
-      {step < 7 && (
+      {step < 8 && (
         <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
           <motion.button
             whileHover={{ scale: canProceed() ? 1.02 : 1 }}
