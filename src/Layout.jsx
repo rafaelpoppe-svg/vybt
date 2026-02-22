@@ -27,13 +27,15 @@ export default function Layout({ children, currentPageName }) {
 
   useEffect(() => {
     const checkAuthAndRedirect = async () => {
+      const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+      
       try {
         const user = await base44.auth.me();
         
         // Utilizador logado
         if (user) {
-          // Se tenta aceder a Welcome, redireciona para Home
-          if (currentPageName === 'Welcome') {
+          // Se tenta aceder a Welcome, redireciona para Home (exceto se está em preview mode)
+          if (currentPageName === 'Welcome' && !isPreview) {
             navigate(createPageUrl('Home'));
             return;
           }
