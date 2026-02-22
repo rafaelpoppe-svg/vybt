@@ -238,3 +238,11 @@ function OnboardingInner() {
     </div>
   );
 }
+
+export default function Onboarding() {
+  return (
+    <LanguageProvider>
+      <OnboardingInner />
+    </LanguageProvider>
+  );
+}
