@@ -25,6 +25,37 @@ const popularCities = [
 export default function LocationSelector({ city, radius, onCityChange, onRadiusChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [detecting, setDetecting] = useState(false);
+
+  const detectLocation = () => {
+    if (!navigator.geolocation) return;
+    setDetecting(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+            { headers: { 'Accept-Language': 'en' } }
+          );
+          const data = await res.json();
+          const detectedCity =
+            data.address?.city ||
+            data.address?.town ||
+            data.address?.village ||
+            data.address?.county ||
+            null;
+          if (detectedCity) {
+            onCityChange(detectedCity);
+            setIsOpen(false);
+          }
+        } catch (_) {}
+        setDetecting(false);
+      },
+      () => setDetecting(false),
+      { timeout: 8000 }
+    );
+  };
 
   const filteredCities = popularCities.filter(c => 
     c.toLowerCase().includes(search.toLowerCase())
