@@ -42,6 +42,13 @@ export default function Home() {
           navigate(createPageUrl('Onboarding'));
         } else {
           setMyProfile(profiles[0]);
+
+          // Show welcome programs page on first visit
+          if (!profiles[0].programs_shown) {
+            navigate(createPageUrl('WelcomePrograms'));
+            return;
+          }
+
           if (!profiles[0].tutorial_completed) {
             setShowTutorial(true);
           }
