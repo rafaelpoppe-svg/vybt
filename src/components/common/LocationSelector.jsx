@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, ChevronDown, Search, Loader2, Navigation } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { MapPin, ChevronDown, Loader2, Navigation, Lock } from 'lucide-react';
 
 const popularCities = [
   // Europe - Capitals
