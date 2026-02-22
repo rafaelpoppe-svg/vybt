@@ -11,6 +11,7 @@ import VibesSelect from '../components/onboarding/VibesSelect';
 import PartyTypeSelect from '../components/onboarding/PartyTypeSelect';
 import WelcomeComplete from '../components/onboarding/WelcomeComplete';
 import LanguageSelect from '../components/onboarding/LanguageSelect';
+import NameSelect from '../components/onboarding/NameSelect';
 import VerificationFlow from '../components/profile/VerificationFlow';
 import { useLanguage } from '../components/common/LanguageContext';
 
