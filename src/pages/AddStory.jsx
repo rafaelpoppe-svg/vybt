@@ -249,6 +249,14 @@ export default function AddStory() {
           </p>
         </div>
 
+        {/* Moderation error */}
+        {moderationError && (
+          <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3">
+            <ShieldAlert className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-red-400">{moderationError}</p>
+          </div>
+        )}
+
         {/* Story limit warning */}
         {selectedPlan && !canPostMore && (
           <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3">
