@@ -44,22 +44,22 @@ export default function StoriesBar({
 
       {/* Stories - Vertical rectangle cards */}
       <div className="flex gap-3 px-4 overflow-x-auto scrollbar-hide pb-2">
-        {/* Add Story with tooltip bubble if plan is happening */}
+        {/* Add Story — neon blue when a plan is happening */}
         <div className="relative flex-shrink-0">
-          <StoryCard isAdd onClick={onAddStory} />
+          <StoryCard isAdd onClick={onAddStory} happeningPlan={happeningPlan} />
           <AnimatePresence>
             {happeningPlan && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: 4 }}
+                initial={{ opacity: 0, scale: 0.85, y: 6 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="absolute -top-2 left-1/2 -translate-x-1/2 w-48 z-50 pointer-events-none"
-                style={{ bottom: 'calc(100% + 4px)', top: 'auto' }}
+                exit={{ opacity: 0, scale: 0.85 }}
+                className="absolute z-50 pointer-events-none"
+                style={{ bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)', width: '160px' }}
               >
-                <div className="bg-orange-500 text-white text-[10px] font-bold rounded-xl px-2 py-1.5 text-center leading-tight shadow-lg shadow-orange-500/40">
-                  🔥 Um dos seus planos está acontecendo agora! Poste já os seus stories!!
+                <div className="bg-[#00d4ff] text-[#0b0b0b] text-[10px] font-bold rounded-xl px-2.5 py-2 text-center leading-tight shadow-lg shadow-[#00d4ff]/40">
+                  🔵 Um plano está a acontecer agora! Poste o teu Experience Story!
                 </div>
-                <div className="w-3 h-3 bg-orange-500 rotate-45 mx-auto -mt-1.5 rounded-sm" />
+                <div className="w-3 h-3 bg-[#00d4ff] rotate-45 mx-auto -mt-1.5 rounded-sm" />
               </motion.div>
             )}
           </AnimatePresence>
