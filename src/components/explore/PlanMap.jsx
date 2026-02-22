@@ -3,9 +3,10 @@ import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { MapPin, Users, Clock, ChevronRight, X, Search } from 'lucide-react';
+import { MapPin, Users, Clock, ChevronRight, X } from 'lucide-react';
 import { format } from 'date-fns';
 import PartyTag from '../common/PartyTag';
+import LocationSelector from '../common/LocationSelector';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
