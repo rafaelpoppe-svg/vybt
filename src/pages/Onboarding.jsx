@@ -174,7 +174,7 @@ function OnboardingInner() {
       )}
     </div>,
     <WelcomeComplete onExplore={handleComplete} />,
-    // step 8 — verify (handled separately below)
+    // step 9 — verify (handled separately below)
     null,
   ];
 
