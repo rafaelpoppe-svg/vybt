@@ -271,14 +271,14 @@ export default function Home() {
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-white font-bold text-lg flex items-center gap-2">
-                🎟️ My Plans
+                🎟️ {t.myPlans}
               </h2>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(createPageUrl('MyPlans'))}
                 className="text-[#00fea3] text-sm font-medium"
               >
-                See all
+                {t.seeAll}
               </motion.button>
             </div>
             <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
@@ -302,7 +302,7 @@ export default function Home() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Calendar className="w-5 h-5 text-[#00fea3]" />
-            <h2 className="text-white font-bold text-lg">Tonight</h2>
+            <h2 className="text-white font-bold text-lg">{t.tonight}</h2>
             <span className="text-gray-500 text-sm">{format(new Date(), 'EEE, MMM d')}</span>
           </div>
 
@@ -324,13 +324,13 @@ export default function Home() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-gray-500">No plans for tonight in {city}</p>
+              <p className="text-gray-500">{t.noPlansTonight} {city}</p>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(createPageUrl('CreatePlan'))}
                 className="mt-4 px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-medium"
               >
-                Create a plan
+                {t.createPlan}
               </motion.button>
             </div>
           )}
@@ -339,7 +339,7 @@ export default function Home() {
         {/* Upcoming Section */}
         {upcomingPlans.length > 0 && (
           <section>
-            <h2 className="text-white font-bold text-lg mb-4">Upcoming Plans</h2>
+            <h2 className="text-white font-bold text-lg mb-4">{t.upcomingPlans}</h2>
             <div className="grid gap-4">
               {upcomingPlans.slice(0, 5).map((plan) => (
                 <PlanCard
