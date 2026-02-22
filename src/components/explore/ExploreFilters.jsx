@@ -1,12 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, MapPin, Flame, Users, Heart, Music } from 'lucide-react';
+import { X, Clock, MapPin, Flame, Users, Heart, Music, Search } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
-import VibeTag, { vibeConfig } from '../common/VibeTag';
-import PartyTag, { partyTagConfig } from '../common/PartyTag';
-
-const partyTags = Object.keys(partyTagConfig);
-const vibeOptions = Object.keys(vibeConfig);
+import VibeTag, { ALL_VIBES } from '../common/VibeTag';
+import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
 
 export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
   if (!isOpen) return null;
