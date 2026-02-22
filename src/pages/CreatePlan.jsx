@@ -18,6 +18,7 @@ const themeColors = [
 export default function CreatePlan() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [tagSearch, setTagSearch] = useState('');
   const [data, setData] = useState({
     title: '',
     description: '',

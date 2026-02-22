@@ -13,6 +13,7 @@ const themeColors = [
 ];
 
 export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoading, onDelete }) {
+  const [tagSearch, setTagSearch] = useState('');
   const [formData, setFormData] = useState({
     title: plan?.title || '',
     time: plan?.time || '',
