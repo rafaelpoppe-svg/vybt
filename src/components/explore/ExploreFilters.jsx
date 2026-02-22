@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, MapPin, Flame, Users, Heart, Music, Search } from 'lucide-react';
+import { X, Clock, MapPin, Flame, Users, Heart, Music, Search, Lock, Sparkles } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import VibeTag, { ALL_VIBES } from '../common/VibeTag';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
