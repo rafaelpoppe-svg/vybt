@@ -6,6 +6,7 @@ import VibeTag, { ALL_VIBES } from '../common/VibeTag';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
 
 export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
+  const [partySearch, setPartySearch] = useState('');
   if (!isOpen) return null;
 
   return (
