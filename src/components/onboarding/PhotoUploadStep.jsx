@@ -104,7 +104,16 @@ export default function PhotoUploadStep({ photos, onChange }) {
         ))}
       </div>
 
-      {photos.length === 0 && (
+      {moderationError ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-8 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3"
+        >
+          <ShieldAlert className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+          <p className="text-red-400 text-sm">{moderationError}</p>
+        </motion.div>
+      ) : photos.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
