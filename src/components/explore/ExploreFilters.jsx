@@ -223,8 +223,18 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
             <Music className="w-4 h-4" />
             Similar Vibes
           </label>
+          <div className="relative mb-2">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
+            <input
+              type="text"
+              value={vibeSearch}
+              onChange={(e) => setVibeSearch(e.target.value)}
+              placeholder="Search vibes..."
+              className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+            />
+          </div>
           <div className="flex flex-wrap gap-2">
-            {vibeOptions.slice(0, 8).map(vibe => (
+            {ALL_VIBES.filter(v => v.toLowerCase().includes(vibeSearch.toLowerCase())).map(vibe => (
               <VibeTag
                 key={vibe}
                 vibe={vibe}
