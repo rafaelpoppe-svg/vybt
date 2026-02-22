@@ -100,7 +100,61 @@ export default function Settings() {
             sublabel="Manage your alerts"
             onClick={() => navigate(createPageUrl('NotificationSettings'))}
           />
+          <Row
+            icon={Globe}
+            iconColor="text-blue-400"
+            label="Language"
+            sublabel={LANGUAGES.find(l => l.code === selectedLanguage)?.name || 'English'}
+            onClick={() => setShowLanguagePicker(true)}
+          />
         </Section>
+
+        {/* Language Picker Modal */}
+        <AnimatePresence>
+          {showLanguagePicker && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/70 flex items-end"
+              onClick={() => setShowLanguagePicker(false)}
+            >
+              <motion.div
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '100%' }}
+                transition={{ type: 'spring', damping: 25 }}
+                className="w-full bg-gray-900 rounded-t-3xl p-6 pb-10"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="w-10 h-1 bg-gray-700 rounded-full mx-auto mb-6" />
+                <h3 className="text-white font-bold text-lg mb-4">Choose Language</h3>
+                <div className="space-y-2">
+                  {LANGUAGES.map(lang => (
+                    <motion.button
+                      key={lang.code}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => handleLanguageChange(lang.code)}
+                      className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all ${
+                        selectedLanguage === lang.code
+                          ? 'bg-[#00fea3]/15 border border-[#00fea3]/40'
+                          : 'bg-gray-800 border border-transparent'
+                      }`}
+                    >
+                      <span className="text-2xl">{lang.flag}</span>
+                      <span className={`flex-1 text-left font-medium ${selectedLanguage === lang.code ? 'text-[#00fea3]' : 'text-white'}`}>
+                        {lang.name}
+                      </span>
+                      {selectedLanguage === lang.code && (
+                        <Check className="w-5 h-5 text-[#00fea3]" />
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Legal */}
         <Section title="Legal & Community">
