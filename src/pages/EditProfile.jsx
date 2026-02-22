@@ -9,18 +9,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import VibeTag from '../components/common/VibeTag';
-import PartyTag from '../components/common/PartyTag';
+import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
+import { Search } from 'lucide-react';
 
 const vibeOptions = [
   'Techno', 'Reggaeton', 'Pop', 'House', 'Trap', 
   'Afrobeats', 'Brazilian Funk', 'Hard Techno', 
   '80s Songs', 'EDM', 'Rock', 'Disco', 
   'Curious to every style'
-];
-
-const partyTypeOptions = [
-  'Rooftop Afternoon', 'Rooftop Night', 'Techno', 'Bar', 'Luxury', 
-  'House Party', 'University', 'Commercial', 'EDM', 'Latin'
 ];
 
 export default function EditProfile() {
