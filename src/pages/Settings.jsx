@@ -87,24 +87,24 @@ export default function Settings() {
         >
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
-        <h1 className="text-xl font-bold text-white">Settings</h1>
+        <h1 className="text-xl font-bold text-white">{t.settings}</h1>
       </header>
 
       <div className="px-4 py-6 space-y-6 pb-16">
 
         {/* Account */}
-        <Section title="Account">
+        <Section title={t.account}>
           <Row
             icon={Bell}
             iconColor="text-[#00fea3]"
-            label="Notifications"
-            sublabel="Manage your alerts"
+            label={t.notifications}
+            sublabel={t.manageAlerts}
             onClick={() => navigate(createPageUrl('NotificationSettings'))}
           />
           <Row
             icon={Globe}
             iconColor="text-blue-400"
-            label="Language"
+            label={t.language}
             sublabel={LANGUAGES.find(l => l.code === selectedLanguage)?.name || 'English'}
             onClick={() => setShowLanguagePicker(true)}
           />
@@ -129,7 +129,7 @@ export default function Settings() {
                 onClick={e => e.stopPropagation()}
               >
                 <div className="w-10 h-1 bg-gray-700 rounded-full mx-auto mb-6" />
-                <h3 className="text-white font-bold text-lg mb-4">Choose Language</h3>
+                <h3 className="text-white font-bold text-lg mb-4">{t.chooseLanguageTitle}</h3>
                 <div className="space-y-2">
                   {LANGUAGES.map(lang => (
                     <motion.button
@@ -158,33 +158,33 @@ export default function Settings() {
         </AnimatePresence>
 
         {/* Legal */}
-        <Section title="Legal & Community">
+        <Section title={t.legalCommunity}>
           <Row
             icon={Shield}
             iconColor="text-purple-400"
-            label="Community Guidelines"
+            label={t.communityGuidelines}
             onClick={() => openUrl('https://vybt.app/community-guidelines')}
           />
           <Row
             icon={FileText}
             iconColor="text-blue-400"
-            label="Terms and Conditions"
+            label={t.termsConditions}
             onClick={() => openUrl('https://vybt.app/terms')}
           />
           <Row
             icon={Lock}
             iconColor="text-teal-400"
-            label="Privacy Policy"
+            label={t.privacyPolicy}
             onClick={() => openUrl('https://vybt.app/privacy')}
           />
         </Section>
 
         {/* Support */}
-        <Section title="Support">
+        <Section title={t.support}>
           <Row
             icon={HelpCircle}
             iconColor="text-yellow-400"
-            label="Help & FAQ"
+            label={t.helpFaq}
             onClick={() => openUrl('https://vybt.app/help')}
           />
         </Section>
@@ -203,17 +203,17 @@ export default function Settings() {
         )}
 
         {/* Danger Zone */}
-        <Section title="Session">
+        <Section title={t.session}>
           <Row
             icon={LogOut}
             iconColor="text-gray-400"
-            label="Log Out"
+            label={t.logOut}
             onClick={() => base44.auth.logout()}
           />
           <Row
             icon={Trash2}
-            label="Delete Account"
-            sublabel="Permanently remove your data"
+            label={t.deleteAccount}
+            sublabel={t.deleteAccountSub}
             destructive
             onClick={() => setShowDeleteModal(true)}
           />
