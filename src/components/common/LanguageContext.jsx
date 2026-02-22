@@ -72,13 +72,23 @@ const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('vybt_language') || 'en';
+    return localStorage.getItem('app_language') || 'en';
   });
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
-    localStorage.setItem('vybt_language', lang);
+    localStorage.setItem('app_language', lang);
   };
+
+  // Listen for external language changes (e.g. from Settings page)
+  React.useEffect(() => {
+    const handler = () => {
+      const lang = localStorage.getItem('app_language') || 'en';
+      setLanguage(lang);
+    };
+    window.addEventListener('languagechange', handler);
+    return () => window.removeEventListener('languagechange', handler);
+  }, []);
 
   const t = translations[language] || translations.en;
 
