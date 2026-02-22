@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { 
   ChevronLeft, Image as ImageIcon, X, Check, 
-  Users, Sparkles, Lock, Loader2, Clock, AlertCircle
+  Users, Sparkles, Lock, Loader2, Clock, AlertCircle, ShieldAlert
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HighlightStoryModal from '../components/story/HighlightStoryModal';

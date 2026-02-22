@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Camera, Loader2, X, AlertCircle } from 'lucide-react';
+import { Camera, Loader2, X, AlertCircle, ShieldAlert } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export default function PhotoUploadStep({ photos, onChange }) {
