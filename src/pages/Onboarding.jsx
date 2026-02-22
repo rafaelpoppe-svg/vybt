@@ -103,6 +103,10 @@ function OnboardingInner() {
   };
 
   const steps = [
+    <LanguageSelect
+      selected={data.language}
+      onSelect={(lang) => { changeLanguage(lang); setData({...data, language: lang}); }}
+    />,
     <GenderSelect 
       selected={data.gender} 
       onSelect={(gender) => setData({...data, gender})} 
@@ -126,8 +130,8 @@ function OnboardingInner() {
     // Location step
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-white mb-2">Where are you? 📍</h2>
-        <p className="text-gray-400">We'll show you plans and people nearby.</p>
+        <h2 className="text-3xl font-bold text-white mb-2">{t.whereAreYou}</h2>
+        <p className="text-gray-400">{t.locationSubtitle}</p>
       </div>
       <button
         type="button"
@@ -142,17 +146,17 @@ function OnboardingInner() {
         )}
         <div>
           <p className="text-white font-semibold">
-            {detectingCity ? 'Detecting...' : data.city ? data.city : 'Use my current location'}
+            {detectingCity ? t.detecting : data.city ? data.city : t.useMyLocation}
           </p>
           {!detectingCity && !data.city && (
-            <p className="text-gray-500 text-sm mt-0.5">Tap to detect automatically</p>
+            <p className="text-gray-500 text-sm mt-0.5">{t.tapToDetect}</p>
           )}
         </div>
       </button>
       {data.city && (
         <div className="flex items-center gap-2 text-[#00fea3] text-sm">
           <MapPin className="w-4 h-4" />
-          <span>Location set to <strong>{data.city}</strong></span>
+          <span>{t.locationSetTo} <strong>{data.city}</strong></span>
         </div>
       )}
     </div>,
