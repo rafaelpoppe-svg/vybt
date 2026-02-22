@@ -22,6 +22,30 @@ export default function Onboarding() {
     party_types: []
   });
   const [loading, setLoading] = useState(false);
+  const [detectingCity, setDetectingCity] = useState(false);
+
+  const detectLocation = () => {
+    if (!navigator.geolocation) return;
+    setDetectingCity(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+            { headers: { 'Accept-Language': 'en' } }
+          );
+          const d = await res.json();
+          const detectedCity =
+            d.address?.city || d.address?.town || d.address?.village || d.address?.county || null;
+          if (detectedCity) setData(prev => ({ ...prev, city: detectedCity }));
+        } catch (_) {}
+        setDetectingCity(false);
+      },
+      () => setDetectingCity(false),
+      { timeout: 8000 }
+    );
+  };
 
   useEffect(() => {
     const checkOnboarding = async () => {

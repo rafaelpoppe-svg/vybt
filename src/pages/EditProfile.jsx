@@ -38,6 +38,34 @@ export default function EditProfile() {
     photos: []
   });
   const [uploading, setUploading] = useState(false);
+  const [detectingLocation, setDetectingLocation] = useState(false);
+
+  const detectLocation = () => {
+    if (!navigator.geolocation) return;
+    setDetectingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+            { headers: { 'Accept-Language': 'en' } }
+          );
+          const data = await res.json();
+          const detectedCity =
+            data.address?.city ||
+            data.address?.town ||
+            data.address?.village ||
+            data.address?.county ||
+            null;
+          if (detectedCity) setFormData(prev => ({ ...prev, city: detectedCity }));
+        } catch (_) {}
+        setDetectingLocation(false);
+      },
+      () => setDetectingLocation(false),
+      { timeout: 8000 }
+    );
+  };
 
   useEffect(() => {
     const getUser = async () => {
