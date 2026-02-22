@@ -49,6 +49,15 @@ export default function Settings() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showLanguagePicker, setShowLanguagePicker] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(() => localStorage.getItem('app_language') || 'en');
+
+  const handleLanguageChange = (code) => {
+    localStorage.setItem('app_language', code);
+    setSelectedLanguage(code);
+    setShowLanguagePicker(false);
+    window.dispatchEvent(new Event('languagechange'));
+  };
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => navigate('/'));
