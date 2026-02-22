@@ -186,11 +186,24 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
 
             {/* Tags */}
             <div>
-              <label className="block text-gray-400 text-sm mb-2">
-                Party Tags (máx. 2)
-              </label>
-              <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
-                {partyTags.map((tag) => (
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-gray-400 text-sm">Party Tags (máx. 2)</label>
+                <span className={`text-xs font-medium ${formData.tags.length >= 2 ? 'text-[#00fea3]' : 'text-gray-500'}`}>
+                  {formData.tags.length}/2
+                </span>
+              </div>
+              <div className="relative mb-2">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
+                <input
+                  type="text"
+                  value={tagSearch}
+                  onChange={(e) => setTagSearch(e.target.value)}
+                  placeholder="Search..."
+                  className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+                />
+              </div>
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
+                {ALL_PARTY_TYPES.filter(t => t.toLowerCase().includes(tagSearch.toLowerCase())).map((tag) => (
                   <PartyTag
                     key={tag}
                     tag={tag}

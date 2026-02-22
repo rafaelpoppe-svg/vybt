@@ -308,12 +308,27 @@ export default function CreatePlan() {
 
         {/* Tags */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">
-            <Tag className="w-4 h-4 inline mr-1" />
-            Party Type Tags (máx. 2)
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-gray-400 text-sm flex items-center gap-1">
+              <Tag className="w-4 h-4" />
+              Party Type Tags (máx. 2)
+            </label>
+            <span className={`text-xs font-medium ${data.tags.length >= 2 ? 'text-[#00fea3]' : 'text-gray-500'}`}>
+              {data.tags.length}/2
+            </span>
+          </div>
+          <div className="relative mb-3">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <input
+              type="text"
+              value={tagSearch}
+              onChange={(e) => setTagSearch(e.target.value)}
+              placeholder="Search party types..."
+              className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+            />
+          </div>
           <div className="flex flex-wrap gap-2">
-            {partyTags.map((tag) => (
+            {ALL_PARTY_TYPES.filter(t => t.toLowerCase().includes(tagSearch.toLowerCase())).map((tag) => (
               <PartyTag
                 key={tag}
                 tag={tag}
