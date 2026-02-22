@@ -8,7 +8,7 @@ import { ChevronLeft, Camera, Loader2, X, Navigation, MapPin } from 'lucide-reac
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import VibeTag from '../components/common/VibeTag';
+import VibeTag, { ALL_VIBES } from '../components/common/VibeTag';
 import PartyTag, { ALL_PARTY_TYPES, partyTagConfig } from '../components/common/PartyTag';
 import { Search, Flame } from 'lucide-react';
 
