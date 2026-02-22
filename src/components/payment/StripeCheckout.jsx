@@ -5,7 +5,9 @@ import { base44 } from '@/api/base44Client';
 import { Loader2, CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
+const stripePromise = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+  ? loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
+  : null;
 
 function CheckoutForm({ onSuccess, onError, buttonLabel }) {
   const stripe = useStripe();
