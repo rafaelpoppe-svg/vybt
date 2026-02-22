@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Navigation, MapPin, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Navigation, MapPin, Loader2, ShieldCheck, Camera } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -11,6 +11,7 @@ import VibesSelect from '../components/onboarding/VibesSelect';
 import PartyTypeSelect from '../components/onboarding/PartyTypeSelect';
 import WelcomeComplete from '../components/onboarding/WelcomeComplete';
 import LanguageSelect from '../components/onboarding/LanguageSelect';
+import VerificationFlow from '../components/profile/VerificationFlow';
 import { useLanguage } from '../components/common/LanguageContext';
 
 function OnboardingInner() {
