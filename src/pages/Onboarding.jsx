@@ -68,6 +68,7 @@ export default function Onboarding() {
       case 2: return data.photos.length > 0;
       case 3: return data.vibes.length >= 2;
       case 4: return data.party_types.length >= 2;
+      case 5: return true; // location is optional
       default: return true;
     }
   };
@@ -117,6 +118,39 @@ export default function Onboarding() {
       selected={data.party_types} 
       onSelect={(party_types) => setData({...data, party_types})} 
     />,
+    // Location step
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-3xl font-bold text-white mb-2">Where are you? 📍</h2>
+        <p className="text-gray-400">We'll show you plans and people nearby.</p>
+      </div>
+      <button
+        type="button"
+        onClick={detectLocation}
+        disabled={detectingCity}
+        className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl bg-[#00fea3]/10 border border-[#00fea3]/40 text-left disabled:opacity-50"
+      >
+        {detectingCity ? (
+          <Loader2 className="w-6 h-6 text-[#00fea3] animate-spin flex-shrink-0" />
+        ) : (
+          <Navigation className="w-6 h-6 text-[#00fea3] flex-shrink-0" />
+        )}
+        <div>
+          <p className="text-white font-semibold">
+            {detectingCity ? 'Detecting...' : data.city ? data.city : 'Use my current location'}
+          </p>
+          {!detectingCity && !data.city && (
+            <p className="text-gray-500 text-sm mt-0.5">Tap to detect automatically</p>
+          )}
+        </div>
+      </button>
+      {data.city && (
+        <div className="flex items-center gap-2 text-[#00fea3] text-sm">
+          <MapPin className="w-4 h-4" />
+          <span>Location set to <strong>{data.city}</strong></span>
+        </div>
+      )}
+    </div>,
     <WelcomeComplete onExplore={handleComplete} />
   ];
 
