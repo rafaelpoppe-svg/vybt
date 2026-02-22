@@ -107,5 +107,6 @@ export default function Layout({ children, currentPageName }) {
         </PageTransition>
       </div>
     </NotificationProvider>
+    </LanguageProvider>
   );
 }
