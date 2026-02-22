@@ -1,19 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NotificationProvider } from '@/components/notifications/NotificationProvider';
 import { Toaster } from 'sonner';
 import PageTransition from '@/components/common/PageTransition';
 import { LanguageProvider } from '@/components/common/LanguageContext';
 import SplashScreen from '@/components/common/SplashScreen';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
   const [splashDone, setSplashDone] = useState(() => {
     return !!sessionStorage.getItem('splash_shown');
   });
+  const [authChecked, setAuthChecked] = useState(false);
+  const navigate = useNavigate();
 
   const handleSplashFinish = () => {
     sessionStorage.setItem('splash_shown', '1');
     setSplashDone(true);
   };
+
+  // Páginas públicas que não requerem autenticação
+  const publicPages = ['Welcome'];
+  // Páginas protegidas que requerem autenticação
+  const protectedPages = ['AddStory', 'Friends', 'Chat', 'GroupChat', 'Profile', 'MyPlans', 'CreatePlan', 'PlanDetails', 'Explore', 'MyStories', 'EditProfile', 'Settings', 'Notifications', 'NotificationSettings', 'Ambassador', 'WelcomePrograms', 'StoryView', 'UserProfile', 'Onboarding', 'Moderation'];
+
+  useEffect(() => {
+    const checkAuthAndRedirect = async () => {
+      try {
+        const user = await base44.auth.me();
+        
+        // Utilizador logado
+        if (user) {
+          // Se tenta aceder a Welcome, redireciona para Home
+          if (currentPageName === 'Welcome') {
+            navigate(createPageUrl('Home'));
+            return;
+          }
+        } else {
+          // Utilizador não logado
+          // Se tenta aceder a página protegida, redireciona para Welcome
+          if (protectedPages.includes(currentPageName)) {
+            navigate(createPageUrl('Welcome'));
+            return;
+          }
+        }
+      } catch (e) {
+        // Não logado
+        if (protectedPages.includes(currentPageName)) {
+          navigate(createPageUrl('Welcome'));
+          return;
+        }
+      } finally {
+        setAuthChecked(true);
+      }
+    };
+
+    checkAuthAndRedirect();
+  }, [currentPageName, navigate]);
 
   return (
     <LanguageProvider>
