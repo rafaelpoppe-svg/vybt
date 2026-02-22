@@ -59,6 +59,14 @@ export default function Layout({ children, currentPageName }) {
     checkAuthAndRedirect();
   }, [currentPageName, navigate]);
 
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[#00fea3]" />
+      </div>
+    );
+  }
+
   return (
     <LanguageProvider>
     <NotificationProvider>
