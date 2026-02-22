@@ -119,10 +119,7 @@ export default function Welcome() {
           </div>
         </section>
 
-        {/* Placeholder for additional sections */}
-        <div className="py-20 text-center text-gray-500">
-          [Secções adicionais serão adicionadas aqui]
-        </div>
+
       </main>
 
       {/* Footer */}
