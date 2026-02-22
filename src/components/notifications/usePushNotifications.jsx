@@ -60,7 +60,7 @@ export function usePushNotifications({ currentUser, userCity, plans = [], friend
           }
         }
 
-        // ── 2. New plan by a friend (created in the last 24h) ──────────────
+        // ── 3. New plan by a friend (created in the last 24h) ──────────────
         if (plan.creator_id && friendIds.includes(plan.creator_id)) {
           const createdAt = new Date(plan.created_date);
           const hoursSince = (Date.now() - createdAt.getTime()) / 1000 / 3600;
