@@ -12,6 +12,14 @@ export default function BottomNav() {
   const location = useLocation();
   const { t } = useLanguage();
 
+  const tabs = [
+    { name: 'Home',       icon: Home,          label: t.home },
+    { name: 'Explore',    icon: Compass,       label: t.explore },
+    { name: 'CreatePlan', icon: PlusCircle,    label: t.create },
+    { name: 'Chat',       icon: MessageCircle, label: t.messages },
+    { name: 'Profile',    icon: User,          label: t.profile },
+  ];
+
   const isActive = (pageName) => {
     const path = location.pathname;
     return path === `/${pageName}` || path.endsWith(`/${pageName}`);
