@@ -88,6 +88,11 @@ function OnboardingInner() {
     setLoading(true);
     try {
       const user = await base44.auth.me();
+
+      // Check for referral code in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get('ref') || sessionStorage.getItem('vybt_ref') || '';
+
       const profile = await base44.entities.UserProfile.create({
         user_id: user.id,
         display_name: data.display_name.trim() || user.full_name,
@@ -99,8 +104,25 @@ function OnboardingInner() {
         city: data.city || '',
         radius_km: 10,
         onboarding_completed: true,
-        total_stories_count: 0
+        total_stories_count: 0,
+        referred_by: refCode || ''
       });
+
+      // Increment referrer's count if referred
+      if (refCode) {
+        try {
+          const referrers = await base44.entities.UserProfile.filter({ referral_code: refCode });
+          if (referrers[0]) {
+            const newCount = (referrers[0].referred_count || 0) + 1;
+            const becomeAmbassador = newCount >= 10;
+            await base44.entities.UserProfile.update(referrers[0].id, {
+              referred_count: newCount,
+              ...(becomeAmbassador ? { is_ambassador: true } : {})
+            });
+          }
+          sessionStorage.removeItem('vybt_ref');
+        } catch (e) {}
+      }
       setCreatedProfile(profile);
       setStep(9); // verification step
     } catch (error) {
