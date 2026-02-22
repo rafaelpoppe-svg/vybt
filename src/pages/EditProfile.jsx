@@ -61,6 +61,7 @@ export default function EditProfile() {
   });
   const [uploading, setUploading] = useState(false);
   const [detectingLocation, setDetectingLocation] = useState(false);
+  const [vibeSearch, setVibeSearch] = useState('');
 
   const detectLocation = () => {
     if (!navigator.geolocation) return;
