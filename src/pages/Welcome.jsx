@@ -7,6 +7,31 @@ import { Apple, Play } from 'lucide-react';
 
 export default function Welcome() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (user) {
+          navigate(createPageUrl('Home'));
+        }
+      } catch (e) {
+        // Utilizador não logado, mostra Welcome
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[#00fea3]" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0b0b0b] text-white overflow-hidden">
