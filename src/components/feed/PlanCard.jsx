@@ -20,7 +20,15 @@ const reasonLabels = {
 
 export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false }) {
   const themeColor = plan.theme_color || '#542b9b';
-  const cardBgColor = featured ? `${themeColor}30` : 'rgb(31, 41, 55)';
+  
+  const getHexWithAlpha = (hex, alpha) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+  
+  const cardBgColor = featured ? getHexWithAlpha(themeColor, 0.2) : 'rgb(31, 41, 55)';
   
   return (
     <motion.div
