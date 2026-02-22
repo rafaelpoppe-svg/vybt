@@ -7,35 +7,6 @@ import { Apple, Play } from 'lucide-react';
 
 export default function Welcome() {
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const user = await base44.auth.me();
-        if (user) {
-          setIsAuthenticated(true);
-          navigate(createPageUrl('Home'));
-        }
-      } catch (e) {
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkAuth();
-  }, [navigate]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[#00fea3]" />
-      </div>
-    );
-  }
-
-  if (isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-[#0b0b0b] text-white overflow-hidden">
