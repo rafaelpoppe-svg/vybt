@@ -119,35 +119,53 @@ function FlyToCity({ coords }) {
   return null;
 }
 
-export default function PlanMap({ plans, allParticipants, profilesMap, myParticipations, selectedCity }) {
+export default function PlanMap({ plans, allParticipants, profilesMap, myParticipations, selectedCity: initialCity, selectedRadius: initialRadius, onCityChange, onRadiusChange }) {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [citySearch, setCitySearch] = useState('');
-  const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [flyCoords, setFlyCoords] = useState(null);
+  const [mapCity, setMapCity] = useState(initialCity || localStorage.getItem('selectedCity') || '');
+  const [mapRadius, setMapRadius] = useState(initialRadius || Number(localStorage.getItem('selectedRadius')) || 10);
 
-  // Fly to city when selectedCity prop changes (from Home LocationSelector)
+  // Fly to city whenever mapCity changes (from LocationSelector or parent)
   React.useEffect(() => {
-    if (selectedCity) {
-      const match = CITIES.find(c => c.name.toLowerCase() === selectedCity.toLowerCase());
-      if (match) setFlyCoords({ lat: match.lat, lng: match.lng });
+    const cityToFly = initialCity || mapCity;
+    if (cityToFly) {
+      // First try static list
+      const match = CITIES.find(c => c.name.toLowerCase() === cityToFly.toLowerCase());
+      if (match) {
+        setFlyCoords({ lat: match.lat, lng: match.lng });
+      } else {
+        // Geocode via Nominatim for cities not in static list (e.g. Braga)
+        fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityToFly)}&format=json&limit=1`, {
+          headers: { 'Accept-Language': 'en' }
+        })
+          .then(r => r.json())
+          .then(data => {
+            if (data[0]) setFlyCoords({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+          })
+          .catch(() => {});
+      }
     }
-  }, [selectedCity]);
+  }, [initialCity, mapCity]);
+
+  const handleCityChange = (c) => {
+    setMapCity(c);
+    localStorage.setItem('selectedCity', c);
+    if (onCityChange) onCityChange(c);
+  };
+
+  const handleRadiusChange = (r) => {
+    setMapRadius(r);
+    localStorage.setItem('selectedRadius', r);
+    if (onRadiusChange) onRadiusChange(r);
+  };
 
   const validPlans = plans.filter(p => p.latitude && p.longitude);
-  const center = validPlans.length > 0
-    ? [validPlans[0].latitude, validPlans[0].longitude]
-    : [38.7169, -9.1399]; // Lisboa default
-
-  const filteredCities = CITIES.filter(c =>
-    c.name.toLowerCase().includes(citySearch.toLowerCase())
-  );
-
-  const handleSelectCity = (city) => {
-    setFlyCoords({ lat: city.lat, lng: city.lng });
-    setCitySearch(city.name);
-    setShowCityDropdown(false);
-  };
+  const center = flyCoords
+    ? [flyCoords.lat, flyCoords.lng]
+    : validPlans.length > 0
+      ? [validPlans[0].latitude, validPlans[0].longitude]
+      : [38.7169, -9.1399]; // Lisboa default
 
   const getParticipantCount = (planId) => allParticipants.filter(p => p.plan_id === planId).length;
   const isJoined = (planId) => myParticipations.some(p => p.plan_id === planId);
