@@ -48,6 +48,7 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AddStory from './pages/AddStory';
+import Ambassador from './pages/Ambassador';
 import Chat from './pages/Chat';
 import CreatePlan from './pages/CreatePlan';
 import EditProfile from './pages/EditProfile';
@@ -67,12 +68,12 @@ import Settings from './pages/Settings';
 import StoryView from './pages/StoryView';
 import UserProfile from './pages/UserProfile';
 import WelcomePrograms from './pages/WelcomePrograms';
-import Ambassador from './pages/Ambassador';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AddStory": AddStory,
+    "Ambassador": Ambassador,
     "Chat": Chat,
     "CreatePlan": CreatePlan,
     "EditProfile": EditProfile,
@@ -92,7 +93,6 @@ export const PAGES = {
     "StoryView": StoryView,
     "UserProfile": UserProfile,
     "WelcomePrograms": WelcomePrograms,
-    "Ambassador": Ambassador,
 }
 
 export const pagesConfig = {

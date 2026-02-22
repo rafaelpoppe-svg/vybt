@@ -72,7 +72,7 @@ export default function AddStory() {
   // Get current participation to check story limit
   const currentParticipation = myParticipations.find(p => p.plan_id === selectedPlan);
   const storiesPosted = currentParticipation?.stories_posted || 0;
-  const canPostMore = storiesPosted < 2;
+  const canPostMore = storiesPosted < 5;
 
   const [thumbnailUrl, setThumbnailUrl] = useState('');
   const [moderationError, setModerationError] = useState('');
@@ -244,7 +244,7 @@ export default function AddStory() {
         <div className="p-3 rounded-xl bg-[#542b9b]/20 border border-[#542b9b]/30 flex items-start gap-3">
           <Clock className="w-5 h-5 text-[#542b9b] flex-shrink-0 mt-0.5" />
           <p className="text-sm text-gray-300">
-            You can post up to <span className="text-[#00fea3] font-bold">2 stories</span> per plan. 
+            You can post up to <span className="text-[#00fea3] font-bold">5 stories</span> per plan. 
             Stories are only available during or after the plan starts.
           </p>
         </div>
@@ -262,7 +262,7 @@ export default function AddStory() {
           <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-red-400">
-              You've reached the limit of 2 stories for this plan.
+              You've reached the limit of 5 stories for this plan.
             </p>
           </div>
         )}
@@ -339,7 +339,7 @@ export default function AddStory() {
                       }`}>
                         {plan.title}
                       </span>
-                      <p className="text-xs text-gray-500">{posted}/2 stories posted</p>
+                      <p className="text-xs text-gray-500">{posted}/5 stories posted</p>
                     </div>
                     {selectedPlan === plan.id && (
                       <Check className="w-5 h-5 text-[#00fea3]" />
