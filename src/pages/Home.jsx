@@ -29,7 +29,7 @@ export default function Home() {
   const [myProfile, setMyProfile] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
 
-  // Check onboarding and get user profile
+  // Check onboarding and get user profile + auto-detect location
   useEffect(() => {
     const checkOnboarding = async () => {
       try {
@@ -40,12 +40,44 @@ export default function Home() {
           navigate(createPageUrl('Onboarding'));
         } else {
           setMyProfile(profiles[0]);
-          // Show tutorial if user hasn't seen it yet
           if (!profiles[0].tutorial_completed) {
             setShowTutorial(true);
           }
-          // Only set from profile if user hasn't manually chosen a city yet
-          if (profiles[0].city && !localStorage.getItem('selectedCity')) {
+          // Auto-detect location via GPS (always runs on load)
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                try {
+                  const { latitude, longitude } = position.coords;
+                  const res = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+                    { headers: { 'Accept-Language': 'en' } }
+                  );
+                  const data = await res.json();
+                  const detectedCity =
+                    data.address?.city ||
+                    data.address?.town ||
+                    data.address?.village ||
+                    data.address?.county ||
+                    null;
+                  if (detectedCity) {
+                    setCity(detectedCity);
+                    localStorage.setItem('selectedCity', detectedCity);
+                  }
+                } catch (_) {}
+              },
+              () => {
+                // Permission denied — fallback to profile city
+                if (profiles[0].city && !localStorage.getItem('selectedCity')) {
+                  setCity(profiles[0].city);
+                  localStorage.setItem('selectedCity', profiles[0].city);
+                  setRadius(profiles[0].radius_km || 10);
+                  localStorage.setItem('selectedRadius', profiles[0].radius_km || 10);
+                }
+              },
+              { timeout: 8000, maximumAge: 60000 }
+            );
+          } else if (profiles[0].city && !localStorage.getItem('selectedCity')) {
             setCity(profiles[0].city);
             localStorage.setItem('selectedCity', profiles[0].city);
             setRadius(profiles[0].radius_km || 10);

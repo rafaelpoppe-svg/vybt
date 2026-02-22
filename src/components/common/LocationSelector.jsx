@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, ChevronDown, Search } from 'lucide-react';
+import { MapPin, ChevronDown, Search, Loader2, Navigation } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 const popularCities = [
