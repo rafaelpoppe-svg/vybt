@@ -7,13 +7,8 @@ import { ChevronLeft, MapPin, Calendar, Clock, Tag, Image as ImageIcon, Loader2,
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import PartyTag from '../components/common/PartyTag';
-
-const partyTags = [
-  'Rooftop Afternoon', 'Rooftop Night', 'Techno', 'Bar', 'Luxury', 
-  'House Party', 'University', 'Commercial', 'EDM', 'Latin',
-  'Beach Club', 'Club', 'Festival', 'Karaoke', 'Pool Party'
-];
+import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
+import { Search } from 'lucide-react';
 
 const themeColors = [
   '#00fea3', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1', 
