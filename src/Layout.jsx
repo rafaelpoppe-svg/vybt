@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NotificationProvider } from '@/components/notifications/NotificationProvider';
 import { Toaster } from 'sonner';
 import PageTransition from '@/components/common/PageTransition';
 import { LanguageProvider } from '@/components/common/LanguageContext';
+import SplashScreen from '@/components/common/SplashScreen';
 
 export default function Layout({ children, currentPageName }) {
   return (
