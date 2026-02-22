@@ -286,7 +286,7 @@ export default function Explore() {
                   : 'bg-gray-900 text-gray-400 border border-gray-800'
               }`}
             >
-              All
+              {t.allTag}
             </motion.button>
             {ALL_PARTY_TYPES.map((tag) => (
               <div key={tag} className="flex-shrink-0">
@@ -323,7 +323,7 @@ export default function Explore() {
                 }`}
               >
                 <Flame className="w-3.5 h-3.5" />
-                On Fire
+                {t.onFire}
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.95 }}
@@ -333,7 +333,7 @@ export default function Explore() {
                 }`}
               >
                 <Users className="w-3.5 h-3.5" />
-                Most Members
+                {t.mostMembers}
               </motion.button>
             </>
           ) : (
@@ -394,7 +394,7 @@ export default function Explore() {
                   </div>
                 ) : (
                   <div className="text-center py-12">
-                    <p className="text-gray-500">No plans found</p>
+                    <p className="text-gray-500">{t.noPlansFound}</p>
                   </div>
                 )
               ) : (
@@ -421,7 +421,7 @@ export default function Explore() {
                             )}
                             {matchingVibes.length > 0 && (
                               <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-[#00fea3]/80 text-[#0b0b0b] text-[10px] font-bold">
-                                {matchingVibes.length} vibes match
+                                {matchingVibes.length} {t.vibesMatch}
                               </div>
                             )}
                           </div>
@@ -437,7 +437,7 @@ export default function Explore() {
                   </div>
                 ) : (
                   <div className="text-center py-12">
-                    <p className="text-gray-500">No users found</p>
+                    <p className="text-gray-500">{t.noUsersFound}</p>
                   </div>
                 )
               )}
