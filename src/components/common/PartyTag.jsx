@@ -1,86 +1,172 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Sun, Moon, Zap, Wine, Crown, Home, GraduationCap, 
-  Radio, Music2, Drum, Flame, Mic2, Waves
+  Music2, Wine, Beer, Home, Building2, Waves, Anchor, 
+  Flame, Zap, Headphones, Mic2, Globe, GraduationCap, 
+  Users, Cake, Sparkles, Sunrise, GlassWater, Moon, Crown,
+  Sun, Wind, Mic, UtensilsCrossed, ChefHat, Radio, Drum
 } from 'lucide-react';
 
+export const ALL_PARTY_TYPES = [
+  'Nightclub',
+  'Bar Hopping',
+  'Pub Crawl',
+  'House Party',
+  'Rooftop Party',
+  'Pool Party',
+  'Boat Party',
+  'Festival',
+  'Rave',
+  'DJ Set',
+  'Live Music',
+  'Erasmus Party',
+  'Student Party',
+  'Social Mixer',
+  'Birthday Party',
+  'Themed Party',
+  'After Party',
+  'Pre-Drinks',
+  'Chill Night',
+  'VIP Night Out',
+  'Beach Club',
+  'Open Air Party',
+  'Karaoke Night',
+  'BBQ Party',
+  'Dinner Party',
+  'Baile Funk',
+];
+
 export const partyTagConfig = {
-  'Rooftop Afternoon': { 
-    icon: Sun, 
+  'Nightclub': {
+    icon: Music2,
+    color: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    gradient: 'from-purple-500 to-indigo-600'
+  },
+  'Bar Hopping': {
+    icon: Beer,
     color: 'bg-amber-400/20 text-amber-300 border-amber-400/30',
-    gradient: 'from-amber-400 to-orange-400'
+    gradient: 'from-amber-400 to-orange-500'
   },
-  'Rooftop Night': { 
-    icon: Moon, 
-    color: 'bg-indigo-400/20 text-indigo-300 border-indigo-400/30',
-    gradient: 'from-indigo-400 to-purple-500'
-  },
-  'Techno': { 
-    icon: Zap, 
-    color: 'bg-lime-400/20 text-lime-300 border-lime-400/30',
-    gradient: 'from-lime-400 to-green-500'
-  },
-  'Bar': { 
-    icon: Wine, 
-    color: 'bg-rose-400/20 text-rose-300 border-rose-400/30',
-    gradient: 'from-rose-400 to-pink-500'
-  },
-  'Luxury': { 
-    icon: Crown, 
-    color: 'bg-yellow-300/20 text-yellow-200 border-yellow-300/30',
-    gradient: 'from-yellow-300 to-amber-400'
-  },
-  'House Party': { 
-    icon: Home, 
-    color: 'bg-teal-400/20 text-teal-300 border-teal-400/30',
-    gradient: 'from-teal-400 to-cyan-500'
-  },
-  'University': { 
-    icon: GraduationCap, 
-    color: 'bg-sky-400/20 text-sky-300 border-sky-400/30',
-    gradient: 'from-sky-400 to-blue-500'
-  },
-  'Commercial': { 
-    icon: Radio, 
-    color: 'bg-fuchsia-400/20 text-fuchsia-300 border-fuchsia-400/30',
-    gradient: 'from-fuchsia-400 to-pink-500'
-  },
-  'EDM': { 
-    icon: Music2, 
-    color: 'bg-cyan-400/20 text-cyan-300 border-cyan-400/30',
-    gradient: 'from-cyan-400 to-blue-500'
-  },
-  'Latin': { 
-    icon: Drum, 
-    color: 'bg-red-400/20 text-red-300 border-red-400/30',
-    gradient: 'from-red-400 to-orange-500'
-  },
-  'Beach Club': { 
-    icon: Sun, 
-    color: 'bg-blue-300/20 text-blue-200 border-blue-300/30',
-    gradient: 'from-blue-300 to-cyan-400'
-  },
-  'Club': { 
-    icon: Music2, 
-    color: 'bg-purple-400/20 text-purple-300 border-purple-400/30',
-    gradient: 'from-purple-400 to-indigo-500'
-  },
-  'Festival': { 
-    icon: Flame, 
+  'Pub Crawl': {
+    icon: Wine,
     color: 'bg-orange-400/20 text-orange-300 border-orange-400/30',
     gradient: 'from-orange-400 to-red-500'
   },
-  'Karaoke': { 
-    icon: Mic2, 
+  'House Party': {
+    icon: Home,
+    color: 'bg-teal-400/20 text-teal-300 border-teal-400/30',
+    gradient: 'from-teal-400 to-cyan-500'
+  },
+  'Rooftop Party': {
+    icon: Building2,
+    color: 'bg-sky-400/20 text-sky-300 border-sky-400/30',
+    gradient: 'from-sky-400 to-blue-500'
+  },
+  'Pool Party': {
+    icon: Waves,
+    color: 'bg-cyan-400/20 text-cyan-300 border-cyan-400/30',
+    gradient: 'from-cyan-400 to-blue-400'
+  },
+  'Boat Party': {
+    icon: Anchor,
+    color: 'bg-blue-400/20 text-blue-300 border-blue-400/30',
+    gradient: 'from-blue-400 to-indigo-500'
+  },
+  'Festival': {
+    icon: Flame,
+    color: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
+    gradient: 'from-orange-500 to-red-600'
+  },
+  'Rave': {
+    icon: Zap,
+    color: 'bg-lime-400/20 text-lime-300 border-lime-400/30',
+    gradient: 'from-lime-400 to-green-500'
+  },
+  'DJ Set': {
+    icon: Headphones,
+    color: 'bg-violet-400/20 text-violet-300 border-violet-400/30',
+    gradient: 'from-violet-400 to-purple-600'
+  },
+  'Live Music': {
+    icon: Mic2,
+    color: 'bg-rose-400/20 text-rose-300 border-rose-400/30',
+    gradient: 'from-rose-400 to-pink-500'
+  },
+  'Erasmus Party': {
+    icon: Globe,
+    color: 'bg-emerald-400/20 text-emerald-300 border-emerald-400/30',
+    gradient: 'from-emerald-400 to-teal-500'
+  },
+  'Student Party': {
+    icon: GraduationCap,
+    color: 'bg-sky-300/20 text-sky-200 border-sky-300/30',
+    gradient: 'from-sky-300 to-blue-400'
+  },
+  'Social Mixer': {
+    icon: Users,
+    color: 'bg-fuchsia-400/20 text-fuchsia-300 border-fuchsia-400/30',
+    gradient: 'from-fuchsia-400 to-pink-500'
+  },
+  'Birthday Party': {
+    icon: Cake,
     color: 'bg-pink-400/20 text-pink-300 border-pink-400/30',
     gradient: 'from-pink-400 to-rose-500'
   },
-  'Pool Party': { 
-    icon: Waves, 
-    color: 'bg-cyan-300/20 text-cyan-200 border-cyan-300/30',
-    gradient: 'from-cyan-300 to-blue-400'
-  }
+  'Themed Party': {
+    icon: Sparkles,
+    color: 'bg-yellow-400/20 text-yellow-300 border-yellow-400/30',
+    gradient: 'from-yellow-400 to-amber-500'
+  },
+  'After Party': {
+    icon: Sunrise,
+    color: 'bg-orange-300/20 text-orange-200 border-orange-300/30',
+    gradient: 'from-orange-300 to-pink-400'
+  },
+  'Pre-Drinks': {
+    icon: GlassWater,
+    color: 'bg-blue-300/20 text-blue-200 border-blue-300/30',
+    gradient: 'from-blue-300 to-cyan-400'
+  },
+  'Chill Night': {
+    icon: Moon,
+    color: 'bg-indigo-300/20 text-indigo-200 border-indigo-300/30',
+    gradient: 'from-indigo-300 to-purple-400'
+  },
+  'VIP Night Out': {
+    icon: Crown,
+    color: 'bg-yellow-300/20 text-yellow-200 border-yellow-300/30',
+    gradient: 'from-yellow-300 to-amber-400'
+  },
+  'Beach Club': {
+    icon: Sun,
+    color: 'bg-amber-300/20 text-amber-200 border-amber-300/30',
+    gradient: 'from-amber-300 to-orange-400'
+  },
+  'Open Air Party': {
+    icon: Wind,
+    color: 'bg-green-400/20 text-green-300 border-green-400/30',
+    gradient: 'from-green-400 to-emerald-500'
+  },
+  'Karaoke Night': {
+    icon: Mic,
+    color: 'bg-pink-300/20 text-pink-200 border-pink-300/30',
+    gradient: 'from-pink-300 to-rose-400'
+  },
+  'BBQ Party': {
+    icon: UtensilsCrossed,
+    color: 'bg-red-400/20 text-red-300 border-red-400/30',
+    gradient: 'from-red-400 to-orange-500'
+  },
+  'Dinner Party': {
+    icon: ChefHat,
+    color: 'bg-stone-400/20 text-stone-300 border-stone-400/30',
+    gradient: 'from-stone-400 to-amber-500'
+  },
+  'Baile Funk': {
+    icon: Drum,
+    color: 'bg-green-500/20 text-green-300 border-green-500/30',
+    gradient: 'from-green-500 to-yellow-500'
+  },
 };
 
 const defaultConfig = {
