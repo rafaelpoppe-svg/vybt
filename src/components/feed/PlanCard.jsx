@@ -28,7 +28,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
   
-  const cardBgColor = featured ? getHexWithAlpha(themeColor, 0.2) : 'rgb(31, 41, 55)';
+  const cardBgColor = getHexWithAlpha(themeColor, 0.15);
   
   return (
     <motion.div
