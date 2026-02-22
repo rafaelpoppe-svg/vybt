@@ -59,10 +59,10 @@ function calculatePartyTypeMatch(planTags = [], userPartyTypes = []) {
   let matchCount = 0;
   
   for (const partyType of userPartyTypes) {
-    const tagName = partyTypeToTag[partyType];
-    if (tagName && planTags.some(tag => 
-      tag.toLowerCase().includes(tagName.toLowerCase()) ||
-      tagName.toLowerCase().includes(tag.toLowerCase())
+    if (planTags.some(tag => 
+      tag.toLowerCase() === partyType.toLowerCase() ||
+      tag.toLowerCase().includes(partyType.toLowerCase()) ||
+      partyType.toLowerCase().includes(tag.toLowerCase())
     )) {
       matchCount++;
     }
