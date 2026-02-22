@@ -177,10 +177,10 @@ export default function Onboarding() {
       </div>
 
       {/* Progress */}
-      {step < 5 && (
-        <div className="px-6 mb-8">
-          <div className="flex gap-2">
-            {[0, 1, 2, 3, 4].map((i) => (
+      {step < 6 && (
+      <div className="px-6 mb-8">
+        <div className="flex gap-2">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
               <div 
                 key={i}
                 className={`h-1 flex-1 rounded-full transition-all duration-500 ${
@@ -208,7 +208,7 @@ export default function Onboarding() {
       </div>
 
       {/* Footer Button */}
-      {step < 5 && (
+      {step < 6 && (
         <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
           <motion.button
             whileHover={{ scale: canProceed() ? 1.02 : 1 }}
