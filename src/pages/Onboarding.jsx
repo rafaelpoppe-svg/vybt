@@ -90,7 +90,7 @@ function OnboardingInner() {
       const user = await base44.auth.me();
       const profile = await base44.entities.UserProfile.create({
         user_id: user.id,
-        display_name: user.full_name,
+        display_name: data.display_name.trim() || user.full_name,
         gender: data.gender,
         date_of_birth: data.date_of_birth,
         photos: data.photos,
