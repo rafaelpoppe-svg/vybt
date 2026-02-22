@@ -191,7 +191,7 @@ export default function Explore() {
     <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh', overscrollBehavior: 'none' }}>
       {/* Header */}
       <header className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4">
-        <h1 className="text-xl font-bold text-white mb-4">Explore</h1>
+        <h1 className="text-xl font-bold text-white mb-4">{t.explore}</h1>
         
         {/* View Toggle */}
         <div className="flex gap-2 mb-4">
@@ -205,7 +205,7 @@ export default function Explore() {
             }`}
           >
             <LayoutGrid className="w-4 h-4" />
-            Plans
+            {t.plans}
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.95 }}
@@ -217,7 +217,7 @@ export default function Explore() {
             }`}
           >
             <Map className="w-4 h-4" />
-            Map
+            {t.map}
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.95 }}
@@ -229,7 +229,7 @@ export default function Explore() {
             }`}
           >
             <User className="w-4 h-4" />
-            Users
+            {t.people}
           </motion.button>
         </div>
         
@@ -240,7 +240,7 @@ export default function Explore() {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={activeView === 'plans' ? 'Search plans...' : activeView === 'map' ? 'Search in the map...' : 'Search people...'}
+              placeholder={activeView === 'plans' ? t.searchPlans : activeView === 'map' ? t.searchPlans : t.searchPeople}
               className="pl-10 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
             />
           </div>
@@ -313,7 +313,7 @@ export default function Explore() {
                   planFilters.sortBy === 'foryou' ? 'bg-gradient-to-r from-[#00fea3]/30 to-[#542b9b]/30 text-[#00fea3]' : 'bg-gray-900 text-gray-400'
                 }`}
               >
-                ❤️ For You
+                ❤️ {t.forYou}
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.95 }}
@@ -344,7 +344,7 @@ export default function Explore() {
                 userFilters.sortBy === 'foryou' ? 'bg-gradient-to-r from-[#00fea3]/30 to-[#542b9b]/30 text-[#00fea3]' : 'bg-gray-900 text-gray-400'
               }`}
             >
-              ❤️ Matches My Vibes
+              ❤️ {t.matchesVibes || 'Matches My Vibes'}
             </motion.button>
           )}
         </div>
