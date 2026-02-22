@@ -86,6 +86,20 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
             exit={{ opacity: 0, y: -10 }}
             className="absolute top-full left-0 right-0 mt-2 p-4 rounded-xl bg-gray-900 border border-gray-800 z-50 min-w-64"
           >
+            {/* Detect my location button */}
+            <button
+              onClick={detectLocation}
+              disabled={detecting}
+              className="w-full flex items-center gap-2 px-3 py-2 mb-3 rounded-lg bg-[#00fea3]/10 border border-[#00fea3]/30 text-[#00fea3] text-sm font-medium hover:bg-[#00fea3]/20 transition-all disabled:opacity-50"
+            >
+              {detecting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Navigation className="w-4 h-4" />
+              )}
+              {detecting ? 'Detecting...' : 'Use my current location'}
+            </button>
+
             <div className="relative mb-3">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <Input
