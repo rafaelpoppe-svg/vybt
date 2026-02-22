@@ -430,6 +430,7 @@ export default function GroupChat() {
         onInviteUser={() => {}}
         currentUserId={currentUser?.id}
         isAdmin={isAdmin}
+        planStatus={planStatus}
         onEditPlan={() => { setShowAdminActions(false); setShowAdminEditModal(true); }}
       />
       <VotingModal
