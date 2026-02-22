@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import {
   ChevronLeft, ChevronRight, LogOut, Trash2,
-  Shield, FileText, Lock, Bell, HelpCircle, ShieldAlert
+  Shield, FileText, Lock, Bell, HelpCircle, ShieldAlert, Globe, Check
 } from 'lucide-react';
 import DeleteAccountModal from '../components/profile/DeleteAccountModal';
+import { translations } from '../components/common/LanguageContext';
+
+const LANGUAGES = [
+  { code: 'pt', flag: '🇵🇹', name: 'Português' },
+  { code: 'en', flag: '🇬🇧', name: 'English' },
+  { code: 'es', flag: '🇪🇸', name: 'Español' },
+  { code: 'fr', flag: '🇫🇷', name: 'Français' },
+  { code: 'it', flag: '🇮🇹', name: 'Italiano' },
+];
 
 const Section = ({ title, children }) => (
   <div>
