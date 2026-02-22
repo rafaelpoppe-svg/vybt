@@ -95,29 +95,20 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
               {detecting ? 'Detecting...' : 'Use my current location'}
             </button>
 
-            {/* City search + list — locked for Vybt Plus */}
-            <div className="relative rounded-xl overflow-hidden">
-              {/* Blurred / disabled city list */}
-              <div className="pointer-events-none select-none opacity-40">
-                <div className="flex items-center gap-2 px-3 py-2 mb-3 rounded-lg bg-gray-800 border border-gray-700">
-                  <div className="w-4 h-4 rounded bg-gray-600" />
-                  <div className="flex-1 h-4 rounded bg-gray-600" />
+            {/* City list — locked for Vybt Plus */}
+            <div className="space-y-1 max-h-48 overflow-y-auto mb-1">
+              {popularCities.map((c) => (
+                <div
+                  key={c}
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg cursor-not-allowed"
+                >
+                  <span className="text-sm text-gray-600">{c}</span>
+                  <span className="text-[10px] text-gray-600 flex items-center gap-1 whitespace-nowrap">
+                    <Lock className="w-2.5 h-2.5" />
+                    Vybt Plus
+                  </span>
                 </div>
-                <div className="space-y-1 max-h-40 overflow-hidden mb-4">
-                  {['London', 'Madrid', 'Paris', 'Berlin', 'Rome'].map((c) => (
-                    <div key={c} className="w-full px-3 py-2 rounded-lg text-sm text-gray-500 bg-gray-800/50">
-                      {c}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Lock overlay */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900/80 backdrop-blur-sm rounded-xl px-4 text-center">
-                <Lock className="w-5 h-5 text-[#00fea3] mb-1.5" />
-                <p className="text-white text-xs font-semibold">Vybt Plus members only</p>
-                <p className="text-gray-500 text-[10px] mt-0.5">Coming soon</p>
-              </div>
+              ))}
             </div>
 
             <div className="pt-3 border-t border-gray-800 mt-3">
