@@ -34,6 +34,11 @@ export default function SplashScreen({ onFinish }) {
             transition={{ duration: 0.5, ease: 'easeOut' }}
             className="relative z-10 flex flex-col items-center gap-4"
           >
+            <img
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/fc2c047b2_VybtLogoPng.png"
+              alt="Vybt mascot"
+              className="w-28 h-28 object-contain"
+            />
             <span className="text-6xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent tracking-tight">
               Vybt
             </span>
@@ -43,7 +48,7 @@ export default function SplashScreen({ onFinish }) {
               transition={{ delay: 0.4, duration: 0.4 }}
               className="text-gray-500 text-sm tracking-widest uppercase"
             >
-              Your night. Your vibe.
+              Best Vibes finds you
             </motion.p>
           </motion.div>
 
