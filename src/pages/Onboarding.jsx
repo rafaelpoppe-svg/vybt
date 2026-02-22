@@ -10,6 +10,8 @@ import PhotoUploadStep from '../components/onboarding/PhotoUploadStep';
 import VibesSelect from '../components/onboarding/VibesSelect';
 import PartyTypeSelect from '../components/onboarding/PartyTypeSelect';
 import WelcomeComplete from '../components/onboarding/WelcomeComplete';
+import LanguageSelect from '../components/onboarding/LanguageSelect';
+import { LanguageProvider, useLanguage } from '../components/common/LanguageContext';
 
 export default function Onboarding() {
   const navigate = useNavigate();
