@@ -275,30 +275,27 @@ export default function Explore() {
         {/* Tags - Only for plans/map */}
         {(activeView === 'plans' || activeView === 'map') && (
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
-            {partyTags.map((tag) => (
-              tag === 'All' ? (
-                <motion.button
-                  key={tag}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedTag(tag)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                    selectedTag === tag
-                      ? 'bg-[#00fea3] text-[#0b0b0b]'
-                      : 'bg-gray-900 text-gray-400 border border-gray-800'
-                  }`}
-                >
-                  {tag}
-                </motion.button>
-              ) : (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setSelectedTag('All')}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${
+                selectedTag === 'All'
+                  ? 'bg-[#00fea3] text-[#0b0b0b]'
+                  : 'bg-gray-900 text-gray-400 border border-gray-800'
+              }`}
+            >
+              All
+            </motion.button>
+            {ALL_PARTY_TYPES.map((tag) => (
+              <div key={tag} className="flex-shrink-0">
                 <PartyTag
-                  key={tag}
                   tag={tag}
                   size="md"
                   interactive
                   selected={selectedTag === tag}
                   onClick={() => setSelectedTag(tag)}
                 />
-              )
+              </div>
             ))}
           </div>
         )}
