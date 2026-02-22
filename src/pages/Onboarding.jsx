@@ -85,7 +85,7 @@ function OnboardingInner() {
     setLoading(true);
     try {
       const user = await base44.auth.me();
-      await base44.entities.UserProfile.create({
+      const profile = await base44.entities.UserProfile.create({
         user_id: user.id,
         display_name: user.full_name,
         gender: data.gender,
@@ -98,12 +98,15 @@ function OnboardingInner() {
         onboarding_completed: true,
         total_stories_count: 0
       });
-      navigate(createPageUrl('Home'));
+      setCreatedProfile(profile);
+      setStep(8); // verification step
     } catch (error) {
       console.error(error);
     }
     setLoading(false);
   };
+
+  const skipToHome = () => navigate(createPageUrl('Home'));
 
   const steps = [
     <LanguageSelect
