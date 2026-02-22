@@ -34,96 +34,85 @@ export default function Welcome() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] text-white overflow-hidden">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <h1 className="text-3xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
-            Vybt
-          </h1>
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => base44.auth.redirectToLogin()}
-            className="px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold hover:bg-[#00fea3]/90 transition-all"
-          >
-            Login
-          </motion.button>
-        </div>
-      </header>
+    <div className="min-h-screen text-white overflow-hidden">
+      {/* Hero Section with transparent header */}
+      <div 
+        className="relative min-h-screen w-full flex flex-col"
+        style={{
+          backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/62ba0dc94_image.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/35"></div>
 
-      {/* Main Content */}
-      <main className="w-full">
-        {/* Hero Section */}
-        <section 
-          className="relative min-h-screen w-full flex flex-col items-center justify-center text-center overflow-hidden"
-          style={{
-            backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/491e75731_image.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed'
-          }}
-        >
-          {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/40"></div>
-          
-          {/* Content */}
-          <div className="relative z-10 px-4 flex flex-col items-center justify-center h-full py-20">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="space-y-6 max-w-2xl"
+        {/* Transparent Header */}
+        <header className="relative z-40 p-4 md:p-6">
+          <div className="max-w-6xl mx-auto flex items-center justify-between">
+            <h1 className="text-3xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
+              Vybt
+            </h1>
+            
+            {/* Download Now Button - Top Right */}
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => base44.auth.redirectToLogin()}
+              className="px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold hover:bg-[#00fea3]/90 transition-all"
             >
-              <h2 className="text-5xl md:text-7xl font-black">
-                Hey, <span className="text-[#00fea3]">mate!</span>
-              </h2>
-              
-              <p className="text-lg md:text-2xl text-gray-100 font-light leading-relaxed">
-                Join us: let's connect and create the best plans<br />
-                in your area!!!
-              </p>
-              
-              {/* Download Now Button */}
+              Download Now!
+            </motion.button>
+          </div>
+        </header>
+
+        {/* Main Content - Centered */}
+        <main className="relative z-10 flex-1 flex items-center justify-center px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-8 max-w-2xl text-center"
+          >
+            <h2 className="text-6xl md:text-7xl font-black">
+              Hey, <span className="text-[#00fea3]">mate!</span>
+            </h2>
+            
+            <p className="text-xl md:text-2xl text-gray-100 font-light leading-relaxed">
+              Join us: let's connect and create the best plans<br />
+              in your area!!!
+            </p>
+            
+            {/* App Store Buttons - Larger */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                className="mx-auto mt-8 px-8 py-3 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold text-lg hover:bg-[#00fea3]/90 transition-all"
+                className="w-full sm:w-auto hover:opacity-80 transition-opacity"
               >
-                Download Now!
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/b09aec4ee_image.png"
+                  alt="Download on the App Store"
+                  className="h-16 md:h-20 object-contain"
+                />
               </motion.button>
               
-              {/* App Store Buttons */}
-              <div className="flex flex-col md:flex-row items-center justify-center gap-4 pt-8">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full md:w-auto hover:opacity-80 transition-opacity"
-                >
-                  <img 
-                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/b09aec4ee_image.png"
-                    alt="Download on the App Store"
-                    className="h-14 object-contain"
-                  />
-                </motion.button>
-                
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full md:w-auto hover:opacity-80 transition-opacity"
-                >
-                  <img 
-                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/0f375ad8a_image.png"
-                    alt="Get it on Google Play"
-                    className="h-14 object-contain"
-                  />
-                </motion.button>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-
-      </main>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto hover:opacity-80 transition-opacity"
+              >
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/0f375ad8a_image.png"
+                  alt="Get it on Google Play"
+                  className="h-16 md:h-20 object-contain"
+                />
+              </motion.button>
+            </div>
+          </motion.div>
+        </main>
+      </div>
 
       {/* Footer */}
-      <footer className="border-t border-gray-800 bg-[#0b0b0b]/50 py-8">
+      <footer className="bg-[#0b0b0b] border-t border-gray-800 py-8">
         <div className="max-w-6xl mx-auto px-4 text-center text-gray-500 text-sm">
           <p>&copy; 2026 Vybt. All rights reserved.</p>
         </div>
