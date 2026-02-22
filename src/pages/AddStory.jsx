@@ -128,21 +128,40 @@ export default function AddStory() {
     if (file) {
       setMedia(file);
       setUploading(true);
+      setModerationError('');
       try {
         const isVideo = file.type.startsWith('video');
-        const [{ file_url }] = await Promise.all([
-          base44.integrations.Core.UploadFile({ file })
-        ]);
-        setMediaUrl(file_url);
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+
+        // For videos, use thumbnail for moderation; for images use directly
+        let urlToModerate = file_url;
+        let thumbUrl = '';
 
         if (isVideo) {
           const thumbBlob = await generateVideoThumbnail(file);
           if (thumbBlob) {
             const thumbFile = new File([thumbBlob], 'thumbnail.jpg', { type: 'image/jpeg' });
             const { file_url: thumb_url } = await base44.integrations.Core.UploadFile({ file: thumbFile });
-            setThumbnailUrl(thumb_url);
+            thumbUrl = thumb_url;
+            urlToModerate = thumb_url;
           }
         }
+
+        // Moderate the image/thumbnail before accepting
+        const modResult = await base44.functions.invoke('moderateImage', {
+          image_url: urlToModerate,
+          context: 'story'
+        });
+
+        if (!modResult.data.approved) {
+          setModerationError(modResult.data.reason || 'This content is not allowed. Stories must be from real social/party events.');
+          setMedia(null);
+          setUploading(false);
+          return;
+        }
+
+        setMediaUrl(file_url);
+        if (isVideo) setThumbnailUrl(thumbUrl);
       } catch (err) {
         console.error(err);
       }
