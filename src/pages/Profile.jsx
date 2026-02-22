@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { 
   Users, PartyPopper, Camera, ChevronRight, 
-  Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles, Settings, ShieldCheck
+  Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles, Settings, ShieldCheck, Trophy
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
