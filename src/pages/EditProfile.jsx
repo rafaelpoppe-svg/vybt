@@ -9,8 +9,39 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import VibeTag from '../components/common/VibeTag';
-import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
-import { Search } from 'lucide-react';
+import PartyTag, { ALL_PARTY_TYPES, partyTagConfig } from '../components/common/PartyTag';
+import { Search, Flame } from 'lucide-react';
+
+function PartyTypeFilterList({ allTypes, selected, onToggle }) {
+  const [search, setSearch] = React.useState('');
+  const filtered = allTypes.filter(t => t.toLowerCase().includes(search.toLowerCase()));
+  return (
+    <div>
+      <div className="relative mb-3">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search party types..."
+          className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+        />
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {filtered.map((type) => (
+          <PartyTag
+            key={type}
+            tag={type}
+            size="md"
+            interactive
+            selected={selected.includes(type)}
+            onClick={() => onToggle(type)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const vibeOptions = [
   'Techno', 'Reggaeton', 'Pop', 'House', 'Trap', 
