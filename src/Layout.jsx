@@ -6,9 +6,19 @@ import { LanguageProvider } from '@/components/common/LanguageContext';
 import SplashScreen from '@/components/common/SplashScreen';
 
 export default function Layout({ children, currentPageName }) {
+  const [splashDone, setSplashDone] = useState(() => {
+    return !!sessionStorage.getItem('splash_shown');
+  });
+
+  const handleSplashFinish = () => {
+    sessionStorage.setItem('splash_shown', '1');
+    setSplashDone(true);
+  };
+
   return (
     <LanguageProvider>
     <NotificationProvider>
+      {!splashDone && <SplashScreen onFinish={handleSplashFinish} />}
       <Toaster position="top-center" theme="dark" />
       <div className="min-h-screen bg-[#0b0b0b]">
         <style>{`
