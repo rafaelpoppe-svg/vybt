@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import {
   notifyNearbyPlanHappening,
   notifyFriendCreatedPlan,
+  notifyPlanHappeningNow,
 } from './NotificationTriggers';
 
 /**
