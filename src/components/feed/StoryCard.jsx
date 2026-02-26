@@ -94,11 +94,14 @@ export default function StoryCard({
 
   return (
     <motion.button
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.9 }}
+      whileHover={{ scale: 1.05, y: -2 }}
       onClick={onClick}
       className="flex flex-col items-center gap-1.5"
     >
-      <div className={`${currentSize.width} ${currentSize.height} rounded-2xl p-0.5 bg-gradient-to-b ${borderColor}`}>
+      <div className={`${currentSize.width} ${currentSize.height} rounded-2xl p-0.5 bg-gradient-to-b ${borderColor}`}
+        style={{ boxShadow: isOwn ? '0 0 12px #00fea330' : undefined }}
+      >
         <div className="w-full h-full rounded-[14px] bg-[#0b0b0b] p-0.5 overflow-hidden relative">
           {story?.media_url ? (
             <>
