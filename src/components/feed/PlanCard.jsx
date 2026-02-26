@@ -32,14 +32,16 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
   
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.02, boxShadow: `0 8px 32px ${getHexWithAlpha(themeColor, 0.3)}` }}
-      whileTap={{ scale: 0.97 }}
+      initial={{ opacity: 0, y: 24, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+      whileHover={{ scale: 1.025, y: -4, boxShadow: `0 16px 48px ${getHexWithAlpha(themeColor, 0.4)}, 0 0 0 1px ${getHexWithAlpha('#00fea3', 0.2)}` }}
+      whileTap={{ scale: 0.96 }}
       onClick={onClick}
-      className={`rounded-2xl overflow-hidden cursor-pointer border border-gray-800 hover:border-gray-700 transition-all`}
+      className={`rounded-3xl overflow-hidden cursor-pointer border transition-all`}
       style={{
-        backgroundColor: cardBgColor
+        backgroundColor: cardBgColor,
+        borderColor: getHexWithAlpha('#00fea3', 0.15),
       }}
     >
       {/* Cover Image */}
