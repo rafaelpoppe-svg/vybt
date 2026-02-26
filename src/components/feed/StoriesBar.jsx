@@ -43,7 +43,12 @@ export default function StoriesBar({
       </div>
 
       {/* Stories - Vertical rectangle cards */}
-      <div className="flex gap-3 px-4 overflow-x-auto scrollbar-hide pb-2">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ staggerChildren: 0.05 }}
+        className="flex gap-3 px-4 overflow-x-auto scrollbar-hide pb-2"
+      >
         {/* Add Story — neon blue when a plan is happening */}
         <div className="relative flex-shrink-0">
           <StoryCard isAdd onClick={onAddStory} happeningPlan={happeningPlan} />

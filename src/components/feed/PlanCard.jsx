@@ -32,8 +32,10 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
   
   return (
     <motion.div
-      whileHover={{ scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.02, boxShadow: `0 8px 32px ${getHexWithAlpha(themeColor, 0.3)}` }}
+      whileTap={{ scale: 0.97 }}
       onClick={onClick}
       className={`rounded-2xl overflow-hidden cursor-pointer border border-gray-800 hover:border-gray-700 transition-all`}
       style={{

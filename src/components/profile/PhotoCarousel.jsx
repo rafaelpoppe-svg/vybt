@@ -54,9 +54,10 @@ export default function PhotoCarousel({ isOpen, photos, initialIndex = 0, onClos
 
           <motion.div
             key={currentIndex}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.85, x: 60 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.85, x: -60 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 30 }}
             className="relative w-full h-full flex items-center justify-center p-4"
           >
             <img

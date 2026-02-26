@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -64,17 +65,26 @@ export function NotificationProvider({ children }) {
         // Show toast notification
         const Icon = notificationIcons[notification.type] || MessageCircle;
         toast.custom((t) => (
-          <div 
-            className="bg-gray-900 border border-gray-800 rounded-xl p-4 shadow-2xl max-w-sm cursor-pointer"
+          <motion.div
+            initial={{ opacity: 0, y: -30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className="bg-gray-900 border border-[#00fea3]/30 rounded-2xl p-4 shadow-2xl shadow-[#00fea3]/10 max-w-sm cursor-pointer"
             onClick={() => {
               toast.dismiss(t);
               handleNotificationClick(notification);
             }}
           >
             <div className="flex gap-3 items-start">
-              <div className="w-10 h-10 rounded-full bg-[#00fea3]/20 flex items-center justify-center flex-shrink-0">
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
+                className="w-10 h-10 rounded-full bg-[#00fea3]/20 flex items-center justify-center flex-shrink-0"
+              >
                 <Icon className="w-5 h-5 text-[#00fea3]" />
-              </div>
+              </motion.div>
               <div className="flex-1 min-w-0">
                 <p className="text-white font-medium text-sm">
                   {notification.title || notification.message}
@@ -84,7 +94,7 @@ export function NotificationProvider({ children }) {
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
         ), {
           duration: 5000,
           position: 'top-center',
