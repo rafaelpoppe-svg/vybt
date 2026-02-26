@@ -95,10 +95,15 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
             {matchReasons.slice(0, 2).map((reason) => {
               const Icon = reasonIcons[reason] || Sparkles;
               return (
-                <div key={reason} className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm flex items-center gap-1">
+                <motion.div
+                  key={reason}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-sm flex items-center gap-1 border border-[#00fea3]/20"
+                >
                   <Icon className="w-2.5 h-2.5 text-[#00fea3]" />
                   <span className="text-[9px] text-white/90">{reasonLabels[reason]}</span>
-                </div>
+                </motion.div>
               );
             })}
           </div>
