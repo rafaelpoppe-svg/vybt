@@ -232,11 +232,14 @@ function OnboardingInner() {
         <div className="px-6 mb-8">
           <div className="flex gap-2">
             {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-              <div 
+              <motion.div 
                 key={i}
-                className={`h-1 flex-1 rounded-full transition-all duration-500 ${
-                  i <= step ? 'bg-[#00fea3]' : 'bg-gray-800'
-                }`}
+                animate={{
+                  backgroundColor: i <= step ? '#00fea3' : '#1f2937',
+                  scaleX: i === step ? 1.1 : 1
+                }}
+                transition={{ duration: 0.4 }}
+                className="h-1 flex-1 rounded-full origin-left"
               />
             ))}
           </div>
@@ -248,10 +251,10 @@ function OnboardingInner() {
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, x: 60, scale: 0.97 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -60, scale: 0.97 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 30 }}
           >
             {step === 9 ? (
               <div className="space-y-6 text-center">
