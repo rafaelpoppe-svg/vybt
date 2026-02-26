@@ -134,11 +134,15 @@ export default function StoryCard({
         </div>
       </div>
       <div className="flex items-center gap-1">
-        {isHighlighted && <Sparkles className="w-3 h-3 text-[#542b9b]" />}
+        {isHighlighted && <Sparkles className="w-3 h-3 text-[#00fea3]" />}
         {(isUnviewed || isNew) && !isOwn && (
-          <span className="px-1.5 py-0.5 rounded text-[8px] bg-sky-400 text-white font-bold">NEW</span>
+          <motion.span
+            animate={{ scale: [1, 1.15, 1] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+            className="px-1.5 py-0.5 rounded text-[8px] bg-[#00fea3] text-[#0b0b0b] font-bold"
+          >NEW</motion.span>
         )}
-        <span className={`${currentSize.text} text-gray-400 max-w-16 truncate`}>
+        <span className={`${currentSize.text} ${isOwn ? 'text-[#00fea3] font-semibold' : 'text-gray-400'} max-w-16 truncate`}>
           {isOwn ? 'Your Story' : (user?.display_name || 'User')}
         </span>
       </div>
