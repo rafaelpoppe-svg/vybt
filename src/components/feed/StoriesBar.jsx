@@ -86,6 +86,7 @@ export default function StoriesBar({
         {shuffledOthers.map((story, index) => (
           <motion.div
             key={story.id}
+            className="flex-shrink-0"
             initial={{ opacity: 0, scale: 0.85, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: index * 0.04, type: 'spring', stiffness: 300, damping: 25 }}
@@ -100,6 +101,9 @@ export default function StoriesBar({
           </motion.div>
         ))}
       </motion.div>
+    </div>
+  );
+}
     </div>
   );
 }
