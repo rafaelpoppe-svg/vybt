@@ -84,16 +84,22 @@ export default function StoriesBar({
         
         {/* Other stories with random colors */}
         {shuffledOthers.map((story, index) => (
-          <StoryCard
+          <motion.div
             key={story.id}
-            user={userProfiles[story.user_id]}
-            story={story}
-            colorIndex={index}
-            isHighlighted={story.is_highlighted}
-            onClick={() => onStoryClick(story)}
-          />
+            initial={{ opacity: 0, scale: 0.85, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: index * 0.04, type: 'spring', stiffness: 300, damping: 25 }}
+          >
+            <StoryCard
+              user={userProfiles[story.user_id]}
+              story={story}
+              colorIndex={index}
+              isHighlighted={story.is_highlighted}
+              onClick={() => onStoryClick(story)}
+            />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
