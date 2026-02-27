@@ -38,9 +38,9 @@ export default function VibesSelect({ selected = [], onSelect, min = 2, max = 5 
 
       {/* Counter */}
       <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-500">{filtered.length} vibes</span>
+        <span className="text-xs text-gray-500">{filtered.length} {t.vibesCount}</span>
         <span className={`text-sm font-semibold ${selected.length >= min ? 'text-[#00fea3]' : 'text-gray-500'}`}>
-          {selected.length}/{max} selected
+          {selected.length}/{max} {t.selected}
         </span>
       </div>
 
