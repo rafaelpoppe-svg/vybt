@@ -208,6 +208,7 @@ export default function Home() {
     plans: visiblePlans,
     friendIds,
     myParticipations,
+    userProfile: myProfile,
   });
 
   const handleRefresh = async () => {
