@@ -1,19 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { User, Users } from 'lucide-react';
-
-const genderOptions = [
-  { id: 'female', label: 'Female', icon: '♀' },
-  { id: 'male', label: 'Male', icon: '♂' },
-  { id: 'other', label: 'Other', icon: '⚧' }
-];
+import { useLanguage } from '../common/LanguageContext';
 
 export default function GenderSelect({ selected, onSelect }) {
+  const { t } = useLanguage();
+
+  const genderOptions = [
+    { id: 'female', icon: '♀' },
+    { id: 'male', icon: '♂' },
+    { id: 'other', icon: '⚧' }
+  ];
+
+  const labels = { female: t.female, male: t.male, other: t.other };
+
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">What's your gender?</h2>
-        <p className="text-gray-400 text-sm">This helps us personalize your experience</p>
+        <h2 className="text-2xl font-bold text-white mb-2">{t.whatsYourGender}</h2>
+        <p className="text-gray-400 text-sm">{t.genderSubtitle}</p>
       </div>
       
       <div className="grid grid-cols-3 gap-4">
@@ -33,7 +37,7 @@ export default function GenderSelect({ selected, onSelect }) {
             <span className={`font-medium ${
               selected === option.id ? 'text-[#00fea3]' : 'text-white'
             }`}>
-              {option.label}
+              {labels[option.id]}
             </span>
           </motion.button>
         ))}
