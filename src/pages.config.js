@@ -70,6 +70,7 @@ import UserProfile from './pages/UserProfile';
 import Welcome from './pages/Welcome';
 import WelcomePrograms from './pages/WelcomePrograms';
 import CommunityGuidelines from './pages/CommunityGuidelines';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import __Layout from './Layout.jsx';
 
 
@@ -97,6 +98,7 @@ export const PAGES = {
     "Welcome": Welcome,
     "WelcomePrograms": WelcomePrograms,
     "CommunityGuidelines": CommunityGuidelines,
+    "PrivacyPolicy": PrivacyPolicy,
 }
 
 export const pagesConfig = {
