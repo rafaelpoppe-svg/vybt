@@ -361,8 +361,8 @@ export default function PlanDetails() {
           </div>
         )}
 
-        {/* Add Story Button (if joined) */}
-        {isJoined && (
+        {/* Add Story Button (if joined, not during voting) */}
+        {isJoined && !isVoting && (
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate(createPageUrl('AddStory') + `?planId=${planId}`)}
@@ -371,6 +371,12 @@ export default function PlanDetails() {
             <Camera className="w-5 h-5" />
             Share your experience
           </motion.button>
+        )}
+        {isJoined && isVoting && (
+          <div className="w-full py-3 rounded-xl bg-gray-900/50 border border-gray-800 flex items-center justify-center gap-2 text-gray-600 cursor-not-allowed">
+            <Camera className="w-5 h-5" />
+            Stories unavailable during voting
+          </div>
         )}
 
         {/* Plan limit warning */}
