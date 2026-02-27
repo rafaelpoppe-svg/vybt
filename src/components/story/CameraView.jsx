@@ -16,7 +16,7 @@ export default function CameraView({ onCapture, onClose }) {
   const [cameraError, setCameraError] = useState(null);
   const [capturing, setCapturing] = useState(false);
   const timerRef = useRef(null);
-  const galleryRef = useRef(null);
+
 
   const startCamera = useCallback(async (facing) => {
     if (streamRef.current) {
