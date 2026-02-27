@@ -325,6 +325,40 @@ export default function Explore() {
           </div>
         )}
 
+        {/* Users sub-tabs */}
+        {activeView === 'users' && (
+          <div className="flex gap-2 mt-3">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setUserSubTab('discover')}
+              className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
+                userSubTab === 'discover'
+                  ? 'bg-gradient-to-r from-[#00fea3]/30 to-[#542b9b]/30 text-[#00fea3]'
+                  : 'bg-gray-900 text-gray-400'
+              }`}
+            >
+              ❤️ {t.matchesVibes || 'Matches My Vibes'}
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setUserSubTab('requests')}
+              className={`flex-1 py-2 rounded-full text-sm font-medium transition-all relative ${
+                userSubTab === 'requests'
+                  ? 'bg-[#542b9b]/40 text-[#00fea3]'
+                  : 'bg-gray-900 text-gray-400'
+              }`}
+            >
+              <UserPlus className="w-3.5 h-3.5 inline mr-1" />
+              Requests
+              {receivedFriendRequests.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center font-bold">
+                  {receivedFriendRequests.length}
+                </span>
+              )}
+            </motion.button>
+          </div>
+        )}
+
         {/* Sort buttons */}
         <div className="flex gap-2 mt-3 overflow-x-auto scrollbar-hide">
           {activeView === 'plans' ? (
