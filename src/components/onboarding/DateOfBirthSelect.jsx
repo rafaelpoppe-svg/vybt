@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function DateOfBirthSelect({ value, onChange }) {
+  const { t } = useLanguage();
   const [error, setError] = useState('');
 
   const calculateAge = (birthDate) => {
