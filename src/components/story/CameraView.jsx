@@ -243,17 +243,7 @@ export default function CameraView({ onCapture, onClose }) {
         </div>
       </div>
 
-      {/* Hidden gallery input */}
-      <input
-        ref={galleryRef}
-        type="file"
-        accept="image/*,video/*"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) onSelectFromGallery(file);
-        }}
-        className="hidden"
-      />
+
     </div>
   );
 }
