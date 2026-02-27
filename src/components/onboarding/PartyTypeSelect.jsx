@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Search } from 'lucide-react';
+import { Check, Search, Flame } from 'lucide-react';
 import { ALL_PARTY_TYPES, partyTagConfig } from '../common/PartyTag';
-import { Flame } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function PartyTypeSelect({ selected = [], onSelect, min = 2, max = 5 }) {
   const [search, setSearch] = useState('');
