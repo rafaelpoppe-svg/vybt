@@ -32,6 +32,48 @@ export function usePushNotifications({ currentUser, userCity, plans = [], friend
 
       const myPlanIds = myParticipations.map(p => p.plan_id);
 
+      // ── Plan reminders (1 day / 1 hour before) ────────────────────────────
+      const reminderPrefs = userProfile?.notification_prefs || {};
+      for (const planId of myPlanIds) {
+        const plan = plans.find(p => p.id === planId);
+        if (!plan || plan.status === 'ended' || plan.status === 'terminated') continue;
+        const startTime = new Date(`${plan.date}T${plan.time}`);
+        const now = new Date();
+        const msUntil = startTime - now;
+
+        // 1 day before: window between 24h and 23h
+        if (reminderPrefs.plan_reminder_1day) {
+          const key = `reminder_1day:${plan.id}`;
+          if (msUntil > 0 && msUntil <= 24 * 3600 * 1000 && msUntil > 23 * 3600 * 1000) {
+            if (!existingPlanNotifIds.has(`plan_reminder_1day:${plan.id}`) && !firedRef.current.has(key)) {
+              firedRef.current.add(key);
+              await createNotification(
+                currentUser.id,
+                'plan_happening_now',
+                `📅 Amanhã tens o plano "${plan.title}"! Não te esqueças.`,
+                { planId: plan.id, title: 'Lembrete — amanhã' }
+              );
+            }
+          }
+        }
+
+        // 1 hour before: window between 60min and 50min
+        if (reminderPrefs.plan_reminder_1hour) {
+          const key = `reminder_1hour:${plan.id}`;
+          if (msUntil > 0 && msUntil <= 60 * 60 * 1000 && msUntil > 50 * 60 * 1000) {
+            if (!existingPlanNotifIds.has(`plan_reminder_1hour:${plan.id}`) && !firedRef.current.has(key)) {
+              firedRef.current.add(key);
+              await createNotification(
+                currentUser.id,
+                'plan_happening_now',
+                `⏰ O plano "${plan.title}" começa em 1 hora! Prepara-te!`,
+                { planId: plan.id, title: 'Lembrete — 1 hora' }
+              );
+            }
+          }
+        }
+      }
+
       for (const plan of plans) {
         if (plan.city !== userCity) continue;
 

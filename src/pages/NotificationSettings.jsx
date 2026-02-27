@@ -51,7 +51,9 @@ const defaultPrefs = {
   plan_update_push: true,  plan_update_email: false,
   friend_request_push: true, friend_request_email: false,
   group_message_push: true,  group_message_email: false,
-  voting_push: true,       voting_email: false
+  voting_push: true,       voting_email: false,
+  plan_reminder_1day: false,
+  plan_reminder_1hour: true
 };
 
 function Toggle({ enabled, onToggle }) {
