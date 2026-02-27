@@ -175,7 +175,7 @@ export default function Settings() {
             icon={Lock}
             iconColor="text-teal-400"
             label={t.privacyPolicy}
-            onClick={() => openUrl('https://vybt.app/privacy')}
+            onClick={() => navigate(createPageUrl('PrivacyPolicy'))}
           />
         </Section>
 
