@@ -34,7 +34,7 @@ export default function PartyTypeSelect({ selected = [], onSelect, min = 2, max 
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search party types..."
+          placeholder={t.searchPartyTypes}
           className="w-full pl-9 pr-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
         />
       </div>
