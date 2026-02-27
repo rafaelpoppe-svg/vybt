@@ -191,12 +191,12 @@ export default function Settings() {
 
         {/* Admin */}
         {currentUser?.role === 'admin' && (
-          <Section title="Administração">
+          <Section title={t.administration}>
             <Row
               icon={ShieldAlert}
               iconColor="text-red-400"
-              label="Painel de Moderação"
-              sublabel="Rever denúncias de conteúdo"
+              label={t.moderationPanel}
+              sublabel={t.moderationSub}
               onClick={() => navigate(createPageUrl('Moderation'))}
             />
           </Section>
