@@ -163,7 +163,7 @@ export default function Settings() {
             icon={Shield}
             iconColor="text-purple-400"
             label={t.communityGuidelines}
-            onClick={() => openUrl('https://vybt.app/community-guidelines')}
+            onClick={() => navigate(createPageUrl('CommunityGuidelines'))}
           />
           <Row
             icon={FileText}
