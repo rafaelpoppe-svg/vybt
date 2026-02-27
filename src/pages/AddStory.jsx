@@ -343,29 +343,7 @@ export default function AddStory() {
         </header>
       )}
 
-      {/* Step back button for step 1 */}
-      {step === 1 && (
-        <header className="flex-shrink-0 flex items-center gap-3 px-4 py-4">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setStep(0)}
-            className="p-2 rounded-full bg-gray-900"
-          >
-            <ChevronLeft className="w-5 h-5 text-white" />
-          </motion.button>
-          <h1 className="text-lg font-bold text-white">Capture</h1>
-          <div className="ml-auto flex items-center gap-1.5">
-            {steps.map((_, i) => (
-              <div
-                key={i}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === step ? 'w-6 bg-[#00fea3]' : i < step ? 'w-3 bg-[#00fea3]/50' : 'w-3 bg-gray-700'
-                }`}
-              />
-            ))}
-          </div>
-        </header>
-      )}
+      {/* Step 1: Camera is fullscreen, no header needed (CameraView has its own close button) */}
 
       {/* Content */}
       <div className="flex-1 relative overflow-hidden">
