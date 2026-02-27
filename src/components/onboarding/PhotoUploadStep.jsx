@@ -5,6 +5,7 @@ import { base44 } from '@/api/base44Client';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function PhotoUploadStep({ photos, onChange }) {
+  const { t } = useLanguage();
   const [uploading, setUploading] = useState(false);
   const [moderationError, setModerationError] = useState('');
 
