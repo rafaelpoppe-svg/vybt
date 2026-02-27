@@ -100,7 +100,7 @@ export default function PhotoUploadStep({ photos, onChange }) {
               className="hidden" 
             />
             <span className="text-[10px] text-gray-500 absolute -bottom-5 left-0 right-0 text-center">
-              {i === 0 ? 'Main (Required)' : `Photo ${i + 1}`}
+              {i === 0 ? t.mainPhoto : `${t.photo} ${i + 1}`}
             </span>
           </label>
         ))}
