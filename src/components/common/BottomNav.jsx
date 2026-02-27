@@ -11,6 +11,7 @@ export default function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useLanguage();
+  const [showMenu, setShowMenu] = useState(false);
 
   const tabs = [
     { name: 'Home',       icon: Home,          label: t.home },
