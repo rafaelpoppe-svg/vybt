@@ -35,6 +35,56 @@ export default function BottomNav() {
   };
 
   return (
+    <>
+      {/* Backdrop */}
+      <AnimatePresence>
+        {showMenu && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40"
+            onClick={() => setShowMenu(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Popup menu */}
+      <AnimatePresence>
+        {showMenu && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+            className="fixed z-50 flex flex-col gap-3 items-center"
+            style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 90px)', left: '50%', transform: 'translateX(-50%)' }}
+          >
+            <motion.button
+              whileTap={{ scale: 0.93 }}
+              onClick={() => { setShowMenu(false); navigate(createPageUrl('AddStory')); }}
+              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#0b0b0b] border border-[#00d4ff]/40 shadow-lg shadow-[#00d4ff]/20 backdrop-blur-xl"
+            >
+              <div className="w-8 h-8 rounded-full bg-[#00d4ff]/20 flex items-center justify-center">
+                <Camera className="w-4 h-4 text-[#00d4ff]" />
+              </div>
+              <span className="text-white font-semibold text-sm whitespace-nowrap">Adicionar Story</span>
+            </motion.button>
+
+            <motion.button
+              whileTap={{ scale: 0.93 }}
+              onClick={() => { setShowMenu(false); navigate(createPageUrl('CreatePlan')); }}
+              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#0b0b0b] border border-[#00fea3]/40 shadow-lg shadow-[#00fea3]/20 backdrop-blur-xl"
+            >
+              <div className="w-8 h-8 rounded-full bg-[#00fea3]/20 flex items-center justify-center">
+                <PlusCircle className="w-4 h-4 text-[#00fea3]" />
+              </div>
+              <span className="text-white font-semibold text-sm whitespace-nowrap">Criar novo Plano</span>
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#0b0b0b]/90 backdrop-blur-2xl border-t border-[#00fea3]/10"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
