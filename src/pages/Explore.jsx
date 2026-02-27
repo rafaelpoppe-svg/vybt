@@ -393,17 +393,7 @@ export default function Explore() {
                 {t.mostMembers}
               </motion.button>
             </>
-          ) : (
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setUserFilters({ ...userFilters, sortBy: 'foryou' })}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap ${
-                userFilters.sortBy === 'foryou' ? 'bg-gradient-to-r from-[#00fea3]/30 to-[#542b9b]/30 text-[#00fea3]' : 'bg-gray-900 text-gray-400'
-              }`}
-            >
-              ❤️ {t.matchesVibes || 'Matches My Vibes'}
-            </motion.button>
-          )}
+          ) : null}
         </div>
       </header>
 
