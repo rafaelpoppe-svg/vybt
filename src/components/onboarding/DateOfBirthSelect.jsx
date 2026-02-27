@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, AlertCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function DateOfBirthSelect({ value, onChange }) {
   const [error, setError] = useState('');
