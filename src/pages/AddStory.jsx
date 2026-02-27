@@ -370,7 +370,6 @@ export default function AddStory() {
               ) : (
                 <CameraView
                   onCapture={(file) => processFile(file)}
-                  onSelectFromGallery={(file) => processFile(file)}
                   onClose={() => setStep(0)}
                 />
               )}
