@@ -37,7 +37,7 @@ export default function CommunityGuidelines() {
     <div className="min-h-screen bg-[#0b0b0b] text-white">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-[#0b0b0b]/90 backdrop-blur-xl border-b border-white/5 px-4 py-4 flex items-center gap-3 safe-top">
-        <button onClick={() => navigate(-1)} className="p-2 rounded-full hover:bg-white/10 transition-colors">
+        <button onClick={() => navigate(createPageUrl('Settings'))} className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
         <h1 className="text-lg font-bold text-white">Community Guidelines</h1>
