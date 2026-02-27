@@ -207,14 +207,8 @@ export default function CameraView({ onCapture, onClose }) {
 
         {/* Shutter row */}
         <div className="flex items-center justify-between">
-          {/* Gallery picker */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => galleryRef.current?.click()}
-            className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center overflow-hidden"
-          >
-            <ImageIcon className="w-6 h-6 text-white" />
-          </motion.button>
+          {/* Spacer to balance flip button */}
+          <div className="w-14 h-14" />
 
           {/* Main shutter */}
           <motion.button
