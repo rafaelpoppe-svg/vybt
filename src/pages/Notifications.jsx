@@ -141,9 +141,9 @@ export default function Notifications() {
             <ChevronLeft className="w-5 h-5 text-white" />
           </motion.button>
           <div className="flex-1">
-            <h1 className="text-xl font-bold text-white">Notificações</h1>
+            <h1 className="text-xl font-bold text-white">{t.notifications_title}</h1>
             {unreadCount > 0 && (
-              <p className="text-sm text-gray-400">{unreadCount} não lidas</p>
+              <p className="text-sm text-gray-400">{unreadCount} {t.unread}</p>
             )}
           </div>
           {unreadCount > 0 && (
@@ -153,7 +153,7 @@ export default function Notifications() {
               className="px-3 py-1.5 rounded-lg bg-[#00fea3]/20 border border-[#00fea3]/30 flex items-center gap-1.5"
             >
               <CheckCheck className="w-4 h-4 text-[#00fea3]" />
-              <span className="text-sm text-[#00fea3]">Marcar todas</span>
+              <span className="text-sm text-[#00fea3]">{t.markAllRead}</span>
             </motion.button>
           )}
         </div>
