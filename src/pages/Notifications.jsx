@@ -59,6 +59,7 @@ export default function Notifications() {
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
   const { markAllAsRead } = useNotifications();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const getUser = async () => {
