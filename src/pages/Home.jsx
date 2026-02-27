@@ -246,17 +246,11 @@ export default function Home() {
         <div className="pb-4">
           {happeningPlan && <HappeningNowBanner plan={happeningPlan} />}
           <StoriesBar
-            stories={stories.filter(s => {
-              // Hide stories older than 24 hours from the home feed
-              const createdAt = new Date(s.created_date);
-              const isExpired = (Date.now() - createdAt.getTime()) > 24 * 60 * 60 * 1000;
-              if (isExpired) return false;
-              return (
-                s.user_id === currentUser?.id ||
-                s.is_highlighted ||
-                friendIds.includes(s.user_id)
-              );
-            })}
+            stories={stories.filter(s =>
+              s.user_id === currentUser?.id ||
+              s.is_highlighted ||
+              friendIds.includes(s.user_id)
+            )}
             userProfiles={profilesMap}
             currentFilter={storyFilter}
             onFilterChange={setStoryFilter}
