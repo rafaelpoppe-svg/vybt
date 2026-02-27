@@ -39,7 +39,14 @@ export default function StoryView() {
 
   const { data: allStoriesData = [], isLoading } = useQuery({
     queryKey: ['allStories'],
-    queryFn: () => base44.entities.ExperienceStory.list('-created_date', 100),
+    queryFn: async () => {
+      const all = await base44.entities.ExperienceStory.list('-created_date', 100);
+      const now = new Date();
+      return all.filter(s => {
+        if (s.expires_at) return new Date(s.expires_at) > now;
+        return (now - new Date(s.created_date)) < 24 * 3600 * 1000;
+      });
+    },
   });
 
   const story = allStories[currentStoryIndex];

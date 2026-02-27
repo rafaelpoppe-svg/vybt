@@ -106,10 +106,18 @@ export default function Home() {
     queryFn: () => base44.entities.PartyPlan.filter({ city }, '-created_date', 20),
   });
 
-  // Fetch stories
+  // Fetch stories — only non-expired (last 24h)
   const { data: stories = [] } = useQuery({
     queryKey: ['stories'],
-    queryFn: () => base44.entities.ExperienceStory.list('-created_date', 20),
+    queryFn: async () => {
+      const all = await base44.entities.ExperienceStory.list('-created_date', 50);
+      const now = new Date();
+      return all.filter(s => {
+        if (s.expires_at) return new Date(s.expires_at) > now;
+        // fallback: created within 24h
+        return (now - new Date(s.created_date)) < 24 * 3600 * 1000;
+      });
+    },
   });
 
   // Fetch participants for each plan
