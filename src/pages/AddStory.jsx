@@ -188,13 +188,15 @@ export default function AddStory() {
   const urlParams = new URLSearchParams(window.location.search);
   const preselectedPlanId = urlParams.get('planId');
 
-  const [step, setStep] = useState(preselectedPlanId ? 1 : 0); // 0=select plan, 1=capture, 2=preview
+  const [step, setStep] = useState(preselectedPlanId ? 1 : 0); // 0=select plan, 1=camera, 2=preview
   const [currentUser, setCurrentUser] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(preselectedPlanId || '');
   const [media, setMedia] = useState(null);
   const [visibility, setVisibility] = useState('friends');
   const [submitting, setSubmitting] = useState(false);
   const [showHighlightModal, setShowHighlightModal] = useState(false);
+  const [processingMedia, setProcessingMedia] = useState(false);
+  const [moderationError, setModerationError] = useState('');
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => navigate(createPageUrl('Onboarding')));
