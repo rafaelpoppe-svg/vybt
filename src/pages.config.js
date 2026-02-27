@@ -71,6 +71,7 @@ import Welcome from './pages/Welcome';
 import WelcomePrograms from './pages/WelcomePrograms';
 import CommunityGuidelines from './pages/CommunityGuidelines';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsConditions from './pages/TermsConditions';
 import __Layout from './Layout.jsx';
 
 
@@ -99,6 +100,7 @@ export const PAGES = {
     "WelcomePrograms": WelcomePrograms,
     "CommunityGuidelines": CommunityGuidelines,
     "PrivacyPolicy": PrivacyPolicy,
+    "TermsConditions": TermsConditions,
 }
 
 export const pagesConfig = {
