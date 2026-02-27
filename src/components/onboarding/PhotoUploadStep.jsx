@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, Loader2, X, AlertCircle, ShieldAlert } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function PhotoUploadStep({ photos, onChange }) {
   const [uploading, setUploading] = useState(false);
