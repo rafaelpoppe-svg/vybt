@@ -1,49 +1,345 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { 
-  ChevronLeft, Image as ImageIcon, X, Check, 
-  Users, Sparkles, Lock, Loader2, Clock, AlertCircle, ShieldAlert
+import {
+  ChevronLeft, X, Loader2, AlertCircle, ShieldAlert,
+  Users, Lock, Sparkles, Camera, ImageIcon, Check, Eye
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import HighlightStoryModal from '../components/story/HighlightStoryModal';
 
-const visibilityOptions = [
-  { id: 'group_only', label: 'Group Only', icon: Lock, desc: 'Only visible in the plan group chat' },
-  { id: 'friends', label: 'Friends', icon: Users, desc: 'Visible to your friends' },
-  { id: 'highlighted', label: 'Highlight to Everyone', icon: Sparkles, desc: 'Featured to all users (€1.59)', isPaid: true }
-];
+// Step 1: Select Plan
+function StepSelectPlan({ activePlans, myParticipations, selectedPlan, onSelect, onNext }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -40 }}
+      className="flex flex-col h-full"
+    >
+      <div className="px-4 pt-4 pb-2">
+        <p className="text-gray-400 text-sm">Which plan is this for?</p>
+      </div>
+      <div className="flex-1 overflow-y-auto px-4 space-y-2 pb-4">
+        {activePlans.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-48 gap-3">
+            <AlertCircle className="w-10 h-10 text-gray-600" />
+            <p className="text-gray-500 text-center text-sm">No active plans yet.<br />Join a plan and wait for it to start.</p>
+          </div>
+        ) : (
+          activePlans.map((plan) => {
+            const participation = myParticipations.find(p => p.plan_id === plan.id);
+            const posted = participation?.stories_posted || 0;
+            const full = posted >= 5;
+            return (
+              <motion.button
+                key={plan.id}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => !full && onSelect(plan.id)}
+                className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 transition-all ${
+                  selectedPlan === plan.id
+                    ? 'border-[#00fea3] bg-[#00fea3]/10'
+                    : full
+                    ? 'border-gray-800 bg-gray-900/50 opacity-50'
+                    : 'border-gray-800 bg-gray-900 active:border-gray-600'
+                }`}
+              >
+                <div className="w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-br from-[#542b9b] to-[#00fea3]/40 flex items-center justify-center flex-shrink-0">
+                  {plan.cover_image ? (
+                    <img src={plan.cover_image} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-xl">🎉</span>
+                  )}
+                </div>
+                <div className="flex-1 text-left min-w-0">
+                  <p className={`font-semibold truncate ${selectedPlan === plan.id ? 'text-[#00fea3]' : 'text-white'}`}>
+                    {plan.title}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">{plan.city} • {posted}/5 stories</p>
+                </div>
+                {selectedPlan === plan.id && <Check className="w-5 h-5 text-[#00fea3] flex-shrink-0" />}
+                {full && <span className="text-xs text-red-400 flex-shrink-0">Full</span>}
+              </motion.button>
+            );
+          })
+        )}
+      </div>
+      <div className="px-4 pb-6">
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={onNext}
+          disabled={!selectedPlan}
+          className={`w-full py-4 rounded-full font-bold text-base transition-all ${
+            selectedPlan ? 'bg-[#00fea3] text-[#0b0b0b]' : 'bg-gray-800 text-gray-600'
+          }`}
+        >
+          Next →
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+}
+
+// Step 2: Capture / Upload
+function StepCapture({ onMediaReady, onBack }) {
+  const [uploading, setUploading] = useState(false);
+  const [moderationError, setModerationError] = useState('');
+  const fileRef = useRef();
+  const cameraRef = useRef();
+
+  const processFile = async (file) => {
+    setUploading(true);
+    setModerationError('');
+    const isVideo = file.type.startsWith('video');
+
+    const generateVideoThumbnail = (f) => new Promise((resolve) => {
+      const video = document.createElement('video');
+      video.preload = 'auto';
+      video.muted = true;
+      video.playsInline = true;
+      const url = URL.createObjectURL(f);
+      video.src = url;
+      const capture = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 320;
+        canvas.height = video.videoHeight || 568;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => { URL.revokeObjectURL(url); resolve(blob); }, 'image/jpeg', 0.85);
+      };
+      video.addEventListener('seeked', capture, { once: true });
+      video.addEventListener('loadedmetadata', () => { video.currentTime = 0.01; }, { once: true });
+      setTimeout(() => { if (video.videoWidth > 0) capture(); else { URL.revokeObjectURL(url); resolve(null); } }, 5000);
+    });
+
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    let thumbUrl = '';
+    let urlToModerate = file_url;
+
+    if (isVideo) {
+      const thumbBlob = await generateVideoThumbnail(file);
+      if (thumbBlob) {
+        const thumbFile = new File([thumbBlob], 'thumbnail.jpg', { type: 'image/jpeg' });
+        const { file_url: tu } = await base44.integrations.Core.UploadFile({ file: thumbFile });
+        thumbUrl = tu;
+        urlToModerate = tu;
+      }
+    }
+
+    const modResult = await base44.functions.invoke('moderateImage', {
+      image_url: urlToModerate,
+      context: 'story'
+    });
+
+    if (!modResult.data.approved) {
+      setModerationError(modResult.data.reason || 'This content is not allowed.');
+      setUploading(false);
+      return;
+    }
+
+    onMediaReady({ file, file_url, thumbUrl, isVideo });
+    setUploading(false);
+  };
+
+  const handleFile = (e) => {
+    const file = e.target.files?.[0];
+    if (file) processFile(file);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -40 }}
+      className="flex flex-col items-center justify-center h-full px-4 gap-6"
+    >
+      {uploading ? (
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-20 h-20 rounded-full bg-[#00fea3]/10 flex items-center justify-center">
+            <Loader2 className="w-10 h-10 text-[#00fea3] animate-spin" />
+          </div>
+          <p className="text-gray-400 text-sm">Uploading & checking content...</p>
+        </div>
+      ) : (
+        <>
+          {moderationError && (
+            <div className="w-full p-3 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3">
+              <ShieldAlert className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-red-400">{moderationError}</p>
+            </div>
+          )}
+
+          {/* Camera capture button */}
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => cameraRef.current?.click()}
+            className="w-32 h-32 rounded-full bg-gradient-to-br from-[#00fea3] to-[#542b9b] flex items-center justify-center shadow-2xl shadow-[#00fea3]/30"
+          >
+            <Camera className="w-14 h-14 text-[#0b0b0b]" />
+          </motion.button>
+          <p className="text-gray-400 text-sm font-medium">Tap to take a photo or video</p>
+
+          <div className="flex items-center gap-3 w-full">
+            <div className="flex-1 h-px bg-gray-800" />
+            <span className="text-gray-600 text-xs">or</span>
+            <div className="flex-1 h-px bg-gray-800" />
+          </div>
+
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => fileRef.current?.click()}
+            className="flex items-center gap-2 px-6 py-3 rounded-full border border-gray-700 bg-gray-900 text-gray-300 font-medium text-sm"
+          >
+            <ImageIcon className="w-4 h-4" />
+            Choose from gallery
+          </motion.button>
+
+          {/* Hidden inputs */}
+          <input
+            ref={cameraRef}
+            type="file"
+            accept="image/*,video/*"
+            capture="environment"
+            onChange={handleFile}
+            className="hidden"
+          />
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*,video/*"
+            onChange={handleFile}
+            className="hidden"
+          />
+        </>
+      )}
+
+      <motion.button
+        whileTap={{ scale: 0.95 }}
+        onClick={onBack}
+        className="absolute bottom-6 left-4 text-gray-500 text-sm"
+      >
+        ← Back
+      </motion.button>
+    </motion.div>
+  );
+}
+
+// Step 3: Preview & Publish
+function StepPreview({ media, plans, selectedPlan, onPublish, onRetake, submitting, onVisibilityChange, visibility }) {
+  const plan = plans.find(p => p.id === selectedPlan);
+
+  const visibilityOptions = [
+    { id: 'friends', icon: Users, label: 'Friends' },
+    { id: 'group_only', icon: Lock, label: 'Group' },
+    { id: 'highlighted', icon: Sparkles, label: 'Highlight', paid: true },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.97 }}
+      className="relative flex flex-col h-full"
+    >
+      {/* Full-screen preview */}
+      <div className="absolute inset-0">
+        {media.isVideo ? (
+          <video
+            src={media.file_url}
+            className="w-full h-full object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        ) : (
+          <img src={media.file_url} alt="Story preview" className="w-full h-full object-cover" />
+        )}
+        {/* Dark overlay at bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+      </div>
+
+      {/* Top bar */}
+      <div className="relative z-10 flex items-center justify-between p-4">
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          onClick={onRetake}
+          className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center"
+        >
+          <X className="w-5 h-5 text-white" />
+        </motion.button>
+
+        {plan && (
+          <div className="px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm">
+            <p className="text-white text-xs font-medium">📍 {plan.title}</p>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom controls */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-8 space-y-3">
+        {/* Visibility quick toggle */}
+        <div className="flex gap-2 justify-center">
+          {visibilityOptions.map((opt) => {
+            const Icon = opt.icon;
+            return (
+              <motion.button
+                key={opt.id}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => onVisibilityChange(opt.id)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-all ${
+                  visibility === opt.id
+                    ? 'bg-[#00fea3] text-[#0b0b0b]'
+                    : 'bg-black/50 backdrop-blur-sm text-white border border-white/20'
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                {opt.label}
+                {opt.paid && <span className="ml-0.5 text-[9px] opacity-70">€</span>}
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* Share button */}
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={onPublish}
+          disabled={submitting}
+          className="w-full py-4 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold text-base flex items-center justify-center gap-2"
+        >
+          {submitting ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <>
+              <Eye className="w-5 h-5" />
+              Share Story
+            </>
+          )}
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function AddStory() {
   const navigate = useNavigate();
   const urlParams = new URLSearchParams(window.location.search);
   const preselectedPlanId = urlParams.get('planId');
-  
+
+  const [step, setStep] = useState(preselectedPlanId ? 1 : 0); // 0=select plan, 1=capture, 2=preview
   const [currentUser, setCurrentUser] = useState(null);
-  const [media, setMedia] = useState(null);
-  const [mediaUrl, setMediaUrl] = useState('');
   const [selectedPlan, setSelectedPlan] = useState(preselectedPlanId || '');
+  const [media, setMedia] = useState(null);
   const [visibility, setVisibility] = useState('friends');
-  const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [showHighlightModal, setShowHighlightModal] = useState(false);
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const user = await base44.auth.me();
-        setCurrentUser(user);
-      } catch (e) {
-        navigate(createPageUrl('Onboarding'));
-      }
-    };
-    getUser();
+    base44.auth.me().then(setCurrentUser).catch(() => navigate(createPageUrl('Onboarding')));
   }, []);
 
-  // Get user's joined plans
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myParticipations', currentUser?.id],
     queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
@@ -57,177 +353,65 @@ export default function AddStory() {
 
   const myPlanIds = myParticipations.map(p => p.plan_id);
   const myPlans = plans.filter(p => myPlanIds.includes(p.id));
-
-  // Check if plan is active (started)
-  const isPlanActive = (plan) => {
-    if (!plan) return false;
+  const activePlans = myPlans.filter((plan) => {
     const now = new Date();
     const planDateTime = new Date(`${plan.date}T${plan.time}`);
     return now >= planDateTime;
-  };
+  });
 
-  // Filter to only show active plans
-  const activePlans = myPlans.filter(isPlanActive);
-
-  // Get current participation to check story limit
   const currentParticipation = myParticipations.find(p => p.plan_id === selectedPlan);
   const storiesPosted = currentParticipation?.stories_posted || 0;
   const canPostMore = storiesPosted < 5;
 
-  const [thumbnailUrl, setThumbnailUrl] = useState('');
-  const [moderationError, setModerationError] = useState('');
-
-  const generateVideoThumbnail = (file) => {
-    return new Promise((resolve) => {
-      const video = document.createElement('video');
-      video.preload = 'auto';
-      video.muted = true;
-      video.playsInline = true;
-      video.crossOrigin = 'anonymous';
-      const url = URL.createObjectURL(file);
-      video.src = url;
-
-      const capture = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth || 320;
-        canvas.height = video.videoHeight || 568;
-        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob((blob) => {
-          URL.revokeObjectURL(url);
-          resolve(blob);
-        }, 'image/jpeg', 0.85);
-      };
-
-      video.addEventListener('seeked', capture, { once: true });
-
-      video.addEventListener('loadedmetadata', () => {
-        video.currentTime = 0.01;
-      }, { once: true });
-
-      // Fallback: if loadedmetadata doesn't fire, try canplay
-      video.addEventListener('canplay', () => {
-        if (video.readyState >= 2 && video.currentTime === 0) {
-          video.currentTime = 0.01;
-        }
-      }, { once: true });
-
-      // Final fallback after 5 seconds
-      setTimeout(() => {
-        if (video.videoWidth > 0) {
-          capture();
-        } else {
-          URL.revokeObjectURL(url);
-          resolve(null);
-        }
-      }, 5000);
-    });
-  };
-
-  const handleMediaSelect = async (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setMedia(file);
-      setUploading(true);
-      setModerationError('');
-      try {
-        const isVideo = file.type.startsWith('video');
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
-
-        // For videos, use thumbnail for moderation; for images use directly
-        let urlToModerate = file_url;
-        let thumbUrl = '';
-
-        if (isVideo) {
-          const thumbBlob = await generateVideoThumbnail(file);
-          if (thumbBlob) {
-            const thumbFile = new File([thumbBlob], 'thumbnail.jpg', { type: 'image/jpeg' });
-            const { file_url: thumb_url } = await base44.integrations.Core.UploadFile({ file: thumbFile });
-            thumbUrl = thumb_url;
-            urlToModerate = thumb_url;
-          }
-        }
-
-        // Moderate the image/thumbnail before accepting
-        const modResult = await base44.functions.invoke('moderateImage', {
-          image_url: urlToModerate,
-          context: 'story'
-        });
-
-        if (!modResult.data.approved) {
-          setModerationError(modResult.data.reason || 'This content is not allowed. Stories must be from real social/party events.');
-          setMedia(null);
-          setUploading(false);
-          return;
-        }
-
-        setMediaUrl(file_url);
-        if (isVideo) setThumbnailUrl(thumbUrl);
-      } catch (err) {
-        console.error(err);
-      }
-      setUploading(false);
-    }
-  };
-
-  const handleSubmit = async (highlightData = null) => {
-    if (!mediaUrl || !selectedPlan) return;
-    if (!canPostMore) return;
-    
+  const handlePublish = async (highlightData = null) => {
+    if (!media || !selectedPlan || !canPostMore) return;
     setSubmitting(true);
-    try {
-      const expiresAt = new Date();
-      expiresAt.setHours(expiresAt.getHours() + 24);
-      
-      const isVideo = media?.type?.startsWith('video');
-      const storyData = {
-        user_id: currentUser.id,
-        plan_id: selectedPlan,
-        media_url: mediaUrl,
-        thumbnail_url: isVideo ? thumbnailUrl : '',
-        media_type: isVideo ? 'video' : 'image',
-        visibility: visibility,
-        is_highlighted: visibility === 'highlighted',
-        view_count: 0,
-        viewed_by: [],
-        expires_at: expiresAt.toISOString()
-      };
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 24);
 
-      // Add highlight targeting if provided
-      if (highlightData) {
-        storyData.target_vibes = highlightData.targetVibes;
-        storyData.target_party_types = highlightData.targetPartyTypes;
-      }
-      
-      await base44.entities.ExperienceStory.create(storyData);
-      
-      // Update stories_posted count
-      if (currentParticipation) {
-        await base44.entities.PlanParticipant.update(currentParticipation.id, {
-          stories_posted: storiesPosted + 1
-        });
-      }
-      
-      navigate(createPageUrl('Home'));
-    } catch (err) {
-      console.error(err);
+    const storyData = {
+      user_id: currentUser.id,
+      plan_id: selectedPlan,
+      media_url: media.file_url,
+      thumbnail_url: media.isVideo ? media.thumbUrl : '',
+      media_type: media.isVideo ? 'video' : 'image',
+      visibility,
+      is_highlighted: visibility === 'highlighted',
+      view_count: 0,
+      viewed_by: [],
+      expires_at: expiresAt.toISOString()
+    };
+
+    if (highlightData) {
+      storyData.target_vibes = highlightData.targetVibes;
+      storyData.target_party_types = highlightData.targetPartyTypes;
     }
+
+    await base44.entities.ExperienceStory.create(storyData);
+
+    if (currentParticipation) {
+      await base44.entities.PlanParticipant.update(currentParticipation.id, {
+        stories_posted: storiesPosted + 1
+      });
+    }
+
     setSubmitting(false);
+    navigate(createPageUrl('Home'));
   };
 
-  const handleVisibilitySelect = (optionId) => {
-    setVisibility(optionId);
-    if (optionId === 'highlighted') {
-      setShowHighlightModal(true);
-    }
+  const handleVisibilityChange = (v) => {
+    setVisibility(v);
+    if (v === 'highlighted') setShowHighlightModal(true);
   };
 
   const selectedPlanData = plans.find(p => p.id === selectedPlan);
+  const steps = ['Plan', 'Capture', 'Preview'];
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b]">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+    <div className="fixed inset-0 bg-[#0b0b0b] flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+      {/* Header - only show on steps 0 */}
+      {step === 0 && (
+        <header className="flex-shrink-0 flex items-center gap-3 px-4 py-4 border-b border-gray-800">
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate(-1)}
@@ -235,219 +419,91 @@ export default function AddStory() {
           >
             <ChevronLeft className="w-5 h-5 text-white" />
           </motion.button>
-          <h1 className="text-xl font-bold text-white">Add Story</h1>
-        </div>
-      </header>
+          <h1 className="text-lg font-bold text-white">Add Story</h1>
 
-      <main className="p-4 pb-32 space-y-6">
-        {/* Info about posting */}
-        <div className="p-3 rounded-xl bg-[#542b9b]/20 border border-[#542b9b]/30 flex items-start gap-3">
-          <Clock className="w-5 h-5 text-[#542b9b] flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-gray-300">
-            You can post up to <span className="text-[#00fea3] font-bold">5 stories</span> per plan. 
-            Stories are only available during or after the plan starts.
-          </p>
-        </div>
-
-        {/* Moderation error */}
-        {moderationError && (
-          <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3">
-            <ShieldAlert className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-red-400">{moderationError}</p>
+          {/* Step indicator */}
+          <div className="ml-auto flex items-center gap-1.5">
+            {steps.map((_, i) => (
+              <div
+                key={i}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === step ? 'w-6 bg-[#00fea3]' : i < step ? 'w-3 bg-[#00fea3]/50' : 'w-3 bg-gray-700'
+                }`}
+              />
+            ))}
           </div>
-        )}
+        </header>
+      )}
 
-        {/* Story limit warning */}
-        {selectedPlan && !canPostMore && (
-          <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-red-400">
-              You've reached the limit of 5 stories for this plan.
-            </p>
+      {/* Step back button for step 1 */}
+      {step === 1 && (
+        <header className="flex-shrink-0 flex items-center gap-3 px-4 py-4">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setStep(0)}
+            className="p-2 rounded-full bg-gray-900"
+          >
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </motion.button>
+          <h1 className="text-lg font-bold text-white">Capture</h1>
+          <div className="ml-auto flex items-center gap-1.5">
+            {steps.map((_, i) => (
+              <div
+                key={i}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === step ? 'w-6 bg-[#00fea3]' : i < step ? 'w-3 bg-[#00fea3]/50' : 'w-3 bg-gray-700'
+                }`}
+              />
+            ))}
           </div>
-        )}
+        </header>
+      )}
 
-        {/* Media Upload */}
-        <div>
-          <label className="block text-gray-400 text-sm mb-2">Photo or Video</label>
-          <label className="block">
-            {mediaUrl ? (
-              <div className="relative aspect-[9/16] max-h-80 rounded-xl overflow-hidden mx-auto">
-                {media?.type?.startsWith('video') ? (
-                  <video src={mediaUrl} className="w-full h-full object-cover" muted playsInline autoPlay loop />
-                ) : (
-                  <img src={mediaUrl} alt="Story" className="w-full h-full object-cover" />
-                )}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setMedia(null);
-                    setMediaUrl('');
-                    setThumbnailUrl('');
-                  }}
-                  className="absolute top-3 right-3 p-2 rounded-full bg-black/50"
-                >
-                  <X className="w-5 h-5 text-white" />
-                </button>
-              </div>
-            ) : (
-              <div className="aspect-[9/16] max-h-80 rounded-xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-gray-600 transition-colors mx-auto">
-                {uploading ? (
-                  <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
-                ) : (
-                  <>
-                    <ImageIcon className="w-12 h-12 text-gray-600" />
-                    <span className="text-gray-500">Tap to add media</span>
-                  </>
-                )}
-              </div>
-            )}
-            <input 
-              type="file" 
-              accept="image/*,video/*" 
-              onChange={handleMediaSelect} 
-              className="hidden" 
-            />
-          </label>
-        </div>
-
-        {/* Select Plan - Only active plans */}
-        <div>
-          <label className="block text-gray-400 text-sm mb-2">Which plan is this from?</label>
-          <div className="space-y-2 max-h-40 overflow-y-auto">
-            {activePlans.length > 0 ? (
-              activePlans.map((plan) => {
-                const participation = myParticipations.find(p => p.plan_id === plan.id);
-                const posted = participation?.stories_posted || 0;
-                return (
-                  <motion.button
-                    key={plan.id}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setSelectedPlan(plan.id)}
-                    className={`w-full p-3 rounded-xl border-2 flex items-center gap-3 transition-all ${
-                      selectedPlan === plan.id
-                        ? 'border-[#00fea3] bg-[#00fea3]/10'
-                        : 'border-gray-800 bg-gray-900'
-                    }`}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#542b9b] to-[#00fea3]/50 flex items-center justify-center">
-                      <span>🎉</span>
-                    </div>
-                    <div className="flex-1 text-left">
-                      <span className={`font-medium ${
-                        selectedPlan === plan.id ? 'text-[#00fea3]' : 'text-white'
-                      }`}>
-                        {plan.title}
-                      </span>
-                      <p className="text-xs text-gray-500">{posted}/5 stories posted</p>
-                    </div>
-                    {selectedPlan === plan.id && (
-                      <Check className="w-5 h-5 text-[#00fea3]" />
-                    )}
-                  </motion.button>
-                );
-              })
-            ) : myPlans.length > 0 ? (
-              <div className="p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-yellow-500 flex-shrink-0" />
-                <div>
-                  <p className="text-white font-medium">Plans not started yet</p>
-                  <p className="text-gray-500 text-sm mt-1">
-                    You can post stories once your plans start at their scheduled time.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-500 text-center py-4">
-                You need to join a plan first to add stories
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Visibility */}
-        <div>
-          <label className="block text-gray-400 text-sm mb-2">Who can see this?</label>
-          <div className="space-y-2">
-            {visibilityOptions.map((option) => {
-              const Icon = option.icon;
-              return (
-                <motion.button
-                  key={option.id}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleVisibilitySelect(option.id)}
-                  className={`w-full p-4 rounded-xl border-2 flex items-center gap-3 transition-all ${
-                    visibility === option.id
-                      ? 'border-[#00fea3] bg-[#00fea3]/10'
-                      : 'border-gray-800 bg-gray-900'
-                  }`}
-                >
-                  <Icon className={`w-5 h-5 ${
-                    visibility === option.id ? 'text-[#00fea3]' : 'text-gray-400'
-                  }`} />
-                  <div className="text-left flex-1">
-                    <p className={`font-medium ${
-                      visibility === option.id ? 'text-[#00fea3]' : 'text-white'
-                    }`}>
-                      {option.label}
-                      {option.isPaid && (
-                        <span className="ml-2 px-2 py-0.5 rounded-full bg-[#542b9b] text-[10px] text-white">
-                          PAID
-                        </span>
-                      )}
-                    </p>
-                    <p className="text-xs text-gray-500">{option.desc}</p>
-                  </div>
-                  {visibility === option.id && (
-                    <Check className="w-5 h-5 text-[#00fea3]" />
-                  )}
-                </motion.button>
-              );
-            })}
-          </div>
-        </div>
-
-        {selectedPlanData && (
-          <div className="p-4 rounded-xl bg-gray-900/50 border border-gray-800">
-            <p className="text-sm text-gray-400">
-              This story will be tagged to:
-            </p>
-            <p className="text-white font-medium mt-1">
-              {selectedPlanData.title} in {selectedPlanData.city}
-            </p>
-          </div>
-        )}
-      </main>
-
-      {/* Submit Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
-        <Button
-          onClick={() => visibility === 'highlighted' ? setShowHighlightModal(true) : handleSubmit()}
-          disabled={!mediaUrl || !selectedPlan || submitting || !canPostMore}
-          className={`w-full py-6 rounded-full font-bold text-lg ${
-            mediaUrl && selectedPlan && canPostMore
-              ? 'bg-[#00fea3] text-[#0b0b0b] hover:bg-[#00fea3]/90'
-              : 'bg-gray-800 text-gray-500'
-          }`}
-        >
-          {submitting ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
-          ) : visibility === 'highlighted' ? (
-            'Continue to Highlight'
-          ) : (
-            'Share Story'
+      {/* Content */}
+      <div className="flex-1 relative overflow-hidden">
+        <AnimatePresence mode="wait">
+          {step === 0 && (
+            <div key="plan" className="absolute inset-0 flex flex-col">
+              <StepSelectPlan
+                activePlans={activePlans}
+                myParticipations={myParticipations}
+                selectedPlan={selectedPlan}
+                onSelect={setSelectedPlan}
+                onNext={() => setStep(1)}
+              />
+            </div>
           )}
-        </Button>
+
+          {step === 1 && (
+            <div key="capture" className="absolute inset-0 flex flex-col items-center justify-center">
+              <StepCapture
+                onMediaReady={(m) => { setMedia(m); setStep(2); }}
+                onBack={() => setStep(0)}
+              />
+            </div>
+          )}
+
+          {step === 2 && media && (
+            <div key="preview" className="absolute inset-0">
+              <StepPreview
+                media={media}
+                plans={plans}
+                selectedPlan={selectedPlan}
+                visibility={visibility}
+                onVisibilityChange={handleVisibilityChange}
+                onPublish={() => visibility === 'highlighted' ? setShowHighlightModal(true) : handlePublish()}
+                onRetake={() => { setMedia(null); setStep(1); }}
+                submitting={submitting}
+              />
+            </div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* Highlight Modal */}
       <HighlightStoryModal
         isOpen={showHighlightModal}
-        onClose={() => setShowHighlightModal(false)}
-        onConfirm={(data) => {
-          setShowHighlightModal(false);
-          handleSubmit(data);
-        }}
+        onClose={() => { setShowHighlightModal(false); setVisibility('friends'); }}
+        onConfirm={(data) => { setShowHighlightModal(false); handlePublish(data); }}
         planCity={selectedPlanData?.city || ''}
         isLoading={submitting}
       />
