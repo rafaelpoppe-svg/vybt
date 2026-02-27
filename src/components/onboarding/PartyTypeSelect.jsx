@@ -41,9 +41,9 @@ export default function PartyTypeSelect({ selected = [], onSelect, min = 2, max 
 
       {/* Counter */}
       <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-500">{filtered.length} types</span>
+        <span className="text-xs text-gray-500">{filtered.length} {t.typesCount}</span>
         <span className={`text-sm font-semibold ${selected.length >= min ? 'text-[#00fea3]' : 'text-gray-500'}`}>
-          {selected.length}/{max} selected
+          {selected.length}/{max} {t.selected}
         </span>
       </div>
 
