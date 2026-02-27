@@ -5,6 +5,7 @@ import { ALL_PARTY_TYPES, partyTagConfig } from '../common/PartyTag';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function PartyTypeSelect({ selected = [], onSelect, min = 2, max = 5 }) {
+  const { t } = useLanguage();
   const [search, setSearch] = useState('');
 
   const filtered = ALL_PARTY_TYPES.filter(type =>
