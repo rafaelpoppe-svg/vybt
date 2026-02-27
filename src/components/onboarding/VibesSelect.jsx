@@ -20,8 +20,8 @@ export default function VibesSelect({ selected = [], onSelect, min = 2, max = 5 
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-1">What's your vibe?</h2>
-        <p className="text-gray-400 text-sm">Select {min}–{max} music styles you love</p>
+        <h2 className="text-2xl font-bold text-white mb-1">{t.whatsYourVibe}</h2>
+        <p className="text-gray-400 text-sm">{(t.vibeSubtitle || '').replace('{min}', min).replace('{max}', max)}</p>
       </div>
 
       {/* Search */}
