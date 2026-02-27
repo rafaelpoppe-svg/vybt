@@ -59,8 +59,9 @@ export default function BottomNav() {
               )}
               {name === 'CreatePlan' ? (
                 <motion.div
-                  whileHover={{ rotate: 90 }}
+                  animate={{ rotate: showMenu ? 45 : 0 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                  onClick={(e) => { e.stopPropagation(); setShowMenu(v => !v); }}
                   className="w-14 h-14 rounded-full bg-gradient-to-br from-[#00fea3] to-[#542b9b] flex items-center justify-center shadow-lg shadow-[#00fea3]/30 -mt-6"
                   style={{ boxShadow: '0 0 20px #00fea340, 0 4px 20px #542b9b40' }}
                 >
