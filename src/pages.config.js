@@ -50,11 +50,13 @@
 import AddStory from './pages/AddStory';
 import Ambassador from './pages/Ambassador';
 import Chat from './pages/Chat';
+import CommunityGuidelines from './pages/CommunityGuidelines';
 import CreatePlan from './pages/CreatePlan';
 import EditProfile from './pages/EditProfile';
 import Explore from './pages/Explore';
 import Friends from './pages/Friends';
 import GroupChat from './pages/GroupChat';
+import HelpFaq from './pages/HelpFaq';
 import Home from './pages/Home';
 import Moderation from './pages/Moderation';
 import MyPlans from './pages/MyPlans';
@@ -63,16 +65,14 @@ import NotificationSettings from './pages/NotificationSettings';
 import Notifications from './pages/Notifications';
 import Onboarding from './pages/Onboarding';
 import PlanDetails from './pages/PlanDetails';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import StoryView from './pages/StoryView';
+import TermsConditions from './pages/TermsConditions';
 import UserProfile from './pages/UserProfile';
 import Welcome from './pages/Welcome';
 import WelcomePrograms from './pages/WelcomePrograms';
-import CommunityGuidelines from './pages/CommunityGuidelines';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsConditions from './pages/TermsConditions';
-import HelpFaq from './pages/HelpFaq';
 import __Layout from './Layout.jsx';
 
 
@@ -80,11 +80,13 @@ export const PAGES = {
     "AddStory": AddStory,
     "Ambassador": Ambassador,
     "Chat": Chat,
+    "CommunityGuidelines": CommunityGuidelines,
     "CreatePlan": CreatePlan,
     "EditProfile": EditProfile,
     "Explore": Explore,
     "Friends": Friends,
     "GroupChat": GroupChat,
+    "HelpFaq": HelpFaq,
     "Home": Home,
     "Moderation": Moderation,
     "MyPlans": MyPlans,
@@ -93,16 +95,14 @@ export const PAGES = {
     "Notifications": Notifications,
     "Onboarding": Onboarding,
     "PlanDetails": PlanDetails,
+    "PrivacyPolicy": PrivacyPolicy,
     "Profile": Profile,
     "Settings": Settings,
     "StoryView": StoryView,
+    "TermsConditions": TermsConditions,
     "UserProfile": UserProfile,
     "Welcome": Welcome,
     "WelcomePrograms": WelcomePrograms,
-    "CommunityGuidelines": CommunityGuidelines,
-    "PrivacyPolicy": PrivacyPolicy,
-    "TermsConditions": TermsConditions,
-    "HelpFaq": HelpFaq,
 }
 
 export const pagesConfig = {

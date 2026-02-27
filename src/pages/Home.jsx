@@ -239,6 +239,7 @@ export default function Home() {
             radius={radius}
             onCityChange={(c) => { setCity(c); localStorage.setItem('selectedCity', c); }}
             onRadiusChange={(r) => { setRadius(r); localStorage.setItem('selectedRadius', r); }}
+            adminMode={currentUser?.role === 'admin'}
           />
         </div>
 
