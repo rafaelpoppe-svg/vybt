@@ -169,7 +169,7 @@ export default function Settings() {
             icon={FileText}
             iconColor="text-blue-400"
             label={t.termsConditions}
-            onClick={() => openUrl('https://vybt.app/terms')}
+            onClick={() => navigate(createPageUrl('TermsConditions'))}
           />
           <Row
             icon={Lock}
