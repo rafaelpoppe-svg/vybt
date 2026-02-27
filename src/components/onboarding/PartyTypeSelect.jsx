@@ -23,8 +23,8 @@ export default function PartyTypeSelect({ selected = [], onSelect, min = 2, max 
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-1">What parties do you love?</h2>
-        <p className="text-gray-400 text-sm">Select {min}–{max} party types</p>
+        <h2 className="text-2xl font-bold text-white mb-1">{t.whatPartiesDoYouLove}</h2>
+        <p className="text-gray-400 text-sm">{(t.partySubtitle || '').replace('{min}', min).replace('{max}', max)}</p>
       </div>
 
       {/* Search */}
