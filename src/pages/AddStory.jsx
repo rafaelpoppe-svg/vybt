@@ -218,7 +218,8 @@ export default function AddStory() {
   const activePlans = myPlans.filter((plan) => {
     const now = new Date();
     const planDateTime = new Date(`${plan.date}T${plan.time}`);
-    return now >= planDateTime;
+    const blockedStatuses = ['voting', 'ended', 'renewed', 'terminated'];
+    return now >= planDateTime && !blockedStatuses.includes(plan.status);
   });
 
   const currentParticipation = myParticipations.find(p => p.plan_id === selectedPlan);
