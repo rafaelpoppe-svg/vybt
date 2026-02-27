@@ -123,7 +123,7 @@ export default function PhotoUploadStep({ photos, onChange }) {
         >
           <AlertCircle className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
           <p className="text-yellow-400 text-sm">
-            Your first photo will be used for profile verification. Make sure it clearly shows your face.
+            {t.photoVerificationWarning}
           </p>
         </motion.div>
       )}
