@@ -91,7 +91,7 @@ export default function DateOfBirthSelect({ value, onChange }) {
             className="p-4 rounded-xl bg-[#00fea3]/10 border border-[#00fea3]/30"
           >
             <p className="text-[#00fea3] text-sm text-center">
-              ✓ Age verified: {calculateAge(value)} years old
+              {t.ageVerified}: {calculateAge(value)} {t.yearsOld}
             </p>
           </motion.div>
         )}
