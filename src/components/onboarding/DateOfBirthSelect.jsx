@@ -31,7 +31,7 @@ export default function DateOfBirthSelect({ value, onChange }) {
     const age = calculateAge(selectedDate);
     
     if (age < 18) {
-      setError('You must be at least 18 years old to use Vybt');
+      setError(t.mustBe18);
       onChange('');
     } else {
       setError('');
