@@ -59,8 +59,8 @@ export default function DateOfBirthSelect({ value, onChange }) {
         <div className="w-16 h-16 rounded-full bg-[#00fea3]/20 flex items-center justify-center mx-auto mb-4">
           <Calendar className="w-8 h-8 text-[#00fea3]" />
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">What's your birthday?</h2>
-        <p className="text-gray-400">You must be 18+ to use Vybt</p>
+        <h2 className="text-2xl font-bold text-white mb-2">{t.whatsYourBirthday}</h2>
+        <p className="text-gray-400">{t.birthdaySubtitle}</p>
       </div>
 
       <div className="space-y-4">
