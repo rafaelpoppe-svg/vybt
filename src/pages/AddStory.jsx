@@ -261,6 +261,52 @@ export default function AddStory() {
     navigate(createPageUrl('Home'));
   };
 
+  const processFile = async (file) => {
+    setProcessingMedia(true);
+    setModerationError('');
+    const isVideo = file.type.startsWith('video');
+
+    const generateVideoThumbnail = (f) => new Promise((resolve) => {
+      const video = document.createElement('video');
+      video.preload = 'auto'; video.muted = true; video.playsInline = true;
+      const url = URL.createObjectURL(f);
+      video.src = url;
+      const capture = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 320; canvas.height = video.videoHeight || 568;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => { URL.revokeObjectURL(url); resolve(blob); }, 'image/jpeg', 0.85);
+      };
+      video.addEventListener('seeked', capture, { once: true });
+      video.addEventListener('loadedmetadata', () => { video.currentTime = 0.01; }, { once: true });
+      setTimeout(() => { if (video.videoWidth > 0) capture(); else { URL.revokeObjectURL(url); resolve(null); } }, 5000);
+    });
+
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    let thumbUrl = '';
+    let urlToModerate = file_url;
+
+    if (isVideo) {
+      const thumbBlob = await generateVideoThumbnail(file);
+      if (thumbBlob) {
+        const thumbFile = new File([thumbBlob], 'thumbnail.jpg', { type: 'image/jpeg' });
+        const { file_url: tu } = await base44.integrations.Core.UploadFile({ file: thumbFile });
+        thumbUrl = tu; urlToModerate = tu;
+      }
+    }
+
+    const modResult = await base44.functions.invoke('moderateImage', { image_url: urlToModerate, context: 'story' });
+    if (!modResult.data.approved) {
+      setModerationError(modResult.data.reason || 'This content is not allowed.');
+      setProcessingMedia(false);
+      return;
+    }
+
+    setMedia({ file, file_url, thumbUrl, isVideo });
+    setProcessingMedia(false);
+    setStep(2);
+  };
+
   const handleVisibilityChange = (v) => {
     setVisibility(v);
     if (v === 'highlighted') setShowHighlightModal(true);
