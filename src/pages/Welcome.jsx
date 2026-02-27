@@ -8,6 +8,7 @@ import { useLanguage } from '@/components/common/LanguageContext';
 
 export default function Welcome() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

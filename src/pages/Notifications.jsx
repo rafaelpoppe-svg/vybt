@@ -13,6 +13,7 @@ import { ptBR } from 'date-fns/locale';
 import BottomNav from '../components/common/BottomNav';
 import { useNotifications } from '../components/notifications/NotificationProvider';
 import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const notificationIcons = {
   new_group_message: MessageCircle,
