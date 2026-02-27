@@ -465,7 +465,7 @@ export default function GroupChat() {
         plan={plan}
         onSave={(data) => adminEditMutation.mutate(data)}
         isLoading={adminEditMutation.isPending}
-        onDelete={plan?.status !== 'renewed' ? () => { setShowAdminEditModal(false); setShowDeleteModal(true); } : undefined}
+        onDelete={() => { setShowAdminEditModal(false); setShowDeleteModal(true); }}
       />
     </div>
   );
