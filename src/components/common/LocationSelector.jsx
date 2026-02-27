@@ -21,7 +21,7 @@ const popularCities = [
   'Miami', 'Atlanta', 'Minneapolis', 'New Orleans', 'Detroit',
 ];
 
-export default function LocationSelector({ city, radius, onCityChange, onRadiusChange }) {
+export default function LocationSelector({ city, radius, onCityChange, onRadiusChange, adminMode = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [detecting, setDetecting] = useState(false);
