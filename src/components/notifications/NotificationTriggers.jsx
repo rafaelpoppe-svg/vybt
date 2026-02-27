@@ -1,8 +1,49 @@
 import { base44 } from '@/api/base44Client';
 
+// Map notification type -> preference key
+const typeToPrefsKey = {
+  new_group_message: 'group_message',
+  new_direct_message: 'group_message',
+  new_group_member: 'group_message',
+  voting_started: 'voting',
+  plan_happening_now: 'plan_update',
+  plan_successful: 'voting',
+  plan_unsuccessful: 'voting',
+  plan_renewed: 'plan_update',
+  new_story_in_plan: 'friend_story',
+  friend_posted_story: 'friend_story',
+  friend_request: 'friend_request',
+  friend_created_plan: 'new_plan',
+  plan_recommendation: 'new_plan',
+  plan_time_changed: 'plan_update',
+  plan_location_changed: 'plan_update',
+  plan_highlighted: 'plan_update',
+  story_highlighted: 'friend_story',
+};
+
+// Check if user allows push notification of a certain type
+const userAllowsPush = async (userId, notifType) => {
+  try {
+    const profiles = await base44.entities.UserProfile.filter({ user_id: userId });
+    const profile = profiles[0];
+    if (!profile?.notification_prefs) return true; // default allow
+    const prefKey = typeToPrefsKey[notifType];
+    if (!prefKey) return true;
+    const pushKey = `${prefKey}_push`;
+    // If key is not set, default to true
+    return profile.notification_prefs[pushKey] !== false;
+  } catch {
+    return true;
+  }
+};
+
 // Create notification helper
 export const createNotification = async (userId, type, message, options = {}) => {
   try {
+    // Check user's push notification preferences
+    const allowed = await userAllowsPush(userId, type);
+    if (!allowed) return;
+
     await base44.entities.Notification.create({
       user_id: userId,
       type,
