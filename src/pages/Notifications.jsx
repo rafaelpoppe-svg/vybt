@@ -207,7 +207,7 @@ export default function Notifications() {
         ) : (
           <div className="text-center py-12">
             <AlertCircle className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-500">Sem notificações</p>
+            <p className="text-gray-500">{t.noNotifications}</p>
           </div>
         )}
       </main>
