@@ -19,7 +19,7 @@ export default function PlanCountdown({ plan, size = 'md' }) {
         endTime.setDate(endTime.getDate() + 1);
       }
 
-      const votingEnds = new Date(endTime.getTime() + 12 * 60 * 60 * 1000);
+      const votingEnds = new Date(endTime.getTime() + 6 * 60 * 60 * 1000);
 
       if (now < startTime) {
         setStatus('upcoming');
