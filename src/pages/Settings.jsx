@@ -185,7 +185,7 @@ export default function Settings() {
             icon={HelpCircle}
             iconColor="text-yellow-400"
             label={t.helpFaq}
-            onClick={() => openUrl('https://vybt.app/help')}
+            onClick={() => navigate(createPageUrl('HelpFaq'))}
           />
         </Section>
 
