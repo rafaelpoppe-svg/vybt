@@ -25,6 +25,7 @@ export default function Explore() {
   const [search, setSearch] = useState('');
   const [selectedTag, setSelectedTag] = useState('All');
   const [activeView, setActiveView] = useState('plans'); // 'plans', 'users', or 'map'
+  const [userSubTab, setUserSubTab] = useState('discover'); // 'discover' or 'requests'
   const [showFilters, setShowFilters] = useState(false);
   const [planFilters, setPlanFilters] = useState({ sortBy: initialTab === 'foryou' ? 'foryou' : 'onfire' });
   const [userFilters, setUserFilters] = useState({ sortBy: 'foryou' });
