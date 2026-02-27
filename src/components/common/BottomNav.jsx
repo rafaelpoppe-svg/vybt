@@ -1,8 +1,8 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Home, Compass, PlusCircle, MessageCircle, User } from 'lucide-react';
+import { Home, Compass, PlusCircle, MessageCircle, User, Camera, X } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 
 // Labels are now dynamic via t(), defined inside component
