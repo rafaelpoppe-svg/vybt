@@ -383,11 +383,25 @@ export default function AddStory() {
           )}
 
           {step === 1 && (
-            <div key="capture" className="absolute inset-0 flex flex-col items-center justify-center">
-              <StepCapture
-                onMediaReady={(m) => { setMedia(m); setStep(2); }}
-                onBack={() => setStep(0)}
-              />
+            <div key="camera" className="absolute inset-0">
+              {processingMedia ? (
+                <div className="absolute inset-0 bg-black flex flex-col items-center justify-center gap-4 z-50">
+                  <Loader2 className="w-12 h-12 text-[#00fea3] animate-spin" />
+                  <p className="text-gray-300 text-sm">Processing & checking content...</p>
+                </div>
+              ) : (
+                <CameraView
+                  onCapture={(file) => processFile(file)}
+                  onSelectFromGallery={(file) => processFile(file)}
+                  onClose={() => setStep(0)}
+                />
+              )}
+              {moderationError && (
+                <div className="absolute bottom-36 left-4 right-4 p-3 rounded-xl bg-red-500/90 flex items-start gap-3 z-50">
+                  <ShieldAlert className="w-5 h-5 text-white flex-shrink-0" />
+                  <p className="text-sm text-white">{moderationError}</p>
+                </div>
+              )}
             </div>
           )}
 
