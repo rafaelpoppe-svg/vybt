@@ -4,6 +4,7 @@ import VibeTag, { ALL_VIBES } from '../common/VibeTag';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function VibesSelect({ selected = [], onSelect, min = 2, max = 5 }) {
+  const { t } = useLanguage();
   const [search, setSearch] = useState('');
 
   const filtered = ALL_VIBES.filter(v => v.toLowerCase().includes(search.toLowerCase()));
