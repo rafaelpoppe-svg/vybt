@@ -140,8 +140,8 @@ export default function BottomNav() {
             </motion.button>
           );
         })}
-      </div>
-    </nav>
+        </div>
+      </nav>
     </>
   );
 }
