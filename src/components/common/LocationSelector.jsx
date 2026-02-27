@@ -95,20 +95,45 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
               {detecting ? 'Detecting...' : 'Use my current location'}
             </button>
 
-            {/* City list — locked for Vybt Plus */}
+            {/* City list */}
+            {adminMode && (
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search city..."
+                className="w-full px-3 py-2 mb-2 rounded-lg bg-gray-800 text-sm text-white placeholder-gray-500 border border-gray-700 focus:outline-none focus:border-[#00fea3]"
+              />
+            )}
             <div className="space-y-1 max-h-48 overflow-y-auto mb-1">
-              {popularCities.map((c) => (
-                <div
-                  key={c}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg cursor-not-allowed"
-                >
-                  <span className="text-sm text-gray-600">{c}</span>
-                  <span className="text-[10px] text-gray-600 flex items-center gap-1 whitespace-nowrap">
-                    <Lock className="w-2.5 h-2.5" />
-                    Vybt Plus
-                  </span>
-                </div>
-              ))}
+              {adminMode ? (
+                popularCities
+                  .filter(c => c.toLowerCase().includes(search.toLowerCase()))
+                  .map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => { onCityChange(c); setIsOpen(false); setSearch(''); }}
+                      className={`w-full flex items-center px-3 py-2 rounded-lg text-sm text-left transition-colors ${
+                        city === c ? 'bg-[#00fea3]/15 text-[#00fea3]' : 'text-gray-300 hover:bg-gray-800'
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  ))
+              ) : (
+                popularCities.map((c) => (
+                  <div
+                    key={c}
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-lg cursor-not-allowed"
+                  >
+                    <span className="text-sm text-gray-600">{c}</span>
+                    <span className="text-[10px] text-gray-600 flex items-center gap-1 whitespace-nowrap">
+                      <Lock className="w-2.5 h-2.5" />
+                      Vybt Plus
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
 
             <div className="pt-3 border-t border-gray-800 mt-3">
