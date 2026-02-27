@@ -70,7 +70,7 @@ export default function Welcome() {
               onClick={() => base44.auth.redirectToLogin()}
               className="px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold hover:bg-[#00fea3]/90 transition-all"
             >
-              Download Now!
+              {t.downloadNow}
             </motion.button>
           </div>
         </header>
@@ -84,12 +84,13 @@ export default function Welcome() {
             className="space-y-6 max-w-2xl text-center flex-1 flex flex-col justify-center"
           >
             <h2 className="text-5xl md:text-6xl font-black">
-              Hey, <span className="text-[#00fea3]">mate!</span>
+              {t.welcomeHero?.split(',')[0]}, <span className="text-[#00fea3]">{t.welcomeHero?.split(',')[1]?.trim()}</span>
             </h2>
             
             <p className="text-lg md:text-xl text-gray-100 font-light leading-relaxed">
-              Join us: let's connect and create the best plans<br />
-              in your area!!!
+              {t.welcomeSubtitle?.split('\n').map((line, i) => (
+                <React.Fragment key={i}>{line}{i === 0 && <br />}</React.Fragment>
+              ))}
             </p>
           </motion.div>
           
@@ -128,7 +129,7 @@ export default function Welcome() {
       {/* Footer */}
       <footer className="bg-[#0b0b0b] border-t border-gray-800 py-8">
         <div className="max-w-6xl mx-auto px-4 text-center text-gray-500 text-sm">
-          <p>&copy; 2026 Vybt. All rights reserved.</p>
+          <p>&copy; 2026 Vybt. {t.allRightsReserved}</p>
         </div>
       </footer>
     </div>
