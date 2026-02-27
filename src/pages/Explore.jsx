@@ -195,6 +195,21 @@ export default function Explore() {
     await queryClient.invalidateQueries();
   };
 
+  const acceptMutation = useMutation({
+    mutationFn: (friendshipId) => base44.entities.Friendship.update(friendshipId, { status: 'accepted' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['receivedFriendRequestsExplore', currentUser?.id]);
+      queryClient.invalidateQueries(['myFriendshipsExplore', currentUser?.id]);
+    }
+  });
+
+  const declineMutation = useMutation({
+    mutationFn: (friendshipId) => base44.entities.Friendship.update(friendshipId, { status: 'declined' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['receivedFriendRequestsExplore', currentUser?.id]);
+    }
+  });
+
   return (
     <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh', overscrollBehavior: 'none' }}>
       {/* Header */}
