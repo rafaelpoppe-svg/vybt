@@ -327,12 +327,24 @@ export default function StoryView() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${storyPlan.id}`)}
-            className="w-full p-3 rounded-xl bg-white/10 backdrop-blur-sm flex items-center gap-3"
+            className="w-full p-3 rounded-xl backdrop-blur-sm flex items-center gap-3 border border-white/10"
+            style={{ backgroundColor: storyPlan.theme_color ? `${storyPlan.theme_color}33` : 'rgba(255,255,255,0.1)' }}
           >
-            <MapPin className="w-5 h-5 text-[#00fea3]" />
+            {storyPlan.group_image ? (
+              <img src={storyPlan.group_image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-white/20" />
+            ) : storyPlan.cover_image ? (
+              <img src={storyPlan.cover_image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-white/20" />
+            ) : (
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-lg"
+                style={{ backgroundColor: storyPlan.theme_color || '#542b9b' }}
+              >
+                🎉
+              </div>
+            )}
             <div className="flex-1 text-left">
               <p className="text-white font-medium">{storyPlan.title}</p>
-              <p className="text-gray-400 text-xs">{storyPlan.city}</p>
+              <p className="text-gray-300 text-xs">{storyPlan.city}</p>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-400" />
           </motion.button>
