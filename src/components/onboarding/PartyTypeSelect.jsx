@@ -81,7 +81,7 @@ export default function PartyTypeSelect({ selected = [], onSelect, min = 2, max 
 
       {selected.length >= max && (
         <p className="text-center text-xs text-[#00fea3]/70">
-          Limit reached — deselect one to pick another
+          {t.limitReached}
         </p>
       )}
     </div>
