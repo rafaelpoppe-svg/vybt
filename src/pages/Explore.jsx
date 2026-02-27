@@ -66,6 +66,12 @@ export default function Explore() {
     enabled: !!currentUser?.id
   });
 
+  const { data: receivedFriendRequests = [], refetch: refetchRequests } = useQuery({
+    queryKey: ['receivedFriendRequestsExplore', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id, status: 'pending' }),
+    enabled: !!currentUser?.id
+  });
+
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myParticipationsExplore', currentUser?.id],
     queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
