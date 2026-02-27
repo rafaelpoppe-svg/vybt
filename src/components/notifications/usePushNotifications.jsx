@@ -13,7 +13,7 @@ import {
  *  3. Plan updates (time/location) for plans the user participates in
  *     — already handled by notifyPlanTimeChanged / notifyPlanLocationChanged in AdminEditModal
  */
-export function usePushNotifications({ currentUser, userCity, plans = [], friendIds = [], myParticipations = [] }) {
+export function usePushNotifications({ currentUser, userCity, plans = [], friendIds = [], myParticipations = [], userProfile = null }) {
   // Track which notifications we've already fired this session to avoid duplicates
   const firedRef = useRef(new Set());
 

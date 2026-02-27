@@ -197,6 +197,33 @@ export default function NotificationSettings() {
             </div>
           ))}
 
+          {/* Plan Reminders */}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl px-4 py-4">
+            <div className="flex items-start gap-3 mb-4">
+              <span className="text-2xl">⏰</span>
+              <div className="flex-1">
+                <p className="text-white font-semibold text-sm">Plan reminders</p>
+                <p className="text-gray-500 text-xs mt-0.5">Get reminded before plans you joined start</p>
+              </div>
+            </div>
+            <div className="pl-9 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-white">1 day before</p>
+                  <p className="text-xs text-gray-500">Reminder the day before the plan</p>
+                </div>
+                <Toggle enabled={prefs.plan_reminder_1day} onToggle={() => toggle('plan_reminder_1day')} />
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-white">1 hour before</p>
+                  <p className="text-xs text-gray-500">Reminder 1 hour before the plan starts</p>
+                </div>
+                <Toggle enabled={prefs.plan_reminder_1hour} onToggle={() => toggle('plan_reminder_1hour')} />
+              </div>
+            </div>
+          </div>
+
           {/* Info */}
           <div className="flex items-start gap-3 p-3 rounded-xl bg-gray-900/50 border border-gray-800 mt-2">
             <Bell className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
