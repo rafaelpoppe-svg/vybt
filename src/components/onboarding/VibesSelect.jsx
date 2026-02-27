@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import VibeTag, { ALL_VIBES } from '../common/VibeTag';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function VibesSelect({ selected = [], onSelect, min = 2, max = 5 }) {
   const [search, setSearch] = useState('');
