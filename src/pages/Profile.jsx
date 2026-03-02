@@ -15,6 +15,7 @@ import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
 import VerificationBadge from '../components/profile/VerificationBadge';
 import VerificationFlow from '../components/profile/VerificationFlow';
 import { useLanguage } from '../components/common/LanguageContext';
+import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
 
 export default function Profile() {
   const navigate = useNavigate();
