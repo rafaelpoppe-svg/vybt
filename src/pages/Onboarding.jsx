@@ -237,10 +237,10 @@ function OnboardingInner() {
       </div>
 
       {/* Progress */}
-      {step < 8 && (
+      {step < 9 && (
         <div className="px-6 mb-8">
           <div className="flex gap-2">
-            {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <motion.div 
                 key={i}
                 animate={{
