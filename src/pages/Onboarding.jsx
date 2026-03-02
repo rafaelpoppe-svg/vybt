@@ -87,6 +87,7 @@ function OnboardingInner() {
       case 5: return data.vibes.length >= 2;
       case 6: return data.party_types.length >= 2;
       case 7: return true; // location is optional
+      case 8: return true; // nationality is optional
       default: return true;
     }
   };
