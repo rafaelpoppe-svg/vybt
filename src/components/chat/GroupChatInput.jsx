@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Sticker, Lock } from 'lucide-react';
 import StickerPicker from './StickerPicker';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function GroupChatInput({ isChatLocked, isPending, themeColor = '#00fea3', userId, onSend }) {
   const [message, setMessage] = useState('');
