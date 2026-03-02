@@ -112,9 +112,9 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
           ) : (
             <>
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-white mb-2">Renovar Plano 🔄</h2>
+                <h2 className="text-2xl font-bold text-white mb-2">{t.renewPlanTitle}</h2>
                 <p className="text-gray-400 text-sm">
-                  Todo será renovado com nova data e horário. As experience stories anteriores serão mantidas.
+                  {t.renewPlanDesc}
                 </p>
               </div>
 
