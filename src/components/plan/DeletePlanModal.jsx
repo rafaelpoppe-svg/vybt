@@ -49,7 +49,7 @@ export default function DeletePlanModal({ isOpen, onClose, onConfirm, planTitle,
               onClick={onClose}
               className="flex-1 bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
             >
-              Cancelar
+              {t.cancel}
             </Button>
             <Button
               onClick={onConfirm}
@@ -61,7 +61,7 @@ export default function DeletePlanModal({ isOpen, onClose, onConfirm, planTitle,
               ) : (
                 <>
                   <Trash2 className="w-4 h-4 mr-2" />
-                  Encerrar Plano
+                  {t.terminatePlanConfirm}
                 </>
               )}
             </Button>
