@@ -61,7 +61,7 @@ export default function GroupAdminActions({
         >
           {/* Header */}
           <div className="p-4 border-b border-gray-800 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-white">Admin Actions</h2>
+            <h2 className="text-lg font-bold text-white">{t.adminActions}</h2>
             <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-800">
               <X className="w-5 h-5 text-gray-400" />
             </button>
