@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate, plan, isLoading }) {
+  const { t } = useLanguage();
   const [action, setAction] = useState(null); // 'renew' or 'terminate'
   const [formData, setFormData] = useState({
     date: '',
