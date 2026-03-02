@@ -56,7 +56,7 @@ export default function GroupChatInput({ isChatLocked, isPending, themeColor = '
         <input
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Mensagem..."
+          placeholder={t.messagePlaceholder}
           className="flex-1 bg-gray-900 border border-gray-700/50 text-white placeholder:text-gray-500 rounded-2xl h-11 px-4 text-sm outline-none focus:border-gray-600 transition-colors"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
