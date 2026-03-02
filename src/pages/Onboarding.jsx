@@ -133,7 +133,7 @@ function OnboardingInner() {
         } catch (e) {}
       }
       setCreatedProfile(profile);
-      setStep(9); // verification step
+      setStep(10); // verification step
     } catch (error) {
       console.error(error);
     }
