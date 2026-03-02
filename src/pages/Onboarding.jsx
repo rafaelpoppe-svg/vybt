@@ -204,8 +204,13 @@ function OnboardingInner() {
         </div>
       )}
     </div>,
+    // Nationality step (optional)
+    <NationalitySelect
+      selected={data.nationality}
+      onSelect={(nationality) => setData({...data, nationality})}
+    />,
     <WelcomeComplete onExplore={handleComplete} />,
-    // step 9 — verify (handled separately below)
+    // step 10 — verify (handled separately below)
     null,
   ];
 
