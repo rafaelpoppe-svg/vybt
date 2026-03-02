@@ -226,7 +226,7 @@ export default function GroupChat() {
         sender_id: currentUser.id,
         plan_id: planId,
         message_type: 'group',
-        content: '🔄 O plano foi renovado! Let\'s gooo 😎',
+        content: t.planRenewed,
         is_read: false,
       });
     },
