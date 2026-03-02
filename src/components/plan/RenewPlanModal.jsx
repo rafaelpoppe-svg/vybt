@@ -164,7 +164,7 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
             <div>
               <label className="block text-gray-400 text-sm mb-2">
                 <MapPin className="w-4 h-4 inline mr-2" />
-                Novo Endereço
+                {t.newAddress}
               </label>
               <Input
                 type="text"
