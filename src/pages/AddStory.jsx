@@ -190,7 +190,6 @@ export default function AddStory() {
 
   const [step, setStep] = useState(preselectedPlanId ? 1 : 0); // 0=select plan, 1=camera, 2=preview
   const [currentUser, setCurrentUser] = useState(null);
-  const isAdmin = currentUser?.role === 'admin';
   const [selectedPlan, setSelectedPlan] = useState(preselectedPlanId || '');
   const [media, setMedia] = useState(null);
   const [visibility, setVisibility] = useState('friends');
