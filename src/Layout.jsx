@@ -162,9 +162,15 @@ export default function Layout({ children, currentPageName }) {
             will-change: transform, opacity;
           }
 
-          /* Safe-area bottom helper for drawers */
+          /* Safe-area helpers */
           .pb-safe {
             padding-bottom: max(env(safe-area-inset-bottom, 0px), 1rem);
+          }
+          .pt-safe {
+            padding-top: max(env(safe-area-inset-top, 0px), 0px);
+          }
+          .mb-safe {
+            margin-bottom: max(env(safe-area-inset-bottom, 0px), 1rem);
           }
         `}</style>
         <PageTransition>
