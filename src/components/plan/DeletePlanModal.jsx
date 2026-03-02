@@ -36,10 +36,10 @@ export default function DeletePlanModal({ isOpen, onClose, onConfirm, planTitle,
             <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
               <AlertTriangle className="w-8 h-8 text-red-500" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-2">Encerrar Plano?</h2>
+            <h2 className="text-2xl font-bold text-white mb-2">{t.terminatePlanQuestion}</h2>
             <p className="text-gray-400 text-sm">"{planTitle}"</p>
             <p className="text-gray-500 text-xs mt-3">
-              O plano será marcado como <span className="text-red-400 font-semibold">Encerrado</span> e ficará visível para todos os membros por 24 horas, depois será removido automaticamente.
+              {t.terminatePlanVisibleDesc.replace('Closed', `<span class="text-red-400 font-semibold">${t.terminated}</span>`)}
             </p>
           </div>
 
