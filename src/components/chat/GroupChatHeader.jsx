@@ -103,7 +103,7 @@ export default function GroupChatHeader({
               className="w-full py-2.5 rounded-xl bg-orange-500/20 border border-orange-500/30 text-orange-400 text-sm font-semibold flex items-center justify-center gap-2"
             >
               <Flame className="w-4 h-4" />
-              Votação aberta! Toque para votar
+              {t.votingOpen}
             </motion.button>
           )}
 
