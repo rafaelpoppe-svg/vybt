@@ -183,7 +183,7 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
                     onClick={() => setAction(null)}
                     className="flex-1 bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
                   >
-                    Voltar
+                    {t.back}
                   </Button>
                   <Button
                     type="submit"
@@ -193,7 +193,7 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      'Confirmar Renovação'
+                      t.confirmRenewal
                     )}
                   </Button>
                 </div>
