@@ -9,6 +9,7 @@ export default function GroupChatHeader({
   plan, planStatus, isChatLocked, hasVoted, isAdmin, themeColor,
   onBack, onInfo, onAdminActions, onVote, onRenew, onDelete
 }) {
+  const { t } = useLanguage();
   return (
     <header
       className="relative z-20 backdrop-blur-xl border-b border-gray-800/60"
