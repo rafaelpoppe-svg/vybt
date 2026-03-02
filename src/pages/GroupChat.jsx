@@ -377,7 +377,7 @@ export default function GroupChat() {
         ) : sortedMessages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
             <span className="text-5xl">👋</span>
-            <p className="text-gray-500 text-sm">Seja o primeiro a enviar uma mensagem!</p>
+            <p className="text-gray-500 text-sm">{t.beFirstToMessage}</p>
           </div>
         ) : (
           sortedMessages.map((msg, index) => {
