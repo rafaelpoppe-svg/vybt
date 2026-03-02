@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Zap, ZapOff, X, Camera } from 'lucide-react';
+import { RotateCcw, Zap, ZapOff, X, Camera, ImageIcon } from 'lucide-react';
 
-export default function CameraView({ onCapture, onClose }) {
+export default function CameraView({ onCapture, onClose, isAdmin = false }) {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
