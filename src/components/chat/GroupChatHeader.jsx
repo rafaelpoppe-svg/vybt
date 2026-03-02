@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, Info, MoreVertical, MapPin, Clock, Flame, RefreshCw, Trash2 } from 'lucide-react';
 import PartyTag from '../common/PartyTag';
 import PlanCountdown from '../plan/PlanCountdown';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function GroupChatHeader({
   plan, planStatus, isChatLocked, hasVoted, isAdmin, themeColor,
