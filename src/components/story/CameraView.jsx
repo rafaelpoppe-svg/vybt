@@ -207,8 +207,23 @@ export default function CameraView({ onCapture, onClose, isAdmin = false }) {
 
         {/* Shutter row */}
         <div className="flex items-center justify-between">
-          {/* Spacer to balance flip button */}
-          <div className="w-14 h-14" />
+          {/* Gallery picker (admin only) */}
+          {isAdmin ? (
+            <label className="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center cursor-pointer">
+              <ImageIcon className="w-6 h-6 text-white" />
+              <input
+                type="file"
+                accept="image/*,video/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) onCapture(file);
+                }}
+              />
+            </label>
+          ) : (
+            <div className="w-14 h-14" />
+          )}
 
           {/* Main shutter */}
           <motion.button
