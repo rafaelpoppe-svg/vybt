@@ -110,6 +110,7 @@ function OnboardingInner() {
         vibes: data.vibes,
         party_types: data.party_types,
         city: data.city || '',
+        nationality: data.nationality || '',
         radius_km: 10,
         onboarding_completed: true,
         total_stories_count: 0,
