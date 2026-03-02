@@ -28,7 +28,8 @@ function OnboardingInner() {
     photos: [],
     vibes: [],
     party_types: [],
-    city: ''
+    city: '',
+    nationality: ''
   });
   const [loading, setLoading] = useState(false);
   const [detectingCity, setDetectingCity] = useState(false);
