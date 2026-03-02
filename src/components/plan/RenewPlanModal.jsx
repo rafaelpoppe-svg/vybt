@@ -80,15 +80,15 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
           ) : action === 'terminate' ? (
             <div className="space-y-4">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-white mb-2">Terminar Plano ❌</h2>
+                <h2 className="text-2xl font-bold text-white mb-2">{t.terminatePlanTitle}</h2>
                 <p className="text-gray-400 text-sm">
-                  O plano será marcado como terminado e ficará visível por 24 horas antes de ser deletado automaticamente.
+                  {t.terminatePlanDesc}
                 </p>
               </div>
 
               <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30">
                 <p className="text-red-400 text-sm">
-                  ⚠️ Esta ação não pode ser desfeita. Todos os membros verão que o plano foi terminado.
+                  {t.terminateWarning}
                 </p>
               </div>
 
@@ -98,14 +98,14 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
                   onClick={() => setAction(null)}
                   className="flex-1 bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
                 >
-                  Voltar
+                  {t.back}
                 </Button>
                 <Button
                   onClick={() => onTerminate()}
                   disabled={isLoading}
                   className="flex-1 bg-red-600 hover:bg-red-700 text-white"
                 >
-                  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirmar Término'}
+                  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : t.confirmTermination}
                 </Button>
               </div>
             </div>
