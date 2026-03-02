@@ -122,7 +122,7 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
             <div>
               <label className="block text-gray-400 text-sm mb-2">
                 <Calendar className="w-4 h-4 inline mr-2" />
-                Nova Data
+                {t.newDate}
               </label>
               <Input
                 type="date"
