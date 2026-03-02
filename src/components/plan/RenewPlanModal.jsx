@@ -51,22 +51,22 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
           {!action ? (
             <div className="space-y-4">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-white mb-2">Ações do Administrador</h2>
-                <p className="text-gray-400 text-sm">Escolha o que fazer com este plano</p>
+                <h2 className="text-2xl font-bold text-white mb-2">{t.adminActionsTitle}</h2>
+                <p className="text-gray-400 text-sm">{t.chooseWhatToDo}</p>
               </div>
 
               <Button
                 onClick={() => setAction('renew')}
                 className="w-full py-6 rounded-xl bg-gradient-to-r from-[#00fea3] to-green-500 hover:from-[#00fea3]/90 hover:to-green-600 text-[#0b0b0b] font-semibold text-lg"
               >
-                🔄 Renovar Plano
+                {t.renewPlanBtn}
               </Button>
 
               <Button
                 onClick={() => setAction('terminate')}
                 className="w-full py-6 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-semibold text-lg"
               >
-                ❌ Terminar Plano
+                {t.terminatePlanBtn}
               </Button>
 
               <Button
@@ -74,7 +74,7 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
                 onClick={onClose}
                 className="w-full bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
               >
-                Cancelar
+                {t.cancel}
               </Button>
             </div>
           ) : action === 'terminate' ? (
