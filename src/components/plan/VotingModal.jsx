@@ -7,6 +7,7 @@ import { useLanguage } from '../common/LanguageContext';
 export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoading }) {
   const [showLeaveQuestion, setShowLeaveQuestion] = useState(false);
   const [voteType, setVoteType] = useState(null);
+  const { t } = useLanguage();
 
   if (!isOpen) return null;
 
