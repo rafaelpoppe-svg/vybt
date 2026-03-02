@@ -26,6 +26,7 @@ export default function GroupChat() {
   const queryClient = useQueryClient();
   const planId = new URLSearchParams(window.location.search).get('planId');
 
+  const { t } = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
   const [myProfile, setMyProfile] = useState(null);
   const [showAdminActions, setShowAdminActions] = useState(false);
