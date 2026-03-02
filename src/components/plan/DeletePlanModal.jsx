@@ -39,7 +39,7 @@ export default function DeletePlanModal({ isOpen, onClose, onConfirm, planTitle,
             <h2 className="text-2xl font-bold text-white mb-2">{t.terminatePlanQuestion}</h2>
             <p className="text-gray-400 text-sm">"{planTitle}"</p>
             <p className="text-gray-500 text-xs mt-3">
-              {t.terminatePlanVisibleDesc.replace('Closed', `<span class="text-red-400 font-semibold">${t.terminated}</span>`)}
+              {t.terminatePlanVisibleDesc}
             </p>
           </div>
 
