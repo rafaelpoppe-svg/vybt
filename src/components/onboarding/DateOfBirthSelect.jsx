@@ -30,8 +30,8 @@ export default function DateOfBirthSelect({ value, onChange }) {
 
     const age = calculateAge(selectedDate);
     
-    if (age < 18) {
-      setError(t.mustBe18);
+    if (age < 16) {
+      setError(t.mustBe16);
       onChange('');
     } else {
       setError('');
@@ -39,9 +39,9 @@ export default function DateOfBirthSelect({ value, onChange }) {
     }
   };
 
-  // Maximum date: 18 years ago from today
+  // Maximum date: 16 years ago from today
   const maxDate = new Date();
-  maxDate.setFullYear(maxDate.getFullYear() - 18);
+  maxDate.setFullYear(maxDate.getFullYear() - 16);
   const maxDateString = maxDate.toISOString().split('T')[0];
 
   // Minimum date: 100 years ago
