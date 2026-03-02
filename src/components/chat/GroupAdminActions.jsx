@@ -88,7 +88,7 @@ export default function GroupAdminActions({
                   className="w-full bg-[#542b9b] hover:bg-[#542b9b]/80 text-white"
                 >
                   <Edit className="w-4 h-4 mr-2" />
-                  Editar Plano
+                  {t.editPlan}
                 </Button>
               )}
             </div>
