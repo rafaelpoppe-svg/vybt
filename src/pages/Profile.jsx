@@ -173,6 +173,15 @@ export default function Profile() {
               <span className="text-gray-300 text-sm">{profile.city}</span>
             </div>
           )}
+          {profile.nationality && (() => {
+            const nat = NATIONALITIES.find(n => n.code === profile.nationality);
+            return nat ? (
+              <div className="flex items-center gap-1.5 mt-1">
+                <span className="text-base">{nat.flag}</span>
+                <span className="text-gray-300 text-sm">{nat.name}</span>
+              </div>
+            ) : null;
+          })()}
         </div>
       </div>
 
