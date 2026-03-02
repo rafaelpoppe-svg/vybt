@@ -94,7 +94,7 @@ export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoad
                   disabled={isLoading}
                   className="w-full py-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold"
                 >
-                  Sim, sair do plano
+                  {t.yesLeavePlan}
                 </Button>
 
                 <Button
@@ -102,7 +102,7 @@ export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoad
                   disabled={isLoading}
                   className="w-full py-4 rounded-xl bg-gray-700 hover:bg-gray-600 text-white font-semibold"
                 >
-                  Não, permanecer no grupo
+                  {t.noStayInGroup}
                 </Button>
               </div>
             </>
