@@ -28,6 +28,7 @@ export default function GroupAdminActions({
   isAdmin,
   planStatus
 }) {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('stories');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviting, setInviting] = useState(false);
