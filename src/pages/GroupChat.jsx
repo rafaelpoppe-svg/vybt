@@ -252,7 +252,7 @@ export default function GroupChat() {
         sender_id: currentUser.id,
         plan_id: planId,
         message_type: 'group',
-        content: '❌ O administrador encerrou este plano. O grupo será removido em 24 horas.',
+        content: t.planTerminatedMsg,
         is_read: false,
       });
     },
