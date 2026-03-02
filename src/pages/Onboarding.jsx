@@ -265,7 +265,7 @@ function OnboardingInner() {
             exit={{ opacity: 0, x: -60, scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 350, damping: 30 }}
           >
-            {step === 9 ? (
+            {step === 10 ? (
               <div className="space-y-6 text-center">
                 <div className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto">
                   <ShieldCheck className="w-12 h-12 text-blue-400" />
