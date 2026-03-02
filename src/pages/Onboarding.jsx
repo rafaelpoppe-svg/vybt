@@ -13,6 +13,7 @@ import WelcomeComplete from '../components/onboarding/WelcomeComplete';
 import LanguageSelect from '../components/onboarding/LanguageSelect';
 import NameSelect from '../components/onboarding/NameSelect';
 import VerificationFlow from '../components/profile/VerificationFlow';
+import NationalitySelect from '../components/onboarding/NationalitySelect';
 import { useLanguage } from '../components/common/LanguageContext';
 
 function OnboardingInner() {
