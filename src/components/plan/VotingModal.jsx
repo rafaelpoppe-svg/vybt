@@ -52,9 +52,9 @@ export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoad
           {!showLeaveQuestion ? (
             <>
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-bold text-white mb-2">Como foi o plano?</h2>
+                <h2 className="text-2xl font-bold text-white mb-2">{t.howWasPlan}</h2>
                 <p className="text-gray-400 text-sm">"{planTitle}"</p>
-                <p className="text-gray-500 text-xs mt-2">Sua opinião ajuda a melhorar eventos futuros</p>
+                <p className="text-gray-500 text-xs mt-2">{t.yourOpinionHelps}</p>
               </div>
 
               <div className="space-y-3">
