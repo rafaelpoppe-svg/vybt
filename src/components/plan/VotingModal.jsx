@@ -78,7 +78,7 @@ export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoad
               </div>
 
               <p className="text-xs text-gray-600 text-center mt-4">
-                Votação encerra em 6 horas após o fim do plano
+                {t.votingClosesIn}
               </p>
             </>
           ) : (
