@@ -67,7 +67,7 @@ function StepSelectPlan({ activePlans, myParticipations, selectedPlan, onSelect,
           })
         )}
       </div>
-      <div className="px-4 pb-6">
+      <div className="px-4" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={onNext}
@@ -138,7 +138,7 @@ function StepPreview({ media, plans, selectedPlan, onPublish, onRetake, submitti
       </div>
 
       {/* Bottom controls */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-8 space-y-3">
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 space-y-3" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
         {/* Visibility quick toggle */}
         <div className="flex gap-2 justify-center">
           {visibilityOptions.map((opt) => {
