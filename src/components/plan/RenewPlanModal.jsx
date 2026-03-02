@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, Clock, MapPin, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate, plan, isLoading }) {
   const [action, setAction] = useState(null); // 'renew' or 'terminate'
