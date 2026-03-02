@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoading }) {
   const [showLeaveQuestion, setShowLeaveQuestion] = useState(false);
