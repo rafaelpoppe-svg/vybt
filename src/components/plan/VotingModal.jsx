@@ -84,8 +84,8 @@ export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoad
           ) : (
             <>
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-bold text-white mb-2">Deseja sair deste plano?</h2>
-                <p className="text-gray-400 text-sm">Você votou que não gostou do plano</p>
+                <h2 className="text-2xl font-bold text-white mb-2">{t.wantToLeavePlan}</h2>
+                <p className="text-gray-400 text-sm">{t.youVotedBad}</p>
               </div>
 
               <div className="space-y-3">
