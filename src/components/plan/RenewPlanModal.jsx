@@ -150,7 +150,7 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
             <div>
               <label className="block text-gray-400 text-sm mb-2">
                 <Clock className="w-4 h-4 inline mr-2" />
-                Horário de Término
+                {t.endTime}
               </label>
               <Input
                 type="time"
