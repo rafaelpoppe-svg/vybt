@@ -170,7 +170,7 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
                 type="text"
                 value={formData.location_address}
                 onChange={(e) => setFormData({ ...formData, location_address: e.target.value })}
-                placeholder="Endereço completo"
+                placeholder={t.fullAddress}
                 className="bg-gray-800 border-gray-700 text-white"
                 required
               />
