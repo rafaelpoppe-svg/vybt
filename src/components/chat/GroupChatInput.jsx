@@ -7,6 +7,7 @@ import { useLanguage } from '../common/LanguageContext';
 export default function GroupChatInput({ isChatLocked, isPending, themeColor = '#00fea3', userId, onSend }) {
   const [message, setMessage] = useState('');
   const [showStickers, setShowStickers] = useState(false);
+  const { t } = useLanguage();
 
   const handleSend = () => {
     const trimmed = message.trim();
