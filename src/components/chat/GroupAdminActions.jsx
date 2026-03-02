@@ -74,12 +74,12 @@ export default function GroupAdminActions({
                 <div className="w-full py-3 px-4 rounded-xl bg-gray-800 border border-gray-700 text-center">
                   <p className="text-gray-400 text-sm font-medium flex items-center justify-center gap-2">
                     <Edit className="w-4 h-4 text-gray-600" />
-                    Editar Plano
+                    {t.editPlan}
                   </p>
                   <p className="text-gray-600 text-xs mt-1">
                     {planStatus === 'voting'
-                      ? 'Indisponível durante a votação'
-                      : 'Indisponível enquanto o plano está encerrado'}
+                      ? t.editPlanUnavailableVoting
+                      : t.editPlanUnavailableEnded}
                   </p>
                 </div>
               ) : (
