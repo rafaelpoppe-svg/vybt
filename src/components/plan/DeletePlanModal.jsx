@@ -2,8 +2,10 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trash2, AlertTriangle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function DeletePlanModal({ isOpen, onClose, onConfirm, planTitle, isLoading }) {
+  const { t } = useLanguage();
   if (!isOpen) return null;
 
   return (
