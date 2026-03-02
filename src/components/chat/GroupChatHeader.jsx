@@ -123,7 +123,7 @@ export default function GroupChatHeader({
                 className="flex-1 py-2.5 rounded-xl bg-[#00fea3]/20 border border-[#00fea3]/30 text-[#00fea3] text-sm font-semibold flex items-center justify-center gap-2"
               >
                 <RefreshCw className="w-4 h-4" />
-                Renovar
+                {t.renewPlan}
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.95 }}
@@ -131,7 +131,7 @@ export default function GroupChatHeader({
                 className="flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
-                Encerrar
+                {t.terminatePlan}
               </motion.button>
             </div>
           )}
