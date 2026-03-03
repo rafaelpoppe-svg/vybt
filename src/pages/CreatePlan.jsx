@@ -274,6 +274,16 @@ export default function CreatePlan() {
             transition={{ delay: 1.2 }}
             className="space-y-3"
           >
+            {/* Highlight Plan CTA */}
+            {!createdPlan.is_highlighted && (
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setShowHighlightModal(true)}
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/40 text-orange-400 font-bold text-lg flex items-center justify-center gap-2"
+              >
+                🔥 Highlight Plan — €2.99
+              </motion.button>
+            )}
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${createdPlan.id}`)}
@@ -291,6 +301,17 @@ export default function CreatePlan() {
           </motion.div>
         </motion.div>
       </div>
+
+      <HighlightPlanModal
+        isOpen={showHighlightModal}
+        onClose={() => setShowHighlightModal(false)}
+        planTitle={createdPlan.title}
+        planTags={createdPlan.tags || []}
+        onConfirm={() => {
+          base44.entities.PartyPlan.update(createdPlan.id, { is_highlighted: true });
+          setCreatedPlan(prev => ({ ...prev, is_highlighted: true }));
+        }}
+      />
     );
   }
 
