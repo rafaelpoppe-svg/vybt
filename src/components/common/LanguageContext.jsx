@@ -945,6 +945,10 @@ export const translations = {
     terminatePlanConfirm: 'Fermer le Plan',
     planRenewed: "🔄 Le plan a été renouvelé ! Let's gooo 😎",
     planTerminatedMsg: '❌ L\'administrateur a fermé ce plan. Le groupe sera supprimé dans 24 heures.',
+    // Ambassador CTA
+    ambassadorCtaTitle: 'Sois le premier dans ta ville !',
+    ambassadorCtaDesc: 'Il n\'y a pas encore de plans à {city}. Deviens Vybt Ambassador et apporte le vibe dans ta région !',
+    becomeAmbassador: 'Devenir Ambassador',
   },
 
   it: {
