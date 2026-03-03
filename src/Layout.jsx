@@ -34,11 +34,10 @@ export default function Layout({ children, currentPageName }) {
         
         // Utilizador logado
         if (user) {
-          // TEMPORÁRIO: comentado para preview
-          // if (currentPageName === 'Welcome' && !isPreview) {
-          //   navigate(createPageUrl('Home'));
-          //   return;
-          // }
+          if (currentPageName === 'Welcome' && !isPreview && user.role !== 'admin') {
+            navigate(createPageUrl('Home'));
+            return;
+          }
         } else {
           // Utilizador não logado
           // Se tenta aceder a página protegida, redireciona para Welcome

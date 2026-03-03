@@ -69,11 +69,11 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import StoryView from './pages/StoryView';
+import Support from './pages/Support';
 import TermsConditions from './pages/TermsConditions';
 import UserProfile from './pages/UserProfile';
 import Welcome from './pages/Welcome';
 import WelcomePrograms from './pages/WelcomePrograms';
-import Support from './pages/Support';
 import __Layout from './Layout.jsx';
 
 
@@ -100,11 +100,11 @@ export const PAGES = {
     "Profile": Profile,
     "Settings": Settings,
     "StoryView": StoryView,
+    "Support": Support,
     "TermsConditions": TermsConditions,
     "UserProfile": UserProfile,
     "Welcome": Welcome,
     "WelcomePrograms": WelcomePrograms,
-    "Support": Support,
 }
 
 export const pagesConfig = {
