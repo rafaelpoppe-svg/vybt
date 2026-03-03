@@ -3,11 +3,13 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { 
-  ChevronLeft, Copy, Check, Users, Trophy, Zap, Star, 
-  Share2, CheckCircle2, Lock, ExternalLink
+import {
+  ChevronLeft, Copy, Check, Users, Trophy, Star,
+  Share2, CheckCircle2, Lock, ExternalLink, Zap
 } from 'lucide-react';
 import { toast } from 'sonner';
+
+const DISCORD_LINK = 'https://discord.gg/nekE48rn';
 
 const ambassadorPerks = [
   { icon: '🎮', text: 'Exclusive Discord Community' },
@@ -22,12 +24,27 @@ const ambassadorPerks = [
   { icon: '📣', text: 'Access to marketing features & strategy' },
 ];
 
-const steps = [
-  { label: 'Join the program', done: true },
-  { label: 'Get your referral link', done: true },
-  { label: 'Invite 10 friends', count: true },
-  { label: 'Unlock Ambassador status', final: true },
-];
+// Level system: every 10 invites is a new milestone
+function getLevel(count) {
+  if (count < 10) return { level: 0, label: 'Newcomer', next: 10, color: 'from-gray-600 to-gray-400' };
+  const lvl = Math.floor(count / 10);
+  const labels = ['', 'Rising Star', 'Community Builder', 'City Legend', 'Vybt Icon', 'Elite Ambassador'];
+  const colors = [
+    '',
+    'from-purple-600 to-purple-400',
+    'from-blue-600 to-blue-400',
+    'from-[#00fea3] to-teal-400',
+    'from-yellow-500 to-amber-400',
+    'from-pink-500 to-rose-400',
+  ];
+  const capped = Math.min(lvl, 5);
+  return {
+    level: capped,
+    label: labels[capped] || 'Elite Ambassador',
+    next: (capped < 5) ? (capped + 1) * 10 : null,
+    color: colors[capped] || colors[5],
+  };
+}
 
 export default function Ambassador() {
   const navigate = useNavigate();
@@ -45,7 +62,6 @@ export default function Ambassador() {
         const profiles = await base44.entities.UserProfile.filter({ user_id: user.id });
         const p = profiles[0];
 
-        // Generate referral code if missing
         if (p && !p.referral_code) {
           const code = `VYBT${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
           await base44.entities.UserProfile.update(p.id, {
@@ -58,18 +74,14 @@ export default function Ambassador() {
 
         setProfile(p);
 
-        // Fetch referred users
         if (p?.referral_code) {
           const refs = await base44.entities.UserProfile.filter({ referred_by: p.referral_code });
           setReferredUsers(refs);
 
-          // Check if should become ambassador
           const count = refs.length;
-          if (count >= 10 && !p.is_ambassador) {
-            await base44.entities.UserProfile.update(p.id, {
-              is_ambassador: true,
-              referred_count: count
-            });
+          const shouldBeAmbassador = count >= 10;
+          if (shouldBeAmbassador && !p.is_ambassador) {
+            await base44.entities.UserProfile.update(p.id, { is_ambassador: true, referred_count: count });
             p.is_ambassador = true;
           } else if (count !== p.referred_count) {
             await base44.entities.UserProfile.update(p.id, { referred_count: count });
@@ -107,8 +119,14 @@ export default function Ambassador() {
   };
 
   const inviteCount = referredUsers.length;
-  const progress = Math.min((inviteCount / 10) * 100, 100);
-  const isAmbassador = profile?.is_ambassador;
+  const isAmbassador = profile?.is_ambassador || inviteCount >= 10;
+  const levelInfo = getLevel(inviteCount);
+  const progressToNext = levelInfo.next
+    ? Math.min(((inviteCount % 10) / 10) * 100, 100)
+    : 100;
+
+  // Milestones to display
+  const milestones = [10, 20, 30, 40, 50];
 
   if (loading) {
     return (
@@ -127,8 +145,8 @@ export default function Ambassador() {
         </motion.button>
         <h1 className="text-white font-bold text-lg flex-1">Vybt Ambassador</h1>
         {isAmbassador && (
-          <span className="px-3 py-1 rounded-full bg-gradient-to-r from-[#542b9b] to-purple-500 text-white text-xs font-bold">
-            🏆 Ambassador
+          <span className={`px-3 py-1 rounded-full bg-gradient-to-r ${levelInfo.color} text-white text-xs font-bold`}>
+            🏆 {levelInfo.label}
           </span>
         )}
       </div>
@@ -141,14 +159,14 @@ export default function Ambassador() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', bounce: 0.4 }}
-            className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#542b9b] to-purple-400 flex items-center justify-center mx-auto mb-4"
+            className={`w-20 h-20 rounded-3xl bg-gradient-to-br ${levelInfo.color} flex items-center justify-center mx-auto mb-4`}
           >
             <Trophy className="w-10 h-10 text-white" />
           </motion.div>
           {isAmbassador ? (
             <>
               <h2 className="text-2xl font-bold text-white mb-1">You're an Ambassador! 🎉</h2>
-              <p className="text-purple-400 text-sm">All perks are now unlocked. Thank you for growing Vybt!</p>
+              <p className="text-purple-400 text-sm">Level {levelInfo.level} · {levelInfo.label} — Keep growing!</p>
             </>
           ) : (
             <>
@@ -158,49 +176,56 @@ export default function Ambassador() {
           )}
         </div>
 
-        {/* Progress */}
+        {/* Level & Progress */}
         <div className="bg-gray-900 rounded-2xl p-5 border border-gray-800">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-purple-400" />
-              <span className="text-white font-semibold">Invites Progress</span>
+              <Zap className="w-5 h-5 text-purple-400" />
+              <span className="text-white font-semibold">Level {levelInfo.level} · {levelInfo.label}</span>
             </div>
-            <span className="text-purple-400 font-bold text-lg">{inviteCount}/10</span>
+            <span className="text-purple-400 font-bold text-lg">{inviteCount} invited</span>
           </div>
+          {levelInfo.next && (
+            <p className="text-gray-500 text-xs mb-3">{levelInfo.next - inviteCount} more to reach Level {levelInfo.level + 1}</p>
+          )}
+          {!levelInfo.next && (
+            <p className="text-[#00fea3] text-xs mb-3 font-semibold">🏆 Max level reached — You're a legend!</p>
+          )}
           <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
+              animate={{ width: `${progressToNext}%` }}
               transition={{ duration: 1, ease: 'easeOut' }}
-              className="h-full rounded-full bg-gradient-to-r from-[#542b9b] to-purple-400"
+              className={`h-full rounded-full bg-gradient-to-r ${levelInfo.color}`}
             />
           </div>
-          {!isAmbassador && (
-            <p className="text-gray-500 text-xs mt-2">{10 - inviteCount} more friends to go!</p>
-          )}
         </div>
 
-        {/* Steps */}
-        <div className="space-y-3">
-          <h3 className="text-white font-semibold text-sm uppercase tracking-widest">Steps</h3>
-          {steps.map((step, i) => {
-            const isDone = step.done || (step.count && inviteCount >= 10) || (step.final && isAmbassador);
-            return (
-              <div key={i} className="flex items-center gap-3">
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${isDone ? 'bg-[#00fea3]' : 'bg-gray-800 border border-gray-700'}`}>
-                  {isDone
-                    ? <Check className="w-3.5 h-3.5 text-[#0b0b0b]" />
-                    : step.count
-                    ? <span className="text-gray-400 text-[10px] font-bold">{inviteCount}</span>
-                    : <Lock className="w-3 h-3 text-gray-600" />
-                  }
+        {/* Milestones */}
+        <div className="space-y-2">
+          <h3 className="text-white font-semibold text-sm uppercase tracking-widest">Milestones</h3>
+          <div className="grid grid-cols-5 gap-2">
+            {milestones.map((m) => {
+              const reached = inviteCount >= m;
+              const levelIdx = Math.floor(m / 10);
+              const colors = [
+                'from-purple-600 to-purple-400',
+                'from-blue-600 to-blue-400',
+                'from-[#00fea3] to-teal-400',
+                'from-yellow-500 to-amber-400',
+                'from-pink-500 to-rose-400',
+              ];
+              const color = colors[levelIdx - 1] || colors[0];
+              return (
+                <div key={m} className="flex flex-col items-center gap-1">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${reached ? `bg-gradient-to-br ${color} text-white` : 'bg-gray-800 text-gray-600 border border-gray-700'}`}>
+                    {reached ? '✓' : m}
+                  </div>
+                  <span className={`text-[10px] text-center ${reached ? 'text-white' : 'text-gray-600'}`}>{m} inv.</span>
                 </div>
-                <span className={`text-sm ${isDone ? 'text-white font-medium' : 'text-gray-500'}`}>
-                  {step.count ? `${step.label} (${inviteCount}/10)` : step.label}
-                </span>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
         {/* Referral Link */}
@@ -231,6 +256,38 @@ export default function Ambassador() {
           </motion.button>
         </div>
 
+        {/* Discord Community — unlocked at 10 invites */}
+        <div className={`rounded-2xl p-5 border ${isAmbassador ? 'bg-[#5865F2]/10 border-[#5865F2]/40' : 'bg-gray-900 border-gray-800 opacity-60'}`}>
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-2xl">🎮</span>
+            <div>
+              <h3 className="text-white font-semibold">Exclusive Discord Community</h3>
+              <p className="text-gray-400 text-xs">
+                {isAmbassador ? 'You have access — join your crew!' : 'Unlocked at 10 invites'}
+              </p>
+            </div>
+            {!isAmbassador && <Lock className="w-4 h-4 text-gray-600 ml-auto flex-shrink-0" />}
+          </div>
+          {isAmbassador ? (
+            <motion.a
+              href={DISCORD_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.02 }}
+              className="w-full py-3 rounded-2xl bg-[#5865F2] text-white font-bold flex items-center justify-center gap-2"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Join the Discord
+            </motion.a>
+          ) : (
+            <div className="w-full py-3 rounded-2xl bg-gray-800 text-gray-500 font-bold flex items-center justify-center gap-2 text-sm">
+              <Lock className="w-4 h-4" />
+              Invite {10 - inviteCount} more friends to unlock
+            </div>
+          )}
+        </div>
+
         {/* Referred Users */}
         {referredUsers.length > 0 && (
           <div className="bg-gray-900 rounded-2xl p-5 border border-gray-800">
@@ -239,7 +296,7 @@ export default function Ambassador() {
               Friends You Invited ({referredUsers.length})
             </h3>
             <div className="space-y-2">
-              {referredUsers.map((u, i) => (
+              {referredUsers.map((u) => (
                 <div key={u.id} className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#542b9b] to-purple-400 flex items-center justify-center text-white text-xs font-bold">
                     {u.display_name?.[0] || '?'}
