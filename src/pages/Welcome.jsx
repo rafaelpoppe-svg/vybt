@@ -237,11 +237,11 @@ export default function Welcome() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            Stop scrolling,
+            Hey Mate!
             <br />
             <span className="relative inline-block">
               <span className="bg-gradient-to-r from-[#00fea3] via-[#00c4ff] to-[#a855f7] bg-clip-text text-transparent">
-                start living
+                Join us
               </span>
               <motion.span
                 className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[#00fea3] to-[#a855f7] rounded-full"
@@ -260,7 +260,7 @@ export default function Welcome() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Discover plans near you, join the right crew and live the night you always wanted. <span className="text-[#00fea3] font-semibold">Free. Now. Let's go.</span>
+            Discover plans near you, join the right crew and live the <span className="text-[#00fea3] font-semibold">best vibes you always wanted.</span>
           </motion.p>
 
           {/* CTA */}
