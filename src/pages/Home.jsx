@@ -350,9 +350,9 @@ export default function Home() {
                 transition={{ delay: 0.3 }}
                 className="mx-auto max-w-sm mt-2 rounded-2xl bg-gradient-to-br from-[#542b9b]/30 to-purple-900/20 border border-purple-500/30 p-4 text-center"
               >
-                <p className="text-purple-300 font-semibold text-sm mb-1">🌍 Be the first in your city!</p>
+                <p className="text-purple-300 font-semibold text-sm mb-1">🌍 {t.ambassadorCtaTitle}</p>
                 <p className="text-gray-400 text-xs mb-3">
-                  There are no plans in <span className="text-white font-medium">{city}</span> yet. Become a Vybt Ambassador and help bring the vibe to your area!
+                  {t.ambassadorCtaDesc?.replace('{city}', city) || `There are no plans in ${city} yet. Become a Vybt Ambassador and help bring the vibe to your area!`}
                 </p>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
@@ -360,7 +360,7 @@ export default function Home() {
                   onClick={() => navigate(createPageUrl('Ambassador'))}
                   className="px-5 py-2 rounded-full bg-gradient-to-r from-[#542b9b] to-purple-500 text-white font-bold text-sm"
                 >
-                  🏆 Become an Ambassador
+                  🏆 {t.becomeAmbassador}
                 </motion.button>
               </motion.div>
             </div>
