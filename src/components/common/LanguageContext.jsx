@@ -475,6 +475,10 @@ export const translations = {
     // Plan renewed chat message
     planRenewed: "🔄 The plan has been renewed! Let's gooo 😎",
     planTerminatedMsg: '❌ The admin has closed this plan. The group will be removed in 24 hours.',
+    // Ambassador CTA
+    ambassadorCtaTitle: 'Be the first in your city!',
+    ambassadorCtaDesc: 'There are no plans in {city} yet. Become a Vybt Ambassador and help bring the vibe to your area!',
+    becomeAmbassador: 'Become an Ambassador',
   },
 
   es: {
