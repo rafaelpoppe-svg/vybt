@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
 import { Search } from 'lucide-react';
+import HighlightPlanModal from '../components/plan/HighlightPlanModal';
 
 const themeColors = [
   '#00fea3', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1',
