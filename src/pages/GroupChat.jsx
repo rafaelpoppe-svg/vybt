@@ -9,6 +9,7 @@ import GroupChatInput from '../components/chat/GroupChatInput';
 import GroupMessageBubble from '../components/chat/GroupMessageBubble';
 import ChatStoryBar from '../components/chat/ChatStoryBar';
 import GroupAdminActions from '../components/chat/GroupAdminActions';
+import HighlightPlanModal from '../components/plan/HighlightPlanModal';
 import VotingModal from '../components/plan/VotingModal';
 import RenewPlanModal from '../components/plan/RenewPlanModal';
 import DeletePlanModal from '../components/plan/DeletePlanModal';
