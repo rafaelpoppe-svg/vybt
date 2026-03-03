@@ -21,7 +21,7 @@ export default function Layout({ children, currentPageName }) {
   };
 
   // Páginas públicas que não requerem autenticação
-  const publicPages = ['Welcome', 'Support'];
+  const publicPages = ['Welcome', 'Support', 'TermsConditions', 'CommunityGuidelines', 'PrivacyPolicy', 'HelpFaq'];
   // Páginas protegidas que requerem autenticação
   const protectedPages = ['Home', 'AddStory', 'Friends', 'Chat', 'GroupChat', 'Profile', 'MyPlans', 'CreatePlan', 'PlanDetails', 'Explore', 'MyStories', 'EditProfile', 'Settings', 'Notifications', 'NotificationSettings', 'Ambassador', 'WelcomePrograms', 'StoryView', 'UserProfile', 'Onboarding', 'Moderation'];
 
