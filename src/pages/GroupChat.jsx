@@ -472,6 +472,16 @@ export default function GroupChat() {
         isLoading={adminEditMutation.isPending}
         onDelete={() => { setShowAdminEditModal(false); setShowDeleteModal(true); }}
       />
+      <HighlightPlanModal
+        isOpen={showHighlightModal}
+        onClose={() => setShowHighlightModal(false)}
+        planTitle={plan?.title || ''}
+        planTags={plan?.tags || []}
+        onConfirm={() => {
+          base44.entities.PartyPlan.update(planId, { is_highlighted: true });
+          queryClient.invalidateQueries(['allPlans']);
+        }}
+      />
     </div>
   );
 }
