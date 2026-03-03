@@ -353,6 +353,7 @@ export default function GroupChat() {
         onVote={() => setShowVotingModal(true)}
         onRenew={() => setShowRenewModal(true)}
         onDelete={() => setShowDeleteModal(true)}
+        onHighlight={() => setShowHighlightModal(true)}
       />
 
       {/* Stories Bar */}
