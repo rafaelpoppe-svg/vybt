@@ -399,11 +399,11 @@ export default function Welcome() {
         >
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptMCAwSDMwdi02aDZ2NnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40" />
           <h2 className="text-3xl md:text-5xl font-black mb-4 relative">
-            A tua noite começa<br />
-            <span className="text-[#00fea3]">quando tu decides</span> ✨
+            Your night starts<br />
+            <span className="text-[#00fea3]">when you say so</span> ✨
           </h2>
           <p className="text-gray-300 text-lg mb-8 relative">
-            Não esperes que alguém organize. Sê tu.
+            Don't wait for someone else to organise. That's your job now.
           </p>
           <motion.button
             whileHover={{ scale: 1.07, boxShadow: '0 0 40px rgba(0,254,163,0.4)' }}
@@ -411,7 +411,7 @@ export default function Welcome() {
             onClick={() => base44.auth.redirectToLogin()}
             className="inline-flex items-center gap-2 px-10 py-4 rounded-2xl bg-gradient-to-r from-[#00fea3] to-[#00c4a0] text-[#0b0b0b] font-black text-xl shadow-2xl relative"
           >
-            Quero entrar 🎊
+            I'm in 🎊
           </motion.button>
         </motion.div>
       </section>
