@@ -260,7 +260,7 @@ export default function Welcome() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Descobre planos na tua zona, junta-te ao grupo certo e vive a noite que sempre quiseste. <span className="text-[#00fea3] font-semibold">Grátis. Já. Agora.</span>
+            Discover plans near you, join the right crew and live the night you always wanted. <span className="text-[#00fea3] font-semibold">Free. Now. Let's go.</span>
           </motion.p>
 
           {/* CTA */}
