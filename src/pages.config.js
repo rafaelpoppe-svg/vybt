@@ -73,6 +73,7 @@ import TermsConditions from './pages/TermsConditions';
 import UserProfile from './pages/UserProfile';
 import Welcome from './pages/Welcome';
 import WelcomePrograms from './pages/WelcomePrograms';
+import Support from './pages/Support';
 import __Layout from './Layout.jsx';
 
 
@@ -103,6 +104,7 @@ export const PAGES = {
     "UserProfile": UserProfile,
     "Welcome": Welcome,
     "WelcomePrograms": WelcomePrograms,
+    "Support": Support,
 }
 
 export const pagesConfig = {
