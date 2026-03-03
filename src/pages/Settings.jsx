@@ -187,6 +187,13 @@ export default function Settings() {
             label={t.helpFaq}
             onClick={() => navigate(createPageUrl('HelpFaq'))}
           />
+          <Row
+            icon={Mail}
+            iconColor="text-[#00fea3]"
+            label="Support"
+            sublabel="support@vybtapp.com"
+            onClick={() => navigate(createPageUrl('Support'))}
+          />
         </Section>
 
         {/* Admin */}
