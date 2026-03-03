@@ -36,6 +36,7 @@ export default function CreatePlan() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [createdPlan, setCreatedPlan] = useState(null);
+  const [showHighlightModal, setShowHighlightModal] = useState(false);
   const [tagSearch, setTagSearch] = useState('');
   const [uploadingCover, setUploadingCover] = useState(false);
   const [uploadingGroup, setUploadingGroup] = useState(false);
