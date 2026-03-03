@@ -7,7 +7,7 @@ import { useLanguage } from '../common/LanguageContext';
 
 export default function GroupChatHeader({
   plan, planStatus, isChatLocked, hasVoted, isAdmin, themeColor,
-  onBack, onInfo, onAdminActions, onVote, onRenew, onDelete
+  onBack, onInfo, onAdminActions, onVote, onRenew, onDelete, onHighlight
 }) {
   const { t } = useLanguage();
   return (
