@@ -334,15 +334,35 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8">
-              <p className="text-gray-500">{t.noPlansTonight} {city}</p>
+            <div className="text-center py-8 space-y-4">
+              <p className="text-gray-500">No plans for tonight in {city}</p>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(createPageUrl('CreatePlan'))}
-                className="mt-4 px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-medium"
+                className="mt-2 px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-medium"
               >
                 {t.createPlan}
               </motion.button>
+              {/* Ambassador CTA */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="mx-auto max-w-sm mt-2 rounded-2xl bg-gradient-to-br from-[#542b9b]/30 to-purple-900/20 border border-purple-500/30 p-4 text-center"
+              >
+                <p className="text-purple-300 font-semibold text-sm mb-1">🌍 Be the first in your city!</p>
+                <p className="text-gray-400 text-xs mb-3">
+                  There are no plans in <span className="text-white font-medium">{city}</span> yet. Become a Vybt Ambassador and help bring the vibe to your area!
+                </p>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.03 }}
+                  onClick={() => navigate(createPageUrl('Ambassador'))}
+                  className="px-5 py-2 rounded-full bg-gradient-to-r from-[#542b9b] to-purple-500 text-white font-bold text-sm"
+                >
+                  🏆 Become an Ambassador
+                </motion.button>
+              </motion.div>
             </div>
           )}
         </section>
