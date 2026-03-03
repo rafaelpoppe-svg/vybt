@@ -425,8 +425,8 @@ export default function Welcome() {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <h2 className="text-xl font-bold mb-2 text-gray-300">Também importante 📋</h2>
-            <p className="text-gray-500 text-sm">Sabemos que ninguém lê, mas está tudo aqui.</p>
+            <h2 className="text-xl font-bold mb-2 text-gray-300">The boring (but important) stuff 📋</h2>
+            <p className="text-gray-500 text-sm">We know nobody reads this, but it's all here.</p>
           </motion.div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
