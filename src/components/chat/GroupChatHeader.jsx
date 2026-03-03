@@ -14,7 +14,6 @@ export default function GroupChatHeader({
     <header
       className="relative z-20 backdrop-blur-xl border-b border-gray-800/60"
       style={{ backgroundColor: `color-mix(in srgb, ${themeColor} 8%, #0b0b0b 92%)` }}
-      onClick={onInfo}
     >
       {/* Main row */}
       <div className="flex items-center gap-3 px-4 pt-12 pb-2">
