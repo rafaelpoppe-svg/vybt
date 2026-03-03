@@ -90,7 +90,7 @@ export default function PrivacyPolicy() {
       <div className="sticky top-0 z-10 bg-[#0b0b0b]/90 backdrop-blur-xl border-b border-white/5 px-4 py-3 flex items-center gap-3"
         style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
         <button
-          onClick={() => navigate(createPageUrl('Settings'))}
+          onClick={() => navigate(-1)}
           className="p-2 rounded-full hover:bg-white/10 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
