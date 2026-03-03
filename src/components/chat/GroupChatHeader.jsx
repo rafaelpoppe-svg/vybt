@@ -48,6 +48,16 @@ export default function GroupChatHeader({
 
         {/* Actions */}
         <div className="flex gap-1.5 flex-shrink-0 relative z-30">
+          {isAdmin && !plan?.is_highlighted && (
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={(e) => { e.stopPropagation(); onHighlight(); }}
+              className="w-9 h-9 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center"
+              title="Highlight Plan"
+            >
+              <Flame className="w-4 h-4 text-orange-400" />
+            </motion.button>
+          )}
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={(e) => { e.stopPropagation(); onInfo(); }}
