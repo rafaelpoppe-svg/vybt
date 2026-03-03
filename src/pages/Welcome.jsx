@@ -276,7 +276,7 @@ export default function Welcome() {
               onClick={() => base44.auth.redirectToLogin()}
               className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#00fea3] to-[#00c4a0] text-[#0b0b0b] font-black text-lg shadow-xl"
             >
-              Entrar na festa <ArrowRight className="w-5 h-5" />
+              Jump in 🚀 <ArrowRight className="w-5 h-5" />
             </motion.button>
           </motion.div>
 
