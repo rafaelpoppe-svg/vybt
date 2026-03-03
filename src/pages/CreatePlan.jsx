@@ -300,18 +300,17 @@ export default function CreatePlan() {
             </motion.button>
           </motion.div>
         </motion.div>
+        <HighlightPlanModal
+          isOpen={showHighlightModal}
+          onClose={() => setShowHighlightModal(false)}
+          planTitle={createdPlan.title}
+          planTags={createdPlan.tags || []}
+          onConfirm={() => {
+            base44.entities.PartyPlan.update(createdPlan.id, { is_highlighted: true });
+            setCreatedPlan(prev => ({ ...prev, is_highlighted: true }));
+          }}
+        />
       </div>
-
-      <HighlightPlanModal
-        isOpen={showHighlightModal}
-        onClose={() => setShowHighlightModal(false)}
-        planTitle={createdPlan.title}
-        planTags={createdPlan.tags || []}
-        onConfirm={() => {
-          base44.entities.PartyPlan.update(createdPlan.id, { is_highlighted: true });
-          setCreatedPlan(prev => ({ ...prev, is_highlighted: true }));
-        }}
-      />
     );
   }
 
