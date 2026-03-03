@@ -340,15 +340,15 @@ export default function Welcome() {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <span className="text-xs font-bold tracking-widest uppercase text-[#00fea3] mb-3 block">Por que Vybt?</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-[#00fea3] mb-3 block">Why Vybt?</span>
           <h2 className="text-3xl md:text-5xl font-black mb-4">
-            Deixa de estar em casa,<br />
+            Stop staying in,<br />
             <span className="bg-gradient-to-r from-[#00fea3] to-[#a855f7] bg-clip-text text-transparent">
-              a noite tá a chamar 👀
+              the night is calling 👀
             </span>
           </h2>
           <p className="text-gray-400 text-base max-w-md mx-auto">
-            Chega de FOMOs. O Vybt é onde os planos acontecem.
+            No more FOMO. Vybt is where plans actually happen.
           </p>
         </motion.div>
 
