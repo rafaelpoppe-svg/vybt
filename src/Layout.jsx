@@ -49,6 +49,11 @@ export default function Layout({ children, currentPageName }) {
             navigate(createPageUrl('Welcome'));
             return;
           }
+          // Mobile app sem login: redireciona Welcome para login direto
+          if (currentPageName === 'Welcome' && isMobileApp) {
+            base44.auth.redirectToLogin();
+            return;
+          }
         }
       } catch (e) {
         // Não logado
