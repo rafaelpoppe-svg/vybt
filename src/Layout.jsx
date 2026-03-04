@@ -29,6 +29,10 @@ export default function Layout({ children, currentPageName }) {
     const checkAuthAndRedirect = async () => {
       const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
       
+      // Detect if running as mobile app (Capacitor/native wrapper)
+      const isMobileApp = !!(window.Capacitor || window.cordova || navigator.userAgent.includes('VybtApp') || window.location.protocol === 'capacitor:');
+
+      
       try {
         const user = await base44.auth.me();
         
