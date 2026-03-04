@@ -34,7 +34,7 @@ export default function Layout({ children, currentPageName }) {
         
         // Utilizador logado
         if (user) {
-          if (currentPageName === 'Welcome' && !isPreview && user.role !== 'admin') {
+          if (currentPageName === 'Welcome' && !isPreview) {
             navigate(createPageUrl('Home'));
             return;
           }
