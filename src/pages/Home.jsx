@@ -224,10 +224,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] pb-24" style={{ overscrollBehavior: 'none' }}>
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800">
-        <div className="px-4 py-4 flex items-center justify-between">
+    <div className="h-full bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide" style={{ overscrollBehavior: 'none', WebkitOverflowScrolling: 'touch' }}>
+      {/* Header — extends behind the iOS status bar */}
+      <header className="sticky top-0 z-40 bg-[#0b0b0b] border-b border-gray-800/60">
+        <div className="px-4 pb-4 flex items-center justify-between" style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}>
           <div className="flex items-center gap-2">
             <img src="/icon.png" alt="Vybt" className="w-8 h-8 rounded-xl object-contain" onError={(e) => e.target.style.display='none'} />
             <h1 className="text-3xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
