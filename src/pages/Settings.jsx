@@ -74,10 +74,10 @@ export default function Settings() {
   const openUrl = (url) => window.open(url, '_blank');
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b]">
+    <div className="h-screen bg-[#0b0b0b] flex flex-col overflow-hidden">
       {/* Header */}
       <header
-        className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 flex items-center gap-4 px-4 py-4"
+        className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 flex items-center gap-4 px-4 py-4"
         style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
       >
         <motion.button
