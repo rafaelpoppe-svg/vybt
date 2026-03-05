@@ -82,7 +82,7 @@ export default function Layout({ children, currentPageName }) {
     <NotificationProvider>
       {!splashDone && <SplashScreen onFinish={handleSplashFinish} />}
       <Toaster position="top-center" theme="dark" />
-      <div className="min-h-screen bg-[#0b0b0b]">
+      <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: '#0b0b0b', overflow: 'hidden' }}>
         <style>{`
           @media (prefers-color-scheme: light) {
             :root {
