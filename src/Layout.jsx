@@ -116,10 +116,22 @@ export default function Layout({ children, currentPageName }) {
           }
 
           /* ── iOS WebView hard reset ── */
-          html, body {
+          html {
             background-color: #0b0b0b !important;
+            background: #0b0b0b !important;
+            height: -webkit-fill-available !important;
+            height: 100dvh !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            overscroll-behavior: none !important;
+          }
+          body {
+            background-color: #0b0b0b !important;
+            background: #0b0b0b !important;
             height: 100% !important;
-            min-height: 100dvh !important;
+            min-height: -webkit-fill-available !important;
             width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
