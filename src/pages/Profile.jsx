@@ -356,6 +356,7 @@ export default function Profile() {
           setShowVerification(false);
         }}
       />
+      </div>
     </div>
   );
 }
