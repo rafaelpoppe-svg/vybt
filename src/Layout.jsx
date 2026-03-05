@@ -90,14 +90,8 @@ export default function Layout({ children, currentPageName }) {
             }
           }
 
-          /* Fix iOS overscroll bounce */
-          html {
-            background-color: #0b0b0b !important;
-            height: 100%;
-            overflow: hidden;
-          }
-
-          body {
+          /* iOS overscroll bounce fix — no position:fixed so scroll works per-page */
+          html, body {
             background-color: #0b0b0b !important;
             height: 100%;
             overflow: hidden;
