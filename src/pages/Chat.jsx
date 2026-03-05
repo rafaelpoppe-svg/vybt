@@ -230,9 +230,9 @@ export default function Chat() {
 
   // ── Chat List ─────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-[#0b0b0b] pb-24">
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800">
-        <div className="px-4 pt-12 pb-3">
+    <div className="h-screen flex flex-col bg-[#0b0b0b] overflow-hidden">
+      <header className="flex-shrink-0 z-40 bg-[#0b0b0b] border-b border-gray-800" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+        <div className="px-4 pt-3 pb-3">
           <h1 className="text-xl font-bold text-white">Messages</h1>
         </div>
         <div className="flex gap-2 px-4 pb-4">
@@ -256,7 +256,7 @@ export default function Chat() {
         </div>
       </header>
 
-      <main className="p-4 space-y-2">
+      <main className="flex-1 overflow-y-auto p-4 space-y-2 pb-24" style={{ WebkitOverflowScrolling: 'touch' }}>
         {activeTab === 'groups' ? (
           myPlans.length > 0 ? (
             myPlans.map((plan) => (
