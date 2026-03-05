@@ -101,7 +101,7 @@ export default function Profile() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/20 to-transparent" />
 
         {/* Top action buttons */}
-        <div className="absolute top-12 right-4 flex gap-2 z-10">
+        <div className="absolute right-4 flex gap-2 z-10" style={{ top: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate(createPageUrl('Notifications'))}
