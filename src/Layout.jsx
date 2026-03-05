@@ -90,20 +90,26 @@ export default function Layout({ children, currentPageName }) {
             }
           }
 
-          /* Fix iOS bounce / white area on scroll */
-          html, body {
+          /* Fix iOS overscroll bounce */
+          html {
             background-color: #0b0b0b !important;
-            overscroll-behavior: none !important;
-            overflow: hidden !important;
-            position: fixed !important;
-            width: 100% !important;
-            height: 100% !important;
+            height: 100%;
+            overflow: hidden;
+          }
+
+          body {
+            background-color: #0b0b0b !important;
+            height: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
           }
 
           #root {
             background-color: #0b0b0b;
             height: 100%;
             overflow: hidden;
+            position: relative;
           }
 
           :root {
