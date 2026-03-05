@@ -129,7 +129,7 @@ export default function Chat() {
   if (selectedFriendId) {
     return (
       <div className="flex flex-col h-screen bg-[#0b0b0b]">
-        <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 px-4 pt-12 pb-3 flex items-center gap-3">
+        <header className="flex-shrink-0 z-40 bg-[#0b0b0b] border-b border-gray-800 px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)' }}>
            <motion.button
              whileTap={{ scale: 0.9 }}
              onClick={() => setSelectedFriendId(null)}
@@ -161,7 +161,7 @@ export default function Chat() {
            </motion.button>
          </header>
 
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2" style={{ WebkitOverflowScrolling: 'touch' }}>
           {dmLoading ? (
             <div className="flex justify-center py-8">
               <Loader2 className="w-6 h-6 text-[#00fea3] animate-spin" />
@@ -336,4 +336,5 @@ export default function Chat() {
       <BottomNav />
     </div>
   );
+
 }
