@@ -102,6 +102,31 @@ export default function Layout({ children, currentPageName }) {
     );
   }
 
+  // Inject theme-color meta + force html/body bg before any paint
+  useEffect(() => {
+    // Set theme-color so iOS status bar matches app background
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      document.head.appendChild(meta);
+    }
+    meta.content = '#0b0b0b';
+
+    // Also set apple-mobile-web-app-status-bar-style
+    let appleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+    if (!appleMeta) {
+      appleMeta = document.createElement('meta');
+      appleMeta.name = 'apple-mobile-web-app-status-bar-style';
+      document.head.appendChild(appleMeta);
+    }
+    appleMeta.content = 'black-translucent';
+
+    // Force background on html element directly
+    document.documentElement.style.backgroundColor = '#0b0b0b';
+    document.body.style.backgroundColor = '#0b0b0b';
+  }, []);
+
   return (
     <LanguageProvider>
     <NotificationProvider>
