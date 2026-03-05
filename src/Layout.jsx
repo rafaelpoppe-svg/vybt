@@ -107,7 +107,7 @@ export default function Layout({ children, currentPageName }) {
     <NotificationProvider>
       {!splashDone && <SplashScreen onFinish={handleSplashFinish} />}
       <Toaster position="top-center" theme="dark" />
-      <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: '#0b0b0b', overflow: 'hidden' }}>
+      <div style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: '#0b0b0b', overflow: 'hidden' }}>
         <style>{`
           @media (prefers-color-scheme: light) {
             :root {
@@ -134,8 +134,9 @@ export default function Layout({ children, currentPageName }) {
             background-color: #0b0b0b !important;
             position: fixed !important;
             inset: 0 !important;
-            width: 100% !important;
+            width: 100vw !important;
             height: 100% !important;
+            min-height: 100dvh !important;
             overflow: hidden !important;
           }
 

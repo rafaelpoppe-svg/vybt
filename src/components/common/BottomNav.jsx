@@ -85,8 +85,8 @@ export default function BottomNav() {
         )}
       </AnimatePresence>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#0b0b0b]/90 backdrop-blur-2xl border-t border-[#00fea3]/10"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      <nav className="fixed bottom-0 z-50 bg-[#0b0b0b]/90 backdrop-blur-2xl border-t border-[#00fea3]/10"
+        style={{ left: 0, right: 0, width: '100%', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)' }}
       >
         <div className="flex items-center justify-around px-2 py-2">
         {tabs.map(({ name, icon: Icon, label }) => {
