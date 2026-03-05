@@ -90,7 +90,7 @@ export default function Settings() {
         <h1 className="text-xl font-bold text-white">{t.settings}</h1>
       </header>
 
-      <div className="px-4 py-6 space-y-6 pb-16">
+      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-16" style={{ WebkitOverflowScrolling: 'touch' }}>
 
         {/* Account */}
         <Section title={t.account}>
