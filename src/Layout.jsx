@@ -231,9 +231,11 @@ export default function Layout({ children, currentPageName }) {
             margin-bottom: max(env(safe-area-inset-bottom, 0px), 1rem);
           }
         `}</style>
-        <PageTransition>
-          {children}
-        </PageTransition>
+        <div style={{ flex: 1, position: 'relative', overflow: 'hidden', background: '#0b0b0b', width: '100%' }}>
+          <PageTransition>
+            {children}
+          </PageTransition>
+        </div>
       </div>
     </NotificationProvider>
     </LanguageProvider>
