@@ -94,17 +94,8 @@ export default function Layout({ children, currentPageName }) {
     checkAuthAndRedirect();
   }, [currentPageName, navigate]);
 
-  if (!authChecked) {
-    return (
-      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[#00fea3]" />
-      </div>
-    );
-  }
-
   // Inject theme-color meta + force html/body bg before any paint
   useEffect(() => {
-    // Set theme-color so iOS status bar matches app background
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) {
       meta = document.createElement('meta');
@@ -113,7 +104,6 @@ export default function Layout({ children, currentPageName }) {
     }
     meta.content = '#0b0b0b';
 
-    // Also set apple-mobile-web-app-status-bar-style
     let appleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
     if (!appleMeta) {
       appleMeta = document.createElement('meta');
@@ -122,10 +112,17 @@ export default function Layout({ children, currentPageName }) {
     }
     appleMeta.content = 'black-translucent';
 
-    // Force background on html element directly
     document.documentElement.style.backgroundColor = '#0b0b0b';
     document.body.style.backgroundColor = '#0b0b0b';
   }, []);
+
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[#00fea3]" />
+      </div>
+    );
+  }
 
   return (
     <LanguageProvider>
