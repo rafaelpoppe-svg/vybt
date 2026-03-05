@@ -344,7 +344,7 @@ export default function Profile() {
           </motion.button>
 
         </div>
-      </div>
+      </div>{/* end px-5 content */}
 
       <BottomNav />
 
