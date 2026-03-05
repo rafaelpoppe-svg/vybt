@@ -90,20 +90,28 @@ export default function Layout({ children, currentPageName }) {
             }
           }
 
-          /* iOS overscroll bounce fix — no position:fixed so scroll works per-page */
+          /* ── iOS WebView hard reset ── */
           html, body {
             background-color: #0b0b0b !important;
-            height: 100%;
-            overflow: hidden;
-            overscroll-behavior: none;
+            height: 100% !important;
+            min-height: 100dvh !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            overscroll-behavior: none !important;
+            overscroll-behavior-y: none !important;
             -webkit-overflow-scrolling: touch;
+            touch-action: pan-x pan-y;
           }
 
           #root {
-            background-color: #0b0b0b;
-            height: 100%;
-            overflow: hidden;
-            position: relative;
+            background-color: #0b0b0b !important;
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
           }
 
           :root {
