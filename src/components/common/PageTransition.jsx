@@ -16,10 +16,10 @@ function isTabPage(pathname) {
   );
 }
 
-const slideVariants = {
-  initial: { opacity: 0, x: '6%' },
-  animate: { opacity: 1, x: 0 },
-  exit:    { opacity: 0, x: '-3%' },
+const fadeVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit:    { opacity: 0 },
 };
 
 export default function PageTransition({ children }) {
@@ -34,12 +34,12 @@ export default function PageTransition({ children }) {
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        variants={slideVariants}
+        variants={fadeVariants}
         initial="initial"
         animate="animate"
         exit="exit"
-        transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
-        style={{ width: '100%', minHeight: '100%' }}
+        transition={{ duration: 0.18, ease: 'easeOut' }}
+        style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, overflowX: 'hidden' }}
       >
         {children}
       </motion.div>
