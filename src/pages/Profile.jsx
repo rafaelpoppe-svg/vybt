@@ -73,8 +73,7 @@ export default function Profile() {
   const hasPhotos = photos.length > 0;
 
   return (
-    <div className="h-screen bg-[#0b0b0b] overflow-y-auto overflow-x-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
-      <div className="pb-24">
+    <div className="h-screen bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24" style={{ WebkitOverflowScrolling: 'touch' }}>
 
       {/* ── Hero Photo Gallery ── */}
       <div className="relative w-full h-[65vh] bg-gray-900 overflow-hidden">
