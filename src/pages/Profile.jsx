@@ -355,7 +355,6 @@ export default function Profile() {
           setShowVerification(false);
         }}
       />
-    </div>{/* end pb-24 */}
-  </div>{/* end h-screen */}
+  </div>
   );
 }
