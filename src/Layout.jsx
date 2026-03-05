@@ -15,6 +15,31 @@ export default function Layout({ children, currentPageName }) {
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
 
+  // Block pinch-to-zoom and gesture zoom on iOS WebView
+  useEffect(() => {
+    const preventGesture = (e) => e.preventDefault();
+    const preventDoubleZoom = (() => {
+      let lastTap = 0;
+      return (e) => {
+        const now = Date.now();
+        if (now - lastTap < 300) e.preventDefault();
+        lastTap = now;
+      };
+    })();
+
+    document.addEventListener('gesturestart', preventGesture, { passive: false });
+    document.addEventListener('gesturechange', preventGesture, { passive: false });
+    document.addEventListener('gestureend', preventGesture, { passive: false });
+    document.addEventListener('touchstart', preventDoubleZoom, { passive: false });
+
+    return () => {
+      document.removeEventListener('gesturestart', preventGesture);
+      document.removeEventListener('gesturechange', preventGesture);
+      document.removeEventListener('gestureend', preventGesture);
+      document.removeEventListener('touchstart', preventDoubleZoom);
+    };
+  }, []);
+
   const handleSplashFinish = () => {
     sessionStorage.setItem('splash_shown', '1');
     setSplashDone(true);
