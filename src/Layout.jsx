@@ -94,24 +94,42 @@ export default function Layout({ children, currentPageName }) {
     checkAuthAndRedirect();
   }, [currentPageName, navigate]);
 
-  // Inject theme-color meta + force html/body bg before any paint
+  // Inject critical iOS meta tags + force bg color as early as possible
   useEffect(() => {
-    let meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta) {
-      meta = document.createElement('meta');
-      meta.name = 'theme-color';
-      document.head.appendChild(meta);
+    // theme-color — controls the status bar area color on Chrome Android + PWA
+    let themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (!themeMeta) {
+      themeMeta = document.createElement('meta');
+      themeMeta.name = 'theme-color';
+      document.head.prepend(themeMeta);
     }
-    meta.content = '#0b0b0b';
+    themeMeta.content = '#0b0b0b';
 
+    // apple status bar style
     let appleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
     if (!appleMeta) {
       appleMeta = document.createElement('meta');
       appleMeta.name = 'apple-mobile-web-app-status-bar-style';
-      document.head.appendChild(appleMeta);
+      document.head.prepend(appleMeta);
     }
     appleMeta.content = 'black-translucent';
 
+    // apple-mobile-web-app-capable
+    let capableMeta = document.querySelector('meta[name="apple-mobile-web-app-capable"]');
+    if (!capableMeta) {
+      capableMeta = document.createElement('meta');
+      capableMeta.name = 'apple-mobile-web-app-capable';
+      document.head.prepend(capableMeta);
+    }
+    capableMeta.content = 'yes';
+
+    // Patch viewport to include viewport-fit=cover
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (viewportMeta && !viewportMeta.content.includes('viewport-fit')) {
+      viewportMeta.content = viewportMeta.content + ', viewport-fit=cover';
+    }
+
+    // Force background immediately
     document.documentElement.style.backgroundColor = '#0b0b0b';
     document.body.style.backgroundColor = '#0b0b0b';
   }, []);
