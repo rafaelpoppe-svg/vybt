@@ -225,6 +225,16 @@ export default function Home() {
     await queryClient.invalidateQueries();
   };
 
+  const handleScroll = useCallback((e) => {
+    const currentY = e.target.scrollTop;
+    if (currentY > lastScrollY.current && currentY > 60) {
+      setHeaderVisible(false);
+    } else {
+      setHeaderVisible(true);
+    }
+    lastScrollY.current = currentY;
+  }, []);
+
   return (
     <div className="h-full bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide" style={{ overscrollBehavior: 'none', WebkitOverflowScrolling: 'touch' }}>
       {/* Header — extends behind the iOS status bar */}
