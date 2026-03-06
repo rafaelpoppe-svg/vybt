@@ -27,7 +27,6 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState(null);
   const [myProfile, setMyProfile] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
-  const [headerVisible, setHeaderVisible] = useState(true);
   const lastScrollY = React.useRef(0);
 
   useEffect(() => {
