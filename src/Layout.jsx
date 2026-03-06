@@ -96,42 +96,42 @@ export default function Layout({ children, currentPageName }) {
 
   // Inject critical iOS meta tags + force bg color as early as possible
   useEffect(() => {
-    // theme-color — controls the status bar area color on Chrome Android + PWA
+    // Force background immediately — prevents white flash on iOS WebView
+    document.documentElement.style.backgroundColor = '#0b0b0b';
+    document.documentElement.style.background = '#0b0b0b';
+    document.body.style.backgroundColor = '#0b0b0b';
+    document.body.style.background = '#0b0b0b';
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.overflow = 'hidden';
+
+    // theme-color
     let themeMeta = document.querySelector('meta[name="theme-color"]');
-    if (!themeMeta) {
-      themeMeta = document.createElement('meta');
-      themeMeta.name = 'theme-color';
-      document.head.prepend(themeMeta);
-    }
+    if (!themeMeta) { themeMeta = document.createElement('meta'); themeMeta.name = 'theme-color'; document.head.prepend(themeMeta); }
     themeMeta.content = '#0b0b0b';
 
-    // apple status bar style
+    // apple status bar style — black-translucent extends content under status bar
     let appleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
-    if (!appleMeta) {
-      appleMeta = document.createElement('meta');
-      appleMeta.name = 'apple-mobile-web-app-status-bar-style';
-      document.head.prepend(appleMeta);
-    }
+    if (!appleMeta) { appleMeta = document.createElement('meta'); appleMeta.name = 'apple-mobile-web-app-status-bar-style'; document.head.prepend(appleMeta); }
     appleMeta.content = 'black-translucent';
 
     // apple-mobile-web-app-capable
     let capableMeta = document.querySelector('meta[name="apple-mobile-web-app-capable"]');
-    if (!capableMeta) {
-      capableMeta = document.createElement('meta');
-      capableMeta.name = 'apple-mobile-web-app-capable';
-      document.head.prepend(capableMeta);
-    }
+    if (!capableMeta) { capableMeta = document.createElement('meta'); capableMeta.name = 'apple-mobile-web-app-capable'; document.head.prepend(capableMeta); }
     capableMeta.content = 'yes';
 
-    // Patch viewport to include viewport-fit=cover
+    // viewport — ensure viewport-fit=cover for edge-to-edge on iPhone notch/Dynamic Island
     const viewportMeta = document.querySelector('meta[name="viewport"]');
-    if (viewportMeta && !viewportMeta.content.includes('viewport-fit')) {
-      viewportMeta.content = viewportMeta.content + ', viewport-fit=cover';
+    if (viewportMeta) {
+      if (!viewportMeta.content.includes('viewport-fit')) {
+        viewportMeta.content = viewportMeta.content.replace(/,?\s*viewport-fit=\w+/, '') + ', viewport-fit=cover';
+      }
+    } else {
+      const vm = document.createElement('meta');
+      vm.name = 'viewport';
+      vm.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
+      document.head.prepend(vm);
     }
-
-    // Force background immediately
-    document.documentElement.style.backgroundColor = '#0b0b0b';
-    document.body.style.backgroundColor = '#0b0b0b';
   }, []);
 
   if (!authChecked) {
