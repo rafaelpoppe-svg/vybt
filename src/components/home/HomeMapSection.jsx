@@ -241,8 +241,8 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
         .home-map .leaflet-control-zoom { display: none; }
       `}</style>
 
-      {/* LIVE header bar */}
-      <div className="absolute top-3 left-3 right-3 z-[500] flex items-center justify-between gap-2">
+      {/* LIVE header bar — hidden in fullscreen (header overlaid from parent) */}
+      <div className="absolute top-3 left-3 right-3 z-[500] flex items-center justify-between gap-2" style={{ display: fullscreen ? 'none' : 'flex' }}>
         <div className="flex items-center gap-2 px-3 py-2 rounded-2xl"
           style={{ background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)' }}>
           <motion.div
