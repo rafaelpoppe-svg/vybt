@@ -229,10 +229,7 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
   const recommendedForCard = plans.filter(p => p.status !== 'terminated' && p.status !== 'ended');
 
   return (
-    <div
-      className={fullscreen ? 'w-full h-full overflow-hidden' : 'mx-4 rounded-3xl overflow-hidden'}
-      style={{ position: 'relative', ...(fullscreen ? {} : { height: 320, border: '1px solid rgba(255,255,255,0.08)' }) }}
-    >
+    <div className="mx-4 rounded-3xl overflow-hidden" style={{ height: 320, position: 'relative', border: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Dark map styles */}
       <style>{`
         .home-map .leaflet-container { background: #1a1a1a !important; }
