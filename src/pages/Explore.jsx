@@ -385,7 +385,7 @@ export default function Explore() {
       </header>
 
       {/* Content — scrollable area */}
-      {(
+      {activeView !== 'map' && (
         <div className="flex-1 overflow-y-auto">
           <PullToRefresh onRefresh={handleRefresh}>
             <main className="p-4 pb-4">
