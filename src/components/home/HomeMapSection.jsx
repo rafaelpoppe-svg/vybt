@@ -39,7 +39,10 @@ function createPlanIcon(plan, isHappening) {
   const isHot = plan.is_on_fire || (plan.recent_joins >= 100);
   const isHighlighted = plan.is_highlighted;
 
-  const borderColor = isHappening
+  // Use theme_color if available, otherwise fallback
+  const borderColor = plan.theme_color
+    ? plan.theme_color
+    : isHappening
     ? '#f97316'
     : isHighlighted
     ? '#a855f7'
@@ -47,17 +50,41 @@ function createPlanIcon(plan, isHappening) {
     ? '#ef4444'
     : '#00fea3';
 
-  const pulse = isHappening ? `
+  // Bubble particles for happening plans
+  const bubbles = isHappening ? Array.from({ length: 6 }, (_, i) => {
+    const angle = (i / 6) * 360;
+    const delay = (i * 0.25).toFixed(2);
+    const size = 6 + (i % 3) * 3;
+    return `
+      <div style="
+        position:absolute;
+        width:${size}px;height:${size}px;border-radius:50%;
+        background:${borderColor};opacity:0.85;
+        top:50%;left:50%;
+        transform-origin:0 0;
+        animation:bubble${i} 1.8s ${delay}s infinite ease-in-out;
+      "></div>
+      <style>
+        @keyframes bubble${i} {
+          0%   { transform: translate(-50%,-50%) rotate(${angle}deg) translateY(-28px) scale(0.6); opacity:0.9; }
+          50%  { transform: translate(-50%,-50%) rotate(${angle + 30}deg) translateY(-36px) scale(1); opacity:0.5; }
+          100% { transform: translate(-50%,-50%) rotate(${angle}deg) translateY(-28px) scale(0.6); opacity:0.9; }
+        }
+      </style>
+    `;
+  }).join('') : '';
+
+  const pulseStyle = isHappening ? `
     @keyframes happeningPulse {
-      0% { box-shadow: 0 0 0 0 ${borderColor}99; }
-      70% { box-shadow: 0 0 0 10px ${borderColor}00; }
+      0%   { box-shadow: 0 0 0 0 ${borderColor}99; }
+      70%  { box-shadow: 0 0 0 12px ${borderColor}00; }
       100% { box-shadow: 0 0 0 0 ${borderColor}00; }
     }
-    .happening-pulse { animation: happeningPulse 1.5s infinite; }
+    .happening-pulse { animation: happeningPulse 1.4s infinite; }
   ` : '';
 
   const badge = isHappening
-    ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#f97316;color:white;font-size:8px;font-weight:bold;padding:2px 5px;border-radius:8px;white-space:nowrap;z-index:10;">● LIVE</div>`
+    ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:${borderColor};color:#0b0b0b;font-size:8px;font-weight:bold;padding:2px 5px;border-radius:8px;white-space:nowrap;z-index:10;">● LIVE</div>`
     : isHot
     ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:14px;z-index:10;">🔥</div>`
     : isHighlighted
@@ -66,28 +93,34 @@ function createPlanIcon(plan, isHappening) {
 
   const imgContent = coverImg
     ? `<img src="${coverImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
-    : `<div style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#542b9b,#00fea3);display:flex;align-items:center;justify-content:center;font-size:18px;">🎉</div>`;
+    : `<div style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#542b9b,${borderColor});display:flex;align-items:center;justify-content:center;font-size:18px;">🎉</div>`;
+
+  const iconH = isHappening ? 80 : 60;
 
   return L.divIcon({
     className: '',
     html: `
-      <style>${pulse}</style>
-      <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+      <style>${pulseStyle}</style>
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;margin-left:-16px;">
         ${badge}
-        <div class="${isHappening ? 'happening-pulse' : ''}" style="
-          width:48px;height:48px;border-radius:50%;
-          border:3px solid ${borderColor};
-          overflow:hidden;
-          box-shadow:0 0 ${isHappening ? '16px' : '8px'} ${borderColor}88;
-          background:#1a1a1a;
-        ">
-          ${imgContent}
+        <div style="position:relative;width:48px;height:48px;margin-top:${isHappening ? 16 : 0}px;">
+          ${bubbles}
+          <div class="${isHappening ? 'happening-pulse' : ''}" style="
+            width:48px;height:48px;border-radius:50%;
+            border:3px solid ${borderColor};
+            overflow:hidden;
+            box-shadow:0 0 ${isHappening ? '18px' : '8px'} ${borderColor}88;
+            background:#1a1a1a;
+            position:relative;z-index:2;
+          ">
+            ${imgContent}
+          </div>
         </div>
       </div>
     `,
-    iconSize: [48, 60],
-    iconAnchor: [24, 60],
-    popupAnchor: [0, -62],
+    iconSize: [80, iconH],
+    iconAnchor: [40, iconH],
+    popupAnchor: [0, -(iconH + 4)],
   });
 }
 
