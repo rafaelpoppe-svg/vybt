@@ -236,7 +236,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="h-full bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide" style={{ overscrollBehavior: 'none', WebkitOverflowScrolling: 'touch' }}>
+    <div className="h-full bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide" style={{ overscrollBehavior: 'none', WebkitOverflowScrolling: 'touch' }} onScroll={handleScroll}>
       {/* Header — extends behind the iOS status bar */}
       <header className="sticky top-0 z-40 bg-[#0b0b0b] border-b border-gray-800/60">
         <div className="px-4 pb-4 flex items-center justify-between" style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}>
