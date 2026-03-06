@@ -175,41 +175,57 @@ export default function Home() {
       style={{ overscrollBehavior: 'none', WebkitOverflowScrolling: 'touch' }}
       onScroll={handleScroll}
     >
-      {/* Sticky Header */}
-      <header
-        className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-md transition-transform duration-300 ease-in-out"
-        style={{ transform: headerVisible ? 'translateY(0)' : 'translateY(-100%)' }}
-      >
-        {/* Top bar: logo + location */}
+      {/* MAP SECTION — full width, large, with overlaid header + stories */}
+      <div className="relative w-full" style={{ height: '62vh', minHeight: 380 }}>
+        {/* Map fills the full area */}
+        <HomeMapSection
+          plans={visiblePlans}
+          allParticipants={allParticipants}
+          profilesMap={profilesMap}
+          myParticipations={myParticipations}
+          city={city}
+          radius={radius}
+          fullscreen
+          onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+        />
+
+        {/* Overlay: top bar (logo + location) */}
         <div
-          className="px-4 pb-3 flex items-center justify-between"
-          style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}
+          className="absolute top-0 left-0 right-0 z-[600] flex items-center justify-between px-4"
+          style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)', paddingBottom: 8 }}
         >
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl" style={{ background: 'rgba(11,11,11,0.75)', backdropFilter: 'blur(12px)' }}>
             <img
               src="/icon.png"
               alt="Vybt"
-              className="w-8 h-8 rounded-xl object-contain"
+              className="w-7 h-7 rounded-xl object-contain"
               onError={(e) => e.target.style.display = 'none'}
             />
-            <h1 className="text-3xl font-black bg-gradient-to-r from-[#00fea3] via-[#a855f7] to-[#f43f5e] bg-clip-text text-transparent">
+            <h1 className="text-2xl font-black bg-gradient-to-r from-[#00fea3] via-[#a855f7] to-[#f43f5e] bg-clip-text text-transparent">
               Vybt
             </h1>
           </div>
-          <LocationSelector
-            city={city}
-            radius={radius}
-            onCityChange={(c) => { setCity(c); localStorage.setItem('selectedCity', c); }}
-            onRadiusChange={(r) => { setRadius(r); localStorage.setItem('selectedRadius', r); }}
-            adminMode={currentUser?.role === 'admin'}
-          />
+          <div style={{ background: 'rgba(11,11,11,0.75)', backdropFilter: 'blur(12px)', borderRadius: 16 }}>
+            <LocationSelector
+              city={city}
+              radius={radius}
+              onCityChange={(c) => { setCity(c); localStorage.setItem('selectedCity', c); }}
+              onRadiusChange={(r) => { setRadius(r); localStorage.setItem('selectedRadius', r); }}
+              adminMode={currentUser?.role === 'admin'}
+            />
+          </div>
         </div>
 
-        {/* Happening Now banner */}
-        {happeningPlan && <HappeningNowBanner plan={happeningPlan} />}
+        {/* Overlay: Happening Now banner */}
+        {happeningPlan && (
+          <div className="absolute z-[600] left-0 right-0" style={{ top: 'calc(max(env(safe-area-inset-top, 0px), 16px) + 52px)' }}>
+            <HappeningNowBanner plan={happeningPlan} />
+          </div>
+        )}
 
-        {/* Stories bar */}
-        <div className="pb-4 pt-1">
+        {/* Overlay: Stories bar at the bottom of the map */}
+        <div className="absolute bottom-0 left-0 right-0 z-[600] pb-2 pt-2"
+          style={{ background: 'linear-gradient(to top, rgba(11,11,11,0.7) 0%, transparent 100%)' }}>
           <HomeStoriesBar
             stories={visibleStories}
             userProfiles={profilesMap}
@@ -219,22 +235,11 @@ export default function Home() {
             onAddStory={() => navigate(createPageUrl('AddStory') + (happeningPlan ? `?planId=${happeningPlan.id}` : ''))}
           />
         </div>
-      </header>
+      </div>
 
-      {/* Main content */}
+      {/* Main content below map */}
       <PullToRefresh onRefresh={handleRefresh}>
         <main className="space-y-6 py-4">
-
-          {/* Live Map */}
-          <HomeMapSection
-            plans={visiblePlans}
-            allParticipants={allParticipants}
-            profilesMap={profilesMap}
-            myParticipations={myParticipations}
-            city={city}
-            radius={radius}
-            onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-          />
 
           {/* Hot Plans Tonight */}
           {plansLoading ? (
