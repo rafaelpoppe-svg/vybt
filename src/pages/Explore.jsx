@@ -516,7 +516,7 @@ export default function Explore() {
             </main>
           </PullToRefresh>
         </div>
-      )}
+      </div>
 
       <div className="flex-shrink-0">
         <BottomNav />
