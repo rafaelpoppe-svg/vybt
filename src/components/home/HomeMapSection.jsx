@@ -204,7 +204,7 @@ function ForYouCard({ plans, allParticipants, profilesMap, onPlanClick }) {
   );
 }
 
-export default function HomeMapSection({ plans = [], allParticipants = [], profilesMap = {}, myParticipations = [], city = '', radius = 10, onPlanClick }) {
+export default function HomeMapSection({ plans = [], allParticipants = [], profilesMap = {}, myParticipations = [], city = '', radius = 10, onPlanClick, fullscreen = false }) {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [flyCoords, setFlyCoords] = useState(null);
