@@ -315,36 +315,70 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
 
       {/* Selected plan quick info */}
       <AnimatePresence>
-        {selectedPlan && (
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 20, opacity: 0 }}
-            className="absolute bottom-4 left-3 right-3 z-[600] rounded-2xl p-3 flex items-center gap-3"
-            style={{ background: 'rgba(22,22,22,0.97)', border: '1px solid rgba(255,255,255,0.12)', backdropFilter: 'blur(16px)' }}
-          >
-            {selectedPlan.cover_image && (
-              <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
-                <img src={selectedPlan.cover_image} alt="" className="w-full h-full object-cover" />
+        {selectedPlan && (() => {
+          const accentColor = selectedPlan.theme_color
+            || (selectedPlan.status === 'happening' ? '#f97316'
+            : selectedPlan.is_highlighted ? '#a855f7'
+            : selectedPlan.is_on_fire ? '#ef4444'
+            : '#00fea3');
+          return (
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              className="absolute bottom-4 left-3 right-3 z-[600] rounded-2xl overflow-hidden"
+              style={{ background: 'rgba(18,18,18,0.97)', border: `1px solid ${accentColor}44`, backdropFilter: 'blur(16px)' }}
+            >
+              <div className="flex items-stretch gap-0">
+                {/* Photo */}
+                <div className="w-20 h-20 flex-shrink-0 relative overflow-hidden">
+                  {selectedPlan.cover_image ? (
+                    <img src={selectedPlan.cover_image} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-2xl"
+                      style={{ background: `linear-gradient(135deg,#1a1a2e,${accentColor}66)` }}>🎉</div>
+                  )}
+                  {selectedPlan.status === 'happening' && (
+                    <div className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded-full text-[8px] font-bold"
+                      style={{ background: accentColor, color: '#0b0b0b' }}>● LIVE</div>
+                  )}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0 p-2.5 flex flex-col justify-between">
+                  <div>
+                    <p className="text-white font-bold text-sm leading-tight truncate">{selectedPlan.title}</p>
+                    <p className="text-gray-400 text-[10px] truncate mt-0.5">{selectedPlan.location_address}</p>
+                  </div>
+                  {/* Party types */}
+                  {selectedPlan.tags && selectedPlan.tags.length > 0 && (
+                    <div className="flex gap-1 mt-1 flex-wrap">
+                      {selectedPlan.tags.slice(0, 2).map(tag => (
+                        <span key={tag} className="px-2 py-0.5 rounded-full text-[9px] font-semibold"
+                          style={{ background: `${accentColor}22`, color: accentColor, border: `1px solid ${accentColor}44` }}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Actions */}
+                <div className="flex flex-col items-center justify-center gap-1.5 pr-2.5 pl-1">
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => { onPlanClick(selectedPlan); setSelectedPlan(null); }}
+                    className="px-3 py-1.5 rounded-full text-xs font-bold"
+                    style={{ background: accentColor, color: '#0b0b0b' }}
+                  >
+                    Ver
+                  </motion.button>
+                  <button onClick={() => setSelectedPlan(null)} className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 text-xs">✕</button>
+                </div>
               </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-bold text-sm truncate">{selectedPlan.title}</p>
-              <p className="text-gray-400 text-xs truncate">{selectedPlan.location_address}</p>
-            </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => { onPlanClick(selectedPlan); setSelectedPlan(null); }}
-                className="px-3 py-1.5 rounded-full text-xs font-bold"
-                style={{ background: selectedPlan.theme_color || '#00fea3', color: '#0b0b0b' }}
-              >
-                Ver
-              </motion.button>
-              <button onClick={() => setSelectedPlan(null)} className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 text-xs">✕</button>
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          );
+        })()}
       </AnimatePresence>
 
       {/* For You draggable card — only shown when no plan is selected */}
