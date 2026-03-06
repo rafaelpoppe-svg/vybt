@@ -384,22 +384,8 @@ export default function Explore() {
         </div>
       </header>
 
-      {/* Map View — fills remaining space between header and bottom nav */}
-      {activeView === 'map' && (
-        <div className="flex-1 overflow-hidden">
-          <PlanMap
-            plans={filteredPlans}
-            allParticipants={allParticipants}
-            profilesMap={profilesMap}
-            myParticipations={myParticipations}
-            selectedCity={selectedCity}
-            onCityChange={(c) => setSelectedCity(c)}
-          />
-        </div>
-      )}
-
       {/* Content — scrollable area */}
-      {activeView !== 'map' && (
+      {(
         <div className="flex-1 overflow-y-auto">
           <PullToRefresh onRefresh={handleRefresh}>
             <main className="p-4 pb-4">
