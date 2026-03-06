@@ -34,57 +34,59 @@ const CITIES = [
   { name: 'Faro', lat: 37.0194, lng: -7.9322 },
 ];
 
+// Inject global CSS once for map icon animations
+if (typeof document !== 'undefined' && !document.getElementById('vybt-map-icon-styles')) {
+  const style = document.createElement('style');
+  style.id = 'vybt-map-icon-styles';
+  style.textContent = `
+    @keyframes vybt-pulse {
+      0%   { box-shadow: 0 0 0 0 var(--plan-color, #f97316); }
+      70%  { box-shadow: 0 0 0 14px transparent; }
+      100% { box-shadow: 0 0 0 0 transparent; }
+    }
+    @keyframes vybt-orbit {
+      0%   { transform: rotate(var(--start-angle)) translateY(-30px) scale(0.7); opacity: 0.9; }
+      50%  { transform: rotate(calc(var(--start-angle) + 30deg)) translateY(-38px) scale(1.1); opacity: 0.5; }
+      100% { transform: rotate(var(--start-angle)) translateY(-30px) scale(0.7); opacity: 0.9; }
+    }
+    .vybt-icon-pulse {
+      animation: vybt-pulse 1.4s infinite;
+    }
+    .vybt-orbit-dot {
+      position: absolute;
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      transform-origin: 0 0;
+      animation: vybt-orbit 1.8s infinite ease-in-out;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function createPlanIcon(plan, isHappening) {
   const coverImg = plan.cover_image || plan.group_image;
   const isHot = plan.is_on_fire || (plan.recent_joins >= 100);
   const isHighlighted = plan.is_highlighted;
 
-  // Use theme_color if available, otherwise fallback
   const borderColor = plan.theme_color
-    ? plan.theme_color
-    : isHappening
-    ? '#f97316'
-    : isHighlighted
-    ? '#a855f7'
-    : isHot
-    ? '#ef4444'
-    : '#00fea3';
+    || (isHappening ? '#f97316' : isHighlighted ? '#a855f7' : isHot ? '#ef4444' : '#00fea3');
 
-  // Bubble particles for happening plans
-  const bubbles = isHappening ? Array.from({ length: 6 }, (_, i) => {
-    const angle = (i / 6) * 360;
-    const delay = (i * 0.25).toFixed(2);
-    const size = 6 + (i % 3) * 3;
-    return `
-      <div style="
-        position:absolute;
-        width:${size}px;height:${size}px;border-radius:50%;
-        background:${borderColor};opacity:0.85;
-        top:50%;left:50%;
-        transform-origin:0 0;
-        animation:bubble${i} 1.8s ${delay}s infinite ease-in-out;
-      "></div>
-      <style>
-        @keyframes bubble${i} {
-          0%   { transform: translate(-50%,-50%) rotate(${angle}deg) translateY(-28px) scale(0.6); opacity:0.9; }
-          50%  { transform: translate(-50%,-50%) rotate(${angle + 30}deg) translateY(-36px) scale(1); opacity:0.5; }
-          100% { transform: translate(-50%,-50%) rotate(${angle}deg) translateY(-28px) scale(0.6); opacity:0.9; }
-        }
-      </style>
-    `;
+  // 6 orbit dots with different angles & delays
+  const dots = isHappening ? Array.from({ length: 6 }, (_, i) => {
+    const angle = i * 60;
+    const delay = (i * 0.3).toFixed(1);
+    const size = 5 + (i % 3) * 2;
+    return `<div class="vybt-orbit-dot" style="
+      width:${size}px;height:${size}px;
+      margin-left:-${size/2}px;margin-top:-${size/2}px;
+      background:${borderColor};
+      --start-angle:${angle}deg;
+      animation-delay:${delay}s;
+    "></div>`;
   }).join('') : '';
 
-  const pulseStyle = isHappening ? `
-    @keyframes happeningPulse {
-      0%   { box-shadow: 0 0 0 0 ${borderColor}99; }
-      70%  { box-shadow: 0 0 0 12px ${borderColor}00; }
-      100% { box-shadow: 0 0 0 0 ${borderColor}00; }
-    }
-    .happening-pulse { animation: happeningPulse 1.4s infinite; }
-  ` : '';
-
   const badge = isHappening
-    ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:${borderColor};color:#0b0b0b;font-size:8px;font-weight:bold;padding:2px 5px;border-radius:8px;white-space:nowrap;z-index:10;">● LIVE</div>`
+    ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:${borderColor};color:#0b0b0b;font-size:8px;font-weight:bold;padding:2px 6px;border-radius:8px;white-space:nowrap;z-index:10;">● LIVE</div>`
     : isHot
     ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:14px;z-index:10;">🔥</div>`
     : isHighlighted
@@ -95,23 +97,23 @@ function createPlanIcon(plan, isHappening) {
     ? `<img src="${coverImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
     : `<div style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#542b9b,${borderColor});display:flex;align-items:center;justify-content:center;font-size:18px;">🎉</div>`;
 
-  const iconH = isHappening ? 80 : 60;
+  const iconH = isHappening ? 82 : 62;
 
   return L.divIcon({
     className: '',
     html: `
-      <style>${pulseStyle}</style>
-      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;margin-left:-16px;">
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;">
         ${badge}
-        <div style="position:relative;width:48px;height:48px;margin-top:${isHappening ? 16 : 0}px;">
-          ${bubbles}
-          <div class="${isHappening ? 'happening-pulse' : ''}" style="
+        <div style="position:relative;width:48px;height:48px;margin-top:${isHappening ? 18 : 8}px;">
+          ${dots}
+          <div class="${isHappening ? 'vybt-icon-pulse' : ''}" style="
             width:48px;height:48px;border-radius:50%;
             border:3px solid ${borderColor};
             overflow:hidden;
-            box-shadow:0 0 ${isHappening ? '18px' : '8px'} ${borderColor}88;
+            box-shadow:0 0 ${isHappening ? '20px' : '8px'} ${borderColor}99;
             background:#1a1a1a;
             position:relative;z-index:2;
+            --plan-color:${borderColor}99;
           ">
             ${imgContent}
           </div>
