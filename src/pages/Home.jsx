@@ -1,23 +1,21 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import { Calendar, Loader2 } from 'lucide-react';
-import StoriesBar from '../components/feed/StoriesBar';
-import PlanCard from '../components/feed/PlanCard';
-import LocationSelector from '../components/common/LocationSelector';
+import { Loader2 } from 'lucide-react';
 import BottomNav from '../components/common/BottomNav';
-import ForYouSection from '../components/feed/ForYouSection';
+import HomeStoriesBar from '../components/home/HomeStoriesBar';
+import HomeMapSection from '../components/home/HomeMapSection';
+import HotPlansSection from '../components/home/HotPlansSection';
+import LocationSelector from '../components/common/LocationSelector';
 import HappeningNowBanner from '../components/feed/HappeningNowBanner';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
 import PullToRefresh from '../components/common/PullToRefresh';
 import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated';
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
 import PlatformTutorial from '../components/onboarding/PlatformTutorial';
-import { AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../components/common/LanguageContext';
 
 export default function Home() {
@@ -26,14 +24,12 @@ export default function Home() {
   const { t } = useLanguage();
   const [city, setCity] = useState(() => localStorage.getItem('selectedCity') || '');
   const [radius, setRadius] = useState(() => Number(localStorage.getItem('selectedRadius')) || 10);
-  const [storyFilter, setStoryFilter] = useState('All stories');
   const [currentUser, setCurrentUser] = useState(null);
   const [myProfile, setMyProfile] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
   const lastScrollY = React.useRef(0);
 
-  // Check onboarding and get user profile + auto-detect location
   useEffect(() => {
     const checkOnboarding = async () => {
       try {
@@ -44,17 +40,12 @@ export default function Home() {
           navigate(createPageUrl('Onboarding'));
         } else {
           setMyProfile(profiles[0]);
-
-          // Show welcome programs page on first visit
           if (!profiles[0].programs_shown) {
             navigate(createPageUrl('WelcomePrograms'));
             return;
           }
+          if (!profiles[0].tutorial_completed) setShowTutorial(true);
 
-          if (!profiles[0].tutorial_completed) {
-            setShowTutorial(true);
-          }
-          // Auto-detect location via GPS (always runs on load)
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
               async (position) => {
@@ -66,11 +57,7 @@ export default function Home() {
                   );
                   const data = await res.json();
                   const detectedCity =
-                    data.address?.city ||
-                    data.address?.town ||
-                    data.address?.village ||
-                    data.address?.county ||
-                    null;
+                    data.address?.city || data.address?.town || data.address?.village || data.address?.county || null;
                   if (detectedCity) {
                     setCity(detectedCity);
                     localStorage.setItem('selectedCity', detectedCity);
@@ -78,7 +65,6 @@ export default function Home() {
                 } catch (_) {}
               },
               () => {
-                // Permission denied — fallback to profile city
                 if (profiles[0].city && !localStorage.getItem('selectedCity')) {
                   setCity(profiles[0].city);
                   localStorage.setItem('selectedCity', profiles[0].city);
@@ -91,24 +77,18 @@ export default function Home() {
           } else if (profiles[0].city && !localStorage.getItem('selectedCity')) {
             setCity(profiles[0].city);
             localStorage.setItem('selectedCity', profiles[0].city);
-            setRadius(profiles[0].radius_km || 10);
-            localStorage.setItem('selectedRadius', profiles[0].radius_km || 10);
           }
         }
-      } catch (e) {
-        // Not logged in
-      }
+      } catch (e) {}
     };
     checkOnboarding();
   }, []);
 
-  // Fetch plans
   const { data: plans = [], isLoading: plansLoading } = useQuery({
     queryKey: ['plans', city],
     queryFn: () => base44.entities.PartyPlan.filter({ city }, '-created_date', 20),
   });
 
-  // Fetch stories — only non-expired (last 24h)
   const { data: stories = [] } = useQuery({
     queryKey: ['stories'],
     queryFn: async () => {
@@ -116,70 +96,50 @@ export default function Home() {
       const now = new Date();
       return all.filter(s => {
         if (s.expires_at) return new Date(s.expires_at) > now;
-        // fallback: created within 24h
         return (now - new Date(s.created_date)) < 24 * 3600 * 1000;
       });
     },
   });
 
-  // Fetch participants for each plan
   const { data: allParticipants = [] } = useQuery({
     queryKey: ['participants'],
     queryFn: () => base44.entities.PlanParticipant.list('-created_date', 100),
   });
 
-  // Fetch user profiles for stories
   const { data: userProfiles = [] } = useQuery({
     queryKey: ['userProfiles'],
     queryFn: () => base44.entities.UserProfile.list('-created_date', 50),
   });
 
-  // Fetch friendships for recommendations
   const { data: friendships = [] } = useQuery({
     queryKey: ['myFriendships', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
     enabled: !!currentUser?.id
   });
 
-  // Also fetch reverse friendships (where current user is the friend)
   const { data: reverseFriendships = [] } = useQuery({
     queryKey: ['reverseFriendships', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id, status: 'accepted' }),
     enabled: !!currentUser?.id
   });
 
-  // Fetch my participations for past attendance
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myParticipations', currentUser?.id],
     queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
     enabled: !!currentUser?.id
   });
 
-  const profilesMap = userProfiles.reduce((acc, p) => {
-    acc[p.user_id] = p;
-    return acc;
-  }, {});
-
-  const friendIds = [
-    ...friendships.map(f => f.friend_id),
-    ...reverseFriendships.map(f => f.user_id)
-  ];
+  const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
+  const friendIds = [...friendships.map(f => f.friend_id), ...reverseFriendships.map(f => f.user_id)];
   const pastPlanIds = myParticipations.map(p => p.plan_id);
 
-  // Filter plans: hide ended/voting plans from non-members; hide terminated plans from everyone except members
+  // Visible plans (filter terminated/ended for non-members)
   const visiblePlans = plans.filter(plan => {
     const isMember = myParticipations.some(p => p.plan_id === plan.id);
-
-    // Terminated plans: only members can see them
-    if (plan.status === 'terminated') return isMember;
-
-    // Ended plans (awaiting admin decision or voting): only members can see them
-    if (plan.status === 'ended' || plan.status === 'voting') return isMember;
-
+    if (plan.status === 'terminated' || plan.status === 'ended' || plan.status === 'voting') return isMember;
     return true;
   });
 
-  // Get personalized recommendations
   const recommendedPlans = useRecommendations({
     plans: visiblePlans,
     userProfile: myProfile,
@@ -189,60 +149,50 @@ export default function Home() {
     allPlans: visiblePlans
   });
 
-  const forYouPlans = recommendedPlans.filter(p => p.matchScore > 20).slice(0, 10);
-
-  const today = format(new Date(), 'yyyy-MM-dd');
-  const todayPlans = visiblePlans.filter(p => p.date === today);
-  const upcomingPlans = visiblePlans.filter(p => p.date > today);
-
-  // Detect a plan the user joined that is happening right now
   const myPlanIds = myParticipations.map(p => p.plan_id);
-  const happeningPlan = visiblePlans.find(p =>
-    myPlanIds.includes(p.id) && p.status === 'happening'
-  ) || null;
+  const happeningPlan = visiblePlans.find(p => myPlanIds.includes(p.id) && p.status === 'happening') || null;
 
-  const getParticipants = (planId) => {
-    return allParticipants
-      .filter(p => p.plan_id === planId)
-      .map(p => profilesMap[p.user_id])
-      .filter(Boolean);
-  };
+  // Stories filtered for display
+  const visibleStories = stories.filter(s =>
+    s.user_id === currentUser?.id || s.is_highlighted || friendIds.includes(s.user_id)
+  );
 
-  // Auto-delete terminated plans older than 24h
   useAutoDeleteTerminated(plans);
+  usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
 
-  // Smart push-style in-app notifications
-  usePushNotifications({
-    currentUser,
-    userCity: city,
-    plans: visiblePlans,
-    friendIds,
-    myParticipations,
-    userProfile: myProfile,
-  });
-
-  const handleRefresh = async () => {
-    await queryClient.invalidateQueries();
-  };
+  const handleRefresh = async () => { await queryClient.invalidateQueries(); };
 
   const handleScroll = useCallback((e) => {
     const currentY = e.target.scrollTop;
-    if (currentY > lastScrollY.current && currentY > 60) {
-      setHeaderVisible(false);
-    } else {
-      setHeaderVisible(true);
-    }
+    if (currentY > lastScrollY.current && currentY > 60) setHeaderVisible(false);
+    else setHeaderVisible(true);
     lastScrollY.current = currentY;
   }, []);
 
   return (
-    <div className="h-full bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide" style={{ overscrollBehavior: 'none', WebkitOverflowScrolling: 'touch' }} onScroll={handleScroll}>
-      {/* Header — hides on scroll down, shows on scroll up */}
-      <header className="sticky top-0 z-40 bg-[#0b0b0b] border-b border-gray-800/60 transition-transform duration-300 ease-in-out" style={{ transform: headerVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
-        <div className="px-4 pb-4 flex items-center justify-between" style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}>
+    <div
+      className="h-full bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide"
+      style={{ overscrollBehavior: 'none', WebkitOverflowScrolling: 'touch' }}
+      onScroll={handleScroll}
+    >
+      {/* Sticky Header */}
+      <header
+        className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-md transition-transform duration-300 ease-in-out"
+        style={{ transform: headerVisible ? 'translateY(0)' : 'translateY(-100%)' }}
+      >
+        {/* Top bar: logo + location */}
+        <div
+          className="px-4 pb-3 flex items-center justify-between"
+          style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}
+        >
           <div className="flex items-center gap-2">
-            <img src="/icon.png" alt="Vybt" className="w-8 h-8 rounded-xl object-contain" onError={(e) => e.target.style.display='none'} />
-            <h1 className="text-3xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
+            <img
+              src="/icon.png"
+              alt="Vybt"
+              className="w-8 h-8 rounded-xl object-contain"
+              onError={(e) => e.target.style.display = 'none'}
+            />
+            <h1 className="text-3xl font-black bg-gradient-to-r from-[#00fea3] via-[#a855f7] to-[#f43f5e] bg-clip-text text-transparent">
               Vybt
             </h1>
           </div>
@@ -255,162 +205,146 @@ export default function Home() {
           />
         </div>
 
-        {/* Stories */}
-        <div className="pb-4">
-          {happeningPlan && <HappeningNowBanner plan={happeningPlan} />}
-          <StoriesBar
-            stories={stories.filter(s =>
-              s.user_id === currentUser?.id ||
-              s.is_highlighted ||
-              friendIds.includes(s.user_id)
-            )}
+        {/* Happening Now banner */}
+        {happeningPlan && <HappeningNowBanner plan={happeningPlan} />}
+
+        {/* Stories bar */}
+        <div className="pb-4 pt-1">
+          <HomeStoriesBar
+            stories={visibleStories}
             userProfiles={profilesMap}
-            currentFilter={storyFilter}
-            onFilterChange={setStoryFilter}
-            onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
-            onAddStory={() => navigate(createPageUrl('AddStory') + (happeningPlan ? `?planId=${happeningPlan.id}` : ''))}
             currentUserId={currentUser?.id}
             happeningPlan={happeningPlan}
+            onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+            onAddStory={() => navigate(createPageUrl('AddStory') + (happeningPlan ? `?planId=${happeningPlan.id}` : ''))}
           />
         </div>
       </header>
 
-      {/* Content — Pull to Refresh wraps the scrollable area */}
+      {/* Main content */}
       <PullToRefresh onRefresh={handleRefresh}>
-      <main className="px-4 py-6 space-y-8">
-        {/* For You Section */}
-        {forYouPlans.length > 0 && (
-          <ForYouSection
-            plans={forYouPlans}
-            participants={allParticipants}
+        <main className="space-y-6 py-4">
+
+          {/* Live Map */}
+          <HomeMapSection
+            plans={visiblePlans}
+            allParticipants={allParticipants}
             profilesMap={profilesMap}
+            myParticipations={myParticipations}
+            city={city}
+            radius={radius}
             onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-            onSeeAll={() => navigate(createPageUrl('Explore') + '?tab=foryou')}
           />
-        )}
 
-        {/* My Joined Plans Section */}
-        {myParticipations.length > 0 && (
-          <section>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-white font-bold text-lg flex items-center gap-2">
-                🎟️ {t.myPlans}
-              </h2>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(createPageUrl('MyPlans'))}
-                className="text-[#00fea3] text-sm font-medium"
-              >
-                {t.seeAll}
-              </motion.button>
-            </div>
-            <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
-              {visiblePlans
-                .filter(p => myParticipations.some(mp => mp.plan_id === p.id))
-                .slice(0, 5)
-                .map((plan) => (
-                  <div key={plan.id} className="min-w-[280px] max-w-[280px]">
-                    <PlanCard
-                      plan={plan}
-                      participants={getParticipants(plan.id)}
-                      onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                    />
-                  </div>
-                ))}
-            </div>
-          </section>
-        )}
-
-        {/* Today Section */}
-        <section>
-          <div className="flex items-center gap-2 mb-4">
-            <Calendar className="w-5 h-5 text-[#00fea3]" />
-            <h2 className="text-white font-bold text-lg">{t.tonight}</h2>
-            <span className="text-gray-500 text-sm">{format(new Date(), 'EEE, MMM d')}</span>
-          </div>
-
+          {/* Hot Plans Tonight */}
           {plansLoading ? (
-            <div className="flex justify-center py-8">
+            <div className="flex justify-center py-4">
               <Loader2 className="w-6 h-6 text-[#00fea3] animate-spin" />
             </div>
-          ) : todayPlans.length > 0 ? (
-            <div className="grid gap-4">
-              {todayPlans.map((plan) => (
-                <PlanCard
-                  key={plan.id}
-                  plan={plan}
-                  participants={getParticipants(plan.id)}
-                  onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                  featured={plan.is_highlighted}
-                />
-              ))}
-            </div>
           ) : (
-            <div className="text-center py-8 space-y-4">
-              <p className="text-gray-500">No plans for tonight in {city}</p>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(createPageUrl('CreatePlan'))}
-                className="mt-2 px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-medium"
-              >
-                {t.createPlan}
-              </motion.button>
-              {/* Ambassador CTA */}
+            <HotPlansSection
+              plans={visiblePlans}
+              allParticipants={allParticipants}
+              onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+            />
+          )}
+
+          {/* My Joined Plans */}
+          {myParticipations.length > 0 && (
+            <section className="px-4">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-white font-bold text-base">🎟️ {t.myPlans}</h2>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate(createPageUrl('MyPlans'))}
+                  className="text-sm font-medium"
+                  style={{ color: '#a855f7' }}
+                >
+                  {t.seeAll}
+                </motion.button>
+              </div>
+              <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
+                {visiblePlans
+                  .filter(p => myParticipations.some(mp => mp.plan_id === p.id))
+                  .slice(0, 5)
+                  .map((plan) => {
+                    const isHot = plan.is_on_fire || plan.recent_joins >= 100;
+                    const isHappening = plan.status === 'happening';
+                    const accentColor = isHappening ? '#f97316' : isHot ? '#ef4444' : plan.is_highlighted ? '#a855f7' : '#00fea3';
+                    return (
+                      <motion.button
+                        key={plan.id}
+                        whileTap={{ scale: 0.96 }}
+                        onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                        className="flex-shrink-0 w-44 rounded-2xl overflow-hidden text-left"
+                        style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${accentColor}44` }}
+                      >
+                        <div className="w-full h-24 relative overflow-hidden">
+                          {plan.cover_image ? (
+                            <img src={plan.cover_image} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-2xl"
+                              style={{ background: `linear-gradient(135deg, #1a1a2e, ${accentColor}66)` }}>🎉</div>
+                          )}
+                          {isHappening && (
+                            <motion.div
+                              animate={{ opacity: [1, 0.4, 1] }}
+                              transition={{ repeat: Infinity, duration: 1 }}
+                              className="absolute top-2 left-2 px-1.5 py-0.5 rounded-full bg-orange-500 text-white text-[9px] font-bold"
+                            >● LIVE</motion.div>
+                          )}
+                          {isHot && !isHappening && (
+                            <div className="absolute top-2 left-2 text-sm">🔥</div>
+                          )}
+                        </div>
+                        <div className="p-2">
+                          <p className="text-white font-bold text-xs truncate">{plan.title}</p>
+                          <p className="text-gray-500 text-[10px] truncate mt-0.5">{plan.city}</p>
+                        </div>
+                      </motion.button>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
+
+          {/* Ambassador CTA when no plans */}
+          {!plansLoading && visiblePlans.length === 0 && (
+            <div className="px-4">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="mx-auto max-w-sm mt-2 rounded-2xl bg-gradient-to-br from-[#542b9b]/30 to-purple-900/20 border border-purple-500/30 p-4 text-center"
+                className="rounded-3xl p-5 text-center"
+                style={{ background: 'linear-gradient(135deg, rgba(84,43,155,0.3), rgba(168,85,247,0.2))', border: '1px solid rgba(168,85,247,0.3)' }}
               >
                 <p className="text-purple-300 font-semibold text-sm mb-1">🌍 {t.ambassadorCtaTitle}</p>
                 <p className="text-gray-400 text-xs mb-3">
-                  {t.ambassadorCtaDesc?.replace('{city}', city) || `There are no plans in ${city} yet. Become a Vybt Ambassador and help bring the vibe to your area!`}
+                  {t.ambassadorCtaDesc?.replace('{city}', city) || `No plans in ${city} yet. Become a Vybt Ambassador!`}
                 </p>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.03 }}
                   onClick={() => navigate(createPageUrl('Ambassador'))}
-                  className="px-5 py-2 rounded-full bg-gradient-to-r from-[#542b9b] to-purple-500 text-white font-bold text-sm"
+                  className="px-5 py-2 rounded-full font-bold text-sm text-white"
+                  style={{ background: 'linear-gradient(135deg, #542b9b, #a855f7)' }}
                 >
                   🏆 {t.becomeAmbassador}
                 </motion.button>
               </motion.div>
             </div>
           )}
-        </section>
 
-        {/* Upcoming Section */}
-        {upcomingPlans.length > 0 && (
-          <section>
-            <h2 className="text-white font-bold text-lg mb-4">{t.upcomingPlans}</h2>
-            <div className="grid gap-4">
-              {upcomingPlans.slice(0, 5).map((plan) => (
-                <PlanCard
-                  key={plan.id}
-                  plan={plan}
-                  participants={getParticipants(plan.id)}
-                  onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-      </main>
-
+        </main>
       </PullToRefresh>
+
       <BottomNav />
 
-      {/* Platform Tutorial Modal */}
       <AnimatePresence>
         {showTutorial && (
           <PlatformTutorial
             onClose={async () => {
               setShowTutorial(false);
-              // Mark tutorial as completed in user profile
               if (myProfile?.id) {
-                await base44.entities.UserProfile.update(myProfile.id, {
-                  tutorial_completed: true
-                });
+                await base44.entities.UserProfile.update(myProfile.id, { tutorial_completed: true });
               }
             }}
           />
