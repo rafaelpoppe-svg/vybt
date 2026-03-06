@@ -192,7 +192,7 @@ export default function Home() {
               className="w-8 h-8 rounded-xl object-contain"
               onError={(e) => e.target.style.display = 'none'}
             />
-            <h1 className="text-3xl font-black bg-gradient-to-r from-[#00fea3] via-[#a855f7] to-[#f43f5e] bg-clip-text text-transparent">
+            <h1 className="text-3xl font-black text-white">
               Vybt
             </h1>
           </div>
