@@ -129,9 +129,17 @@ function createPlanIcon(plan, isHappening) {
 function FlyToCity({ coords }) {
   const map = useMap();
   useEffect(() => {
-    if (coords && !isNaN(coords.lat) && !isNaN(coords.lng)) {
-      map.flyTo([coords.lat, coords.lng], 13, { animate: true, duration: 1.2 });
-    }
+    if (!coords || isNaN(coords.lat) || isNaN(coords.lng)) return;
+    // Wait until the map container has valid pixel dimensions before flying
+    const fly = () => {
+      const size = map.getSize();
+      if (size.x > 0 && size.y > 0) {
+        map.flyTo([coords.lat, coords.lng], 13, { animate: true, duration: 1.2 });
+      } else {
+        map.once('resize', fly);
+      }
+    };
+    fly();
   }, [coords?.lat, coords?.lng]);
   return null;
 }
