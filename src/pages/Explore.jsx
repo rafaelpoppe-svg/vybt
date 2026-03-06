@@ -284,8 +284,8 @@ export default function Explore() {
           )}
         </div>
 
-        {/* Tags - Only for plans/map */}
-        {(activeView === 'plans' || activeView === 'map') && (
+        {/* Tags - Only for plans */}
+        {activeView === 'plans' && (
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
             <motion.button
               whileTap={{ scale: 0.95 }}
