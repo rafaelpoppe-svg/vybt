@@ -119,7 +119,7 @@ export default function Welcome() {
             </span>
           </motion.div>
 
-          <nav className="hidden md:flex items-center justify-between flex-1 px-12 md:px-20 lg:px-24 xl:px-28">
+          <nav className="hidden md:flex items-center justify-between flex-1 px-16 md:px-28 lg:px-32 xl:px-36">
             {NAV_LINKS.map(link => (
               <Link
                 key={link.page}
