@@ -289,7 +289,7 @@ export default function Welcome() {
           >
             <motion.button whileTap={{ scale: 0.95 }} className="hover:opacity-80 transition-opacity">
               <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/0606aa490_AppStore.png"
+                src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=some-date"
                 alt="Download on the App Store"
                 className="h-12 object-contain"
               />
