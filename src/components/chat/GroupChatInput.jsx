@@ -42,7 +42,7 @@ export default function GroupChatInput({ isChatLocked, isPending, themeColor = '
         userId={userId}
       />
 
-      <div className="flex items-center gap-2 px-3 py-3 pb-safe">
+      <div className="flex items-center gap-2 px-3 py-3" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)' }}>
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => setShowStickers(!showStickers)}
@@ -57,7 +57,8 @@ export default function GroupChatInput({ isChatLocked, isPending, themeColor = '
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder={t.messagePlaceholder}
-          className="flex-1 bg-gray-900 border border-gray-700/50 text-white placeholder:text-gray-500 rounded-2xl h-11 px-4 text-sm outline-none focus:border-gray-600 transition-colors"
+          className="flex-1 bg-gray-900 border border-gray-700/50 text-white placeholder:text-gray-500 rounded-2xl h-11 px-4 outline-none focus:border-gray-600 transition-colors"
+          style={{ fontSize: '16px' }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();

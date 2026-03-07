@@ -98,6 +98,13 @@ body > #root {
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #444; }
 
+/* ─── PREVENT iOS AUTO-ZOOM ON INPUT FOCUS ─── */
+/* iOS zooms in when input font-size < 16px. Force 16px minimum on all inputs. */
+input, textarea, select {
+  font-size: 16px !important;
+  -webkit-text-size-adjust: 100%;
+}
+
 /* ─── MISC ─── */
 * {
   -webkit-tap-highlight-color: transparent;
