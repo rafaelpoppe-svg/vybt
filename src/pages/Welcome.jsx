@@ -124,7 +124,7 @@ export default function Welcome() {
               <Link
                 key={link.page}
                 to={createPageUrl(link.page)}
-                className="text-red-400 hover:text-[#00fea3] text-sm transition-colors font-medium background"
+                className="text-gray-400 hover:text-[#00fea3] text-sm transition-colors font-medium background"
               >
                 {link.label}
               </Link>
