@@ -156,14 +156,37 @@ export default function Layout({ children, currentPageName }) {
         flexDirection: 'column',
         background: '#0b0b0b',
         overflow: 'hidden',
+        overflowX: 'hidden',
+        // CRITICAL: prevent iOS WKWebView back-swipe gesture from sliding the layer
+        touchAction: 'pan-y pinch-zoom',
+        overscrollBehavior: 'none',
         WebkitOverflowScrolling: 'touch',
       }}>
         <style>{`
           /* Force dark color-scheme so iOS renders status bar dark */
           :root { color-scheme: dark; }
           @media (prefers-color-scheme: light) { :root { color-scheme: dark; } }
+          /* Block horizontal swipe/overflow everywhere */
+          html, body, #root {
+            overflow-x: hidden !important;
+            overscroll-behavior-x: none !important;
+            touch-action: pan-y pinch-zoom !important;
+            max-width: 100vw !important;
+          }
+          * { max-width: 100%; box-sizing: border-box; }
+          /* Prevent any element from creating horizontal scroll */
+          body > #root { overflow: hidden !important; }
         `}</style>
-        <div style={{ flex: 1, position: 'relative', overflow: 'hidden', background: '#0b0b0b', width: '100%' }}>
+        <div style={{
+          flex: 1,
+          position: 'relative',
+          overflow: 'hidden',
+          overflowX: 'hidden',
+          background: '#0b0b0b',
+          width: '100%',
+          maxWidth: '100vw',
+          touchAction: 'pan-y pinch-zoom',
+        }}>
           <PageTransition>
             {children}
           </PageTransition>
