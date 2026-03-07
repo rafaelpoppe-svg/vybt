@@ -53,17 +53,19 @@ body {
 /* Reset body padding only for #root so it fills edge-to-edge */
 body > #root {
   position: fixed !important;
-  inset: 0 !important;
-  /* Go under the status bar on iOS */
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
-  width: 100vw !important;
+  width: 100% !important;
   height: 100% !important;
   min-height: 100dvh !important;
   background-color: #0b0b0b !important;
+  background: #0b0b0b !important;
   overflow: hidden !important;
+  /* Ensure it sits BEHIND safe area — content handles its own padding */
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 /* ─── SAFE AREA HELPERS ─── */
