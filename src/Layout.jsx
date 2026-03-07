@@ -181,7 +181,6 @@ export default function Layout({ children, currentPageName }) {
         display: 'flex',
         flexDirection: 'column',
         background: '#0b0b0b',
-        overflow: 'hidden',
         overflowX: 'hidden',
         // CRITICAL: prevent iOS WKWebView back-swipe gesture from sliding the layer
         touchAction: 'pan-y pinch-zoom',
