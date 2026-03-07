@@ -100,9 +100,9 @@ function createPlanIcon(plan, isHappening) {
   const iconH = isHappening ? 82 : 62;
 
   return L.divIcon({
-    className: '',
+    className: 'vybt-plan-marker',
     html: `
-      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;">
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;background:none;border:none;">
         ${badge}
         <div style="position:relative;width:48px;height:48px;margin-top:${isHappening ? 18 : 8}px;">
           ${dots}
@@ -114,6 +114,7 @@ function createPlanIcon(plan, isHappening) {
             background:#1a1a1a;
             position:relative;z-index:2;
             --plan-color:${borderColor}99;
+            display:flex;align-items:center;justify-content:center;
           ">
             ${imgContent}
           </div>
