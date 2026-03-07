@@ -39,6 +39,10 @@ if (typeof document !== 'undefined' && !document.getElementById('vybt-map-icon-s
   const style = document.createElement('style');
   style.id = 'vybt-map-icon-styles';
   style.textContent = `
+    .vybt-plan-marker {
+      background: none !important;
+      border: none !important;
+    }
     @keyframes vybt-pulse {
       0%   { box-shadow: 0 0 0 0 var(--plan-color, #f97316); }
       70%  { box-shadow: 0 0 0 14px transparent; }
@@ -100,9 +104,9 @@ function createPlanIcon(plan, isHappening) {
   const iconH = isHappening ? 82 : 62;
 
   return L.divIcon({
-    className: 'vybt-plan-marker',
+    className: '',
     html: `
-      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;background:none;border:none;">
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;">
         ${badge}
         <div style="position:relative;width:48px;height:48px;margin-top:${isHappening ? 18 : 8}px;">
           ${dots}
@@ -114,7 +118,6 @@ function createPlanIcon(plan, isHappening) {
             background:#1a1a1a;
             position:relative;z-index:2;
             --plan-color:${borderColor}99;
-            display:flex;align-items:center;justify-content:center;
           ">
             ${imgContent}
           </div>
