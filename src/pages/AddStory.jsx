@@ -372,7 +372,6 @@ export default function AddStory() {
                 <CameraView
                   onCapture={(file) => processFile(file)}
                   onClose={() => setStep(0)}
-                  isAdmin={currentUser?.role === 'admin'}
                 />
               )}
               {moderationError && (
