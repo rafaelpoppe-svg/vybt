@@ -39,7 +39,7 @@ export default function PageTransition({ children }) {
         animate="animate"
         exit="exit"
         transition={{ duration: 0.18, ease: 'easeOut' }}
-        style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, overflowX: 'hidden' }}
+        style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, overflowX: 'hidden', background: '#0b0b0b' }}
       >
         {children}
       </motion.div>
