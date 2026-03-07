@@ -39,10 +39,6 @@ if (typeof document !== 'undefined' && !document.getElementById('vybt-map-icon-s
   const style = document.createElement('style');
   style.id = 'vybt-map-icon-styles';
   style.textContent = `
-    .vybt-plan-marker {
-      background: none !important;
-      border: none !important;
-    }
     @keyframes vybt-pulse {
       0%   { box-shadow: 0 0 0 0 var(--plan-color, #f97316); }
       70%  { box-shadow: 0 0 0 14px transparent; }
@@ -104,9 +100,9 @@ function createPlanIcon(plan, isHappening) {
   const iconH = isHappening ? 82 : 62;
 
   return L.divIcon({
-    className: '',
+    className: 'vybt-plan-marker',
     html: `
-      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;">
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;background:none;border:none;">
         ${badge}
         <div style="position:relative;width:48px;height:48px;margin-top:${isHappening ? 18 : 8}px;">
           ${dots}
@@ -118,6 +114,7 @@ function createPlanIcon(plan, isHappening) {
             background:#1a1a1a;
             position:relative;z-index:2;
             --plan-color:${borderColor}99;
+            display:flex;align-items:center;justify-content:center;
           ">
             ${imgContent}
           </div>
@@ -285,6 +282,8 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
         .home-map .leaflet-tile { filter: brightness(0.65) saturate(0.7) hue-rotate(185deg) invert(1); }
         .home-map .leaflet-control-attribution { display: none; }
         .home-map .leaflet-control-zoom { display: none; }
+        .vybt-plan-marker { background: none !important; border: none !important; box-shadow: none !important; }
+        .vybt-plan-marker img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
       `}</style>
 
       {/* LIVE header bar */}
