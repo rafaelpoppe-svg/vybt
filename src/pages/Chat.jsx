@@ -128,7 +128,7 @@ export default function Chat() {
   // ── DM Chat View ─────────────────────────────────────────────────────────
   if (selectedFriendId) {
     return (
-      <div className="flex flex-col h-screen bg-[#0b0b0b]">
+      <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh' }}>
         <header className="flex-shrink-0 z-40 bg-[#0b0b0b] border-b border-gray-800 px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)' }}>
            <motion.button
              whileTap={{ scale: 0.9 }}
@@ -195,7 +195,7 @@ export default function Chat() {
             }}
             userId={currentUser?.id}
           />
-          <div className="flex items-center gap-2 px-3 py-3">
+          <div className="flex items-center gap-2 px-3 py-3" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)' }}>
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setShowStickers(!showStickers)}
@@ -207,7 +207,8 @@ export default function Chat() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Mensagem..."
-              className="flex-1 bg-gray-900 border border-gray-700/50 text-white placeholder:text-gray-500 rounded-2xl h-11 px-4 text-sm outline-none focus:border-gray-600 transition-colors"
+              className="flex-1 bg-gray-900 border border-gray-700/50 text-white placeholder:text-gray-500 rounded-2xl h-11 px-4 outline-none focus:border-gray-600 transition-colors"
+              style={{ fontSize: '16px' }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && newMessage.trim()) {
                   sendDMMutation.mutate(newMessage);
