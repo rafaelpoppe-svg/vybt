@@ -97,13 +97,8 @@ export default function Layout({ children, currentPageName }) {
   // Inject critical iOS meta tags + force bg color as early as possible
   useEffect(() => {
     // Force background immediately — prevents white flash on iOS WebView
-    document.documentElement.style.backgroundColor = '#0b0b0b';
-    document.documentElement.style.background = '#0b0b0b';
-    document.body.style.backgroundColor = '#0b0b0b';
-    document.body.style.background = '#0b0b0b';
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-    document.body.style.overflow = 'hidden';
+    document.documentElement.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
+    document.body.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
 
     // theme-color
     let themeMeta = document.querySelector('meta[name="theme-color"]');
