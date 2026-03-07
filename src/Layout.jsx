@@ -201,7 +201,10 @@ export default function Layout({ children, currentPageName }) {
           }
           * { max-width: 100%; box-sizing: border-box; }
           /* Prevent any element from creating horizontal scroll */
-          body > #root { overflow: hidden !important; }
+          body > #root {
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+          }
         `}</style>
         <div style={{
           flex: 1,
