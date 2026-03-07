@@ -147,7 +147,7 @@ export default function HomeStoriesBar({
       </div>
 
       {/* Circles */}
-      <div className="flex gap-4 px-4 overflow-x-auto scrollbar-hide pb-1">
+      <div className="flex gap-4 px-4 overflow-x-auto scrollbar-hide pb-1" data-hscroll="true">
         {/* Add Story */}
         <CircleStory isAdd onClick={onAddStory} happeningPlan={happeningPlan} />
 
