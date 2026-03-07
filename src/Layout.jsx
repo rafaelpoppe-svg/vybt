@@ -15,9 +15,11 @@ export default function Layout({ children, currentPageName }) {
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
 
-  // Block pinch-to-zoom and gesture zoom on iOS WebView
+  // Block pinch-to-zoom, gesture zoom, and horizontal swipe on iOS WebView
   useEffect(() => {
     const preventGesture = (e) => e.preventDefault();
+
+    // Block double-tap zoom
     const preventDoubleZoom = (() => {
       let lastTap = 0;
       return (e) => {
@@ -27,16 +29,41 @@ export default function Layout({ children, currentPageName }) {
       };
     })();
 
+    // Block horizontal swipe gestures (iOS back/forward navigation in WKWebView)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const preventHorizontalSwipe = (e) => {
+      if (e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    };
+    const blockHorizontalMove = (e) => {
+      if (e.touches.length !== 1) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartX);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY);
+      // If primarily horizontal, prevent default (blocks WKWebView back swipe)
+      if (dx > dy && dx > 8) {
+        // Only block if the target doesn't have explicit horizontal scroll
+        const el = e.target;
+        const scrollable = el.closest('[data-hscroll]');
+        if (!scrollable) e.preventDefault();
+      }
+    };
+
     document.addEventListener('gesturestart', preventGesture, { passive: false });
     document.addEventListener('gesturechange', preventGesture, { passive: false });
     document.addEventListener('gestureend', preventGesture, { passive: false });
     document.addEventListener('touchstart', preventDoubleZoom, { passive: false });
+    document.addEventListener('touchstart', preventHorizontalSwipe, { passive: true });
+    document.addEventListener('touchmove', blockHorizontalMove, { passive: false });
 
     return () => {
       document.removeEventListener('gesturestart', preventGesture);
       document.removeEventListener('gesturechange', preventGesture);
       document.removeEventListener('gestureend', preventGesture);
       document.removeEventListener('touchstart', preventDoubleZoom);
+      document.removeEventListener('touchstart', preventHorizontalSwipe);
+      document.removeEventListener('touchmove', blockHorizontalMove);
     };
   }, []);
 
