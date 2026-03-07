@@ -142,16 +142,15 @@ export default function Layout({ children, currentPageName }) {
     if (!capableMeta) { capableMeta = document.createElement('meta'); capableMeta.name = 'apple-mobile-web-app-capable'; document.head.prepend(capableMeta); }
     capableMeta.content = 'yes';
 
-    // viewport — ensure viewport-fit=cover for edge-to-edge on iPhone notch/Dynamic Island
+    // viewport — force no-zoom, no-scale, edge-to-edge on iPhone notch/Dynamic Island
     const viewportMeta = document.querySelector('meta[name="viewport"]');
+    const viewportContent = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
     if (viewportMeta) {
-      if (!viewportMeta.content.includes('viewport-fit')) {
-        viewportMeta.content = viewportMeta.content.replace(/,?\s*viewport-fit=\w+/, '') + ', viewport-fit=cover';
-      }
+      viewportMeta.content = viewportContent;
     } else {
       const vm = document.createElement('meta');
       vm.name = 'viewport';
-      vm.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
+      vm.content = viewportContent;
       document.head.prepend(vm);
     }
   }, []);
