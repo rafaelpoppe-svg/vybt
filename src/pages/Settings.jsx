@@ -74,7 +74,7 @@ export default function Settings() {
   const openUrl = (url) => window.open(url, '_blank');
 
   return (
-    <div className="h-screen bg-[#0b0b0b] flex flex-col overflow-hidden">
+    <div className="bg-[#0b0b0b] flex flex-col overflow-hidden" style={{ height: '100dvh', minHeight: '100dvh' }}>
       {/* Header */}
       <header
         className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 flex items-center gap-4 px-4 py-4"
