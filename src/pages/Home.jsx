@@ -263,7 +263,7 @@ export default function Home() {
                   {t.seeAll}
                 </motion.button>
               </div>
-              <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
+              <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2" data-hscroll="true">
                 {visiblePlans
                   .filter(p => myParticipations.some(mp => mp.plan_id === p.id))
                   .slice(0, 5)
