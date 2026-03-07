@@ -323,7 +323,7 @@ export default function GroupChat() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col h-screen bg-[#0b0b0b] overflow-hidden">
+    <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" style={{ height: '100dvh' }}>
 
       {/* Background blur from group image */}
       {plan?.group_image && (
