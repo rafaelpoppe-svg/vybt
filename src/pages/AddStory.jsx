@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import {
   ChevronLeft, X, Loader2, AlertCircle, ShieldAlert,
-  Users, Lock, Sparkles, Camera, ImageIcon, Check, Eye
+  Users, Lock, Sparkles, Check, Eye
 } from 'lucide-react';
 import HighlightStoryModal from '../components/story/HighlightStoryModal';
 import CameraView from '../components/story/CameraView';
