@@ -358,17 +358,27 @@ export default function GroupChat() {
         onHighlight={() => setShowHighlightModal(true)}
       />
 
-      {/* Stories Bar */}
+      {/* Stories Bar + Gallery Toggle */}
       <div className="relative z-10 border-b border-gray-800/40 bg-black/30 backdrop-blur-sm">
-        <ChatStoryBar
-          stories={[...stories].sort((a, b) => (a.is_pinned ? -1 : 1))}
-          profilesMap={profilesMap}
-          currentUserId={currentUser?.id}
-          canPost={planStatus === 'happening'}
-          isHappening={planStatus === 'happening'}
-          onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
-          onAddStory={() => navigate(createPageUrl('AddStory') + `?planId=${planId}`)}
-        />
+        <div className="flex items-center justify-between px-4 py-2">
+          <div className="flex-1">
+            <ChatStoryBar
+              stories={[...stories].sort((a, b) => (a.is_pinned ? -1 : 1))}
+              profilesMap={profilesMap}
+              currentUserId={currentUser?.id}
+              canPost={planStatus === 'happening'}
+              isHappening={planStatus === 'happening'}
+              onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+              onAddStory={() => navigate(createPageUrl('AddStory') + `?planId=${planId}`)}
+            />
+          </div>
+          <button
+            onClick={() => setShowGallery(true)}
+            className="flex-shrink-0 ml-2 px-3 py-2 rounded-lg bg-gray-800/50 hover:bg-gray-700/70 text-white text-sm font-semibold transition-colors"
+          >
+            📸
+          </button>
+        </div>
       </div>
 
       {/* Messages */}
