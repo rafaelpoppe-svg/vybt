@@ -28,7 +28,7 @@ if (typeof document !== 'undefined' && !document.getElementById('home-live-map-s
   s.id = 'home-live-map-styles';
   s.textContent = `
     .hlm-wrap .leaflet-tile { filter: brightness(0.55) saturate(0.5) hue-rotate(190deg) invert(1) !important; }
-    .hlm-wrap .leaflet-container { background: #111 !important; touch-action: pan-x pan-y !important; }
+    .hlm-wrap .leaflet-container { background: #111 !important; touch-action: none !important; }
     .hlm-wrap .leaflet-control-attribution, .hlm-wrap .leaflet-control-zoom { display: none !important; }
     .hlm-pin { background: none !important; border: none !important; box-shadow: none !important; }
     @keyframes hlm-glow { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.7;transform:scale(1.15)} }
