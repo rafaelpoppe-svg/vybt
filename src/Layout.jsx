@@ -259,9 +259,11 @@ function getThemeStyles(theme) {
 }
 
 export default function Layout({ children, currentPageName }) {
+  const [profileTheme, setProfileTheme] = useState(null);
+
   return (
     <ProfileThemeProvider>
-      <LayoutContent currentPageName={currentPageName}>{children}</LayoutContent>
+      <LayoutContent currentPageName={currentPageName} profileTheme={profileTheme}>{children}</LayoutContent>
     </ProfileThemeProvider>
   );
 }
