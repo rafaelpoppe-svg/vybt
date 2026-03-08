@@ -64,10 +64,6 @@ export default function Home() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [filters, setFilters] = useState({ time: 'all', type: 'All' });
 
-  const now = new Date();
-  const dateLabel = format(now, "EEEE, d MMM");
-  const timeLabel = format(now, "HH:mm");
-
   useEffect(() => {
     const checkOnboarding = async () => {
       try {
