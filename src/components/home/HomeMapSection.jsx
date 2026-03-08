@@ -282,7 +282,8 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
         .home-map .leaflet-tile { filter: brightness(0.65) saturate(0.7) hue-rotate(185deg) invert(1); }
         .home-map .leaflet-control-attribution { display: none; }
         .home-map .leaflet-control-zoom { display: none; }
-        .vybt-plan-marker { background: none !important; border: none !important; box-shadow: none !important; }
+        .vybt-plan-marker { background: none !important; border: none !important; box-shadow: none !important; overflow: visible !important; }
+        .leaflet-div-icon { background: none !important; border: none !important; box-shadow: none !important; }
         .vybt-plan-marker img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
       `}</style>
 
