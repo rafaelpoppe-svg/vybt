@@ -243,9 +243,11 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
       className="rounded-3xl overflow-hidden"
       style={{
         height: '100%',
+        width: '100%',
         position: 'relative',
         border: '1px solid rgba(255,255,255,0.08)',
         isolation: 'isolate',
+        contain: 'layout',
       }}
     >
       {/* Critical CSS reset for Leaflet icons */}
