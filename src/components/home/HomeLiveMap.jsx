@@ -19,6 +19,8 @@ if (typeof document !== 'undefined' && !document.getElementById('hlm-styles')) {
     .hlm-icon-root, .hlm-icon-root * { max-width: none !important; box-sizing: content-box !important; }
     @keyframes hlm-pulse { 0%{box-shadow:0 0 0 0 rgba(249,115,22,0.7)} 70%{box-shadow:0 0 0 12px rgba(249,115,22,0)} 100%{box-shadow:0 0 0 0 rgba(249,115,22,0)} }
     .hlm-pulse { animation: hlm-pulse 1.4s infinite; }
+    @keyframes hlm-particle { 0%{transform:translate(0,0) scale(1);opacity:0.9} 100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0} }
+    .hlm-particle { position:absolute; border-radius:50%; animation: hlm-particle var(--dur) var(--delay) ease-out infinite; pointer-events:none; }
   `;
   document.head.appendChild(s);
 }
