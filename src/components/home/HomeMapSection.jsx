@@ -48,11 +48,12 @@ if (typeof document !== 'undefined' && !document.getElementById('vybt-map-styles
       padding: 0 !important;
       margin: 0 !important;
     }
-    /* Allow drag on the map — override global touch-action:pan-y */
+    /* Map is static — allow page scroll over it */
     .vybt-leaflet-map,
     .vybt-leaflet-map .leaflet-container,
     .vybt-leaflet-map .leaflet-map-pane {
-      touch-action: none !important;
+      touch-action: pan-y !important;
+      pointer-events: none !important;
     }
     /* Dark map tiles */
     .vybt-leaflet-map .leaflet-tile {
