@@ -71,10 +71,20 @@ export default function GroupChatInput({ isChatLocked, isPending, themeColor = '
           whileTap={{ scale: 0.9 }}
           onClick={handleSend}
           disabled={!message.trim() || isPending}
-          className="w-11 h-11 rounded-full flex items-center justify-center disabled:opacity-40 transition-opacity flex-shrink-0"
+          className="
+            w-11 h-11 
+            rounded-full flex 
+            items-center justify-center 
+            disabled:opacity-40 
+            transition-all duration-200 
+            hover:shadow-lg hover:shadow-black/20 
+            hover:-translate-y-0.5 
+            active:shadow-md active:translate-y-0
+            flex-shrink-0
+          "
           style={{ backgroundColor: themeColor }}
         >
-          <Send className="w-6 h-6 text-[#0b0b0b]" />
+          <Send className="w-5 h-5 text-[#0b0b0b]" />
         </motion.button>
       </div>
     </div>
