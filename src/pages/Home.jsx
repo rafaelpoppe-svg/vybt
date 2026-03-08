@@ -161,13 +161,6 @@ export default function Home() {
 
   const handleRefresh = async () => { await queryClient.invalidateQueries(); };
 
-  const handleScroll = useCallback((e) => {
-    const currentY = e.target.scrollTop;
-    if (currentY > lastScrollY.current && currentY > 60) setHeaderVisible(false);
-    else setHeaderVisible(true);
-    lastScrollY.current = currentY;
-  }, []);
-
   return (
     <div
       className="bg-[#0b0b0b] overflow-hidden"
