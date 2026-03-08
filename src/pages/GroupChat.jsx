@@ -8,6 +8,7 @@ import GroupChatHeader from '../components/chat/GroupChatHeader';
 import GroupChatInput from '../components/chat/GroupChatInput';
 import GroupMessageBubble from '../components/chat/GroupMessageBubble';
 import ChatStoryBar from '../components/chat/ChatStoryBar';
+import GroupChatGalleryTab from '../components/chat/GroupChatGalleryTab';
 import GroupAdminActions from '../components/chat/GroupAdminActions';
 import HighlightPlanModal from '../components/plan/HighlightPlanModal';
 import VotingModal from '../components/plan/VotingModal';
