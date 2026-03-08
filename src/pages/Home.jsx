@@ -235,28 +235,54 @@ export default function Home() {
 
       {/* Conteúdo scrollável */}
       <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)' }}>
-        {/* Mapa interativo - altura fixa */}
+        {/* Map Controls: sort tabs + date/time + filter button */}
+        <HomeMapControls
+          activeSort={activeSort}
+          setActiveSort={setActiveSort}
+          onFilterClick={() => setShowFilter(v => !v)}
+          hasActiveFilters={mapFilters.partyTags?.length > 0 || !!mapFilters.startTime || !!mapFilters.endTime}
+        />
+
+        {/* Filter panel */}
+        <HomePlanFilterPanel
+          isOpen={showFilter}
+          onClose={() => setShowFilter(false)}
+          filters={mapFilters}
+          setFilters={setMapFilters}
+        />
+
+        {/* Mapa interativo */}
         <div className="px-4 mb-5">
           <HomeLiveMap
-            plans={visiblePlans}
+            plans={filteredMapPlans}
             allParticipants={allParticipants}
             city={city}
             onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
           />
         </div>
 
-        {/* Planos */}
+        {/* Hot Plans Carousel */}
         {plansLoading ? (
           <div className="flex justify-center py-3">
             <Loader2 className="w-5 h-5 text-[#00fea3] animate-spin" />
           </div>
         ) : (
-          <HotPlansSection
+          <HomeHotPlansCarousel
             plans={visiblePlans}
             allParticipants={allParticipants}
             onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
           />
         )}
+
+        {/* Live Activities */}
+        <HomeLiveActivities
+          friendIds={friendIds}
+          allParticipants={allParticipants}
+          stories={visibleStories}
+          profilesMap={profilesMap}
+          plans={visiblePlans}
+          onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+        />
       </div>
 
       <BottomNav />
