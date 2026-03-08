@@ -8,10 +8,13 @@ import { Loader2 } from 'lucide-react';
 
 import BottomNav from '../components/common/BottomNav';
 import HomeStoriesBar from '../components/home/HomeStoriesBar';
-import HotPlansSection from '../components/home/HotPlansSection';
 import LocationSelector from '../components/common/LocationSelector';
 import HappeningNowBanner from '../components/feed/HappeningNowBanner';
 import HomeLiveMap from '../components/home/HomeLiveMap';
+import HomeMapControls from '../components/home/HomeMapControls';
+import HomePlanFilterPanel from '../components/home/HomePlanFilterPanel';
+import HomeHotPlansCarousel from '../components/home/HomeHotPlansCarousel';
+import HomeLiveActivities from '../components/home/HomeLiveActivities';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
 import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated';
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
