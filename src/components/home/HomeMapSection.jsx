@@ -305,11 +305,11 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
         </div>
       </div>
 
-      <div className="home-map w-full h-full">
+      <div className="home-map w-full h-full" style={{ height: 320 }}>
         <MapContainer
           center={center}
           zoom={13}
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', height: '320px' }}
           zoomControl={false}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
