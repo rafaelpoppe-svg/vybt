@@ -173,10 +173,7 @@ export default function Layout({ children, currentPageName }) {
         Uses inset:0 so it covers status bar on iOS (with viewport-fit=cover).
       */}
       <div style={{
-        position: 'fixed',
-        top: 0, left: 0, right: 0, bottom: 0,
         width: '100%',
-        height: '100%',
         minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
@@ -209,11 +206,12 @@ export default function Layout({ children, currentPageName }) {
         <div style={{
           flex: 1,
           position: 'relative',
-          overflow: 'hidden',
+          overflowY: 'auto',
           overflowX: 'hidden',
           background: '#0b0b0b',
           width: '100%',
           maxWidth: '100vw',
+          minHeight: '100%',
           touchAction: 'pan-y pinch-zoom',
         }}>
           <PageTransition>
