@@ -82,7 +82,7 @@ function createPlanIcon(plan) {
       <div class="hlm-icon-root" style="position:relative;width:48px;height:62px;display:flex;flex-direction:column;align-items:center;pointer-events:none;">
         ${statusBadge}
         <div style="position:relative;margin-top:4px;flex-shrink:0;">
-          ${particles}
+          ${ripples}
           <div class="${isHappening ? 'hlm-pulse' : ''}" style="width:36px;height:36px;border-radius:50%;border:2px solid ${color};overflow:hidden;box-shadow:0 0 ${isHappening ? '12px' : '5px'} ${color}88;">
             ${inner}
           </div>
