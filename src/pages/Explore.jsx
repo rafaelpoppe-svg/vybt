@@ -113,10 +113,9 @@ export default function Explore() {
   let filteredPlans = basePlans.filter(plan => {
     const isMember = myParticipations.some(p => p.plan_id === plan.id);
 
-    // Hide terminated, ended, and voting plans from non-members
-    if (plan.status === 'terminated' || plan.status === 'ended' || plan.status === 'voting') {
-      if (!isMember) return false;
-    }
+    // Hide voting and terminated plans from everyone in Explore
+    // voting: hidden until renewed; terminated: hidden permanently
+    if (plan.status === 'voting' || plan.status === 'terminated') return false;
 
     // Filter by current city
     if (selectedCity && plan.city?.toLowerCase() !== selectedCity.toLowerCase()) return false;

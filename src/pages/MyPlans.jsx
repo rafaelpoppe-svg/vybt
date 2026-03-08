@@ -48,7 +48,8 @@ export default function MyPlans() {
   }, {});
 
   const myPlanIds = participations.map(p => p.plan_id);
-  const myPlans = plans.filter(p => myPlanIds.includes(p.id));
+  // Hide voting (until renewed) and terminated plans from My Plans
+  const myPlans = plans.filter(p => myPlanIds.includes(p.id) && p.status !== 'voting' && p.status !== 'terminated');
 
   const getParticipants = (planId) => {
     return allParticipants
