@@ -287,14 +287,36 @@ export default function Welcome() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
           >
-            <motion.button whileTap={{ scale: 0.95 }} className="hover:opacity-80 transition-opacity">
+            <motion.button 
+              whileHover={{
+                scale: 1.12,
+                y: -6,
+                transition: {
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 12
+                }
+              }}
+              whileTap={{ scale: 0.94, y: 2 }} 
+              className="focus:outline-none">
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/df829ef36_appstore.png"
                 alt="Download on the App Store"
                 className="h-12 object-contain"
               />
             </motion.button>
-            <motion.button whileTap={{ scale: 0.95 }} className="hover:opacity-80 transition-opacity">
+            <motion.button 
+              whileHover={{
+                scale: 1.12,
+                y: -6,
+                transition: {
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 12
+                }
+              }}
+              whileTap={{ scale: 0.94, y: 2 }} 
+              className="focus:outline-none">
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/c645c9fe5_googleplay.png"
                 alt="Get it on Google Play"
