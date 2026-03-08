@@ -8,9 +8,6 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
-  const [splashDone, setSplashDone] = useState(() => {
-    return !!sessionStorage.getItem('splash_shown');
-  });
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
 
