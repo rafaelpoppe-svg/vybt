@@ -223,3 +223,46 @@ function LayoutContent({ children, currentPageName }) {
     </LanguageProvider>
   );
 }
+
+// Helper function to get theme styles
+function getThemeStyles(theme) {
+  const themes = {
+    default: {
+      background: '#0b0b0b',
+      backgroundImage: 'linear-gradient(135deg, #0b0b0b 0%, #1a1a1a 100%)',
+    },
+    beer: {
+      background: '#2d1810',
+      backgroundImage: 'linear-gradient(135deg, #2d1810 0%, #5c3d2e 100%)',
+    },
+    dance: {
+      background: '#1a0a2e',
+      backgroundImage: 'linear-gradient(135deg, #1a0a2e 0%, #16213e 100%)',
+    },
+    champagne: {
+      background: '#3d3d2e',
+      backgroundImage: 'linear-gradient(135deg, #3d3d2e 0%, #5c5c42 100%)',
+    },
+    money: {
+      background: '#1a2e1a',
+      backgroundImage: 'linear-gradient(135deg, #1a2e1a 0%, #2d5c2d 100%)',
+    },
+    luxury: {
+      background: '#1a1a2e',
+      backgroundImage: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+    },
+    party: {
+      background: '#2e1a2e',
+      backgroundImage: 'linear-gradient(135deg, #2e1a2e 0%, #5c2d5c 100%)',
+    },
+  };
+  return themes[theme] || themes.default;
+}
+
+export default function Layout({ children, currentPageName }) {
+  return (
+    <ProfileThemeProvider>
+      <LayoutContent currentPageName={currentPageName}>{children}</LayoutContent>
+    </ProfileThemeProvider>
+  );
+}
