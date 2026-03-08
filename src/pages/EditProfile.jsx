@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import VibeTag, { ALL_VIBES } from '../components/common/VibeTag';
 import PartyTag, { ALL_PARTY_TYPES, partyTagConfig } from '../components/common/PartyTag';
 import { Search, Flame } from 'lucide-react';
+import BackgroundThemeSelector from '../components/profile/BackgroundThemeSelector';
 
 function PartyTypeFilterList({ allTypes, selected, onToggle }) {
   const [search, setSearch] = React.useState('');
@@ -57,7 +58,8 @@ export default function EditProfile() {
     radius_km: 10,
     vibes: [],
     party_types: [],
-    photos: []
+    photos: [],
+    profile_background_theme: 'default'
   });
   const [uploading, setUploading] = useState(false);
   const [detectingLocation, setDetectingLocation] = useState(false);
@@ -119,7 +121,8 @@ export default function EditProfile() {
         radius_km: profile.radius_km || 10,
         vibes: profile.vibes || [],
         party_types: profile.party_types || [],
-        photos: profile.photos || []
+        photos: profile.photos || [],
+        profile_background_theme: profile.profile_background_theme || 'default'
       });
     }
   }, [profile]);
@@ -390,7 +393,15 @@ export default function EditProfile() {
             onToggle={togglePartyType}
           />
         </div>
-      </main>
+
+        {/* Background Theme */}
+        <div>
+          <BackgroundThemeSelector
+            selectedTheme={formData.profile_background_theme}
+            onSelect={(theme) => setFormData({ ...formData, profile_background_theme: theme })}
+          />
+        </div>
+        </main>
 
       {/* Save Button */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
