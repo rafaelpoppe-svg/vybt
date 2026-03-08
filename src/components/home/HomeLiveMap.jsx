@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import { motion, AnimatePresence } from 'framer-motion';
-
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
+// Inject styles once
+if (typeof document !== 'undefined' && !document.getElementById('hlm-styles')) {
+  const s = document.createElement('style');
+  s.id = 'hlm-styles';
+  s.textContent = `
+    .hlm-wrap .leaflet-tile { filter: brightness(0.55) saturate(0.5) hue-rotate(190deg) invert(1) !important; }
+    .hlm-wrap .leaflet-container { background: #111 !important; }
+    .hlm-wrap .leaflet-control-attribution,
+    .hlm-wrap .leaflet-control-zoom { display: none !important; }
+    /* Reset ALL default Leaflet icon styles */
+    .hlm-wrap .leaflet-div-icon { background: none !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
+    /* Prevent tailwind global max-width from collapsing icon children */
+    .hlm-icon-root, .hlm-icon-root * { max-width: none !important; box-sizing: content-box !important; }
+    @keyframes hlm-pulse { 0%{box-shadow:0 0 0 0 rgba(249,115,22,0.7)} 70%{box-shadow:0 0 0 12px rgba(249,115,22,0)} 100%{box-shadow:0 0 0 0 rgba(249,115,22,0)} }
+    .hlm-pulse { animation: hlm-pulse 1.4s infinite; }
+  `;
+  document.head.appendChild(s);
+}
 
 const CITIES = [
   { name: 'Lisbon', lat: 38.7169, lng: -9.1399 }, { name: 'Lisboa', lat: 38.7169, lng: -9.1399 },
@@ -22,70 +33,38 @@ const CITIES = [
   { name: 'New York', lat: 40.7128, lng: -74.0060 }, { name: 'Miami', lat: 25.7617, lng: -80.1918 },
 ];
 
-// Inject map styles once
-if (typeof document !== 'undefined' && !document.getElementById('home-live-map-styles')) {
-  const s = document.createElement('style');
-  s.id = 'home-live-map-styles';
-  s.textContent = `
-    .hlm-wrap .leaflet-tile { filter: brightness(0.55) saturate(0.5) hue-rotate(190deg) invert(1) !important; }
-    .hlm-wrap .leaflet-container { background: #111 !important; touch-action: none !important; }
-    .hlm-wrap .leaflet-control-attribution, .hlm-wrap .leaflet-control-zoom { display: none !important; }
-    .hlm-pin { background: none !important; border: none !important; box-shadow: none !important; }
-    @keyframes hlm-glow { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.7;transform:scale(1.15)} }
-    @keyframes hlm-pulse { 0%{box-shadow:0 0 0 0 rgba(255,255,255,0.5)} 70%{box-shadow:0 0 0 14px rgba(255,255,255,0)} 100%{box-shadow:0 0 0 0 rgba(255,255,255,0)} }
-    .hlm-pulse { animation: hlm-pulse 1.6s infinite; }
-  `;
-  document.head.appendChild(s);
-}
-
-function createPlanIcon(plan, count) {
+function createPlanIcon(plan) {
   const isHappening = plan.status === 'happening';
   const isHot = plan.is_on_fire || plan.recent_joins >= 100;
   const color = plan.theme_color || (isHappening ? '#f97316' : isHot ? '#ef4444' : plan.is_highlighted ? '#a855f7' : '#00fea3');
-  const glowColor = color + 'aa';
-  const pulse = isHappening ? 'hlm-pulse' : '';
-
-  const inner = plan.cover_image
-    ? `<img src="${plan.cover_image}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
-    : `<div style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#1a1a2e,${color});display:flex;align-items:center;justify-content:center;font-size:16px;">🎉</div>`;
 
   const badge = isHappening
-    ? `<div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:${color};color:#000;font-size:8px;font-weight:900;padding:2px 7px;border-radius:8px;white-space:nowrap;box-shadow:0 0 8px ${color};">● LIVE</div>`
+    ? `<div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:${color};color:#000;font-size:8px;font-weight:900;padding:2px 6px;border-radius:6px;white-space:nowrap;pointer-events:none;">● LIVE</div>`
+    : isHot
+    ? `<div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:12px;pointer-events:none;">🔥</div>`
+    : plan.is_highlighted
+    ? `<div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:12px;pointer-events:none;">✨</div>`
     : '';
 
+  const inner = plan.cover_image || plan.group_image
+    ? `<img src="${plan.cover_image || plan.group_image}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;" />`
+    : `<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#542b9b,${color});display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎉</div>`;
+
   return L.divIcon({
-    className: 'hlm-pin',
+    className: '',
     html: `
-      <div style="position:relative;width:52px;height:68px;display:flex;flex-direction:column;align-items:center;">
+      <div class="hlm-icon-root" style="position:relative;width:56px;height:72px;display:flex;flex-direction:column;align-items:center;pointer-events:none;">
         ${badge}
-        <div class="${pulse}" style="
-          width:44px;height:44px;border-radius:50%;
-          border:2.5px solid ${color};
-          overflow:hidden;
-          box-shadow:0 0 14px ${glowColor},0 0 4px ${color};
-          margin-top:${isHappening ? 18 : 4}px;
-          flex-shrink:0;
-          position:relative;
-          background:#111;
-        ">${inner}</div>
-        <div style="
-          position:absolute;
-          bottom:10px;
-          left:50%;transform:translateX(-50%);
-          background:rgba(0,0,0,0.8);
-          color:${color};
-          font-size:8px;font-weight:700;
-          padding:1px 5px;border-radius:6px;
-          white-space:nowrap;
-          border:1px solid ${color}55;
-        ">👥${count}</div>
-        <div style="width:2px;height:8px;background:${color};margin-top:1px;border-radius:1px;opacity:0.7;box-shadow:0 0 4px ${color};"></div>
-        <div style="width:5px;height:5px;background:${color};border-radius:50%;box-shadow:0 0 6px ${color};opacity:0.8;"></div>
+        <div class="${isHappening ? 'hlm-pulse' : ''}" style="width:44px;height:44px;border-radius:50%;border:2.5px solid ${color};overflow:hidden;box-shadow:0 0 ${isHappening ? '16px' : '6px'} ${color}88;margin-top:${isHappening ? 16 : 4}px;flex-shrink:0;">
+          ${inner}
+        </div>
+        <div style="width:2px;height:10px;background:${color};margin-top:2px;border-radius:1px;opacity:0.8;flex-shrink:0;"></div>
+        <div style="width:6px;height:6px;background:${color};border-radius:50%;opacity:0.6;flex-shrink:0;"></div>
       </div>
     `,
-    iconSize: [52, 68],
-    iconAnchor: [26, 68],
-    popupAnchor: [0, -72],
+    iconSize: [56, 72],
+    iconAnchor: [28, 72],
+    popupAnchor: [0, -76],
   });
 }
 
@@ -95,7 +74,7 @@ function FlyToCity({ coords }) {
     if (!coords) return;
     const tryFly = () => {
       const size = map.getSize();
-      if (size.x > 0 && size.y > 0) map.flyTo([coords.lat, coords.lng], 13, { animate: true, duration: 1 });
+      if (size.x > 0 && size.y > 0) map.setView([coords.lat, coords.lng], 13, { animate: false });
       else setTimeout(tryFly, 100);
     };
     tryFly();
@@ -118,6 +97,9 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
       .catch(() => {});
   }, [city]);
 
+  // Dismiss selected when city changes
+  useEffect(() => { setSelected(null); }, [city]);
+
   const validPlans = plans.filter(p => p.latitude && p.longitude && !isNaN(p.latitude) && !isNaN(p.longitude));
   const defaultCenter = flyCoords
     ? [flyCoords.lat, flyCoords.lng]
@@ -129,9 +111,9 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
   return (
     <div
       className="hlm-wrap rounded-3xl overflow-hidden"
-      style={{ position: 'relative', height: 280, border: '1px solid rgba(255,255,255,0.1)', background: '#111' }}
+      style={{ position: 'relative', height: 280, width: '100%', border: '1px solid rgba(255,255,255,0.1)', background: '#111' }}
     >
-      {/* Map full-bleed */}
+      {/* Map */}
       <MapContainer
         center={defaultCenter}
         zoom={13}
@@ -141,7 +123,7 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
         dragging={true}
         tap={true}
         touchZoom={true}
-        doubleClickZoom={true}
+        doubleClickZoom={false}
         keyboard={false}
         whenReady={() => setMapReady(true)}
       >
@@ -151,39 +133,36 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
           <Marker
             key={plan.id}
             position={[plan.latitude, plan.longitude]}
-            icon={createPlanIcon(plan, countFor(plan.id))}
+            icon={createPlanIcon(plan)}
             eventHandlers={{ click: () => setSelected(plan) }}
           />
         ))}
       </MapContainer>
 
       {/* Top-left: LIVE badge */}
-      <div
-        style={{
-          position: 'absolute', top: 12, left: 12, zIndex: 500,
-          display: 'flex', alignItems: 'center', gap: 6,
-          background: 'rgba(11,11,11,0.82)', backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(255,255,255,0.12)',
-          borderRadius: 20, padding: '5px 12px',
-          pointerEvents: 'none',
-        }}
-      >
-        <motion.div animate={{ opacity: [1,0.2,1] }} transition={{ repeat: Infinity, duration: 1.2 }}
+      <div style={{
+        position: 'absolute', top: 12, left: 12, zIndex: 500,
+        display: 'flex', alignItems: 'center', gap: 6,
+        background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(8px)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        borderRadius: 20, padding: '5px 12px',
+        pointerEvents: 'none',
+      }}>
+        <motion.div animate={{ opacity: [1, 0.2, 1] }} transition={{ repeat: Infinity, duration: 1.2 }}
           style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444', flexShrink: 0 }} />
-        <span style={{ color: '#fff', fontWeight: 800, fontSize: 13 }}>LIVE{city ? ` — ${city}` : ''}</span>
+        <span style={{ color: '#fff', fontWeight: 800, fontSize: 13, lineHeight: 1 }}>LIVE{city ? ` — ${city}` : ''}</span>
       </div>
 
       {/* Top-right: plan count */}
-      <div
-        style={{
-          position: 'absolute', top: 12, right: 12, zIndex: 500,
-          background: 'rgba(11,11,11,0.82)', backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(255,255,255,0.12)',
-          borderRadius: 20, padding: '5px 12px',
-          pointerEvents: 'none',
-        }}
-      >
-        <span style={{ color: '#00fea3', fontWeight: 800, fontSize: 13 }}>{validPlans.length} planos</span>
+      <div style={{
+        position: 'absolute', top: 12, right: 12, zIndex: 500,
+        display: 'flex', alignItems: 'center',
+        background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(8px)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        borderRadius: 20, padding: '5px 12px',
+        pointerEvents: 'none',
+      }}>
+        <span style={{ color: '#00fea3', fontWeight: 800, fontSize: 13, lineHeight: 1 }}>{validPlans.length} planos</span>
       </div>
 
       {/* Selected plan popup */}
@@ -211,10 +190,10 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
               <button onClick={() => { onPlanClick(selected); setSelected(null); }}
-                style={{ background: accentOf(selected), color: '#0b0b0b', fontWeight: 700, fontSize: 12, padding: '4px 12px', borderRadius: 20, border: 'none', cursor: 'pointer' }}>
+                style={{ background: accentOf(selected), color: '#0b0b0b', fontWeight: 700, fontSize: 12, padding: '5px 14px', borderRadius: 20, border: 'none', cursor: 'pointer' }}>
                 Ver
               </button>
-              <button onClick={() => setSelected(null)} style={{ color: '#666', fontSize: 10, background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
+              <button onClick={() => setSelected(null)} style={{ color: '#666', fontSize: 11, background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
             </div>
           </motion.div>
         )}
