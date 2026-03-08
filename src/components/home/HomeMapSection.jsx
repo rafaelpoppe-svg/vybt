@@ -257,6 +257,8 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
         .vybt-leaflet-map .leaflet-control-attribution,
         .vybt-leaflet-map .leaflet-control-zoom { display: none !important; }
         .vybt-leaflet-map, .vybt-leaflet-map .leaflet-container { touch-action: pan-y !important; pointer-events: none !important; }
+        /* Fix: prevent globals max-width:100% from breaking divIcon elements */
+        .vybt-pin *, .vybt-pin *::before, .vybt-pin *::after { max-width: none !important; box-sizing: content-box !important; }
       `}</style>
 
       {/* Overlaid header */}
