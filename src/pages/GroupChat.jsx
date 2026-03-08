@@ -37,6 +37,7 @@ export default function GroupChat() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAdminEditModal, setShowAdminEditModal] = useState(false);
   const [showHighlightModal, setShowHighlightModal] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
