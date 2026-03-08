@@ -156,12 +156,15 @@ function LayoutContent({ children, currentPageName }) {
     );
   }
 
+  // Get theme styles
+  const themeStyles = profileTheme ? getThemeStyles(profileTheme) : null;
+
   return (
     <LanguageProvider>
     <NotificationProvider>
       <Toaster position="top-center" theme="dark" />
       {/* 
-        Root wrapper: fixed, edge-to-edge, black.
+        Root wrapper: fixed, edge-to-edge.
         Uses inset:0 so it covers status bar on iOS (with viewport-fit=cover).
       */}
       <div style={{
@@ -169,7 +172,10 @@ function LayoutContent({ children, currentPageName }) {
         minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
-        background: '#0b0b0b',
+        background: themeStyles?.background || '#0b0b0b',
+        backgroundImage: themeStyles?.backgroundImage,
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
         overflowX: 'hidden',
         overflowY: 'auto',
         // CRITICAL: prevent iOS WKWebView back-swipe gesture from sliding the layer
