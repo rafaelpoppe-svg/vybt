@@ -271,8 +271,17 @@ export default function Welcome() {
             transition={{ delay: 0.7 }}
           >
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(0,254,163,0.5)' }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ 
+                scale: 1.12, 
+                boxShadow: '0 0 30px rgba(0,254,163,0.5)',
+                y: -6,
+                transition: {
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 12
+                } 
+              }}
+              whileTap={{ scale: 0.94, y: 2 }}
               onClick={() => base44.auth.redirectToLogin()}
               className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#00fea3] to-[#00c4a0] text-[#0b0b0b] font-black text-lg shadow-xl"
             >
