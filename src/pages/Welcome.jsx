@@ -282,7 +282,7 @@ export default function Welcome() {
 
           {/* App store buttons */}
           <motion.div
-            className="flex items-center justify-center gap-4 pt-2"
+            className="flex items-center justify-center gap-8 pt-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
