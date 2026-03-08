@@ -367,7 +367,7 @@ export default function Welcome() {
             >
               {/* Glow on hover */}
               <motion.div
-                className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${f.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${f.color} opacity-0 group-hover:opacity-10 transition-opacity duration-200`}
               />
 
               <div className={`w-12 h-12 rounded-2xl ${f.bg} flex items-center justify-center mb-4 text-2xl`}>
