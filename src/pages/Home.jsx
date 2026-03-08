@@ -262,6 +262,13 @@ export default function Home() {
           />
         </div>
 
+        {/* Happening Now */}
+        <HomeHappeningNowSection
+          plans={visiblePlans}
+          allParticipants={allParticipants}
+          onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+        />
+
         {/* Hot Plans Carousel */}
         {plansLoading ? (
           <div className="flex justify-center py-3">
