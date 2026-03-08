@@ -97,7 +97,7 @@ export default function Profile() {
   const selectedTheme = BACKGROUND_THEMES[profile.profile_background_theme] || BACKGROUND_THEMES.default;
 
   return (
-    <div className="h-screen overflow-y-auto overflow-x-hidden pb-24" style={{ WebkitOverflowScrolling: 'touch', background: `linear-gradient(135deg, var(--tw-gradient-stops))`, '--tw-gradient-stops': 'rgb(11, 11, 11) 0%, rgba(11, 11, 11, 0.95) 100%' }}>
+    <div className="h-screen overflow-y-auto overflow-x-hidden pb-24" style={{ WebkitOverflowScrolling: 'touch' }}>
 
       {/* ── Hero Photo Gallery ── */}
       <div className="relative w-full h-[65vh] bg-gray-900 overflow-hidden" style={{ backgroundImage: `linear-gradient(135deg, ${selectedTheme.gradient})` }}>
