@@ -360,7 +360,14 @@ export default function Welcome() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.12 }}
-              whileHover={{ scale: 1.03, y: -4 }}
+              whileHover={{ 
+                scale: 1.03, 
+                y: -4,
+                transition: {
+                  duration: 0.15,
+                  ease: "easeOut"
+                }
+              }}
               onHoverStart={() => setHoveredFeature(i)}
               onHoverEnd={() => setHoveredFeature(null)}
               className="relative group bg-white/5 border border-white/8 rounded-3xl p-6 cursor-default overflow-hidden transition-all hover:border-white/20"
