@@ -15,6 +15,7 @@ import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
 import VerificationBadge from '../components/profile/VerificationBadge';
 import VerificationFlow from '../components/profile/VerificationFlow';
 import { useLanguage } from '../components/common/LanguageContext';
+import { useProfileThemeContext } from '../components/common/ProfileThemeContext';
 import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
 import { BACKGROUND_THEMES } from '../components/profile/BackgroundThemeSelector';
 import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
@@ -24,6 +25,7 @@ import ProfileAboutSection from '../components/profile/ProfileAboutSection';
 export default function Profile() {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { setProfileTheme } = useProfileThemeContext();
   const [currentUser, setCurrentUser] = useState(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [showVerification, setShowVerification] = useState(false);
