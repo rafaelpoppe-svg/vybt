@@ -495,6 +495,17 @@ export default function GroupChat() {
           queryClient.invalidateQueries(['allPlans']);
         }}
       />
+
+      {/* Gallery Modal */}
+      {showGallery && (
+        <div className="fixed inset-0 z-50 bg-[#0b0b0b] overflow-hidden">
+          <GroupChatGalleryTab
+            stories={stories}
+            profilesMap={profilesMap}
+            onClose={() => setShowGallery(false)}
+          />
+        </div>
+      )}
     </div>
   );
 }
