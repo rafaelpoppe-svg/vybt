@@ -164,7 +164,8 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
               key={plan.id}
               position={[plan.latitude, plan.longitude]}
               icon={createPlanIcon(plan, countFor(plan.id))}
-              interactive={false}
+              interactive={true}
+              eventHandlers={{ click: () => setSelected(plan) }}
             />
           ))}
         </MapContainer>
