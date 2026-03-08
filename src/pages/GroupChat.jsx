@@ -363,6 +363,7 @@ export default function GroupChat() {
           profilesMap={profilesMap}
           currentUserId={currentUser?.id}
           canPost={planStatus === 'happening'}
+          isHappening={planStatus === 'happening'}
           onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
           onAddStory={() => navigate(createPageUrl('AddStory') + `?planId=${planId}`)}
         />
