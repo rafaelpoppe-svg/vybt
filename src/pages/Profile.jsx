@@ -77,6 +77,13 @@ export default function Profile() {
     participations.some(p => p.plan_id === plan.id)
   );
 
+  // Update theme context when profile loads
+  useEffect(() => {
+    if (profile?.profile_background_theme) {
+      setProfileTheme(profile.profile_background_theme);
+    }
+  }, [profile?.profile_background_theme, setProfileTheme]);
+
   if (!currentUser || !profile) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
