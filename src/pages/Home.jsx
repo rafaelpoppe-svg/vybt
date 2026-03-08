@@ -201,21 +201,23 @@ export default function Home() {
 
   return (
     <div
-      className="bg-[#0b0b0b] overflow-y-auto overflow-x-hidden scrollbar-hide"
-      style={{
-        minHeight: '100dvh',
-        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)',
-      }}
+      className="bg-[#0b0b0b] overflow-hidden"
+      style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}
     >
-      {/* Header */}
-      <header style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}>
-        <div className="px-4 pb-2 flex items-center justify-between">
+      {/* Header fixo */}
+      <header className="flex-shrink-0 bg-[#0b0b0b] z-40">
+        <div
+          className="px-4 pb-3 flex items-center justify-between"
+          style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}
+        >
           <div className="flex items-center gap-2">
-            <img src="/icon.png" alt="Vybt" className="w-8 h-8 rounded-xl object-contain" onError={e => e.target.style.display='none'} />
-            <div>
-              <h1 className="text-2xl font-black text-white leading-tight">Vybt</h1>
-              <p className="text-gray-500 text-[10px] leading-none">{dateLabel} · {timeLabel}</p>
-            </div>
+            <img
+              src="/icon.png"
+              alt="Vybt"
+              className="w-8 h-8 rounded-xl object-contain"
+              onError={(e) => e.target.style.display = 'none'}
+            />
+            <h1 className="text-3xl font-black text-white">Vybt</h1>
           </div>
           <LocationSelector
             city={city}
@@ -227,87 +229,33 @@ export default function Home() {
         </div>
 
         {happeningPlan && <HappeningNowBanner plan={happeningPlan} />}
+
+        <div className="pb-3 pt-1">
+          <HomeStoriesBar
+            stories={visibleStories}
+            userProfiles={profilesMap}
+            currentUserId={currentUser?.id}
+            happeningPlan={happeningPlan}
+            onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+            onAddStory={() => navigate(createPageUrl('AddStory') + (happeningPlan ? `?planId=${happeningPlan.id}` : ''))}
+          />
+        </div>
       </header>
 
-      {/* Experiences Stories */}
-      <section className="mt-2 mb-4">
-        <div className="flex items-center justify-between px-4 mb-2">
-          <h2 className="text-white font-bold text-sm">🌙 Experiences Tonight</h2>
-          <ChevronRight className="w-4 h-4 text-gray-600" />
-        </div>
-        <HomeStoriesBar
-          stories={visibleStories}
-          userProfiles={profilesMap}
-          currentUserId={currentUser?.id}
-          happeningPlan={happeningPlan}
-          onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
-          onAddStory={() => navigate(createPageUrl('AddStory') + (happeningPlan ? `?planId=${happeningPlan.id}` : ''))}
-        />
-      </section>
-
-      {/* Live Map */}
-      <section className="mb-4">
-        <HomeLiveMap
-          plans={visiblePlans}
-          allParticipants={allParticipants}
-          city={city}
-          onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-          onExpand={() => navigate(createPageUrl('Explore'))}
-        />
-      </section>
-
-      {/* Filters */}
-      <section className="mb-4">
-        <HomeFilterBar onFilterChange={setFilters} />
-      </section>
-
-      {/* Hot Plans Tonight */}
-      <section className="mb-4">
+      {/* Conteúdo scrollável */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)' }}>
         {plansLoading ? (
-          <div className="flex justify-center py-4">
+          <div className="flex justify-center py-3">
             <Loader2 className="w-5 h-5 text-[#00fea3] animate-spin" />
           </div>
         ) : (
           <HotPlansSection
-            plans={filteredPlans}
+            plans={visiblePlans}
             allParticipants={allParticipants}
             onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
           />
         )}
-      </section>
-
-      {/* For You */}
-      <section className="mb-6">
-        <HomeForYouSection
-          plans={recommendedPlans.length > 0 ? recommendedPlans.map(r => r.plan || r) : filteredPlans}
-          allParticipants={allParticipants}
-          onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-        />
-      </section>
-
-      {/* Empty state */}
-      {!plansLoading && filteredPlans.length === 0 && (
-        <div className="px-4 mb-6">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-            className="rounded-3xl p-5 text-center"
-            style={{ background: 'linear-gradient(135deg,rgba(84,43,155,0.3),rgba(168,85,247,0.2))', border: '1px solid rgba(168,85,247,0.3)' }}
-          >
-            <p className="text-purple-300 font-semibold text-sm mb-1">🌍 No plans found</p>
-            <p className="text-gray-400 text-xs mb-3">
-              {filters.time !== 'all' || filters.type !== 'All'
-                ? 'Try changing your filters'
-                : `No plans in ${city} yet. Become a Vybt Ambassador!`}
-            </p>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate(createPageUrl('Ambassador'))}
-              className="px-5 py-2 rounded-full font-bold text-sm text-white"
-              style={{ background: 'linear-gradient(135deg,#542b9b,#a855f7)' }}
-            >🏆 {t.becomeAmbassador || 'Become Ambassador'}</motion.button>
-          </motion.div>
-        </div>
-      )}
+      </div>
 
       <BottomNav />
 
