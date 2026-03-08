@@ -17,41 +17,6 @@ import { usePushNotifications } from '../components/notifications/usePushNotific
 import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { useLanguage } from '../components/common/LanguageContext';
 
-function parseTime(timeStr) {
-  if (!timeStr) return null;
-  const [h, m] = timeStr.split(':').map(Number);
-  return h * 60 + (m || 0);
-}
-
-function filterByTime(plans, timeFilter) {
-  if (timeFilter === 'all') return plans;
-  const now = new Date();
-  const nowMins = now.getHours() * 60 + now.getMinutes();
-  return plans.filter(plan => {
-    const start = parseTime(plan.time);
-    const end = parseTime(plan.end_time);
-    if (timeFilter === 'now') {
-      if (plan.status === 'happening') return true;
-      if (start === null) return false;
-      if (end !== null) return nowMins >= start && nowMins <= end;
-      return Math.abs(nowMins - start) <= 60;
-    }
-    if (timeFilter === 'tonight') {
-      if (start === null) return true;
-      return start >= 18 * 60;
-    }
-    if (timeFilter === 'late') {
-      if (start === null) return false;
-      return start >= 23 * 60 || start <= 5 * 60;
-    }
-    return true;
-  });
-}
-
-function filterByType(plans, typeFilter) {
-  if (!typeFilter || typeFilter === 'All') return plans;
-  return plans.filter(p => p.tags?.some(tag => tag.toLowerCase().includes(typeFilter.toLowerCase())));
-}
 
 export default function Home() {
   const navigate = useNavigate();
