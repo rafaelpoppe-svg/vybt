@@ -33,38 +33,56 @@ const CITIES = [
   { name: 'New York', lat: 40.7128, lng: -74.0060 }, { name: 'Miami', lat: 25.7617, lng: -80.1918 },
 ];
 
+const TAG_EMOJI = {
+  'Techno': '🎛️', 'House': '🎵', 'Hip-Hop': '🎤', 'R&B': '🎶',
+  'Pop': '🎉', 'Reggaeton': '🌴', 'Electronic': '⚡', 'Rock': '🎸',
+  'Jazz': '🎷', 'Latin': '💃', 'Afro': '🥁', 'Rave': '🔊',
+  'Club': '🍾', 'Beach': '🏖️', 'Rooftop': '🌆', 'Festival': '🎪',
+  'Lounge': '🛋️', 'Karaoke': '🎤', 'Live Music': '🎸',
+};
+
 function createPlanIcon(plan) {
   const isHappening = plan.status === 'happening';
   const isHot = plan.is_on_fire || plan.recent_joins >= 100;
   const color = plan.theme_color || (isHappening ? '#f97316' : isHot ? '#ef4444' : plan.is_highlighted ? '#a855f7' : '#00fea3');
 
-  const badge = isHappening
-    ? `<div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:${color};color:#000;font-size:8px;font-weight:900;padding:2px 6px;border-radius:6px;white-space:nowrap;pointer-events:none;">● LIVE</div>`
+  const statusBadge = isHappening
+    ? `<div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:${color};color:#000;font-size:7px;font-weight:900;padding:2px 5px;border-radius:5px;white-space:nowrap;pointer-events:none;">● LIVE</div>`
     : isHot
-    ? `<div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:12px;pointer-events:none;">🔥</div>`
+    ? `<div style="position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:11px;pointer-events:none;">🔥</div>`
     : plan.is_highlighted
-    ? `<div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:12px;pointer-events:none;">✨</div>`
+    ? `<div style="position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:11px;pointer-events:none;">✨</div>`
+    : '';
+
+  // Tag badge (bottom-right corner of the circle)
+  const firstTag = plan.tags?.[0];
+  const tagEmoji = firstTag ? (TAG_EMOJI[firstTag] || '🎉') : null;
+  const tagBadge = tagEmoji
+    ? `<div style="position:absolute;bottom:6px;right:-4px;width:18px;height:18px;border-radius:50%;background:#0b0b0b;border:1.5px solid ${color};display:flex;align-items:center;justify-content:center;font-size:9px;pointer-events:none;flex-shrink:0;">${tagEmoji}</div>`
     : '';
 
   const inner = plan.cover_image || plan.group_image
-    ? `<img src="${plan.cover_image || plan.group_image}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;" />`
-    : `<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#542b9b,${color});display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎉</div>`;
+    ? `<img src="${plan.cover_image || plan.group_image}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;" />`
+    : `<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#542b9b,${color});display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">🎉</div>`;
 
   return L.divIcon({
     className: '',
     html: `
-      <div class="hlm-icon-root" style="position:relative;width:56px;height:72px;display:flex;flex-direction:column;align-items:center;pointer-events:none;">
-        ${badge}
-        <div class="${isHappening ? 'hlm-pulse' : ''}" style="width:44px;height:44px;border-radius:50%;border:2.5px solid ${color};overflow:hidden;box-shadow:0 0 ${isHappening ? '16px' : '6px'} ${color}88;margin-top:${isHappening ? 16 : 4}px;flex-shrink:0;">
-          ${inner}
+      <div class="hlm-icon-root" style="position:relative;width:48px;height:62px;display:flex;flex-direction:column;align-items:center;pointer-events:none;">
+        ${statusBadge}
+        <div style="position:relative;margin-top:${isHappening ? 14 : 4}px;flex-shrink:0;">
+          <div class="${isHappening ? 'hlm-pulse' : ''}" style="width:36px;height:36px;border-radius:50%;border:2px solid ${color};overflow:hidden;box-shadow:0 0 ${isHappening ? '12px' : '5px'} ${color}88;">
+            ${inner}
+          </div>
+          ${tagBadge}
         </div>
-        <div style="width:2px;height:10px;background:${color};margin-top:2px;border-radius:1px;opacity:0.8;flex-shrink:0;"></div>
-        <div style="width:6px;height:6px;background:${color};border-radius:50%;opacity:0.6;flex-shrink:0;"></div>
+        <div style="width:2px;height:8px;background:${color};margin-top:2px;border-radius:1px;opacity:0.8;flex-shrink:0;"></div>
+        <div style="width:5px;height:5px;background:${color};border-radius:50%;opacity:0.6;flex-shrink:0;"></div>
       </div>
     `,
-    iconSize: [56, 72],
-    iconAnchor: [28, 72],
-    popupAnchor: [0, -76],
+    iconSize: [48, 62],
+    iconAnchor: [24, 62],
+    popupAnchor: [0, -66],
   });
 }
 
