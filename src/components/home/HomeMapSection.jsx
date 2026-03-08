@@ -247,6 +247,17 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
         isolation: 'isolate',
       }}
     >
+      {/* Critical CSS reset for Leaflet icons */}
+      <style>{`
+        .leaflet-div-icon { background: none !important; border: none !important; box-shadow: none !important; }
+        .vybt-pin { background: none !important; border: none !important; box-shadow: none !important; }
+        .vybt-leaflet-map .leaflet-container { background: #1a1a1a !important; }
+        .vybt-leaflet-map .leaflet-tile { filter: brightness(0.6) saturate(0.6) hue-rotate(185deg) invert(1) !important; }
+        .vybt-leaflet-map .leaflet-control-attribution,
+        .vybt-leaflet-map .leaflet-control-zoom { display: none !important; }
+        .vybt-leaflet-map, .vybt-leaflet-map .leaflet-container { touch-action: none !important; }
+      `}</style>
+
       {/* Overlaid header */}
       <div className="absolute top-3 left-3 right-3 z-[500] flex items-center justify-between pointer-events-none">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl pointer-events-auto"
