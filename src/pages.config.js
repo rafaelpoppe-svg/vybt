@@ -57,6 +57,7 @@ import Explore from './pages/Explore';
 import Friends from './pages/Friends';
 import GroupChat from './pages/GroupChat';
 import HelpFaq from './pages/HelpFaq';
+import Home from './pages/Home';
 import Moderation from './pages/Moderation';
 import MyPlans from './pages/MyPlans';
 import MyStories from './pages/MyStories';
@@ -73,7 +74,6 @@ import TermsConditions from './pages/TermsConditions';
 import UserProfile from './pages/UserProfile';
 import Welcome from './pages/Welcome';
 import WelcomePrograms from './pages/WelcomePrograms';
-import Home from './pages/Home';
 import __Layout from './Layout.jsx';
 
 
@@ -88,6 +88,7 @@ export const PAGES = {
     "Friends": Friends,
     "GroupChat": GroupChat,
     "HelpFaq": HelpFaq,
+    "Home": Home,
     "Moderation": Moderation,
     "MyPlans": MyPlans,
     "MyStories": MyStories,
@@ -104,7 +105,6 @@ export const PAGES = {
     "UserProfile": UserProfile,
     "Welcome": Welcome,
     "WelcomePrograms": WelcomePrograms,
-    "Home": Home,
 }
 
 export const pagesConfig = {

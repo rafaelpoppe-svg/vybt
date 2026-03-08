@@ -11,6 +11,7 @@ import HomeStoriesBar from '../components/home/HomeStoriesBar';
 import HotPlansSection from '../components/home/HotPlansSection';
 import LocationSelector from '../components/common/LocationSelector';
 import HappeningNowBanner from '../components/feed/HappeningNowBanner';
+import HomeLiveMap from '../components/home/HomeLiveMap';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
 import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated';
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
