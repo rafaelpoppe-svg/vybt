@@ -276,12 +276,12 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
       {/* Map — fixed pixel height, static (no drag/scroll) */}
       <div
         className="vybt-leaflet-map"
-        style={{ width: '100%', height: MAP_HEIGHT, overflow: 'hidden', pointerEvents: 'none' }}
+        style={{ width: '100%', height: '100%', overflow: 'hidden', pointerEvents: 'none' }}
       >
         <MapContainer
           center={defaultCenter}
           zoom={13}
-          style={{ width: '100%', height: `${MAP_HEIGHT}px` }}
+          style={{ width: '100%', height: '100%' }}
           zoomControl={false}
           scrollWheelZoom={false}
           dragging={false}
