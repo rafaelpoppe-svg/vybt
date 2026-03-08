@@ -130,7 +130,10 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
   // Dismiss selected when city changes
   useEffect(() => { setSelected(null); }, [city]);
 
-  const validPlans = plans.filter(p => p.latitude && p.longitude && !isNaN(p.latitude) && !isNaN(p.longitude));
+  const validPlans = plans.filter(p =>
+    p.latitude && p.longitude && !isNaN(p.latitude) && !isNaN(p.longitude) &&
+    !['voting', 'ended', 'terminated'].includes(p.status)
+  );
   const defaultCenter = flyCoords
     ? [flyCoords.lat, flyCoords.lng]
     : validPlans.length > 0 ? [validPlans[0].latitude, validPlans[0].longitude] : [38.7169, -9.1399];
