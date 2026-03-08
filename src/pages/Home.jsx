@@ -204,6 +204,17 @@ export default function Home() {
 
       {/* Conteúdo scrollável */}
       <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)' }}>
+        {/* Mapa interativo - altura fixa */}
+        <div className="px-4 mb-5">
+          <HomeLiveMap
+            plans={visiblePlans}
+            allParticipants={allParticipants}
+            city={city}
+            onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+          />
+        </div>
+
+        {/* Planos */}
         {plansLoading ? (
           <div className="flex justify-center py-3">
             <Loader2 className="w-5 h-5 text-[#00fea3] animate-spin" />
