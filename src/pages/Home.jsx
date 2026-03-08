@@ -139,14 +139,8 @@ export default function Home() {
     return true;
   }), [plans, myParticipations]);
 
-  const filteredPlans = useMemo(() => {
-    let result = filterByTime(visiblePlans, filters.time);
-    result = filterByType(result, filters.type);
-    return result;
-  }, [visiblePlans, filters]);
-
   const recommendedPlans = useRecommendations({
-    plans: filteredPlans,
+    plans: visiblePlans,
     userProfile: myProfile,
     friendIds,
     pastPlanIds,
