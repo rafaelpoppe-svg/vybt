@@ -191,10 +191,12 @@ export default function Layout({ children, currentPageName }) {
           @media (prefers-color-scheme: light) { :root { color-scheme: dark; } }
           /* Block horizontal swipe/overflow everywhere */
           html, body, #root {
+            margin: 0;
+            padding: 0;
             overflow-x: hidden !important;
-            overscroll-behavior-x: none !important;
-            touch-action: pan-y pinch-zoom !important;
+            overflow-y: auto !important; 
             max-width: 100vw !important;
+            min-height: 100dvh;
           }
           * { max-width: 100%; box-sizing: border-box; }
           /* Prevent any element from creating horizontal scroll */
