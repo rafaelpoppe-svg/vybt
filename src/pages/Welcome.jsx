@@ -502,7 +502,7 @@ export default function Welcome() {
       {/* ── FOOTER ── */}
       <footer className="border-t border-white/5 py-10 px-4">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <motion.div className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
+          <motion.div className="flex items-center gap-2 cursor-default select-none" whileHover={{ scale: 1.05 }}>
             <img
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/4f0b92888_VybtLogoPng.png"
               alt="Vybt"
