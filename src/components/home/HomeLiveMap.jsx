@@ -143,17 +143,17 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
       </div>
 
       {/* Map */}
-      <div className="hlm-wrap" style={{ height: 220, position: 'relative', pointerEvents: 'none' }}>
+      <div className="hlm-wrap" style={{ height: 220, position: 'relative' }}>
         <MapContainer
           center={defaultCenter}
           zoom={13}
           style={{ width: '100%', height: '100%' }}
           zoomControl={false}
           scrollWheelZoom={false}
-          dragging={false}
-          tap={false}
-          touchZoom={false}
-          doubleClickZoom={false}
+          dragging={true}
+          tap={true}
+          touchZoom={true}
+          doubleClickZoom={true}
           keyboard={false}
           whenReady={() => setMapReady(true)}
         >
