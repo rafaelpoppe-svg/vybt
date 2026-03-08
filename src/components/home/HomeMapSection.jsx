@@ -272,10 +272,10 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
         </div>
       </div>
 
-      {/* Map — fixed pixel height, no scroll */}
+      {/* Map — fixed pixel height, static (no drag/scroll) */}
       <div
         className="vybt-leaflet-map"
-        style={{ width: '100%', height: MAP_HEIGHT, overflow: 'hidden', touchAction: 'none' }}
+        style={{ width: '100%', height: MAP_HEIGHT, overflow: 'hidden', pointerEvents: 'none' }}
       >
         <MapContainer
           center={defaultCenter}
@@ -283,10 +283,11 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
           style={{ width: '100%', height: `${MAP_HEIGHT}px` }}
           zoomControl={false}
           scrollWheelZoom={false}
-          dragging={true}
-          tap={true}
+          dragging={false}
+          tap={false}
           touchZoom={false}
           doubleClickZoom={false}
+          keyboard={false}
           whenReady={() => setMapReady(true)}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
