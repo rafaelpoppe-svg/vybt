@@ -3,6 +3,7 @@ import { NotificationProvider } from '@/components/notifications/NotificationPro
 import { Toaster } from 'sonner';
 import PageTransition from '@/components/common/PageTransition';
 import { LanguageProvider } from '@/components/common/LanguageContext';
+import { ProfileThemeProvider, useProfileThemeContext } from '@/components/common/ProfileThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
