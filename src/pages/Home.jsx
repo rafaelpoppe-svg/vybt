@@ -282,6 +282,7 @@ export default function Home() {
           profilesMap={profilesMap}
           plans={visiblePlans}
           onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+          onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
         />
       </div>
 
