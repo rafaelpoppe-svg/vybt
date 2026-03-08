@@ -155,6 +155,31 @@ export default function Home() {
     allPlans: visiblePlans,
   });
 
+  // Apply sort + filters to plans shown on map
+  const filteredMapPlans = useMemo(() => {
+    let result = [...visiblePlans];
+
+    // Sort
+    if (activeSort === 'foryou') {
+      const recIds = recommendedPlans.map(r => r.id);
+      result = [...result.filter(p => recIds.includes(p.id)), ...result.filter(p => !recIds.includes(p.id))];
+    } else if (activeSort === 'hot') {
+      result = result.filter(p => p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted || p.status === 'happening');
+    } else if (activeSort === 'members') {
+      result = result.sort((a, b) => allParticipants.filter(p => p.plan_id === b.id).length - allParticipants.filter(p => p.plan_id === a.id).length);
+    }
+
+    // Tag filter
+    if (mapFilters.partyTags?.length > 0) {
+      result = result.filter(p => p.tags?.some(t => mapFilters.partyTags.includes(t)));
+    }
+    // Time filter
+    if (mapFilters.startTime) result = result.filter(p => p.time >= mapFilters.startTime);
+    if (mapFilters.endTime) result = result.filter(p => p.time <= mapFilters.endTime);
+
+    return result;
+  }, [visiblePlans, activeSort, mapFilters, recommendedPlans, allParticipants]);
+
   const myPlanIds = myParticipations.map(p => p.plan_id);
   const happeningPlan = visiblePlans.find(p => myPlanIds.includes(p.id) && p.status === 'happening') || null;
 
