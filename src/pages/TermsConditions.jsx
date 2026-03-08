@@ -12,7 +12,7 @@ const sections = [
   {
     number: '2.',
     title: 'Eligibility',
-    content: `Vybt is intended for individuals who are:\n- At least 18 years old\n- Legally capable of entering into binding agreements\n\nBy creating an account, you confirm that you meet these requirements.\n\nVybt reserves the right to suspend or terminate accounts that violate this condition.`,
+    content: `Vybt is intended for individuals who are:\n- At least 16 years old\n- Legally capable of entering into binding agreements\n\nBy creating an account, you confirm that you meet these requirements.\n\nVybt reserves the right to suspend or terminate accounts that violate this condition.`,
   },
   {
     number: '3.',
