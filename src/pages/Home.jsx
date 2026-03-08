@@ -7,7 +7,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import BottomNav from '../components/common/BottomNav';
 import HomeStoriesBar from '../components/home/HomeStoriesBar';
-import HomeMapSection from '../components/home/HomeMapSection';
 import HotPlansSection from '../components/home/HotPlansSection';
 import LocationSelector from '../components/common/LocationSelector';
 import HappeningNowBanner from '../components/feed/HappeningNowBanner';
