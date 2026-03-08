@@ -39,6 +39,8 @@ if (typeof document !== 'undefined' && !document.getElementById('vybt-map-icon-s
   const style = document.createElement('style');
   style.id = 'vybt-map-icon-styles';
   style.textContent = `
+    .leaflet-div-icon { background: none !important; border: none !important; box-shadow: none !important; }
+    .vybt-plan-marker { background: none !important; border: none !important; box-shadow: none !important; overflow: visible !important; }
     @keyframes vybt-pulse {
       0%   { box-shadow: 0 0 0 0 var(--plan-color, #f97316); }
       70%  { box-shadow: 0 0 0 14px transparent; }
