@@ -217,6 +217,21 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
             <div style={{ flex: 1, minWidth: 0 }}>
               <p style={{ color: '#fff', fontWeight: 700, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.title}</p>
               <p style={{ color: '#888', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.location_address}</p>
+              {selected.tags?.length > 0 && (
+                <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
+                  {selected.tags.map(tag => (
+                    <span key={tag} style={{ background: `${accentOf(selected)}22`, color: accentOf(selected), padding: '2px 6px', borderRadius: 10, fontSize: 9, fontWeight: 600 }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {(selected.date || selected.time) && (
+                <p style={{ color: '#aaa', fontSize: 10, marginTop: 3 }}>
+                  {selected.date && new Date(selected.date).toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })}
+                  {selected.time && ` · ${selected.time}`}
+                </p>
+              )}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
               <button onClick={() => { onPlanClick(selected); setSelected(null); }}
