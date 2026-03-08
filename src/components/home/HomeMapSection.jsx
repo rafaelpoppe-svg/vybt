@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
-import { motion, AnimatePresence, useDragControls } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
-import { MapPin, Users, ChevronRight, Flame, Sparkles, ChevronDown } from 'lucide-react';
-import { format } from 'date-fns';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Users, Sparkles, ChevronDown } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
+// Fix default Leaflet icon
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -34,153 +32,125 @@ const CITIES = [
   { name: 'Faro', lat: 37.0194, lng: -7.9322 },
 ];
 
-// Inject global CSS once for map icon animations
-if (typeof document !== 'undefined' && !document.getElementById('vybt-map-icon-styles')) {
+const MAP_HEIGHT = 320;
+
+// Inject global CSS once
+if (typeof document !== 'undefined' && !document.getElementById('vybt-map-styles')) {
   const style = document.createElement('style');
-  style.id = 'vybt-map-icon-styles';
+  style.id = 'vybt-map-styles';
   style.textContent = `
-    .leaflet-div-icon { background: none !important; border: none !important; box-shadow: none !important; }
-    .vybt-plan-marker { background: none !important; border: none !important; box-shadow: none !important; overflow: visible !important; }
+    /* Kill ALL Leaflet default icon styles */
+    .leaflet-div-icon,
+    .vybt-pin {
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    /* Dark map tiles */
+    .vybt-leaflet-map .leaflet-tile {
+      filter: brightness(0.6) saturate(0.6) hue-rotate(185deg) invert(1) !important;
+    }
+    .vybt-leaflet-map .leaflet-container {
+      background: #1a1a1a !important;
+    }
+    .vybt-leaflet-map .leaflet-control-attribution,
+    .vybt-leaflet-map .leaflet-control-zoom {
+      display: none !important;
+    }
+    /* Pulse animation */
     @keyframes vybt-pulse {
-      0%   { box-shadow: 0 0 0 0 var(--plan-color, #f97316); }
-      70%  { box-shadow: 0 0 0 14px transparent; }
-      100% { box-shadow: 0 0 0 0 transparent; }
+      0%   { box-shadow: 0 0 0 0 rgba(249,115,22,0.7); }
+      70%  { box-shadow: 0 0 0 12px rgba(249,115,22,0); }
+      100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); }
     }
-    @keyframes vybt-orbit {
-      0%   { transform: rotate(var(--start-angle)) translateY(-30px) scale(0.7); opacity: 0.9; }
-      50%  { transform: rotate(calc(var(--start-angle) + 30deg)) translateY(-38px) scale(1.1); opacity: 0.5; }
-      100% { transform: rotate(var(--start-angle)) translateY(-30px) scale(0.7); opacity: 0.9; }
-    }
-    .vybt-icon-pulse {
-      animation: vybt-pulse 1.4s infinite;
-    }
-    .vybt-orbit-dot {
-      position: absolute;
-      border-radius: 50%;
-      top: 50%; left: 50%;
-      transform-origin: 0 0;
-      animation: vybt-orbit 1.8s infinite ease-in-out;
-    }
+    .vybt-pulse { animation: vybt-pulse 1.4s infinite; }
   `;
   document.head.appendChild(style);
 }
 
 function createPlanIcon(plan, isHappening) {
-  const coverImg = plan.cover_image || plan.group_image;
+  const coverImg = plan.cover_image || plan.group_image || '';
   const isHot = plan.is_on_fire || (plan.recent_joins >= 100);
   const isHighlighted = plan.is_highlighted;
-
-  const borderColor = plan.theme_color
+  const color = plan.theme_color
     || (isHappening ? '#f97316' : isHighlighted ? '#a855f7' : isHot ? '#ef4444' : '#00fea3');
 
-  // 6 orbit dots with different angles & delays
-  const dots = isHappening ? Array.from({ length: 6 }, (_, i) => {
-    const angle = i * 60;
-    const delay = (i * 0.3).toFixed(1);
-    const size = 5 + (i % 3) * 2;
-    return `<div class="vybt-orbit-dot" style="
-      width:${size}px;height:${size}px;
-      margin-left:-${size/2}px;margin-top:-${size/2}px;
-      background:${borderColor};
-      --start-angle:${angle}deg;
-      animation-delay:${delay}s;
-    "></div>`;
-  }).join('') : '';
-
   const badge = isHappening
-    ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:${borderColor};color:#0b0b0b;font-size:8px;font-weight:bold;padding:2px 6px;border-radius:8px;white-space:nowrap;z-index:10;">● LIVE</div>`
+    ? `<div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:${color};color:#000;font-size:8px;font-weight:900;padding:2px 6px;border-radius:6px;white-space:nowrap;">● LIVE</div>`
     : isHot
-    ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:14px;z-index:10;">🔥</div>`
+    ? `<div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:13px;">🔥</div>`
     : isHighlighted
-    ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:14px;z-index:10;">✨</div>`
+    ? `<div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:13px;">✨</div>`
     : '';
 
-  const imgContent = coverImg
-    ? `<img src="${coverImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
-    : `<div style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#542b9b,${borderColor});display:flex;align-items:center;justify-content:center;font-size:18px;">🎉</div>`;
-
-  const iconH = isHappening ? 82 : 62;
+  const inner = coverImg
+    ? `<img src="${coverImg}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;display:block;" />`
+    : `<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#542b9b,${color});display:flex;align-items:center;justify-content:center;font-size:18px;">🎉</div>`;
 
   return L.divIcon({
-    className: 'vybt-plan-marker',
+    className: 'vybt-pin',
     html: `
-      <div style="position:relative;display:flex;flex-direction:column;align-items:center;width:80px;height:${iconH}px;background:none;border:none;">
+      <div style="position:relative;width:56px;height:72px;display:flex;flex-direction:column;align-items:center;">
         ${badge}
-        <div style="position:relative;width:48px;height:48px;margin-top:${isHappening ? 18 : 8}px;">
-          ${dots}
-          <div class="${isHappening ? 'vybt-icon-pulse' : ''}" style="
-            width:48px;height:48px;border-radius:50%;
-            border:3px solid ${borderColor};
-            overflow:hidden;
-            box-shadow:0 0 ${isHappening ? '20px' : '8px'} ${borderColor}99;
-            background:#1a1a1a;
-            position:relative;z-index:2;
-            --plan-color:${borderColor}99;
-            display:flex;align-items:center;justify-content:center;
-          ">
-            ${imgContent}
-          </div>
-        </div>
+        <div class="${isHappening ? 'vybt-pulse' : ''}" style="
+          width:44px;height:44px;border-radius:50%;
+          border:2.5px solid ${color};
+          overflow:hidden;
+          box-shadow:0 0 ${isHappening ? '16px' : '6px'} ${color}88;
+          margin-top:${isHappening ? 16 : 4}px;
+          flex-shrink:0;
+        ">${inner}</div>
+        <div style="width:2px;height:10px;background:${color};margin-top:2px;border-radius:1px;opacity:0.7;"></div>
+        <div style="width:6px;height:6px;background:${color};border-radius:50%;margin-top:1px;opacity:0.5;"></div>
       </div>
     `,
-    iconSize: [80, iconH],
-    iconAnchor: [40, iconH],
-    popupAnchor: [0, -(iconH + 4)],
+    iconSize: [56, 72],
+    iconAnchor: [28, 72],
+    popupAnchor: [0, -76],
   });
 }
 
 function FlyToCity({ coords }) {
   const map = useMap();
   useEffect(() => {
-    if (!coords || isNaN(coords.lat) || isNaN(coords.lng)) return;
-    // Wait until the map container has valid pixel dimensions before flying
-    const fly = () => {
+    if (!coords) return;
+    const tryFly = () => {
       const size = map.getSize();
       if (size.x > 0 && size.y > 0) {
-        map.flyTo([coords.lat, coords.lng], 13, { animate: true, duration: 1.2 });
+        map.flyTo([coords.lat, coords.lng], 13, { animate: true, duration: 1.1 });
       } else {
-        map.once('resize', fly);
+        setTimeout(tryFly, 100);
       }
     };
-    fly();
+    tryFly();
   }, [coords?.lat, coords?.lng]);
   return null;
 }
 
-// Draggable bottom card
-function ForYouCard({ plans, allParticipants, profilesMap, onPlanClick }) {
+function ForYouCard({ plans, allParticipants, onPlanClick }) {
   const [minimized, setMinimized] = useState(false);
-  const [dragStart, setDragStart] = useState(null);
 
-  const hotPlans = plans.filter(p => p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted || (p.matchScore > 20));
-  const displayPlans = hotPlans.slice(0, 5);
+  const hot = plans.filter(p =>
+    p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted || p.status === 'happening'
+  ).slice(0, 5);
 
-  if (displayPlans.length === 0) return null;
+  if (hot.length === 0) return null;
 
-  const getCount = (planId) => allParticipants.filter(p => p.plan_id === planId).length;
+  const count = (pid) => allParticipants.filter(p => p.plan_id === pid).length;
 
   return (
-    <motion.div
-      drag="y"
-      dragConstraints={{ top: 0, bottom: 0 }}
-      onDragStart={(_, info) => setDragStart(info.point.y)}
-      onDragEnd={(_, info) => {
-        if (info.point.y - (dragStart || 0) > 40) setMinimized(true);
-        else if ((dragStart || 0) - info.point.y > 40) setMinimized(false);
-      }}
-      className="absolute bottom-0 left-0 right-0 z-[500] rounded-t-3xl overflow-hidden"
-      style={{ background: 'rgba(11,11,11,0.96)', backdropFilter: 'blur(16px)', borderTop: '1px solid rgba(255,255,255,0.08)' }}
+    <div
+      className="absolute bottom-0 left-0 right-0 z-[500] rounded-t-2xl"
+      style={{ background: 'rgba(11,11,11,0.95)', borderTop: '1px solid rgba(255,255,255,0.08)' }}
     >
-      {/* Drag handle */}
-      <div
-        className="flex flex-col items-center pt-2 pb-1 cursor-grab active:cursor-grabbing"
-        onClick={() => setMinimized(!minimized)}
-      >
-        <div className="w-10 h-1 rounded-full bg-gray-600" />
-        <div className="flex items-center gap-2 mt-2">
-          <Sparkles className="w-4 h-4 text-yellow-400" />
-          <span className="text-white font-bold text-sm">For You</span>
-          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${minimized ? 'rotate-180' : ''}`} />
+      <div className="flex flex-col items-center pt-2 pb-1 cursor-pointer" onClick={() => setMinimized(m => !m)}>
+        <div className="w-8 h-1 rounded-full bg-gray-600" />
+        <div className="flex items-center gap-1.5 mt-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
+          <span className="text-white font-bold text-xs">For You</span>
+          <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${minimized ? 'rotate-180' : ''}`} />
         </div>
       </div>
 
@@ -190,222 +160,180 @@ function ForYouCard({ plans, allParticipants, profilesMap, onPlanClick }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className="overflow-hidden"
           >
-            <div className="flex gap-3 px-4 pb-4 pt-1 overflow-x-auto scrollbar-hide">
-              {displayPlans.map(plan => {
-                const isHot = plan.is_on_fire || plan.recent_joins >= 100;
+            <div className="flex gap-3 px-4 pb-3 pt-1 overflow-x-auto" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+              {hot.map(plan => {
                 const isHappening = plan.status === 'happening';
-                const count = getCount(plan.id);
-                const borderColor = isHappening ? '#f97316' : isHot ? '#ef4444' : plan.is_highlighted ? '#a855f7' : '#00fea3';
-
+                const isHot = plan.is_on_fire || plan.recent_joins >= 100;
+                const color = isHappening ? '#f97316' : isHot ? '#ef4444' : plan.is_highlighted ? '#a855f7' : '#00fea3';
                 return (
-                  <motion.button
+                  <button
                     key={plan.id}
-                    whileTap={{ scale: 0.96 }}
                     onClick={() => onPlanClick(plan)}
-                    className="flex-shrink-0 w-52 rounded-2xl overflow-hidden text-left relative"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${borderColor}44` }}
+                    className="flex-shrink-0 w-48 rounded-xl overflow-hidden text-left"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${color}33` }}
                   >
-                    {/* Cover image */}
-                    <div className="w-full h-28 relative overflow-hidden">
-                      {plan.cover_image ? (
-                        <img src={plan.cover_image} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full" style={{ background: `linear-gradient(135deg, #542b9b, ${borderColor})` }} />
-                      )}
-                      {/* Overlay badges */}
-                      <div className="absolute top-2 left-2 flex gap-1">
-                        {isHappening && (
-                          <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-orange-500 text-white">● LIVE</span>
-                        )}
-                        {isHot && !isHappening && (
-                          <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-red-500/90 text-white">🔥 Hot</span>
-                        )}
-                        {plan.is_highlighted && (
-                          <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-500/90 text-white">✨</span>
-                        )}
+                    <div className="w-full h-24 relative overflow-hidden">
+                      {plan.cover_image
+                        ? <img src={plan.cover_image} alt="" className="w-full h-full object-cover" />
+                        : <div className="w-full h-full" style={{ background: `linear-gradient(135deg,#542b9b,${color})` }} />
+                      }
+                      {isHappening && <span className="absolute top-1.5 left-1.5 text-[8px] font-bold bg-orange-500 text-white px-1.5 py-0.5 rounded-full">● LIVE</span>}
+                    </div>
+                    <div className="p-2">
+                      <p className="text-white font-bold text-[11px] truncate">{plan.title}</p>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <Users className="w-2.5 h-2.5 text-gray-500" />
+                        <span className="text-gray-400 text-[9px]">{count(plan.id)} going</span>
                       </div>
                     </div>
-                    <div className="p-3">
-                      <p className="text-white font-bold text-xs leading-tight truncate">{plan.title}</p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Users className="w-3 h-3 text-gray-500" />
-                        <span className="text-gray-400 text-[10px]">{count} going</span>
-                        {plan.matchScore > 0 && (
-                          <span className="ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded-full"
-                            style={{ background: `${borderColor}22`, color: borderColor }}>
-                            {plan.matchScore}% match
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </motion.button>
+                  </button>
                 );
               })}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 
-export default function HomeMapSection({ plans = [], allParticipants = [], profilesMap = {}, myParticipations = [], city = '', radius = 10, onPlanClick }) {
-  const navigate = useNavigate();
+export default function HomeMapSection({ plans = [], allParticipants = [], profilesMap = {}, city = '', onPlanClick }) {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [flyCoords, setFlyCoords] = useState(null);
+  const [mapReady, setMapReady] = useState(false);
 
-  // Geocode city to coords
   useEffect(() => {
     if (!city) return;
     const match = CITIES.find(c => c.name.toLowerCase() === city.toLowerCase());
     if (match) {
       setFlyCoords({ lat: match.lat, lng: match.lng });
-    } else {
-      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`, { headers: { 'Accept-Language': 'en' } })
-        .then(r => r.json())
-        .then(data => { if (data[0]) setFlyCoords({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) }); })
-        .catch(() => {});
+      return;
     }
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`, {
+      headers: { 'Accept-Language': 'en' }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data[0]) setFlyCoords({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+      })
+      .catch(() => {});
   }, [city]);
 
-  const validPlans = plans.filter(p => p.latitude && p.longitude);
-  const center = flyCoords ? [flyCoords.lat, flyCoords.lng] : validPlans.length > 0 ? [validPlans[0].latitude, validPlans[0].longitude] : [38.7169, -9.1399];
+  const validPlans = plans.filter(p => p.latitude && p.longitude && !isNaN(p.latitude) && !isNaN(p.longitude));
+  const defaultCenter = flyCoords
+    ? [flyCoords.lat, flyCoords.lng]
+    : validPlans.length > 0
+    ? [validPlans[0].latitude, validPlans[0].longitude]
+    : [38.7169, -9.1399];
 
-  const recommendedForCard = plans.filter(p => p.status !== 'terminated' && p.status !== 'ended');
+  const accentOf = (plan) => plan.theme_color
+    || (plan.status === 'happening' ? '#f97316' : plan.is_highlighted ? '#a855f7' : plan.is_on_fire ? '#ef4444' : '#00fea3');
 
   return (
-    <div className="mx-4 rounded-3xl overflow-hidden" style={{ height: 320, position: 'relative', border: '1px solid rgba(255,255,255,0.08)' }}>
-      {/* Dark map styles */}
-      <style>{`
-        .home-map .leaflet-container { background: #1a1a1a !important; }
-        .home-map .leaflet-tile { filter: brightness(0.65) saturate(0.7) hue-rotate(185deg) invert(1); }
-        .home-map .leaflet-control-attribution { display: none; }
-        .home-map .leaflet-control-zoom { display: none; }
-        .vybt-plan-marker { background: none !important; border: none !important; box-shadow: none !important; overflow: visible !important; }
-        .leaflet-div-icon { background: none !important; border: none !important; box-shadow: none !important; }
-        .vybt-plan-marker img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-      `}</style>
-
-      {/* LIVE header bar */}
-      <div className="absolute top-3 left-3 right-3 z-[500] flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 px-3 py-2 rounded-2xl"
-          style={{ background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)' }}>
-          <motion.div
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ repeat: Infinity, duration: 1.2 }}
-            className="w-2 h-2 rounded-full bg-red-500"
-          />
+    <div
+      className="mx-4 rounded-3xl overflow-hidden"
+      style={{
+        height: MAP_HEIGHT,
+        position: 'relative',
+        border: '1px solid rgba(255,255,255,0.08)',
+        isolation: 'isolate',
+      }}
+    >
+      {/* Overlaid header */}
+      <div className="absolute top-3 left-3 right-3 z-[500] flex items-center justify-between pointer-events-none">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl pointer-events-auto"
+          style={{ background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <motion.div animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 1.2 }} className="w-2 h-2 rounded-full bg-red-500" />
           <span className="text-white font-bold text-xs">LIVE</span>
-          {city && <span className="text-gray-300 text-xs font-medium">— {city}</span>}
+          {city && <span className="text-gray-300 text-xs">— {city}</span>}
         </div>
-        <div className="px-3 py-2 rounded-2xl text-xs font-bold"
-          style={{ background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)', color: '#00fea3' }}>
+        <div className="px-3 py-1.5 rounded-2xl text-xs font-bold pointer-events-auto"
+          style={{ background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', color: '#00fea3' }}>
           {validPlans.length} planos
         </div>
       </div>
 
-      <div className="home-map w-full h-full" style={{ height: 320 }}>
+      {/* Map — fixed pixel height, no scroll */}
+      <div
+        className="vybt-leaflet-map"
+        style={{ width: '100%', height: MAP_HEIGHT, overflow: 'hidden' }}
+      >
         <MapContainer
-          center={center}
+          center={defaultCenter}
           zoom={13}
-          style={{ width: '100%', height: '320px' }}
+          style={{ width: '100%', height: `${MAP_HEIGHT}px` }}
           zoomControl={false}
+          scrollWheelZoom={false}
+          whenReady={() => setMapReady(true)}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {flyCoords && <FlyToCity coords={flyCoords} />}
-
-          {validPlans.map(plan => {
-            const isHappening = plan.status === 'happening';
-            return (
-              <Marker
-                key={plan.id}
-                position={[plan.latitude, plan.longitude]}
-                icon={createPlanIcon(plan, isHappening)}
-                eventHandlers={{ click: () => setSelectedPlan(plan) }}
-              />
-            );
-          })}
+          {flyCoords && mapReady && <FlyToCity coords={flyCoords} />}
+          {validPlans.map(plan => (
+            <Marker
+              key={plan.id}
+              position={[plan.latitude, plan.longitude]}
+              icon={createPlanIcon(plan, plan.status === 'happening')}
+              eventHandlers={{ click: () => setSelectedPlan(plan) }}
+            />
+          ))}
         </MapContainer>
       </div>
 
-      {/* Selected plan quick info */}
+      {/* Selected plan popup */}
       <AnimatePresence>
-        {selectedPlan && (() => {
-          const accentColor = selectedPlan.theme_color
-            || (selectedPlan.status === 'happening' ? '#f97316'
-            : selectedPlan.is_highlighted ? '#a855f7'
-            : selectedPlan.is_on_fire ? '#ef4444'
-            : '#00fea3');
-          return (
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 20, opacity: 0 }}
-              className="absolute bottom-4 left-3 right-3 z-[600] rounded-2xl overflow-hidden"
-              style={{ background: 'rgba(18,18,18,0.97)', border: `1px solid ${accentColor}44`, backdropFilter: 'blur(16px)' }}
-            >
-              <div className="flex items-stretch gap-0">
-                {/* Photo */}
-                <div className="w-20 h-20 flex-shrink-0 relative overflow-hidden">
-                  {selectedPlan.cover_image ? (
-                    <img src={selectedPlan.cover_image} alt="" className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-2xl"
-                      style={{ background: `linear-gradient(135deg,#1a1a2e,${accentColor}66)` }}>🎉</div>
-                  )}
-                  {selectedPlan.status === 'happening' && (
-                    <div className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded-full text-[8px] font-bold"
-                      style={{ background: accentColor, color: '#0b0b0b' }}>● LIVE</div>
-                  )}
-                </div>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0 p-2.5 flex flex-col justify-between">
-                  <div>
-                    <p className="text-white font-bold text-sm leading-tight truncate">{selectedPlan.title}</p>
-                    <p className="text-gray-400 text-[10px] truncate mt-0.5">{selectedPlan.location_address}</p>
-                  </div>
-                  {/* Party types */}
-                  {selectedPlan.tags && selectedPlan.tags.length > 0 && (
-                    <div className="flex gap-1 mt-1 flex-wrap">
-                      {selectedPlan.tags.slice(0, 2).map(tag => (
-                        <span key={tag} className="px-2 py-0.5 rounded-full text-[9px] font-semibold"
-                          style={{ background: `${accentColor}22`, color: accentColor, border: `1px solid ${accentColor}44` }}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Actions */}
-                <div className="flex flex-col items-center justify-center gap-1.5 pr-2.5 pl-1">
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => { onPlanClick(selectedPlan); setSelectedPlan(null); }}
-                    className="px-3 py-1.5 rounded-full text-xs font-bold"
-                    style={{ background: accentColor, color: '#0b0b0b' }}
-                  >
-                    Ver
-                  </motion.button>
-                  <button onClick={() => setSelectedPlan(null)} className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 text-xs">✕</button>
-                </div>
+        {selectedPlan && (
+          <motion.div
+            key={selectedPlan.id}
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 20, opacity: 0 }}
+            className="absolute bottom-4 left-3 right-3 z-[600] rounded-2xl overflow-hidden"
+            style={{ background: 'rgba(18,18,18,0.97)', border: `1px solid ${accentOf(selectedPlan)}44`, backdropFilter: 'blur(16px)' }}
+          >
+            <div className="flex items-stretch">
+              <div className="w-20 h-20 flex-shrink-0 overflow-hidden">
+                {selectedPlan.cover_image
+                  ? <img src={selectedPlan.cover_image} alt="" className="w-full h-full object-cover" />
+                  : <div className="w-full h-full flex items-center justify-center text-2xl"
+                      style={{ background: `linear-gradient(135deg,#1a1a2e,${accentOf(selectedPlan)}66)` }}>🎉</div>
+                }
               </div>
-            </motion.div>
-          );
-        })()}
+              <div className="flex-1 min-w-0 p-2.5 flex flex-col justify-center">
+                <p className="text-white font-bold text-sm truncate">{selectedPlan.title}</p>
+                <p className="text-gray-400 text-[10px] truncate">{selectedPlan.location_address}</p>
+                {selectedPlan.tags?.length > 0 && (
+                  <div className="flex gap-1 mt-1">
+                    {selectedPlan.tags.slice(0, 2).map(tag => (
+                      <span key={tag} className="px-1.5 py-0.5 rounded-full text-[8px] font-semibold"
+                        style={{ background: `${accentOf(selectedPlan)}22`, color: accentOf(selectedPlan) }}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col items-center justify-center gap-1.5 px-2.5">
+                <button
+                  onClick={() => { onPlanClick(selectedPlan); setSelectedPlan(null); }}
+                  className="px-3 py-1.5 rounded-full text-xs font-bold"
+                  style={{ background: accentOf(selectedPlan), color: '#0b0b0b' }}
+                >Ver</button>
+                <button onClick={() => setSelectedPlan(null)}
+                  className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 text-xs">✕</button>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
 
-      {/* For You draggable card — only shown when no plan is selected */}
+      {/* For You card */}
       {!selectedPlan && (
         <ForYouCard
-          plans={recommendedForCard}
+          plans={plans.filter(p => p.status !== 'terminated' && p.status !== 'ended')}
           allParticipants={allParticipants}
-          profilesMap={profilesMap}
-          onPlanClick={(plan) => { onPlanClick(plan); }}
+          onPlanClick={onPlanClick}
         />
       )}
     </div>
