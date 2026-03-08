@@ -296,7 +296,7 @@ export default function Welcome() {
             </motion.button>
             <motion.button whileTap={{ scale: 0.95 }} className="hover:opacity-80 transition-opacity">
               <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/bc33ef276_googleplay.png"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/c645c9fe5_googleplay.png"
                 alt="Get it on Google Play"
                 className="h-12 object-contain"
               />
