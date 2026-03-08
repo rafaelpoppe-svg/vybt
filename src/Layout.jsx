@@ -157,7 +157,6 @@ export default function Layout({ children, currentPageName }) {
   return (
     <LanguageProvider>
     <NotificationProvider>
-      {!splashDone && <SplashScreen onFinish={handleSplashFinish} />}
       <Toaster position="top-center" theme="dark" />
       {/* 
         Root wrapper: fixed, edge-to-edge, black.
