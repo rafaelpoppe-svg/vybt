@@ -79,7 +79,7 @@ function createPlanIcon(plan) {
   return L.divIcon({
     className: '',
     html: `
-      <div class="hlm-icon-root" style="position:relative;width:48px;height:62px;display:flex;flex-direction:column;align-items:center;pointer-events:none;">
+      <div class="hlm-icon-root" style="position:relative;width:48px;height:62px;display:flex;flex-direction:column;align-items:center;pointer-events:auto;cursor:pointer;">
         ${statusBadge}
         <div style="position:relative;margin-top:4px;flex-shrink:0;">
           ${ripples}
