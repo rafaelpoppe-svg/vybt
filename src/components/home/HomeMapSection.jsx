@@ -255,7 +255,7 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
         .vybt-leaflet-map .leaflet-tile { filter: brightness(0.6) saturate(0.6) hue-rotate(185deg) invert(1) !important; }
         .vybt-leaflet-map .leaflet-control-attribution,
         .vybt-leaflet-map .leaflet-control-zoom { display: none !important; }
-        .vybt-leaflet-map, .vybt-leaflet-map .leaflet-container { touch-action: none !important; }
+        .vybt-leaflet-map, .vybt-leaflet-map .leaflet-container { touch-action: pan-y !important; pointer-events: none !important; }
       `}</style>
 
       {/* Overlaid header */}
