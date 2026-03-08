@@ -7,22 +7,17 @@ Deno.serve(async (req) => {
     const allPlans = await base44.asServiceRole.entities.PartyPlan.list('-created_date', 200);
     const now = new Date();
 
-    // Build today's date string (YYYY-MM-DD) in UTC
-    const todayStr = now.toISOString().slice(0, 10);
-
     let updated = 0;
 
     for (const plan of allPlans) {
       if (!['upcoming', 'happening'].includes(plan.status)) continue;
       if (!plan.date || !plan.end_time) continue;
 
-      // Build end datetime from plan date + end_time (treat as local time, assume UTC for simplicity)
-      const endDateTimeStr = `${plan.date}T${plan.end_time}:00`;
-      const endDateTime = new Date(endDateTimeStr);
-
+      // Build end datetime from plan date + end_time
+      const endDateTime = new Date(`${plan.date}T${plan.end_time}:00`);
       if (isNaN(endDateTime.getTime())) continue;
 
-      // If end time has passed, move to voting
+      // If end time has passed and plan is happening → move to voting
       if (now > endDateTime && plan.status === 'happening') {
         const votingEndsAt = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString();
         await base44.asServiceRole.entities.PartyPlan.update(plan.id, {
@@ -33,10 +28,9 @@ Deno.serve(async (req) => {
         continue;
       }
 
-      // If plan date/time has passed and still upcoming → move to happening
+      // If start time has passed and plan is upcoming → move to happening
       if (!plan.time) continue;
-      const startDateTimeStr = `${plan.date}T${plan.time}:00`;
-      const startDateTime = new Date(startDateTimeStr);
+      const startDateTime = new Date(`${plan.date}T${plan.time}:00`);
       if (!isNaN(startDateTime.getTime()) && now > startDateTime && plan.status === 'upcoming') {
         await base44.asServiceRole.entities.PartyPlan.update(plan.id, { status: 'happening' });
         updated++;
