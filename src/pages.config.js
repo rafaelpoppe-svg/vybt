@@ -57,7 +57,6 @@ import Explore from './pages/Explore';
 import Friends from './pages/Friends';
 import GroupChat from './pages/GroupChat';
 import HelpFaq from './pages/HelpFaq';
-import Home from './pages/Home';
 import Moderation from './pages/Moderation';
 import MyPlans from './pages/MyPlans';
 import MyStories from './pages/MyStories';
@@ -88,7 +87,6 @@ export const PAGES = {
     "Friends": Friends,
     "GroupChat": GroupChat,
     "HelpFaq": HelpFaq,
-    "Home": Home,
     "Moderation": Moderation,
     "MyPlans": MyPlans,
     "MyStories": MyStories,
