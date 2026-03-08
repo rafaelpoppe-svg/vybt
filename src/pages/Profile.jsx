@@ -94,191 +94,184 @@ export default function Profile() {
 
   const photos = profile.photos?.filter(Boolean) || [];
   const hasPhotos = photos.length > 0;
-  const selectedTheme = BACKGROUND_THEMES[profile.profile_background_theme] || BACKGROUND_THEMES.default;
 
   return (
-    <div className="h-screen overflow-y-auto overflow-x-hidden pb-24" style={{ WebkitOverflowScrolling: 'touch' }}>
+    <div className="h-screen overflow-y-auto overflow-x-hidden pb-24 bg-[#0b0b0b]" style={{ WebkitOverflowScrolling: 'touch' }}>
 
-      {/* ── Hero Photo Gallery ── */}
-      <div className="relative w-full h-[65vh] bg-gray-900 overflow-hidden" style={{ backgroundImage: `linear-gradient(135deg, ${selectedTheme.gradient})` }}>
-        <AnimatePresence mode="wait">
-          {hasPhotos ? (
-            <motion.img
-              key={currentPhotoIndex}
-              src={photos[currentPhotoIndex]}
-              alt=""
-              initial={{ opacity: 0, scale: 1.04 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.35 }}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#542b9b]/40 to-[#00fea3]/20">
-              <Camera className="w-20 h-20 text-white/10" />
+      {/* ── Header: Name, Stats, Actions ── */}
+      <div className="sticky top-0 z-40 bg-[#0b0b0b] border-b border-gray-800 px-4 py-3" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
+        <div className="flex items-start justify-between gap-4">
+          {/* Left: Profile pic small + Username + Bio preview */}
+          <div className="flex gap-3 flex-1 min-w-0">
+            <motion.div className="flex-shrink-0">
+              {hasPhotos ? (
+                <img
+                  src={photos[0]}
+                  alt="profile"
+                  className="w-14 h-14 rounded-full object-cover border-2 border-gray-700"
+                />
+              ) : (
+                <div className="w-14 h-14 rounded-full bg-gray-800 border-2 border-gray-700 flex items-center justify-center">
+                  <Camera className="w-6 h-6 text-gray-600" />
+                </div>
+              )}
+            </motion.div>
+            
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h2 className="font-bold text-white truncate">{profile.display_name || currentUser.full_name}</h2>
+                <VerificationBadge isVerified={profile.is_verified} size="xs" />
+              </div>
+              {profile.bio && (
+                <p className="text-xs text-gray-400 line-clamp-2 mt-0.5">{profile.bio}</p>
+              )}
             </div>
-          )}
-        </AnimatePresence>
+          </div>
 
-        {/* Gradient overlay with theme emoji pattern */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/20 to-transparent" />
-        <div className="absolute inset-0 opacity-5 text-6xl overflow-hidden flex flex-wrap items-center justify-center gap-8 p-8 pointer-events-none">
-          {[...Array(12)].map((_, i) => (
-            <span key={i} className="animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>
-              {selectedTheme.emoji}
-            </span>
+          {/* Right: Action icons */}
+          <div className="flex gap-2 flex-shrink-0">
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => navigate(createPageUrl('Notifications'))}
+              className="p-2 hover:bg-gray-900 rounded-lg transition-colors relative"
+            >
+              <Bell className="w-5 h-5 text-white" />
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full" />
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => navigate(createPageUrl('EditProfile'))}
+              className="p-2 hover:bg-gray-900 rounded-lg transition-colors"
+            >
+              <Edit2 className="w-5 h-5 text-white" />
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => navigate(createPageUrl('Settings'))}
+              className="p-2 hover:bg-gray-900 rounded-lg transition-colors"
+            >
+              <Settings className="w-5 h-5 text-gray-400" />
+            </motion.button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Stats Row ── */}
+      <div className="px-4 py-4 border-b border-gray-800">
+        <div className="flex justify-between">
+          {[
+            { value: myStories.length, label: t.stories },
+            { value: friendships.length, label: t.friends },
+            { value: participations.length, label: t.parties },
+          ].map(({ value, label }) => (
+            <motion.div key={label} className="flex flex-col items-center">
+              <p className="text-lg font-bold text-white">{value}</p>
+              <p className="text-xs text-gray-400">{label}</p>
+            </motion.div>
           ))}
         </div>
+      </div>
 
-        {/* Top action buttons */}
-        <div className="absolute right-4 flex gap-2 z-10" style={{ top: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => navigate(createPageUrl('Notifications'))}
-            className="p-2 rounded-full bg-black/40 backdrop-blur-md relative"
-          >
-            <Bell className="w-5 h-5 text-white" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-          </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => navigate(createPageUrl('EditProfile'))}
-            className="p-2 rounded-full bg-black/40 backdrop-blur-md"
-          >
-            <Edit2 className="w-5 h-5 text-white" />
-          </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => navigate(createPageUrl('Settings'))}
-            className="p-2 rounded-full bg-black/40 backdrop-blur-md"
-          >
-            <Settings className="w-5 h-5 text-gray-300" />
-          </motion.button>
-        </div>
+      {/* ── Action Buttons ── */}
+      <div className="px-4 py-3 flex gap-2 border-b border-gray-800">
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          onClick={() => navigate(createPageUrl('EditProfile'))}
+          className="flex-1 py-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm font-medium"
+        >
+          {t.editProfile}
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          className="flex-1 py-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm font-medium flex items-center justify-center gap-1.5"
+        >
+          <Users className="w-4 h-4" />
+          {t.friends}
+        </motion.button>
+      </div>
 
-        {/* Photo dots */}
-        {photos.length > 1 && (
-          <div className="absolute top-14 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-            {photos.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentPhotoIndex(i)}
-                className={`rounded-full transition-all duration-300 ${
-                  i === currentPhotoIndex ? 'w-5 h-1.5 bg-[#00fea3]' : 'w-1.5 h-1.5 bg-white/40'
-                }`}
-              />
-            ))}
-          </div>
+      {/* ── Bio + Location ── */}
+      <div className="px-4 py-3 border-b border-gray-800 space-y-2">
+        {profile.bio && (
+          <p className="text-sm text-gray-300">{profile.bio}</p>
         )}
-
-        {/* Tap zones */}
-        {photos.length > 1 && (
-          <>
-            <button
-              className="absolute left-0 top-20 bottom-0 w-1/3 z-20"
-              onClick={() => setCurrentPhotoIndex(i => Math.max(0, i - 1))}
-            />
-            <button
-              className="absolute right-0 top-20 bottom-0 w-1/3 z-20"
-              onClick={() => setCurrentPhotoIndex(i => Math.min(photos.length - 1, i + 1))}
-            />
-          </>
-        )}
-
-        {/* Name + location pinned to bottom of hero */}
-        <div className="absolute bottom-0 left-0 right-0 px-5 pb-5 z-10">
-          <div className="flex items-baseline gap-2 flex-wrap">
-            <h1 className="text-3xl font-bold text-white tracking-tight">{profile.display_name || currentUser.full_name}</h1>
-            {profile.date_of_birth && (
-              <span className="text-xl text-gray-300 font-semibold">
-                {Math.floor((new Date() - new Date(profile.date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000))}
-              </span>
-            )}
-          </div>
-          <div className="mt-1.5">
-            <VerificationBadge isVerified={profile.is_verified} size="sm" />
-          </div>
+        <div className="flex items-center gap-2 text-xs text-gray-400">
           {profile.city && (
-            <div className="flex items-center gap-1.5 mt-1">
-              <MapPin className="w-3.5 h-3.5 text-[#00fea3]" />
-              <span className="text-gray-300 text-sm">{profile.city}</span>
-            </div>
+            <>
+              <MapPin className="w-3.5 h-3.5" />
+              <span>{profile.city}</span>
+            </>
           )}
           {profile.nationality && (() => {
             const nat = NATIONALITIES.find(n => n.code === profile.nationality);
             return nat ? (
-              <div className="flex items-center gap-1.5 mt-1">
+              <>
                 <span className="text-base">{nat.flag}</span>
-                <span className="text-gray-300 text-sm">{nat.name}</span>
-              </div>
+                <span>{nat.name}</span>
+              </>
             ) : null;
           })()}
         </div>
       </div>
 
-      {/* ── Stats Row ── */}
-      <div className="px-5 pt-5">
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          {[
-            { icon: Users, label: t.friends, value: friendships.length, color: 'text-[#00fea3]' },
-            { icon: PartyPopper, label: t.parties, value: participations.length, color: 'text-[#542b9b]' },
-            { icon: Clapperboard, label: t.stories, value: myStories.length, color: 'text-pink-400' },
-          ].map(({ icon: Icon, label, value, color }) => (
+      {/* ── Stories Carousel (Like Instagram Stories) ── */}
+      <div className="px-4 py-4 border-b border-gray-800">
+        <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
+          {/* Add Story Button */}
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate(createPageUrl('AddStory'))}
+            className="flex-shrink-0 w-16 h-20 rounded-xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center hover:border-gray-600 transition-colors"
+          >
+            <Plus className="w-6 h-6 text-gray-400 mb-1" />
+            <span className="text-[10px] text-gray-400">Novo</span>
+          </motion.button>
+
+          {/* Story circles - show multiple photos as stories */}
+          {photos.map((photo, idx) => (
             <motion.button
-              key={label}
+              key={idx}
               whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                if (label === t.friends) navigate(createPageUrl('Friends'));
-                if (label === t.parties) navigate(createPageUrl('MyPlans'));
-                if (label === t.stories) navigate(createPageUrl('MyStories'));
-              }}
-              className="bg-gray-900/60 border border-gray-800 rounded-2xl py-4 flex flex-col items-center gap-1 hover:border-gray-700 transition-colors"
+              onClick={() => navigate(createPageUrl('StoryView') + `?id=${photo}`)}
+              className="flex-shrink-0 flex flex-col items-center gap-1.5"
             >
-              <Icon className={`w-5 h-5 ${color}`} />
-              <p className="text-2xl font-bold text-white">{value}</p>
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest">{label}</p>
+              <div className="w-16 h-16 rounded-full border-2 border-[#00fea3] overflow-hidden bg-gray-800">
+                <img src={photo} alt="" className="w-full h-full object-cover" />
+              </div>
+              <span className="text-[10px] text-gray-400 text-center truncate w-16">{`Foto ${idx + 1}`}</span>
             </motion.button>
           ))}
         </div>
       </div>
 
       {/* ── Tabs ── */}
-      <div className="sticky top-0 z-30 bg-[#0b0b0b]/80 backdrop-blur-lg border-b border-gray-800 px-5">
-        <div className="flex gap-0 overflow-x-auto scrollbar-hide">
-          {[
-            { id: 'posts', label: '📸 Posts' },
-            { id: 'planos', label: '🎉 Planos' },
-            { id: 'sobre', label: 'ℹ️ Sobre' },
-          ].map(tab => (
-            <motion.button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors relative ${
-                activeTab === tab.id ? 'text-[#00fea3]' : 'text-gray-400'
-              }`}
-            >
-              {tab.label}
-              {activeTab === tab.id && (
-                <motion.div
-                  layoutId="tab-underline"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00fea3]"
-                />
-              )}
-            </motion.button>
-          ))}
-        </div>
+      <div className="sticky top-[calc(env(safe-area-inset-top,0px)+60px)] z-30 bg-[#0b0b0b] border-b border-gray-800 px-4 flex gap-6">
+        {[
+          { id: 'posts', label: '📸', icon: true },
+          { id: 'planos', label: '🎬', icon: true },
+          { id: 'sobre', label: '👤', icon: true },
+        ].map(tab => (
+          <motion.button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`py-3 px-1 border-b-2 transition-colors ${
+              activeTab === tab.id ? 'border-[#00fea3] text-white' : 'border-transparent text-gray-500'
+            }`}
+          >
+            <span className="text-lg">{tab.label}</span>
+          </motion.button>
+        ))}
       </div>
 
-      {/* ── Tab Content ── */}
-      <div className="px-5 pt-5 space-y-7">
+      {/* ── Tab Content: Grid/Feed ── */}
+      <div className="pb-24">
         <AnimatePresence mode="wait">
           {activeTab === 'posts' && (
             <motion.div
               key="posts"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
               <ProfileStoryGrid
                 stories={myStories}
@@ -290,121 +283,74 @@ export default function Profile() {
           {activeTab === 'planos' && (
             <motion.div
               key="planos"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="p-4"
             >
-              <ProfilePlansCarousel
-                plans={myPlans}
-                onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-              />
+              <div className="space-y-3">
+                {myPlans.map(plan => (
+                  <motion.button
+                    key={plan.id}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                    className="w-full p-3 bg-gray-900 rounded-lg border border-gray-800 text-left hover:border-gray-700 transition-colors"
+                  >
+                    <p className="font-semibold text-white text-sm">{plan.title}</p>
+                    <p className="text-xs text-gray-400 mt-1">{plan.city} • {new Date(plan.date).toLocaleDateString()}</p>
+                  </motion.button>
+                ))}
+                {myPlans.length === 0 && (
+                  <p className="text-center text-gray-500 text-sm py-8">{t.noPlansFound}</p>
+                )}
+              </div>
             </motion.div>
           )}
 
           {activeTab === 'sobre' && (
             <motion.div
               key="sobre"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="p-4 space-y-4"
             >
               <ProfileAboutSection profile={profile} />
+              
+              {/* Verification & Ambassador info */}
+              <div className="space-y-2 mt-6">
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setShowVerification(true)}
+                  className={`w-full p-3 rounded-lg text-sm font-medium border flex items-center justify-between ${
+                    profile.is_verified
+                      ? 'bg-blue-500/10 border-blue-500/30 text-blue-400'
+                      : 'bg-gray-900 border-gray-800 text-white'
+                  }`}
+                >
+                  <span>{profile.is_verified ? '✓ ' + t.profileVerified : t.verifyProfile}</span>
+                  {!profile.is_verified && <ChevronRight className="w-4 h-4" />}
+                </motion.button>
+
+                {profile.ambassador_opted_in && (
+                  <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => navigate(createPageUrl('Ambassador'))}
+                    className={`w-full p-3 rounded-lg text-sm font-medium border flex items-center justify-between ${
+                      profile.is_ambassador
+                        ? 'bg-purple-500/10 border-purple-500/30 text-purple-400'
+                        : 'bg-gray-900 border-gray-800 text-white'
+                    }`}
+                  >
+                    <span>{profile.is_ambassador ? '🏆 Ambassador' : t.ambassadorProgram}</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </motion.button>
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* Menu Items */}
-        <div className="space-y-2">
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={() => navigate(createPageUrl('Friends'))}
-            className="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-between"
-          >
-            <div className="flex items-center gap-3">
-              <Users className="w-5 h-5 text-[#00fea3]" />
-              <span className="text-white font-medium">{t.myFriends}</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-500" />
-          </motion.button>
-
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={() => navigate(createPageUrl('MyPlans'))}
-            className="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-between"
-          >
-            <div className="flex items-center gap-3">
-              <PartyPopper className="w-5 h-5 text-[#542b9b]" />
-              <span className="text-white font-medium">{t.joinedPartyPlans}</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-500" />
-          </motion.button>
-
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={() => navigate(createPageUrl('MyStories'))}
-            className="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-between"
-          >
-            <div className="flex items-center gap-3">
-              <Camera className="w-5 h-5 text-[#00fea3]" />
-              <span className="text-white font-medium">{t.myExperienceStories}</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-500" />
-          </motion.button>
-
-          {/* Ambassador button — only if opted in */}
-          {profile.ambassador_opted_in && (
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              onClick={() => navigate(createPageUrl('Ambassador'))}
-              className={`w-full p-4 rounded-xl border flex items-center justify-between ${
-                profile.is_ambassador
-                  ? 'bg-purple-500/10 border-purple-500/40'
-                  : 'bg-gray-900 border-gray-800'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <Trophy className={`w-5 h-5 ${profile.is_ambassador ? 'text-purple-400' : 'text-gray-500'}`} />
-                <div className="text-left">
-                  <span className={`font-medium block ${profile.is_ambassador ? 'text-purple-400' : 'text-white'}`}>
-                    {profile.is_ambassador ? '🏆 Vybt Ambassador' : 'Ambassador Program'}
-                  </span>
-                  <span className="text-gray-500 text-xs">
-                    {profile.is_ambassador ? 'All perks unlocked!' : `${profile.referred_count || 0}/10 friends invited`}
-                  </span>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-gray-500" />
-            </motion.button>
-          )}
-
-          {/* Verification button */}
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setShowVerification(true)}
-            className={`w-full p-4 rounded-xl border flex items-center justify-between ${
-              profile.is_verified
-                ? 'bg-blue-500/10 border-blue-500/30'
-                : 'bg-gray-900 border-gray-800'
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <ShieldCheck className={`w-5 h-5 ${profile.is_verified ? 'text-blue-400' : 'text-gray-500'}`} />
-              <div className="text-left">
-                <span className={`font-medium block ${profile.is_verified ? 'text-blue-400' : 'text-white'}`}>
-                  {profile.is_verified ? t.profileVerified : t.verifyProfile}
-                </span>
-                {!profile.is_verified && (
-                  <span className="text-gray-500 text-xs">{t.verifyBadge}</span>
-                )}
-              </div>
-            </div>
-            {!profile.is_verified && <ChevronRight className="w-5 h-5 text-gray-500" />}
-          </motion.button>
-
-        </div>
-      </div>{/* end px-5 content */}
+      </div>
 
       <BottomNav />
 
@@ -412,10 +358,8 @@ export default function Profile() {
         isOpen={showVerification}
         onClose={() => setShowVerification(false)}
         userProfile={profile}
-        onVerificationComplete={() => {
-          setShowVerification(false);
-        }}
+        onVerificationComplete={() => setShowVerification(false)}
       />
-  </div>
+    </div>
   );
 }
