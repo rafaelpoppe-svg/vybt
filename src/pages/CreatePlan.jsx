@@ -588,7 +588,7 @@ export default function CreatePlan() {
       </header>
 
       {/* Step Content */}
-      <div className="flex-1 overflow-hidden relative">
+      <div className="flex-1 overflow-y-auto relative">
         <AnimatePresence custom={direction} mode="wait">
           <motion.div
             key={step}
