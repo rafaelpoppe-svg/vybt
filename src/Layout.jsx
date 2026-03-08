@@ -63,11 +63,6 @@ export default function Layout({ children, currentPageName }) {
     };
   }, []);
 
-  const handleSplashFinish = () => {
-    sessionStorage.setItem('splash_shown', '1');
-    setSplashDone(true);
-  };
-
   // Páginas públicas que não requerem autenticação
   const publicPages = ['Welcome', 'Support', 'TermsConditions', 'CommunityGuidelines', 'PrivacyPolicy', 'HelpFaq'];
   // Páginas protegidas que requerem autenticação
