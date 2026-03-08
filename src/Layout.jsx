@@ -8,10 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 
-function LayoutContent({ children, currentPageName }) {
+function LayoutContent({ children, currentPageName, profileTheme }) {
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
-  const { profileTheme } = useProfileThemeContext();
 
   // Block pinch-to-zoom, gesture zoom, and horizontal swipe on iOS WebView
   useEffect(() => {
