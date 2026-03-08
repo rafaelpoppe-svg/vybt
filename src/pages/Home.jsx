@@ -208,21 +208,8 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Mapa — ocupa o espaço restante */}
-      <div className="flex-1 overflow-hidden px-4 pb-2">
-        <HomeMapSection
-          plans={visiblePlans}
-          allParticipants={allParticipants}
-          profilesMap={profilesMap}
-          myParticipations={myParticipations}
-          city={city}
-          radius={radius}
-          onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-        />
-      </div>
-
-      {/* Hot Plans — lista compacta fixa em baixo */}
-      <div className="flex-shrink-0" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)' }}>
+      {/* Hot Plans */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)' }}>
         {plansLoading ? (
           <div className="flex justify-center py-3">
             <Loader2 className="w-5 h-5 text-[#00fea3] animate-spin" />
