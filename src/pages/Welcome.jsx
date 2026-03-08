@@ -289,14 +289,14 @@ export default function Welcome() {
           >
             <motion.button whileTap={{ scale: 0.95 }} className="hover:opacity-80 transition-opacity">
               <img
-                src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&releaseDate=some-date"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/3be55e3ab_appstore.png"
                 alt="Download on the App Store"
                 className="h-12 object-contain"
               />
             </motion.button>
             <motion.button whileTap={{ scale: 0.95 }} className="hover:opacity-80 transition-opacity">
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698004f141dcfbdef518004d/bc33ef276_googleplay.png"
                 alt="Get it on Google Play"
                 className="h-12 object-contain"
               />
