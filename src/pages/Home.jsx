@@ -27,7 +27,7 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState(null);
   const [myProfile, setMyProfile] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
-  const [filters, setFilters] = useState({ time: 'all', type: 'All' });
+
 
   useEffect(() => {
     const checkOnboarding = async () => {
