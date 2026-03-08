@@ -31,6 +31,9 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState(null);
   const [myProfile, setMyProfile] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [activeSort, setActiveSort] = useState('foryou');
+  const [showFilter, setShowFilter] = useState(false);
+  const [mapFilters, setMapFilters] = useState({ partyTags: [], startTime: '', endTime: '' });
 
 
   useEffect(() => {
