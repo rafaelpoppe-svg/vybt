@@ -147,7 +147,14 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {flyCoords && mapReady && <FlyToCity coords={flyCoords} />}
-
+        {validPlans.map(plan => (
+          <Marker
+            key={plan.id}
+            position={[plan.latitude, plan.longitude]}
+            icon={createPlanIcon(plan, countFor(plan.id))}
+            eventHandlers={{ click: () => setSelected(plan) }}
+          />
+        ))}
       </MapContainer>
 
       {/* Top-left: LIVE badge */}
