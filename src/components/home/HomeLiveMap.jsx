@@ -103,7 +103,7 @@ function FlyToCity({ coords }) {
   return null;
 }
 
-export default function HomeLiveMap({ plans = [], allParticipants = [], city = '', onPlanClick, onExpand }) {
+export default function HomeLiveMap({ plans = [], allParticipants = [], city = '', onPlanClick }) {
   const [flyCoords, setFlyCoords] = useState(null);
   const [mapReady, setMapReady] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -127,81 +127,95 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
   const accentOf = (plan) => plan.theme_color || (plan.status === 'happening' ? '#f97316' : plan.is_highlighted ? '#a855f7' : plan.is_on_fire ? '#ef4444' : '#00fea3');
 
   return (
-    <div className="mx-4 rounded-3xl overflow-hidden" style={{ position: 'relative', border: '1px solid rgba(255,255,255,0.1)', background: '#111' }}>
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-3 pb-2">
-        <div>
-          <div className="flex items-center gap-2">
-            <motion.div animate={{ opacity: [1,0.3,1] }} transition={{ repeat: Infinity, duration: 1.2 }} className="w-2 h-2 rounded-full bg-red-500" />
-            <span className="text-white font-bold text-sm">🌙 LIVE MAP{city ? ` — ${city}` : ''}</span>
-          </div>
-          <p style={{ color: '#00fea3' }} className="text-xs font-semibold mt-0.5">{validPlans.length} plans nearby</p>
-        </div>
-        <button onClick={onExpand} className="flex items-center gap-1 text-gray-400 text-xs">
-          <ChevronRight className="w-4 h-4" />
-        </button>
+    <div
+      className="hlm-wrap rounded-3xl overflow-hidden"
+      style={{ position: 'relative', height: 280, border: '1px solid rgba(255,255,255,0.1)', background: '#111' }}
+    >
+      {/* Map full-bleed */}
+      <MapContainer
+        center={defaultCenter}
+        zoom={13}
+        style={{ width: '100%', height: '100%' }}
+        zoomControl={false}
+        scrollWheelZoom={false}
+        dragging={true}
+        tap={true}
+        touchZoom={true}
+        doubleClickZoom={true}
+        keyboard={false}
+        whenReady={() => setMapReady(true)}
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {flyCoords && mapReady && <FlyToCity coords={flyCoords} />}
+        {validPlans.map(plan => (
+          <Marker
+            key={plan.id}
+            position={[plan.latitude, plan.longitude]}
+            icon={createPlanIcon(plan, countFor(plan.id))}
+            interactive={true}
+            eventHandlers={{ click: () => setSelected(plan) }}
+          />
+        ))}
+      </MapContainer>
+
+      {/* Top-left: LIVE badge */}
+      <div
+        style={{
+          position: 'absolute', top: 12, left: 12, zIndex: 500,
+          display: 'flex', alignItems: 'center', gap: 6,
+          background: 'rgba(11,11,11,0.82)', backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          borderRadius: 20, padding: '5px 12px',
+          pointerEvents: 'none',
+        }}
+      >
+        <motion.div animate={{ opacity: [1,0.2,1] }} transition={{ repeat: Infinity, duration: 1.2 }}
+          style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444', flexShrink: 0 }} />
+        <span style={{ color: '#fff', fontWeight: 800, fontSize: 13 }}>LIVE{city ? ` — ${city}` : ''}</span>
       </div>
 
-      {/* Map */}
-      <div className="hlm-wrap" style={{ height: 220, position: 'relative' }}>
-        <MapContainer
-          center={defaultCenter}
-          zoom={13}
-          style={{ width: '100%', height: '100%' }}
-          zoomControl={false}
-          scrollWheelZoom={false}
-          dragging={true}
-          tap={true}
-          touchZoom={true}
-          doubleClickZoom={true}
-          keyboard={false}
-          whenReady={() => setMapReady(true)}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {flyCoords && mapReady && <FlyToCity coords={flyCoords} />}
-          {validPlans.map(plan => (
-            <Marker
-              key={plan.id}
-              position={[plan.latitude, plan.longitude]}
-              icon={createPlanIcon(plan, countFor(plan.id))}
-              interactive={true}
-              eventHandlers={{ click: () => setSelected(plan) }}
-            />
-          ))}
-        </MapContainer>
-
-        {/* Expand button overlay */}
-        <div style={{ position: 'absolute', bottom: 10, right: 10, zIndex: 500, pointerEvents: 'auto' }}>
-          <button
-            onClick={onExpand}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-white text-xs font-semibold"
-            style={{ background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }}
-          >
-            Expand Map <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
+      {/* Top-right: plan count */}
+      <div
+        style={{
+          position: 'absolute', top: 12, right: 12, zIndex: 500,
+          background: 'rgba(11,11,11,0.82)', backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          borderRadius: 20, padding: '5px 12px',
+          pointerEvents: 'none',
+        }}
+      >
+        <span style={{ color: '#00fea3', fontWeight: 800, fontSize: 13 }}>{validPlans.length} planos</span>
       </div>
 
-      {/* Selected plan pill */}
+      {/* Selected plan popup */}
       <AnimatePresence>
         {selected && (
           <motion.div
             initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 10, opacity: 0 }}
-            className="absolute bottom-14 left-3 right-3 z-[600] rounded-2xl p-3 flex items-center gap-3"
-            style={{ background: 'rgba(18,18,18,0.97)', border: `1px solid ${accentOf(selected)}44`, backdropFilter: 'blur(16px)' }}
+            style={{
+              position: 'absolute', bottom: 12, left: 12, right: 12, zIndex: 600,
+              borderRadius: 18, padding: '10px 12px',
+              display: 'flex', alignItems: 'center', gap: 12,
+              background: 'rgba(18,18,18,0.97)',
+              border: `1px solid ${accentOf(selected)}44`,
+              backdropFilter: 'blur(16px)',
+            }}
           >
-            <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
-              {selected.cover_image ? <img src={selected.cover_image} className="w-full h-full object-cover" /> :
-                <div className="w-full h-full flex items-center justify-center text-xl" style={{ background: `linear-gradient(135deg,#1a1a2e,${accentOf(selected)}66)` }}>🎉</div>}
+            <div style={{ width: 44, height: 44, borderRadius: 12, overflow: 'hidden', flexShrink: 0 }}>
+              {selected.cover_image
+                ? <img src={selected.cover_image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, background: `linear-gradient(135deg,#1a1a2e,${accentOf(selected)}66)` }}>🎉</div>}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-bold text-sm truncate">{selected.title}</p>
-              <p className="text-gray-400 text-xs truncate">{selected.location_address}</p>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ color: '#fff', fontWeight: 700, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.title}</p>
+              <p style={{ color: '#888', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.location_address}</p>
             </div>
-            <div className="flex flex-col gap-1">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
               <button onClick={() => { onPlanClick(selected); setSelected(null); }}
-                className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: accentOf(selected), color: '#0b0b0b' }}>Ver</button>
-              <button onClick={() => setSelected(null)} className="text-gray-500 text-[10px] text-center">✕</button>
+                style={{ background: accentOf(selected), color: '#0b0b0b', fontWeight: 700, fontSize: 12, padding: '4px 12px', borderRadius: 20, border: 'none', cursor: 'pointer' }}>
+                Ver
+              </button>
+              <button onClick={() => setSelected(null)} style={{ color: '#666', fontSize: 10, background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
             </div>
           </motion.div>
         )}
