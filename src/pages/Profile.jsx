@@ -16,6 +16,7 @@ import VerificationBadge from '../components/profile/VerificationBadge';
 import VerificationFlow from '../components/profile/VerificationFlow';
 import { useLanguage } from '../components/common/LanguageContext';
 import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
+import { BACKGROUND_THEMES } from '../components/profile/BackgroundThemeSelector';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -71,12 +72,13 @@ export default function Profile() {
 
   const photos = profile.photos?.filter(Boolean) || [];
   const hasPhotos = photos.length > 0;
+  const selectedTheme = BACKGROUND_THEMES[profile.profile_background_theme] || BACKGROUND_THEMES.default;
 
   return (
-    <div className="h-screen bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24" style={{ WebkitOverflowScrolling: 'touch' }}>
+    <div className="h-screen overflow-y-auto overflow-x-hidden pb-24" style={{ WebkitOverflowScrolling: 'touch', background: `linear-gradient(135deg, var(--tw-gradient-stops))`, '--tw-gradient-stops': 'rgb(11, 11, 11) 0%, rgba(11, 11, 11, 0.95) 100%' }}>
 
       {/* ── Hero Photo Gallery ── */}
-      <div className="relative w-full h-[65vh] bg-gray-900 overflow-hidden">
+      <div className="relative w-full h-[65vh] bg-gray-900 overflow-hidden" style={{ backgroundImage: `linear-gradient(135deg, ${selectedTheme.gradient})` }}>
         <AnimatePresence mode="wait">
           {hasPhotos ? (
             <motion.img
@@ -96,8 +98,15 @@ export default function Profile() {
           )}
         </AnimatePresence>
 
-        {/* Gradient overlay */}
+        {/* Gradient overlay with theme emoji pattern */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/20 to-transparent" />
+        <div className="absolute inset-0 opacity-5 text-6xl overflow-hidden flex flex-wrap items-center justify-center gap-8 p-8 pointer-events-none">
+          {[...Array(12)].map((_, i) => (
+            <span key={i} className="animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>
+              {selectedTheme.emoji}
+            </span>
+          ))}
+        </div>
 
         {/* Top action buttons */}
         <div className="absolute right-4 flex gap-2 z-10" style={{ top: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
