@@ -48,8 +48,18 @@ function createPlanIcon(plan) {
   const isHot = plan.is_on_fire || plan.recent_joins >= 100;
   const color = plan.theme_color || (isHappening ? '#f97316' : isHot ? '#ef4444' : plan.is_highlighted ? '#a855f7' : '#00fea3');
 
+  // Generate floating particles for happening plans
+  const particles = isHappening ? [
+    { tx: '-18px', ty: '-22px', dur: '1.6s', delay: '0s',   size: 4, op: 0.9 },
+    { tx: '20px',  ty: '-18px', dur: '1.9s', delay: '0.3s', size: 3, op: 0.7 },
+    { tx: '-22px', ty: '8px',   dur: '1.4s', delay: '0.6s', size: 5, op: 0.8 },
+    { tx: '18px',  ty: '10px',  dur: '2.0s', delay: '0.9s', size: 3, op: 0.6 },
+    { tx: '4px',   ty: '-24px', dur: '1.7s', delay: '0.2s', size: 4, op: 0.85 },
+    { tx: '-8px',  ty: '-20px', dur: '1.5s', delay: '1.1s', size: 3, op: 0.7 },
+  ].map(p => `<div class="hlm-particle" style="width:${p.size}px;height:${p.size}px;background:${color};left:calc(50% - ${p.size/2}px);top:calc(50% - ${p.size/2}px);--tx:${p.tx};--ty:${p.ty};--dur:${p.dur};--delay:${p.delay};opacity:${p.op};"></div>`).join('') : '';
+
   const statusBadge = isHappening
-    ? `<div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:${color};color:#000;font-size:7px;font-weight:900;padding:2px 5px;border-radius:5px;white-space:nowrap;pointer-events:none;">● LIVE</div>`
+    ? ``
     : isHot
     ? `<div style="position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:11px;pointer-events:none;">🔥</div>`
     : plan.is_highlighted
