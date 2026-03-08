@@ -298,6 +298,7 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
               position={[plan.latitude, plan.longitude]}
               icon={createPlanIcon(plan, plan.status === 'happening')}
               eventHandlers={{ click: () => setSelectedPlan(plan) }}
+              interactive={false}
             />
           ))}
         </MapContainer>
