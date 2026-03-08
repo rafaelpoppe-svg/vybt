@@ -9,10 +9,7 @@ import { format } from 'date-fns';
 
 import BottomNav from '../components/common/BottomNav';
 import HomeStoriesBar from '../components/home/HomeStoriesBar';
-import HomeLiveMap from '../components/home/HomeLiveMap';
 import HotPlansSection from '../components/home/HotPlansSection';
-import HomeForYouSection from '../components/home/HomeForYouSection';
-import HomeFilterBar from '../components/home/HomeFilterBar';
 import LocationSelector from '../components/common/LocationSelector';
 import HappeningNowBanner from '../components/feed/HappeningNowBanner';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
