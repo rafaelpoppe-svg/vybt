@@ -240,9 +240,9 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
 
   return (
     <div
-      className="mx-4 rounded-3xl overflow-hidden"
+      className="rounded-3xl overflow-hidden"
       style={{
-        height: MAP_HEIGHT,
+        height: '100%',
         position: 'relative',
         border: '1px solid rgba(255,255,255,0.08)',
         isolation: 'isolate',
