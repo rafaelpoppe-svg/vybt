@@ -267,8 +267,8 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
           <span className="text-white font-bold text-xs">LIVE</span>
           {city && <span className="text-gray-300 text-xs">— {city}</span>}
         </div>
-        <div className="px-3 py-1.5 rounded-2xl text-xs font-bold pointer-events-auto"
-          style={{ background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', color: '#00fea3' }}>
+        <div className="flex items-center px-3 py-1.5 rounded-2xl text-xs font-bold pointer-events-auto"
+          style={{ background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', color: '#00fea3', lineHeight: 1 }}>
           {validPlans.length} planos
         </div>
       </div>
