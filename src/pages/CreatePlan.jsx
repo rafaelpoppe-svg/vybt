@@ -143,7 +143,7 @@ export default function CreatePlan() {
   // ---- SUCCESS SCREEN ----
   if (done && createdPlan) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center px-6 text-center overflow-hidden">
+      <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center px-6 text-center overflow-y-auto">
         {/* Confetti-like floating emojis */}
         {['🎉', '🔥', '🎶', '✨', '🥂', '💃', '🎊', '🕺'].map((emoji, i) => (
           <motion.div
