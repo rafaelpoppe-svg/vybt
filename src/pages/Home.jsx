@@ -271,7 +271,7 @@ export default function Home() {
       </header>
 
       {/* Conteúdo scrollável */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)' }}>
+      <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ position: 'relative', zIndex: 1 }} style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)' }}>
         {/* Map Controls: sort tabs + date/time + filter button */}
         <HomeMapControls
           activeSort={activeSort}
