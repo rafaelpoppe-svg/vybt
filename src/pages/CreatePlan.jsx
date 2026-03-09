@@ -11,8 +11,21 @@ import { Search } from 'lucide-react';
 import HighlightPlanModal from '../components/plan/HighlightPlanModal';
 
 const themeColors = [
-  '#00c6d2', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1',
-  '#f7dc6f', '#bb8fce', '#85c1e9', '#f8b500', '#ff69b4'
+  '#00c6d2', // teal branding
+  '#542b9b', // deep purple
+  '#ff6b6b', // coral red
+  '#f8b500', // golden yellow
+  '#ff69b4', // hot pink
+  '#22c55e', // green
+  '#f97316', // orange
+  '#3b82f6', // blue
+  '#e879f9', // fuchsia
+  '#84cc16', // lime
+  '#ef4444', // red
+  '#a78bfa', // lavender
+  '#06b6d4', // cyan
+  '#fb923c', // amber orange
+  '#ec4899', // pink
 ];
 
 const STEPS = [
