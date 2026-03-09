@@ -9,7 +9,7 @@ import { Search } from 'lucide-react';
 import { GROUP_CHAT_THEMES } from '../chat/GroupChatBackground';
 
 const themeColors = [
-  '#00fea3', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1', 
+  '#00c6d2', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1', 
   '#f7dc6f', '#bb8fce', '#85c1e9', '#f8b500', '#ff69b4'
 ];
 
@@ -21,7 +21,7 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
     end_time: plan?.end_time || '',
     location_address: plan?.location_address || '',
     cover_image: plan?.cover_image || '',
-    theme_color: plan?.theme_color || '#00fea3',
+    theme_color: plan?.theme_color || '#00c6d2',
     tags: plan?.tags || [],
     chat_background_theme: plan?.chat_background_theme || 'default'
   });
@@ -201,7 +201,7 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
                     <div
                       className={`w-12 h-12 rounded-2xl border-2 transition-all flex items-center justify-center ${
                         formData.chat_background_theme === key
-                          ? 'border-[#00fea3] ring-2 ring-[#00fea3]/40'
+                          ? 'border-[#00c6d2] ring-2 ring-[#00c6d2]/40'
                           : 'border-gray-700'
                       }`}
                       style={{
@@ -214,7 +214,7 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
                         <span className="text-xs text-gray-500">—</span>
                       )}
                       {formData.chat_background_theme === key && (
-                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#00fea3] rounded-full flex items-center justify-center">
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#00c6d2] rounded-full flex items-center justify-center">
                           <Check className="w-2.5 h-2.5 text-[#0b0b0b]" />
                         </div>
                       )}
@@ -229,7 +229,7 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-gray-400 text-sm">Party Tags (máx. 2)</label>
-                <span className={`text-xs font-medium ${formData.tags.length >= 2 ? 'text-[#00fea3]' : 'text-gray-500'}`}>
+                <span className={`text-xs font-medium ${formData.tags.length >= 2 ? 'text-[#00c6d2]' : 'text-gray-500'}`}>
                   {formData.tags.length}/2
                 </span>
               </div>
@@ -240,7 +240,7 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
                   value={tagSearch}
                   onChange={(e) => setTagSearch(e.target.value)}
                   placeholder="Search..."
-                  className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+                  className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
                 />
               </div>
               <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
@@ -269,7 +269,7 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="flex-1 bg-[#00fea3] text-[#0b0b0b] hover:bg-[#00fea3]/90"
+                className="flex-1 bg-[#00c6d2] text-[#0b0b0b] hover:bg-[#00c6d2]/90"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

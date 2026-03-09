@@ -114,7 +114,7 @@ export default function Profile() {
   if (!currentUser || !profile) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
   }
@@ -217,7 +217,7 @@ export default function Profile() {
                 {profile.display_name || currentUser.full_name}
               </h2>
               {age && (
-                <span className="text-sm font-semibold text-[#00fea3]">{age}y</span>
+                <span className="text-sm font-semibold text-[#00c6d2]">{age}y</span>
               )}
             </div>
 
@@ -295,7 +295,7 @@ export default function Profile() {
         {profile.vibes && profile.vibes.length > 0 && (
           <div className="mt-4">
             <div className="flex items-center gap-2 mb-2">
-              <Music2 className="w-4 h-4 text-[#00fea3]" />
+              <Music2 className="w-4 h-4 text-[#00c6d2]" />
               <span className="text-sm font-semibold text-white">Vibes</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -315,7 +315,7 @@ export default function Profile() {
             onClick={() => setActiveTab(tab.id)}
             className={`flex-1 py-3 flex items-center justify-center border-b-2 transition-colors ${
               activeTab === tab.id
-                ? 'border-[#00fea3] text-[#00fea3]'
+                ? 'border-[#00c6d2] text-[#00c6d2]'
                 : 'border-transparent text-gray-500'
             }`}
           >

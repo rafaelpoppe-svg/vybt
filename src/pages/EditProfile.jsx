@@ -25,7 +25,7 @@ function PartyTypeFilterList({ allTypes, selected, onToggle }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search party types..."
-          className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+          className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
         />
       </div>
       <div className="flex flex-wrap gap-2">
@@ -185,7 +185,7 @@ export default function EditProfile() {
   if (isLoading || !profile) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
   }
@@ -307,14 +307,14 @@ export default function EditProfile() {
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-left disabled:opacity-50"
           >
             {detectingLocation ? (
-              <Loader2 className="w-5 h-5 text-[#00fea3] animate-spin flex-shrink-0" />
+              <Loader2 className="w-5 h-5 text-[#00c6d2] animate-spin flex-shrink-0" />
             ) : (
-              <Navigation className="w-5 h-5 text-[#00fea3] flex-shrink-0" />
+              <Navigation className="w-5 h-5 text-[#00c6d2] flex-shrink-0" />
             )}
             <div className="flex-1 min-w-0">
               {formData.city ? (
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#00fea3]" />
+                  <MapPin className="w-3.5 h-3.5 text-[#00c6d2]" />
                   <span className="text-white text-sm font-medium truncate">{formData.city}</span>
                 </div>
               ) : (
@@ -335,7 +335,7 @@ export default function EditProfile() {
             max="100"
             value={formData.radius_km}
             onChange={(e) => setFormData({ ...formData, radius_km: Number(e.target.value) })}
-            className="w-full accent-[#00fea3]"
+            className="w-full accent-[#00c6d2]"
           />
         </div>
 
@@ -343,7 +343,7 @@ export default function EditProfile() {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-gray-400 text-sm">Your Vibes (max 5)</label>
-            <span className={`text-xs font-medium ${formData.vibes.length >= 5 ? 'text-[#00fea3]' : 'text-gray-500'}`}>
+            <span className={`text-xs font-medium ${formData.vibes.length >= 5 ? 'text-[#00c6d2]' : 'text-gray-500'}`}>
               {formData.vibes.length}/5
             </span>
           </div>
@@ -356,11 +356,11 @@ export default function EditProfile() {
                 const val = e.target.value.toLowerCase();
                 setVibeSearch(val);
               }}
-              className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+              className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
             />
           </div>
           {formData.vibes.length >= 5 && (
-            <p className="text-xs text-[#00fea3]/70 mb-2">Limit reached — deselect one to pick another.</p>
+            <p className="text-xs text-[#00c6d2]/70 mb-2">Limit reached — deselect one to pick another.</p>
           )}
           <div className="flex flex-wrap gap-2">
             {ALL_VIBES.filter(v => v.toLowerCase().includes(vibeSearch || '')).map((vibe) => (
@@ -380,12 +380,12 @@ export default function EditProfile() {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-gray-400 text-sm">Preferred Party Types</label>
-            <span className={`text-xs font-medium ${formData.party_types.length >= 5 ? 'text-[#00fea3]' : 'text-gray-500'}`}>
+            <span className={`text-xs font-medium ${formData.party_types.length >= 5 ? 'text-[#00c6d2]' : 'text-gray-500'}`}>
               {formData.party_types.length}/5
             </span>
           </div>
           {formData.party_types.length >= 5 && (
-            <p className="text-xs text-[#00fea3]/70 mb-2">Limit reached — deselect one to pick another.</p>
+            <p className="text-xs text-[#00c6d2]/70 mb-2">Limit reached — deselect one to pick another.</p>
           )}
           <PartyTypeFilterList
             allTypes={ALL_PARTY_TYPES}
@@ -408,7 +408,7 @@ export default function EditProfile() {
         <Button
           onClick={() => updateMutation.mutate()}
           disabled={updateMutation.isPending}
-          className="w-full py-6 rounded-full font-bold text-lg bg-[#00fea3] text-[#0b0b0b] hover:bg-[#00fea3]/90"
+          className="w-full py-6 rounded-full font-bold text-lg bg-[#00c6d2] text-[#0b0b0b] hover:bg-[#00c6d2]/90"
         >
           {updateMutation.isPending ? (
             <Loader2 className="w-5 h-5 animate-spin" />

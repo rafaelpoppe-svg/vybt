@@ -41,7 +41,7 @@ export const GROUP_CHAT_THEMES = {
     emoji: '🎵',
     bgColor: 'rgba(0, 254, 163, 0.10)',
     previewColor: '#002218',
-    previewAccent: '#00fea3',
+    previewAccent: '#00c6d2',
   },
   champagne: {
     name: 'Champagne',

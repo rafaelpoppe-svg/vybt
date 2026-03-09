@@ -27,7 +27,7 @@ export default function BackgroundThemeSelector({ selectedTheme, onSelect }) {
             <div
               className={`w-12 h-12 rounded-2xl border-2 transition-all ${
                 selectedTheme === key
-                  ? 'border-[#00fea3] ring-2 ring-[#00fea3]/40'
+                  ? 'border-[#00c6d2] ring-2 ring-[#00c6d2]/40'
                   : 'border-gray-700'
               }`}
               style={{
@@ -40,7 +40,7 @@ export default function BackgroundThemeSelector({ selectedTheme, onSelect }) {
                   animate={{ scale: 1 }}
                   className="absolute inset-0 flex items-center justify-center"
                 >
-                  <Check className="w-4 h-4 text-[#00fea3]" />
+                  <Check className="w-4 h-4 text-[#00c6d2]" />
                 </motion.div>
               )}
             </div>
