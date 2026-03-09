@@ -202,6 +202,8 @@ export default function PlanDetails() {
 
   const participantProfiles = participants.map(p => profilesMap[p.user_id]).filter(Boolean);
   const isOnFire = plan.is_on_fire || (plan.recent_joins && plan.recent_joins >= 100);
+  const pendingJoinRequest = myJoinRequests.find(r => r.plan_id === planId && r.status === 'pending');
+  const declinedJoinRequest = myJoinRequests.find(r => r.plan_id === planId && r.status === 'declined');
 
   return (
     <div className="min-h-screen bg-[#0b0b0b] pb-36">
