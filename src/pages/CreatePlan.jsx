@@ -577,6 +577,20 @@ export default function CreatePlan() {
         </div>
       </div>
     ),
+
+    6: (
+      <div className="space-y-6">
+        <div className="text-center">
+          <div className="text-5xl mb-3">🔒</div>
+          <h2 className="text-2xl font-black text-white">Privacy & Access</h2>
+          <p className="text-gray-400 mt-1">Control who can see and join your plan</p>
+        </div>
+        <PlanPrivacySettings
+          data={data}
+          onChange={(updates) => setData(prev => ({ ...prev, ...updates }))}
+        />
+      </div>
+    ),
   };
 
   return (
@@ -606,7 +620,7 @@ export default function CreatePlan() {
         </div>
 
         <div className="text-gray-500 text-sm w-10 text-right">
-          {step}/5
+          {step}/6
         </div>
       </header>
 
@@ -632,7 +646,7 @@ export default function CreatePlan() {
       <div className="p-6 border-t border-gray-900 bg-[#0b0b0b]">
         <motion.button
           whileTap={{ scale: 0.97 }}
-          onClick={step < 5 ? goNext : handleSubmit}
+          onClick={step < 6 ? goNext : handleSubmit}
           disabled={!canProceed() || loading}
           className={`w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
             canProceed() && !loading
@@ -642,7 +656,7 @@ export default function CreatePlan() {
         >
           {loading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
-          ) : step < 5 ? (
+          ) : step < 6 ? (
             <>Next <ArrowRight className="w-5 h-5" /></>
           ) : (
             <>Create Plan 🔥</>
