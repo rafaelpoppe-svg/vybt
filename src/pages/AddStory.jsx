@@ -336,11 +336,27 @@ export default function AddStory() {
           )}
 
           {step === 1 && (
-            <div key="camera" className="absolute inset-0">
+            <div key="source" className="absolute inset-0 flex flex-col">
               {processingMedia ? (
                 <div className="absolute inset-0 bg-black flex flex-col items-center justify-center gap-4 z-50">
                   <Loader2 className="w-12 h-12 text-[#00c6d2] animate-spin" />
                   <p className="text-gray-300 text-sm">Processing & checking content...</p>
+                </div>
+              ) : isAdmin ? (
+                <div className="flex-1 overflow-y-auto">
+                  <GalleryUpload
+                    onFileSelect={processFile}
+                    isLoading={processingMedia}
+                  />
+                  <div className="px-4 pb-32">
+                    <motion.button
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => setStep(0)}
+                      className="w-full py-4 rounded-full bg-gray-800 text-white font-bold mt-4"
+                    >
+                      ← Back
+                    </motion.button>
+                  </div>
                 </div>
               ) : (
                 <CameraView
