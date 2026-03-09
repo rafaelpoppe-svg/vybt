@@ -393,33 +393,93 @@ export default function Explore() {
       {/* Content — scrollable area */}
       <div className="flex-1 overflow-y-auto">
           <PullToRefresh onRefresh={handleRefresh}>
-            <main className="p-4 pb-4">
+            <main className="p-4 pb-4 space-y-5">
               {isLoading ? (
                 <div className="flex justify-center py-12">
                   <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
                 </div>
               ) : activeView === 'plans' ? (
                 filteredPlans.length > 0 ? (
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {filteredPlans.map((plan) => {
-                      const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
-                      return (
-                        <PlanCard
-                          key={plan.id}
-                          plan={plan}
-                          participants={getParticipants(plan.id)}
-                          featured={plan.is_highlighted}
-                          matchScore={planFilters.sortBy === 'foryou' ? plan.matchScore : null}
-                          matchReasons={planFilters.sortBy === 'foryou' ? plan.matchReasons : null}
-                          isOnFire={isOnFire}
-                          onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                        />
-                      );
-                    })}
-                  </div>
+                  <>
+                    {/* Happening Now banner */}
+                    {filteredPlans.some(p => p.status === 'happening') && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="rounded-2xl p-3 flex items-center gap-3 overflow-hidden relative"
+                        style={{ background: 'linear-gradient(135deg, rgba(249,115,22,0.2), rgba(239,68,68,0.12))', border: '1px solid rgba(249,115,22,0.3)' }}
+                      >
+                        <motion.span
+                          animate={{ scale: [1, 1.3, 1], rotate: [-5, 5, -5] }}
+                          transition={{ repeat: Infinity, duration: 1 }}
+                          className="text-2xl flex-shrink-0"
+                        >⚡</motion.span>
+                        <div>
+                          <p className="text-orange-400 font-bold text-sm">Happening Right Now!</p>
+                          <p className="text-orange-300/70 text-xs">{filteredPlans.filter(p => p.status === 'happening').length} plan(s) live tonight 🎉</p>
+                        </div>
+                        <motion.div
+                          animate={{ opacity: [0.3, 0.7, 0.3] }}
+                          transition={{ repeat: Infinity, duration: 2 }}
+                          className="absolute right-4 text-3xl pointer-events-none"
+                        >🎶</motion.div>
+                      </motion.div>
+                    )}
+
+                    {/* On Fire banner */}
+                    {filteredPlans.some(p => p.is_on_fire || p.recent_joins >= 100) && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="rounded-2xl p-3 flex items-center gap-3 overflow-hidden relative"
+                        style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.18), rgba(249,115,22,0.1))', border: '1px solid rgba(239,68,68,0.3)' }}
+                      >
+                        <motion.span
+                          animate={{ scale: [1, 1.25, 1] }}
+                          transition={{ repeat: Infinity, duration: 0.8 }}
+                          className="text-2xl flex-shrink-0"
+                        >🔥</motion.span>
+                        <div>
+                          <p className="text-red-400 font-bold text-sm">On Fire Plans 🌶️</p>
+                          <p className="text-red-300/70 text-xs">These are blowing up right now!</p>
+                        </div>
+                        <motion.div
+                          animate={{ opacity: [0.3, 0.8, 0.3] }}
+                          transition={{ repeat: Infinity, duration: 1.5 }}
+                          className="absolute right-4 text-3xl pointer-events-none"
+                        >🎸</motion.div>
+                      </motion.div>
+                    )}
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      {filteredPlans.map((plan, idx) => {
+                        const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
+                        return (
+                          <motion.div
+                            key={plan.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.04, type: 'spring', stiffness: 260, damping: 22 }}
+                          >
+                            <PlanCard
+                              plan={plan}
+                              participants={getParticipants(plan.id)}
+                              featured={plan.is_highlighted}
+                              matchScore={planFilters.sortBy === 'foryou' ? plan.matchScore : null}
+                              matchReasons={planFilters.sortBy === 'foryou' ? plan.matchReasons : null}
+                              isOnFire={isOnFire}
+                              onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                            />
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </>
                 ) : (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500">{t.noPlansFound}</p>
+                  <div className="text-center py-16 space-y-3">
+                    <div className="text-5xl">🎭</div>
+                    <p className="text-gray-500 text-sm">{t.noPlansFound}</p>
+                    <p className="text-gray-600 text-xs">Try changing filters or city 🌍</p>
                   </div>
                 )
               ) : userSubTab === 'requests' ? (
