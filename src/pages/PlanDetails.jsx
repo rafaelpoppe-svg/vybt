@@ -460,6 +460,34 @@ export default function PlanDetails() {
                     </>
                   )}
                 </Button>
+              ) : plan?.is_private ? (
+                // Private plan — show request flow
+                pendingJoinRequest || joinRequestSent ? (
+                  <Button
+                    disabled
+                    className="flex-1 py-6 rounded-full bg-gray-800 text-gray-400 cursor-not-allowed"
+                  >
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Request Pending...
+                  </Button>
+                ) : declinedJoinRequest ? (
+                  <Button disabled className="flex-1 py-6 rounded-full bg-gray-900 text-red-400 border border-red-500/30 cursor-not-allowed">
+                    ❌ Request Declined
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => requestJoinMutation.mutate()}
+                    disabled={requestJoinMutation.isPending || !canJoinMorePlans}
+                    className="flex-1 py-6 rounded-full font-bold disabled:opacity-50"
+                    style={{ background: 'linear-gradient(135deg, #542b9b, #00c6d2)', color: 'white' }}
+                  >
+                    {requestJoinMutation.isPending ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <>🔒 Request to Join</>
+                    )}
+                  </Button>
+                )
               ) : (
                 <Button
                   onClick={() => joinMutation.mutate()}
