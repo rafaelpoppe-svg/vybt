@@ -79,6 +79,12 @@ export default function Explore() {
     enabled: !!currentUser?.id
   });
 
+  const { data: sentFriendRequests = [] } = useQuery({
+    queryKey: ['sentFriendRequests', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id }),
+    enabled: !!currentUser?.id
+  });
+
   const profilesMap = userProfiles.reduce((acc, p) => {
     acc[p.user_id] = p;
     return acc;
