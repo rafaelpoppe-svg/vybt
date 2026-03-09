@@ -53,6 +53,7 @@ import Chat from './pages/Chat';
 import CommunityGuidelines from './pages/CommunityGuidelines';
 import CreatePlan from './pages/CreatePlan';
 import EditProfile from './pages/EditProfile';
+import EditStory from './pages/EditStory';
 import Explore from './pages/Explore';
 import Friends from './pages/Friends';
 import GroupChat from './pages/GroupChat';
@@ -74,7 +75,6 @@ import TermsConditions from './pages/TermsConditions';
 import UserProfile from './pages/UserProfile';
 import Welcome from './pages/Welcome';
 import WelcomePrograms from './pages/WelcomePrograms';
-import EditStory from './pages/EditStory';
 import __Layout from './Layout.jsx';
 
 
@@ -85,6 +85,7 @@ export const PAGES = {
     "CommunityGuidelines": CommunityGuidelines,
     "CreatePlan": CreatePlan,
     "EditProfile": EditProfile,
+    "EditStory": EditStory,
     "Explore": Explore,
     "Friends": Friends,
     "GroupChat": GroupChat,
@@ -106,7 +107,6 @@ export const PAGES = {
     "UserProfile": UserProfile,
     "Welcome": Welcome,
     "WelcomePrograms": WelcomePrograms,
-    "EditStory": EditStory,
 }
 
 export const pagesConfig = {
