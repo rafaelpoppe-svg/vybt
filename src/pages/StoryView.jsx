@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { X, MapPin, Loader2, ChevronRight, ChevronLeft, MoreVertical, Trash2, Volume2, VolumeX, Flag, MessageCircle, Smile } from 'lucide-react';
 import StoryReactions from '../components/story/StoryReactions';
 import ReportContentModal from '../components/moderation/ReportContentModal';
+import StoryChatInput from '../components/story/StoryChatInput';
 import { useStoryGrouping } from '../components/story/useStoryGrouping';
 import { 
   DropdownMenu,
