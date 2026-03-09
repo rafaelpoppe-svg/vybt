@@ -54,8 +54,6 @@ export default function StoryView() {
     },
   });
 
-  const story = allStories[currentStoryIndex];
-
   const { data: userProfiles = [] } = useQuery({
     queryKey: ['userProfiles'],
     queryFn: () => base44.entities.UserProfile.list('-created_date', 100),
