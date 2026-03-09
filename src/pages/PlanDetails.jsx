@@ -408,14 +408,16 @@ export default function PlanDetails() {
       {plan.status !== 'terminated' && (
         <div className="fixed bottom-0 left-0 right-0 p-4 z-50 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/95 to-transparent" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)' }}>
           <div className="flex gap-3">
-            <Button
-              onClick={() => navigate(createPageUrl('Chat') + `?planId=${planId}`)}
-              variant="outline"
-              className="flex-1 py-6 rounded-full border-gray-700 bg-gray-900 text-white hover:bg-gray-800"
-            >
-              <MessageCircle className="w-5 h-5 mr-2" />
-              Group Chat
-            </Button>
+            {isJoined && (
+              <Button
+                onClick={() => navigate(createPageUrl('Chat') + `?planId=${planId}`)}
+                variant="outline"
+                className="flex-1 py-6 rounded-full border-gray-700 bg-gray-900 text-white hover:bg-gray-800"
+              >
+                <MessageCircle className="w-5 h-5 mr-2" />
+                Group Chat
+              </Button>
+            )}
             
             {!isVoting && (
               isJoined ? (
