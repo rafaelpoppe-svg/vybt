@@ -38,26 +38,7 @@ export default function StoryReactions({
         </div>
       )}
 
-      {/* Reaction picker */}
-      {showPicker && (
-        <div className="flex gap-2 justify-center">
-          {emojis.map(emoji => (
-            <motion.button
-              key={emoji}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => onReact(emoji)}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                myReaction?.emoji === emoji 
-                  ? 'bg-[#00fea3]/30 ring-2 ring-[#00fea3]' 
-                  : 'bg-gray-800/80 hover:bg-gray-700'
-              }`}
-            >
-              <span className="text-lg">{emoji}</span>
-            </motion.button>
-          ))}
-        </div>
-      )}
+
     </div>
   );
 }
