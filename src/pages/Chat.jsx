@@ -45,6 +45,14 @@ export default function Chat() {
     getUser();
   }, []);
 
+  // Group messages (for unread count on plan cards)
+  const { data: allGroupMessages = [] } = useQuery({
+    queryKey: ['allGroupMessages', currentUser?.id],
+    queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'group' }),
+    enabled: !!currentUser?.id,
+    staleTime: 0,
+  });
+
   // Plans (for group list)
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myParticipations', currentUser?.id],
