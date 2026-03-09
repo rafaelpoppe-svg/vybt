@@ -481,7 +481,7 @@ export default function StoryView() {
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
               className="p-3 rounded-xl bg-gradient-to-r from-[#542b9b]/80 to-[#542b9b] text-white backdrop-blur-sm border border-[#542b9b]/50 hover:shadow-lg hover:shadow-[#542b9b]/30 transition-all"
             >
-              <span className="text-xl">💬</span>
+              <span className="text-xl">😊</span>
             </motion.button>
 
             {showEmojiPicker && (
