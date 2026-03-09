@@ -508,7 +508,7 @@ export default function StoryView() {
                   <motion.button
                     key={emoji}
                     whileTap={{ scale: 1.3 }}
-                    onClick={() => { e.stopPropagation(); handleEmojiSelect(emoji); }}
+                    onClick={(e) => { e.stopPropagation(); handleEmojiSelect(emoji); }}
                     className="text-2xl hover:scale-125 transition-transform"
                   >
                     {emoji}
