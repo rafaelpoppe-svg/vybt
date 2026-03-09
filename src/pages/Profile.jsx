@@ -206,15 +206,15 @@ export default function Profile() {
             </div>
 
             {/* Stats */}
-            <div className="flex gap-4 mt-2">
+            <div className="flex gap-5 mt-3">
               {[
                 { value: myStories.length, label: 'stories' },
                 { value: friendships.length, label: 'amigos' },
                 { value: activePlans.length, label: 'plans' },
               ].map(({ value, label }) => (
                 <div key={label} className="flex flex-col items-center">
-                  <p className="text-base font-bold text-white leading-tight">{value}</p>
-                  <p className="text-[10px] text-gray-400 leading-tight">{label}</p>
+                  <p className="text-lg font-bold text-white leading-tight">{value}</p>
+                  <p className="text-xs text-gray-400 leading-tight">{label}</p>
                 </div>
               ))}
             </div>
