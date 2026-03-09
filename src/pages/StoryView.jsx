@@ -446,6 +446,48 @@ export default function StoryView() {
             <ChevronRight className="w-5 h-5 text-gray-400" />
           </motion.button>
         )}
+
+        {/* Chat and Reaction Buttons */}
+        <div className="flex gap-3 items-center">
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {/* Handle send chat */}}
+            className="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+          >
+            <MessageCircle className="w-5 h-5 text-white" />
+            <span className="text-white font-medium">Enviar Mensagem</span>
+          </motion.button>
+
+          <div className="relative">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+            >
+              <Smile className="w-5 h-5 text-white" />
+            </motion.button>
+
+            {showEmojiPicker && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.8, y: 10 }}
+                className="absolute bottom-16 right-0 bg-gray-900 border border-gray-700 rounded-xl p-3 z-50 flex gap-2"
+              >
+                {emojis.map((emoji) => (
+                  <motion.button
+                    key={emoji}
+                    whileTap={{ scale: 1.2 }}
+                    onClick={() => handleEmojiSelect(emoji)}
+                    className="text-2xl hover:scale-110 transition-transform"
+                  >
+                    {emoji}
+                  </motion.button>
+                ))}
+              </motion.div>
+            )}
+          </div>
+        </div>
       </div>
     <ReportContentModal
         isOpen={showReportModal}
