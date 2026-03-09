@@ -260,7 +260,8 @@ export default function Explore() {
         {/* View Toggle — pill style */}
         <div className="relative flex bg-gray-900 rounded-2xl p-1 mb-3">
           <motion.div
-            className="absolute top-1 bottom-1 rounded-xl bg-[#00c6d2]"
+            className="absolute top-1 bottom-1 rounded-xl"
+            style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}
             animate={{ left: activeView === 'plans' ? '4px' : 'calc(50% + 2px)', width: 'calc(50% - 6px)' }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           />
