@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, MapPin, Image as ImageIcon, Palette, Loader2, Trash2 } from 'lucide-react';
+import { X, Clock, MapPin, Image as ImageIcon, Palette, Loader2, Trash2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
 import { Search } from 'lucide-react';
+import { GROUP_CHAT_THEMES } from '../chat/GroupChatBackground';
 
 const themeColors = [
   '#00fea3', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1', 
