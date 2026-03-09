@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import AIReviewModal from '../components/story/AIReviewModal';
+import AIReviewModal from '../components/story/AIReviewModal.jsx';
 
 export default function EditStory() {
   const navigate = useNavigate();
