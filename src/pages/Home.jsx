@@ -191,11 +191,47 @@ export default function Home() {
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
 
+  // City background map (only famous/capital cities)
+  const CITY_BACKGROUNDS = {
+    'Madrid': 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800&q=60',
+    'Barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800&q=60',
+    'Paris': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=60',
+    'London': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=60',
+    'Miami': 'https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?w=800&q=60',
+    'New York': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=60',
+    'Ibiza': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=60',
+    'Berlin': 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&q=60',
+    'Amsterdam': 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=60',
+    'Lisbon': 'https://images.unsplash.com/photo-1588493782072-76da4b7dc25e?w=800&q=60',
+    'Lisboa': 'https://images.unsplash.com/photo-1588493782072-76da4b7dc25e?w=800&q=60',
+    'Tokyo': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=60',
+    'Dubai': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=60',
+    'Los Angeles': 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=60',
+    'São Paulo': 'https://images.unsplash.com/photo-1579656381226-5fc0f0100c3b?w=800&q=60',
+    'Rio de Janeiro': 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=60',
+  };
+
+  const cityBg = city ? Object.entries(CITY_BACKGROUNDS).find(([k]) =>
+    city.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(city.toLowerCase())
+  )?.[1] : null;
+
   return (
     <div
       className="bg-[#0b0b0b] overflow-hidden"
       style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}
     >
+      {/* City background overlay */}
+      {cityBg && (
+        <div
+          style={{
+            position: 'absolute', inset: 0, zIndex: 0,
+            backgroundImage: `url(${cityBg})`,
+            backgroundSize: 'cover', backgroundPosition: 'center',
+            opacity: 0.07,
+            pointerEvents: 'none',
+          }}
+        />
+      )}
       {/* Header fixo */}
       <header className="flex-shrink-0 bg-[#0b0b0b] z-40">
         <div
