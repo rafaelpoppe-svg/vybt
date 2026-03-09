@@ -315,7 +315,7 @@ export default function Chat() {
                 (m.sender_id === f.friend_id && m.receiver_id === currentUser?.id)
               ).sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
               const lastMsg = convoMsgs[0];
-              const mySentCount = convoMsgs.filter(m => m.sender_id === currentUser?.id).length;
+              const mySentCount = convoMsgs.filter(m => m.sender_id === currentUser?.id && !m.is_read).length;
               const unreadCount = convoMsgs.filter(m => m.sender_id === f.friend_id && !m.is_read).length;
               const isLastMine = lastMsg?.sender_id === currentUser?.id;
               const previewText = lastMsg
