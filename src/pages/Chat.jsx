@@ -137,47 +137,56 @@ export default function Chat() {
   if (selectedFriendId) {
     return (
       <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh' }}>
-        <header className="flex-shrink-0 z-40 bg-[#0b0b0b] border-b border-gray-800 px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)' }}>
-           <motion.button
-             whileTap={{ scale: 0.9 }}
-             onClick={() => setSelectedFriendId(null)}
-             className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center"
-           >
-             <ChevronLeft className="w-5 h-5 text-white" />
-           </motion.button>
-           <motion.button
-             whileTap={{ scale: 0.95 }}
-             onClick={() => navigate(createPageUrl('UserProfile') + `?id=${selectedFriendId}`)}
-             className="w-9 h-9 rounded-full bg-gray-800 overflow-hidden flex-shrink-0 cursor-pointer"
-           >
-             {selectedFriendProfile?.photos?.[0] ? (
-               <img src={selectedFriendProfile.photos[0]} alt="" className="w-full h-full object-cover" />
-             ) : (
-               <div className="w-full h-full flex items-center justify-center">
-                 <span className="text-white font-bold text-sm">
-                   {selectedFriendProfile?.display_name?.[0] || '?'}
-                 </span>
-               </div>
-             )}
-           </motion.button>
-           <motion.button
-             whileTap={{ scale: 0.95 }}
-             onClick={() => navigate(createPageUrl('UserProfile') + `?id=${selectedFriendId}`)}
-             className="text-white font-semibold cursor-pointer hover:opacity-80 transition-opacity flex-1 text-left"
-           >
-             {selectedFriendProfile?.display_name || 'User'}
-           </motion.button>
-         </header>
+        {/* Header */}
+        <header className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-xl border-b border-gray-800/50 px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)' }}>
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setSelectedFriendId(null)}
+            className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0"
+          >
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </motion.button>
 
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate(createPageUrl('UserProfile') + `?id=${selectedFriendId}`)}
+            className="flex items-center gap-3 flex-1 min-w-0"
+          >
+            <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-[#00c6d2]/40 flex-shrink-0">
+              {selectedFriendProfile?.photos?.[0] ? (
+                <img src={selectedFriendProfile.photos[0]} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2] flex items-center justify-center">
+                  <span className="text-white font-bold">{selectedFriendProfile?.display_name?.[0] || '?'}</span>
+                </div>
+              )}
+              {/* Online dot */}
+              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-[#0b0b0b]" />
+            </div>
+            <div className="text-left min-w-0">
+              <p className="text-white font-semibold text-sm truncate">{selectedFriendProfile?.display_name || 'User'}</p>
+              {selectedFriendProfile?.city && (
+                <p className="text-[#00c6d2] text-xs truncate">📍 {selectedFriendProfile.city}</p>
+              )}
+            </div>
+          </motion.button>
+        </header>
+
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3" style={{ WebkitOverflowScrolling: 'touch' }}>
           {dmLoading ? (
             <div className="flex justify-center py-8">
               <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin" />
             </div>
           ) : sortedDMs.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full gap-3 opacity-50">
-              <MessageCircle className="w-10 h-10 text-gray-600" />
-              <p className="text-gray-500 text-sm">Inicie uma conversa!</p>
+            <div className="flex flex-col items-center justify-center h-full gap-4 opacity-60">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#542b9b]/30 to-[#00c6d2]/30 flex items-center justify-center">
+                <MessageCircle className="w-8 h-8 text-[#00c6d2]" />
+              </div>
+              <div className="text-center">
+                <p className="text-gray-400 font-medium text-sm">Inicia uma conversa com</p>
+                <p className="text-[#00c6d2] font-bold">{selectedFriendProfile?.display_name || 'User'} 👋</p>
+              </div>
             </div>
           ) : (
             sortedDMs.map((msg) => (
@@ -186,7 +195,7 @@ export default function Chat() {
                 message={msg}
                 isMe={msg.sender_id === currentUser?.id}
                 sender={msg.sender_id === currentUser?.id ? myProfile : selectedFriendProfile}
-                showProfile={false}
+                showProfile={true}
               />
             ))
           )}
