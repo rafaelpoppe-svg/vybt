@@ -29,6 +29,7 @@ export default function PlanDetails() {
   const [showHighlightModal, setShowHighlightModal] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [joinRequestSent, setJoinRequestSent] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -68,6 +69,12 @@ export default function PlanDetails() {
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myAllParticipations', currentUser?.id],
     queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
+    enabled: !!currentUser?.id
+  });
+
+  const { data: myJoinRequests = [] } = useQuery({
+    queryKey: ['myJoinRequests', currentUser?.id],
+    queryFn: () => base44.entities.PlanJoinRequest.filter({ user_id: currentUser?.id }),
     enabled: !!currentUser?.id
   });
 
