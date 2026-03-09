@@ -171,6 +171,8 @@ export default function StoryView() {
   });
 
   const canDelete = story?.user_id === currentUser?.id;
+  const isStoryOwner = story?.user_id === currentUser?.id;
+  const canChat = !isStoryOwner && currentUser && story;
 
   // Mark as viewed
   useEffect(() => {
