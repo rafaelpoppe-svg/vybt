@@ -479,37 +479,19 @@ export default function Explore() {
                 filteredUsers.length > 0 ? (
                   <div className="grid grid-cols-2 gap-3">
                     {filteredUsers.map((profile) => {
-                      const matchingVibes = myProfile?.vibes?.filter(v => profile.vibes?.includes(v)) || [];
+                      const isFriend = friendIds.includes(profile.user_id);
+                      const isPendingSent = sentFriendRequests.some(
+                        r => r.friend_id === profile.user_id && r.status === 'pending'
+                      );
                       return (
-                        <motion.button
+                        <UserCard
                           key={profile.id}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => navigate(createPageUrl('UserProfile') + `?id=${profile.user_id}`)}
-                          className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800"
-                        >
-                          <div className="aspect-square relative">
-                            {profile.photos?.[0] ? (
-                              <img src={profile.photos[0]} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2]/30 flex items-center justify-center">
-                                <span className="text-4xl text-white font-bold">
-                                  {profile.display_name?.[0] || '?'}
-                                </span>
-                              </div>
-                            )}
-                            {matchingVibes.length > 0 && (
-                              <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-[#00c6d2]/80 text-[#0b0b0b] text-[10px] font-bold">
-                                {matchingVibes.length} {t.vibesMatch}
-                              </div>
-                            )}
-                          </div>
-                          <div className="p-3">
-                            <p className="text-white font-medium truncate">{profile.display_name || 'User'}</p>
-                            {profile.city && (
-                              <p className="text-gray-500 text-xs mt-0.5">{profile.city}</p>
-                            )}
-                          </div>
-                        </motion.button>
+                          profile={profile}
+                          myProfile={myProfile}
+                          currentUser={currentUser}
+                          isFriend={isFriend}
+                          isPendingSent={isPendingSent}
+                        />
                       );
                     })}
                   </div>
