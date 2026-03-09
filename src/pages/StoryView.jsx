@@ -66,6 +66,25 @@ export default function StoryView() {
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 50),
   });
 
+  const { data: friendships = [] } = useQuery({
+    queryKey: ['friendships'],
+    queryFn: () => base44.entities.Friendship.list('-created_date', 100),
+  });
+
+  // Use story grouping hook
+  const { groupedStories, findStoryPosition, getStoryAt, getGroupContext } = useStoryGrouping(
+    allStories,
+    userProfiles,
+    plans,
+    currentUser,
+    friendships
+  );
+
+  // Get current story from grouped structure
+  const currentGroup = groupedStories[currentGroupIndex];
+  const currentGroupStory = currentGroup?.stories?.[currentStoryInGroupIndex];
+  const story = currentGroupStory || allStories[currentStoryIndex];
+
   const currentStoryId = story?.id || storyId;
 
   const { data: reactions = [] } = useQuery({
