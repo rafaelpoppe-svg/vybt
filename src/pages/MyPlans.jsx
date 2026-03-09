@@ -87,6 +87,7 @@ export default function MyPlans() {
                 plan={plan}
                 participants={getParticipants(plan.id)}
                 onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                currentUserId={currentUser?.id}
               />
             ))}
           </div>
