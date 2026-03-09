@@ -275,9 +275,9 @@ export default function EditProfile() {
             onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
             placeholder="Tell others about yourself..."
             className="bg-gray-900 border-gray-800 text-white min-h-20"
-            maxLength={200}
+            maxLength={70}
           />
-          <p className="text-xs text-gray-500 mt-1 text-right">{formData.bio.length}/200</p>
+          <p className="text-xs text-gray-500 mt-1 text-right">{formData.bio.length}/70</p>
         </div>
 
         {/* Date of Birth */}
