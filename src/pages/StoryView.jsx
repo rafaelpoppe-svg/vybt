@@ -339,6 +339,7 @@ export default function StoryView() {
         style={{ left: '33%', right: '33%' }}
         onTouchStart={() => { isPausedRef.current = true; }}
         onTouchEnd={() => { isPausedRef.current = false; }}
+        onclick={() => { isPausedRef.current = !isPausedRef.current}}
       />
 
       {/* Media */}
