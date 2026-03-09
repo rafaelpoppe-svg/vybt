@@ -478,6 +478,7 @@ export default function Explore() {
                               matchReasons={planFilters.sortBy === 'foryou' ? plan.matchReasons : null}
                               isOnFire={isOnFire}
                               onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                              currentUserId={currentUser?.id}
                             />
                           </motion.div>
                         );
