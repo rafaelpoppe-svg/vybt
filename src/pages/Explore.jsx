@@ -529,8 +529,10 @@ export default function Explore() {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500">{t.noUsersFound}</p>
+                  <div className="text-center py-16 space-y-3">
+                    <div className="text-5xl">🕺</div>
+                    <p className="text-gray-500 text-sm">{t.noUsersFound}</p>
+                    <p className="text-gray-600 text-xs">No one found with those filters 🎭</p>
                   </div>
                 )
               )}
