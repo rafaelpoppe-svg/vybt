@@ -243,6 +243,42 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
         ))}
       </div>
 
+      {/* Selected POI popup */}
+      <AnimatePresence>
+        {selectedPoi && (
+          <motion.div
+            initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 10, opacity: 0 }}
+            style={{
+              position: 'absolute', bottom: 12, left: 12, right: 12, zIndex: 600,
+              borderRadius: 18, padding: '10px 12px',
+              display: 'flex', alignItems: 'center', gap: 12,
+              background: 'rgba(18,18,18,0.97)',
+              border: `1px solid ${POI_COLOR}44`,
+              backdropFilter: 'blur(16px)',
+            }}
+          >
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: `linear-gradient(135deg,#b45309,${POI_COLOR})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
+              {POI_TYPE_ICON[selectedPoi.type] || '📍'}
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ color: '#fff', fontWeight: 700, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedPoi.name}</p>
+              <p style={{ color: '#888', fontSize: 11 }}>{selectedPoi.address}</p>
+              {selectedPoi.opening_hours && (
+                <p style={{ color: POI_COLOR, fontSize: 10, marginTop: 2 }}>🕐 {selectedPoi.opening_hours}</p>
+              )}
+              {selectedPoi.tags?.length > 0 && (
+                <div style={{ display: 'flex', gap: 4, marginTop: 3, flexWrap: 'wrap' }}>
+                  {selectedPoi.tags.slice(0, 3).map(tag => (
+                    <span key={tag} style={{ background: `${POI_COLOR}22`, color: POI_COLOR, padding: '2px 6px', borderRadius: 10, fontSize: 9, fontWeight: 600 }}>{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button onClick={() => setSelectedPoi(null)} style={{ color: '#666', fontSize: 11, background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}>✕</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Selected plan popup */}
       <AnimatePresence>
         {selected && (
