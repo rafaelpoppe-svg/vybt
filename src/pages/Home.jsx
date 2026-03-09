@@ -233,7 +233,7 @@ export default function Home() {
         />
       )}
       {/* Header fixo */}
-      <header className="flex-shrink-0 bg-[#0b0b0b] z-40">
+      <header className="flex-shrink-0 bg-[#0b0b0b] z-40" style={{ position: 'relative', zIndex: 40 }}>
         <div
           className="px-4 pb-3 flex items-center justify-between"
           style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}
