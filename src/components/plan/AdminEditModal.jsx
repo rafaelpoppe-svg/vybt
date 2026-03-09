@@ -262,6 +262,15 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
               </div>
             </div>
 
+            {/* Privacy & Visibility */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-3 font-medium">🔒 Privacy & Visibility</label>
+              <PlanPrivacySettings
+                data={formData}
+                onChange={(updates) => setFormData(prev => ({ ...prev, ...updates }))}
+              />
+            </div>
+
             <div className="flex gap-3 pt-2">
               <Button
                 type="button"
