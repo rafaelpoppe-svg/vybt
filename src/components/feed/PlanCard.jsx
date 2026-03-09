@@ -70,29 +70,62 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           </div>
         )}
         
+        {/* Happening Now pulsing overlay */}
+        {isHappening && (
+          <motion.div
+            animate={{ opacity: [0.15, 0.3, 0.15] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(135deg, rgba(249,115,22,0.15) 0%, transparent 60%)' }}
+          />
+        )}
+
         {/* Badges - can show multiple */}
         <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
           {plan.status === 'terminated' && (
             <div className="px-3 py-1.5 rounded-full bg-red-600/90 backdrop-blur-sm flex items-center gap-1">
               <span className="text-xs">❌</span>
-              <span className="text-xs text-white font-bold">Encerrado</span>
+              <span className="text-xs text-white font-bold">Terminated</span>
             </div>
           )}
           {plan.status !== 'terminated' && (
             <>
+              {isHappening && (
+                <motion.div
+                  animate={{ scale: [1, 1.06, 1] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                  className="px-2.5 py-1 rounded-full backdrop-blur-sm flex items-center gap-1"
+                  style={{ background: 'rgba(249,115,22,0.9)' }}
+                >
+                  <motion.span
+                    animate={{ opacity: [1, 0.3, 1] }}
+                    transition={{ repeat: Infinity, duration: 1 }}
+                    className="text-xs"
+                  >⚡</motion.span>
+                  <span className="text-[10px] text-white font-bold tracking-wide">LIVE NOW</span>
+                </motion.div>
+              )}
               {plan.is_highlighted && (
                 <div className="px-2 py-1 rounded-full bg-gradient-to-r from-[#00c6d2]/80 to-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-white" />
                   <span className="text-[10px] text-white font-medium">Highlighted</span>
                 </div>
               )}
-              {isOnFire && (
-                <div className="px-2 py-1 rounded-full bg-orange-500/80 backdrop-blur-sm flex items-center gap-1">
-                  <span className="text-xs">🔥</span>
-                  <span className="text-[10px] text-white font-medium">On Fire</span>
-                </div>
+              {isOnFire && !isHappening && (
+                <motion.div
+                  animate={{ scale: [1, 1.08, 1] }}
+                  transition={{ repeat: Infinity, duration: 1.2 }}
+                  className="px-2 py-1 rounded-full bg-red-500/85 backdrop-blur-sm flex items-center gap-1"
+                >
+                  <motion.span
+                    animate={{ rotate: [-5, 5, -5] }}
+                    transition={{ repeat: Infinity, duration: 0.6 }}
+                    className="text-xs"
+                  >🔥</motion.span>
+                  <span className="text-[10px] text-white font-bold">On Fire</span>
+                </motion.div>
               )}
-              {matchScore && matchScore > 30 && !plan.is_highlighted && !isOnFire && (
+              {matchScore && matchScore > 30 && !plan.is_highlighted && !isOnFire && !isHappening && (
                 <div className="px-2 py-1 rounded-full bg-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
                   <Heart className="w-3 h-3 text-white" />
                   <span className="text-[10px] text-white font-medium">{matchScore}%</span>
