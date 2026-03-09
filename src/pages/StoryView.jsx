@@ -320,6 +320,26 @@ export default function StoryView() {
         ))}
       </div>
 
+      {/* Progress bars */}
+      <div className="absolute top-0 left-0 right-0 z-30 flex gap-1 px-2"
+        style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 8px)' }}
+      >
+        {currentGroup?.stories?.map((_, index) => (
+          <div key={index} className="flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-white rounded-full"
+              initial={{ width: '0%' }}
+              animate={{
+                width: index === currentStoryInGroupIndex ? `${progress}%`
+                    : index < currentStoryInGroupIndex ? '100%'
+                    : '0%'
+              }}
+              transition={{ ease: 'linear' }}
+            />
+          </div>
+        ))}
+      </div>
+
       {/* Navigation areas — start below the header area (top-24) so buttons don't block header */}
       <button
         onClick={handlePrevious}
