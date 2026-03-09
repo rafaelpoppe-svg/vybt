@@ -18,9 +18,10 @@ const reasonLabels = {
   location: 'Near you'
 };
 
-export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false }) {
+export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false, currentUserId }) {
   const themeColor = plan.theme_color || '#542b9b';
   const isHappening = plan.status === 'happening';
+  const isMyPlan = currentUserId && plan.creator_id === currentUserId;
   
   const getHexWithAlpha = (hex, alpha) => {
     if (!hex || hex.length < 7) return `rgba(84,43,155,${alpha})`;
