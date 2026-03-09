@@ -65,11 +65,18 @@ export default function Settings() {
     base44.auth.me().then(setCurrentUser).catch(() => navigate('/'));
   }, []);
 
+  const queryClient = useQueryClient();
+
   const { data: profile } = useQuery({
     queryKey: ['myProfile', currentUser?.id],
     queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser.id }),
     select: (d) => d[0],
     enabled: !!currentUser?.id
+  });
+
+  const togglePrivacyMutation = useMutation({
+    mutationFn: () => base44.entities.UserProfile.update(profile.id, { is_private: !profile.is_private }),
+    onSuccess: () => queryClient.invalidateQueries(['myProfile', currentUser?.id])
   });
 
   const openUrl = (url) => window.open(url, '_blank');
