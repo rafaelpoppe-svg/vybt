@@ -287,7 +287,8 @@ export default function AddStory() {
   };
 
   const selectedPlanData = plans.find(p => p.id === selectedPlan);
-  const steps = ['Plan', 'Capture', 'Preview'];
+  const isAdmin = currentUser?.role === 'admin';
+  const steps = isAdmin ? ['Plan', 'Source', 'Preview'] : ['Plan', 'Capture', 'Preview'];
 
   return (
     <div className="fixed inset-0 bg-[#0b0b0b] flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
