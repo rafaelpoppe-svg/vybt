@@ -332,22 +332,22 @@ export default function StoryView() {
       />
 
       {/* Media */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0">
         {story.media_type === 'video' ? (
-          <video 
+          <video
             key={story.id}
-            src={story.media_url} 
-            className="max-w-full max-h-full object-contain"
+            src={story.media_url}
+            className="w-full h-full object-cover"
             autoPlay
             muted={isMuted || !story.has_audio}
             playsInline
             loop
           />
         ) : (
-          <img 
-            src={story.media_url} 
-            alt="" 
-            className="max-w-full max-h-full object-contain"
+          <img
+            src={story.media_url}
+            alt=""
+            className="w-full h-full object-cover"
           />
         )}
       </div>
