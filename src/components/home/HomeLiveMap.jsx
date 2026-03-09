@@ -221,16 +221,26 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
         <span style={{ color: '#fff', fontWeight: 800, fontSize: 13, lineHeight: 1 }}>LIVE{city ? ` — ${city}` : ''}</span>
       </div>
 
-      {/* Top-right: plan count */}
+      {/* Top-right: mode toggle */}
       <div style={{
         position: 'absolute', top: 12, right: 12, zIndex: 500,
-        display: 'flex', alignItems: 'center',
+        display: 'flex', alignItems: 'center', gap: 2,
         background: 'rgba(11,11,11,0.85)', backdropFilter: 'blur(8px)',
         border: '1px solid rgba(255,255,255,0.12)',
-        borderRadius: 20, padding: '5px 12px',
-        pointerEvents: 'none',
+        borderRadius: 20, padding: '3px',
       }}>
-        <span style={{ color: '#00fea3', fontWeight: 800, fontSize: 13, lineHeight: 1 }}>{validPlans.length} planos</span>
+        {[
+          { id: 'plans', label: '🎉', title: 'Planos' },
+          { id: 'pois', label: '🪩', title: 'Locais' },
+          { id: 'all', label: '🗺️', title: 'Tudo' },
+        ].map(m => (
+          <button key={m.id} onClick={() => setMapMode(m.id)} style={{
+            padding: '3px 9px', borderRadius: 16, fontSize: 11, fontWeight: 700, cursor: 'pointer', border: 'none',
+            background: mapMode === m.id ? '#00fea3' : 'transparent',
+            color: mapMode === m.id ? '#0b0b0b' : '#aaa',
+            transition: 'all 0.15s',
+          }}>{m.label} {m.title}</button>
+        ))}
       </div>
 
       {/* Selected plan popup */}
