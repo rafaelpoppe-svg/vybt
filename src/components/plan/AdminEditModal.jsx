@@ -7,6 +7,7 @@ import { base44 } from '@/api/base44Client';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
 import { Search } from 'lucide-react';
 import { GROUP_CHAT_THEMES } from '../chat/GroupChatBackground';
+import PlanPrivacySettings from './PlanPrivacySettings';
 
 const themeColors = [
   '#00c6d2', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1', 

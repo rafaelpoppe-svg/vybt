@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
 import { Search } from 'lucide-react';
 import HighlightPlanModal from '../components/plan/HighlightPlanModal';
+import PlanPrivacySettings from '../components/plan/PlanPrivacySettings';
 
 const themeColors = [
   '#00c6d2', // teal branding
