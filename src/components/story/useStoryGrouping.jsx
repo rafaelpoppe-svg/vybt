@@ -30,7 +30,6 @@ export function useStoryGrouping(allStories, userProfiles, plans, currentUser, f
     // Agrupar por Plano (plan_id)
     const storiesByPlan = {};
     allStories.forEach(story => {
-      if (story.moderation_status !== 'approved') return;
       
       const key = `plan_${story.plan_id}`;
       if (!storiesByPlan[key]) storiesByPlan[key] = [];
@@ -57,7 +56,6 @@ export function useStoryGrouping(allStories, userProfiles, plans, currentUser, f
     // Agrupar por Utilizador (Amigos)
     const storiesByFriendUser = {};
     allStories.forEach(story => {
-      if (story.moderation_status !== 'approved') return;
       if (!friendIds.has(story.user_id)) return;
 
       const key = `friend_${story.user_id}`;
@@ -83,7 +81,6 @@ export function useStoryGrouping(allStories, userProfiles, plans, currentUser, f
     // Agrupar por Utilizador (Highlighted/Promovidos)
     const storiesByHighlightedUser = {};
     allStories.forEach(story => {
-      if (story.moderation_status !== 'approved') return;
       if (!story.is_highlighted) return;
       if (friendIds.has(story.user_id)) return; // Já foram processados como amigos
 
