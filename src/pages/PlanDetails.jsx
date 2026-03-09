@@ -106,6 +106,22 @@ export default function PlanDetails() {
   const isVoting = plan?.status === 'voting';
   const canJoinOrLeave = !isVoting;
 
+  const requestJoinMutation = useMutation({
+    mutationFn: async (message = '') => {
+      if (!currentUser) { base44.auth.redirectToLogin(); return; }
+      await base44.entities.PlanJoinRequest.create({
+        plan_id: planId,
+        user_id: currentUser.id,
+        status: 'pending',
+        message,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['myJoinRequests', currentUser?.id]);
+      setJoinRequestSent(true);
+    }
+  });
+
   const joinMutation = useMutation({
     mutationFn: async () => {
       if (!currentUser) {
