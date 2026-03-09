@@ -87,16 +87,16 @@ export default function StoryView() {
 
   const currentStoryId = story?.id || storyId;
 
+  const profilesMap = userProfiles.reduce((acc, p) => {
+    acc[p.user_id] = p;
+    return acc;
+  }, {});
+
   const { data: reactions = [] } = useQuery({
     queryKey: ['storyReactions', currentStoryId],
     queryFn: () => base44.entities.StoryReaction.filter({ story_id: currentStoryId }),
     enabled: !!currentStoryId
   });
-
-  const profilesMap = userProfiles.reduce((acc, p) => {
-    acc[p.user_id] = p;
-    return acc;
-  }, {});
 
   const storyUser = story ? profilesMap[story.user_id] : null;
   const storyPlan = story ? plans.find(p => p.id === story.plan_id) : null;
