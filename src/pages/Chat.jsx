@@ -365,8 +365,8 @@ export default function Chat() {
                         </p>
                         <div className="flex items-center gap-1.5 flex-shrink-0">
                           {mySentCount > 0 && (
-                            <span className="text-xs text-gray-600 bg-gray-800 px-1.5 py-0.5 rounded-full">
-                              {mySentCount} sent
+                            <span className="text-xs text-gray-500 bg-gray-800/80 px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                              ✓ {mySentCount}
                             </span>
                           )}
                           {unreadCount > 0 && (
