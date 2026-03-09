@@ -2,20 +2,29 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { UserPlus, Check, Music2, MapPin, ShieldCheck } from 'lucide-react';
+import { Plus, Check, MapPin, ShieldCheck } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export default function UserCard({ profile, myProfile, currentUser, isFriend, isPendingSent }) {
+// mode: 'discover' | 'request'
+// For 'request': pass friendshipId + onAccept callback
+export default function UserCard({ profile, myProfile, currentUser, isFriend, isPendingSent, mode = 'discover', friendshipId, onAccept }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [localSent, setLocalSent] = useState(isPendingSent);
+  const [localAccepted, setLocalAccepted] = useState(false);
 
   const matchingVibes = myProfile?.vibes?.filter(v => profile.vibes?.includes(v)) || [];
   const matchingPartyTypes = myProfile?.party_types?.filter(pt => profile.party_types?.includes(pt)) || [];
   const totalCompatible = matchingVibes.length + matchingPartyTypes.length;
   const totalMine = (myProfile?.vibes?.length || 0) + (myProfile?.party_types?.length || 0);
   const matchPct = totalMine > 0 ? Math.round((totalCompatible / totalMine) * 100) : 0;
+
+  // All matching tags to show
+  const allMatchTags = [
+    ...matchingVibes.map(v => ({ label: v, color: '#00c6d2' })),
+    ...matchingPartyTypes.map(pt => ({ label: pt, color: '#a855f7' })),
+  ];
 
   const sendRequest = useMutation({
     mutationFn: () => base44.entities.Friendship.create({
@@ -29,10 +38,36 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
     }
   });
 
-  const handleAddFriend = (e) => {
+  const acceptRequest = useMutation({
+    mutationFn: () => base44.entities.Friendship.update(friendshipId, { status: 'accepted' }),
+    onSuccess: () => {
+      setLocalAccepted(true);
+      queryClient.invalidateQueries(['receivedFriendRequestsExplore', currentUser?.id]);
+      queryClient.invalidateQueries(['myFriendshipsExplore', currentUser?.id]);
+      if (onAccept) onAccept();
+    }
+  });
+
+  const handleAction = (e) => {
     e.stopPropagation();
-    if (!localSent && !isFriend) sendRequest.mutate();
+    if (mode === 'request') {
+      if (!localAccepted) acceptRequest.mutate();
+    } else {
+      if (!localSent && !isFriend) sendRequest.mutate();
+    }
   };
+
+  const showButton = currentUser?.id !== profile.user_id && !isFriend;
+
+  const buttonLabel = mode === 'request'
+    ? localAccepted ? '✓' : <Check className="w-3.5 h-3.5 text-white" />
+    : localSent ? <Check className="w-3.5 h-3.5 text-[#00c6d2]" /> : <Plus className="w-4 h-4 text-white" />;
+
+  const buttonStyle = mode === 'request'
+    ? { background: localAccepted ? 'rgba(0,198,210,0.3)' : 'linear-gradient(135deg, #00c6d2, #542b9b)', border: 'none' }
+    : localSent
+      ? { background: 'rgba(0,198,210,0.15)', border: '1px solid rgba(0,198,210,0.4)' }
+      : { background: 'linear-gradient(135deg, #00c6d2, #542b9b)', border: 'none' };
 
   return (
     <motion.div
@@ -53,16 +88,16 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
       )}
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
 
       {/* Match badge top-left */}
       {matchPct > 0 && (
         <div className="absolute top-2 left-2 px-2 py-1 rounded-full text-[10px] font-bold"
           style={{
-            background: matchPct >= 70
-              ? 'linear-gradient(135deg, #00c6d2cc, #542b9bcc)'
-              : 'rgba(0,0,0,0.6)',
-            color: matchPct >= 70 ? '#fff' : '#aaa',
+            background: matchPct >= 60
+              ? 'linear-gradient(135deg, rgba(0,198,210,0.85), rgba(84,43,155,0.85))'
+              : 'rgba(0,0,0,0.65)',
+            color: '#fff',
             border: '1px solid rgba(255,255,255,0.15)',
             backdropFilter: 'blur(6px)'
           }}
@@ -85,45 +120,44 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
             <p className="text-white font-semibold text-sm truncate leading-tight">{profile.display_name || 'User'}</p>
             {profile.city && (
               <p className="text-gray-400 text-[10px] flex items-center gap-0.5 mt-0.5">
-                <MapPin className="w-2.5 h-2.5" />
+                <MapPin className="w-2.5 h-2.5 flex-shrink-0" />
                 {profile.city}
               </p>
             )}
 
-            {/* Matching vibes */}
-            {matchingVibes.length > 0 && (
-              <div className="flex items-center gap-1 mt-1.5 flex-wrap">
-                <Music2 className="w-3 h-3 text-[#00c6d2] flex-shrink-0" />
-                {matchingVibes.slice(0, 2).map(v => (
-                  <span key={v} className="text-[9px] px-1.5 py-0.5 rounded-full bg-[#00c6d2]/20 text-[#00c6d2] font-medium border border-[#00c6d2]/30 truncate max-w-[60px]">
-                    {v}
+            {/* Matching vibe/party tags */}
+            {allMatchTags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-1.5">
+                {allMatchTags.slice(0, 3).map((tag, i) => (
+                  <span
+                    key={i}
+                    className="text-[9px] px-1.5 py-0.5 rounded-full font-semibold truncate max-w-[64px]"
+                    style={{
+                      background: `${tag.color}22`,
+                      color: tag.color,
+                      border: `1px solid ${tag.color}44`
+                    }}
+                  >
+                    {tag.label}
                   </span>
                 ))}
-                {matchingVibes.length > 2 && (
-                  <span className="text-[9px] text-gray-400">+{matchingVibes.length - 2}</span>
+                {allMatchTags.length > 3 && (
+                  <span className="text-[9px] text-gray-400 self-center">+{allMatchTags.length - 3}</span>
                 )}
               </div>
             )}
           </div>
 
-          {/* Add friend button */}
-          {!isFriend && currentUser?.id !== profile.user_id && (
+          {/* Action button */}
+          {showButton && (
             <motion.button
-              whileTap={{ scale: 0.85 }}
-              onClick={handleAddFriend}
-              disabled={localSent || sendRequest.isPending}
-              className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
-              style={{
-                background: localSent
-                  ? 'rgba(0,198,210,0.2)'
-                  : 'linear-gradient(135deg, #00c6d2, #542b9b)',
-                border: localSent ? '1px solid rgba(0,198,210,0.4)' : 'none'
-              }}
+              whileTap={{ scale: 0.8 }}
+              onClick={handleAction}
+              disabled={acceptRequest.isPending || sendRequest.isPending}
+              className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center shadow-lg"
+              style={buttonStyle}
             >
-              {localSent
-                ? <Check className="w-3.5 h-3.5 text-[#00c6d2]" />
-                : <UserPlus className="w-3.5 h-3.5 text-white" />
-              }
+              {buttonLabel}
             </motion.button>
           )}
         </div>
