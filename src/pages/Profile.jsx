@@ -273,6 +273,20 @@ export default function Profile() {
           )}
         </div>
 
+        {/* ── Photo Strip ── */}
+        {photos.length > 1 && (
+          <div className="mt-4 flex gap-2 overflow-x-auto scrollbar-hide" data-hscroll="1">
+            {photos.map((photo, i) => (
+              <img
+                key={i}
+                src={photo}
+                alt={`photo-${i}`}
+                className="w-24 h-32 rounded-xl object-cover flex-shrink-0 border border-gray-800"
+              />
+            ))}
+          </div>
+        )}
+
         {/* ── Vibes ── */}
         {profile.vibes && profile.vibes.length > 0 && (
           <div className="mt-4">
