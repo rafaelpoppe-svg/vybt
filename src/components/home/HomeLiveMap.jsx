@@ -151,7 +151,11 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
   }, [city]);
 
   // Dismiss selected when city changes
-  useEffect(() => { setSelected(null); }, [city]);
+  useEffect(() => { setSelected(null); setSelectedPoi(null); }, [city]);
+
+  const validPois = pois.filter(p => p.latitude && p.longitude && !isNaN(p.latitude) && !isNaN(p.longitude));
+  const showPlans = mapMode === 'plans' || mapMode === 'all';
+  const showPois = mapMode === 'pois' || mapMode === 'all';
 
   const validPlans = plans.filter(p =>
     p.latitude && p.longitude && !isNaN(p.latitude) && !isNaN(p.longitude) &&
