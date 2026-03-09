@@ -32,6 +32,7 @@ export default function StoryView() {
   const [currentStoryInGroupIndex, setCurrentStoryInGroupIndex] = useState(0);
   const [showChatInput, setShowChatInput] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
@@ -199,6 +200,7 @@ export default function StoryView() {
     const increment = (interval / duration) * 100;
     
     const timer = setInterval(() => {
+      if (isPaused) return;
       setProgress(prev => {
         if (prev >= 100) {
           clearInterval(timer);
@@ -210,7 +212,7 @@ export default function StoryView() {
     }, interval);
 
     return () => clearInterval(timer);
-  }, [story]);
+  }, [story, isPaused]);
 
   const handleNext = () => {
     if (groupedStories.length > 0) {
@@ -344,6 +346,14 @@ export default function StoryView() {
       <button
         onClick={handleNext}
         className="absolute right-0 top-24 bottom-32 w-1/3 z-20"
+      />
+
+      {/* Pause Zone - Stay in the middle of the screen */}
+      <div
+        className="absolute top-24 bottom-32 z-20"
+        style={{ left: '33%', right: '33%' }}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
       />
 
       {/* Media */}
