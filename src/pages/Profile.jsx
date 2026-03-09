@@ -221,7 +221,9 @@ export default function Profile() {
 
             {/* Bio */}
             {profile.bio && (
-              <p className="text-xs text-gray-300 mt-2 line-clamp-3">{profile.bio}</p>
+              <p className="text-xs text-gray-300 mt-2 line-clamp-3">
+                {profile.bio.split(' ').slice(0, 50).join(' ')}{profile.bio.split(' ').length > 50 ? '…' : ''}
+              </p>
             )}
           </div>
         </div>
