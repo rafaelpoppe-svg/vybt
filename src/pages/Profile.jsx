@@ -39,6 +39,7 @@ export default function Profile() {
   const [currentUser, setCurrentUser] = useState(null);
   const [showVerification, setShowVerification] = useState(false);
   const [activeTab, setActiveTab] = useState('stories');
+  const [expandedPhoto, setExpandedPhoto] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
