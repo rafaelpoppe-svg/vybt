@@ -257,78 +257,133 @@ export default function Chat() {
   }
 
   // ── Chat List ─────────────────────────────────────────────────────────────
+  const totalUnreadDMs = friendships.reduce((acc, f) => {
+    return acc + allDMMessages.filter(m => m.sender_id === f.friend_id && m.receiver_id === currentUser?.id && !m.is_read).length;
+  }, 0);
+  const totalUnreadGroups = myPlans.reduce((acc, plan) => {
+    return acc + allGroupMessages.filter(m => m.plan_id === plan.id && m.sender_id !== currentUser?.id && !m.is_read).length;
+  }, 0);
+
   return (
     <div className="h-screen flex flex-col bg-[#0b0b0b] overflow-hidden">
-      <header className="flex-shrink-0 z-40 bg-[#0b0b0b] border-b border-gray-800" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-        <div className="px-4 pt-3 pb-3">
-          <h1 className="text-xl font-bold text-white">Messages</h1>
+      {/* Header */}
+      <header className="flex-shrink-0 z-40" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+        <div className="px-4 pt-4 pb-2 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Messages</h1>
+            <p className="text-xs text-gray-500 mt-0.5">
+              {totalUnreadDMs + totalUnreadGroups > 0
+                ? <span className="text-[#00c6d2] font-medium">{totalUnreadDMs + totalUnreadGroups} não lidas</span>
+                : 'Tudo lido ✓'}
+            </p>
+          </div>
         </div>
-        <div className="flex gap-2 px-4 pb-4">
+
+        {/* Tabs */}
+        <div className="flex gap-2 px-4 pt-2 pb-3">
           {[
-            { key: 'groups', label: 'Plan Groups' },
-            { key: 'direct', label: 'Direct Messages' },
-          ].map(({ key, label }) => (
+            { key: 'groups', label: '🎉 Grupos', count: totalUnreadGroups },
+            { key: 'direct', label: '💬 Diretas', count: totalUnreadDMs },
+          ].map(({ key, label, count }) => (
             <motion.button
               key={key}
               whileTap={{ scale: 0.95 }}
               onClick={() => setActiveTab(key)}
-              className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-all ${
+              className={`flex-1 py-2.5 rounded-2xl text-sm font-semibold transition-all relative overflow-hidden ${
                 activeTab === key
-                  ? 'bg-[#00c6d2] text-[#0b0b0b]'
-                  : 'bg-gray-900 text-gray-400 border border-gray-800'
+                  ? 'text-[#0b0b0b]'
+                  : 'bg-gray-900/80 text-gray-400 border border-gray-800'
               }`}
+              style={activeTab === key ? { background: 'linear-gradient(135deg, #00c6d2, #542b9b)' } : {}}
             >
               {label}
+              {count > 0 && (
+                <span className={`ml-1.5 inline-flex items-center justify-center w-4 h-4 rounded-full text-[10px] font-bold ${
+                  activeTab === key ? 'bg-white/30 text-white' : 'bg-[#00c6d2] text-[#0b0b0b]'
+                }`}>{count}</span>
+              )}
             </motion.button>
           ))}
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-4 space-y-2 pb-24" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <main className="flex-1 overflow-y-auto px-4 space-y-2.5 pb-28" style={{ WebkitOverflowScrolling: 'touch' }}>
         {activeTab === 'groups' ? (
           myPlans.length > 0 ? (
-            myPlans.map((plan) => (
-              <motion.button
-                key={plan.id}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => navigate(createPageUrl('GroupChat') + `?planId=${plan.id}`)}
-                className="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center gap-3 text-left"
-                style={{ borderLeftColor: plan.theme_color || '#00c6d2', borderLeftWidth: '3px' }}
-              >
-                <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
-                  {plan.group_image ? (
-                    <img src={plan.group_image} alt="" className="w-full h-full object-cover" />
-                  ) : (
-                    <div
-                      className="w-full h-full flex items-center justify-center text-xl"
-                      style={{ background: `linear-gradient(135deg, ${plan.theme_color || '#542b9b'}50, #00c6d250)` }}
-                    >
-                      🎉
+            myPlans.map((plan, idx) => {
+              const planMsgs = allGroupMessages
+                .filter(m => m.plan_id === plan.id)
+                .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+              const lastGroupMsg = planMsgs[0];
+              const groupUnread = planMsgs.filter(m => m.sender_id !== currentUser?.id && !m.is_read).length;
+              const color = plan.theme_color || '#00c6d2';
+
+              return (
+                <motion.button
+                  key={plan.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => navigate(createPageUrl('GroupChat') + `?planId=${plan.id}`)}
+                  className="w-full rounded-2xl overflow-hidden text-left"
+                  style={{ background: 'linear-gradient(135deg, #111 0%, #181818 100%)', border: `1px solid ${color}25` }}
+                >
+                  <div className="flex items-center gap-3 p-3.5">
+                    {/* Plan image */}
+                    <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
+                      {plan.group_image || plan.cover_image ? (
+                        <img src={plan.group_image || plan.cover_image} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-2xl"
+                          style={{ background: `linear-gradient(135deg, ${color}60, #542b9b60)` }}>
+                          🎉
+                        </div>
+                      )}
+                      {groupUnread > 0 && (
+                        <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[10px] font-bold flex items-center justify-center px-1">
+                          {groupUnread}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-white font-semibold truncate">{plan.title}</p>
-                  <div className="flex gap-1 mt-1 overflow-x-auto scrollbar-hide">
-                    {plan.tags?.slice(0, 2).map((tag, i) => (
-                      <PartyTag key={i} tag={tag} size="sm" />
-                    ))}
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <p className="text-white font-semibold truncate text-sm">{plan.title}</p>
+                        {lastGroupMsg && (
+                          <span className="text-[10px] text-gray-600 flex-shrink-0 ml-2">
+                            {new Date(lastGroupMsg.created_date).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        )}
+                      </div>
+                      {lastGroupMsg ? (
+                        <p className={`text-xs truncate ${groupUnread > 0 ? 'text-gray-300 font-medium' : 'text-gray-500'}`}>
+                          {lastGroupMsg.content.startsWith('sticker:') ? '🖼 Sticker' : lastGroupMsg.content}
+                        </p>
+                      ) : (
+                        <div className="flex gap-1 mt-0.5">
+                          {plan.tags?.slice(0, 2).map((tag, i) => (
+                            <PartyTag key={i} tag={tag} size="sm" />
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <ChevronLeft className="w-4 h-4 text-gray-600 rotate-180 flex-shrink-0" />
-              </motion.button>
-            ))
+                  {/* color accent bottom */}
+                  <div className="h-0.5" style={{ background: `linear-gradient(90deg, ${color}, #542b9b)` }} />
+                </motion.button>
+              );
+            })
           ) : (
-            <div className="text-center py-16 opacity-50">
-              <span className="text-5xl mb-4 block">🎉</span>
-              <p className="text-gray-500">Junte-se a um plano para ver grupos!</p>
+            <div className="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#542b9b]/30 to-[#00c6d2]/30 flex items-center justify-center text-3xl">🎉</div>
+              <p className="text-gray-500 text-sm">Junte-se a um plano para ver grupos!</p>
             </div>
           )
         ) : (
           friendships.length > 0 ? (
-            friendships.map((f) => {
+            friendships.map((f, idx) => {
               const friend = profilesMap[f.friend_id];
-              // get conversation messages between me and this friend
               const convoMsgs = allDMMessages.filter(m =>
                 (m.sender_id === currentUser?.id && m.receiver_id === f.friend_id) ||
                 (m.sender_id === f.friend_id && m.receiver_id === currentUser?.id)
@@ -338,20 +393,26 @@ export default function Chat() {
               const unreadCount = convoMsgs.filter(m => m.sender_id === f.friend_id && !m.is_read).length;
               const isLastMine = lastMsg?.sender_id === currentUser?.id;
               const previewText = lastMsg
-                ? lastMsg.content.startsWith('sticker:')
-                  ? '🖼 Sticker'
-                  : lastMsg.content
+                ? lastMsg.content.startsWith('sticker:') ? '🖼 Sticker' : lastMsg.content
                 : null;
 
               return (
                 <motion.button
                   key={f.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.04 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setSelectedFriendId(f.friend_id)}
-                  className="w-full rounded-2xl bg-gray-900/80 border border-gray-800/60 overflow-hidden text-left active:bg-gray-800/80 transition-colors"
+                  className="w-full rounded-2xl overflow-hidden text-left"
+                  style={{
+                    background: unreadCount > 0
+                      ? 'linear-gradient(135deg, #0d1f20 0%, #111 100%)'
+                      : 'linear-gradient(135deg, #111 0%, #181818 100%)',
+                    border: unreadCount > 0 ? '1px solid #00c6d230' : '1px solid #ffffff10'
+                  }}
                 >
-                  <div className="flex items-center gap-3 p-4">
-                    {/* Avatar with online-like ring when has unread */}
+                  <div className="flex items-center gap-3 p-3.5">
                     <div className={`relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 ${unreadCount > 0 ? 'ring-2 ring-[#00c6d2]' : ''}`}>
                       {friend?.photos?.[0] ? (
                         <img src={friend.photos[0]} alt="" className="w-full h-full object-cover" />
@@ -360,45 +421,37 @@ export default function Chat() {
                           <span className="text-white font-bold text-lg">{friend?.display_name?.[0] || '?'}</span>
                         </div>
                       )}
+                      {unreadCount > 0 && (
+                        <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[10px] font-bold flex items-center justify-center px-1">
+                          {unreadCount}
+                        </div>
+                      )}
                     </div>
 
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-0.5">
-                        <p className={`font-semibold truncate ${unreadCount > 0 ? 'text-white' : 'text-gray-200'}`}>
+                        <p className={`font-semibold truncate text-sm ${unreadCount > 0 ? 'text-white' : 'text-gray-200'}`}>
                           {friend?.display_name || 'User'}
                         </p>
-                        {lastMsg && (
-                          <span className="text-xs text-gray-600 flex-shrink-0 ml-2">
-                            {new Date(lastMsg.created_date).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' })}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-between gap-2">
-                        <p className={`text-sm truncate flex-1 ${unreadCount > 0 ? 'text-gray-300 font-medium' : 'text-gray-500'}`}>
-                          {previewText
-                            ? <>{isLastMine && <span className="text-[#00c6d2]">Tu: </span>}{previewText}</>
-                            : <span className="italic text-gray-600">Inicia uma conversa 👋</span>
-                          }
-                        </p>
-                        <div className="flex items-center gap-1.5 flex-shrink-0">
-                          {mySentCount > 0 && (
-                            <span className="text-xs text-gray-500 bg-gray-800/80 px-1.5 py-0.5 rounded-full flex items-center gap-1">
-                              ✓ {mySentCount}
+                        <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                          {lastMsg && (
+                            <span className="text-[10px] text-gray-600">
+                              {new Date(lastMsg.created_date).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' })}
                             </span>
                           )}
-                          {unreadCount > 0 && (
-                            <span className="w-5 h-5 rounded-full bg-[#00c6d2] text-[#0b0b0b] text-xs font-bold flex items-center justify-center">
-                              {unreadCount}
-                            </span>
+                          {mySentCount > 0 && (
+                            <span className="text-[10px] text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded-full">✓ {mySentCount}</span>
                           )}
                         </div>
                       </div>
+                      <p className={`text-xs truncate ${unreadCount > 0 ? 'text-gray-300 font-medium' : 'text-gray-500'}`}>
+                        {previewText
+                          ? <>{isLastMine && <span className="text-[#00c6d2]">Tu: </span>}{previewText}</>
+                          : <span className="italic text-gray-600">Inicia uma conversa 👋</span>
+                        }
+                      </p>
                     </div>
                   </div>
-
-                  {/* Bottom accent bar if has unread */}
                   {unreadCount > 0 && (
                     <div className="h-0.5 bg-gradient-to-r from-[#00c6d2] to-[#542b9b]" />
                   )}
@@ -406,9 +459,11 @@ export default function Chat() {
               );
             })
           ) : (
-            <div className="text-center py-16 opacity-50">
-              <MessageCircle className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-500">Adicione amigos para conversar!</p>
+            <div className="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#542b9b]/30 to-[#00c6d2]/30 flex items-center justify-center">
+                <MessageCircle className="w-8 h-8 text-[#00c6d2]" />
+              </div>
+              <p className="text-gray-500 text-sm">Adicione amigos para conversar!</p>
             </div>
           )
         )}
