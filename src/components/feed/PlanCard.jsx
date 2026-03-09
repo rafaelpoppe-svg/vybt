@@ -20,8 +20,10 @@ const reasonLabels = {
 
 export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false }) {
   const themeColor = plan.theme_color || '#542b9b';
+  const isHappening = plan.status === 'happening';
   
   const getHexWithAlpha = (hex, alpha) => {
+    if (!hex || hex.length < 7) return `rgba(84,43,155,${alpha})`;
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
@@ -29,7 +31,12 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
   };
   
   const cardBgColor = getHexWithAlpha(themeColor, 0.15);
-  
+  const borderColor = isHappening
+    ? 'rgba(249,115,22,0.5)'
+    : isOnFire
+    ? 'rgba(239,68,68,0.4)'
+    : getHexWithAlpha('#00c6d2', 0.15);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24, scale: 0.97 }}
@@ -41,7 +48,12 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
       className={`rounded-3xl overflow-hidden cursor-pointer border transition-all`}
       style={{
         backgroundColor: cardBgColor,
-        borderColor: getHexWithAlpha('#00c6d2', 0.15),
+        borderColor,
+        boxShadow: isHappening
+          ? '0 0 20px rgba(249,115,22,0.25)'
+          : isOnFire
+          ? '0 0 16px rgba(239,68,68,0.2)'
+          : undefined,
       }}
     >
       {/* Cover Image */}
