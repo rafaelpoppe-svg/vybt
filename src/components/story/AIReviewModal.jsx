@@ -13,7 +13,7 @@ export default function AIReviewModal({
   onApply,
   loading = false
 }) {
-  const [copiedSuggestion, setCopiedSuggestion] = React.useState(false);
+  const [copiedSuggestion, setCopiedSuggestion] = useState(false);
 
   if (!isOpen || !review) return null;
 
