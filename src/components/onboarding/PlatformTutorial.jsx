@@ -8,7 +8,7 @@ const tutorialSlides = [
     title: 'Bem-vindo ao Vybt',
     description: 'Descubra e crie as melhores festas e eventos na tua cidade',
     emoji: '🎉',
-    gradient: 'from-[#00fea3] to-green-500'
+    gradient: 'from-[#00c6d2] to-green-500'
   },
   {
     title: 'Explora Planos',
@@ -44,7 +44,7 @@ const tutorialSlides = [
     title: 'Pronto para a Ação?',
     description: 'Vamos começar a explorar as melhores festas da tua cidade!',
     emoji: '🚀',
-    gradient: 'from-[#00fea3] to-[#542b9b]'
+    gradient: 'from-[#00c6d2] to-[#542b9b]'
   }
 ];
 
@@ -133,7 +133,7 @@ export default function PlatformTutorial({ onClose }) {
                 key={i}
                 onClick={() => setCurrentSlide(i)}
                 className={`h-2 rounded-full cursor-pointer transition-all ${
-                  i === currentSlide ? 'bg-[#00fea3] w-6' : 'bg-gray-700 w-2'
+                  i === currentSlide ? 'bg-[#00c6d2] w-6' : 'bg-gray-700 w-2'
                 }`}
               />
             ))}

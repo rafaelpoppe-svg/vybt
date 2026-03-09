@@ -57,7 +57,7 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
 
               <Button
                 onClick={() => setAction('renew')}
-                className="w-full py-6 rounded-xl bg-gradient-to-r from-[#00fea3] to-green-500 hover:from-[#00fea3]/90 hover:to-green-600 text-[#0b0b0b] font-semibold text-lg"
+                className="w-full py-6 rounded-xl bg-gradient-to-r from-[#00c6d2] to-green-500 hover:from-[#00c6d2]/90 hover:to-green-600 text-[#0b0b0b] font-semibold text-lg"
               >
                 {t.renewPlanBtn}
               </Button>
@@ -188,7 +188,7 @@ export default function RenewPlanModal({ isOpen, onClose, onConfirm, onTerminate
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 bg-[#00fea3] text-[#0b0b0b] hover:bg-[#00fea3]/90"
+                    className="flex-1 bg-[#00c6d2] text-[#0b0b0b] hover:bg-[#00c6d2]/90"
                   >
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />

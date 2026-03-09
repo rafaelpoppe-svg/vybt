@@ -10,7 +10,7 @@ export default function HomeForYouSection({ plans = [], allParticipants = [], on
   if (forYou.length === 0) return null;
 
   const countFor = (pid) => allParticipants.filter(p => p.plan_id === pid).length;
-  const accentOf = (plan) => plan.theme_color || (plan.status === 'happening' ? '#f97316' : plan.is_on_fire ? '#ef4444' : plan.is_highlighted ? '#a855f7' : '#00fea3');
+  const accentOf = (plan) => plan.theme_color || (plan.status === 'happening' ? '#f97316' : plan.is_on_fire ? '#ef4444' : plan.is_highlighted ? '#a855f7' : '#00c6d2');
 
   return (
     <section className="px-4">

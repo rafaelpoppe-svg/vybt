@@ -123,7 +123,7 @@ export default function UserProfile() {
   if (isLoading || !profile) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
   }
@@ -149,7 +149,7 @@ export default function UserProfile() {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#542b9b]/40 to-[#00fea3]/20">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#542b9b]/40 to-[#00c6d2]/20">
               <span className="text-white/20 text-9xl font-bold select-none">
                 {profile.display_name?.[0] || '?'}
               </span>
@@ -200,7 +200,7 @@ export default function UserProfile() {
                 key={i}
                 onClick={() => setPhotoIndex(i)}
                 className={`rounded-full transition-all duration-300 ${
-                  i === photoIndex ? 'w-5 h-1.5 bg-[#00fea3]' : 'w-1.5 h-1.5 bg-white/40'
+                  i === photoIndex ? 'w-5 h-1.5 bg-[#00c6d2]' : 'w-1.5 h-1.5 bg-white/40'
                 }`}
               />
             ))}
@@ -234,7 +234,7 @@ export default function UserProfile() {
           <div className="flex items-center gap-2 mt-1.5 flex-wrap">
             {profile.city && (
               <div className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#00fea3]" />
+                <MapPin className="w-3.5 h-3.5 text-[#00c6d2]" />
                 <span className="text-gray-300 text-sm">{profile.city}</span>
               </div>
             )}
@@ -249,7 +249,7 @@ export default function UserProfile() {
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { icon: Users, label: 'Friends', value: userFriendships.length, color: 'text-[#00fea3]' },
+            { icon: Users, label: 'Friends', value: userFriendships.length, color: 'text-[#00c6d2]' },
             { icon: PartyPopper, label: 'Parties', value: participations.length, color: 'text-[#542b9b]' },
             { icon: Clapperboard, label: 'Stories', value: stories.length, color: 'text-pink-400' },
           ].map(({ icon: Icon, label, value, color }) => (
@@ -274,12 +274,12 @@ export default function UserProfile() {
             {isFriend ? (
               <div className="flex-1 flex gap-3">
                 <div className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full bg-gray-800 text-gray-400 text-sm font-medium">
-                  <Check className="w-4 h-4 text-[#00fea3]" />
+                  <Check className="w-4 h-4 text-[#00c6d2]" />
                   Friends
                 </div>
                 <Button
                   onClick={() => navigate(createPageUrl('Chat') + `?userId=${userId}`)}
-                  className="flex-1 py-6 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold hover:bg-[#00fea3]/90"
+                  className="flex-1 py-6 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold hover:bg-[#00c6d2]/90"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Message
@@ -293,7 +293,7 @@ export default function UserProfile() {
               <Button
                 onClick={() => addFriendMutation.mutate()}
                 disabled={addFriendMutation.isPending}
-                className="flex-1 py-6 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold hover:bg-[#00fea3]/90"
+                className="flex-1 py-6 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold hover:bg-[#00c6d2]/90"
               >
                 {addFriendMutation.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -312,7 +312,7 @@ export default function UserProfile() {
         {profile.vibes?.length > 0 && (
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Music2 className="w-4 h-4 text-[#00fea3]" />
+              <Music2 className="w-4 h-4 text-[#00c6d2]" />
               <h3 className="text-white font-semibold text-sm uppercase tracking-widest">My Vibes</h3>
             </div>
             <div className="flex flex-wrap gap-2">

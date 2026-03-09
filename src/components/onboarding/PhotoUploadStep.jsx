@@ -52,8 +52,8 @@ export default function PhotoUploadStep({ photos, onChange }) {
       className="w-full max-w-md mx-auto"
     >
       <div className="text-center mb-8">
-        <div className="w-16 h-16 rounded-full bg-[#00fea3]/20 flex items-center justify-center mx-auto mb-4">
-          <Camera className="w-8 h-8 text-[#00fea3]" />
+        <div className="w-16 h-16 rounded-full bg-[#00c6d2]/20 flex items-center justify-center mx-auto mb-4">
+          <Camera className="w-8 h-8 text-[#00c6d2]" />
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">{t.addYourPhotos}</h2>
         <p className="text-gray-400">{t.photosSubtitle}</p>

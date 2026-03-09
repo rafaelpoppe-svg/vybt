@@ -90,7 +90,7 @@ export default function WelcomePrograms() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent mb-2"
+          className="text-4xl font-black bg-gradient-to-r from-[#00c6d2] to-[#542b9b] bg-clip-text text-transparent mb-2"
         >
           Vybt
         </motion.div>
@@ -112,16 +112,16 @@ export default function WelcomePrograms() {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="rounded-3xl border border-[#00fea3]/30 bg-gradient-to-br from-[#00fea3]/10 to-transparent overflow-hidden"
+          className="rounded-3xl border border-[#00c6d2]/30 bg-gradient-to-br from-[#00c6d2]/10 to-transparent overflow-hidden"
         >
           <div className="p-5">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-2xl bg-[#00fea3]/20 flex items-center justify-center">
-                <Star className="w-5 h-5 text-[#00fea3]" />
+              <div className="w-10 h-10 rounded-2xl bg-[#00c6d2]/20 flex items-center justify-center">
+                <Star className="w-5 h-5 text-[#00c6d2]" />
               </div>
               <div>
                 <h2 className="text-white font-bold text-lg">Vybt Witnesses Program</h2>
-                <p className="text-[#00fea3] text-xs font-medium">Support & Shape Vybt</p>
+                <p className="text-[#00c6d2] text-xs font-medium">Support & Shape Vybt</p>
               </div>
             </div>
 
@@ -142,7 +142,7 @@ export default function WelcomePrograms() {
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={handleWitness}
-              className="w-full py-3.5 rounded-2xl bg-[#00fea3] text-[#0b0b0b] font-bold flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl bg-[#00c6d2] text-[#0b0b0b] font-bold flex items-center justify-center gap-2"
             >
               <ExternalLink className="w-4 h-4" />
               Join Witnesses Program

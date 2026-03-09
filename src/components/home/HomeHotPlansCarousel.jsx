@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
 const accentOf = (p) =>
-  p.status === 'happening' ? '#f97316' : p.is_on_fire ? '#ef4444' : p.is_highlighted ? '#a855f7' : '#00fea3';
+  p.status === 'happening' ? '#f97316' : p.is_on_fire ? '#ef4444' : p.is_highlighted ? '#a855f7' : '#00c6d2';
 
 export default function HomeHotPlansCarousel({ plans = [], allParticipants = [], onPlanClick }) {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function HomeHotPlansCarousel({ plans = [], allParticipants = [],
         </div>
         <button
           onClick={() => navigate(createPageUrl('Explore'))}
-          className="flex items-center gap-0.5 text-[#00fea3] text-xs font-semibold"
+          className="flex items-center gap-0.5 text-[#00c6d2] text-xs font-semibold"
         >
           View all <ChevronRight className="w-3.5 h-3.5" />
         </button>

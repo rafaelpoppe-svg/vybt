@@ -4,7 +4,7 @@ import { Send, Sticker, Lock } from 'lucide-react';
 import StickerPicker from './StickerPicker';
 import { useLanguage } from '../common/LanguageContext';
 
-export default function GroupChatInput({ isChatLocked, isPending, themeColor = '#00fea3', userId, onSend }) {
+export default function GroupChatInput({ isChatLocked, isPending, themeColor = '#00c6d2', userId, onSend }) {
   const [message, setMessage] = useState('');
   const [showStickers, setShowStickers] = useState(false);
   const { t } = useLanguage();
@@ -47,10 +47,10 @@ export default function GroupChatInput({ isChatLocked, isPending, themeColor = '
           whileTap={{ scale: 0.9 }}
           onClick={() => setShowStickers(!showStickers)}
           className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${
-            showStickers ? 'bg-[#00fea3]/20' : 'bg-gray-900'
+            showStickers ? 'bg-[#00c6d2]/20' : 'bg-gray-900'
           }`}
         >
-          <Sticker className={`w-5 h-5 ${showStickers ? 'text-[#00fea3]' : 'text-gray-400'}`} />
+          <Sticker className={`w-5 h-5 ${showStickers ? 'text-[#00c6d2]' : 'text-gray-400'}`} />
         </motion.button>
 
         <input

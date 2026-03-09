@@ -95,7 +95,7 @@ export default function PlanDetails() {
   }, [currentUser, participants]);
 
   const isCreator = plan?.creator_id === currentUser?.id;
-  const themeColor = plan?.theme_color || '#00fea3';
+  const themeColor = plan?.theme_color || '#00c6d2';
   const isVoting = plan?.status === 'voting';
   const canJoinOrLeave = !isVoting;
 
@@ -172,7 +172,7 @@ export default function PlanDetails() {
   if (planLoading || !plan) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
   }
@@ -237,7 +237,7 @@ export default function PlanDetails() {
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4 text-[#00fea3]" />
+                  <Sparkles className="w-4 h-4 text-[#00c6d2]" />
                   <span className="text-xs text-white font-medium">Highlighted</span>
                 </>
               )}

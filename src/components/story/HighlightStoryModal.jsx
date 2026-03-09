@@ -67,7 +67,7 @@ export default function HighlightStoryModal({
             {/* Header */}
             <div className="sticky top-0 bg-gray-900 p-4 border-b border-gray-800 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-[#00fea3]" />
+                <Sparkles className="w-5 h-5 text-[#00c6d2]" />
                 <h2 className="text-lg font-bold text-white">Highlight Story</h2>
               </div>
               <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-800">
@@ -81,13 +81,13 @@ export default function HighlightStoryModal({
                 <Info className="w-5 h-5 text-[#542b9b] flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-gray-300">
                   <p className="font-medium text-white mb-1">How highlighting works</p>
-                  <p>Your story will be visible to all users in <span className="text-[#00fea3] font-medium">{planCity}</span> who match your selected filters.</p>
+                  <p>Your story will be visible to all users in <span className="text-[#00c6d2] font-medium">{planCity}</span> who match your selected filters.</p>
                 </div>
               </div>
 
               {/* Location Info */}
               <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800">
-                <MapPin className="w-4 h-4 text-[#00fea3]" />
+                <MapPin className="w-4 h-4 text-[#00c6d2]" />
                 <span className="text-sm text-gray-300">Targeting users in: <span className="text-white font-medium">{planCity}</span></span>
               </div>
 
@@ -134,14 +134,14 @@ export default function HighlightStoryModal({
               </div>
 
               {/* Price */}
-              <div className="p-4 rounded-xl bg-gradient-to-r from-[#00fea3]/10 to-[#542b9b]/10 border border-[#00fea3]/30">
+              <div className="p-4 rounded-xl bg-gradient-to-r from-[#00c6d2]/10 to-[#542b9b]/10 border border-[#00c6d2]/30">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-white font-medium">Highlight Cost</p>
                     <p className="text-xs text-gray-400">One-time payment</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-[#00fea3]">€1.59</p>
+                    <p className="text-2xl font-bold text-[#00c6d2]">€1.59</p>
                   </div>
                 </div>
               </div>

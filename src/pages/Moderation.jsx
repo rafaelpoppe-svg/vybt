@@ -104,7 +104,7 @@ export default function Moderation() {
   if (!currentUser || currentUser.role !== 'admin') {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
   }
@@ -118,7 +118,7 @@ export default function Moderation() {
             <ChevronLeft className="w-5 h-5 text-white" />
           </button>
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-[#00fea3]" />
+            <Shield className="w-5 h-5 text-[#00c6d2]" />
             <h1 className="text-xl font-bold text-white">Moderação</h1>
           </div>
           {pendingCount > 0 && (
@@ -135,7 +135,7 @@ export default function Moderation() {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all ${
-                activeTab === tab ? 'bg-[#00fea3] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400'
+                activeTab === tab ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400'
               }`}
             >
               {tab === 'pending' ? 'Pendentes' : tab === 'reviewed' ? 'Em análise' : 'Resolvidas'}
@@ -149,7 +149,7 @@ export default function Moderation() {
       <main className="p-4 space-y-3">
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+            <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
           </div>
         ) : filteredReports.length === 0 ? (
           <div className="text-center py-16">
@@ -201,7 +201,7 @@ export default function Moderation() {
                     <span className="text-gray-300 text-sm truncate">{reportedPlan.title}</span>
                     <button
                       onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${reportedPlan.id}`)}
-                      className="ml-auto text-[#00fea3] text-xs"
+                      className="ml-auto text-[#00c6d2] text-xs"
                     >
                       Ver
                     </button>

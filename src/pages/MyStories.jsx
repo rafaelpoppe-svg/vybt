@@ -54,7 +54,7 @@ export default function MyStories() {
       <main className="p-4">
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+            <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
           </div>
         ) : stories.length > 0 ? (
           <div className="grid grid-cols-2 gap-3">
@@ -76,7 +76,7 @@ export default function MyStories() {
                   
                   {story.is_highlighted && (
                     <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-[#00fea3]" />
+                      <Sparkles className="w-3 h-3 text-[#00c6d2]" />
                     </div>
                   )}
 
@@ -104,7 +104,7 @@ export default function MyStories() {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(createPageUrl('AddStory'))}
-              className="px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-medium"
+              className="px-6 py-2 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-medium"
             >
               Add Your First Story
             </motion.button>

@@ -35,13 +35,13 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
       initial={{ opacity: 0, y: 24, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-      whileHover={{ scale: 1.025, y: -4, boxShadow: `0 16px 48px ${getHexWithAlpha(themeColor, 0.4)}, 0 0 0 1px ${getHexWithAlpha('#00fea3', 0.2)}` }}
+      whileHover={{ scale: 1.025, y: -4, boxShadow: `0 16px 48px ${getHexWithAlpha(themeColor, 0.4)}, 0 0 0 1px ${getHexWithAlpha('#00c6d2', 0.2)}` }}
       whileTap={{ scale: 0.96 }}
       onClick={onClick}
       className={`rounded-3xl overflow-hidden cursor-pointer border transition-all`}
       style={{
         backgroundColor: cardBgColor,
-        borderColor: getHexWithAlpha('#00fea3', 0.15),
+        borderColor: getHexWithAlpha('#00c6d2', 0.15),
       }}
     >
       {/* Cover Image */}
@@ -53,7 +53,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00fea3]/50 flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2]/50 flex items-center justify-center">
             <span className="text-4xl">🎉</span>
           </div>
         )}
@@ -69,7 +69,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           {plan.status !== 'terminated' && (
             <>
               {plan.is_highlighted && (
-                <div className="px-2 py-1 rounded-full bg-gradient-to-r from-[#00fea3]/80 to-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
+                <div className="px-2 py-1 rounded-full bg-gradient-to-r from-[#00c6d2]/80 to-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-white" />
                   <span className="text-[10px] text-white font-medium">Highlighted</span>
                 </div>
@@ -99,9 +99,9 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
                   key={reason}
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-sm flex items-center gap-1 border border-[#00fea3]/20"
+                  className="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-sm flex items-center gap-1 border border-[#00c6d2]/20"
                 >
-                  <Icon className="w-2.5 h-2.5 text-[#00fea3]" />
+                  <Icon className="w-2.5 h-2.5 text-[#00c6d2]" />
                   <span className="text-[9px] text-white/90">{reasonLabels[reason]}</span>
                 </motion.div>
               );
@@ -115,7 +115,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
               {plan.tags?.slice(0, 2).map((tag, i) => (
                 <span 
                   key={i}
-                  className="px-2 py-0.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-[10px] font-medium"
+                  className="px-2 py-0.5 rounded-full bg-[#00c6d2]/20 text-[#00c6d2] text-[10px] font-medium"
                 >
                   {tag}
                 </span>
@@ -133,17 +133,17 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 text-gray-300 text-xs">
-              <Calendar className="w-3 h-3 text-[#00fea3]" />
+              <Calendar className="w-3 h-3 text-[#00c6d2]" />
               {format(new Date(plan.date), 'EEE, MMM d')}
             </span>
             <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 text-gray-300 text-xs">
-              <Clock className="w-3 h-3 text-[#00fea3]" />
+              <Clock className="w-3 h-3 text-[#00c6d2]" />
               {plan.time}
             </span>
           </div>
           
           <div className="flex items-center gap-1.5 text-gray-400 text-xs">
-            <MapPin className="w-3.5 h-3.5 text-[#00fea3]/70 flex-shrink-0" />
+            <MapPin className="w-3.5 h-3.5 text-[#00c6d2]/70 flex-shrink-0" />
             <span className="line-clamp-1">{plan.location_address}</span>
           </div>
         </div>
@@ -155,7 +155,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
               {participants.slice(0, 3).map((p, i) => (
                 <div 
                   key={i}
-                  className="w-6 h-6 rounded-full bg-gradient-to-br from-[#00fea3]/30 to-[#542b9b]/30 border-2 border-gray-900 flex items-center justify-center"
+                  className="w-6 h-6 rounded-full bg-gradient-to-br from-[#00c6d2]/30 to-[#542b9b]/30 border-2 border-gray-900 flex items-center justify-center"
                 >
                   <span className="text-[10px] text-white font-bold">
                     {p.display_name?.[0] || '?'}
@@ -163,7 +163,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
                 </div>
               ))}
             </div>
-            <span className="text-xs font-medium text-[#00fea3]/80">
+            <span className="text-xs font-medium text-[#00c6d2]/80">
               {participants.length} going
             </span>
           </div>

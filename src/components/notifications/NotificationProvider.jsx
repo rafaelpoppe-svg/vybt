@@ -70,7 +70,7 @@ export function NotificationProvider({ children }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-            className="bg-gray-900 border border-[#00fea3]/30 rounded-2xl p-4 shadow-2xl shadow-[#00fea3]/10 max-w-sm cursor-pointer"
+            className="bg-gray-900 border border-[#00c6d2]/30 rounded-2xl p-4 shadow-2xl shadow-[#00c6d2]/10 max-w-sm cursor-pointer"
             onClick={() => {
               toast.dismiss(t);
               handleNotificationClick(notification);
@@ -81,9 +81,9 @@ export function NotificationProvider({ children }) {
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
-                className="w-10 h-10 rounded-full bg-[#00fea3]/20 flex items-center justify-center flex-shrink-0"
+                className="w-10 h-10 rounded-full bg-[#00c6d2]/20 flex items-center justify-center flex-shrink-0"
               >
-                <Icon className="w-5 h-5 text-[#00fea3]" />
+                <Icon className="w-5 h-5 text-[#00c6d2]" />
               </motion.div>
               <div className="flex-1 min-w-0">
                 <p className="text-white font-medium text-sm">

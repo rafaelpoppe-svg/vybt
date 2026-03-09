@@ -33,7 +33,7 @@ function getLevel(count) {
     '',
     'from-purple-600 to-purple-400',
     'from-blue-600 to-blue-400',
-    'from-[#00fea3] to-teal-400',
+    'from-[#00c6d2] to-teal-400',
     'from-yellow-500 to-amber-400',
     'from-pink-500 to-rose-400',
   ];
@@ -189,7 +189,7 @@ export default function Ambassador() {
             <p className="text-gray-500 text-xs mb-3">{levelInfo.next - inviteCount} more to reach Level {levelInfo.level + 1}</p>
           )}
           {!levelInfo.next && (
-            <p className="text-[#00fea3] text-xs mb-3 font-semibold">🏆 Max level reached — You're a legend!</p>
+            <p className="text-[#00c6d2] text-xs mb-3 font-semibold">🏆 Max level reached — You're a legend!</p>
           )}
           <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
             <motion.div
@@ -211,7 +211,7 @@ export default function Ambassador() {
               const colors = [
                 'from-purple-600 to-purple-400',
                 'from-blue-600 to-blue-400',
-                'from-[#00fea3] to-teal-400',
+                'from-[#00c6d2] to-teal-400',
                 'from-yellow-500 to-amber-400',
                 'from-pink-500 to-rose-400',
               ];
@@ -231,7 +231,7 @@ export default function Ambassador() {
         {/* Referral Link */}
         <div className="bg-gray-900 rounded-2xl p-5 border border-gray-800">
           <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-            <Share2 className="w-4 h-4 text-[#00fea3]" />
+            <Share2 className="w-4 h-4 text-[#00c6d2]" />
             Your Referral Link
           </h3>
           <div className="flex gap-2">
@@ -241,9 +241,9 @@ export default function Ambassador() {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={handleCopy}
-              className="px-3 py-2 rounded-xl bg-[#00fea3]/20 border border-[#00fea3]/40"
+              className="px-3 py-2 rounded-xl bg-[#00c6d2]/20 border border-[#00c6d2]/40"
             >
-              {copied ? <Check className="w-4 h-4 text-[#00fea3]" /> : <Copy className="w-4 h-4 text-[#00fea3]" />}
+              {copied ? <Check className="w-4 h-4 text-[#00c6d2]" /> : <Copy className="w-4 h-4 text-[#00c6d2]" />}
             </motion.button>
           </div>
           <motion.button
@@ -302,7 +302,7 @@ export default function Ambassador() {
                     {u.display_name?.[0] || '?'}
                   </div>
                   <span className="text-gray-300 text-sm">{u.display_name || 'User'}</span>
-                  <CheckCircle2 className="w-4 h-4 text-[#00fea3] ml-auto" />
+                  <CheckCircle2 className="w-4 h-4 text-[#00c6d2] ml-auto" />
                 </div>
               ))}
             </div>
@@ -320,7 +320,7 @@ export default function Ambassador() {
               <div key={i} className={`flex items-center gap-3 ${isAmbassador ? 'opacity-100' : i < 3 ? 'opacity-100' : 'opacity-50'}`}>
                 <span className="text-lg">{perk.icon}</span>
                 <span className="text-gray-300 text-sm">{perk.text}</span>
-                {isAmbassador && <CheckCircle2 className="w-3.5 h-3.5 text-[#00fea3] ml-auto flex-shrink-0" />}
+                {isAmbassador && <CheckCircle2 className="w-3.5 h-3.5 text-[#00c6d2] ml-auto flex-shrink-0" />}
                 {!isAmbassador && i >= 3 && <Lock className="w-3.5 h-3.5 text-gray-600 ml-auto flex-shrink-0" />}
               </div>
             ))}

@@ -106,7 +106,7 @@ export default function GroupAdminActions({
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 py-3 text-xs font-medium flex items-center justify-center gap-1.5 ${
                   activeTab === tab.id 
-                    ? 'text-[#00fea3] border-b-2 border-[#00fea3]' 
+                    ? 'text-[#00c6d2] border-b-2 border-[#00c6d2]' 
                     : 'text-gray-400'
                 }`}
               >
@@ -141,7 +141,7 @@ export default function GroupAdminActions({
                           size="sm"
                           variant={isPinned ? 'outline' : 'default'}
                           onClick={() => isPinned ? onUnpinStory(story.id) : onPinStory(story.id)}
-                          className={isPinned ? 'border-gray-700' : 'bg-[#00fea3] text-[#0b0b0b]'}
+                          className={isPinned ? 'border-gray-700' : 'bg-[#00c6d2] text-[#0b0b0b]'}
                         >
                           <Pin className="w-4 h-4" />
                         </Button>
@@ -171,7 +171,7 @@ export default function GroupAdminActions({
                           size="sm"
                           variant={isPinned ? 'outline' : 'default'}
                           onClick={() => isPinned ? onUnpinMessage(msg.id) : onPinMessage(msg.id)}
-                          className={isPinned ? 'border-gray-700' : 'bg-[#00fea3] text-[#0b0b0b]'}
+                          className={isPinned ? 'border-gray-700' : 'bg-[#00c6d2] text-[#0b0b0b]'}
                         >
                           <Pin className="w-4 h-4" />
                         </Button>
@@ -188,7 +188,7 @@ export default function GroupAdminActions({
                 {/* Invite Section */}
                 <div className="p-4 rounded-xl bg-gray-800 space-y-3">
                   <div className="flex items-center gap-2 text-white font-medium">
-                    <UserPlus className="w-4 h-4 text-[#00fea3]" />
+                    <UserPlus className="w-4 h-4 text-[#00c6d2]" />
                     Invite User
                   </div>
                   <div className="flex gap-2">
@@ -201,7 +201,7 @@ export default function GroupAdminActions({
                     <Button
                       onClick={handleInvite}
                       disabled={inviting || !inviteEmail.trim()}
-                      className="bg-[#00fea3] text-[#0b0b0b]"
+                      className="bg-[#00c6d2] text-[#0b0b0b]"
                     >
                       {inviting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Share2 className="w-4 h-4" />}
                     </Button>
@@ -228,7 +228,7 @@ export default function GroupAdminActions({
                         </div>
                         <div className="flex-1">
                           <p className="text-white text-sm font-medium">{user?.display_name || 'User'}</p>
-                          {isCreator && <p className="text-[#00fea3] text-xs">Admin</p>}
+                          {isCreator && <p className="text-[#00c6d2] text-xs">Admin</p>}
                         </div>
                         {!isCreator && !isSelf && (
                           <Button

@@ -221,7 +221,7 @@ export default function Explore() {
             onClick={() => setActiveView('plans')}
             className={`flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 ${
               activeView === 'plans'
-                ? 'bg-[#00fea3] text-[#0b0b0b]'
+                ? 'bg-[#00c6d2] text-[#0b0b0b]'
                 : 'bg-gray-900 text-gray-400 border border-gray-800'
             }`}
           >
@@ -233,7 +233,7 @@ export default function Explore() {
             onClick={() => setActiveView('users')}
             className={`flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 ${
               activeView === 'users'
-                ? 'bg-[#00fea3] text-[#0b0b0b]'
+                ? 'bg-[#00c6d2] text-[#0b0b0b]'
                 : 'bg-gray-900 text-gray-400 border border-gray-800'
             }`}
           >
@@ -257,7 +257,7 @@ export default function Explore() {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowFilters(!showFilters)}
-              className={`p-3 rounded-xl ${showFilters ? 'bg-[#00fea3] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400'}`}
+              className={`p-3 rounded-xl ${showFilters ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400'}`}
             >
               <Filter className="w-5 h-5" />
             </motion.button>
@@ -291,7 +291,7 @@ export default function Explore() {
               onClick={() => setSelectedTag('All')}
               className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${
                 selectedTag === 'All'
-                  ? 'bg-[#00fea3] text-[#0b0b0b]'
+                  ? 'bg-[#00c6d2] text-[#0b0b0b]'
                   : 'bg-gray-900 text-gray-400 border border-gray-800'
               }`}
             >
@@ -319,7 +319,7 @@ export default function Explore() {
               onClick={() => setUserSubTab('discover')}
               className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
                 userSubTab === 'discover'
-                  ? 'bg-gradient-to-r from-[#00fea3]/30 to-[#542b9b]/30 text-[#00fea3]'
+                  ? 'bg-gradient-to-r from-[#00c6d2]/30 to-[#542b9b]/30 text-[#00c6d2]'
                   : 'bg-gray-900 text-gray-400'
               }`}
             >
@@ -330,7 +330,7 @@ export default function Explore() {
               onClick={() => setUserSubTab('requests')}
               className={`flex-1 py-2 rounded-full text-sm font-medium transition-all relative ${
                 userSubTab === 'requests'
-                  ? 'bg-[#542b9b]/40 text-[#00fea3]'
+                  ? 'bg-[#542b9b]/40 text-[#00c6d2]'
                   : 'bg-gray-900 text-gray-400'
               }`}
             >
@@ -353,7 +353,7 @@ export default function Explore() {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setPlanFilters({ ...planFilters, sortBy: 'foryou' })}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap ${
-                  planFilters.sortBy === 'foryou' ? 'bg-gradient-to-r from-[#00fea3]/30 to-[#542b9b]/30 text-[#00fea3]' : 'bg-gray-900 text-gray-400'
+                  planFilters.sortBy === 'foryou' ? 'bg-gradient-to-r from-[#00c6d2]/30 to-[#542b9b]/30 text-[#00c6d2]' : 'bg-gray-900 text-gray-400'
                 }`}
               >
                 ❤️ {t.forYou}
@@ -372,7 +372,7 @@ export default function Explore() {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setPlanFilters({ ...planFilters, sortBy: 'popular' })}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap ${
-                  planFilters.sortBy === 'popular' ? 'bg-[#542b9b]/30 text-[#00fea3]' : 'bg-gray-900 text-gray-400'
+                  planFilters.sortBy === 'popular' ? 'bg-[#542b9b]/30 text-[#00c6d2]' : 'bg-gray-900 text-gray-400'
                 }`}
               >
                 <Users className="w-3.5 h-3.5" />
@@ -389,7 +389,7 @@ export default function Explore() {
             <main className="p-4 pb-4">
               {isLoading ? (
                 <div className="flex justify-center py-12">
-                  <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+                  <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
                 </div>
               ) : activeView === 'plans' ? (
                 filteredPlans.length > 0 ? (
@@ -446,7 +446,7 @@ export default function Explore() {
                               whileTap={{ scale: 0.9 }}
                               onClick={() => acceptMutation.mutate(request.id)}
                               disabled={acceptMutation.isPending}
-                              className="w-9 h-9 rounded-full bg-[#00fea3] flex items-center justify-center"
+                              className="w-9 h-9 rounded-full bg-[#00c6d2] flex items-center justify-center"
                             >
                               <Check className="w-4 h-4 text-[#0b0b0b]" />
                             </motion.button>
@@ -484,14 +484,14 @@ export default function Explore() {
                             {profile.photos?.[0] ? (
                               <img src={profile.photos[0]} alt="" className="w-full h-full object-cover" />
                             ) : (
-                              <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00fea3]/30 flex items-center justify-center">
+                              <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2]/30 flex items-center justify-center">
                                 <span className="text-4xl text-white font-bold">
                                   {profile.display_name?.[0] || '?'}
                                 </span>
                               </div>
                             )}
                             {matchingVibes.length > 0 && (
-                              <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-[#00fea3]/80 text-[#0b0b0b] text-[10px] font-bold">
+                              <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-[#00c6d2]/80 text-[#0b0b0b] text-[10px] font-bold">
                                 {matchingVibes.length} {t.vibesMatch}
                               </div>
                             )}

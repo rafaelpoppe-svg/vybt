@@ -48,7 +48,7 @@ export const vibeConfig = {
   'Throwbacks': { icon: Disc3, color: 'bg-amber-500/20 text-amber-400 border-amber-500/30', gradient: 'from-amber-400 to-pink-500' },
   'Portuguese Hits': { icon: Sun, color: 'bg-green-600/20 text-green-400 border-green-600/30', gradient: 'from-green-600 to-yellow-500' },
   'Spanish Hits': { icon: Flame, color: 'bg-red-500/20 text-red-400 border-red-500/30', gradient: 'from-red-500 to-yellow-500' },
-  'Curious to every style': { icon: Sparkles, color: 'bg-gradient-to-r from-[#00fea3]/20 to-[#542b9b]/20 text-[#00fea3] border-[#00fea3]/30', gradient: 'from-[#00fea3] to-[#542b9b]' },
+  'Curious to every style': { icon: Sparkles, color: 'bg-gradient-to-r from-[#00c6d2]/20 to-[#542b9b]/20 text-[#00c6d2] border-[#00c6d2]/30', gradient: 'from-[#00c6d2] to-[#542b9b]' },
   // Legacy aliases
   'Afrobeats': { icon: Drum, color: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30', gradient: 'from-yellow-500 to-orange-500' },
   'Brazilian Funk': { icon: Flag, color: 'bg-green-500/20 text-green-400 border-green-500/30', gradient: 'from-green-500 to-yellow-500' },

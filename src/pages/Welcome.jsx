@@ -19,8 +19,8 @@ const features = [
     emoji: '📍',
     title: 'Drop a plan, IRL',
     desc: "Parties, meetups, rooftops, food runs — whatever. If it's happening, it's on Vybt.",
-    color: 'from-[#00fea3] to-[#00c4ff]',
-    bg: 'bg-[#00fea3]/10',
+    color: 'from-[#00c6d2] to-[#00c4ff]',
+    bg: 'bg-[#00c6d2]/10',
   },
   {
     icon: Users,
@@ -93,7 +93,7 @@ export default function Welcome() {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          className="rounded-full h-12 w-12 border-t-2 border-r-2 border-[#00fea3]"
+          className="rounded-full h-12 w-12 border-t-2 border-r-2 border-[#00c6d2]"
         />
       </div>
     );
@@ -114,7 +114,7 @@ export default function Welcome() {
               alt="Vybt"
               className="w-9 h-9 object-contain"
             />
-            <span className="text-2xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
+            <span className="text-2xl font-black bg-gradient-to-r from-[#00c6d2] to-[#542b9b] bg-clip-text text-transparent">
               Vybt
             </span>
           </motion.div>
@@ -124,7 +124,7 @@ export default function Welcome() {
               <Link
                 key={link.page}
                 to={createPageUrl(link.page)}
-                className="text-gray-400 hover:text-[#00fea3] text-sm transition-colors font-medium background"
+                className="text-gray-400 hover:text-[#00c6d2] text-sm transition-colors font-medium background"
               >
                 {link.label}
               </Link>
@@ -136,7 +136,7 @@ export default function Welcome() {
               whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(0,254,163,0.4)' }}
               whileTap={{ scale: 0.95 }}
               onClick={() => base44.auth.redirectToLogin()}
-              className="px-5 py-2 rounded-full bg-gradient-to-r from-[#00fea3] to-[#00c4a0] text-[#0b0b0b] font-bold text-sm transition-all"
+              className="px-5 py-2 rounded-full bg-gradient-to-r from-[#00c6d2] to-[#00c4a0] text-[#0b0b0b] font-bold text-sm transition-all"
             >
               Get in 🚀
             </motion.button>
@@ -164,7 +164,7 @@ export default function Welcome() {
                     key={link.page}
                     to={createPageUrl(link.page)}
                     onClick={() => setMenuOpen(false)}
-                    className="block text-gray-300 hover:text-[#00fea3] text-sm py-1 transition-colors"
+                    className="block text-gray-300 hover:text-[#00c6d2] text-sm py-1 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -210,7 +210,7 @@ export default function Welcome() {
         </div>
 
         {/* Glow orbs */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#00fea3]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#00c6d2]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-[#542b9b]/15 rounded-full blur-3xl pointer-events-none" />
 
         <motion.div
@@ -225,7 +225,7 @@ export default function Welcome() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00fea3]/10 border border-[#00fea3]/30 text-[#00fea3] text-xs font-bold tracking-widest uppercase"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00c6d2]/10 border border-[#00c6d2]/30 text-[#00c6d2] text-xs font-bold tracking-widest uppercase"
           >
             ✨ THE social plans app
           </motion.div>
@@ -240,11 +240,11 @@ export default function Welcome() {
             Hey Mate!
             <br />
             <span className="relative inline-block">
-              <span className="bg-gradient-to-r from-[#00fea3] via-[#00c4ff] to-[#a855f7] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#00c6d2] via-[#00c4ff] to-[#a855f7] bg-clip-text text-transparent">
                 Join us
               </span>
               <motion.span
-                className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[#00fea3] to-[#a855f7] rounded-full"
+                className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[#00c6d2] to-[#a855f7] rounded-full"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 1, duration: 0.8 }}
@@ -260,7 +260,7 @@ export default function Welcome() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Discover plans near you, join the right crew and live the <span className="text-[#00fea3] font-semibold">best vibes you always wanted.</span>
+            Discover plans near you, join the right crew and live the <span className="text-[#00c6d2] font-semibold">best vibes you always wanted.</span>
           </motion.p>
 
           {/* CTA */}
@@ -283,7 +283,7 @@ export default function Welcome() {
               }}
               whileTap={{ scale: 0.94, y: 2 }}
               onClick={() => base44.auth.redirectToLogin()}
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#00fea3] to-[#00c4a0] text-[#0b0b0b] font-black text-lg shadow-xl"
+              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#00c6d2] to-[#00c4a0] text-[#0b0b0b] font-black text-lg shadow-xl"
             >
               Jump in 🚀 <ArrowRight className="w-5 h-5" />
             </motion.button>
@@ -347,7 +347,7 @@ export default function Welcome() {
       </section>
 
       {/* ── MARQUEE STRIP ── */}
-      <div className="overflow-hidden bg-[#00fea3]/5 border-y border-[#00fea3]/10 py-4">
+      <div className="overflow-hidden bg-[#00c6d2]/5 border-y border-[#00c6d2]/10 py-4">
         <motion.div
           animate={{ x: ['0%', '-50%'] }}
           transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
@@ -355,7 +355,7 @@ export default function Welcome() {
         >
           {[...Array(2)].map((_, j) => (
             ['🎉 Real Plans', '🔥 Real Vibes', '🫂 Real People', '💃 Real Nights', '✨ No Cringe', '🎶 Your Music', '📍 Your City', '🥳 Your Crew'].map((item, i) => (
-              <span key={`${j}-${i}`} className="text-[#00fea3] text-sm font-bold tracking-wider">
+              <span key={`${j}-${i}`} className="text-[#00c6d2] text-sm font-bold tracking-wider">
                 {item}
               </span>
             ))
@@ -371,10 +371,10 @@ export default function Welcome() {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <span className="text-xs font-bold tracking-widest uppercase text-[#00fea3] mb-3 block">Why Vybt?</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-[#00c6d2] mb-3 block">Why Vybt?</span>
           <h2 className="text-3xl md:text-5xl font-black mb-4">
             Stop staying in,<br />
-            <span className="bg-gradient-to-r from-[#00fea3] to-[#a855f7] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#00c6d2] to-[#a855f7] bg-clip-text text-transparent">
               the night is calling 👀
             </span>
           </h2>
@@ -433,12 +433,12 @@ export default function Welcome() {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="max-w-4xl mx-auto rounded-3xl bg-gradient-to-br from-[#542b9b]/30 to-[#00fea3]/10 border border-white/10 p-10 text-center relative overflow-hidden"
+          className="max-w-4xl mx-auto rounded-3xl bg-gradient-to-br from-[#542b9b]/30 to-[#00c6d2]/10 border border-white/10 p-10 text-center relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptMCAwSDMwdi02aDZ2NnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40" />
           <h2 className="text-3xl md:text-5xl font-black mb-4 relative">
             Your night starts<br />
-            <span className="text-[#00fea3]">when you say so</span> ✨
+            <span className="text-[#00c6d2]">when you say so</span> ✨
           </h2>
           <p className="text-gray-300 text-lg mb-8 relative">
             Don't wait for someone else to organise. That's your job now.
@@ -447,7 +447,7 @@ export default function Welcome() {
             whileHover={{ scale: 1.07, boxShadow: '0 0 40px rgba(0,254,163,0.4)' }}
             whileTap={{ scale: 0.95 }}
             onClick={() => base44.auth.redirectToLogin()}
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-2xl bg-gradient-to-r from-[#00fea3] to-[#00c4a0] text-[#0b0b0b] font-black text-xl shadow-2xl relative"
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-2xl bg-gradient-to-r from-[#00c6d2] to-[#00c4a0] text-[#0b0b0b] font-black text-xl shadow-2xl relative"
           >
             I'm in 🎊
           </motion.button>
@@ -472,7 +472,7 @@ export default function Welcome() {
               { icon: Shield, label: 'Community', sub: 'Guidelines', page: 'CommunityGuidelines', color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'hover:border-purple-500/40' },
               { icon: FileText, label: 'Terms &', sub: 'Conditions', page: 'TermsConditions', color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'hover:border-blue-500/40' },
               { icon: Lock, label: 'Privacy', sub: 'Policy', page: 'PrivacyPolicy', color: 'text-teal-400', bg: 'bg-teal-500/10', border: 'hover:border-teal-500/40' },
-              { icon: HelpCircle, label: 'Support', sub: '& FAQ', page: 'Support', color: 'text-[#00fea3]', bg: 'bg-[#00fea3]/10', border: 'hover:border-[#00fea3]/40' },
+              { icon: HelpCircle, label: 'Support', sub: '& FAQ', page: 'Support', color: 'text-[#00c6d2]', bg: 'bg-[#00c6d2]/10', border: 'hover:border-[#00c6d2]/40' },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -508,14 +508,14 @@ export default function Welcome() {
               alt="Vybt"
               className="w-7 h-7 object-contain"
             />
-            <span className="font-black text-gray-300 bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">Vybt</span>
+            <span className="font-black text-gray-300 bg-gradient-to-r from-[#00c6d2] to-[#542b9b] bg-clip-text text-transparent">Vybt</span>
           </motion.div>
           <div className="flex items-center gap-5 flex-wrap justify-center">
             {NAV_LINKS.map(link => (
               <Link
                 key={link.page}
                 to={createPageUrl(link.page)}
-                className="text-gray-500 hover:text-[#00fea3] text-xs transition-colors font-medium"
+                className="text-gray-500 hover:text-[#00c6d2] text-xs transition-colors font-medium"
               >
                 {link.label}
               </Link>

@@ -5,7 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { pt } from 'date-fns/locale';
 
 const ACTIVITY_CONFIG = {
-  join:      { emoji: '🎉', color: '#00fea3', label: 'entrou em' },
+  join:      { emoji: '🎉', color: '#00c6d2', label: 'entrou em' },
   story:     { emoji: '📸', color: '#a855f7', label: 'publicou uma story em' },
   created:   { emoji: '✨', color: '#f59e0b', label: 'criou o plano' },
   hot:       { emoji: '🔥', color: '#ef4444', label: 'plano a bombar perto de ti' },
@@ -153,7 +153,7 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
       >
         {/* Header */}
         <div className="flex items-center gap-2 px-4 pt-4 pb-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <Zap className="w-4 h-4 text-[#00fea3]" fill="#00fea3" />
+          <Zap className="w-4 h-4 text-[#00c6d2]" fill="#00c6d2" />
           <h2 className="text-white font-bold text-sm tracking-wide">Live Activities</h2>
           <span className="ml-auto text-[10px] text-gray-500 font-medium">Últimas 24h</span>
         </div>

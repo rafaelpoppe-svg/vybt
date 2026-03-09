@@ -39,7 +39,7 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
                 onClick={() => setFilters({ ...filters, sortBy: opt.id })}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 ${
                   filters.sortBy === opt.id
-                    ? 'bg-[#00fea3] text-[#0b0b0b]'
+                    ? 'bg-[#00c6d2] text-[#0b0b0b]'
                     : 'bg-gray-800 text-gray-400'
                 }`}
               >
@@ -98,7 +98,7 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
               value={partySearch}
               onChange={(e) => setPartySearch(e.target.value)}
               placeholder="Search..."
-              className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+              className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
             />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -165,7 +165,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
               onClick={() => setFilters({ ...filters, sortBy: 'foryou' })}
               className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 ${
                 filters.sortBy === 'foryou'
-                  ? 'bg-[#00fea3] text-[#0b0b0b]'
+                  ? 'bg-[#00c6d2] text-[#0b0b0b]'
                   : 'bg-gray-800 text-gray-400'
               }`}
             >
@@ -186,7 +186,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
                 onClick={() => setFilters({ ...filters, ageRange: filters.ageRange === age ? null : age })}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium ${
                   filters.ageRange === age
-                    ? 'bg-[#00fea3] text-[#0b0b0b]'
+                    ? 'bg-[#00c6d2] text-[#0b0b0b]'
                     : 'bg-gray-800 text-gray-400'
                 }`}
               >
@@ -207,7 +207,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
                 onClick={() => setFilters({ ...filters, gender: filters.gender === gender ? null : gender })}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium capitalize ${
                   filters.gender === gender
-                    ? 'bg-[#00fea3] text-[#0b0b0b]'
+                    ? 'bg-[#00c6d2] text-[#0b0b0b]'
                     : 'bg-gray-800 text-gray-400'
                 }`}
               >
@@ -256,7 +256,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
               value={vibeSearch}
               onChange={(e) => setVibeSearch(e.target.value)}
               placeholder="Search vibes..."
-              className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+              className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
             />
           </div>
           <div className="flex flex-wrap gap-2">

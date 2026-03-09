@@ -74,10 +74,10 @@ export default function BottomNav() {
             <motion.button
               whileTap={{ scale: 0.93 }}
               onClick={() => { setShowMenu(false); navigate(createPageUrl('CreatePlan')); }}
-              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#0b0b0b] border border-[#00fea3]/40 shadow-lg shadow-[#00fea3]/20 backdrop-blur-xl"
+              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#0b0b0b] border border-[#00c6d2]/40 shadow-lg shadow-[#00c6d2]/20 backdrop-blur-xl"
             >
-              <div className="w-8 h-8 rounded-full bg-[#00fea3]/20 flex items-center justify-center">
-                <PlusCircle className="w-4 h-4 text-[#00fea3]" />
+              <div className="w-8 h-8 rounded-full bg-[#00c6d2]/20 flex items-center justify-center">
+                <PlusCircle className="w-4 h-4 text-[#00c6d2]" />
               </div>
               <span className="text-white font-semibold text-sm whitespace-nowrap">Criar novo Plano</span>
             </motion.button>
@@ -85,7 +85,7 @@ export default function BottomNav() {
         )}
       </AnimatePresence>
 
-      <nav className="fixed bottom-0 z-700 bg-[#0b0b0b]/90 backdrop-blur-2xl border-t border-[#00fea3]/10"
+      <nav className="fixed bottom-0 z-700 bg-[#0b0b0b]/90 backdrop-blur-2xl border-t border-[#00c6d2]/10"
         style={{ left: 0, right: 0, width: '100%', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)' }}
       >
         <div className="flex items-center justify-around px-2 py-2">
@@ -103,7 +103,7 @@ export default function BottomNav() {
                 <motion.div
                   layoutId="nav-pill"
                   className="absolute inset-0 rounded-2xl"
-                  style={{ background: 'linear-gradient(135deg, #00fea322, #542b9b22)' }}
+                  style={{ background: 'linear-gradient(135deg, #00c6d222, #542b9b22)' }}
                   transition={{ type: 'spring', bounce: 0.35, duration: 0.45 }}
                 />
               )}
@@ -112,8 +112,8 @@ export default function BottomNav() {
                   animate={{ rotate: showMenu ? 45 : 0 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 18 }}
                   onClick={(e) => { e.stopPropagation(); setShowMenu(v => !v); }}
-                  className="w-14 h-14 rounded-full bg-gradient-to-br from-[#00fea3] to-[#542b9b] flex items-center justify-center shadow-lg shadow-[#00fea3]/30 -mt-6"
-                  style={{ boxShadow: '0 0 20px #00fea340, 0 4px 20px #542b9b40' }}
+                  className="w-14 h-14 rounded-full bg-gradient-to-br from-[#00c6d2] to-[#542b9b] flex items-center justify-center shadow-lg shadow-[#00c6d2]/30 -mt-6"
+                  style={{ boxShadow: '0 0 20px #00c6d240, 0 4px 20px #542b9b40' }}
                 >
                   <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
                 </motion.div>
@@ -121,18 +121,18 @@ export default function BottomNav() {
                 <>
                   <div className="relative">
                     <Icon
-                      className={`w-5 h-5 transition-colors duration-200 ${active ? 'text-[#00fea3]' : 'text-gray-500'}`}
+                      className={`w-5 h-5 transition-colors duration-200 ${active ? 'text-[#00c6d2]' : 'text-gray-500'}`}
                       strokeWidth={active ? 2.5 : 1.8}
                     />
                     {active && (
                       <motion.div
                         layoutId={`dot-${name}`}
-                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#00fea3]"
+                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#00c6d2]"
                         transition={{ type: 'spring', bounce: 0.5 }}
                       />
                     )}
                   </div>
-                  <span className={`text-[10px] font-semibold transition-colors duration-200 ${active ? 'text-[#00fea3]' : 'text-gray-600'}`}>
+                  <span className={`text-[10px] font-semibold transition-colors duration-200 ${active ? 'text-[#00c6d2]' : 'text-gray-600'}`}>
                     {label}
                   </span>
                 </>

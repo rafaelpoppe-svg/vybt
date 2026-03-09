@@ -77,7 +77,7 @@ export default function MyPlans() {
       <main className="p-4">
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+            <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
           </div>
         ) : myPlans.length > 0 ? (
           <div className="grid gap-4">
@@ -96,7 +96,7 @@ export default function MyPlans() {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(createPageUrl('Explore'))}
-              className="px-6 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-medium"
+              className="px-6 py-2 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-medium"
             >
               Explore Plans
             </motion.button>

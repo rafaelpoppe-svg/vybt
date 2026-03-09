@@ -272,7 +272,7 @@ export default function Home() {
         {/* Hot Plans Carousel */}
         {plansLoading ? (
           <div className="flex justify-center py-3">
-            <Loader2 className="w-5 h-5 text-[#00fea3] animate-spin" />
+            <Loader2 className="w-5 h-5 text-[#00c6d2] animate-spin" />
           </div>
         ) : (
           <HomeHotPlansCarousel

@@ -28,7 +28,7 @@ const Section = ({ title, children }) => (
   </div>
 );
 
-const Row = ({ icon: Icon, iconColor = 'text-[#00fea3]', label, sublabel, onClick, destructive }) => (
+const Row = ({ icon: Icon, iconColor = 'text-[#00c6d2]', label, sublabel, onClick, destructive }) => (
   <motion.button
     whileTap={{ scale: 0.98 }}
     onClick={onClick}
@@ -96,7 +96,7 @@ export default function Settings() {
         <Section title={t.account}>
           <Row
             icon={Bell}
-            iconColor="text-[#00fea3]"
+            iconColor="text-[#00c6d2]"
             label={t.notifications}
             sublabel={t.manageAlerts}
             onClick={() => navigate(createPageUrl('NotificationSettings'))}
@@ -138,16 +138,16 @@ export default function Settings() {
                       onClick={() => handleLanguageChange(lang.code)}
                       className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all ${
                         selectedLanguage === lang.code
-                          ? 'bg-[#00fea3]/15 border border-[#00fea3]/40'
+                          ? 'bg-[#00c6d2]/15 border border-[#00c6d2]/40'
                           : 'bg-gray-800 border border-transparent'
                       }`}
                     >
                       <span className="text-2xl">{lang.flag}</span>
-                      <span className={`flex-1 text-left font-medium ${selectedLanguage === lang.code ? 'text-[#00fea3]' : 'text-white'}`}>
+                      <span className={`flex-1 text-left font-medium ${selectedLanguage === lang.code ? 'text-[#00c6d2]' : 'text-white'}`}>
                         {lang.name}
                       </span>
                       {selectedLanguage === lang.code && (
-                        <Check className="w-5 h-5 text-[#00fea3]" />
+                        <Check className="w-5 h-5 text-[#00c6d2]" />
                       )}
                     </motion.button>
                   ))}
@@ -189,7 +189,7 @@ export default function Settings() {
           />
           <Row
             icon={Mail}
-            iconColor="text-[#00fea3]"
+            iconColor="text-[#00c6d2]"
             label="Support"
             sublabel="support@vybtapp.com"
             onClick={() => navigate(createPageUrl('Support'))}

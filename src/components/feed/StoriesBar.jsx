@@ -37,7 +37,7 @@ export default function StoriesBar({
             onClick={() => onFilterChange(filter)}
             className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
               currentFilter === filter
-                ? 'bg-[#00fea3] text-[#0b0b0b] shadow-lg shadow-[#00fea3]/30'
+                ? 'bg-[#00c6d2] text-[#0b0b0b] shadow-lg shadow-[#00c6d2]/30'
                 : 'bg-white/5 text-gray-400 border border-white/10'
             }`}
           >

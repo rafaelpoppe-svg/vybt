@@ -34,7 +34,7 @@ export default function HomeFilterBar({ onFilterChange }) {
             onClick={() => handleTime(f.value)}
             className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
             style={{
-              background: activeTime === f.value ? '#00fea3' : 'rgba(255,255,255,0.07)',
+              background: activeTime === f.value ? '#00c6d2' : 'rgba(255,255,255,0.07)',
               color: activeTime === f.value ? '#0b0b0b' : '#aaa',
               border: activeTime === f.value ? 'none' : '1px solid rgba(255,255,255,0.1)',
             }}

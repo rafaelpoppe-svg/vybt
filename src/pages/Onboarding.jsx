@@ -181,12 +181,12 @@ function OnboardingInner() {
         type="button"
         onClick={detectLocation}
         disabled={detectingCity}
-        className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl bg-[#00fea3]/10 border border-[#00fea3]/40 text-left disabled:opacity-50"
+        className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl bg-[#00c6d2]/10 border border-[#00c6d2]/40 text-left disabled:opacity-50"
       >
         {detectingCity ? (
-          <Loader2 className="w-6 h-6 text-[#00fea3] animate-spin flex-shrink-0" />
+          <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin flex-shrink-0" />
         ) : (
-          <Navigation className="w-6 h-6 text-[#00fea3] flex-shrink-0" />
+          <Navigation className="w-6 h-6 text-[#00c6d2] flex-shrink-0" />
         )}
         <div>
           <p className="text-white font-semibold">
@@ -198,7 +198,7 @@ function OnboardingInner() {
         </div>
       </button>
       {data.city && (
-        <div className="flex items-center gap-2 text-[#00fea3] text-sm">
+        <div className="flex items-center gap-2 text-[#00c6d2] text-sm">
           <MapPin className="w-4 h-4" />
           <span>{t.locationSetTo} <strong>{data.city}</strong></span>
         </div>
@@ -228,7 +228,7 @@ function OnboardingInner() {
         </motion.button>
         
         <div className="flex-1 flex justify-center">
-          <span className="text-2xl font-black bg-gradient-to-r from-[#00fea3] to-[#542b9b] bg-clip-text text-transparent">
+          <span className="text-2xl font-black bg-gradient-to-r from-[#00c6d2] to-[#542b9b] bg-clip-text text-transparent">
             Vybt
           </span>
         </div>
@@ -244,7 +244,7 @@ function OnboardingInner() {
               <motion.div 
                 key={i}
                 animate={{
-                  backgroundColor: i <= step ? '#00fea3' : '#1f2937',
+                  backgroundColor: i <= step ? '#00c6d2' : '#1f2937',
                   scaleX: i === step ? 1.1 : 1
                 }}
                 transition={{ duration: 0.4 }}
@@ -306,7 +306,7 @@ function OnboardingInner() {
             disabled={!canProceed()}
             className={`w-full py-4 rounded-full font-bold text-lg flex items-center justify-center gap-2 transition-all ${
               canProceed()
-                ? 'bg-[#00fea3] text-[#0b0b0b]'
+                ? 'bg-[#00c6d2] text-[#0b0b0b]'
                 : 'bg-gray-800 text-gray-500'
             }`}
           >

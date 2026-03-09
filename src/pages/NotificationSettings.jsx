@@ -61,7 +61,7 @@ function Toggle({ enabled, onToggle }) {
     <motion.button
       whileTap={{ scale: 0.9 }}
       onClick={onToggle}
-      className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${enabled ? 'bg-[#00fea3]' : 'bg-gray-700'}`}
+      className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${enabled ? 'bg-[#00c6d2]' : 'bg-gray-700'}`}
     >
       <motion.div
         animate={{ x: enabled ? 20 : 2 }}
@@ -133,7 +133,7 @@ export default function NotificationSettings() {
           whileTap={{ scale: 0.95 }}
           onClick={() => saveMutation.mutate()}
           disabled={saveMutation.isPending}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold text-sm"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold text-sm"
         >
           {saveMutation.isPending ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -148,14 +148,14 @@ export default function NotificationSettings() {
 
       {isLoading ? (
         <div className="flex items-center justify-center pt-20">
-          <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+          <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
         </div>
       ) : (
         <div className="px-4 py-6 pb-16 space-y-4">
           {/* Channel legend */}
           <div className="flex items-center gap-6 px-1 mb-2">
             <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Smartphone className="w-3.5 h-3.5 text-[#00fea3]" />
+              <Smartphone className="w-3.5 h-3.5 text-[#00c6d2]" />
               Push
             </div>
             <div className="flex items-center gap-1.5 text-xs text-gray-400">
@@ -179,7 +179,7 @@ export default function NotificationSettings() {
               <div className="flex items-center gap-6 pl-9">
                 {/* Push */}
                 <div className="flex items-center gap-2">
-                  <Smartphone className="w-3.5 h-3.5 text-[#00fea3]" />
+                  <Smartphone className="w-3.5 h-3.5 text-[#00c6d2]" />
                   <Toggle
                     enabled={prefs[`${type.key}_push`]}
                     onToggle={() => toggle(`${type.key}_push`)}

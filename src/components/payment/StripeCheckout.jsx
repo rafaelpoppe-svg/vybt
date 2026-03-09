@@ -39,7 +39,7 @@ function CheckoutForm({ onSuccess, onError, buttonLabel }) {
       <Button
         type="submit"
         disabled={!stripe || isProcessing}
-        className="w-full py-6 rounded-full font-bold text-lg bg-gradient-to-r from-[#00fea3] to-[#542b9b] text-white"
+        className="w-full py-6 rounded-full font-bold text-lg bg-gradient-to-r from-[#00c6d2] to-[#542b9b] text-white"
       >
         {isProcessing ? (
           <Loader2 className="w-5 h-5 animate-spin" />
@@ -75,7 +75,7 @@ export default function StripeCheckout({ type, buttonLabel, onSuccess, onError }
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <Loader2 className="w-6 h-6 animate-spin text-[#00fea3]" />
+        <Loader2 className="w-6 h-6 animate-spin text-[#00c6d2]" />
       </div>
     );
   }
@@ -90,7 +90,7 @@ export default function StripeCheckout({ type, buttonLabel, onSuccess, onError }
         appearance: {
           theme: 'night',
           variables: {
-            colorPrimary: '#00fea3',
+            colorPrimary: '#00c6d2',
             colorBackground: '#1f2937',
             colorText: '#ffffff',
             colorDanger: '#ef4444',

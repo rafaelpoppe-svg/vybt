@@ -39,7 +39,7 @@ export default function HotPlansSection({ plans = [], allParticipants = [], onPl
             ? '#ef4444'
             : plan.is_highlighted
             ? '#a855f7'
-            : '#00fea3';
+            : '#00c6d2';
 
           return (
             <motion.button

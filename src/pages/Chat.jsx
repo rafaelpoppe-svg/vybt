@@ -164,7 +164,7 @@ export default function Chat() {
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2" style={{ WebkitOverflowScrolling: 'touch' }}>
           {dmLoading ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="w-6 h-6 text-[#00fea3] animate-spin" />
+              <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin" />
             </div>
           ) : sortedDMs.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full gap-3 opacity-50">
@@ -219,7 +219,7 @@ export default function Chat() {
               whileTap={{ scale: 0.9 }}
               onClick={() => newMessage.trim() && sendDMMutation.mutate(newMessage)}
               disabled={!newMessage.trim() || sendDMMutation.isPending}
-              className="w-10 h-10 rounded-full bg-[#00fea3] flex items-center justify-center disabled:opacity-40 flex-shrink-0"
+              className="w-10 h-10 rounded-full bg-[#00c6d2] flex items-center justify-center disabled:opacity-40 flex-shrink-0"
             >
               <Send className="w-4 h-4 text-[#0b0b0b]" />
             </motion.button>
@@ -247,7 +247,7 @@ export default function Chat() {
               onClick={() => setActiveTab(key)}
               className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-all ${
                 activeTab === key
-                  ? 'bg-[#00fea3] text-[#0b0b0b]'
+                  ? 'bg-[#00c6d2] text-[#0b0b0b]'
                   : 'bg-gray-900 text-gray-400 border border-gray-800'
               }`}
             >
@@ -266,7 +266,7 @@ export default function Chat() {
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigate(createPageUrl('GroupChat') + `?planId=${plan.id}`)}
                 className="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center gap-3 text-left"
-                style={{ borderLeftColor: plan.theme_color || '#00fea3', borderLeftWidth: '3px' }}
+                style={{ borderLeftColor: plan.theme_color || '#00c6d2', borderLeftWidth: '3px' }}
               >
                 <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
                   {plan.group_image ? (
@@ -274,7 +274,7 @@ export default function Chat() {
                   ) : (
                     <div
                       className="w-full h-full flex items-center justify-center text-xl"
-                      style={{ background: `linear-gradient(135deg, ${plan.theme_color || '#542b9b'}50, #00fea350)` }}
+                      style={{ background: `linear-gradient(135deg, ${plan.theme_color || '#542b9b'}50, #00c6d250)` }}
                     >
                       🎉
                     </div>

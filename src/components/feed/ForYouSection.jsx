@@ -17,8 +17,8 @@ export default function ForYouSection({ plans, participants, profilesMap, onPlan
     <section className="mb-8">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#00fea3]/20 to-[#542b9b]/20">
-            <Sparkles className="w-5 h-5 text-[#00fea3]" />
+          <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#00c6d2]/20 to-[#542b9b]/20">
+            <Sparkles className="w-5 h-5 text-[#00c6d2]" />
           </div>
           <h2 className="text-white font-bold text-lg">For You</h2>
         </div>
@@ -26,7 +26,7 @@ export default function ForYouSection({ plans, participants, profilesMap, onPlan
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={onSeeAll}
-            className="flex items-center gap-1 text-[#00fea3] text-sm font-medium"
+            className="flex items-center gap-1 text-[#00c6d2] text-sm font-medium"
           >
             See all
             <ChevronRight className="w-4 h-4" />

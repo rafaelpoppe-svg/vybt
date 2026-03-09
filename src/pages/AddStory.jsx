@@ -41,13 +41,13 @@ function StepSelectPlan({ activePlans, myParticipations, selectedPlan, onSelect,
                 onClick={() => !full && onSelect(plan.id)}
                 className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 transition-all ${
                   selectedPlan === plan.id
-                    ? 'border-[#00fea3] bg-[#00fea3]/10'
+                    ? 'border-[#00c6d2] bg-[#00c6d2]/10'
                     : full
                     ? 'border-gray-800 bg-gray-900/50 opacity-50'
                     : 'border-gray-800 bg-gray-900 active:border-gray-600'
                 }`}
               >
-                <div className="w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-br from-[#542b9b] to-[#00fea3]/40 flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-br from-[#542b9b] to-[#00c6d2]/40 flex items-center justify-center flex-shrink-0">
                   {plan.cover_image ? (
                     <img src={plan.cover_image} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -55,12 +55,12 @@ function StepSelectPlan({ activePlans, myParticipations, selectedPlan, onSelect,
                   )}
                 </div>
                 <div className="flex-1 text-left min-w-0">
-                  <p className={`font-semibold truncate ${selectedPlan === plan.id ? 'text-[#00fea3]' : 'text-white'}`}>
+                  <p className={`font-semibold truncate ${selectedPlan === plan.id ? 'text-[#00c6d2]' : 'text-white'}`}>
                     {plan.title}
                   </p>
                   <p className="text-xs text-gray-500 mt-0.5">{plan.city} • {posted}/5 stories</p>
                 </div>
-                {selectedPlan === plan.id && <Check className="w-5 h-5 text-[#00fea3] flex-shrink-0" />}
+                {selectedPlan === plan.id && <Check className="w-5 h-5 text-[#00c6d2] flex-shrink-0" />}
                 {full && <span className="text-xs text-red-400 flex-shrink-0">Full</span>}
               </motion.button>
             );
@@ -73,7 +73,7 @@ function StepSelectPlan({ activePlans, myParticipations, selectedPlan, onSelect,
           onClick={onNext}
           disabled={!selectedPlan}
           className={`w-full py-4 rounded-full font-bold text-base transition-all ${
-            selectedPlan ? 'bg-[#00fea3] text-[#0b0b0b]' : 'bg-gray-800 text-gray-600'
+            selectedPlan ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'bg-gray-800 text-gray-600'
           }`}
         >
           Next →
@@ -150,7 +150,7 @@ function StepPreview({ media, plans, selectedPlan, onPublish, onRetake, submitti
                 onClick={() => onVisibilityChange(opt.id)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-all ${
                   visibility === opt.id
-                    ? 'bg-[#00fea3] text-[#0b0b0b]'
+                    ? 'bg-[#00c6d2] text-[#0b0b0b]'
                     : 'bg-black/50 backdrop-blur-sm text-white border border-white/20'
                 }`}
               >
@@ -167,7 +167,7 @@ function StepPreview({ media, plans, selectedPlan, onPublish, onRetake, submitti
           whileTap={{ scale: 0.97 }}
           onClick={onPublish}
           disabled={submitting}
-          className="w-full py-4 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold text-base flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold text-base flex items-center justify-center gap-2"
         >
           {submitting ? (
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -308,7 +308,7 @@ export default function AddStory() {
               <div
                 key={i}
                 className={`h-1.5 rounded-full transition-all ${
-                  i === step ? 'w-6 bg-[#00fea3]' : i < step ? 'w-3 bg-[#00fea3]/50' : 'w-3 bg-gray-700'
+                  i === step ? 'w-6 bg-[#00c6d2]' : i < step ? 'w-3 bg-[#00c6d2]/50' : 'w-3 bg-gray-700'
                 }`}
               />
             ))}
@@ -337,7 +337,7 @@ export default function AddStory() {
             <div key="camera" className="absolute inset-0">
               {processingMedia ? (
                 <div className="absolute inset-0 bg-black flex flex-col items-center justify-center gap-4 z-50">
-                  <Loader2 className="w-12 h-12 text-[#00fea3] animate-spin" />
+                  <Loader2 className="w-12 h-12 text-[#00c6d2] animate-spin" />
                   <p className="text-gray-300 text-sm">Processing & checking content...</p>
                 </div>
               ) : (

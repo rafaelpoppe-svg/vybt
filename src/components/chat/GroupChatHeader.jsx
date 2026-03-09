@@ -129,7 +129,7 @@ export default function GroupChatHeader({
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={(e) => { e.stopPropagation(); onRenew(); }}
-                className="flex-1 py-2.5 rounded-xl bg-[#00fea3]/20 border border-[#00fea3]/30 text-[#00fea3] text-sm font-semibold flex items-center justify-center gap-2"
+                className="flex-1 py-2.5 rounded-xl bg-[#00c6d2]/20 border border-[#00c6d2]/30 text-[#00c6d2] text-sm font-semibold flex items-center justify-center gap-2"
               >
                 <RefreshCw className="w-4 h-4" />
                 {t.renewPlan}

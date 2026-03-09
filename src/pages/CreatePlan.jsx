@@ -11,7 +11,7 @@ import { Search } from 'lucide-react';
 import HighlightPlanModal from '../components/plan/HighlightPlanModal';
 
 const themeColors = [
-  '#00fea3', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1',
+  '#00c6d2', '#542b9b', '#ff6b6b', '#4ecdc4', '#45b7d1',
   '#f7dc6f', '#bb8fce', '#85c1e9', '#f8b500', '#ff69b4'
 ];
 
@@ -43,7 +43,7 @@ export default function CreatePlan() {
   const [data, setData] = useState({
     title: '', description: '', date: '', time: '', end_time: '',
     location_address: '', city: '', tags: [],
-    cover_image: '', group_image: '', theme_color: '#00fea3'
+    cover_image: '', group_image: '', theme_color: '#00c6d2'
   });
 
   const todayStr = new Date().toISOString().split('T')[0];
@@ -186,7 +186,7 @@ export default function CreatePlan() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.7 }}
-            className="text-[#00fea3] text-lg font-bold mb-8"
+            className="text-[#00c6d2] text-lg font-bold mb-8"
           >
             Your plan is Ready! ✨
           </motion.p>
@@ -256,7 +256,7 @@ export default function CreatePlan() {
                 transition={{ delay: 1.3 }}
                 className="flex items-end gap-2 flex-row-reverse"
               >
-                <div className="w-7 h-7 rounded-full bg-[#00fea3] flex items-center justify-center text-xs">😎</div>
+                <div className="w-7 h-7 rounded-full bg-[#00c6d2] flex items-center justify-center text-xs">😎</div>
                 <div
                   className="rounded-2xl rounded-br-none px-3 py-2 text-sm text-[#0b0b0b] font-medium max-w-[70%]"
                   style={{ backgroundColor: createdPlan.theme_color }}
@@ -287,7 +287,7 @@ export default function CreatePlan() {
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${createdPlan.id}`)}
-              className="w-full py-4 rounded-2xl bg-[#00fea3] text-[#0b0b0b] font-bold text-lg"
+              className="w-full py-4 rounded-2xl bg-[#00c6d2] text-[#0b0b0b] font-bold text-lg"
             >
               Open my Plan 🚀
             </motion.button>
@@ -387,7 +387,7 @@ export default function CreatePlan() {
               </div>
             ) : (
               <div className="h-40 rounded-2xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center gap-2 hover:border-gray-500 transition-colors">
-                {uploadingCover ? <Loader2 className="w-6 h-6 text-[#00fea3] animate-spin" /> : <>
+                {uploadingCover ? <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin" /> : <>
                   <ImageIcon className="w-8 h-8 text-gray-600" />
                   <span className="text-gray-500 text-sm">Add a cover photo 🌆</span>
                 </>}
@@ -405,7 +405,7 @@ export default function CreatePlan() {
               <img src={data.group_image} alt="" className="w-16 h-16 rounded-2xl object-cover" />
             ) : (
               <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-gray-700 flex items-center justify-center hover:border-gray-500 transition-colors">
-                {uploadingGroup ? <Loader2 className="w-5 h-5 text-[#00fea3] animate-spin" /> : <ImageIcon className="w-5 h-5 text-gray-600" />}
+                {uploadingGroup ? <Loader2 className="w-5 h-5 text-[#00c6d2] animate-spin" /> : <ImageIcon className="w-5 h-5 text-gray-600" />}
               </div>
             )}
             <span className="text-gray-500 text-sm">Small icon for the group chat 💬</span>
@@ -481,9 +481,9 @@ export default function CreatePlan() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#00fea3]/10 border border-[#00fea3]/30 rounded-2xl p-4 text-center"
+            className="bg-[#00c6d2]/10 border border-[#00c6d2]/30 rounded-2xl p-4 text-center"
           >
-            <p className="text-[#00fea3] font-bold">{data.time} → {data.end_time} ✅</p>
+            <p className="text-[#00c6d2] font-bold">{data.time} → {data.end_time} ✅</p>
           </motion.div>
         )}
       </div>
@@ -526,7 +526,7 @@ export default function CreatePlan() {
         </div>
         <div className="flex items-center justify-between">
           <span className="text-gray-500 text-sm">Selected</span>
-          <span className={`text-sm font-bold ${data.tags.length >= 2 ? 'text-[#00fea3]' : 'text-gray-500'}`}>
+          <span className={`text-sm font-bold ${data.tags.length >= 2 ? 'text-[#00c6d2]' : 'text-gray-500'}`}>
             {data.tags.length}/2
           </span>
         </div>
@@ -537,7 +537,7 @@ export default function CreatePlan() {
             value={tagSearch}
             onChange={(e) => setTagSearch(e.target.value)}
             placeholder="Search party types..."
-            className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+            className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
           />
         </div>
         <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto">
@@ -575,7 +575,7 @@ export default function CreatePlan() {
               key={s.id}
               animate={{
                 width: step === s.id ? 24 : 8,
-                backgroundColor: step > s.id ? '#00fea3' : step === s.id ? '#00fea3' : '#374151'
+                backgroundColor: step > s.id ? '#00c6d2' : step === s.id ? '#00c6d2' : '#374151'
               }}
               className="h-2 rounded-full"
             />
@@ -613,7 +613,7 @@ export default function CreatePlan() {
           disabled={!canProceed() || loading}
           className={`w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
             canProceed() && !loading
-              ? 'bg-[#00fea3] text-[#0b0b0b]'
+              ? 'bg-[#00c6d2] text-[#0b0b0b]'
               : 'bg-gray-800 text-gray-500 cursor-not-allowed'
           }`}
         >

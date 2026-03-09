@@ -59,7 +59,7 @@ export default function HighlightPlanModal({
                 <p className="text-white font-bold text-lg">{planTitle}</p>
                 <div className="flex gap-1 mt-2 flex-wrap">
                   {planTags.map((tag, i) => (
-                    <span key={i} className="px-2 py-0.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-xs">
+                    <span key={i} className="px-2 py-0.5 rounded-full bg-[#00c6d2]/20 text-[#00c6d2] text-xs">
                       {tag}
                     </span>
                   ))}
@@ -71,7 +71,7 @@ export default function HighlightPlanModal({
                 <p className="text-gray-400 text-sm font-medium">What you get:</p>
                 
                 <div className="flex items-start gap-3 p-3 rounded-xl bg-gray-800/50">
-                  <TrendingUp className="w-5 h-5 text-[#00fea3] flex-shrink-0" />
+                  <TrendingUp className="w-5 h-5 text-[#00c6d2] flex-shrink-0" />
                   <div>
                     <p className="text-white font-medium">Appear First in Explore</p>
                     <p className="text-xs text-gray-400">Your plan will be shown at the top for users matching your tags</p>

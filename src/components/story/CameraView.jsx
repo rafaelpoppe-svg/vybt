@@ -98,7 +98,7 @@ export default function CameraView({ onCapture, onClose }) {
             <p className="text-gray-400 text-center text-sm leading-relaxed">{cameraError}</p>
             <button
               onClick={() => startCamera(facingMode)}
-              className="px-6 py-3 rounded-full bg-[#00fea3] text-[#0b0b0b] font-bold text-sm"
+              className="px-6 py-3 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold text-sm"
             >
               Try Again
             </button>

@@ -25,7 +25,7 @@ function getColorForUser(userId) {
 
 function CircleStory({ story, user, isOwn, isAdd, onClick, happeningPlan }) {
   const colors = isOwn
-    ? ['#00fea3', '#542b9b']
+    ? ['#00c6d2', '#542b9b']
     : getColorForUser(story?.user_id);
 
   if (isAdd) {
@@ -52,12 +52,12 @@ function CircleStory({ story, user, isOwn, isAdd, onClick, happeningPlan }) {
                 : 'rgba(255,255,255,0.05)',
               border: isHappening
                 ? '2.5px solid #00d4ff'
-                : '2.5px dashed #00fea3',
+                : '2.5px dashed #00c6d2',
             }}
           >
             {isHappening
               ? <Video className="w-6 h-6 text-[#00d4ff]" />
-              : <Plus className="w-6 h-6 text-[#00fea3]" />
+              : <Plus className="w-6 h-6 text-[#00c6d2]" />
             }
           </div>
         </div>

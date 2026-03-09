@@ -41,15 +41,15 @@ const notificationColors = {
   voting_started: 'bg-orange-500/20 text-orange-400',
   plan_happening_now: 'bg-red-500/20 text-red-400',
   new_story_in_plan: 'bg-[#542b9b]/20 text-[#542b9b]',
-  plan_highlighted: 'bg-[#00fea3]/20 text-[#00fea3]',
-  story_highlighted: 'bg-[#00fea3]/20 text-[#00fea3]',
+  plan_highlighted: 'bg-[#00c6d2]/20 text-[#00c6d2]',
+  story_highlighted: 'bg-[#00c6d2]/20 text-[#00c6d2]',
   friend_posted_story: 'bg-pink-500/20 text-pink-400',
   plan_recommendation: 'bg-rose-500/20 text-rose-400',
   plan_renewed: 'bg-cyan-500/20 text-cyan-400',
   plan_unsuccessful: 'bg-red-500/20 text-red-400',
   plan_successful: 'bg-green-500/20 text-green-400',
   friend_created_plan: 'bg-indigo-500/20 text-indigo-400',
-  friend_request: 'bg-[#00fea3]/20 text-[#00fea3]',
+  friend_request: 'bg-[#00c6d2]/20 text-[#00c6d2]',
   plan_time_changed: 'bg-yellow-500/20 text-yellow-400',
   plan_location_changed: 'bg-yellow-500/20 text-yellow-400'
 };
@@ -149,10 +149,10 @@ export default function Notifications() {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => markAllAsRead()}
-              className="px-3 py-1.5 rounded-lg bg-[#00fea3]/20 border border-[#00fea3]/30 flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-lg bg-[#00c6d2]/20 border border-[#00c6d2]/30 flex items-center gap-1.5"
             >
-              <CheckCheck className="w-4 h-4 text-[#00fea3]" />
-              <span className="text-sm text-[#00fea3]">{t.markAllRead}</span>
+              <CheckCheck className="w-4 h-4 text-[#00c6d2]" />
+              <span className="text-sm text-[#00c6d2]">{t.markAllRead}</span>
             </motion.button>
           )}
         </div>
@@ -161,7 +161,7 @@ export default function Notifications() {
       <main className="p-4">
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 text-[#00fea3] animate-spin" />
+            <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
           </div>
         ) : sortedNotifications.length > 0 ? (
           <div className="space-y-2">
@@ -177,7 +177,7 @@ export default function Notifications() {
                   className={`w-full p-4 rounded-xl border text-left transition-all ${
                     notification.is_read 
                       ? 'bg-gray-900/50 border-gray-800' 
-                      : 'bg-gray-900 border-[#00fea3]/30'
+                      : 'bg-gray-900 border-[#00c6d2]/30'
                   }`}
                 >
                   <div className="flex gap-3">
@@ -196,7 +196,7 @@ export default function Notifications() {
                       </p>
                     </div>
                     {!notification.is_read && (
-                      <div className="w-2 h-2 rounded-full bg-[#00fea3] flex-shrink-0 mt-2" />
+                      <div className="w-2 h-2 rounded-full bg-[#00c6d2] flex-shrink-0 mt-2" />
                     )}
                   </div>
                 </motion.button>

@@ -134,7 +134,7 @@ export default function GroupChat() {
   const isAwaitingAdmin = planStatus === 'ended' && plan?.status !== 'terminated' && plan?.status !== 'renewed';
   const isChatLocked = planStatus === 'voting' || isAwaitingAdmin;
   const hasVoted = plan?.voted_users?.includes(currentUser?.id);
-  const themeColor = plan?.theme_color || '#00fea3';
+  const themeColor = plan?.theme_color || '#00c6d2';
 
   // ── Mutations ──────────────────────────────────────────────────────────────
   const sendMutation = useMutation({

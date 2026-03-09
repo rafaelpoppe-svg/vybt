@@ -97,7 +97,7 @@ export default function Friends() {
             onClick={() => setActiveTab('friends')}
             className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-all ${
               activeTab === 'friends'
-                ? 'bg-[#00fea3] text-[#0b0b0b]'
+                ? 'bg-[#00c6d2] text-[#0b0b0b]'
                 : 'bg-gray-900 text-gray-400 border border-gray-800'
             }`}
           >
@@ -108,7 +108,7 @@ export default function Friends() {
             onClick={() => setActiveTab('requests')}
             className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-all relative ${
               activeTab === 'requests'
-                ? 'bg-[#00fea3] text-[#0b0b0b]'
+                ? 'bg-[#00c6d2] text-[#0b0b0b]'
                 : 'bg-gray-900 text-gray-400 border border-gray-800'
             }`}
           >
@@ -186,7 +186,7 @@ export default function Friends() {
                       size="sm"
                       onClick={() => acceptMutation.mutate(request.id)}
                       disabled={acceptMutation.isPending}
-                      className="bg-[#00fea3] text-[#0b0b0b] hover:bg-[#00fea3]/90"
+                      className="bg-[#00c6d2] text-[#0b0b0b] hover:bg-[#00c6d2]/90"
                     >
                       <Check className="w-4 h-4" />
                     </Button>
