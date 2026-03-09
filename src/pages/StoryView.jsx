@@ -103,12 +103,21 @@ export default function StoryView() {
 
   // Initialize stories list
   useEffect(() => {
-    if (allStoriesData.length > 0 && storyId) {
-      const currentIndex = allStoriesData.findIndex(s => s.id === storyId);
+    if (allStoriesData.length > 0) {
       setAllStories(allStoriesData);
-      setCurrentStoryIndex(currentIndex >= 0 ? currentIndex : 0);
+      if (storyId && groupedStories.length > 0) {
+        const position = findStoryPosition(storyId);
+        if (position) {
+          setCurrentGroupIndex(position.groupIndex);
+          setCurrentStoryInGroupIndex(position.storyIndex);
+        }
+      }
+      // Fallback to flat list if no grouping
+      if (!storyId) {
+        setCurrentStoryIndex(0);
+      }
     }
-  }, [allStoriesData, storyId]);
+  }, [allStoriesData, storyId, groupedStories]);
 
   const deleteMutation = useMutation({
     mutationFn: () => base44.entities.ExperienceStory.delete(story.id),
