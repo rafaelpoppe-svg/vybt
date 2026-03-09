@@ -189,12 +189,20 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {flyCoords && mapReady && <FlyToCity coords={flyCoords} />}
-        {validPlans.map(plan => (
+        {showPlans && validPlans.map(plan => (
           <Marker
             key={plan.id}
             position={[plan.latitude, plan.longitude]}
             icon={createPlanIcon(plan)}
-            eventHandlers={{ click: () => setSelected(plan) }}
+            eventHandlers={{ click: () => { setSelected(plan); setSelectedPoi(null); } }}
+          />
+        ))}
+        {showPois && validPois.map(poi => (
+          <Marker
+            key={poi.id}
+            position={[poi.latitude, poi.longitude]}
+            icon={createPoiIcon(poi)}
+            eventHandlers={{ click: () => { setSelectedPoi(poi); setSelected(null); } }}
           />
         ))}
       </MapContainer>
