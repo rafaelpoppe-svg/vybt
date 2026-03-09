@@ -300,7 +300,7 @@ export default function StoryView() {
 
   return (
     <div 
-      className="fixed inset-0 bg-black z-50"
+      className="fixed inset-0 bg-gradient-to-b from-black via-black to-black z-50"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
