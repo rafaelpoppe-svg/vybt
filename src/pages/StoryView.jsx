@@ -281,6 +281,15 @@ export default function StoryView() {
     reactMutation.mutate(emoji);
   };
 
+  const handleChatSent = async () => {
+    setShowChatInput(false);
+    // Navigate to chat after message sent
+    const user = await base44.auth.me();
+    if (user && storyUser) {
+      navigate(createPageUrl('Chat'));
+    }
+  };
+
   if (isLoading || !story) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
