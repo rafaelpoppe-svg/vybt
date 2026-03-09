@@ -83,7 +83,6 @@ export default function StoryView() {
   // Get current story from grouped structure
   const currentGroup = groupedStories[currentGroupIndex];
   const currentGroupStory = currentGroup?.stories?.[currentStoryInGroupIndex];
-  const story = currentGroupStory || allStories[currentStoryIndex];
 
   const currentStoryId = story?.id || storyId;
 
