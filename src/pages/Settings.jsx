@@ -118,6 +118,39 @@ export default function Settings() {
           />
         </Section>
 
+        {/* Privacy */}
+        {profile && (
+          <Section title="Privacy">
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => togglePrivacyMutation.mutate()}
+              disabled={togglePrivacyMutation.isPending}
+              className="w-full flex items-center gap-4 px-4 py-4"
+            >
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-gray-800">
+                {profile.is_private
+                  ? <EyeOff className="w-4 h-4 text-purple-400" />
+                  : <Eye className="w-4 h-4 text-[#00c6d2]" />
+                }
+              </div>
+              <div className="flex-1 text-left">
+                <p className="font-medium text-sm text-white">
+                  {profile.is_private ? 'Perfil Privado' : 'Perfil Público'}
+                </p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {profile.is_private
+                    ? 'Só amigos vêem os teus stories, planos e amigos'
+                    : 'Toda a gente pode ver o teu perfil completo'
+                  }
+                </p>
+              </div>
+              <div className={`w-11 h-6 rounded-full relative transition-colors ${profile.is_private ? 'bg-purple-500' : 'bg-gray-700'}`}>
+                <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${profile.is_private ? 'translate-x-5' : 'translate-x-0.5'}`} />
+              </div>
+            </motion.button>
+          </Section>
+        )}
+
         {/* Language Picker Modal */}
         <AnimatePresence>
           {showLanguagePicker && (
