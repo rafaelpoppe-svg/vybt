@@ -145,6 +145,10 @@ export default function CreatePlan() {
       creator_id: user.id,
       view_count: 0,
       is_highlighted: false,
+      is_private: data.is_private ?? false,
+      show_in_explore: data.show_in_explore ?? true,
+      show_in_map: data.is_private ? false : (data.show_in_map ?? true),
+      audience_restrictions: data.audience_restrictions || {},
       ...(latitude && longitude ? { latitude, longitude } : {})
     });
 
