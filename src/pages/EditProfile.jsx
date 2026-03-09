@@ -207,11 +207,11 @@ export default function EditProfile() {
       <main className="p-4 pb-32 space-y-6">
         {/* Photos */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Photos (max 3)</label>
-          <div className="flex gap-3">
-            {[0, 1, 2].map((i) => (
-              <label key={i} className="relative">
-                <div className={`${i === 0 ? 'w-28 h-28' : 'w-20 h-20'} rounded-xl overflow-hidden cursor-pointer ${
+          <label className="block text-gray-400 text-sm mb-2">Photos (max 5) — 1st is profile picture</label>
+          <div className="flex gap-3 flex-wrap">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <label key={i} className="relative" style={{ marginBottom: '1.25rem' }}>
+                <div className={`${i === 0 ? 'w-28 h-28' : 'w-[72px] h-[72px]'} rounded-xl overflow-hidden cursor-pointer ${
                   formData.photos[i] ? '' : 'bg-gray-800 border-2 border-dashed border-gray-700'
                 }`}>
                   {formData.photos[i] ? (
@@ -249,7 +249,7 @@ export default function EditProfile() {
                   className="hidden" 
                 />
                 <span className="text-[10px] text-gray-500 absolute -bottom-4 left-0 right-0 text-center">
-                  {i === 0 ? 'Main' : `Photo ${i + 1}`}
+                  {i === 0 ? '📸 Main' : `Photo ${i + 1}`}
                 </span>
               </label>
             ))}
