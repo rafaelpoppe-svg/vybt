@@ -96,7 +96,7 @@ export default function PlanCountdown({ plan, size = 'md' }) {
     return (
       <div className={`${sizes[size]} rounded-full bg-gray-800 text-gray-300 font-medium flex items-center gap-1.5`}>
         <Clock className="w-4 h-4" />
-        <span>Começa em {timeLeft}</span>
+        <span>Starts in {timeLeft}</span>
       </div>
     );
   }
