@@ -424,49 +424,21 @@ export default function Explore() {
                 )
               ) : userSubTab === 'requests' ? (
                 receivedFriendRequests.length > 0 ? (
-                  <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
                     {receivedFriendRequests.map((request) => {
                       const requester = profilesMap[request.user_id];
+                      if (!requester) return null;
                       return (
-                        <motion.div
+                        <UserCard
                           key={request.id}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="p-4 rounded-2xl bg-gray-900 border border-gray-800 flex items-center gap-3"
-                        >
-                          <div
-                            onClick={() => navigate(createPageUrl('UserProfile') + `?id=${request.user_id}`)}
-                            className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden cursor-pointer flex-shrink-0"
-                          >
-                            {requester?.photos?.[0] ? (
-                              <img src={requester.photos[0]} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                              <span className="text-white font-bold">{requester?.display_name?.[0] || '?'}</span>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-white font-medium truncate">{requester?.display_name || 'User'}</p>
-                            <p className="text-gray-500 text-xs">Wants to be your friend</p>
-                          </div>
-                          <div className="flex gap-2 flex-shrink-0">
-                            <motion.button
-                              whileTap={{ scale: 0.9 }}
-                              onClick={() => acceptMutation.mutate(request.id)}
-                              disabled={acceptMutation.isPending}
-                              className="w-9 h-9 rounded-full bg-[#00c6d2] flex items-center justify-center"
-                            >
-                              <Check className="w-4 h-4 text-[#0b0b0b]" />
-                            </motion.button>
-                            <motion.button
-                              whileTap={{ scale: 0.9 }}
-                              onClick={() => declineMutation.mutate(request.id)}
-                              disabled={declineMutation.isPending}
-                              className="w-9 h-9 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center"
-                            >
-                              <X className="w-4 h-4 text-gray-400" />
-                            </motion.button>
-                          </div>
-                        </motion.div>
+                          profile={requester}
+                          myProfile={myProfile}
+                          currentUser={currentUser}
+                          isFriend={false}
+                          isPendingSent={false}
+                          mode="request"
+                          friendshipId={request.id}
+                        />
                       );
                     })}
                   </div>
