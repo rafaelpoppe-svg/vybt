@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import HighlightStoryModal from '../components/story/HighlightStoryModal';
 import CameraView from '../components/story/CameraView';
+import GalleryUpload from '../components/story/GalleryUpload';
 
 // Step 1: Select Plan
 function StepSelectPlan({ activePlans, myParticipations, selectedPlan, onSelect, onNext }) {
