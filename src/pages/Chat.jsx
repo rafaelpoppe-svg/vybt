@@ -125,20 +125,37 @@ export default function Chat() {
   const sendDMMutation = useMutation({
     mutationFn: async (content) => {
       if (!currentUser?.id || !selectedFriendId) return;
-      await base44.entities.ChatMessage.create({
+      const msg = await base44.entities.ChatMessage.create({
         sender_id: currentUser.id,
         receiver_id: selectedFriendId,
         message_type: 'direct',
         content,
         is_read: false,
       });
-      await notifyNewDirectMessage(
+      notifyNewDirectMessage(
         selectedFriendId,
         currentUser.id,
         myProfile?.display_name || currentUser.full_name || 'Alguém'
       );
+      return msg;
     },
-    onSuccess: () => setNewMessage(''),
+    onMutate: (content) => {
+      // Optimistic update: add message instantly for the sender
+      const optimisticMsg = {
+        id: `optimistic-${Date.now()}`,
+        sender_id: currentUser.id,
+        receiver_id: selectedFriendId,
+        message_type: 'direct',
+        content,
+        is_read: false,
+        created_date: new Date().toISOString(),
+      };
+      queryClient.setQueryData(['dmMessages', selectedFriendId, currentUser.id], (old = []) => [...old, optimisticMsg]);
+      setNewMessage('');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['dmMessages', selectedFriendId, currentUser.id]);
+    },
   });
 
   // ── DM Chat View ─────────────────────────────────────────────────────────
