@@ -274,15 +274,17 @@ export default function Profile() {
           )}
         </div>
 
-        {/* ── Photo Strip ── */}
+        {/* ── Photo Strip (photos 2–5, first is avatar) ── */}
         {photos.length > 1 && (
           <div className="mt-4 flex gap-2 overflow-x-auto scrollbar-hide" data-hscroll="1">
-            {photos.map((photo, i) => (
-              <img
+            {photos.slice(1).map((photo, i) => (
+              <motion.img
                 key={i}
+                whileTap={{ scale: 0.96 }}
                 src={photo}
-                alt={`photo-${i}`}
-                className="w-24 h-32 rounded-xl object-cover flex-shrink-0 border border-gray-800"
+                alt={`photo-${i + 2}`}
+                onClick={() => setExpandedPhoto(photo)}
+                className="w-24 h-32 rounded-xl object-cover flex-shrink-0 border border-gray-800 cursor-pointer"
               />
             ))}
           </div>
