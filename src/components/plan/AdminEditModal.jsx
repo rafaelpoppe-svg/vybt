@@ -24,7 +24,11 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
     cover_image: plan?.cover_image || '',
     theme_color: plan?.theme_color || '#00c6d2',
     tags: plan?.tags || [],
-    chat_background_theme: plan?.chat_background_theme || 'default'
+    chat_background_theme: plan?.chat_background_theme || 'default',
+    is_private: plan?.is_private ?? false,
+    show_in_explore: plan?.show_in_explore ?? true,
+    show_in_map: plan?.show_in_map ?? true,
+    audience_restrictions: plan?.audience_restrictions || {},
   });
   const [uploading, setUploading] = useState(false);
 
