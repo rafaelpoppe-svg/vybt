@@ -435,8 +435,11 @@ export default function StoryView() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${storyPlan.id}`)}
-            className="w-full p-3 rounded-xl backdrop-blur-sm flex items-center gap-3 border border-white/10"
-            style={{ backgroundColor: storyPlan.theme_color ? `${storyPlan.theme_color}33` : 'rgba(255,255,255,0.1)' }}
+            className="w-full p-3 rounded-xl backdrop-blur-sm flex items-center gap-3 border-2 hover:shadow-lg transition-all"
+            style={{
+              backgroundColor: storyPlan.theme_color ? `${storyPlan.theme_color}44` : 'rgba(255,255,255,0.1)',
+              borderColor: storyPlan.theme_color ? `${storyPlan.theme_color}80` : 'rgba(255,255,255,0.2)'
+            }}
           >
             {storyPlan.group_image ? (
               <img src={storyPlan.group_image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-white/20" />
