@@ -458,24 +458,26 @@ export default function StoryView() {
           </motion.button>
         )}
 
-        {/* Chat and Reaction Buttons */}
+        {/* Interaction Buttons */}
         <div className="flex gap-3 items-center">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {/* Handle send chat */}}
-            className="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
-          >
-            <MessageCircle className="w-5 h-5 text-white" />
-            <span className="text-white font-medium">Enviar Mensagem</span>
-          </motion.button>
+          {canChat && (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowChatInput(true)}
+              className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-[#00c6d2]/80 to-[#00c6d2] text-[#0b0b0b] font-bold backdrop-blur-sm border border-[#00c6d2]/50 hover:shadow-lg hover:shadow-[#00c6d2]/30 transition-all"
+            >
+              <MessageCircle className="w-5 h-5" />
+              <span>Send Chat</span>
+            </motion.button>
+          )}
 
           <div className="relative">
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+              className="p-3 rounded-xl bg-gradient-to-r from-[#542b9b]/80 to-[#542b9b] text-white backdrop-blur-sm border border-[#542b9b]/50 hover:shadow-lg hover:shadow-[#542b9b]/30 transition-all"
             >
-              <Smile className="w-5 h-5 text-white" />
+              <span className="text-xl">💬</span>
             </motion.button>
 
             {showEmojiPicker && (
@@ -483,14 +485,14 @@ export default function StoryView() {
                 initial={{ opacity: 0, scale: 0.8, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                className="absolute bottom-16 right-0 bg-gray-900 border border-gray-700 rounded-xl p-3 z-50 flex gap-2"
+                className="absolute bottom-16 right-0 bg-gray-900 border border-[#542b9b]/50 rounded-xl p-2 z-50 flex flex-col gap-2"
               >
                 {emojis.map((emoji) => (
                   <motion.button
                     key={emoji}
-                    whileTap={{ scale: 1.2 }}
+                    whileTap={{ scale: 1.3 }}
                     onClick={() => handleEmojiSelect(emoji)}
-                    className="text-2xl hover:scale-110 transition-transform"
+                    className="text-2xl hover:scale-125 transition-transform"
                   >
                     {emoji}
                   </motion.button>
@@ -499,6 +501,15 @@ export default function StoryView() {
             )}
           </div>
         </div>
+
+        {showChatInput && canChat && (
+          <StoryChatInput
+            storyId={story?.id}
+            storyUser={storyUser}
+            onMessageSent={handleChatSent}
+            onClose={() => setShowChatInput(false)}
+          />
+        )}
       </div>
     <ReportContentModal
         isOpen={showReportModal}
