@@ -112,10 +112,33 @@ function FlyToCity({ coords }) {
   return null;
 }
 
-export default function HomeLiveMap({ plans = [], allParticipants = [], city = '', onPlanClick }) {
+const POI_TYPE_ICON = { club: '🪩', bar: '🍺', pub: '🍻', event_venue: '🎪', restaurant: '🍽️' };
+const POI_COLOR = '#f59e0b';
+
+function createPoiIcon(poi) {
+  const emoji = POI_TYPE_ICON[poi.type] || '📍';
+  return L.divIcon({
+    className: '',
+    html: `
+      <div class="hlm-icon-root" style="position:relative;width:40px;height:52px;display:flex;flex-direction:column;align-items:center;pointer-events:auto;cursor:pointer;">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#b45309,${POI_COLOR});border:2px solid ${POI_COLOR};display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 0 8px ${POI_COLOR}88;margin-top:4px;flex-shrink:0;">
+          ${emoji}
+        </div>
+        <div style="width:2px;height:6px;background:${POI_COLOR};margin-top:2px;border-radius:1px;opacity:0.8;flex-shrink:0;"></div>
+        <div style="width:5px;height:5px;background:${POI_COLOR};border-radius:50%;opacity:0.6;flex-shrink:0;"></div>
+      </div>
+    `,
+    iconSize: [40, 52],
+    iconAnchor: [20, 52],
+  });
+}
+
+export default function HomeLiveMap({ plans = [], allParticipants = [], city = '', pois = [], onPlanClick }) {
   const [flyCoords, setFlyCoords] = useState(null);
   const [mapReady, setMapReady] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [selectedPoi, setSelectedPoi] = useState(null);
+  const [mapMode, setMapMode] = useState('plans'); // 'plans' | 'pois' | 'all'
 
   useEffect(() => {
     if (!city) return;
