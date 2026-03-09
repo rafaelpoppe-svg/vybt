@@ -43,7 +43,7 @@ export default function BottomNav() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40"
+            className="fixed inset-0 z-650"
             onClick={() => setShowMenu(false)}
           />
         )}
@@ -57,7 +57,7 @@ export default function BottomNav() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-            className="fixed z-50 flex flex-col gap-3 items-center"
+            className="fixed z-700 flex flex-col gap-3 items-center"
             style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 90px)', left: '50%', transform: 'translateX(-50%)' }}
           >
             <motion.button
@@ -85,7 +85,7 @@ export default function BottomNav() {
         )}
       </AnimatePresence>
 
-      <nav className="fixed bottom-0 z-50 bg-[#0b0b0b]/90 backdrop-blur-2xl border-t border-[#00fea3]/10"
+      <nav className="fixed bottom-0 z-700 bg-[#0b0b0b]/90 backdrop-blur-2xl border-t border-[#00fea3]/10"
         style={{ left: 0, right: 0, width: '100%', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)' }}
       >
         <div className="flex items-center justify-around px-2 py-2">
