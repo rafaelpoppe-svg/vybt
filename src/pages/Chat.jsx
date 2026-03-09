@@ -309,27 +309,80 @@ export default function Chat() {
           friendships.length > 0 ? (
             friendships.map((f) => {
               const friend = profilesMap[f.friend_id];
+              // get conversation messages between me and this friend
+              const convoMsgs = allDMMessages.filter(m =>
+                (m.sender_id === currentUser?.id && m.receiver_id === f.friend_id) ||
+                (m.sender_id === f.friend_id && m.receiver_id === currentUser?.id)
+              ).sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+              const lastMsg = convoMsgs[0];
+              const mySentCount = convoMsgs.filter(m => m.sender_id === currentUser?.id).length;
+              const unreadCount = convoMsgs.filter(m => m.sender_id === f.friend_id && !m.is_read).length;
+              const isLastMine = lastMsg?.sender_id === currentUser?.id;
+              const previewText = lastMsg
+                ? lastMsg.content.startsWith('sticker:')
+                  ? '🖼 Sticker'
+                  : lastMsg.content
+                : null;
+
               return (
                 <motion.button
                   key={f.id}
-                  whileTap={{ scale: 0.98 }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={() => setSelectedFriendId(f.friend_id)}
-                  className="w-full p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center gap-3 text-left"
+                  className="w-full rounded-2xl bg-gray-900/80 border border-gray-800/60 overflow-hidden text-left active:bg-gray-800/80 transition-colors"
                 >
-                  <div className="w-12 h-12 rounded-full bg-gray-800 overflow-hidden flex-shrink-0">
-                    {friend?.photos?.[0] ? (
-                      <img src={friend.photos[0]} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-white font-bold">{friend?.display_name?.[0] || '?'}</span>
+                  <div className="flex items-center gap-3 p-4">
+                    {/* Avatar with online-like ring when has unread */}
+                    <div className={`relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 ${unreadCount > 0 ? 'ring-2 ring-[#00c6d2]' : ''}`}>
+                      {friend?.photos?.[0] ? (
+                        <img src={friend.photos[0]} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2] flex items-center justify-center">
+                          <span className="text-white font-bold text-lg">{friend?.display_name?.[0] || '?'}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <p className={`font-semibold truncate ${unreadCount > 0 ? 'text-white' : 'text-gray-200'}`}>
+                          {friend?.display_name || 'User'}
+                        </p>
+                        {lastMsg && (
+                          <span className="text-xs text-gray-600 flex-shrink-0 ml-2">
+                            {new Date(lastMsg.created_date).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        )}
                       </div>
-                    )}
+
+                      <div className="flex items-center justify-between gap-2">
+                        <p className={`text-sm truncate flex-1 ${unreadCount > 0 ? 'text-gray-300 font-medium' : 'text-gray-500'}`}>
+                          {previewText
+                            ? <>{isLastMine && <span className="text-[#00c6d2]">Tu: </span>}{previewText}</>
+                            : <span className="italic text-gray-600">Inicia uma conversa 👋</span>
+                          }
+                        </p>
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                          {mySentCount > 0 && (
+                            <span className="text-xs text-gray-600 bg-gray-800 px-1.5 py-0.5 rounded-full">
+                              {mySentCount} sent
+                            </span>
+                          )}
+                          {unreadCount > 0 && (
+                            <span className="w-5 h-5 rounded-full bg-[#00c6d2] text-[#0b0b0b] text-xs font-bold flex items-center justify-center">
+                              {unreadCount}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white font-semibold truncate">{friend?.display_name || 'User'}</p>
-                    {friend?.city && <p className="text-gray-500 text-sm truncate">{friend.city}</p>}
-                  </div>
-                  <ChevronLeft className="w-4 h-4 text-gray-600 rotate-180 flex-shrink-0" />
+
+                  {/* Bottom accent bar if has unread */}
+                  {unreadCount > 0 && (
+                    <div className="h-0.5 bg-gradient-to-r from-[#00c6d2] to-[#542b9b]" />
+                  )}
                 </motion.button>
               );
             })
