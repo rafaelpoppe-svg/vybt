@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, Clock, Users, Sparkles, Calendar, Heart, Music, Flame } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, Clock, Users, Sparkles, Calendar, Heart, Music, Flame, Zap } from 'lucide-react';
 import { format } from 'date-fns';
 import PlanCountdown from '../plan/PlanCountdown';
 
