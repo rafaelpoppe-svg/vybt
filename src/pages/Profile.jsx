@@ -118,7 +118,7 @@ export default function Profile() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24" style={{ WebkitOverflowScrolling: 'touch' }}>
+    <div className="min-h-screen overflow-y-auto overflow-x-hidden pb-24" style={{ WebkitOverflowScrolling: 'touch', background: getThemeBackground(profile?.profile_background_theme) }}>
 
       {/* ── Top Bar: Settings + Notifications ── */}
       <div
