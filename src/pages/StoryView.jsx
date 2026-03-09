@@ -281,7 +281,11 @@ export default function StoryView() {
   }
 
   return (
-    <div className="fixed inset-0 bg-black z-50">
+    <div 
+      className="fixed inset-0 bg-black z-50"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Progress bars */}
       <div className="absolute top-0 left-0 right-0 h-1 z-10 flex gap-1 px-2 pt-2">
         {allStories.map((_, index) => (
