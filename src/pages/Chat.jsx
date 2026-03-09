@@ -71,7 +71,15 @@ export default function Chat() {
   const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
   const selectedFriendProfile = profilesMap[selectedFriendId];
 
-  // DM Messages
+  // All DMs for list previews
+  const { data: allDMMessages = [] } = useQuery({
+    queryKey: ['allDMMessages', currentUser?.id],
+    queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'direct' }),
+    enabled: !!currentUser?.id,
+    staleTime: 0,
+  });
+
+  // DM Messages for active chat
   const { data: dmMessages = [], isLoading: dmLoading } = useQuery({
     queryKey: ['dmMessages', selectedFriendId, currentUser?.id],
     queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'direct' }),
