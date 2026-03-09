@@ -328,6 +328,9 @@ export default function GroupChat() {
   return (
     <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" style={{ height: '100dvh' }}>
 
+      {/* Chat background theme (emojis) */}
+      <GroupChatBackground theme={plan?.chat_background_theme} />
+
       {/* Background blur from group image */}
       {plan?.group_image && (
         <div
