@@ -35,6 +35,7 @@ const STEPS = [
   { id: 3, label: 'Time', emoji: '⏰' },
   { id: 4, label: 'Location', emoji: '📍' },
   { id: 5, label: 'Vibe', emoji: '🎉' },
+  { id: 6, label: 'Privacy', emoji: '🔒' },
 ];
 
 const slideVariants = {
@@ -57,7 +58,9 @@ export default function CreatePlan() {
   const [data, setData] = useState({
     title: '', description: '', date: '', time: '', end_time: '',
     location_address: '', city: '', tags: [],
-    cover_image: '', group_image: '', theme_color: '#00c6d2'
+    cover_image: '', group_image: '', theme_color: '#00c6d2',
+    is_private: false, show_in_explore: true, show_in_map: true,
+    audience_restrictions: {}
   });
 
   const todayStr = new Date().toISOString().split('T')[0];
@@ -118,10 +121,12 @@ export default function CreatePlan() {
     if (step === 3) return !!data.time && !!data.end_time && isEndTimeValid(data.time, data.end_time);
     if (step === 4) return !!data.location_address && !!data.city;
     if (step === 5) return data.tags.length >= 1;
+    if (step === 6) return true; // Privacy is always optional/valid
     return false;
   };
 
   const handleSubmit = async () => {
+    if (step < 6) { goNext(); return; }
     setLoading(true);
     const user = await base44.auth.me();
     let latitude = null, longitude = null;
