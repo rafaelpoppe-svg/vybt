@@ -18,6 +18,20 @@ import { useProfileThemeContext } from '../components/common/ProfileThemeContext
 import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
 import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
 
+const THEME_BACKGROUNDS = {
+  default:    'linear-gradient(160deg, #0b0b0b 0%, #111118 100%)',
+  beer:       'linear-gradient(160deg, #1a0e00 0%, #0b0b0b 50%, #0b0b0b 100%)',
+  dance:      'linear-gradient(160deg, #1a0a2e 0%, #0b0b0b 50%, #0b0b0b 100%)',
+  champagne:  'linear-gradient(160deg, #1c1500 0%, #0b0b0b 50%, #0b0b0b 100%)',
+  money:      'linear-gradient(160deg, #001a0a 0%, #0b0b0b 50%, #0b0b0b 100%)',
+  luxury:     'linear-gradient(160deg, #0a0a1f 0%, #0b0b0b 50%, #0b0b0b 100%)',
+  party:      'linear-gradient(160deg, #1a0010 0%, #0b0b0b 50%, #0b0b0b 100%)',
+};
+
+function getThemeBackground(theme) {
+  return THEME_BACKGROUNDS[theme] || THEME_BACKGROUNDS.default;
+}
+
 export default function Profile() {
   const navigate = useNavigate();
   const { t } = useLanguage();
