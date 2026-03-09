@@ -22,7 +22,8 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
     location_address: plan?.location_address || '',
     cover_image: plan?.cover_image || '',
     theme_color: plan?.theme_color || '#00fea3',
-    tags: plan?.tags || []
+    tags: plan?.tags || [],
+    chat_background_theme: plan?.chat_background_theme || 'default'
   });
   const [uploading, setUploading] = useState(false);
 
