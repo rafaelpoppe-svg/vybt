@@ -47,7 +47,7 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true,
     <div className={`flex gap-2 items-end ${isMe ? 'flex-row-reverse' : 'flex-row'} group`}>
       {/* Avatar - only for the other person */}
       {!isMe && <Avatar />}
-      {isMe && <div className="w-7 flex-shrink-0" />}
+
 
       <div className={`max-w-[72%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
         {/* Bubble */}
