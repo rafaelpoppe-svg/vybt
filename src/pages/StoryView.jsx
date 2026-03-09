@@ -210,7 +210,20 @@ export default function StoryView() {
   }, [story]);
 
   const handleNext = () => {
-    if (currentStoryIndex < allStories.length - 1) {
+    if (groupedStories.length > 0) {
+      const group = groupedStories[currentGroupIndex];
+      if (currentStoryInGroupIndex < group.stories.length - 1) {
+        // Next story in group
+        setCurrentStoryInGroupIndex(currentStoryInGroupIndex + 1);
+      } else if (currentGroupIndex < groupedStories.length - 1) {
+        // Next group
+        setCurrentGroupIndex(currentGroupIndex + 1);
+        setCurrentStoryInGroupIndex(0);
+      } else {
+        // End of all stories
+        navigate(-1);
+      }
+    } else if (currentStoryIndex < allStories.length - 1) {
       setCurrentStoryIndex(currentStoryIndex + 1);
     } else {
       navigate(-1);
@@ -218,7 +231,17 @@ export default function StoryView() {
   };
 
   const handlePrevious = () => {
-    if (currentStoryIndex > 0) {
+    if (groupedStories.length > 0) {
+      if (currentStoryInGroupIndex > 0) {
+        // Previous story in group
+        setCurrentStoryInGroupIndex(currentStoryInGroupIndex - 1);
+      } else if (currentGroupIndex > 0) {
+        // Previous group (last story)
+        setCurrentGroupIndex(currentGroupIndex - 1);
+        const prevGroup = groupedStories[currentGroupIndex - 1];
+        setCurrentStoryInGroupIndex(prevGroup.stories.length - 1);
+      }
+    } else if (currentStoryIndex > 0) {
       setCurrentStoryIndex(currentStoryIndex - 1);
     }
   };
