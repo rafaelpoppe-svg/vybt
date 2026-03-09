@@ -305,7 +305,7 @@ export default function StoryView() {
       <button
         onClick={handlePrevious}
         className="absolute left-0 top-24 bottom-32 w-1/3 z-20"
-        disabled={currentStoryIndex === 0}
+        disabled={currentStoryInGroupIndex === 0 && currentGroupIndex === 0}
       />
       <button
         onClick={handleNext}
