@@ -324,6 +324,40 @@ export default function GroupChat() {
     return null;
   }
 
+  // ── Non-member gate ────────────────────────────────────────────────────────
+  const isMember = !!myParticipation;
+  const participantsLoaded = participants !== undefined;
+
+  if (currentUser && participantsLoaded && !isMember) {
+    return (
+      <div className="flex flex-col items-center justify-center bg-[#0b0b0b] text-center px-6 gap-6" style={{ height: '100dvh' }}>
+        <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0"
+          style={{ background: `linear-gradient(135deg, ${plan?.theme_color || '#00c6d2'}60, #542b9b60)` }}>
+          {plan?.cover_image
+            ? <img src={plan.cover_image} className="w-full h-full object-cover" alt="" />
+            : <span className="flex items-center justify-center w-full h-full text-4xl">🎉</span>}
+        </div>
+        <div>
+          <h2 className="text-white font-bold text-xl mb-1">{plan?.title || 'Plano'}</h2>
+          <p className="text-gray-400 text-sm">Junta-te ao plano para acederes ao grupo e conversar.</p>
+        </div>
+        <button
+          onClick={() => navigate(createPageUrl('PlanDetails') + '?id=' + planId)}
+          className="px-8 py-3 rounded-2xl font-bold text-[#0b0b0b] text-base"
+          style={{ background: `linear-gradient(135deg, ${plan?.theme_color || '#00c6d2'}, #542b9b)` }}
+        >
+          Join Plan
+        </button>
+        <button
+          onClick={() => navigate(createPageUrl('Chat'))}
+          className="text-gray-500 text-sm"
+        >
+          ← Voltar
+        </button>
+      </div>
+    );
+  }
+
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" style={{ height: '100dvh' }}>
