@@ -4,32 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { 
-  Users, PartyPopper, Camera, ChevronRight, 
-  Edit2, Loader2, Bell, MapPin, Clapperboard, Music2, Sparkles, Settings, ShieldCheck, Trophy, Plus, MessageCircle
+import {
+  Camera, Loader2, Bell, Settings, ShieldCheck, ShieldX,
+  PartyPopper, Users, Edit2, Trophy, Music2, ChevronRight
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import BottomNav from '../components/common/BottomNav';
 import VibeTag, { vibeConfig } from '../components/common/VibeTag';
-import PartyTag, { partyTagConfig } from '../components/common/PartyTag';
+import PartyTag from '../components/common/PartyTag';
 import VerificationBadge from '../components/profile/VerificationBadge';
 import VerificationFlow from '../components/profile/VerificationFlow';
 import { useLanguage } from '../components/common/LanguageContext';
 import { useProfileThemeContext } from '../components/common/ProfileThemeContext';
 import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
-import { BACKGROUND_THEMES } from '../components/profile/BackgroundThemeSelector';
 import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
-import ProfilePlansCarousel from '../components/profile/ProfilePlansCarousel';
-import ProfileAboutSection from '../components/profile/ProfileAboutSection';
 
 export default function Profile() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { setProfileTheme } = useProfileThemeContext();
   const [currentUser, setCurrentUser] = useState(null);
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [showVerification, setShowVerification] = useState(false);
-  const [activeTab, setActiveTab] = useState('posts');
+  const [activeTab, setActiveTab] = useState('stories');
 
   useEffect(() => {
     const getUser = async () => {
@@ -73,11 +68,28 @@ export default function Profile() {
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 100),
   });
 
+  // Fetch friend profiles for friends tab
+  const friendIds = friendships.map(f => f.friend_id);
+  const { data: friendProfiles = [] } = useQuery({
+    queryKey: ['friendProfiles', friendIds.join(',')],
+    queryFn: async () => {
+      const results = await Promise.all(
+        friendIds.map(id => base44.entities.UserProfile.filter({ user_id: id }))
+      );
+      return results.flat();
+    },
+    enabled: friendIds.length > 0
+  });
+
   const myPlans = allPlans.filter(plan =>
     participations.some(p => p.plan_id === plan.id)
   );
 
-  // Update theme context when profile loads
+  // Only show upcoming/happening plans (not ended, voting, terminated)
+  const activePlans = myPlans.filter(plan =>
+    ['upcoming', 'happening'].includes(plan.status)
+  );
+
   useEffect(() => {
     if (profile?.profile_background_theme) {
       setProfileTheme(profile.profile_background_theme);
@@ -94,263 +106,267 @@ export default function Profile() {
 
   const photos = profile.photos?.filter(Boolean) || [];
   const hasPhotos = photos.length > 0;
+  const nationalityInfo = profile.nationality ? NATIONALITIES.find(n => n.code === profile.nationality) : null;
+  const age = profile.date_of_birth
+    ? Math.floor((new Date() - new Date(profile.date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000))
+    : null;
+
+  const tabs = [
+    { id: 'stories', icon: <Camera className="w-5 h-5" /> },
+    { id: 'plans', icon: <PartyPopper className="w-5 h-5" /> },
+    { id: 'friends', icon: <Users className="w-5 h-5" /> },
+  ];
 
   return (
-    <div className="h-screen overflow-y-auto overflow-x-hidden pb-24 bg-[#0b0b0b]" style={{ WebkitOverflowScrolling: 'touch' }}>
+    <div className="min-h-screen bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-24" style={{ WebkitOverflowScrolling: 'touch' }}>
 
-      {/* ── Header: Name, Stats, Actions ── */}
-      <div className="sticky top-0 z-40 bg-[#0b0b0b] border-b border-gray-800 px-4 py-3" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
-        <div className="flex items-start justify-between gap-4">
-          {/* Left: Profile pic small + Username + Bio preview */}
-          <div className="flex gap-3 flex-1 min-w-0">
-            <motion.div className="flex-shrink-0">
-              {hasPhotos ? (
-                <img
-                  src={photos[0]}
-                  alt="profile"
-                  className="w-14 h-14 rounded-full object-cover border-2 border-gray-700"
-                />
-              ) : (
-                <div className="w-14 h-14 rounded-full bg-gray-800 border-2 border-gray-700 flex items-center justify-center">
-                  <Camera className="w-6 h-6 text-gray-600" />
-                </div>
-              )}
-            </motion.div>
-            
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <h2 className="font-bold text-white truncate">{profile.display_name || currentUser.full_name}</h2>
-                <VerificationBadge isVerified={profile.is_verified} size="xs" />
+      {/* ── Top Bar: Settings + Notifications ── */}
+      <div
+        className="flex items-center justify-between px-4 pt-3 pb-2"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}
+      >
+        {/* Nationality tag */}
+        <div className="flex items-center gap-1.5">
+          {nationalityInfo && (
+            <div className="flex items-center gap-1 bg-gray-800/70 rounded-full px-2.5 py-1">
+              <span className="text-base leading-none">{nationalityInfo.flag}</span>
+              <span className="text-xs text-gray-300 font-medium">{nationalityInfo.name}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Action icons top right */}
+        <div className="flex items-center gap-1">
+          {/* Verify badge / verify button */}
+          {profile.is_verified ? (
+            <div className="flex items-center gap-1 bg-blue-500/20 rounded-full px-2.5 py-1 mr-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+              <span className="text-xs text-blue-400 font-medium">Verified</span>
+            </div>
+          ) : (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowVerification(true)}
+              className="flex items-center gap-1 bg-gray-800/70 rounded-full px-2.5 py-1 mr-1"
+            >
+              <ShieldX className="w-3.5 h-3.5 text-gray-400" />
+              <span className="text-xs text-gray-400 font-medium">Verify</span>
+            </motion.button>
+          )}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate(createPageUrl('Notifications'))}
+            className="p-2 hover:bg-gray-900 rounded-lg transition-colors relative"
+          >
+            <Bell className="w-5 h-5 text-white" />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full" />
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate(createPageUrl('Settings'))}
+            className="p-2 hover:bg-gray-900 rounded-lg transition-colors"
+          >
+            <Settings className="w-5 h-5 text-gray-300" />
+          </motion.button>
+        </div>
+      </div>
+
+      {/* ── Profile Card ── */}
+      <div className="px-4 pb-4">
+        <div className="flex gap-4 items-start">
+          {/* Profile Photo */}
+          <motion.div
+            whileTap={{ scale: 0.97 }}
+            onClick={() => navigate(createPageUrl('EditProfile'))}
+            className="flex-shrink-0"
+          >
+            {hasPhotos ? (
+              <img
+                src={photos[0]}
+                alt="profile"
+                className="w-24 h-28 rounded-2xl object-cover border border-gray-700"
+              />
+            ) : (
+              <div className="w-24 h-28 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center">
+                <Camera className="w-8 h-8 text-gray-600" />
               </div>
-              {profile.bio && (
-                <p className="text-xs text-gray-400 line-clamp-2 mt-0.5">{profile.bio}</p>
+            )}
+          </motion.div>
+
+          {/* Name + Stats */}
+          <div className="flex-1 min-w-0 pt-1">
+            {/* Name + age */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="font-bold text-white text-lg leading-tight">
+                {profile.display_name || currentUser.full_name}
+              </h2>
+              {age && (
+                <span className="text-sm font-semibold text-[#00fea3]">{age}y</span>
               )}
             </div>
-          </div>
 
-          {/* Right: Action icons */}
-          <div className="flex gap-2 flex-shrink-0">
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => navigate(createPageUrl('Notifications'))}
-              className="p-2 hover:bg-gray-900 rounded-lg transition-colors relative"
-            >
-              <Bell className="w-5 h-5 text-white" />
-              <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full" />
-            </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => navigate(createPageUrl('EditProfile'))}
-              className="p-2 hover:bg-gray-900 rounded-lg transition-colors"
-            >
-              <Edit2 className="w-5 h-5 text-white" />
-            </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => navigate(createPageUrl('Settings'))}
-              className="p-2 hover:bg-gray-900 rounded-lg transition-colors"
-            >
-              <Settings className="w-5 h-5 text-gray-400" />
-            </motion.button>
+            {/* Stats */}
+            <div className="flex gap-4 mt-2">
+              {[
+                { value: myStories.length, label: 'stories' },
+                { value: friendships.length, label: 'amigos' },
+                { value: activePlans.length, label: 'plans' },
+              ].map(({ value, label }) => (
+                <div key={label} className="flex flex-col items-center">
+                  <p className="text-base font-bold text-white leading-tight">{value}</p>
+                  <p className="text-[10px] text-gray-400 leading-tight">{label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Bio */}
+            {profile.bio && (
+              <p className="text-xs text-gray-300 mt-2 line-clamp-3">{profile.bio}</p>
+            )}
           </div>
         </div>
-      </div>
 
-      {/* ── Stats Row ── */}
-      <div className="px-4 py-4 border-b border-gray-800">
-        <div className="flex justify-between">
-          {[
-            { value: myStories.length, label: t.stories },
-            { value: friendships.length, label: t.friends },
-            { value: participations.length, label: t.parties },
-          ].map(({ value, label }) => (
-            <motion.div key={label} className="flex flex-col items-center">
-              <p className="text-lg font-bold text-white">{value}</p>
-              <p className="text-xs text-gray-400">{label}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Action Buttons ── */}
-      <div className="px-4 py-3 flex gap-2 border-b border-gray-800">
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate(createPageUrl('EditProfile'))}
-          className="flex-1 py-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm font-medium"
-        >
-          {t.editProfile}
-        </motion.button>
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          className="flex-1 py-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm font-medium flex items-center justify-center gap-1.5"
-        >
-          <Users className="w-4 h-4" />
-          {t.friends}
-        </motion.button>
-      </div>
-
-      {/* ── Bio + Location ── */}
-      <div className="px-4 py-3 border-b border-gray-800 space-y-2">
-        {profile.bio && (
-          <p className="text-sm text-gray-300">{profile.bio}</p>
-        )}
-        <div className="flex items-center gap-2 text-xs text-gray-400">
-          {profile.city && (
-            <>
-              <MapPin className="w-3.5 h-3.5" />
-              <span>{profile.city}</span>
-            </>
-          )}
-          {profile.nationality && (() => {
-            const nat = NATIONALITIES.find(n => n.code === profile.nationality);
-            return nat ? (
-              <>
-                <span className="text-base">{nat.flag}</span>
-                <span>{nat.name}</span>
-              </>
-            ) : null;
-          })()}
-        </div>
-      </div>
-
-      {/* ── Stories Carousel (Like Instagram Stories) ── */}
-      <div className="px-4 py-4 border-b border-gray-800">
-        <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
-          {/* Add Story Button */}
+        {/* ── Action Buttons ── */}
+        <div className="flex gap-2 mt-4">
           <motion.button
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate(createPageUrl('AddStory'))}
-            className="flex-shrink-0 w-16 h-20 rounded-xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center hover:border-gray-600 transition-colors"
+            onClick={() => navigate(createPageUrl('EditProfile'))}
+            className="flex-1 py-2.5 bg-[#7c3aed] rounded-xl text-white text-sm font-semibold"
           >
-            <Plus className="w-6 h-6 text-gray-400 mb-1" />
-            <span className="text-[10px] text-gray-400">Novo</span>
+            {t.editProfile}
           </motion.button>
-
-          {/* Story circles - show multiple photos as stories */}
-          {photos.map((photo, idx) => (
+          {profile.ambassador_opted_in && (
             <motion.button
-              key={idx}
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate(createPageUrl('StoryView') + `?id=${photo}`)}
-              className="flex-shrink-0 flex flex-col items-center gap-1.5"
+              onClick={() => navigate(createPageUrl('Ambassador'))}
+              className="flex-1 py-2.5 bg-[#7c3aed] rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-1.5"
             >
-              <div className="w-16 h-16 rounded-full border-2 border-[#00fea3] overflow-hidden bg-gray-800">
-                <img src={photo} alt="" className="w-full h-full object-cover" />
-              </div>
-              <span className="text-[10px] text-gray-400 text-center truncate w-16">{`Foto ${idx + 1}`}</span>
+              <Trophy className="w-4 h-4" />
+              Ambassador
             </motion.button>
-          ))}
+          )}
+          {!profile.ambassador_opted_in && (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate(createPageUrl('Friends'))}
+              className="flex-1 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-1.5"
+            >
+              <Users className="w-4 h-4" />
+              {t.friends}
+            </motion.button>
+          )}
         </div>
+
+        {/* ── Vibes ── */}
+        {profile.vibes && profile.vibes.length > 0 && (
+          <div className="mt-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Music2 className="w-4 h-4 text-[#00fea3]" />
+              <span className="text-sm font-semibold text-white">Vibes</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {profile.vibes.map(vibe => (
+                <VibeTag key={vibe} vibe={vibe} size="sm" />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── Tabs ── */}
-      <div className="sticky top-[calc(env(safe-area-inset-top,0px)+60px)] z-30 bg-[#0b0b0b] border-b border-gray-800 px-4 flex gap-6">
-        {[
-          { id: 'posts', label: '📸', icon: true },
-          { id: 'planos', label: '🎬', icon: true },
-          { id: 'sobre', label: '👤', icon: true },
-        ].map(tab => (
+      <div className="sticky top-0 z-30 bg-[#0b0b0b] border-b border-gray-800 flex">
+        {tabs.map(tab => (
           <motion.button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`py-3 px-1 border-b-2 transition-colors ${
-              activeTab === tab.id ? 'border-[#00fea3] text-white' : 'border-transparent text-gray-500'
+            className={`flex-1 py-3 flex items-center justify-center border-b-2 transition-colors ${
+              activeTab === tab.id
+                ? 'border-[#00fea3] text-[#00fea3]'
+                : 'border-transparent text-gray-500'
             }`}
           >
-            <span className="text-lg">{tab.label}</span>
+            {tab.icon}
           </motion.button>
         ))}
       </div>
 
-      {/* ── Tab Content: Grid/Feed ── */}
-      <div className="pb-24">
-        <AnimatePresence mode="wait">
-          {activeTab === 'posts' && (
-            <motion.div
-              key="posts"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <ProfileStoryGrid
-                stories={myStories}
-                onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
-              />
-            </motion.div>
-          )}
+      {/* ── Tab Content ── */}
+      <AnimatePresence mode="wait">
+        {activeTab === 'stories' && (
+          <motion.div key="stories" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <ProfileStoryGrid
+              stories={myStories}
+              onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+            />
+          </motion.div>
+        )}
 
-          {activeTab === 'planos' && (
-            <motion.div
-              key="planos"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="p-4"
-            >
-              <div className="space-y-3">
-                {myPlans.map(plan => (
-                  <motion.button
-                    key={plan.id}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                    className="w-full p-3 bg-gray-900 rounded-lg border border-gray-800 text-left hover:border-gray-700 transition-colors"
-                  >
-                    <p className="font-semibold text-white text-sm">{plan.title}</p>
-                    <p className="text-xs text-gray-400 mt-1">{plan.city} • {new Date(plan.date).toLocaleDateString()}</p>
-                  </motion.button>
-                ))}
-                {myPlans.length === 0 && (
-                  <p className="text-center text-gray-500 text-sm py-8">{t.noPlansFound}</p>
-                )}
-              </div>
-            </motion.div>
-          )}
-
-          {activeTab === 'sobre' && (
-            <motion.div
-              key="sobre"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="p-4 space-y-4"
-            >
-              <ProfileAboutSection profile={profile} />
-              
-              {/* Verification & Ambassador info */}
-              <div className="space-y-2 mt-6">
+        {activeTab === 'plans' && (
+          <motion.div key="plans" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4 space-y-3">
+            {activePlans.length === 0 ? (
+              <p className="text-center text-gray-500 text-sm py-10">{t.noPlansFound}</p>
+            ) : (
+              activePlans.map(plan => (
                 <motion.button
+                  key={plan.id}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => setShowVerification(true)}
-                  className={`w-full p-3 rounded-lg text-sm font-medium border flex items-center justify-between ${
-                    profile.is_verified
-                      ? 'bg-blue-500/10 border-blue-500/30 text-blue-400'
-                      : 'bg-gray-900 border-gray-800 text-white'
-                  }`}
+                  onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                  className="w-full p-3 bg-gray-900 rounded-xl border border-gray-800 text-left flex gap-3 items-center"
                 >
-                  <span>{profile.is_verified ? '✓ ' + t.profileVerified : t.verifyProfile}</span>
-                  {!profile.is_verified && <ChevronRight className="w-4 h-4" />}
+                  {plan.cover_image ? (
+                    <img src={plan.cover_image} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0">
+                      <PartyPopper className="w-5 h-5 text-gray-500" />
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <p className="font-semibold text-white text-sm truncate">{plan.title}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{plan.city} · {new Date(plan.date).toLocaleDateString()}</p>
+                    <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full mt-1 inline-block ${
+                      plan.status === 'happening' ? 'bg-green-500/20 text-green-400' : 'bg-gray-700 text-gray-300'
+                    }`}>
+                      {plan.status === 'happening' ? '🟢 Happening' : '📅 Upcoming'}
+                    </span>
+                  </div>
                 </motion.button>
+              ))
+            )}
+          </motion.div>
+        )}
 
-                {profile.ambassador_opted_in && (
-                  <motion.button
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate(createPageUrl('Ambassador'))}
-                    className={`w-full p-3 rounded-lg text-sm font-medium border flex items-center justify-between ${
-                      profile.is_ambassador
-                        ? 'bg-purple-500/10 border-purple-500/30 text-purple-400'
-                        : 'bg-gray-900 border-gray-800 text-white'
-                    }`}
-                  >
-                    <span>{profile.is_ambassador ? '🏆 Ambassador' : t.ambassadorProgram}</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </motion.button>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+        {activeTab === 'friends' && (
+          <motion.div key="friends" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4 space-y-3">
+            {friendships.length === 0 ? (
+              <p className="text-center text-gray-500 text-sm py-10">{t.noFriendsYet}</p>
+            ) : (
+              friendProfiles.map(fp => (
+                <motion.button
+                  key={fp.user_id}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => navigate(createPageUrl('UserProfile') + `?id=${fp.user_id}`)}
+                  className="w-full flex items-center gap-3 p-3 bg-gray-900 rounded-xl border border-gray-800"
+                >
+                  {fp.photos?.[0] ? (
+                    <img src={fp.photos[0]} className="w-11 h-11 rounded-full object-cover flex-shrink-0" />
+                  ) : (
+                    <div className="w-11 h-11 rounded-full bg-gray-800 flex items-center justify-center flex-shrink-0">
+                      <Users className="w-4 h-4 text-gray-500" />
+                    </div>
+                  )}
+                  <div className="text-left min-w-0">
+                    <p className="text-sm font-semibold text-white truncate">{fp.display_name || 'User'}</p>
+                    {fp.city && <p className="text-xs text-gray-400">{fp.city}</p>}
+                  </div>
+                  {fp.is_verified && (
+                    <ShieldCheck className="w-4 h-4 text-blue-400 ml-auto flex-shrink-0" />
+                  )}
+                </motion.button>
+              ))
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <BottomNav />
 
