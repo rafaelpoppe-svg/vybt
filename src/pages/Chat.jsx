@@ -282,8 +282,8 @@ export default function Chat() {
         {/* Tabs */}
         <div className="flex gap-2 px-4 pt-2 pb-3">
           {[
-            { key: 'groups', label: '🎉 Grupos', count: totalUnreadGroups },
-            { key: 'direct', label: '💬 Diretas', count: totalUnreadDMs },
+            { key: 'groups', label: '🎉 Groups', count: totalUnreadGroups },
+            { key: 'direct', label: '💬 Directs', count: totalUnreadDMs },
           ].map(({ key, label, count }) => (
             <motion.button
               key={key}
