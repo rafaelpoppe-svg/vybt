@@ -22,6 +22,7 @@ import {
   notifyPlanUnsuccessful,
 } from '../components/notifications/NotificationTriggers';
 import { useLanguage } from '../components/common/LanguageContext';
+import GroupChatBackground from '../components/chat/GroupChatBackground';
 
 export default function GroupChat() {
   const navigate = useNavigate();
