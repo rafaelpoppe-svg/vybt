@@ -227,7 +227,7 @@ export default function Home() {
             position: 'absolute', inset: 0, zIndex: 0,
             backgroundImage: `url(${cityBg})`,
             backgroundSize: 'cover', backgroundPosition: 'center',
-            opacity: 0.07,
+            opacity: 0.18,
             pointerEvents: 'none',
           }}
         />
