@@ -84,6 +84,11 @@ export default function Home() {
     checkOnboarding();
   }, []);
 
+  const { data: pois = [] } = useQuery({
+    queryKey: ['pois', city],
+    queryFn: () => city ? base44.entities.PointOfInterest.filter({ city }) : base44.entities.PointOfInterest.list(),
+  });
+
   const { data: plans = [], isLoading: plansLoading } = useQuery({
     queryKey: ['plans', city],
     queryFn: () => base44.entities.PartyPlan.filter({ city }, '-created_date', 20),
@@ -294,6 +299,7 @@ export default function Home() {
             plans={filteredMapPlans}
             allParticipants={allParticipants}
             city={city}
+            pois={pois}
             onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
           />
         </div>
