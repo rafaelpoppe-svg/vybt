@@ -269,8 +269,15 @@ export default function StoryView() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['storyReactions', story?.id]);
+      setShowEmojiPicker(false);
     }
   });
+
+  const emojis = ['❤️', '🔥', '😍', '🎉', '👏', '💯'];
+
+  const handleEmojiSelect = (emoji) => {
+    reactMutation.mutate(emoji);
+  };
 
   if (isLoading || !story) {
     return (
