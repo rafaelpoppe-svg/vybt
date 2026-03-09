@@ -306,20 +306,15 @@ export default function StoryView() {
       onTouchEnd={handleTouchEnd}
     >
       {/* Progress bars */}
-      <div className="absolute top-0 left-0 right-0 z-30 flex gap-1 px-2"
-        style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 8px)' }}
-      >
-        {(currentGroup?.stories?.length ? currentGroup.stories : [story]).map((_, index) => (
-          <div key={index} className="flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-1 z-10 flex gap-1 px-2 pt-2">
+        {currentGroup?.stories?.map((_, index) => (
+          <div key={index} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-white rounded-full"
-              initial={{ width: '0%' }}
-              animate={{
-                width: index === currentStoryInGroupIndex ? `${progress}%`
-                    : index < currentStoryInGroupIndex ? '100%'
-                    : '0%'
+              className="h-full bg-white"
+              initial={{ width: 0 }}
+              animate={{ 
+                width: index === currentStoryInGroupIndex ? `${progress}%` : index < currentStoryInGroupIndex ? '100%' : '0%'
               }}
-              transition={{ ease: 'linear' }}
             />
           </div>
         ))}
