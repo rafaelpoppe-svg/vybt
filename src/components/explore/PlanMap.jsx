@@ -160,7 +160,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
     if (onRadiusChange) onRadiusChange(r);
   };
 
-  const validPlans = plans.filter(p => p.latitude && p.longitude);
+  const validPlans = plans.filter(p => p.latitude && p.longitude && p.show_in_map !== false && !p.is_private);
   const center = flyCoords
     ? [flyCoords.lat, flyCoords.lng]
     : validPlans.length > 0
