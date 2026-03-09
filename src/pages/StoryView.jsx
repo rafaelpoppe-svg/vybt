@@ -30,8 +30,7 @@ export default function StoryView() {
   const [showReportModal, setShowReportModal] = useState(false);
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const [currentStoryInGroupIndex, setCurrentStoryInGroupIndex] = useState(0);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [chatMessage, setChatMessage] = useState('');
+  const [showChatInput, setShowChatInput] = useState(false);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
