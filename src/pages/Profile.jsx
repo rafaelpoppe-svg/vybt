@@ -199,7 +199,8 @@ export default function Profile() {
               <img
                 src={photos[0]}
                 alt="profile"
-                className="w-24 h-28 rounded-2xl object-cover border border-gray-700"
+                onClick={() => setExpandedPhoto(photos[0])}
+                className="w-24 h-28 rounded-2xl object-cover border border-gray-700 cursor-pointer"
               />
             ) : (
               <div className="w-24 h-28 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center">
