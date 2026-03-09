@@ -26,7 +26,11 @@ export default function GroupAdminActions({
   onInviteUser,
   currentUserId,
   isAdmin,
-  planStatus
+  planStatus,
+  joinRequests = [],
+  onApproveRequest,
+  onDeclineRequest,
+  isPrivate = false,
 }) {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('stories');
@@ -95,11 +99,12 @@ export default function GroupAdminActions({
           )}
 
           {/* Tabs */}
-          <div className="flex border-b border-gray-800">
+          <div className="flex border-b border-gray-800 overflow-x-auto scrollbar-hide">
             {[
-              { id: 'stories', label: 'Pin Stories', icon: Camera },
-              { id: 'messages', label: 'Pin Messages', icon: MessageSquare },
-              { id: 'members', label: 'Members', icon: UserMinus }
+              { id: 'stories', label: 'Stories', icon: Camera },
+              { id: 'messages', label: 'Messages', icon: MessageSquare },
+              { id: 'members', label: 'Members', icon: UserMinus },
+              ...(isPrivate ? [{ id: 'requests', label: `Requests${joinRequests.length > 0 ? ` (${joinRequests.length})` : ''}`, icon: UserPlus }] : []),
             ].map(tab => (
               <button
                 key={tab.id}
