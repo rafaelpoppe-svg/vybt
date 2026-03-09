@@ -402,6 +402,27 @@ export default function Profile() {
         )}
       </AnimatePresence>
 
+      {/* ── Photo Expand Modal ── */}
+      <AnimatePresence>
+        {expandedPhoto && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setExpandedPhoto(null)}
+            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          >
+            <motion.img
+              initial={{ scale: 0.85 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.85 }}
+              src={expandedPhoto}
+              className="max-w-full max-h-full rounded-2xl object-contain"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <BottomNav />
 
       <VerificationFlow
