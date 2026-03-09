@@ -83,6 +83,12 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
 
         {/* Badges - can show multiple */}
         <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
+          {isMyPlan && (
+            <div className="px-3 py-1.5 rounded-full bg-[#00c6d2]/90 backdrop-blur-sm flex items-center gap-1">
+              <span className="text-xs">👤</span>
+              <span className="text-xs text-[#0b0b0b] font-bold">My Plan</span>
+            </div>
+          )}
           {plan.status === 'terminated' && (
             <div className="px-3 py-1.5 rounded-full bg-red-600/90 backdrop-blur-sm flex items-center gap-1">
               <span className="text-xs">❌</span>
