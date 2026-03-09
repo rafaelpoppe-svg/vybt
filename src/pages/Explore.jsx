@@ -218,56 +218,90 @@ export default function Explore() {
   return (
     <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh', overscrollBehavior: 'none' }}>
       {/* Header */}
-      <header className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4">
-        <h1 className="text-xl font-bold text-white mb-4">{t.explore}</h1>
-        
-        {/* View Toggle */}
-        <div className="flex gap-2 mb-4">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveView('plans')}
-            className={`flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 ${
-              activeView === 'plans'
-                ? 'bg-[#00c6d2] text-[#0b0b0b]'
-                : 'bg-gray-900 text-gray-400 border border-gray-800'
-            }`}
-          >
-            <LayoutGrid className="w-4 h-4" />
-            {t.plans}
-          </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveView('users')}
-            className={`flex-1 py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 ${
-              activeView === 'users'
-                ? 'bg-[#00c6d2] text-[#0b0b0b]'
-                : 'bg-gray-900 text-gray-400 border border-gray-800'
-            }`}
-          >
-            <User className="w-4 h-4" />
-            {t.people}
-          </motion.button>
-        </div>
-        
-        {/* Search */}
-        <div className="relative mb-4 flex gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={activeView === 'plans' ? t.searchPlans : activeView === 'map' ? t.searchPlans : t.searchPeople}
-              className="pl-10 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
-            />
+      <header className="flex-shrink-0 z-40 backdrop-blur-lg border-b border-gray-800/60 px-4 pt-3 pb-0" style={{ background: 'linear-gradient(180deg, #0b0b0b 60%, rgba(11,11,11,0.92) 100%)' }}>
+        {/* Title row */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <motion.span
+              animate={{ rotate: [0, -10, 10, -10, 0] }}
+              transition={{ repeat: Infinity, repeatDelay: 4, duration: 0.6 }}
+              className="text-xl"
+            >🔍</motion.span>
+            <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">{t.explore}</h1>
+            {activeView === 'plans' && filteredPlans.length > 0 && (
+              <motion.span
+                key={filteredPlans.length}
+                initial={{ scale: 0.6, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="text-[10px] font-bold text-[#0b0b0b] bg-[#00c6d2] px-2 py-0.5 rounded-full"
+              >
+                {filteredPlans.length}
+              </motion.span>
+            )}
           </div>
+          {/* Filter button up here */}
           {activeView !== 'map' && (
             <motion.button
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => setShowFilters(!showFilters)}
-              className={`p-3 rounded-xl ${showFilters ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400'}`}
+              className={`relative p-2.5 rounded-xl transition-all ${showFilters ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400 border border-gray-800'}`}
             >
-              <Filter className="w-5 h-5" />
+              <Filter className="w-4 h-4" />
+              {showFilters && (
+                <motion.span
+                  layoutId="filter-dot"
+                  className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-orange-500"
+                />
+              )}
             </motion.button>
+          )}
+        </div>
+
+        {/* View Toggle — pill style */}
+        <div className="relative flex bg-gray-900 rounded-2xl p-1 mb-3">
+          <motion.div
+            className="absolute top-1 bottom-1 rounded-xl bg-[#00c6d2]"
+            animate={{ left: activeView === 'plans' ? '4px' : 'calc(50% + 2px)', width: 'calc(50% - 6px)' }}
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+          />
+          <button
+            onClick={() => setActiveView('plans')}
+            className={`relative flex-1 py-2 text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors ${activeView === 'plans' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}
+          >
+            <LayoutGrid className="w-3.5 h-3.5" />
+            {t.plans}
+            {activeView === 'plans' && filteredPlans.some(p => p.status === 'happening') && (
+              <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 1 }} className="w-1.5 h-1.5 rounded-full bg-orange-500 inline-block" />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveView('users')}
+            className={`relative flex-1 py-2 text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors ${activeView === 'users' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}
+          >
+            <User className="w-3.5 h-3.5" />
+            {t.people}
+            {receivedFriendRequests.length > 0 && (
+              <span className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold">{receivedFriendRequests.length}</span>
+            )}
+          </button>
+        </div>
+
+        {/* Search */}
+        <div className="relative mb-3">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={activeView === 'plans' ? t.searchPlans : t.searchPeople}
+            className="pl-9 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500 rounded-xl h-10"
+          />
+          {search && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              onClick={() => setSearch('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 text-xs"
+            >✕</motion.button>
           )}
         </div>
 
@@ -290,29 +324,42 @@ export default function Explore() {
           )}
         </div>
 
-        {/* Tags - Only for plans */}
+        {/* Tags + Sort — scrollable row, only for plans */}
         {activeView === 'plans' && (
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3" data-hscroll="1">
+            {/* Sort pills */}
+            {[
+              { key: 'foryou', label: t.forYou, emoji: '❤️', activeClass: 'bg-gradient-to-r from-[#00c6d2]/30 to-[#542b9b]/30 text-[#00c6d2] border-[#00c6d2]/30' },
+              { key: 'onfire', label: t.onFire, emoji: '🔥', activeClass: 'bg-orange-500/20 text-orange-400 border-orange-500/30' },
+              { key: 'popular', label: t.mostMembers, emoji: '👥', activeClass: 'bg-[#542b9b]/30 text-purple-300 border-[#542b9b]/30' },
+            ].map(({ key, label, emoji, activeClass }) => (
+              <motion.button
+                key={key}
+                whileTap={{ scale: 0.92 }}
+                onClick={() => setPlanFilters({ ...planFilters, sortBy: key })}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border transition-all flex-shrink-0 ${
+                  planFilters.sortBy === key ? activeClass : 'bg-gray-900 text-gray-400 border-gray-800'
+                }`}
+              >
+                <span>{emoji}</span> {label}
+              </motion.button>
+            ))}
+
+            <div className="w-px h-5 bg-gray-800 self-center mx-1 flex-shrink-0" />
+
+            {/* Tag filter */}
             <motion.button
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.92 }}
               onClick={() => setSelectedTag('All')}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${
-                selectedTag === 'All'
-                  ? 'bg-[#00c6d2] text-[#0b0b0b]'
-                  : 'bg-gray-900 text-gray-400 border border-gray-800'
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border flex-shrink-0 transition-all ${
+                selectedTag === 'All' ? 'bg-[#00c6d2] text-[#0b0b0b] border-[#00c6d2]' : 'bg-gray-900 text-gray-400 border-gray-800'
               }`}
             >
               {t.allTag}
             </motion.button>
             {ALL_PARTY_TYPES.map((tag) => (
               <div key={tag} className="flex-shrink-0">
-                <PartyTag
-                  tag={tag}
-                  size="md"
-                  interactive
-                  selected={selectedTag === tag}
-                  onClick={() => setSelectedTag(tag)}
-                />
+                <PartyTag tag={tag} size="md" interactive selected={selectedTag === tag} onClick={() => setSelectedTag(tag)} />
               </div>
             ))}
           </div>
@@ -320,74 +367,33 @@ export default function Explore() {
 
         {/* Users sub-tabs */}
         {activeView === 'users' && (
-          <div className="flex gap-2 mt-3">
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setUserSubTab('discover')}
-              className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
-                userSubTab === 'discover'
-                  ? 'bg-gradient-to-r from-[#00c6d2]/30 to-[#542b9b]/30 text-[#00c6d2]'
-                  : 'bg-gray-900 text-gray-400'
-              }`}
-            >
-              ❤️ {t.matchesVibes || 'Matches My Vibes'}
-            </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setUserSubTab('requests')}
-              className={`flex-1 py-2 rounded-full text-sm font-medium transition-all relative ${
-                userSubTab === 'requests'
-                  ? 'bg-[#542b9b]/40 text-[#00c6d2]'
-                  : 'bg-gray-900 text-gray-400'
-              }`}
-            >
-              <UserPlus className="w-3.5 h-3.5 inline mr-1" />
-              Requests
-              {receivedFriendRequests.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center font-bold">
-                  {receivedFriendRequests.length}
-                </span>
-              )}
-            </motion.button>
+          <div className="flex gap-2 pb-3">
+            {[
+              { key: 'discover', label: t.matchesVibes || 'Matches My Vibes', emoji: '❤️' },
+              { key: 'requests', label: 'Requests', emoji: '👋', badge: receivedFriendRequests.length },
+            ].map(({ key, label, emoji, badge }) => (
+              <motion.button
+                key={key}
+                whileTap={{ scale: 0.93 }}
+                onClick={() => setUserSubTab(key)}
+                className={`relative flex-1 py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-1.5 transition-all ${
+                  userSubTab === key
+                    ? 'bg-gradient-to-r from-[#00c6d2]/25 to-[#542b9b]/25 text-[#00c6d2] border border-[#00c6d2]/30'
+                    : 'bg-gray-900 text-gray-400 border border-gray-800'
+                }`}
+              >
+                <span>{emoji}</span> {label}
+                {badge > 0 && (
+                  <motion.span
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                    className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold"
+                  >{badge}</motion.span>
+                )}
+              </motion.button>
+            ))}
           </div>
         )}
-
-        {/* Sort buttons */}
-        <div className="flex gap-2 mt-3 overflow-x-auto scrollbar-hide">
-          {activeView === 'plans' ? (
-            <>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setPlanFilters({ ...planFilters, sortBy: 'foryou' })}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap ${
-                  planFilters.sortBy === 'foryou' ? 'bg-gradient-to-r from-[#00c6d2]/30 to-[#542b9b]/30 text-[#00c6d2]' : 'bg-gray-900 text-gray-400'
-                }`}
-              >
-                ❤️ {t.forYou}
-              </motion.button>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setPlanFilters({ ...planFilters, sortBy: 'onfire' })}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap ${
-                  planFilters.sortBy === 'onfire' ? 'bg-orange-500/30 text-orange-400' : 'bg-gray-900 text-gray-400'
-                }`}
-              >
-                <Flame className="w-3.5 h-3.5" />
-                {t.onFire}
-              </motion.button>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setPlanFilters({ ...planFilters, sortBy: 'popular' })}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap ${
-                  planFilters.sortBy === 'popular' ? 'bg-[#542b9b]/30 text-[#00c6d2]' : 'bg-gray-900 text-gray-400'
-                }`}
-              >
-                <Users className="w-3.5 h-3.5" />
-                {t.mostMembers}
-              </motion.button>
-            </>
-          ) : null}
-        </div>
       </header>
 
       {/* Content — scrollable area */}
