@@ -126,7 +126,6 @@ export default function CreatePlan() {
   };
 
   const handleSubmit = async () => {
-    if (step < 6) { goNext(); return; }
     setLoading(true);
     const user = await base44.auth.me();
     let latitude = null, longitude = null;
