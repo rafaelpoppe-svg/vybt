@@ -434,7 +434,7 @@ export default function StoryView() {
       </div>
 
       {/* Bottom section */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent z-10 space-y-4">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent z-100 space-y-4">
         {/* Reactions - only for viewers, not story owner */}
         {!isStoryOwner && (
           <StoryReactions
