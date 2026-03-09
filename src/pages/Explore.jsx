@@ -121,8 +121,10 @@ export default function Explore() {
     const isMember = myParticipations.some(p => p.plan_id === plan.id);
 
     // Hide voting and terminated plans from everyone in Explore
-    // voting: hidden until renewed; terminated: hidden permanently
     if (plan.status === 'voting' || plan.status === 'terminated') return false;
+
+    // Hide plans that admin chose to hide from Explore
+    if (plan.show_in_explore === false) return false;
 
     // Filter by current city
     if (selectedCity && plan.city?.toLowerCase() !== selectedCity.toLowerCase()) return false;
