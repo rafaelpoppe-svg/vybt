@@ -503,8 +503,9 @@ export default function Explore() {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500">No pending friend requests</p>
+                  <div className="text-center py-16 space-y-3">
+                    <div className="text-5xl">👥</div>
+                    <p className="text-gray-500 text-sm">No pending friend requests</p>
                   </div>
                 )
               ) : (
