@@ -186,6 +186,45 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
               </div>
             </div>
 
+            {/* Chat Background Theme */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-3">Background do Chat</label>
+              <div className="flex flex-wrap gap-3">
+                {Object.entries(GROUP_CHAT_THEMES).map(([key, theme]) => (
+                  <motion.button
+                    key={key}
+                    type="button"
+                    whileTap={{ scale: 0.92 }}
+                    onClick={() => setFormData({ ...formData, chat_background_theme: key })}
+                    className="relative flex flex-col items-center gap-1.5"
+                  >
+                    <div
+                      className={`w-12 h-12 rounded-2xl border-2 transition-all flex items-center justify-center ${
+                        formData.chat_background_theme === key
+                          ? 'border-[#00fea3] ring-2 ring-[#00fea3]/40'
+                          : 'border-gray-700'
+                      }`}
+                      style={{
+                        background: `linear-gradient(135deg, ${theme.previewColor} 0%, ${theme.previewAccent} 100%)`
+                      }}
+                    >
+                      {theme.emoji ? (
+                        <span className="text-lg">{theme.emoji}</span>
+                      ) : (
+                        <span className="text-xs text-gray-500">—</span>
+                      )}
+                      {formData.chat_background_theme === key && (
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#00fea3] rounded-full flex items-center justify-center">
+                          <Check className="w-2.5 h-2.5 text-[#0b0b0b]" />
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-[10px] text-gray-400">{theme.name}</span>
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+
             {/* Tags */}
             <div>
               <div className="flex items-center justify-between mb-2">
