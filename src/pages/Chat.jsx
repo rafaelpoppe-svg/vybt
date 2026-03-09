@@ -194,7 +194,9 @@ export default function Chat() {
                 key={msg.id}
                 message={msg}
                 isMe={msg.sender_id === currentUser?.id}
-                sender={msg.sender_id === currentUser?.id ? myProfile : selectedFriendProfile}
+                sender={msg.sender_id === currentUser?.id
+                  ? (myProfile || { display_name: currentUser?.full_name, photos: [] })
+                  : selectedFriendProfile}
                 showProfile={true}
               />
             ))
