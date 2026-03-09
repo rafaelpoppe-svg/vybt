@@ -154,8 +154,8 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
   useEffect(() => { setSelected(null); setSelectedPoi(null); }, [city]);
 
   const validPois = pois.filter(p => p.latitude && p.longitude && !isNaN(p.latitude) && !isNaN(p.longitude));
-  const showPlans = mapMode === 'plans' || mapMode === 'all';
-  const showPois = mapMode === 'pois' || mapMode === 'all';
+  const showPlans = true;
+  const showPois = false;
 
   const validPlans = plans.filter(p =>
     p.latitude && p.longitude && !isNaN(p.latitude) && !isNaN(p.longitude) &&
