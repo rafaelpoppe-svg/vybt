@@ -32,6 +32,7 @@ export default function StoryView() {
   const [currentStoryInGroupIndex, setCurrentStoryInGroupIndex] = useState(0);
   const [showChatInput, setShowChatInput] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [floatingReactions, setFloatingReactions] = useState([]);
   const isPausedRef = useRef(false);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
@@ -131,6 +132,14 @@ export default function StoryView() {
         }
       }
     }
+  };
+
+  const triggerFloatingEmoji = (emoji) => {
+    const id = Date.now();
+    setFloatingReactions(prev => [...prev, { id, emoji }]);
+    setTimeout(() => {
+      setFloatingReactions(prev => prev.filter(r => r.id !== id));
+    }, 1500);
   };
 
   // Initialize stories list
@@ -282,6 +291,7 @@ export default function StoryView() {
 
   const handleEmojiSelect = (emoji) => {
     reactMutation.mutate(emoji);
+    triggerFloatingEmoji(emoji);
   };
 
   const handleChatSent = async () => {
@@ -536,6 +546,19 @@ export default function StoryView() {
         contentTitle={storyPlan?.title}
         isLoading={reportMutation.isPending}
       />
+      {/* Floating reaction emojis */}
+      {floatingReactions.map(({ id, emoji }) => (
+        <motion.div
+          key={id}
+          className="fixed text-4xl pointer-events-none z-50"
+          style={{ bottom: '20%', right: '10%' }}
+          initial={{ y: 0, opacity: 1, scale: 1 }}
+          animate={{ y: -400, opacity: 0, scale: 1.5 }}
+          transition={{ duration: 1.5, ease: 'easeOut' }}
+        >
+          {emoji}
+        </motion.div>
+      ))}
     </div>
   );
 }
