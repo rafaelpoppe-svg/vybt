@@ -1,75 +1,124 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Play, Sparkles, Video } from 'lucide-react';
+import React, { useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { Plus, Play, Video } from 'lucide-react';
 
-// Diverse vibrant color palettes for story borders
 const STORY_BORDER_COLORS = [
-  ['#f43f5e', '#fb7185'],   // rose
-  ['#a855f7', '#c084fc'],   // purple
-  ['#3b82f6', '#60a5fa'],   // blue
-  ['#f97316', '#fb923c'],   // orange
-  ['#ec4899', '#f472b6'],   // pink
-  ['#06b6d4', '#22d3ee'],   // cyan
-  ['#eab308', '#fbbf24'],   // yellow
-  ['#10b981', '#34d399'],   // emerald
-  ['#6366f1', '#818cf8'],   // indigo
-  ['#ef4444', '#f87171'],   // red
+  ['#f43f5e', '#fb7185'],
+  ['#a855f7', '#c084fc'],
+  ['#3b82f6', '#60a5fa'],
+  ['#f97316', '#fb923c'],
+  ['#ec4899', '#f472b6'],
+  ['#06b6d4', '#22d3ee'],
+  ['#eab308', '#fbbf24'],
+  ['#10b981', '#34d399'],
+  ['#6366f1', '#818cf8'],
+  ['#ef4444', '#f87171'],
 ];
 
-function getColorForUser(userId) {
-  if (!userId) return STORY_BORDER_COLORS[0];
+function getColorsForId(id) {
+  if (!id) return STORY_BORDER_COLORS[0];
   let hash = 0;
-  for (let i = 0; i < userId.length; i++) hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
   return STORY_BORDER_COLORS[Math.abs(hash) % STORY_BORDER_COLORS.length];
 }
 
-function CircleStory({ story, user, isOwn, isAdd, onClick, happeningPlan }) {
-  const colors = isOwn
-    ? ['#00c6d2', '#542b9b']
-    : getColorForUser(story?.user_id);
+// Círculo "Adicionar story"
+function AddCircle({ happeningPlan, onClick }) {
+  const isHappening = !!happeningPlan;
+  return (
+    <motion.button
+      whileTap={{ scale: 0.92 }}
+      onClick={onClick}
+      className="flex flex-col items-center gap-1.5 flex-shrink-0"
+    >
+      <div className="relative">
+        {isHappening && (
+          <motion.div
+            className="absolute inset-0 rounded-full"
+            animate={{ boxShadow: ['0 0 0 0px #00d4ff88', '0 0 0 8px #00d4ff00'] }}
+            transition={{ repeat: Infinity, duration: 1.4, ease: 'easeOut' }}
+          />
+        )}
+        <div
+          className="w-16 h-16 rounded-full flex items-center justify-center"
+          style={{
+            background: isHappening ? 'rgba(0,212,255,0.15)' : 'rgba(255,255,255,0.05)',
+            border: isHappening ? '2.5px solid #00d4ff' : '2.5px dashed #00c6d2',
+          }}
+        >
+          {isHappening ? <Video className="w-6 h-6 text-[#00d4ff]" /> : <Plus className="w-6 h-6 text-[#00c6d2]" />}
+        </div>
+      </div>
+      <span className="text-[10px] text-gray-400 max-w-[64px] text-center leading-tight truncate">
+        {isHappening ? '🔵 Live' : 'Add'}
+      </span>
+    </motion.button>
+  );
+}
 
-  if (isAdd) {
-    const isHappening = !!happeningPlan;
-    return (
-      <motion.button
-        whileTap={{ scale: 0.92 }}
-        onClick={onClick}
-        className="flex flex-col items-center gap-1.5 flex-shrink-0"
-      >
-        <div className="relative">
-          {isHappening && (
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              animate={{ boxShadow: ['0 0 0 0px #00d4ff88', '0 0 0 8px #00d4ff00'] }}
-              transition={{ repeat: Infinity, duration: 1.4, ease: 'easeOut' }}
-            />
-          )}
-          <div
-            className="w-16 h-16 rounded-full flex items-center justify-center relative"
-            style={{
-              background: isHappening
-                ? 'rgba(0,212,255,0.15)'
-                : 'rgba(255,255,255,0.05)',
-              border: isHappening
-                ? '2.5px solid #00d4ff'
-                : '2.5px dashed #00c6d2',
-            }}
-          >
-            {isHappening
-              ? <Video className="w-6 h-6 text-[#00d4ff]" />
-              : <Plus className="w-6 h-6 text-[#00c6d2]" />
-            }
+// Círculo de um PLANO (agrupa stories dos membros)
+function PlanCircle({ plan, previewStory, onClick, index }) {
+  const colors = getColorsForId(plan.id);
+  const thumbnail = plan.group_image || plan.cover_image || previewStory?.thumbnail_url || previewStory?.media_url;
+  const isHappening = plan.status === 'happening';
+
+  return (
+    <motion.button
+      whileTap={{ scale: 0.92 }}
+      whileHover={{ scale: 1.05 }}
+      onClick={onClick}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: index * 0.04, type: 'spring', stiffness: 280, damping: 22 }}
+      className="flex flex-col items-center gap-1.5 flex-shrink-0"
+    >
+      <div className="relative">
+        {isHappening && (
+          <motion.div
+            className="absolute inset-0 rounded-full z-0"
+            animate={{ boxShadow: ['0 0 0 0px #f43f5e88', '0 0 0 6px #f43f5e00'] }}
+            transition={{ repeat: Infinity, duration: 1.6, ease: 'easeOut' }}
+          />
+        )}
+        <div
+          className="w-16 h-16 rounded-full p-[2.5px] relative z-10"
+          style={{
+            background: plan.theme_color
+              ? `linear-gradient(135deg, ${plan.theme_color}, ${plan.theme_color}88)`
+              : `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`,
+            boxShadow: `0 0 12px ${colors[0]}55`,
+          }}
+        >
+          <div className="w-full h-full rounded-full bg-[#0b0b0b] p-[2px] overflow-hidden relative">
+            {thumbnail ? (
+              <img src={thumbnail} alt={plan.title} className="w-full h-full rounded-full object-cover" />
+            ) : (
+              <div
+                className="w-full h-full rounded-full flex items-center justify-center text-xl"
+                style={{ background: plan.theme_color ? `${plan.theme_color}33` : `${colors[0]}33` }}
+              >
+                🎉
+              </div>
+            )}
+            {/* Badge de "live" */}
+            {isHappening && (
+              <div className="absolute bottom-0 right-0 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center border border-[#0b0b0b]">
+                <div className="w-1.5 h-1.5 bg-white rounded-full" />
+              </div>
+            )}
           </div>
         </div>
-        <span className="text-[10px] text-gray-400 max-w-[64px] text-center leading-tight truncate">
-          {isHappening ? '🔵 Live' : 'Add'}
-        </span>
-      </motion.button>
-    );
-  }
+      </div>
+      <span className="text-[10px] text-gray-300 max-w-[64px] text-center leading-tight truncate">
+        {plan.title}
+      </span>
+    </motion.button>
+  );
+}
 
-  const isUnviewed = story && !story.viewed_by?.includes('__current__');
-
+// Círculo do utilizador (stories próprios)
+function UserCircle({ story, user, isOwn, onClick }) {
+  const colors = isOwn ? ['#00c6d2', '#542b9b'] : getColorsForId(story?.user_id);
   return (
     <motion.button
       whileTap={{ scale: 0.92 }}
@@ -101,27 +150,20 @@ function CircleStory({ story, user, isOwn, isAdd, onClick, happeningPlan }) {
               )}
             </>
           ) : user?.photos?.[0] ? (
-            <img
-              src={user.photos[0]}
-              alt={user.display_name}
-              className="w-full h-full rounded-full object-cover"
-            />
+            <img src={user.photos[0]} alt={user.display_name} className="w-full h-full rounded-full object-cover" />
           ) : (
-            <div className="w-full h-full rounded-full flex items-center justify-center"
-              style={{ background: `linear-gradient(135deg, ${colors[0]}33, ${colors[1]}33)` }}>
-              <span className="text-white font-bold text-lg">
-                {user?.display_name?.[0] || '?'}
-              </span>
+            <div
+              className="w-full h-full rounded-full flex items-center justify-center"
+              style={{ background: `${colors[0]}33` }}
+            >
+              <span className="text-white font-bold text-lg">{user?.display_name?.[0] || '?'}</span>
             </div>
           )}
         </div>
       </div>
-      <div className="flex items-center gap-0.5 max-w-[64px]">
-        {story?.is_highlighted && <Sparkles className="w-2.5 h-2.5 text-yellow-400 flex-shrink-0" />}
-        <span className="text-[10px] text-gray-300 truncate leading-tight">
-          {isOwn ? 'You' : (user?.display_name || 'User')}
-        </span>
-      </div>
+      <span className="text-[10px] text-gray-300 truncate leading-tight max-w-[64px] text-center">
+        {isOwn ? 'You' : (user?.display_name || 'User')}
+      </span>
     </motion.button>
   );
 }
@@ -129,31 +171,58 @@ function CircleStory({ story, user, isOwn, isAdd, onClick, happeningPlan }) {
 export default function HomeStoriesBar({
   stories = [],
   userProfiles = {},
+  plans = [],
   onStoryClick,
+  onPlanStoriesClick,
   onAddStory,
   currentUserId,
   happeningPlan = null,
 }) {
+  // Agrupar stories por plano
+  const planGroups = useMemo(() => {
+    const byPlan = {};
+    stories.forEach(s => {
+      if (!s.plan_id) return;
+      if (!byPlan[s.plan_id]) byPlan[s.plan_id] = [];
+      byPlan[s.plan_id].push(s);
+    });
+
+    return Object.entries(byPlan)
+      .map(([planId, planStories]) => {
+        const plan = plans.find(p => p.id === planId);
+        if (!plan) return null;
+        const preview = planStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))[0];
+        return { plan, stories: planStories, preview };
+      })
+      .filter(Boolean)
+      .sort((a, b) => {
+        // Happening primeiro
+        if (a.plan.status === 'happening' && b.plan.status !== 'happening') return -1;
+        if (b.plan.status === 'happening' && a.plan.status !== 'happening') return 1;
+        return b.stories.length - a.stories.length;
+      });
+  }, [stories, plans]);
+
+  // Stories próprios (sem plano ou com plano mas exibido como user)
   const ownStories = stories.filter(s => s.user_id === currentUserId);
-  const otherStories = stories.filter(s => s.user_id !== currentUserId);
-  const shuffled = [...otherStories].sort(() => Math.random() - 0.5);
+
+  // Total de stories para o contador
+  const totalCount = planGroups.reduce((sum, g) => sum + g.stories.length, ownStories.length);
 
   return (
     <div className="space-y-2">
-      {/* Title */}
       <div className="flex items-center justify-between px-4">
         <h2 className="text-white font-bold text-base tracking-wide">✨ Experiences</h2>
-        <span className="text-gray-500 text-xs">{stories.length} stories</span>
+        <span className="text-gray-500 text-xs">{totalCount} stories</span>
       </div>
 
-      {/* Circles */}
       <div className="flex gap-4 px-4 overflow-x-auto scrollbar-hide pb-1" data-hscroll="true">
-        {/* Add Story */}
-        <CircleStory isAdd onClick={onAddStory} happeningPlan={happeningPlan} />
+        {/* Adicionar story */}
+        <AddCircle happeningPlan={happeningPlan} onClick={onAddStory} />
 
-        {/* Own stories */}
+        {/* Stories próprios */}
         {ownStories.map(story => (
-          <CircleStory
+          <UserCircle
             key={story.id}
             story={story}
             user={userProfiles[story.user_id]}
@@ -162,20 +231,15 @@ export default function HomeStoriesBar({
           />
         ))}
 
-        {/* Others */}
-        {shuffled.map((story, idx) => (
-          <motion.div
-            key={story.id}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: idx * 0.04, type: 'spring', stiffness: 280, damping: 22 }}
-          >
-            <CircleStory
-              story={story}
-              user={userProfiles[story.user_id]}
-              onClick={() => onStoryClick(story)}
-            />
-          </motion.div>
+        {/* Planos com stories */}
+        {planGroups.map(({ plan, stories: ps, preview }, idx) => (
+          <PlanCircle
+            key={plan.id}
+            plan={plan}
+            previewStory={preview}
+            index={idx}
+            onClick={() => onPlanStoriesClick(plan, ps)}
+          />
         ))}
       </div>
     </div>
