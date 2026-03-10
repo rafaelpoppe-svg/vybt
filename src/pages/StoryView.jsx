@@ -230,7 +230,6 @@ export default function StoryView() {
 
   useEffect(() => {
     if (!story) return;
-    setProgress(0);
     startProgress();
     return () => clearTimeout(progressTimerRef.current);
   }, [story]);
