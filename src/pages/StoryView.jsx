@@ -343,13 +343,13 @@ export default function StoryView() {
       <div className="absolute top-0 left-0 right-0 h-1 z-10 flex gap-1 px-2 pt-2">
         {currentGroup?.stories?.map((_, index) => (
           <div key={index} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-white"
-              initial={{ width: 0 }}
-              animate={{ 
-                width: index === currentStoryInGroupIndex ? `${progress}%` : index < currentStoryInGroupIndex ? '100%' : '0%'
-              }}
-            />
+            {index < currentStoryInGroupIndex ? (
+              <div className="h-full bg-white w-full" />
+            ) : index === currentStoryInGroupIndex ? (
+              <div ref={progressBarRef} className="h-full bg-white" style={{ width: '0%' }} />
+            ) : (
+              <div className="h-full bg-white w-0" />
+            )}
           </div>
         ))}
       </div>
