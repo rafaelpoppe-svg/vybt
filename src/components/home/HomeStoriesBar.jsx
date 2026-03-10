@@ -203,8 +203,10 @@ export default function HomeStoriesBar({
       });
   }, [stories, plans]);
 
-  // Stories próprios (sem plano ou com plano mas exibido como user)
-  const ownStories = stories.filter(s => s.user_id === currentUserId);
+  // Stories próprios agrupados num único círculo (mais recente como preview)
+  const ownStories = stories
+    .filter(s => s.user_id === currentUserId)
+    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
 
   // Total de stories para o contador
   const totalCount = planGroups.reduce((sum, g) => sum + g.stories.length, ownStories.length);
