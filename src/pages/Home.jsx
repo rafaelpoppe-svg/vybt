@@ -273,6 +273,7 @@ export default function Home() {
             stories={visibleStories}
             userProfiles={profilesMap}
             plans={visiblePlans}
+            friendUserIds={friendIds}
             currentUserId={currentUser?.id}
             happeningPlan={happeningPlan}
             onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
