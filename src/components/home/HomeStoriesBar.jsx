@@ -222,16 +222,15 @@ export default function HomeStoriesBar({
         {/* Adicionar story */}
         <AddCircle happeningPlan={happeningPlan} onClick={onAddStory} />
 
-        {/* Stories próprios */}
-        {ownStories.map(story => (
+        {/* Stories próprios — 1 único círculo com o story mais recente como preview */}
+        {ownStories.length > 0 && (
           <UserCircle
-            key={story.id}
-            story={story}
-            user={userProfiles[story.user_id]}
+            story={ownStories[0]}
+            user={userProfiles[currentUserId]}
             isOwn
-            onClick={() => onStoryClick(story)}
+            onClick={() => onStoryClick(ownStories[0])}
           />
-        ))}
+        )}
 
         {/* Planos com stories */}
         {planGroups.map(({ plan, stories: ps, preview }, idx) => (
