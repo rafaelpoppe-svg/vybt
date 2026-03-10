@@ -189,9 +189,14 @@ export default function Home() {
   const myPlanIds = myParticipations.map(p => p.plan_id);
   const happeningPlan = visiblePlans.find(p => myPlanIds.includes(p.id) && p.status === 'happening') || null;
 
-  const visibleStories = stories.filter(s =>
-    s.user_id === currentUser?.id || s.is_highlighted || friendIds.includes(s.user_id)
-  );
+  // Stories visíveis: próprios + amigos + stories de planos da cidade
+  const visibleStories = stories.filter(s => {
+    if (s.user_id === currentUser?.id) return true;
+    if (s.is_highlighted) return true;
+    if (friendIds.includes(s.user_id)) return true;
+    // Stories de planos na cidade/raio
+    return visiblePlans.some(p => p.id === s.plan_id);
+  });
 
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
