@@ -209,12 +209,12 @@ export default function StoryView() {
   const progressStartRef = useRef(null);
   const progressPausedAtRef = useRef(null);
 
+  const handleNextRef = useRef(null);
+
   const startProgress = () => {
     if (!progressBarRef.current) return;
     progressBarRef.current.style.transition = 'none';
     progressBarRef.current.style.width = '0%';
-    progressStartRef.current = Date.now();
-    progressPausedAtRef.current = null;
 
     requestAnimationFrame(() => {
       if (!progressBarRef.current) return;
@@ -224,7 +224,7 @@ export default function StoryView() {
 
     clearTimeout(progressTimerRef.current);
     progressTimerRef.current = setTimeout(() => {
-      if (!isPausedRef.current) handleNext();
+      if (!isPausedRef.current) handleNextRef.current?.();
     }, 5000);
   };
 
