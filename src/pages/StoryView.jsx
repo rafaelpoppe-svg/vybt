@@ -22,7 +22,7 @@ export default function StoryView() {
   const urlParams = new URLSearchParams(window.location.search);
   const storyId = urlParams.get('id');
   
-  const [progress, setProgress] = useState(0);
+
   const [currentUser, setCurrentUser] = useState(null);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [allStories, setAllStories] = useState([]);
