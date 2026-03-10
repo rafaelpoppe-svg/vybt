@@ -208,6 +208,21 @@ export default function HomeStoriesBar({
     .filter(s => s.user_id === currentUserId)
     .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
 
+  // Stories de amigos agrupados por utilizador (1 círculo por amigo)
+  const friendStoryGroups = useMemo(() => {
+    const byUser = {};
+    stories.forEach(s => {
+      if (s.user_id === currentUserId) return; // próprios já tratados
+      if (!friendUserIds || !friendUserIds.includes(s.user_id)) return; // só amigos
+      if (!byUser[s.user_id]) byUser[s.user_id] = [];
+      byUser[s.user_id].push(s);
+    });
+    return Object.entries(byUser).map(([userId, userStories]) => ({
+      userId,
+      stories: userStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
+    }));
+  }, [stories, currentUserId, friendUserIds]);
+
   // Total de stories para o contador
   const totalCount = planGroups.reduce((sum, g) => sum + g.stories.length, ownStories.length);
 
