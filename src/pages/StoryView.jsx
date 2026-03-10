@@ -231,8 +231,14 @@ export default function StoryView() {
   useEffect(() => {
     if (!story) return;
     startProgress();
-    return () => clearTimeout(progressTimerRef.current);
-  }, [story]);
+    return () => {
+      clearTimeout(progressTimerRef.current);
+      // Immediately stop any running animation on unmount
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transition = 'none';
+      }
+    };
+  }, [currentStoryInGroupIndex, currentGroupIndex]);
 
   // Keep handleNextRef always up to date
   useEffect(() => { handleNextRef.current = handleNext; });
