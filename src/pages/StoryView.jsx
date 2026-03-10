@@ -230,10 +230,15 @@ export default function StoryView() {
 
   useEffect(() => {
     if (!story) return;
-    startProgress();
+    // Only auto-advance (with progress bar) when group has multiple stories
+    if (currentGroup?.stories?.length > 1) {
+      startProgress();
+    } else {
+      // Single story — no auto-advance, swipe only
+      clearTimeout(progressTimerRef.current);
+    }
     return () => {
       clearTimeout(progressTimerRef.current);
-      // Immediately stop any running animation on unmount
       if (progressBarRef.current) {
         progressBarRef.current.style.transition = 'none';
       }
