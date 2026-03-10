@@ -99,12 +99,7 @@ function PlanCircle({ plan, onClick, index }) {
                 🎉
               </div>
             )}
-            {/* Badge de "live" */}
-            {isHappening && (
-              <div className="absolute bottom-0 right-0 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center border border-[#0b0b0b]">
-                <div className="w-1.5 h-1.5 bg-white rounded-full" />
-              </div>
-            )}
+
           </div>
         </div>
       </div>
