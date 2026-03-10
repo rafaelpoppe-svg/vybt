@@ -57,9 +57,10 @@ function AddCircle({ happeningPlan, onClick }) {
 }
 
 // Círculo de um PLANO (agrupa stories dos membros)
-function PlanCircle({ plan, previewStory, onClick, index }) {
+function PlanCircle({ plan, onClick, index }) {
   const colors = getColorsForId(plan.id);
-  const thumbnail = plan.group_image || plan.cover_image || previewStory?.thumbnail_url || previewStory?.media_url;
+  const planImage = plan.group_image || plan.cover_image;
+  const themeColor = plan.theme_color || colors[0];
   const isHappening = plan.status === 'happening';
 
   return (
@@ -76,26 +77,24 @@ function PlanCircle({ plan, previewStory, onClick, index }) {
         {isHappening && (
           <motion.div
             className="absolute inset-0 rounded-full z-0"
-            animate={{ boxShadow: ['0 0 0 0px #f43f5e88', '0 0 0 6px #f43f5e00'] }}
+            animate={{ boxShadow: [`0 0 0 0px ${themeColor}88`, `0 0 0 6px ${themeColor}00`] }}
             transition={{ repeat: Infinity, duration: 1.6, ease: 'easeOut' }}
           />
         )}
         <div
           className="w-16 h-16 rounded-full p-[2.5px] relative z-10"
           style={{
-            background: plan.theme_color
-              ? `linear-gradient(135deg, ${plan.theme_color}, ${plan.theme_color}88)`
-              : `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`,
-            boxShadow: `0 0 12px ${colors[0]}55`,
+            background: `linear-gradient(135deg, ${themeColor}, ${themeColor}88)`,
+            boxShadow: `0 0 12px ${themeColor}55`,
           }}
         >
           <div className="w-full h-full rounded-full bg-[#0b0b0b] p-[2px] overflow-hidden relative">
-            {thumbnail ? (
-              <img src={thumbnail} alt={plan.title} className="w-full h-full rounded-full object-cover" />
+            {planImage ? (
+              <img src={planImage} alt={plan.title} className="w-full h-full rounded-full object-cover" />
             ) : (
               <div
                 className="w-full h-full rounded-full flex items-center justify-center text-xl"
-                style={{ background: plan.theme_color ? `${plan.theme_color}33` : `${colors[0]}33` }}
+                style={{ background: `${themeColor}33` }}
               >
                 🎉
               </div>
