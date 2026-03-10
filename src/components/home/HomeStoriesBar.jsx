@@ -102,6 +102,12 @@ function PlanCircle({ plan, onClick, index }) {
 
           </div>
         </div>
+        {/* Badge de "live" — fora da imagem */}
+        {isHappening && (
+          <div className="absolute -bottom-0.5 -right-0.5 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center border-2 border-[#0b0b0b] z-20">
+            <div className="w-1.5 h-1.5 bg-white rounded-full" />
+          </div>
+        )}
       </div>
       <span className="text-[10px] text-gray-300 max-w-[64px] text-center leading-tight truncate">
         {plan.title}
