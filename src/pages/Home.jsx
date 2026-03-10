@@ -272,9 +272,14 @@ export default function Home() {
           <HomeStoriesBar
             stories={visibleStories}
             userProfiles={profilesMap}
+            plans={visiblePlans}
             currentUserId={currentUser?.id}
             happeningPlan={happeningPlan}
             onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+            onPlanStoriesClick={(plan, planStories) => {
+              const firstStory = planStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))[0];
+              if (firstStory) navigate(createPageUrl('StoryView') + `?id=${firstStory.id}`);
+            }}
             onAddStory={() => navigate(createPageUrl('AddStory') + (happeningPlan ? `?planId=${happeningPlan.id}` : ''))}
           />
         </div>
