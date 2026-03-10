@@ -203,29 +203,47 @@ export default function StoryView() {
     }
   }, [story, currentUser, storyId]);
 
-  // Progress timer
+  // Progress timer — using CSS transition for performance (no per-frame re-render)
+  const progressBarRef = useRef(null);
+  const progressTimerRef = useRef(null);
+  const progressStartRef = useRef(null);
+  const progressPausedAtRef = useRef(null);
+
+  const startProgress = () => {
+    if (!progressBarRef.current) return;
+    progressBarRef.current.style.transition = 'none';
+    progressBarRef.current.style.width = '0%';
+    progressStartRef.current = Date.now();
+    progressPausedAtRef.current = null;
+
+    requestAnimationFrame(() => {
+      if (!progressBarRef.current) return;
+      progressBarRef.current.style.transition = 'width 5s linear';
+      progressBarRef.current.style.width = '100%';
+    });
+
+    clearTimeout(progressTimerRef.current);
+    progressTimerRef.current = setTimeout(() => {
+      if (!isPausedRef.current) handleNext();
+    }, 5000);
+  };
+
   useEffect(() => {
     if (!story) return;
-    
     setProgress(0);
-    const duration = 5000;
-    const interval = 50;
-    const increment = (interval / duration) * 100;
-    
-    const timer = setInterval(() => {
-      if (isPausedRef.current) return;
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(timer);
-          handleNext();
-          return 100;
-        }
-        return prev + increment;
-      });
-    }, interval);
-
-    return () => clearInterval(timer);
+    startProgress();
+    return () => clearTimeout(progressTimerRef.current);
   }, [story]);
+
+  // Preload next story media
+  useEffect(() => {
+    const nextStory = groupedStories[currentGroupIndex]?.stories?.[currentStoryInGroupIndex + 1]
+      || groupedStories[currentGroupIndex + 1]?.stories?.[0];
+    if (nextStory?.media_url && nextStory.media_type !== 'video') {
+      const img = new Image();
+      img.src = nextStory.media_url;
+    }
+  }, [currentStoryInGroupIndex, currentGroupIndex, groupedStories]);
 
   const handleNext = () => {
     if (groupedStories.length > 0) {
