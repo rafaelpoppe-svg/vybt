@@ -358,7 +358,7 @@ export default function StoryView() {
           <video
             key={story.id}
             src={story.media_url}
-            className="h-full w-auto max-w-[500px] object-cover rounded-none md:rounded-2xl"
+            className="h-full w-auto max-w-[400px] object-cover rounded-none md:rounded-2xl"
             autoPlay
             muted={isMuted || !story.has_audio}
             playsInline
