@@ -172,6 +172,7 @@ export default function HomeStoriesBar({
   stories = [],
   userProfiles = {},
   plans = [],
+  friendUserIds = [],
   onStoryClick,
   onPlanStoriesClick,
   onAddStory,
