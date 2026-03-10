@@ -246,6 +246,7 @@ export default function StoryView() {
   }, [currentStoryInGroupIndex, currentGroupIndex, groupedStories]);
 
   const handleNext = () => {
+    handleNextRef.current = handleNext;
     if (groupedStories.length > 0) {
       const group = groupedStories[currentGroupIndex];
       if (currentStoryInGroupIndex < group.stories.length - 1) {
