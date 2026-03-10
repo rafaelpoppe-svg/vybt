@@ -57,21 +57,25 @@ export default function StoryView() {
         return (now - new Date(s.created_date)) < 24 * 3600 * 1000;
       });
     },
+    staleTime: 2 * 60 * 1000,
   });
 
   const { data: userProfiles = [] } = useQuery({
     queryKey: ['userProfiles'],
     queryFn: () => base44.entities.UserProfile.list('-created_date', 100),
+    staleTime: 5 * 60 * 1000,
   });
 
   const { data: plans = [] } = useQuery({
     queryKey: ['allPlans'],
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 50),
+    staleTime: 5 * 60 * 1000,
   });
 
   const { data: friendships = [] } = useQuery({
     queryKey: ['friendships'],
     queryFn: () => base44.entities.Friendship.list('-created_date', 100),
+    staleTime: 5 * 60 * 1000,
   });
 
   // Use story grouping hook
