@@ -191,7 +191,7 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
         {flyCoords && mapReady && <FlyToCity coords={flyCoords} />}
         {showPlans && validPlans.map(plan => (
           <Marker
-            key={plan.id}
+            key={`${plan.id}_${plan.status}`}
             position={[plan.latitude, plan.longitude]}
             icon={createPlanIcon(plan)}
             eventHandlers={{ click: () => { setSelected(plan); setSelectedPoi(null); } }}
