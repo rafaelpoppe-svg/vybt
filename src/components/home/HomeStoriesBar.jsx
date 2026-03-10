@@ -238,7 +238,7 @@ export default function HomeStoriesBar({
         {/* Adicionar story */}
         <AddCircle happeningPlan={happeningPlan} onClick={onAddStory} />
 
-        {/* Stories próprios — 1 único círculo com o story mais recente como preview */}
+        {/* Stories próprios — 1 único círculo */}
         {ownStories.length > 0 && (
           <UserCircle
             story={ownStories[0]}
@@ -247,6 +247,16 @@ export default function HomeStoriesBar({
             onClick={() => onStoryClick(ownStories[0])}
           />
         )}
+
+        {/* Stories de amigos — 1 círculo por amigo */}
+        {friendStoryGroups.map(({ userId, stories: us }) => (
+          <UserCircle
+            key={userId}
+            story={us[0]}
+            user={userProfiles[userId]}
+            onClick={() => onStoryClick(us[0])}
+          />
+        ))}
 
         {/* Planos com stories */}
         {planGroups.map(({ plan, stories: ps, preview }, idx) => (
