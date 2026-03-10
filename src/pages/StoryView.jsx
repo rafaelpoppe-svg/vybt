@@ -347,20 +347,22 @@ export default function StoryView() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Progress bars */}
-      <div className="absolute top-0 left-0 right-0 h-1 z-10 flex gap-1 px-2 pt-2">
-        {currentGroup?.stories?.map((_, index) => (
-          <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
-            {index < currentStoryInGroupIndex ? (
-              <div className="h-full bg-white" style={{ width: '100%' }} />
-            ) : index === currentStoryInGroupIndex ? (
-              <div ref={progressBarRef} className="h-full bg-white" style={{ width: '0%' }} />
-            ) : (
-              <div className="h-full bg-white" style={{ width: '0%' }} />
-            )}
-          </div>
-        ))}
-      </div>
+      {/* Progress bars — only shown when group has multiple stories */}
+      {currentGroup?.stories?.length > 1 && (
+        <div className="absolute top-0 left-0 right-0 h-1 z-10 flex gap-1 px-2 pt-2">
+          {currentGroup.stories.map((_, index) => (
+            <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
+              {index < currentStoryInGroupIndex ? (
+                <div className="h-full bg-white" style={{ width: '100%' }} />
+              ) : index === currentStoryInGroupIndex ? (
+                <div ref={progressBarRef} className="h-full bg-white" style={{ width: '0%' }} />
+              ) : (
+                <div className="h-full bg-white" style={{ width: '0%' }} />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Navigation areas — start below the header area (top-24) so buttons don't block header */}
       <button
