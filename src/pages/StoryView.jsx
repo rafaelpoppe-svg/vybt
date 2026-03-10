@@ -235,6 +235,9 @@ export default function StoryView() {
     return () => clearTimeout(progressTimerRef.current);
   }, [story]);
 
+  // Keep handleNextRef always up to date
+  useEffect(() => { handleNextRef.current = handleNext; });
+
   // Preload next story media
   useEffect(() => {
     const nextStory = groupedStories[currentGroupIndex]?.stories?.[currentStoryInGroupIndex + 1]
