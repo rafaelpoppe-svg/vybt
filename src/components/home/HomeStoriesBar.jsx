@@ -262,7 +262,6 @@ export default function HomeStoriesBar({
           <PlanCircle
             key={plan.id}
             plan={plan}
-            previewStory={preview}
             index={idx}
             onClick={() => onPlanStoriesClick(plan, ps)}
           />
