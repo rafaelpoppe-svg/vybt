@@ -52,7 +52,7 @@ export default function HomeHotPlansCarousel({ plans = [], allParticipants = [],
         {hotPlans.map((plan, i) => {
           const accent = accentOf(plan);
           const count = getCount(plan.id);
-          const isHappening = plan.status === 'happening';
+          const isHappening = isLiveNow(plan);
 
           return (
             <motion.button
