@@ -68,10 +68,21 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
       });
     });
 
+    // Helper: check if a happening plan is actually still live
+    const isActuallyLive = (plan) => {
+      if (plan.status !== 'happening') return false;
+      if (!plan.date) return true;
+      const endDateTime = plan.end_time
+        ? new Date(`${plan.date}T${plan.end_time}:00`)
+        : new Date(new Date(`${plan.date}T${plan.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
+      return Date.now() <= endDateTime.getTime();
+    };
+
     // Area activities — Hot plans
     plans.forEach(plan => {
       if (plan.is_on_fire || (plan.recent_joins >= 50)) {
-        if (plan.status === 'upcoming' || plan.status === 'happening') {
+        const validStatus = plan.status === 'upcoming' || isActuallyLive(plan);
+        if (validStatus) {
           result.push({
             id: `hot-${plan.id}`,
             type: 'hot',
