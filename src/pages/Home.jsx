@@ -192,7 +192,15 @@ export default function Home() {
   }, [visiblePlans, activeSort, mapFilters, recommendedPlans, allParticipants]);
 
   const myPlanIds = myParticipations.map(p => p.plan_id);
-  const happeningPlan = visiblePlans.find(p => myPlanIds.includes(p.id) && p.status === 'happening') || null;
+  const happeningPlan = visiblePlans.find(p => {
+    if (!myPlanIds.includes(p.id) || p.status !== 'happening') return false;
+    // Check end_time client-side
+    if (p.date && p.end_time) {
+      const endDateTime = new Date(`${p.date}T${p.end_time}:00`);
+      if (new Date() > endDateTime) return false;
+    }
+    return true;
+  }) || null;
 
   // Stories visíveis: próprios + amigos + stories de planos da cidade
   const visibleStories = stories.filter(s => {
