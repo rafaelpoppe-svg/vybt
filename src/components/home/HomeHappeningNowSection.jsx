@@ -17,7 +17,7 @@ export default function HomeHappeningNowSection({ plans = [], allParticipants = 
           transition={{ repeat: Infinity, duration: 1.2 }}
           className="w-2.5 h-2.5 rounded-full bg-orange-500"
         />
-        <h2 className="text-white font-bold text-sm">Happening Now</h2>
+        <h2 className="text-white font-bold text-sm">Live Now</h2>
         <span className="text-[10px] font-semibold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full">
           {happeningPlans.length} {happeningPlans.length === 1 ? 'evento' : 'eventos'}
         </span>

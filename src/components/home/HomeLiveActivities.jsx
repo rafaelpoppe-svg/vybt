@@ -9,7 +9,7 @@ const ACTIVITY_CONFIG = {
   story:     { emoji: '📸', color: '#a855f7', label: 'publicou uma story em' },
   created:   { emoji: '✨', color: '#f59e0b', label: 'criou o plano' },
   hot:       { emoji: '🔥', color: '#ef4444', label: 'plano a bombar perto de ti' },
-  happening: { emoji: '⚡', color: '#f97316', label: 'a acontecer agora' },
+  happening: { emoji: '⚡', color: '#f97316', label: 'live agora' },
   voting:    { emoji: '🗳️', color: '#3b82f6', label: 'votação a terminar' },
 };
 

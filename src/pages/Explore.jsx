@@ -279,7 +279,7 @@ export default function Explore() {
           >
             <LayoutGrid className="w-3.5 h-3.5" />
             {t.plans}
-            {activeView === 'plans' && filteredPlans.some(p => p.status === 'happening') && (
+            {activeView === 'plans' && filteredPlans.some(p => p.status === 'happening' && !(p.date && p.end_time && new Date() > new Date(`${p.date}T${p.end_time}:00`))) && (
               <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 1 }} className="w-1.5 h-1.5 rounded-full bg-orange-500 inline-block" />
             )}
           </button>
@@ -416,31 +416,6 @@ export default function Explore() {
               ) : activeView === 'plans' ? (
                 filteredPlans.length > 0 ? (
                   <>
-                    {/* Happening Now banner */}
-                    {filteredPlans.some(p => p.status === 'happening') && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="rounded-2xl p-3 flex items-center gap-3 overflow-hidden relative"
-                        style={{ background: 'linear-gradient(135deg, rgba(249,115,22,0.2), rgba(239,68,68,0.12))', border: '1px solid rgba(249,115,22,0.3)' }}
-                      >
-                        <motion.span
-                          animate={{ scale: [1, 1.3, 1], rotate: [-5, 5, -5] }}
-                          transition={{ repeat: Infinity, duration: 1 }}
-                          className="text-2xl flex-shrink-0"
-                        >⚡</motion.span>
-                        <div>
-                          <p className="text-orange-400 font-bold text-sm">Happening Right Now!</p>
-                          <p className="text-orange-300/70 text-xs">{filteredPlans.filter(p => p.status === 'happening').length} plan(s) live tonight 🎉</p>
-                        </div>
-                        <motion.div
-                          animate={{ opacity: [0.3, 0.7, 0.3] }}
-                          transition={{ repeat: Infinity, duration: 2 }}
-                          className="absolute right-4 text-3xl pointer-events-none"
-                        >🎶</motion.div>
-                      </motion.div>
-                    )}
-
                     {/* On Fire banner */}
                     {filteredPlans.some(p => p.is_on_fire || p.recent_joins >= 100) && (
                       <motion.div
