@@ -149,6 +149,11 @@ export default function Home() {
   const visiblePlans = useMemo(() => plans.filter(plan => {
     const isMember = myParticipations.some(p => p.plan_id === plan.id);
     if (plan.status === 'terminated' || plan.status === 'ended' || plan.status === 'voting') return isMember;
+    // Client-side: if happening but past end_time, hide from non-members (backend may not have updated yet)
+    if (plan.status === 'happening' && plan.date && plan.end_time) {
+      const endDateTime = new Date(`${plan.date}T${plan.end_time}:00`);
+      if (new Date() > endDateTime) return isMember;
+    }
     return true;
   }), [plans, myParticipations]);
 
