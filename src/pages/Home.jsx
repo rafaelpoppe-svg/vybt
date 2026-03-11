@@ -197,8 +197,10 @@ export default function Home() {
   const happeningPlan = visiblePlans.find(p => {
     if (!myPlanIds.includes(p.id) || p.status !== 'happening') return false;
     // Check end_time client-side
-    if (p.date && p.end_time) {
-      const endDateTime = new Date(`${p.date}T${p.end_time}:00`);
+    if (p.date) {
+      const endDateTime = p.end_time
+        ? new Date(`${p.date}T${p.end_time}:00`)
+        : new Date(new Date(`${p.date}T${p.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
       if (new Date() > endDateTime) return false;
     }
     return true;
