@@ -123,9 +123,11 @@ export default function Explore() {
     // Hide voting and terminated plans from everyone in Explore
     if (plan.status === 'voting' || plan.status === 'terminated') return false;
 
-    // Client-side: if happening but past end_time, hide from Explore
-    if (plan.status === 'happening' && plan.date && plan.end_time) {
-      const endDateTime = new Date(`${plan.date}T${plan.end_time}:00`);
+    // Client-side: if happening but past end time, hide from Explore
+    if (plan.status === 'happening' && plan.date) {
+      const endDateTime = plan.end_time
+        ? new Date(`${plan.date}T${plan.end_time}:00`)
+        : new Date(new Date(`${plan.date}T${plan.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
       if (new Date() > endDateTime) return false;
     }
 
