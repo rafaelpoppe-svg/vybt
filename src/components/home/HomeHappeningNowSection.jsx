@@ -5,14 +5,13 @@ import { MapPin, Users } from 'lucide-react';
 export default function HomeHappeningNowSection({ plans = [], allParticipants = [], onPlanClick }) {
   const now = new Date();
   const happeningPlans = plans.filter(p => {
-    if (p.status !== 'happening') return false;
-    if (p.date) {
-      const endDateTime = p.end_time
-        ? new Date(`${p.date}T${p.end_time}:00`)
-        : new Date(new Date(`${p.date}T${p.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
-      if (now > endDateTime) return false;
-    }
-    return true;
+    if (!p.date || !p.time) return false;
+    if (['ended', 'terminated', 'voting'].includes(p.status)) return false;
+    const startDateTime = new Date(`${p.date}T${p.time}:00`);
+    const endDateTime = p.end_time
+      ? new Date(`${p.date}T${p.end_time}:00`)
+      : new Date(startDateTime.getTime() + 8 * 60 * 60 * 1000);
+    return now >= startDateTime && now <= endDateTime;
   });
 
   if (happeningPlans.length === 0) return null;

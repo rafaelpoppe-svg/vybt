@@ -4,22 +4,28 @@ import { Users, ChevronRight, Flame } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
+const isLiveNow = (p) => {
+  if (!p.date || !p.time) return false;
+  if (['ended', 'terminated', 'voting'].includes(p.status)) return false;
+  const now = new Date();
+  const start = new Date(`${p.date}T${p.time}:00`);
+  const end = p.end_time
+    ? new Date(`${p.date}T${p.end_time}:00`)
+    : new Date(start.getTime() + 8 * 60 * 60 * 1000);
+  return now >= start && now <= end;
+};
+
 const accentOf = (p) =>
-  p.status === 'happening' ? '#f97316' : p.is_on_fire ? '#ef4444' : p.is_highlighted ? '#a855f7' : '#00c6d2';
+  isLiveNow(p) ? '#f97316' : p.is_on_fire ? '#ef4444' : p.is_highlighted ? '#a855f7' : '#00c6d2';
 
 export default function HomeHotPlansCarousel({ plans = [], allParticipants = [], onPlanClick }) {
   const navigate = useNavigate();
 
-  const now = new Date();
   const hotPlans = plans
     .filter(p => {
-      if (p.status === 'happening' && p.date) {
-        const endDateTime = p.end_time
-          ? new Date(`${p.date}T${p.end_time}:00`)
-          : new Date(new Date(`${p.date}T${p.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
-        if (now > endDateTime) return false;
-      }
-      return p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted || p.status === 'happening';
+      if (isLiveNow(p)) return true;
+      if (['ended', 'terminated', 'voting'].includes(p.status)) return false;
+      return p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted;
     })
     .slice(0, 10);
 

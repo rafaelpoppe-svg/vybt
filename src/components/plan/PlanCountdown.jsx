@@ -69,10 +69,10 @@ export default function PlanCountdown({ plan, size = 'md' }) {
       <motion.div
         initial={{ scale: 0.9 }}
         animate={{ scale: 1 }}
-        className={`${sizes[size]} rounded-full bg-blue-500 text-white font-medium flex items-center gap-1.5`}
+        className={`${sizes[size]} rounded-full bg-orange-500 text-white font-medium flex items-center gap-1.5`}
       >
         <Flame className="w-4 h-4 animate-pulse" />
-        <span>Happening Now</span>
+        <span>Live Now</span>
         {timeLeft && <span className="opacity-75">• {timeLeft}</span>}
       </motion.div>
     );
