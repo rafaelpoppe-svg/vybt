@@ -3,7 +3,17 @@ import { motion } from 'framer-motion';
 import { MapPin, Users } from 'lucide-react';
 
 export default function HomeHappeningNowSection({ plans = [], allParticipants = [], onPlanClick }) {
-  const happeningPlans = plans.filter(p => p.status === 'happening');
+  const now = new Date();
+  const happeningPlans = plans.filter(p => {
+    if (p.status !== 'happening') return false;
+    if (p.date) {
+      const endDateTime = p.end_time
+        ? new Date(`${p.date}T${p.end_time}:00`)
+        : new Date(new Date(`${p.date}T${p.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
+      if (now > endDateTime) return false;
+    }
+    return true;
+  });
 
   if (happeningPlans.length === 0) return null;
 

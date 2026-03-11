@@ -45,8 +45,17 @@ const TAG_EMOJI = {
   'Lounge': '🛋️', 'Karaoke': '🎤', 'Live Music': '🎸',
 };
 
+function isPlanActuallyLive(plan) {
+  if (plan.status !== 'happening') return false;
+  if (!plan.date) return true;
+  const endDateTime = plan.end_time
+    ? new Date(`${plan.date}T${plan.end_time}:00`)
+    : new Date(new Date(`${plan.date}T${plan.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
+  return new Date() <= endDateTime;
+}
+
 function createPlanIcon(plan) {
-  const isHappening = plan.status === 'happening';
+  const isHappening = isPlanActuallyLive(plan);
   const isHot = plan.is_on_fire || plan.recent_joins >= 100;
   const color = plan.theme_color || (isHappening ? '#f97316' : isHot ? '#ef4444' : plan.is_highlighted ? '#a855f7' : '#00fea3');
 
