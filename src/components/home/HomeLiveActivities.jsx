@@ -96,9 +96,9 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
       }
     });
 
-    // Area activities — Happening now
+    // Area activities — Happening now (only if still within end time)
     plans.forEach(plan => {
-      if (plan.status === 'happening') {
+      if (isActuallyLive(plan)) {
         result.push({
           id: `happening-${plan.id}`,
           type: 'happening',
