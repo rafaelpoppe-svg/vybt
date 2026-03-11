@@ -123,12 +123,13 @@ export default function Explore() {
     // Hide voting and terminated plans from everyone in Explore
     if (plan.status === 'voting' || plan.status === 'terminated') return false;
 
-    // Client-side: if happening but past end time, hide from Explore
-    if (plan.status === 'happening' && plan.date) {
-      const endDateTime = plan.end_time
+    // Client-side: hide plans whose time has passed (ended or in voting window)
+    if (plan.date && plan.time) {
+      const start = new Date(`${plan.date}T${plan.time}:00`);
+      const end = plan.end_time
         ? new Date(`${plan.date}T${plan.end_time}:00`)
-        : new Date(new Date(`${plan.date}T${plan.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
-      if (new Date() > endDateTime) return false;
+        : new Date(start.getTime() + 8 * 60 * 60 * 1000);
+      if (new Date() > end) return false;
     }
 
     // Hide plans that admin chose to hide from Explore

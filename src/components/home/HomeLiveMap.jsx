@@ -170,12 +170,13 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
   const validPlans = plans.filter(p => {
     if (!p.latitude || !p.longitude || isNaN(p.latitude) || isNaN(p.longitude)) return false;
     if (['voting', 'ended', 'terminated'].includes(p.status)) return false;
-    // Hide happening plans that are past end time
-    if (p.status === 'happening' && p.date) {
-      const endDateTime = p.end_time
+    // Hide plans whose time has already passed (regardless of backend status)
+    if (p.date && p.time) {
+      const start = new Date(`${p.date}T${p.time}:00`);
+      const end = p.end_time
         ? new Date(`${p.date}T${p.end_time}:00`)
-        : new Date(new Date(`${p.date}T${p.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
-      if (now > endDateTime) return false;
+        : new Date(start.getTime() + 8 * 60 * 60 * 1000);
+      if (now > end) return false;
     }
     return true;
   });
