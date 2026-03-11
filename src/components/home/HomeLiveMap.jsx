@@ -166,10 +166,19 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
   const showPlans = true;
   const showPois = false;
 
-  const validPlans = plans.filter(p =>
-    p.latitude && p.longitude && !isNaN(p.latitude) && !isNaN(p.longitude) &&
-    !['voting', 'ended', 'terminated'].includes(p.status)
-  );
+  const now = new Date();
+  const validPlans = plans.filter(p => {
+    if (!p.latitude || !p.longitude || isNaN(p.latitude) || isNaN(p.longitude)) return false;
+    if (['voting', 'ended', 'terminated'].includes(p.status)) return false;
+    // Hide happening plans that are past end time
+    if (p.status === 'happening' && p.date) {
+      const endDateTime = p.end_time
+        ? new Date(`${p.date}T${p.end_time}:00`)
+        : new Date(new Date(`${p.date}T${p.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
+      if (now > endDateTime) return false;
+    }
+    return true;
+  });
   const defaultCenter = flyCoords
     ? [flyCoords.lat, flyCoords.lng]
     : validPlans.length > 0 ? [validPlans[0].latitude, validPlans[0].longitude] : [38.7169, -9.1399];
