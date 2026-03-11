@@ -10,8 +10,17 @@ const accentOf = (p) =>
 export default function HomeHotPlansCarousel({ plans = [], allParticipants = [], onPlanClick }) {
   const navigate = useNavigate();
 
+  const now = new Date();
   const hotPlans = plans
-    .filter(p => p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted || p.status === 'happening')
+    .filter(p => {
+      if (p.status === 'happening' && p.date) {
+        const endDateTime = p.end_time
+          ? new Date(`${p.date}T${p.end_time}:00`)
+          : new Date(new Date(`${p.date}T${p.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
+        if (now > endDateTime) return false;
+      }
+      return p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted || p.status === 'happening';
+    })
     .slice(0, 10);
 
   if (hotPlans.length === 0) return null;
