@@ -247,7 +247,9 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
             {/* Tags */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-gray-400 text-sm">Party Tags (máx. 2)</label>
+                <label className="text-gray-400 text-sm">
+                  Party Tags (máx. 2) {locked && <span className="text-orange-400 text-xs ml-1">🔒 locked</span>}
+                </label>
                 <span className={`text-xs font-medium ${formData.tags.length >= 2 ? 'text-[#00c6d2]' : 'text-gray-500'}`}>
                   {formData.tags.length}/2
                 </span>
