@@ -68,14 +68,15 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
       });
     });
 
-    // Helper: check if a happening plan is actually still live
+    // Helper: purely temporal — is this plan happening right now?
     const isActuallyLive = (plan) => {
-      if (plan.status !== 'happening') return false;
-      if (!plan.date) return true;
-      const endDateTime = plan.end_time
+      if (['ended', 'terminated', 'voting'].includes(plan.status)) return false;
+      if (!plan.date || !plan.time) return false;
+      const start = new Date(`${plan.date}T${plan.time}:00`);
+      const end = plan.end_time
         ? new Date(`${plan.date}T${plan.end_time}:00`)
-        : new Date(new Date(`${plan.date}T${plan.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
-      return Date.now() <= endDateTime.getTime();
+        : new Date(start.getTime() + 8 * 60 * 60 * 1000);
+      return Date.now() >= start.getTime() && Date.now() <= end.getTime();
     };
 
     // Area activities — Hot plans

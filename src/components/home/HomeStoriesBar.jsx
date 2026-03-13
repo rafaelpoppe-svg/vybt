@@ -56,12 +56,23 @@ function AddCircle({ happeningPlan, onClick }) {
   );
 }
 
+function isPlanLiveNow(plan) {
+  if (['ended', 'terminated', 'voting'].includes(plan.status)) return false;
+  if (!plan.date || !plan.time) return false;
+  const now = new Date();
+  const start = new Date(`${plan.date}T${plan.time}:00`);
+  const end = plan.end_time
+    ? new Date(`${plan.date}T${plan.end_time}:00`)
+    : new Date(start.getTime() + 8 * 60 * 60 * 1000);
+  return now >= start && now <= end;
+}
+
 // Círculo de um PLANO (agrupa stories dos membros)
 function PlanCircle({ plan, onClick, index }) {
   const colors = getColorsForId(plan.id);
   const planImage = plan.group_image || plan.cover_image;
   const themeColor = plan.theme_color || colors[0];
-  const isHappening = plan.status === 'happening';
+  const isHappening = isPlanLiveNow(plan);
 
   return (
     <motion.button
@@ -197,9 +208,11 @@ export default function HomeStoriesBar({
       })
       .filter(Boolean)
       .sort((a, b) => {
-        // Happening primeiro
-        if (a.plan.status === 'happening' && b.plan.status !== 'happening') return -1;
-        if (b.plan.status === 'happening' && a.plan.status !== 'happening') return 1;
+        // Live now primeiro
+        const aLive = isPlanLiveNow(a.plan);
+        const bLive = isPlanLiveNow(b.plan);
+        if (aLive && !bLive) return -1;
+        if (bLive && !aLive) return 1;
         return b.stories.length - a.stories.length;
       });
   }, [stories, plans]);
