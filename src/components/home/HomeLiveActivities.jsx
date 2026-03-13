@@ -97,9 +97,11 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
       }
     });
 
-    // Area activities — Happening now (only if still within end time)
+    // Area activities — Happening now (only if still within end time and ≥ 3 participants)
     plans.forEach(plan => {
       if (isActuallyLive(plan)) {
+        const goingCount = allParticipants.filter(p => p.plan_id === plan.id).length;
+        if (goingCount < 3) return;
         result.push({
           id: `happening-${plan.id}`,
           type: 'happening',

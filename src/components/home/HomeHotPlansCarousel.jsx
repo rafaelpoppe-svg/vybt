@@ -23,8 +23,9 @@ export default function HomeHotPlansCarousel({ plans = [], allParticipants = [],
 
   const hotPlans = plans
     .filter(p => {
-      if (isLiveNow(p)) return true;
       if (['ended', 'terminated', 'voting'].includes(p.status)) return false;
+      const count = allParticipants.filter(pp => pp.plan_id === p.id).length;
+      if (isLiveNow(p)) return count >= 3;
       return p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted;
     })
     .slice(0, 10);

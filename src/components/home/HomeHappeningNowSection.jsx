@@ -11,7 +11,10 @@ export default function HomeHappeningNowSection({ plans = [], allParticipants = 
     const endDateTime = p.end_time
       ? new Date(`${p.date}T${p.end_time}:00`)
       : new Date(startDateTime.getTime() + 8 * 60 * 60 * 1000);
-    return now >= startDateTime && now <= endDateTime;
+    if (!(now >= startDateTime && now <= endDateTime)) return false;
+    // Require ≥ 3 confirmed participants to appear in Live Now
+    const goingCount = allParticipants.filter(pp => pp.plan_id === p.id).length;
+    return goingCount >= 3;
   });
 
   if (happeningPlans.length === 0) return null;
