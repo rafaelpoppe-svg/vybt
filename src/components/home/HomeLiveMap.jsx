@@ -248,49 +248,71 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
       <AnimatePresence>
         {selected && (
           <motion.div
-            initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 10, opacity: 0 }}
+            initial={{ y: 20, opacity: 0, scale: 0.97 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: 20, opacity: 0, scale: 0.97 }}
+            transition={{ type: 'spring', damping: 22, stiffness: 320 }}
             style={{
               position: 'absolute', bottom: 12, left: 12, right: 12, zIndex: 600,
-              borderRadius: 18, padding: '10px 12px',
-              display: 'flex', alignItems: 'center', gap: 12,
-              background: 'rgba(18,18,18,0.97)',
-              border: `1px solid ${accentOf(selected)}44`,
-              backdropFilter: 'blur(16px)',
+              borderRadius: 22, overflow: 'hidden',
+              background: 'rgba(14,14,14,0.97)',
+              border: `1.5px solid ${accentOf(selected)}55`,
+              backdropFilter: 'blur(20px)',
+              boxShadow: `0 8px 32px ${accentOf(selected)}33`,
             }}
           >
-            <div style={{ width: 44, height: 44, borderRadius: 12, overflow: 'hidden', flexShrink: 0 }}>
-              {selected.cover_image
-                ? <img src={selected.cover_image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, background: `linear-gradient(135deg,#1a1a2e,${accentOf(selected)}66)` }}>🎉</div>}
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ color: '#fff', fontWeight: 700, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.title}</p>
-              <p style={{ color: '#888', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.location_address}</p>
-              <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
-                {isPlanActuallyLive(selected) && (
-                  <span style={{ background: 'rgba(249,115,22,0.15)', color: '#f97316', padding: '2px 6px', borderRadius: 10, fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 3 }}>
-                    ● Live Now
-                  </span>
-                )}
-                {selected.tags?.map(tag => (
-                  <span key={tag} style={{ background: `${accentOf(selected)}22`, color: accentOf(selected), padding: '2px 6px', borderRadius: 10, fontSize: 9, fontWeight: 600 }}>
-                    {tag}
-                  </span>
-                ))}
+            {/* Colored top strip */}
+            <div style={{ height: 3, background: `linear-gradient(90deg, ${accentOf(selected)}, ${accentOf(selected)}88)` }} />
+
+            <div style={{ padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
+              {/* Cover image */}
+              <div style={{ width: 52, height: 52, borderRadius: 14, overflow: 'hidden', flexShrink: 0, border: `1.5px solid ${accentOf(selected)}44` }}>
+                {selected.cover_image
+                  ? <img src={selected.cover_image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, background: `linear-gradient(135deg,#1a1a2e,${accentOf(selected)}66)` }}>🎉</div>}
               </div>
-              {(selected.date || selected.time) && (
-                <p style={{ color: '#aaa', fontSize: 10, marginTop: 3 }}>
-                  {selected.date && new Date(selected.date).toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })}
-                  {selected.time && ` · ${selected.time}`}
-                </p>
-              )}
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-              <button onClick={() => { onPlanClick(selected); setSelected(null); }}
-                style={{ background: accentOf(selected), color: '#0b0b0b', fontWeight: 700, fontSize: 12, padding: '5px 14px', borderRadius: 20, border: 'none', cursor: 'pointer' }}>
-                Ver
-              </button>
-              <button onClick={() => setSelected(null)} style={{ color: '#666', fontSize: 11, background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
+
+              {/* Info */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                  {isPlanActuallyLive(selected) && (
+                    <motion.span
+                      animate={{ opacity: [1, 0.4, 1] }}
+                      transition={{ repeat: Infinity, duration: 1 }}
+                      style={{ background: 'rgba(249,115,22,0.18)', color: '#f97316', padding: '1px 6px', borderRadius: 8, fontSize: 9, fontWeight: 800 }}
+                    >● LIVE</motion.span>
+                  )}
+                  {selected.tags?.[0] && (
+                    <span style={{ background: `${accentOf(selected)}22`, color: accentOf(selected), padding: '1px 6px', borderRadius: 8, fontSize: 9, fontWeight: 600 }}>
+                      {selected.tags[0]}
+                    </span>
+                  )}
+                </div>
+                <p style={{ color: '#fff', fontWeight: 800, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', lineHeight: 1.2 }}>{selected.title}</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+                  {/* Participant count */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                    <span style={{ fontSize: 10 }}>👥</span>
+                    <span style={{ color: accentOf(selected), fontWeight: 700, fontSize: 11 }}>{countFor(selected.id)}</span>
+                  </div>
+                  {selected.time && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <span style={{ fontSize: 10 }}>🕐</span>
+                      <span style={{ color: '#aaa', fontSize: 10 }}>{selected.time}{selected.date ? ` · ${new Date(selected.date).toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })}` : ''}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                <motion.button
+                  whileTap={{ scale: 0.93 }}
+                  onClick={() => { onPlanClick(selected); setSelected(null); }}
+                  style={{ background: `linear-gradient(135deg, ${accentOf(selected)}, ${accentOf(selected)}cc)`, color: '#0b0b0b', fontWeight: 800, fontSize: 12, padding: '7px 16px', borderRadius: 20, border: 'none', cursor: 'pointer', boxShadow: `0 4px 12px ${accentOf(selected)}55` }}
+                >
+                  Ver →
+                </motion.button>
+                <button onClick={() => setSelected(null)} style={{ color: '#555', fontSize: 10, background: 'none', border: 'none', cursor: 'pointer' }}>fechar</button>
+              </div>
             </div>
           </motion.div>
         )}
