@@ -246,13 +246,23 @@ export default function GroupChat() {
     },
   });
 
+  const isLive = planStatus === 'happening';
+
   const terminateMutation = useMutation({
     mutationFn: async () => {
       const terminatedAt = new Date().toISOString();
-      await base44.entities.PartyPlan.update(planId, {
+      const updateData = {
         status: 'terminated',
         terminated_at: terminatedAt,
-      });
+      };
+      // If live, also hide from all feeds
+      if (isLive) {
+        updateData.show_in_explore = false;
+        updateData.show_in_map = false;
+        updateData.is_highlighted = false;
+        updateData.is_on_fire = false;
+      }
+      await base44.entities.PartyPlan.update(planId, updateData);
       await base44.entities.ChatMessage.create({
         sender_id: currentUser.id,
         plan_id: planId,
