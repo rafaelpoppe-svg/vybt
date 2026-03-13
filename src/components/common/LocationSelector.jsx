@@ -80,10 +80,11 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute top-full left-0 right-0 mt-2 p-4 rounded-xl bg-gray-900 border border-gray-800 z-50 min-w-64"
+            initial={{ opacity: 0, y: -8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.97 }}
+            className="absolute top-full left-0 mt-2 p-3 rounded-2xl bg-[#111] border border-white/10 z-50 min-w-64 shadow-xl shadow-black/60"
+            style={{ background: 'linear-gradient(145deg, #161616 0%, #111 100%)' }}
           >
             {/* Detect my location button */}
             <button
