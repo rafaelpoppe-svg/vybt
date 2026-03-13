@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
 import { Search } from 'lucide-react';
+import AddressAutocomplete from '../common/AddressAutocomplete';
 import { GROUP_CHAT_THEMES } from '../chat/GroupChatBackground';
 import PlanPrivacySettings from './PlanPrivacySettings';
 
