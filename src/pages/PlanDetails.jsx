@@ -32,6 +32,7 @@ export default function PlanDetails() {
   const [showHighlightModal, setShowHighlightModal] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [joinRequestSent, setJoinRequestSent] = useState(false);
 
   useEffect(() => {
