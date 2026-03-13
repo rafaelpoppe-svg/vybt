@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
 import { Search } from 'lucide-react';
+import AddressAutocomplete from '../components/common/AddressAutocomplete';
 import HighlightPlanModal from '../components/plan/HighlightPlanModal';
 import PlanPrivacySettings from '../components/plan/PlanPrivacySettings';
 
