@@ -186,6 +186,14 @@ export default function PlanDetails() {
     onSuccess: () => setShowReportModal(false)
   });
 
+  const editPlanMutation = useMutation({
+    mutationFn: (data) => base44.entities.PartyPlan.update(planId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['plan', planId]);
+      setShowEditModal(false);
+    }
+  });
+
   const highlightMutation = useMutation({
     mutationFn: async () => {
       await base44.entities.PartyPlan.update(planId, {
