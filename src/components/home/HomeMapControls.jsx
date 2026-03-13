@@ -21,18 +21,19 @@ export default function HomeMapControls({ activeSort, setActiveSort, onFilterCli
   return (
     <div className="flex items-center justify-between mb-3 px-4">
       {/* Sort tabs */}
-      <div className="flex items-center gap-0.5 bg-white/5 rounded-full p-1">
+      <div className="flex items-center gap-1.5 bg-white/5 rounded-2xl p-1.5">
         {SORT_TABS.map(tab => (
           <motion.button
             key={tab.id}
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.93 }}
             onClick={() => setActiveSort(tab.id)}
-            className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-[12px] font-bold transition-all ${
               activeSort === tab.id
-                ? 'bg-[#00fea3] text-[#0b0b0b]'
-                : 'text-gray-500'
+                ? `${tab.activeColor} ${tab.activeText} shadow-lg`
+                : 'text-gray-500 hover:text-gray-300'
             }`}
           >
+            <span className="text-sm">{tab.emoji}</span>
             {tab.label}
           </motion.button>
         ))}
