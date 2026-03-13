@@ -90,12 +90,12 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
             <button
               onClick={detectLocation}
               disabled={detecting}
-              className="w-full flex items-center gap-2 px-3 py-2 mb-3 rounded-lg bg-[#00fea3]/10 border border-[#00fea3]/30 text-[#00fea3] text-sm font-medium hover:bg-[#00fea3]/20 transition-all disabled:opacity-50"
+              className="w-full flex items-center gap-2 px-3 py-2 mb-3 rounded-xl bg-gradient-to-r from-[#00c6d2]/15 to-[#7c3aed]/15 border border-[#00c6d2]/30 text-[#00c6d2] text-sm font-semibold hover:from-[#00c6d2]/25 hover:to-[#7c3aed]/25 transition-all disabled:opacity-50"
             >
               {detecting ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <Navigation className="w-4 h-4" />
+                <span className="text-base">🧭</span>
               )}
               {detecting ? 'Detecting...' : 'Use my current location'}
             </button>
