@@ -22,6 +22,7 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
     time: plan?.time || '',
     end_time: plan?.end_time || '',
     location_address: plan?.location_address || '',
+    city: plan?.city || '',
     cover_image: plan?.cover_image || '',
     theme_color: plan?.theme_color || '#00c6d2',
     tags: plan?.tags || [],
