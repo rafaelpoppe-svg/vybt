@@ -187,7 +187,7 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
     : validPlans.length > 0 ? [validPlans[0].latitude, validPlans[0].longitude] : [38.7169, -9.1399];
 
   const countFor = (pid) => allParticipants.filter(p => p.plan_id === pid).length;
-  const accentOf = (plan) => plan.theme_color || (plan.status === 'happening' ? '#f97316' : plan.is_highlighted ? '#a855f7' : plan.is_on_fire ? '#ef4444' : '#00fea3');
+  const accentOf = (plan) => plan.theme_color || (isPlanActuallyLive(plan) ? '#f97316' : plan.is_highlighted ? '#a855f7' : plan.is_on_fire ? '#ef4444' : '#00fea3');
 
   return (
     <div
@@ -267,9 +267,9 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
               <p style={{ color: '#fff', fontWeight: 700, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.title}</p>
               <p style={{ color: '#888', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.location_address}</p>
               <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
-                {selected.status === 'happening' && (
+                {isPlanActuallyLive(selected) && (
                   <span style={{ background: 'rgba(249,115,22,0.15)', color: '#f97316', padding: '2px 6px', borderRadius: 10, fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 3 }}>
-                    ● Happening Now
+                    ● Live Now
                   </span>
                 )}
                 {selected.tags?.map(tag => (
