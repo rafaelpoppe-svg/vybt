@@ -457,9 +457,6 @@ export default function Chat() {
                               {new Date(lastMsg.created_date).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' })}
                             </span>
                           )}
-                          {mySentCount > 0 && (
-                            <span className="text-[10px] text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded-full">✓ {mySentCount}</span>
-                          )}
                         </div>
                       </div>
                       <p className={`text-xs truncate ${unreadCount > 0 ? 'text-gray-300 font-medium' : 'text-gray-500'}`}>
