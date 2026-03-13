@@ -524,6 +524,7 @@ export default function GroupChat() {
         onConfirm={() => terminateMutation.mutate()}
         planTitle={plan?.title || ''}
         isLoading={terminateMutation.isPending}
+        isLive={isLive}
       />
       <AdminEditModal
         isOpen={showAdminEditModal}
@@ -532,6 +533,7 @@ export default function GroupChat() {
         onSave={(data) => adminEditMutation.mutate(data)}
         isLoading={adminEditMutation.isPending}
         onDelete={() => { setShowAdminEditModal(false); setShowDeleteModal(true); }}
+        isLive={isLive}
       />
       <HighlightPlanModal
         isOpen={showHighlightModal}
