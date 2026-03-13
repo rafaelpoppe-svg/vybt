@@ -59,18 +59,22 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
   return (
     <div className="relative">
       <motion.button
-        whileTap={{ scale: 0.98 }}
+        whileTap={{ scale: 0.96 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-900 border border-gray-800"
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all border ${
+          isOpen
+            ? 'bg-gradient-to-r from-[#00c6d2]/20 to-[#7c3aed]/20 border-[#00c6d2]/50'
+            : 'bg-white/5 border-white/10'
+        }`}
       >
-        <MapPin className="w-4 h-4 text-[#00fea3]" />
-        <span className="text-white text-sm font-medium">
-          {city || 'Select location'}
+        <span className="text-sm">📍</span>
+        <span className="text-white text-[12px] font-bold max-w-[90px] truncate">
+          {city || 'Location'}
         </span>
-        <span className="text-gray-500 text-xs">
+        <span className="text-[#00c6d2] text-[10px] font-semibold bg-[#00c6d2]/10 px-1.5 py-0.5 rounded-full">
           {radius}km
         </span>
-        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </motion.button>
 
       <AnimatePresence>
