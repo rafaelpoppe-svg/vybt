@@ -264,13 +264,13 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
                   className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
                 />
               </div>
-              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
+              <div className={`flex flex-wrap gap-2 max-h-40 overflow-y-auto ${locked ? 'opacity-50 pointer-events-none' : ''}`}>
                 {ALL_PARTY_TYPES.filter(t => t.toLowerCase().includes(tagSearch.toLowerCase())).map((tag) => (
                   <PartyTag
                     key={tag}
                     tag={tag}
                     size="sm"
-                    interactive
+                    interactive={!locked}
                     selected={formData.tags.includes(tag)}
                     onClick={() => toggleTag(tag)}
                   />
