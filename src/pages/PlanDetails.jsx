@@ -338,9 +338,15 @@ export default function PlanDetails() {
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowEditModal(true)}
-            className="w-full py-3 rounded-xl bg-gray-900 border border-gray-700 flex items-center justify-center gap-2 text-white font-medium"
+            className="w-full py-3 rounded-xl flex items-center justify-center gap-2 font-medium border"
+            style={{
+              background: `linear-gradient(135deg, ${themeColor}22, ${themeColor}11)`,
+              borderColor: `${themeColor}44`,
+              color: themeColor,
+            }}
           >
-            ✏️ Editar Plano
+            <Pencil className="w-5 h-5" />
+            Edit Plan
           </motion.button>
         )}
 
