@@ -141,8 +141,8 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
               )}
             </div>
 
-            <div className="pt-3 border-t border-gray-800 mt-3">
-              <label className="text-xs text-gray-500 mb-2 block">Radius: {radius}km</label>
+            <div className="pt-3 border-t border-white/8 mt-3">
+              <label className="text-xs text-[#00c6d2] font-semibold mb-2 flex items-center gap-1">📡 Radius: <span className="text-white">{radius}km</span></label>
               <input
                 type="range"
                 min="5"
