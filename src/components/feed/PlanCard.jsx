@@ -203,7 +203,6 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
                 </span>
               ))}
             </div>
-            <PlanCountdown plan={plan} size="sm" />
           </div>
         </div>
       </div>
