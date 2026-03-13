@@ -18,6 +18,7 @@ import LeavePlanModal from '../components/plan/LeavePlanModal';
 import ReportContentModal from '../components/moderation/ReportContentModal';
 import AttendingToggle from '../components/plan/AttendingToggle';
 import AttendingAvatars from '../components/plan/AttendingAvatars';
+import AdminEditModal from '../components/plan/AdminEditModal';
 import { notifyNewGroupMember } from '../components/notifications/NotificationTriggers';
 
 export default function PlanDetails() {
