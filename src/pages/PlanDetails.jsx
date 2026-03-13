@@ -333,37 +333,31 @@ export default function PlanDetails() {
           </motion.button>
         )}
 
+        {/* Attending toggle (only for joined users, not during voting) */}
+        {isJoined && canJoinOrLeave && (() => {
+          const myParticipation = participants.find(p => p.user_id === currentUser?.id);
+          return myParticipation ? (
+            <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-900 border border-gray-800">
+              <AttendingToggle
+                participation={myParticipation}
+                planId={planId}
+                themeColor={themeColor}
+              />
+            </div>
+          ) : null;
+        })()}
+
         {/* Participants */}
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-white font-semibold flex items-center gap-2">
-              <Users className="w-5 h-5" style={{ color: themeColor }} />
-              {participants.length} Going
-            </h3>
-          </div>
-          <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
-            {participantProfiles.map((profile, i) => {
-              const participation = participants.find(p => p.user_id === profile.user_id);
-              const isCreator = plan.creator_id === profile.user_id;
-              return (
-                <div key={profile.id} className="relative">
-                  <StoryCard
-                    user={profile}
-                    size="sm"
-                    colorIndex={i}
-                    onClick={() => navigate(createPageUrl('UserProfile') + `?id=${profile.user_id}`)}
-                  />
-                  {isCreator && (
-                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-[#542b9b] text-[10px] text-white font-medium flex items-center gap-1">
-                      <Shield className="w-2.5 h-2.5" />
-                      Admin
-                    </div>
-                  )}
-                  <p className="text-center text-sm text-white mt-1 font-medium">{profile.display_name}</p>
-                </div>
-              );
-            })}
-          </div>
+          <h3 className="text-white font-semibold flex items-center gap-2 mb-3">
+            <Users className="w-5 h-5" style={{ color: themeColor }} />
+            {participants.length} Attending
+          </h3>
+          <AttendingAvatars
+            participants={participants}
+            profilesMap={profilesMap}
+            themeColor={themeColor}
+          />
         </div>
 
         {/* Experience Stories */}
