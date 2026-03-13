@@ -89,7 +89,12 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
             <X className="w-5 h-5 text-gray-400" />
           </button>
 
-          <h2 className="text-2xl font-bold text-white mb-6">Editar Plano</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">Editar Plano</h2>
+          {locked && (
+            <p className="text-orange-400 text-xs mb-4 bg-orange-500/10 border border-orange-500/30 rounded-xl px-3 py-2">
+              ⚠️ Some fields are locked while the plan is Live.
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Cover Image */}
