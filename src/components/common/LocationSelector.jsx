@@ -118,8 +118,8 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
                     <button
                       key={c}
                       onClick={() => { onCityChange(c); setIsOpen(false); setSearch(''); }}
-                      className={`w-full flex items-center px-3 py-2 rounded-lg text-sm text-left transition-colors ${
-                        city === c ? 'bg-[#00fea3]/15 text-[#00fea3]' : 'text-gray-300 hover:bg-gray-800'
+                      className={`w-full flex items-center px-3 py-2 rounded-xl text-sm text-left transition-colors ${
+                        city === c ? 'bg-gradient-to-r from-[#00c6d2]/20 to-[#7c3aed]/20 text-[#00c6d2] font-semibold' : 'text-gray-300 hover:bg-white/5'
                       }`}
                     >
                       {c}
