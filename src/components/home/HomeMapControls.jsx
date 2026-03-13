@@ -5,9 +5,9 @@ import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
 
 const SORT_TABS = [
-  { id: 'foryou', label: 'For You' },
-  { id: 'hot', label: 'Hot Plans' },
-  { id: 'members', label: 'Most Members' },
+  { id: 'foryou',  label: 'For You',      emoji: '✨', activeColor: 'bg-gradient-to-r from-[#00c6d2] to-[#7c3aed]', activeText: 'text-white' },
+  { id: 'hot',     label: 'Hot',          emoji: '🔥', activeColor: 'bg-gradient-to-r from-orange-500 to-red-500',  activeText: 'text-white' },
+  { id: 'members', label: 'Top',          emoji: '👑', activeColor: 'bg-gradient-to-r from-yellow-400 to-amber-500', activeText: 'text-[#0b0b0b]' },
 ];
 
 export default function HomeMapControls({ activeSort, setActiveSort, onFilterClick, hasActiveFilters }) {
