@@ -175,6 +175,24 @@ export default function CreatePlan() {
     setDone(true);
   };
 
+  // Layer 2: block UI if user already has a plan happening
+  if (blockedByActive) {
+    return (
+      <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center px-6 text-center">
+        <div className="text-6xl mb-4">🚫</div>
+        <h2 className="text-2xl font-black text-white mb-3">You already have a plan Live Now</h2>
+        <p className="text-gray-400 mb-6 max-w-xs">You can only create a new plan when your current happening plan ends. This keeps the map fair for everyone.</p>
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={() => navigate(-1)}
+          className="px-8 py-4 rounded-2xl bg-gray-900 text-white font-bold border border-gray-700"
+        >
+          Go Back
+        </motion.button>
+      </div>
+    );
+  }
+
   // ---- SUCCESS SCREEN ----
   if (done && createdPlan) {
     return (
