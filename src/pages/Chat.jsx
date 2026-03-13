@@ -430,19 +430,21 @@ export default function Chat() {
                   }}
                 >
                   <div className="flex items-center gap-3 p-3.5">
-                    <div className={`relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 ${unreadCount > 0 ? 'ring-2 ring-[#00c6d2]' : ''}`}>
-                      {friend?.photos?.[0] ? (
-                        <img src={friend.photos[0]} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2] flex items-center justify-center">
-                          <span className="text-white font-bold text-lg">{friend?.display_name?.[0] || '?'}</span>
-                        </div>
-                      )}
-                      {unreadCount > 0 && (
-                        <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[10px] font-bold flex items-center justify-center px-1">
-                          {unreadCount}
-                        </div>
-                      )}
+                    <div className="relative w-14 h-14 flex-shrink-0">
+                     <div className={`w-full h-full rounded-full overflow-hidden ${unreadCount > 0 ? 'ring-2 ring-[#00c6d2]' : ''}`}>
+                       {friend?.photos?.[0] ? (
+                         <img src={friend.photos[0]} alt="" className="w-full h-full object-cover" />
+                       ) : (
+                         <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2] flex items-center justify-center">
+                           <span className="text-white font-bold text-lg">{friend?.display_name?.[0] || '?'}</span>
+                         </div>
+                       )}
+                     </div>
+                     {unreadCount > 0 && (
+                       <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[10px] font-bold flex items-center justify-center px-1 z-10">
+                         {unreadCount}
+                       </div>
+                     )}
                     </div>
 
                     <div className="flex-1 min-w-0">
