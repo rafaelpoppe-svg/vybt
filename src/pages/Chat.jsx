@@ -101,6 +101,18 @@ export default function Chat() {
     )
     .sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
 
+  // Mark incoming messages as read when chat is open
+  useEffect(() => {
+    if (!selectedFriendId || !currentUser?.id) return;
+    const unread = allDMMessages.filter(
+      m => m.sender_id === selectedFriendId && m.receiver_id === currentUser.id && !m.is_read
+    );
+    unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }));
+    if (unread.length > 0) {
+      queryClient.invalidateQueries(['allDMMessages', currentUser.id]);
+    }
+  }, [selectedFriendId, allDMMessages, currentUser?.id, queryClient]);
+
   // Real-time DM subscription
   useEffect(() => {
     if (!selectedFriendId || !currentUser?.id) return;
