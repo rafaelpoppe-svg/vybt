@@ -48,7 +48,8 @@ const reasonLabels = {
 
 export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false, currentUserId }) {
   const themeColor = plan.theme_color || '#542b9b';
-  const isHappening = plan.status === 'happening';
+  const { isLive, timeLeft } = useLiveCountdown(plan);
+  const isHappening = isLive;
   const isMyPlan = currentUserId && plan.creator_id === currentUserId;
   
   const getHexWithAlpha = (hex, alpha) => {
