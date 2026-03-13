@@ -106,6 +106,8 @@ export default function PlanDetails() {
   }, [currentUser, participants]);
 
   const isCreator = plan?.creator_id === currentUser?.id;
+  const myParticipationRecord = participants.find(p => p.user_id === currentUser?.id);
+  const isAdminOfPlan = isCreator || myParticipationRecord?.is_admin;
   const themeColor = plan?.theme_color || '#00c6d2';
   const isVoting = plan?.status === 'voting';
   const canJoinOrLeave = !isVoting;
