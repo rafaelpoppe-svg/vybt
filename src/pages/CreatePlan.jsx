@@ -548,26 +548,43 @@ export default function CreatePlan() {
         <div className="text-center">
           <div className="text-5xl mb-3">📍</div>
           <h2 className="text-2xl font-black text-white">Where is it?</h2>
-          <p className="text-gray-400 mt-1">Drop the location so people can find you!</p>
+          <p className="text-gray-400 mt-1">Search and pick the address from suggestions!</p>
         </div>
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Full Address *</label>
-          <Input
+          <label className="block text-gray-400 text-sm mb-2">Search Address *</label>
+          <AddressAutocomplete
             value={data.location_address}
-            onChange={(e) => setData({ ...data, location_address: e.target.value })}
-            placeholder="e.g. Gran Via 123, Madrid"
-            className="bg-gray-900 border-gray-800 text-white"
+            onChange={(val) => setData(prev => ({ ...prev, location_address: val }))}
+            onSelect={({ address, city, latitude, longitude }) => {
+              setData(prev => ({ ...prev, location_address: address, city, latitude, longitude }));
+            }}
+            placeholder="e.g. Gran Via 123, Madrid..."
           />
         </div>
-        <div>
-          <label className="block text-gray-400 text-sm mb-2">City *</label>
-          <Input
-            value={data.city}
-            onChange={(e) => setData({ ...data, city: e.target.value })}
-            placeholder="e.g. Madrid"
-            className="bg-gray-900 border-gray-800 text-white"
-          />
-        </div>
+        {data.location_address ? (
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-400 text-xs w-16 shrink-0">Address</span>
+              <span className="text-white text-sm">{data.location_address}</span>
+            </div>
+            {data.city && (
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400 text-xs w-16 shrink-0">City</span>
+                <span className="text-[#00c6d2] text-sm font-medium">{data.city}</span>
+              </div>
+            )}
+            {data.city && (
+              <div>
+                <label className="block text-gray-500 text-xs mb-1">Edit city (optional)</label>
+                <Input
+                  value={data.city}
+                  onChange={(e) => setData(prev => ({ ...prev, city: e.target.value }))}
+                  className="bg-gray-800 border-gray-700 text-white text-sm py-2"
+                />
+              </div>
+            )}
+          </div>
+        ) : null}
       </div>
     ),
 
