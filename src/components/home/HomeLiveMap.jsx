@@ -179,13 +179,6 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
         ? new Date(`${p.date}T${p.end_time}:00`)
         : new Date(start.getTime() + 8 * 60 * 60 * 1000);
       if (now > end) return false;
-      // Layer 1 + 4: live plans AND plans starting within 1h require ≥ 3 confirmed participants
-      const isLive = now >= start && now <= end;
-      const startingSoon = now < start && (start - now) < 60 * 60 * 1000;
-      if (isLive || startingSoon) {
-        const goingCount = allParticipants.filter(pp => pp.plan_id === p.id).length;
-        if (goingCount < 3) return false;
-      }
     }
     return true;
   });
