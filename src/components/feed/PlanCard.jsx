@@ -127,20 +127,21 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           {plan.status !== 'terminated' && (
             <>
               {isHappening && (
-                <motion.div
-                  animate={{ scale: [1, 1.06, 1] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                  className="px-2.5 py-1 rounded-full backdrop-blur-sm flex items-center gap-1"
-                  style={{ background: 'rgba(249,115,22,0.9)' }}
-                >
-                  <motion.span
-                    animate={{ opacity: [1, 0.3, 1] }}
-                    transition={{ repeat: Infinity, duration: 1 }}
-                    className="text-xs"
-                  >⚡</motion.span>
-                  <span className="text-[10px] text-white font-bold tracking-wide">LIVE NOW</span>
-                </motion.div>
-              )}
+                 <motion.div
+                   animate={{ scale: [1, 1.06, 1] }}
+                   transition={{ repeat: Infinity, duration: 1.5 }}
+                   className="px-2.5 py-1 rounded-full backdrop-blur-sm flex items-center gap-1.5"
+                   style={{ background: 'rgba(249,115,22,0.9)' }}
+                 >
+                   <motion.span
+                     animate={{ opacity: [1, 0.3, 1] }}
+                     transition={{ repeat: Infinity, duration: 1 }}
+                     className="text-xs"
+                   >⚡</motion.span>
+                   <span className="text-[10px] text-white font-bold tracking-wide">LIVE NOW</span>
+                   {timeLeft && <span className="text-[10px] text-white/75">· {timeLeft}</span>}
+                 </motion.div>
+               )}
               {plan.is_highlighted && (
                 <div className="px-2 py-1 rounded-full bg-gradient-to-r from-[#00c6d2]/80 to-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-white" />
