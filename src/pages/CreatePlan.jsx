@@ -50,6 +50,7 @@ export default function CreatePlan() {
   const [direction, setDirection] = useState(1);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [blockedByActive, setBlockedByActive] = useState(false);
   const [createdPlan, setCreatedPlan] = useState(null);
   const [showHighlightModal, setShowHighlightModal] = useState(false);
   const [tagSearch, setTagSearch] = useState('');

@@ -160,7 +160,23 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
     if (onRadiusChange) onRadiusChange(r);
   };
 
-  const validPlans = plans.filter(p => p.latitude && p.longitude && p.show_in_map !== false && !p.is_private);
+  const validPlans = plans.filter(p => {
+    if (!p.latitude || !p.longitude) return false;
+    if (p.show_in_map === false || p.is_private) return false;
+    // Layer 1: if plan is currently live, require ≥ 3 confirmed participants
+    if (p.date && p.time) {
+      const now = new Date();
+      const start = new Date(`${p.date}T${p.time}:00`);
+      const end = p.end_time
+        ? new Date(`${p.date}T${p.end_time}:00`)
+        : new Date(start.getTime() + 8 * 60 * 60 * 1000);
+      if (now >= start && now <= end) {
+        const goingCount = allParticipants.filter(pp => pp.plan_id === p.id).length;
+        if (goingCount < 3) return false;
+      }
+    }
+    return true;
+  });
   const center = flyCoords
     ? [flyCoords.lat, flyCoords.lng]
     : validPlans.length > 0

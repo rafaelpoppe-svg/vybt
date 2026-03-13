@@ -28,11 +28,22 @@ Deno.serve(async (req) => {
         continue;
       }
 
-      // If start time has passed and plan is upcoming → move to happening
+      // If start time has passed and plan is upcoming → check participants before moving to happening
       if (!plan.time) continue;
       const startDateTime = new Date(`${plan.date}T${plan.time}:00`);
       if (!isNaN(startDateTime.getTime()) && now > startDateTime && plan.status === 'upcoming') {
-        await base44.asServiceRole.entities.PartyPlan.update(plan.id, { status: 'happening' });
+        // Layer 3: require at least 3 confirmed participants (going) to become "happening"
+        const participants = await base44.asServiceRole.entities.PlanParticipant.filter({ plan_id: plan.id });
+        const goingCount = participants.filter(p => p.status === 'going').length;
+        if (goingCount < 3) {
+          // Not enough people — auto-terminate instead of happening
+          await base44.asServiceRole.entities.PartyPlan.update(plan.id, {
+            status: 'terminated',
+            terminated_at: now.toISOString(),
+          });
+        } else {
+          await base44.asServiceRole.entities.PartyPlan.update(plan.id, { status: 'happening' });
+        }
         updated++;
       }
     }
