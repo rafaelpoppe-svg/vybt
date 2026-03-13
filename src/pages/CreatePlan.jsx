@@ -47,6 +47,18 @@ const slideVariants = {
 export default function CreatePlan() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+
+  // Layer 2: block creation if user already has a happening plan they created
+  React.useEffect(() => {
+    const checkActiveплан = async () => {
+      const user = await base44.auth.me();
+      if (!user) return;
+      const myPlans = await base44.entities.PartyPlan.filter({ creator_id: user.id });
+      const hasHappening = myPlans.some(p => p.status === 'happening');
+      setBlockedByActive(hasHappening);
+    };
+    checkActiveплан();
+  }, []);
   const [direction, setDirection] = useState(1);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
