@@ -549,6 +549,16 @@ export default function PlanDetails() {
         isLoading={reportPlanMutation.isPending}
       />
 
+      {/* Edit Plan Modal */}
+      <AdminEditModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        plan={plan}
+        onSave={(data) => editPlanMutation.mutate(data)}
+        isLoading={editPlanMutation.isPending}
+        isLive={plan.status === 'happening'}
+      />
+
       {/* Leave Modal */}
       <LeavePlanModal
         isOpen={showLeaveModal}
