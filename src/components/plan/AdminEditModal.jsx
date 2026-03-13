@@ -177,12 +177,34 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
                 <MapPin className="w-4 h-4 inline mr-1" />
                 Endereço {locked && <span className="text-orange-400 text-xs ml-1">🔒 locked</span>}
               </label>
-              <Input
-                value={formData.location_address}
-                onChange={(e) => !locked && setFormData({ ...formData, location_address: e.target.value })}
-                className={`border-gray-700 text-white ${locked ? 'bg-gray-800/40 opacity-50 cursor-not-allowed' : 'bg-gray-800'}`}
-                readOnly={locked}
-              />
+              {locked ? (
+                <Input
+                  value={formData.location_address}
+                  readOnly
+                  className="bg-gray-800/40 border-gray-700 text-white opacity-50 cursor-not-allowed"
+                />
+              ) : (
+                <>
+                  <AddressAutocomplete
+                    value={formData.location_address}
+                    onChange={(val) => setFormData(prev => ({ ...prev, location_address: val }))}
+                    onSelect={({ address, city, latitude, longitude }) =>
+                      setFormData(prev => ({ ...prev, location_address: address, city, latitude, longitude }))
+                    }
+                    placeholder="Search address..."
+                  />
+                  {formData.city && (
+                    <div className="mt-2">
+                      <label className="block text-gray-500 text-xs mb-1">City</label>
+                      <Input
+                        value={formData.city || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
+                        className="bg-gray-800 border-gray-700 text-white text-sm"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
             </div>
 
             {/* Theme Color */}
