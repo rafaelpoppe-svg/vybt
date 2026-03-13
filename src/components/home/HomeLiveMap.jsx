@@ -109,6 +109,11 @@ function createPlanIcon(plan) {
   });
 }
 
+function MapTapToDismiss({ onDismiss }) {
+  useMapEvents({ click: () => onDismiss() });
+  return null;
+}
+
 function FlyToCity({ coords }) {
   const map = useMap();
   useEffect(() => {
