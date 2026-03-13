@@ -1,8 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, Users, Sparkles, Calendar, Heart, Music, Flame, Zap } from 'lucide-react';
 import { format } from 'date-fns';
-import PlanCountdown from '../plan/PlanCountdown';
+
+function useLiveCountdown(plan) {
+  const [state, setState] = useState({ isLive: false, timeLeft: null });
+  useEffect(() => {
+    const calc = () => {
+      if (!plan.date || !plan.time) { setState({ isLive: false, timeLeft: null }); return; }
+      if (['ended', 'terminated', 'voting'].includes(plan.status)) { setState({ isLive: false, timeLeft: null }); return; }
+      const now = new Date();
+      const start = new Date(`${plan.date}T${plan.time}:00`);
+      const end = plan.end_time
+        ? new Date(`${plan.date}T${plan.end_time}:00`)
+        : new Date(start.getTime() + 8 * 60 * 60 * 1000);
+      if (now >= start && now <= end) {
+        const diff = end - now;
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        const timeLeft = h > 0 ? `${h}h ${m}m` : m > 0 ? `${m}m ${s}s` : `${s}s`;
+        setState({ isLive: true, timeLeft });
+      } else {
+        setState({ isLive: false, timeLeft: null });
+      }
+    };
+    calc();
+    const interval = setInterval(calc, 1000);
+    return () => clearInterval(interval);
+  }, [plan]);
+  return state;
+}
 
 const reasonIcons = {
   vibes: Music,
