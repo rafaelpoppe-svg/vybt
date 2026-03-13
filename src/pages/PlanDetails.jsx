@@ -7,7 +7,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { 
   ChevronLeft, MapPin, Calendar, Clock, Users, MessageCircle, 
-  Share2, Check, Plus, Camera, Loader2, Flame, Sparkles, Shield, LogOut, Flag
+  Share2, Check, Plus, Camera, Loader2, Flame, Sparkles, Shield, LogOut, Flag, Pencil
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import StoryCard from '../components/feed/StoryCard';
