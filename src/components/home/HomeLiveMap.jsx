@@ -215,6 +215,7 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {flyCoords && mapReady && <FlyToCity coords={flyCoords} />}
+        <MapTapToDismiss onDismiss={() => setSelected(null)} />
         {showPlans && validPlans.map(plan => (
           <Marker
             key={`${plan.id}_${plan.status}`}
