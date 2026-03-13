@@ -52,36 +52,43 @@ export default function UserProfile() {
     queryKey: ['userProfile', userId],
     queryFn: () => base44.entities.UserProfile.filter({ user_id: userId }),
     select: (data) => data[0],
-    enabled: !!userId
+    enabled: !!userId,
+    staleTime: 60_000,
   });
 
   const { data: friendships = [] } = useQuery({
     queryKey: ['friendshipStatus', currentUser?.id, userId],
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, friend_id: userId }),
-    enabled: !!currentUser?.id && !!userId
+    enabled: !!currentUser?.id && !!userId,
+    staleTime: 30_000,
   });
 
   const { data: userFriendships = [] } = useQuery({
     queryKey: ['userFriendships', userId],
     queryFn: () => base44.entities.Friendship.filter({ user_id: userId, status: 'accepted' }),
-    enabled: !!userId
+    enabled: !!userId,
+    staleTime: 60_000,
   });
 
   const { data: participations = [] } = useQuery({
     queryKey: ['userParticipations', userId],
     queryFn: () => base44.entities.PlanParticipant.filter({ user_id: userId }),
-    enabled: !!userId
+    enabled: !!userId,
+    staleTime: 60_000,
   });
 
   const { data: stories = [] } = useQuery({
     queryKey: ['userStories', userId],
     queryFn: () => base44.entities.ExperienceStory.filter({ user_id: userId }),
-    enabled: !!userId
+    enabled: !!userId,
+    staleTime: 60_000,
   });
 
   const { data: allPlans = [] } = useQuery({
     queryKey: ['allPlansForUser'],
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 100),
+    enabled: !!userId,
+    staleTime: 60_000,
   });
 
   const existingFriendship = friendships[0];
