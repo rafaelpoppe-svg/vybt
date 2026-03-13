@@ -125,7 +125,7 @@ export default function UserProfile() {
     onSuccess: () => queryClient.invalidateQueries(['friendshipStatus', currentUser?.id, userId])
   });
 
-  if (isLoading || !profile) {
+  if (!profile) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
