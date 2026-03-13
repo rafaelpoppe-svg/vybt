@@ -34,7 +34,11 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
 
   if (!isOpen || !plan) return null;
 
+  // Fields locked while plan is live
+  const locked = isLive;
+
   const toggleTag = (tag) => {
+    if (locked) return;
     if (formData.tags.includes(tag)) {
       setFormData({ ...formData, tags: formData.tags.filter(t => t !== tag) });
     } else if (formData.tags.length < 2) {
