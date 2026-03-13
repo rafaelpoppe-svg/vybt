@@ -130,11 +130,14 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
 
             {/* Title */}
             <div>
-              <label className="block text-gray-400 text-sm mb-2">Nome do Plano</label>
+              <label className="block text-gray-400 text-sm mb-2">
+                Nome do Plano {locked && <span className="text-orange-400 text-xs ml-1">🔒 locked</span>}
+              </label>
               <Input
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="bg-gray-800 border-gray-700 text-white"
+                onChange={(e) => !locked && setFormData({ ...formData, title: e.target.value })}
+                className={`border-gray-700 text-white ${locked ? 'bg-gray-800/40 opacity-50 cursor-not-allowed' : 'bg-gray-800'}`}
+                readOnly={locked}
               />
             </div>
 
@@ -143,13 +146,14 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
               <div>
                 <label className="block text-gray-400 text-sm mb-2">
                   <Clock className="w-4 h-4 inline mr-1" />
-                  Início
+                  Início {locked && <span className="text-orange-400 text-xs">🔒</span>}
                 </label>
                 <Input
                   type="time"
                   value={formData.time}
-                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                  className="bg-gray-800 border-gray-700 text-white"
+                  onChange={(e) => !locked && setFormData({ ...formData, time: e.target.value })}
+                  className={`border-gray-700 text-white ${locked ? 'bg-gray-800/40 opacity-50 cursor-not-allowed' : 'bg-gray-800'}`}
+                  readOnly={locked}
                 />
               </div>
               <div>
@@ -170,12 +174,13 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
             <div>
               <label className="block text-gray-400 text-sm mb-2">
                 <MapPin className="w-4 h-4 inline mr-1" />
-                Endereço
+                Endereço {locked && <span className="text-orange-400 text-xs ml-1">🔒 locked</span>}
               </label>
               <Input
                 value={formData.location_address}
-                onChange={(e) => setFormData({ ...formData, location_address: e.target.value })}
-                className="bg-gray-800 border-gray-700 text-white"
+                onChange={(e) => !locked && setFormData({ ...formData, location_address: e.target.value })}
+                className={`border-gray-700 text-white ${locked ? 'bg-gray-800/40 opacity-50 cursor-not-allowed' : 'bg-gray-800'}`}
+                readOnly={locked}
               />
             </div>
 
