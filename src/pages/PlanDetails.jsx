@@ -333,6 +333,17 @@ export default function PlanDetails() {
           </div>
         )}
 
+        {/* Edit Plan Button (for admins only) */}
+        {isAdminOfPlan && plan.status !== 'terminated' && (
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowEditModal(true)}
+            className="w-full py-3 rounded-xl bg-gray-900 border border-gray-700 flex items-center justify-center gap-2 text-white font-medium"
+          >
+            ✏️ Editar Plano
+          </motion.button>
+        )}
+
         {/* Highlight Plan Button (for creator) */}
         {isCreator && !plan.is_highlighted && (
           <motion.button
