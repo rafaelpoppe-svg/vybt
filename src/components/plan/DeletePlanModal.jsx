@@ -4,7 +4,7 @@ import { X, Trash2, AlertTriangle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '../common/LanguageContext';
 
-export default function DeletePlanModal({ isOpen, onClose, onConfirm, planTitle, isLoading }) {
+export default function DeletePlanModal({ isOpen, onClose, onConfirm, planTitle, isLoading, isLive = false }) {
   const { t } = useLanguage();
   if (!isOpen) return null;
 
@@ -33,14 +33,20 @@ export default function DeletePlanModal({ isOpen, onClose, onConfirm, planTitle,
           </button>
 
           <div className="text-center mb-6">
-            <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
-              <AlertTriangle className="w-8 h-8 text-red-500" />
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isLive ? 'bg-orange-500/20' : 'bg-red-500/20'}`}>
+              <AlertTriangle className={`w-8 h-8 ${isLive ? 'text-orange-500' : 'text-red-500'}`} />
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">{t.terminatePlanQuestion}</h2>
             <p className="text-gray-400 text-sm">"{planTitle}"</p>
-            <p className="text-gray-500 text-xs mt-3">
-              {t.terminatePlanVisibleDesc}
-            </p>
+            {isLive ? (
+              <p className="text-orange-400 text-sm mt-3 font-medium">
+                ⚠️ Your plan is happening now, if you delete the plan will be terminated.
+              </p>
+            ) : (
+              <p className="text-gray-500 text-xs mt-3">
+                {t.terminatePlanVisibleDesc}
+              </p>
+            )}
           </div>
 
           <div className="flex gap-3">

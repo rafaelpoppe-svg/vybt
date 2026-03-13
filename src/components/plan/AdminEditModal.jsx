@@ -14,7 +14,7 @@ const themeColors = [
   '#f7dc6f', '#bb8fce', '#85c1e9', '#f8b500', '#ff69b4'
 ];
 
-export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoading, onDelete }) {
+export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoading, onDelete, isLive = false }) {
   const [tagSearch, setTagSearch] = useState('');
   const [formData, setFormData] = useState({
     title: plan?.title || '',
