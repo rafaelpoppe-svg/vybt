@@ -98,14 +98,11 @@ export default function Home() {
     queryKey: ['stories'],
     queryFn: async () => {
       const all = await base44.entities.ExperienceStory.list('-created_date', 50);
-      console.log('TODOS os stories da API:', all.map(s => ({ id: s.id, plan_id: s.plan_id, created_date: s.created_date, expires_at: s.expires_at })));
       const now = new Date();
-      const filtered = all.filter(s => {
+      return all.filter(s => {
         if (s.expires_at) return new Date(s.expires_at) > now;
         return (now - new Date(s.created_date)) < 24 * 3600 * 1000;
       });
-      console.log('DEPOIS do filtro:',filtered.map(s => ({ id: s.id, plan_id: s.plan_id, created_date: s.created_date, expires_at: s.expires_at })));
-      return filtered;
     },
   });
 
@@ -218,20 +215,24 @@ export default function Home() {
     return visiblePlans.some(p => p.id === s.plan_id);
   });*/
 
+  console.log('1. stories:', stories.map(s => ({ id: s.id, plan_id: s.plan_id, user_id: s.user_id })));
+
   const ownStories = useMemo(() => 
     stories
       .filter(s => s.user_id === currentUser?.id)
       .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
   , [stories, currentUser?.id]);
+  console.log('2. ownStories:', ownStories.map(s => ({ id: s.id, plan_id: s.plan_id, user_id: s.user_id })));
 
   const friendStories = useMemo(() => 
     stories.filter(s => friendIds.includes(s.user_id))
   , [stories, friendIds]);
+  console.log('3. friendStories:', friendStories.map(s => ({ id: s.id, plan_id: s.plan_id, user_id: s.user_id })));
 
   const planStories = useMemo(() => 
     stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
   , [stories, visiblePlans]);
-
+  console.log('4. planStories:', planStories.map(s => ({ id: s.id, plan_id: s.plan_id, user_id: s.user_id })));
 
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
