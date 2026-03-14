@@ -94,6 +94,9 @@ export default function Home() {
     queryFn: () => base44.entities.PartyPlan.filter({ city }, '-created_date', 20),
   });
 
+  
+  console.log("plans:", plans);
+
   const { data: stories = [] } = useQuery({
     queryKey: ['stories'],
     queryFn: async () => {
@@ -215,7 +218,6 @@ export default function Home() {
     // Stories de planos na cidade/raio
     return visiblePlans.some(p => p.id === s.plan_id);
   });*/
-  console.log("plans:", plans);
   //console.log('0. currentUser:', currentUser);
   console.log('0. myProfile:', {
     ...myProfile,
