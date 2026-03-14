@@ -213,8 +213,14 @@ export default function StoryView() {
 
   const startProgress = () => {
     if (!progressBarRef.current) return;
+    //REMOVER SE NÃO FUNCIONAR
+    clearTimeout(progressTimerRef.current);
+
     progressBarRef.current.style.transition = 'none';
     progressBarRef.current.style.width = '0%';
+
+    //REMOVER SE NÃO FUNCIONAR
+    progressBarRef.current.getBoundingClientRect();
 
     requestAnimationFrame(() => {
       if (!progressBarRef.current) return;
@@ -254,6 +260,14 @@ export default function StoryView() {
   }, [currentStoryInGroupIndex, currentGroupIndex, groupedStories]);
 
   const handleNext = () => {
+
+    // REMOVER SE NÃO FUNCIONAR
+    if (progressBarRef.current) {
+      progressBarRef.current.style.transition = 'none';
+      progressBarRef.current.style.width = '100%';
+    }
+    clearTimeout(progressTimerRef.current);
+
     if (groupedStories.length > 0) {
       const group = groupedStories[currentGroupIndex];
       if (currentStoryInGroupIndex < group.stories.length - 1) {
@@ -275,6 +289,15 @@ export default function StoryView() {
   };
 
   const handlePrevious = () => {
+
+    // REMOVER SE NÃO DER CERTO
+    if (progressBarRef.current) {
+      progressBarRef.current.style.transition = 'none';
+      progressBarRef.current.style.width = '0%';
+    }
+    clearTimeout(progressTimerRef.current);
+
+
     if (groupedStories.length > 0) {
       if (currentStoryInGroupIndex > 0) {
         // Previous story in group
