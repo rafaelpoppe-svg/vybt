@@ -100,10 +100,12 @@ export default function Home() {
       const all = await base44.entities.ExperienceStory.list('-created_date', 50);
       console.log('TODOS os stories da API:', all.map(s => ({ id: s.id, plan_id: s.plan_id, created_date: s.created_date, expires_at: s.expires_at })));
       const now = new Date();
-      return all.filter(s => {
+      const filtered = all.filter(s => {
         if (s.expires_at) return new Date(s.expires_at) > now;
         return (now - new Date(s.created_date)) < 24 * 3600 * 1000;
       });
+      console.log('DEPOIS do filtro:',filtered.map(s => ({ id: s.id, plan_id: s.plan_id, created_date: s.created_date, expires_at: s.expires_at })));
+      return filtered;
     },
   });
 
