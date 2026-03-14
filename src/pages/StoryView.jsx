@@ -231,12 +231,7 @@ export default function StoryView() {
   useEffect(() => {
     if (!story) return;
     // Only auto-advance (with progress bar) when group has multiple stories
-    if (currentGroup?.stories?.length > 1) {
-      startProgress();
-    } else {
-      // Single story — no auto-advance, swipe only
-      clearTimeout(progressTimerRef.current);
-    }
+    startProgress();
     return () => {
       clearTimeout(progressTimerRef.current);
       if (progressBarRef.current) {
@@ -353,7 +348,6 @@ export default function StoryView() {
       onTouchEnd={handleTouchEnd}
     >
       {/* Progress bars — only shown when group has multiple stories */}
-      {currentGroup?.stories?.length > 1 && (
         <div className="absolute top-0 left-0 right-0 h-1 z-10 flex gap-1 px-2 pt-2">
           {currentGroup.stories.map((_, index) => (
             <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
@@ -367,7 +361,6 @@ export default function StoryView() {
             </div>
           ))}
         </div>
-      )}
 
       {/* Navigation areas — start below the header area (top-24) so buttons don't block header */}
       <button
