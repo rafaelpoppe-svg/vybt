@@ -13,7 +13,7 @@ const ACTIVITY_CONFIG = {
   voting:    { emoji: '🗳️', color: '#3b82f6', label: 'votação a terminar' },
 };
 
-export default function HomeLiveActivities({ friendIds = [], allParticipants = [], friendStories = [],/*APAGAR*/ stories = [], profilesMap = {}, plans = [], onPlanClick, onStoryClick }) {
+export default function HomeLiveActivities({ friendIds = [], allParticipants = [], friendStories = []/*,APAGAR stories = []*/, profilesMap = {}, plans = [], onPlanClick, onStoryClick }) {
   const activities = useMemo(() => {
     const result = [];
     const now = Date.now();
