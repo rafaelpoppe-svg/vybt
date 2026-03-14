@@ -99,9 +99,6 @@ export default function Home() {
     queryFn: async () => {
       const all = await base44.entities.ExperienceStory.list('-created_date', 50);
       console.log('TODOS os stories da API:', all.map(s => ({ id: s.id, plan_id: s.plan_id, created_date: s.created_date, expires_at: s.expires_at })));
-      console.log('stories from API:', all);  // <- adiciona aqui
-      console.log('primeiro story expires_at:', all[0]?.expires_at);
-      console.log('é maior que now?', new Date(all[0]?.expires_at) > new Date());
       const now = new Date();
       return all.filter(s => {
         if (s.expires_at) return new Date(s.expires_at) > now;
@@ -232,12 +229,7 @@ export default function Home() {
   const planStories = useMemo(() => 
     stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
   , [stories, visiblePlans]);
-  
-  //REMOVER
-  console.log('todos os plan_ids dos stories:', [...new Set(stories.filter(s => !!s.plan_id).map(s => s.plan_id))]);
-  console.log('todos os visiblePlans ids:', visiblePlans.map(p => p.id));
-  console.log('visiblePlans ids:', visiblePlans.map(p => p.id));
-  console.log('stories com plan_id:', stories.filter(s => !!s.plan_id).map(s => s.plan_id));
+
 
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
