@@ -158,6 +158,7 @@ export default function Home() {
     }
     return true;
   }), [plans, myParticipations]);
+  console.log('3.5. visible plans:', visiblePlans);
 
   const recommendedPlans = useRecommendations({
     plans: visiblePlans,
