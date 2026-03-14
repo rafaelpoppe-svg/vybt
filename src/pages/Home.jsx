@@ -99,6 +99,8 @@ export default function Home() {
     queryFn: async () => {
       const all = await base44.entities.ExperienceStory.list('-created_date', 50);
       console.log('stories from API:', all);  // <- adiciona aqui
+      console.log('primeiro story expires_at:', all[0]?.expires_at);
+      console.log('é maior que now?', new Date(all[0]?.expires_at) > new Date());
       const now = new Date();
       return all.filter(s => {
         if (s.expires_at) return new Date(s.expires_at) > now;
