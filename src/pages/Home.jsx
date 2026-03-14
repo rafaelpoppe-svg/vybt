@@ -306,7 +306,7 @@ console.log('stories raw:', stories);
 
         <div className="pb-3 pt-1">
           <HomeStoriesBar
-            stories={visibleStories}
+            /* REMOVER stories={visibleStories}*/
             ownStories={ownStories}
             friendStories={friendStories}
             planStories={planStories}
@@ -385,7 +385,7 @@ console.log('stories raw:', stories);
         <HomeLiveActivities
           friendIds={friendIds}
           allParticipants={allParticipants}
-          stories={visibleStories}
+          /* REMOVER stories={visibleStories}*/
           friendStories={friendStories}
           profilesMap={profilesMap}
           plans={visiblePlans}
