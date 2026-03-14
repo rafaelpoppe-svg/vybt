@@ -228,6 +228,10 @@ export default function Home() {
   const planStories = useMemo(() => 
     stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
   , [stories, visiblePlans]);
+  
+  //REMOVER
+  console.log('planStories:', planStories);
+  console.log('stories raw:', stories);
 
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
@@ -403,8 +407,4 @@ export default function Home() {
       </AnimatePresence>
     </div>
   );
-
-//REMOVER
-console.log('planStories:', planStories);
-console.log('stories raw:', stories);
 }
