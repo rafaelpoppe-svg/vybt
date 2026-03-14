@@ -217,7 +217,13 @@ export default function Home() {
   });*/
 
   console.log('0. currentUser:', currentUser);
-  console.log('0. myProfile:', myProfile);
+  console.log('0. myProfile:', {
+    ...myProfile,
+    myPlans: myParticipations.map(p => {
+      const plan = plans.find(pl => pl.id === p.plan_id);
+      return { plan_id: p.plan_id, title: plan?.title, status: plan?.status };
+    })
+  });
   console.log('1. stories:', stories.map(s => ({ ...s, display_name: profilesMap[s.user_id]?.display_name })));
 
   const ownStories = useMemo(() => 
