@@ -13,7 +13,7 @@ const ACTIVITY_CONFIG = {
   voting:    { emoji: '🗳️', color: '#3b82f6', label: 'votação a terminar' },
 };
 
-export default function HomeLiveActivities({ friendIds = [], allParticipants = [], stories = [], profilesMap = {}, plans = [], onPlanClick, onStoryClick }) {
+export default function HomeLiveActivities({ friendIds = [], allParticipants = [], friendStories = [],/*APAGAR*/ stories = [], profilesMap = {}, plans = [], onPlanClick, onStoryClick }) {
   const activities = useMemo(() => {
     const result = [];
     const now = Date.now();
@@ -37,8 +37,8 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
       });
     });
 
-    // Friend posted a story (last 24h)
-    stories.forEach(s => {
+    // Friend posted a story (last 24h) REMOVER SE DER CERTO
+    /*stories.forEach(s => {
       if (!friendIds.includes(s.user_id)) return;
       if (now - new Date(s.created_date).getTime() > DAY) return;
       const plan = plans.find(pl => pl.id === s.plan_id);
@@ -51,8 +51,22 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
         plan: plan || null,
         story: s,
       });
-    });
+    })*/
 
+      friendStories.forEach(s => {
+        if (now - new Date(s.created_date).getTime() > DAY) return;
+        const plan = plans.find(pl => pl.id === s.plan_id);
+        result.push({
+          id: `story-${s.id}`,
+          type: 'story',
+          profile: profilesMap[s.user_id],
+          planName: plan?.title || '',
+          time: s.created_date,
+          plan: plan || null,
+          story: s,
+        });
+      });
+      
     // Friend created a plan (last 24h)
     plans.forEach(plan => {
       if (!friendIds.includes(plan.creator_id)) return;
@@ -142,7 +156,7 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
         return true;
       })
       .slice(0, 10);
-  }, [friendIds, allParticipants, stories, profilesMap, plans]);
+  }, [friendIds, allParticipants, friendStories, profilesMap, plans]);
 
   if (activities.length === 0) return null;
 
