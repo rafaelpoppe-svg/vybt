@@ -217,7 +217,7 @@ export default function Home() {
 
   console.log('0. currentUser:', currentUser);
   console.log('0. myProfile:', myProfile);
-  console.log('1. stories:', stories);
+  console.log('1. stories:', stories.map(s => ({ ...s, display_name: profilesMap[s.user_id]?.display_name })));
 
   const ownStories = useMemo(() => 
     stories
