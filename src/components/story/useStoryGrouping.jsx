@@ -110,7 +110,7 @@ export function useStoryGrouping(allStories, userProfiles, plans, currentUser, f
   /**
    * Encontra o índice do grupo e da história dentro do grupo baseado num story ID
    */
-  const findStoryPosition = (storyId) => {
+  /* rREMOVER SE DER CERTOconst findStoryPosition = (storyId) => {
     for (let groupIdx = 0; groupIdx < groupedStories.length; groupIdx++) {
       const group = groupedStories[groupIdx];
       const storyIdx = group.stories.findIndex(s => s.id === storyId);
@@ -119,8 +119,26 @@ export function useStoryGrouping(allStories, userProfiles, plans, currentUser, f
       }
     }
     return null;
+  };*/
+  const findStoryPosition = (storyId) => {
+    for (let groupIdx = 0; groupIdx < groupedStories.length; groupIdx++) {
+      const group = groupedStories[groupIdx];
+      if (group.type !== 'friend') continue;
+      const storyIdx = group.stories.findIndex(s => s.id === storyId);
+      if (storyIdx !== -1) {
+        return { groupIndex: groupIdx, storyIndex: storyIdx, group };
+      }
+    }
+    for (let groupIdx = 0; groupIdx < groupedStories.length; groupIdx++) {
+      const group = groupedStories[groupIdx];
+      if (group.type === 'friend') continue;
+      const storyIdx = group.stories.findIndex(s => s.id === storyId);
+      if (storyIdx !== -1) {
+        return { groupIndex: groupIdx, storyIndex: storyIdx, group };
+      }
+    }
+    return null;
   };
-
   /**
    * Obtém a história atual baseado nos índices
    */
