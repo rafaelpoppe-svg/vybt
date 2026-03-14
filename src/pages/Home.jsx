@@ -158,7 +158,7 @@ export default function Home() {
     }
     return true;
   }), [plans, myParticipations]);
-  console.log('3.5. visible plans:', visiblePlans);
+  //console.log('3.5. visible plans:', visiblePlans);
 
   const recommendedPlans = useRecommendations({
     plans: visiblePlans,
@@ -216,7 +216,7 @@ export default function Home() {
     return visiblePlans.some(p => p.id === s.plan_id);
   });*/
   console.log("plans:", plans);
-  console.log('0. currentUser:', currentUser);
+  //console.log('0. currentUser:', currentUser);
   console.log('0. myProfile:', {
     ...myProfile,
     myPlans: myParticipations.map(p => {
