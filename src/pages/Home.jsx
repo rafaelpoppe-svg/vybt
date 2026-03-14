@@ -91,7 +91,7 @@ export default function Home() {
 
   const { data: plans = [], isLoading: plansLoading } = useQuery({
     queryKey: ['plans', city],
-    queryFn: () => base44.entities.PartyPlan.filter({ city }, '-created_date', 20),
+    queryFn: () => base44.entities.PartyPlan.filter({ city }, '-created_date', 100),
   });
 
   
