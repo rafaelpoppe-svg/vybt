@@ -206,14 +206,14 @@ export default function Home() {
     return true;
   }) || null;
 
-  // Stories visíveis: próprios + amigos + stories de planos da cidade
-  const visibleStories = stories.filter(s => {
+  // Stories visíveis: próprios + amigos + stories de planos da cidade REMOVER SE DER CERTO
+  /*const visibleStories = stories.filter(s => {
     if (s.user_id === currentUser?.id) return true;
     if (s.is_highlighted) return true;
     if (friendIds.includes(s.user_id)) return true;
     // Stories de planos na cidade/raio
     return visiblePlans.some(p => p.id === s.plan_id);
-  });
+  });*/
 
   const ownStories = useMemo(() => 
     stories
