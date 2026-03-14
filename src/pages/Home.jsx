@@ -98,6 +98,7 @@ export default function Home() {
     queryKey: ['stories'],
     queryFn: async () => {
       const all = await base44.entities.ExperienceStory.list('-created_date', 50);
+      console.log('TODOS os stories da API:', all.map(s => ({ id: s.id, plan_id: s.plan_id, created_date: s.created_date, expires_at: s.expires_at })));
       console.log('stories from API:', all);  // <- adiciona aqui
       console.log('primeiro story expires_at:', all[0]?.expires_at);
       console.log('é maior que now?', new Date(all[0]?.expires_at) > new Date());
