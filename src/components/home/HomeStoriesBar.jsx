@@ -180,7 +180,7 @@ function UserCircle({ story, user, isOwn, onClick }) {
 }
 
 export default function HomeStoriesBar({
-  stories = [],
+  // REMOVER stories = [],
   ownStories = [],
   friendStories = [],
   planStories = [],
