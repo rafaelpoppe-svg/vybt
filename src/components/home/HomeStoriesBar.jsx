@@ -181,6 +181,9 @@ function UserCircle({ story, user, isOwn, onClick }) {
 
 export default function HomeStoriesBar({
   stories = [],
+  ownStories = [],
+  friendStories = [],
+  planStories = [],
   userProfiles = {},
   plans = [],
   friendUserIds = [],
@@ -190,8 +193,8 @@ export default function HomeStoriesBar({
   currentUserId,
   happeningPlan = null,
 }) {
-  // Agrupar stories por plano
-  const planGroups = useMemo(() => {
+  // Agrupar stories por plano REMOVER SE DER CERTO
+  /*const planGroups = useMemo(() => {
     const byPlan = {};
     stories.forEach(s => {
       if (!s.plan_id) return;
@@ -215,15 +218,36 @@ export default function HomeStoriesBar({
         if (bLive && !aLive) return 1;
         return b.stories.length - a.stories.length;
       });
-  }, [stories, plans]);
+  }, [stories, plans]);*/
 
-  // Stories próprios agrupados num único círculo (mais recente como preview)
-  const ownStories = stories
+  const planGroups = useMemo(() => {
+    const byPlan = {};
+    planStories.forEach(s => {
+      if (!byPlan[s.plan_id]) byPlan[s.plan_id] = [];
+      byPlan[s.plan_id].push(s);
+    });
+    return Object.entries(byPlan)
+      .map(([planId, ps]) => {
+        const plan = plans.find(p => p.id === planId);
+        if (!plan) return null;
+        const preview = ps.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))[0];
+        return { plan, stories: ps, preview };
+      })
+      .filter(Boolean)
+      .sort((a, b) => {
+        if (a.plan.status === 'happening' && b.plan.status !== 'happening') return -1;
+        if (b.plan.status === 'happening' && a.plan.status !== 'happening') return 1;
+        return b.stories.length - a.stories.length;
+      });
+  }, [planStories, plans]);
+
+  // Stories próprios agrupados num único círculo (mais recente como preview) REMOVER SE DER CERTO
+  /*const ownStories = stories
     .filter(s => s.user_id === currentUserId)
-    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));*/
 
-  // Stories de amigos agrupados por utilizador (1 círculo por amigo)
-  const friendStoryGroups = useMemo(() => {
+  // Stories de amigos agrupados por utilizador (1 círculo por amigo)REMOVER SE DER CERTO
+  /*const friendStoryGroups = useMemo(() => {
     const byUser = {};
     stories.forEach(s => {
       if (s.user_id === currentUserId) return; // próprios já tratados
@@ -235,11 +259,24 @@ export default function HomeStoriesBar({
       userId,
       stories: userStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
     }));
-  }, [stories, currentUserId, friendUserIds]);
+  }, [stories, currentUserId, friendUserIds]);*/
 
-  // Total de stories para o contador
-  const totalCount = planGroups.reduce((sum, g) => sum + g.stories.length, ownStories.length);
+  const friendStoryGroups = useMemo(() => {
+    const byUser = {};
+    friendStories.forEach(s => {
+      if (!byUser[s.user_id]) byUser[s.user_id] = [];
+      byUser[s.user_id].push(s);
+    });
+    return Object.entries(byUser).map(([userId, userStories]) => ({
+      userId,
+      stories: userStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
+    }));
+  }, [friendStories]);
 
+  // Total de stories para o contador REMOVER SE DER CERTO
+  //const totalCount = planGroups.reduce((sum, g) => sum + g.stories.length, ownStories.length);
+  const totalCount = ownStories.length + friendStories.length + planStories.length;
+  
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between px-4">
