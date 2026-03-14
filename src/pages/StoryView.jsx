@@ -150,19 +150,18 @@ export default function StoryView() {
   useEffect(() => {
     if (allStoriesData.length > 0) {
       setAllStories(allStoriesData);
-      if (storyId && groupedStories.length > 0) {
-        const position = findStoryPosition(storyId);
-        if (position) {
-          setCurrentGroupIndex(position.groupIndex);
-          setCurrentStoryInGroupIndex(position.storyIndex);
-        }
-      }
-      // Fallback to flat list if no grouping
-      if (!storyId) {
-        setCurrentStoryIndex(0);
+    }
+  }, [allStoriesData]);
+
+  useEffect(() => {
+    if (storyId && groupedStories.length > 0 && allStories.length > 0) {
+      const position = findStoryPosition(storyId);
+      if (position) {
+        setCurrentGroupIndex(position.groupIndex);
+        setCurrentStoryInGroupIndex(position.storyIndex);
       }
     }
-  }, [allStoriesData, storyId, groupedStories]);
+  }, [storyId, groupedStories]);
 
   const deleteMutation = useMutation({
     mutationFn: () => base44.entities.ExperienceStory.delete(story.id),
