@@ -229,11 +229,6 @@ export default function Home() {
     stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
   , [stories, visiblePlans]);
 
-
-//REMOVER
-console.log('planStories:', planStories);
-console.log('stories raw:', stories);
-
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
 
@@ -408,4 +403,8 @@ console.log('stories raw:', stories);
       </AnimatePresence>
     </div>
   );
+
+//REMOVER
+console.log('planStories:', planStories);
+console.log('stories raw:', stories);
 }
