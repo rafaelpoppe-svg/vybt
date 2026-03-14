@@ -37,11 +37,11 @@ export default function StoryView() {
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
-  useEffect(() => {
+  /* REMOVER SE DER CERTO useEffect(() => {
     setCurrentGroupIndex(0);
     setCurrentStoryInGroupIndex(0);
     setAllStories([]);
-  }, [storyId]);
+  }, [storyId]);*/
 
   useEffect(() => {
     const getUser = async () => {
@@ -172,6 +172,7 @@ export default function StoryView() {
   const deleteMutation = useMutation({
     mutationFn: () => base44.entities.ExperienceStory.delete(story.id),
     onSuccess: () => {
+      queryClient.removeQueries(['allStories']);
       queryClient.invalidateQueries(['allStories']);
       navigate(-1);
     }
@@ -495,7 +496,10 @@ export default function StoryView() {
 
             <motion.button
               whileTap={{ scale: 0.9 }}
-              onClick={() => navigate(-1)}
+              onClick={() => {
+                queryClient.removeQueries(['allStories']);
+                navigate(-1)
+              }}
               className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
             >
               <X className="w-6 h-6 text-white" />
