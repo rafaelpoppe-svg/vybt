@@ -404,3 +404,7 @@ export default function Home() {
     </div>
   );
 }
+
+//REMOVER
+console.log('planStories:', planStories);
+console.log('stories raw:', stories);
