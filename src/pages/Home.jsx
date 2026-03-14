@@ -215,24 +215,26 @@ export default function Home() {
     return visiblePlans.some(p => p.id === s.plan_id);
   });*/
 
-  console.log('1. stories:', stories.map(s => ({ id: s.id, plan_id: s.plan_id, user_id: s.user_id })));
+  console.log('0. currentUser:', currentUser);
+  console.log('0. myProfile:', myProfile);
+  console.log('1. stories:', stories);
 
   const ownStories = useMemo(() => 
     stories
       .filter(s => s.user_id === currentUser?.id)
       .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
   , [stories, currentUser?.id]);
-  console.log('2. ownStories:', ownStories.map(s => ({ id: s.id, plan_id: s.plan_id, user_id: s.user_id })));
+  console.log('2. ownStories:', ownStories);
 
   const friendStories = useMemo(() => 
     stories.filter(s => friendIds.includes(s.user_id))
   , [stories, friendIds]);
-  console.log('3. friendStories:', friendStories.map(s => ({ id: s.id, plan_id: s.plan_id, user_id: s.user_id })));
+  console.log('3. friendStories:', friendStories);
 
   const planStories = useMemo(() => 
     stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
   , [stories, visiblePlans]);
-  console.log('4. planStories:', planStories.map(s => ({ id: s.id, plan_id: s.plan_id, user_id: s.user_id })));
+  console.log('4. planStories:', planStories);
 
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
