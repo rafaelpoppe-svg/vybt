@@ -99,10 +99,12 @@ export default function Home() {
     queryFn: async () => {
       const all = await base44.entities.ExperienceStory.list('-created_date', 50);
       const now = new Date();
-      return all.filter(s => {
+      const filtered = all.filter(s => {
         if (s.expires_at) return new Date(s.expires_at) > now;
         return (now - new Date(s.created_date)) < 24 * 3600 * 1000;
       });
+      console.log('DEPOIS do filtro:', filtered.map(s => ({ id: s.id, plan_id: s.plan_id, expires_at: s.expires_at })));
+      return filtered;
     },
   });
 
