@@ -215,7 +215,7 @@ export default function Home() {
     // Stories de planos na cidade/raio
     return visiblePlans.some(p => p.id === s.plan_id);
   });*/
-
+  console.log("plans:", plans);
   console.log('0. currentUser:', currentUser);
   console.log('0. myProfile:', {
     ...myProfile,
