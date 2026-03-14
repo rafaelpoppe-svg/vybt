@@ -38,6 +38,12 @@ export default function StoryView() {
   const touchStartY = useRef(0);
 
   useEffect(() => {
+    setCurrentGroupIndex(0);
+    setCurrentStoryInGroupIndex(0);
+    setAllStories([]);
+  }, [storyId]);
+
+  useEffect(() => {
     const getUser = async () => {
       try {
         const user = await base44.auth.me();
@@ -371,7 +377,7 @@ export default function StoryView() {
     >
       {/* Progress bars — only shown when group has multiple stories */}
         <div className="absolute top-0 left-0 right-0 h-1 z-10 flex gap-1 px-2 pt-2">
-          {currentGroup.stories.map((_, index) => (
+          {(currentGroup?.stories || []).map((_, index) => (
             <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
               {index < currentStoryInGroupIndex ? (
                 <div className="h-full bg-white" style={{ width: '100%' }} />
