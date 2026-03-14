@@ -233,8 +233,8 @@ export default function Home() {
   , [stories, visiblePlans]);
   
   //REMOVER
-  console.log('primeiro plan_id de story:', stories.find(s => !!s.plan_id)?.plan_id);
-  console.log('primeiro visiblePlan id:', visiblePlans[0]?.id);
+  console.log('todos os plan_ids dos stories:', [...new Set(stories.filter(s => !!s.plan_id).map(s => s.plan_id))]);
+  console.log('todos os visiblePlans ids:', visiblePlans.map(p => p.id));
   console.log('visiblePlans ids:', visiblePlans.map(p => p.id));
   console.log('stories com plan_id:', stories.filter(s => !!s.plan_id).map(s => s.plan_id));
 
