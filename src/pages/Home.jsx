@@ -231,6 +231,7 @@ export default function Home() {
   , [stories, friendIds]);
   console.log('3. friendStories:', friendStories.map(s => ({ ...s, display_name: profilesMap[s.user_id]?.display_name })));
 
+  console.log('3.5. visible plans:', visiblePlans);
   const planStories = useMemo(() => 
     stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
   , [stories, visiblePlans]);
