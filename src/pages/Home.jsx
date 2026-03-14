@@ -100,7 +100,7 @@ export default function Home() {
   const { data: stories = [] } = useQuery({
     queryKey: ['stories'],
     queryFn: async () => {
-      const all = await base44.entities.ExperienceStory.list('-created_date', 50);
+      const all = await base44.entities.ExperienceStory.list('-created_date');
       const now = new Date();
       return all.filter(s => {
         if (s.expires_at) return new Date(s.expires_at) > now;
