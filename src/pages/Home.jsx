@@ -233,8 +233,8 @@ export default function Home() {
   , [stories, visiblePlans]);
   
   //REMOVER
-  console.log('planStories:', planStories);
-  console.log('stories raw:', stories);
+  console.log('visiblePlans ids:', visiblePlans.map(p => p.id));
+  console.log('stories com plan_id:', stories.filter(s => !!s.plan_id).map(s => s.plan_id));
 
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
