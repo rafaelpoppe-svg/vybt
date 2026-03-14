@@ -103,7 +103,7 @@ export default function Home() {
         if (s.expires_at) return new Date(s.expires_at) > now;
         return (now - new Date(s.created_date)) < 24 * 3600 * 1000;
       });
-      console.log('DEPOIS do filtro:', filtered.map(s => ({ id: s.id, plan_id: s.plan_id, expires_at: s.expires_at })));
+      //console.log('DEPOIS do filtro:', filtered.map(s => ({ id: s.id, plan_id: s.plan_id, expires_at: s.expires_at })));
       return filtered;
     },
   });
