@@ -215,6 +215,20 @@ export default function Home() {
     return visiblePlans.some(p => p.id === s.plan_id);
   });
 
+  const ownStories = useMemo(() => 
+    stories
+      .filter(s => s.user_id === currentUser?.id)
+      .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
+  , [stories, currentUser?.id]);
+
+  const friendStories = useMemo(() => 
+    stories.filter(s => friendIds.includes(s.user_id))
+  , [stories, friendIds]);
+
+  const planStories = useMemo(() => 
+    stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
+  , [stories, visiblePlans]);
+
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
 
@@ -288,6 +302,9 @@ export default function Home() {
         <div className="pb-3 pt-1">
           <HomeStoriesBar
             stories={visibleStories}
+            ownStories={ownStories}
+            friendStories={friendStories}
+            planStories={planStories}
             userProfiles={profilesMap}
             plans={visiblePlans}
             friendUserIds={friendIds}
@@ -364,6 +381,7 @@ export default function Home() {
           friendIds={friendIds}
           allParticipants={allParticipants}
           stories={visibleStories}
+          friendStories={friendStories}
           profilesMap={profilesMap}
           plans={visiblePlans}
           onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
