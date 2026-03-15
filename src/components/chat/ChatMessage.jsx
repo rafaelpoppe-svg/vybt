@@ -14,6 +14,27 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true,
   const isSticker = message.content?.startsWith('sticker:');
   const stickerUrl = isSticker ? message.content.replace('sticker:', '') : null;
 
+  // Story reply: "story_reply:<id>:<url>:<type>\n<message>"
+  const isStoryReply = message.content?.startsWith('story_reply:');
+  let storyReplyData = null;
+  let displayContent = message.content;
+  if (isStoryReply) {
+    const lines = message.content.split('\n');
+    const parts = lines[0].split(':');
+    // parts: ['story_reply', id, ...url parts..., type]
+    // url may contain colons (https://...), so we reconstruct carefully
+    const afterPrefix = lines[0].slice('story_reply:'.length); // "id:url:type"
+    const firstColon = afterPrefix.indexOf(':');
+    const rest = afterPrefix.slice(firstColon + 1); // "url:type"
+    const lastColon = rest.lastIndexOf(':');
+    storyReplyData = {
+      id: afterPrefix.slice(0, firstColon),
+      url: rest.slice(0, lastColon),
+      type: rest.slice(lastColon + 1),
+    };
+    displayContent = lines.slice(1).join('\n');
+  }
+
   const handleLike = () => {
     const next = !liked;
     setLiked(next);
