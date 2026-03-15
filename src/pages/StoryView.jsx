@@ -754,9 +754,9 @@ export default function StoryView() {
                   </motion.button>
                 )}
                 <div className="relative">
-                  <motion.button whileTap={{ scale: 0.95 }} onClick={() => showEmojiPicker ? handleCloseEmoji() : handleOpenEmoji()}
-                    className="p-3 rounded-xl bg-gradient-to-r from-[#542b9b]/80 to-[#542b9b] text-white backdrop-blur-sm border border-[#542b9b]/50">
-                    <span className="text-xl">😊</span>
+                  <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.03 }} onClick={() => showEmojiPicker ? handleCloseEmoji() : handleOpenEmoji()}
+                    className="p-3 rounded-xl bg-transparent text-white backdrop-blur-sm border border-white/60 flex items-center justify-center">
+                    <span className="text-xl">🤍</span>
                   </motion.button>
                   {showEmojiPicker && (
                     <motion.div initial={{ opacity: 0, scale: 0.8, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }}
