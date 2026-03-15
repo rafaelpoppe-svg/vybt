@@ -432,10 +432,11 @@ export default function StoryView() {
       if (currentStoryInGroupIndex < group.stories.length - 1) {
         setCurrentStoryInGroupIndex(currentStoryInGroupIndex + 1);
       } else if (currentGroupIndex < groupedStories.length - 1) {
+        // Always advance to next group, regardless of type
         goToGroupCube(currentGroupIndex + 1, 0, 1);
       } else {
-        goToGroupCube(currentGroupIndex, 0, 1);
-        setTimeout(() => navigate(-1), 300);
+        // Last story of last group — exit
+        navigate(-1);
       }
     } else if (currentStoryIndex < allStories.length - 1) {
       setCurrentStoryIndex(currentStoryIndex + 1);
