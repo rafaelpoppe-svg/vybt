@@ -38,17 +38,7 @@ function getCubeFaceStyle(role, progress, direction) {
 
   if (role === 'current') {
     if (direction >= 0) {
-      // Forward: current pivots on its RIGHT edge, swings back
-      return {
-        position: 'absolute', inset: 0,
-        transformOrigin: 'right center',
-        transform: `rotateY(${-90 * p}deg)`,
-        backfaceVisibility: 'hidden',
-        zIndex: 1,
-        willChange: 'transform',
-      };
-    } else {
-      // Backward: current pivots on its LEFT edge, swings back
+      // Forward (swipe left → next): current exits to the LEFT, pivots on LEFT edge
       return {
         position: 'absolute', inset: 0,
         transformOrigin: 'left center',
@@ -57,24 +47,34 @@ function getCubeFaceStyle(role, progress, direction) {
         zIndex: 1,
         willChange: 'transform',
       };
+    } else {
+      // Backward (swipe right → prev): current exits to the RIGHT, pivots on RIGHT edge
+      return {
+        position: 'absolute', inset: 0,
+        transformOrigin: 'right center',
+        transform: `rotateY(${-90 * p}deg)`,
+        backfaceVisibility: 'hidden',
+        zIndex: 1,
+        willChange: 'transform',
+      };
     }
   } else {
     if (direction >= 0) {
-      // Forward: adjacent comes in from the right, pivots on its LEFT edge
+      // Forward: adjacent enters from the RIGHT, pivots on RIGHT edge
       return {
         position: 'absolute', inset: 0,
-        transformOrigin: 'left center',
-        transform: `rotateY(${90 - 90 * p}deg)`,
+        transformOrigin: 'right center',
+        transform: `rotateY(${-90 + 90 * p}deg)`,
         backfaceVisibility: 'hidden',
         zIndex: 2,
         willChange: 'transform',
       };
     } else {
-      // Backward: adjacent comes in from the left, pivots on its RIGHT edge
+      // Backward: adjacent enters from the LEFT, pivots on LEFT edge
       return {
         position: 'absolute', inset: 0,
-        transformOrigin: 'right center',
-        transform: `rotateY(${-90 + 90 * p}deg)`,
+        transformOrigin: 'left center',
+        transform: `rotateY(${90 - 90 * p}deg)`,
         backfaceVisibility: 'hidden',
         zIndex: 2,
         willChange: 'transform',
