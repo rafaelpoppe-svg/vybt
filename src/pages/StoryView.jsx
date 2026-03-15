@@ -748,9 +748,9 @@ export default function StoryView() {
               )}
               <div className="flex gap-3 items-center">
                 {canChat && (
-                  <motion.button whileTap={{ scale: 0.95 }} onClick={handleOpenChat}
-                    className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-[#00c6d2]/80 to-[#00c6d2] text-[#0b0b0b] font-bold backdrop-blur-sm border border-[#00c6d2]/50">
-                    <MessageCircle className="w-5 h-5" /><span>Send Chat</span>
+                  <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.03 }} onClick={handleOpenChat}
+                    className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-transparent text-white font-semibold backdrop-blur-sm border border-white/60">
+                    <MessageCircle className="w-5 h-5" /><span>Reply to {storyUser?.display_name || 'user'}</span>
                   </motion.button>
                 )}
                 <div className="relative">
