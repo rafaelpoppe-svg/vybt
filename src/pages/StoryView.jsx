@@ -36,68 +36,6 @@ export default function StoryView() {
   const isPausedRef = useRef(false);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
-// REMOVER
-  const [dragX, setDragX] = useState(0);
-  const isDraggingRef = useRef(false);
-  const containerRef = useRef(null);
-  const SCREEN_WIDTH = window.innerWidth;
-  const DRAG_THRESHOLD = SCREEN_WIDTH * 0.3; // 30% da largura
-
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-    isDraggingRef.current = false;
-    setDragX(0);
-  };
-
-  const handleTouchMove = (e) => {
-    const deltaX = e.touches[0].clientX - touchStartX.current;
-    const deltaY = Math.abs(e.touches[0].clientY - touchStartY.current);
-    
-    // só ativa drag horizontal se movimento horizontal > vertical
-    if (Math.abs(deltaX) > deltaY * 1.5) {
-      isDraggingRef.current = true;
-      // limita o drag se não houver grupo anterior/próximo
-      if (deltaX > 0 && currentGroupIndex === 0) {
-        setDragX(deltaX * 0.2); // resistência no início
-      } else if (deltaX < 0 && currentGroupIndex === groupedStories.length - 1) {
-        setDragX(deltaX * 0.2); // resistência no fim
-      } else {
-        setDragX(deltaX);
-      }
-    }
-  };
-
-  const handleTouchEnd = (e) => {
-    if (!isDraggingRef.current) {
-      setDragX(0);
-      return;
-    }
-
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-
-    if (deltaX < -DRAG_THRESHOLD && currentGroupIndex < groupedStories.length - 1) {
-      // completa swipe para a esquerda → próximo grupo
-      setDragX(-SCREEN_WIDTH);
-      setTimeout(() => {
-        setCurrentGroupIndex(currentGroupIndex + 1);
-        setCurrentStoryInGroupIndex(0);
-        setDragX(0);
-      }, 300);
-    } else if (deltaX > DRAG_THRESHOLD && currentGroupIndex > 0) {
-      // completa swipe para a direita → grupo anterior
-      setDragX(SCREEN_WIDTH);
-      setTimeout(() => {
-        setCurrentGroupIndex(currentGroupIndex - 1);
-        setCurrentStoryInGroupIndex(0);
-        setDragX(0);
-      }, 300);
-    } else {
-      // não passou o threshold → volta ao lugar
-      setDragX(0);
-    }
-    isDraggingRef.current = false;
-  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -170,11 +108,35 @@ export default function StoryView() {
   const storyUser = story ? profilesMap[story.user_id] : null;
   const storyPlan = story ? plans.find(p => p.id === story.plan_id) : null;
 
-  /* REMOVER SE DER CERTO Handle horizontal swipe for group navigation
+  // Handle horizontal swipe for group navigation
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
-  };*/
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchEndX - touchStartX.current;
+    const deltaY = Math.abs(touchEndY - touchStartY.current);
+
+    // Only trigger if horizontal swipe > 50px and less vertical movement
+    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > deltaY * 2) {
+      if (deltaX > 0) {
+        // Swipe right: previous group
+        if (currentGroupIndex > 0) {
+          setCurrentGroupIndex(currentGroupIndex - 1);
+          setCurrentStoryInGroupIndex(0);
+        }
+      } else {
+        // Swipe left: next group
+        if (currentGroupIndex < groupedStories.length - 1) {
+          setCurrentGroupIndex(currentGroupIndex + 1);
+          setCurrentStoryInGroupIndex(0);
+        }
+      }
+    }
+  };
 
   const triggerFloatingEmoji = (emoji) => {
     const id = Date.now();
@@ -373,7 +335,7 @@ export default function StoryView() {
     }
   });
 
-  const emojis = ['❤️', '🔥', '😍', '🎉', '👏'];
+  const emojis = ['❤️', '🔥', '😍', '🎉', '👏', '💯'];
 
   const handleEmojiSelect = (emoji) => {
     reactMutation.mutate(emoji);
@@ -398,11 +360,9 @@ export default function StoryView() {
   }
 
   return (
-    <div
-      data-hscroll="true" 
-      className="fixed inset-0 bg-gradient-to-b from-black via-black to-black z-50 overflow-hidden"
+    <div 
+      className="fixed inset-0 bg-gradient-to-b from-black via-black to-black z-50"
       onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {/* Progress bars — only shown when group has multiple stories */}
@@ -440,34 +400,8 @@ export default function StoryView() {
         onClick={() => { isPausedRef.current = !isPausedRef.current}}
       />
 
-      {/* Grupo anterior */}
-      {currentGroupIndex > 0 && (
-        <div
-          className="absolute inset-0 flex items-center justify-center bg-black"
-          style={{
-            transform: `translateX(${-SCREEN_WIDTH + dragX}px)`,
-            transition: isDraggingRef.current ? 'none' : 'transform 0.3s ease',
-          }}
-        >
-          {(() => {
-            const prevStory = groupedStories[currentGroupIndex - 1]?.stories?.[0];
-            return prevStory?.media_type === 'video' ? (
-              <video src={prevStory.media_url} className="h-full w-auto max-w-[400px] object-cover" muted />
-            ) : (
-              <img src={prevStory?.media_url} alt="" className="h-full w-auto max-w-[400px] object-cover" />
-            );
-          })()}
-        </div>
-      )}
-
-      {/* Grupo atual */}
-      <div
-        className="absolute inset-0 flex items-center justify-center bg-black"
-        style={{
-          transform: `translateX(${dragX}px)`,
-          transition: isDraggingRef.current ? 'none' : 'transform 0.3s ease',
-        }}
-      >
+      {/* Media */}
+      <div className="absolute inset-0 flex items-center justify-center bg-black">
         {story.media_type === 'video' ? (
           <video
             key={story.id}
@@ -489,26 +423,6 @@ export default function StoryView() {
           />
         )}
       </div>
-
-      {/* Próximo grupo */}
-      {currentGroupIndex < groupedStories.length - 1 && (
-        <div
-          className="absolute inset-0 flex items-center justify-center bg-black"
-          style={{
-            transform: `translateX(${SCREEN_WIDTH + dragX}px)`,
-            transition: isDraggingRef.current ? 'none' : 'transform 0.3s ease',
-          }}
-        >
-          {(() => {
-            const nextStory = groupedStories[currentGroupIndex + 1]?.stories?.[0];
-            return nextStory?.media_type === 'video' ? (
-              <video src={nextStory.media_url} className="h-full w-auto max-w-[400px] object-cover" muted />
-            ) : (
-              <img src={nextStory?.media_url} alt="" className="h-full w-auto max-w-[400px] object-cover" />
-            );
-          })()}
-        </div>
-      )}
 
       {/* Header */}
       <div className="absolute top-4 left-0 right-0 px-4 z-30">
