@@ -469,32 +469,34 @@ export default function StoryView() {
           {prevGroup && <SideGroupCard group={prevGroup} side="left" />}
           {nextGroup && <SideGroupCard group={nextGroup} side="right" />}
 
+          {/* Progress bars — outside AnimatePresence so ref never loses DOM */}
+          <div className="absolute top-0 left-0 right-0 h-1 z-30 flex gap-1 px-2 pt-2">
+            {(currentGroup?.stories || []).map((_, index) => (
+              <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
+                {index < currentStoryInGroupIndex ? (
+                  <div className="h-full bg-white" style={{ width: '100%' }} />
+                ) : index === currentStoryInGroupIndex ? (
+                  <div ref={progressBarRef} className="h-full bg-white" style={{ width: '0%' }} />
+                ) : (
+                  <div className="h-full bg-white" style={{ width: '0%' }} />
+                )}
+              </div>
+            ))}
+          </div>
+
           {/* Main story with cube animation on group change */}
           <AnimatePresence custom={cubeDirection} mode="sync">
             <motion.div
-              key={isCubeTransition ? `cube-${groupKey}` : `static-${currentGroupIndex}`}
+              key={`group-${groupKey}`}
               custom={cubeDirection}
-              variants={isCubeTransition ? cubeVariants : {}}
-              initial={isCubeTransition ? 'enter' : false}
+              variants={cubeVariants}
+              initial="enter"
               animate="center"
-              exit={isCubeTransition ? 'exit' : {}}
+              exit="exit"
               className="absolute inset-0"
               style={{ transformOrigin: cubeDirection > 0 ? 'left center' : 'right center', transformStyle: 'preserve-3d' }}
             >
-              {/* Progress bars */}
-              <div className="absolute top-0 left-0 right-0 h-1 z-10 flex gap-1 px-2 pt-2">
-                {(currentGroup?.stories || []).map((_, index) => (
-                  <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
-                    {index < currentStoryInGroupIndex ? (
-                      <div className="h-full bg-white" style={{ width: '100%' }} />
-                    ) : index === currentStoryInGroupIndex ? (
-                      <div ref={progressBarRef} className="h-full bg-white" style={{ width: '0%' }} />
-                    ) : (
-                      <div className="h-full bg-white" style={{ width: '0%' }} />
-                    )}
-                  </div>
-                ))}
-              </div>
+              {/* Progress bars placeholder (invisible, space taken by outer) */}
 
               {/* Navigation tap zones */}
               <button
