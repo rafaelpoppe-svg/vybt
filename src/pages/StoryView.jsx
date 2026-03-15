@@ -13,74 +13,25 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// ─── Real 3D cube geometry ────────────────────────────────────────────────────
-// Instagram-style cube: both faces share ONE perspective on the parent container.
-// The cube has a radius (half the width). Each face is offset by that radius on Z,
-// then rotated so they meet at a 90° angle — exactly like a physical cube corner.
+// ─── True 3D cube rotation ────────────────────────────────────────────────────
+// Both faces are children of a cube wrapper that itself rotates.
+// Current face: translateZ(+r), starts at 0° rotation
+// Adjacent face: starts at -90° (forward) or +90° (backward) around Y, translateZ(+r)
+// The cube wrapper rotates from 0 → +90° (forward) or 0 → -90° (backward)
+// This produces a genuine cube spin, not a "door opening" effect.
 //
-// progress: 0..1 (forward) or 0..-1 (backward)
-// direction: 1 = going forward (swipe left), -1 = going backward (swipe right)
-//
-// Face angles:
-//   current:  starts at 0° → ends at -90° (forward) or +90° (backward)
-//   adjacent: starts at +90° (forward) or -90° (backward) → ends at 0°
+// We return styles for the CUBE WRAPPER (not individual faces).
+// Individual face offsets are handled inline in the JSX.
 
-// ─── Instagram cube geometry ──────────────────────────────────────────────────
-// Two faces pivot from the shared vertical edge between them.
-// Forward (swipe left):
-//   current  → pivot RIGHT edge, rotates from 0° to -90°
-//   adjacent → pivot LEFT edge,  rotates from +90° to 0°
-// Backward (swipe right):
-//   current  → pivot LEFT edge,  rotates from 0° to +90°
-//   adjacent → pivot RIGHT edge, rotates from -90° to 0°
-function getCubeFaceStyle(role, progress, direction) {
+function getCubeWrapperStyle(progress, direction) {
   const p = Math.abs(progress); // 0..1
-
-  if (role === 'current') {
-    if (direction >= 0) {
-      // Forward (swipe left → next): current exits to the LEFT, pivots on LEFT edge
-      return {
-        position: 'absolute', inset: 0,
-        transformOrigin: 'left center',
-        transform: `rotateY(${90 * p}deg)`,
-        backfaceVisibility: 'hidden',
-        zIndex: 1,
-        willChange: 'transform',
-      };
-    } else {
-      // Backward (swipe right → prev): current exits to the RIGHT, pivots on RIGHT edge
-      return {
-        position: 'absolute', inset: 0,
-        transformOrigin: 'right center',
-        transform: `rotateY(${-90 * p}deg)`,
-        backfaceVisibility: 'hidden',
-        zIndex: 1,
-        willChange: 'transform',
-      };
-    }
-  } else {
-    if (direction >= 0) {
-      // Forward: adjacent enters from the RIGHT, pivots on RIGHT edge
-      return {
-        position: 'absolute', inset: 0,
-        transformOrigin: 'right center',
-        transform: `rotateY(${-90 + 90 * p}deg)`,
-        backfaceVisibility: 'hidden',
-        zIndex: 2,
-        willChange: 'transform',
-      };
-    } else {
-      // Backward: adjacent enters from the LEFT, pivots on LEFT edge
-      return {
-        position: 'absolute', inset: 0,
-        transformOrigin: 'left center',
-        transform: `rotateY(${90 - 90 * p}deg)`,
-        backfaceVisibility: 'hidden',
-        zIndex: 2,
-        willChange: 'transform',
-      };
-    }
-  }
+  const angle = direction >= 0 ? -90 * p : 90 * p;
+  return {
+    position: 'absolute', inset: 0,
+    transformStyle: 'preserve-3d',
+    transform: `rotateY(${angle}deg)`,
+    willChange: 'transform',
+  };
 }
 
 export default function StoryView() {
