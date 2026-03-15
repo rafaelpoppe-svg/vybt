@@ -170,23 +170,21 @@ export default function StoryView() {
     if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > deltaY * 2) {
       isSwipeRef.current = true;
       if (deltaX < 0) {
-        // Swipe left → next group (or exit)
+        // Swipe left → always jump to next GROUP (skip remaining stories in current group)
         if (currentGroupIndex < groupedStories.length - 1) {
           goToGroup(currentGroupIndex + 1, 0, 1);
         } else {
-          setCubeDirection(1);
-          setIsCubeTransition(true);
-          setTimeout(() => { setIsCubeTransition(false); navigate(-1); }, CUBE_DURATION * 1000);
+          goToGroup(currentGroupIndex, 0, 1); // trigger cube exit anim then leave
+          setTimeout(() => navigate(-1), CUBE_DURATION * 1000);
         }
       } else {
-        // Swipe right → previous group (or exit)
+        // Swipe right → always jump to previous GROUP
         if (currentGroupIndex > 0) {
-          const prevGroup = groupedStories[currentGroupIndex - 1];
-          goToGroup(currentGroupIndex - 1, prevGroup.stories.length - 1, -1);
+          const pg = groupedStories[currentGroupIndex - 1];
+          goToGroup(currentGroupIndex - 1, pg.stories.length - 1, -1);
         } else {
-          setCubeDirection(-1);
-          setIsCubeTransition(true);
-          setTimeout(() => { setIsCubeTransition(false); navigate(-1); }, CUBE_DURATION * 1000);
+          goToGroup(currentGroupIndex, 0, -1); // trigger cube exit anim then leave
+          setTimeout(() => navigate(-1), CUBE_DURATION * 1000);
         }
       }
     }
