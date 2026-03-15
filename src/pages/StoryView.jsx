@@ -398,9 +398,11 @@ export default function StoryView() {
   }
 
   return (
-    <div 
+    <div
+      data-hscroll="true" 
       className="fixed inset-0 bg-gradient-to-b from-black via-black to-black z-50"
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {/* Progress bars — only shown when group has multiple stories */}
