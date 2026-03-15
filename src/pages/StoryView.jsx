@@ -556,7 +556,7 @@ export default function StoryView() {
         {/* Outer clip container — clips the cube as it rotates */}
         <div
           className="relative w-full md:w-[400px] h-full md:h-[90vh] md:rounded-2xl overflow-hidden"
-          style={{ perspective: '800px' }}
+          style={{ perspective: '900px', perspectiveOrigin: '50% 120%' }}
         >
           {/* Desktop side group cards */}
           {prevGroup && <SideGroupCard group={prevGroup} side="left" />}
