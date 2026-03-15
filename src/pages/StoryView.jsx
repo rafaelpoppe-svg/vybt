@@ -506,11 +506,11 @@ export default function StoryView() {
   const showCube = (isDragging || isAnimating) && absProgress > 0;
 
   const currentFaceStyle = showCube
-    ? getCubeFaceStyle('current', absProgress, dragDir, screenW.current)
+    ? getCubeFaceStyle('current', absProgress, dragDir)
     : { position: 'absolute', inset: 0 };
 
   const adjacentFaceStyle = showCube && adjacentStory
-    ? getCubeFaceStyle('adjacent', absProgress, dragDir, screenW.current)
+    ? getCubeFaceStyle('adjacent', absProgress, dragDir)
     : null;
 
   // ── Render ────────────────────────────────────────────────────────────────
