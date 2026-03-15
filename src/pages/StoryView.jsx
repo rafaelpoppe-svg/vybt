@@ -487,7 +487,7 @@ export default function StoryView() {
               key={`group-${groupKey}`}
               custom={cubeDirection}
               variants={cubeVariants}
-              initial="enter"
+              initial={groupKey === 0 ? false : 'enter'}
               animate="center"
               exit="exit"
               className="absolute inset-0"
