@@ -36,12 +36,68 @@ export default function StoryView() {
   const isPausedRef = useRef(false);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
+// REMOVER
+  const [dragX, setDragX] = useState(0);
+  const isDraggingRef = useRef(false);
+  const containerRef = useRef(null);
+  const SCREEN_WIDTH = window.innerWidth;
+  const DRAG_THRESHOLD = SCREEN_WIDTH * 0.3; // 30% da largura
 
-  /* REMOVER SE DER CERTO useEffect(() => {
-    setCurrentGroupIndex(0);
-    setCurrentStoryInGroupIndex(0);
-    setAllStories([]);
-  }, [storyId]);*/
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isDraggingRef.current = false;
+    setDragX(0);
+  };
+
+  const handleTouchMove = (e) => {
+    const deltaX = e.touches[0].clientX - touchStartX.current;
+    const deltaY = Math.abs(e.touches[0].clientY - touchStartY.current);
+    
+    // só ativa drag horizontal se movimento horizontal > vertical
+    if (Math.abs(deltaX) > deltaY * 1.5) {
+      isDraggingRef.current = true;
+      // limita o drag se não houver grupo anterior/próximo
+      if (deltaX > 0 && currentGroupIndex === 0) {
+        setDragX(deltaX * 0.2); // resistência no início
+      } else if (deltaX < 0 && currentGroupIndex === groupedStories.length - 1) {
+        setDragX(deltaX * 0.2); // resistência no fim
+      } else {
+        setDragX(deltaX);
+      }
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (!isDraggingRef.current) {
+      setDragX(0);
+      return;
+    }
+
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+
+    if (deltaX < -DRAG_THRESHOLD && currentGroupIndex < groupedStories.length - 1) {
+      // completa swipe para a esquerda → próximo grupo
+      setDragX(-SCREEN_WIDTH);
+      setTimeout(() => {
+        setCurrentGroupIndex(currentGroupIndex + 1);
+        setCurrentStoryInGroupIndex(0);
+        setDragX(0);
+      }, 300);
+    } else if (deltaX > DRAG_THRESHOLD && currentGroupIndex > 0) {
+      // completa swipe para a direita → grupo anterior
+      setDragX(SCREEN_WIDTH);
+      setTimeout(() => {
+        setCurrentGroupIndex(currentGroupIndex - 1);
+        setCurrentStoryInGroupIndex(0);
+        setDragX(0);
+      }, 300);
+    } else {
+      // não passou o threshold → volta ao lugar
+      setDragX(0);
+    }
+    isDraggingRef.current = false;
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -219,13 +275,10 @@ export default function StoryView() {
 
   const startProgress = () => {
     if (!progressBarRef.current) return;
-    //REMOVER SE NÃO FUNCIONAR
     clearTimeout(progressTimerRef.current);
 
     progressBarRef.current.style.transition = 'none';
     progressBarRef.current.style.width = '0%';
-
-    //REMOVER SE NÃO FUNCIONAR
     progressBarRef.current.getBoundingClientRect();
 
     requestAnimationFrame(() => {
@@ -267,7 +320,6 @@ export default function StoryView() {
 
   const handleNext = () => {
 
-    // REMOVER SE NÃO FUNCIONAR
     if (progressBarRef.current) {
       progressBarRef.current.style.transition = 'none';
       progressBarRef.current.style.width = '100%';
@@ -296,7 +348,6 @@ export default function StoryView() {
 
   const handlePrevious = () => {
 
-    // REMOVER SE NÃO DER CERTO
     if (progressBarRef.current) {
       progressBarRef.current.style.transition = 'none';
       progressBarRef.current.style.width = '0%';
