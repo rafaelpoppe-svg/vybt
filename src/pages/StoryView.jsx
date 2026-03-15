@@ -522,9 +522,10 @@ export default function StoryView() {
       onTouchEnd={handleTouchEnd}
     >
       <div className="w-full h-full flex items-center justify-center">
+        {/* Outer clip container — clips the cube as it rotates */}
         <div
           className="relative w-full md:w-[400px] h-full md:h-[90vh] md:rounded-2xl overflow-hidden"
-          style={{ perspective: `${screenW.current * 2}px` }}
+          style={{ perspective: '800px' }}
         >
           {/* Desktop side group cards */}
           {prevGroup && <SideGroupCard group={prevGroup} side="left" />}
@@ -543,16 +544,21 @@ export default function StoryView() {
             ))}
           </div>
 
-          {/* Adjacent face (next/prev group preview) */}
-          {adjacentFaceStyle && adjacentStory && (
-            <div style={adjacentFaceStyle}>
-              <div className="absolute inset-0 bg-black">
-                {adjacentStory.media_type === 'video'
-                  ? <video src={adjacentStory.media_url} className="h-full w-full object-cover" muted playsInline />
-                  : <img src={adjacentStory.media_url} alt="" className="h-full w-full object-cover" />}
+          {/* 3D cube wrapper — both faces live here, sharing the same perspective */}
+          <div
+            className="absolute inset-0"
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            {/* Adjacent face (next/prev group preview) */}
+            {adjacentFaceStyle && adjacentStory && (
+              <div style={adjacentFaceStyle}>
+                <div className="absolute inset-0 bg-black">
+                  {adjacentStory.media_type === 'video'
+                    ? <video src={adjacentStory.media_url} className="h-full w-full object-cover" muted playsInline />
+                    : <img src={adjacentStory.media_url} alt="" className="h-full w-full object-cover" />}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* Current face */}
           <div style={currentFaceStyle}>
