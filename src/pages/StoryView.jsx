@@ -373,7 +373,7 @@ export default function StoryView() {
     }
   });
 
-  const emojis = ['❤️', '🔥', '😍', '🎉', '👏', '💯'];
+  const emojis = ['❤️', '🔥', '😍', '🎉', '👏'];
 
   const handleEmojiSelect = (emoji) => {
     reactMutation.mutate(emoji);
