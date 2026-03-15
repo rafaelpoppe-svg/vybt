@@ -503,29 +503,23 @@ export default function StoryView() {
     const user = preview ? profilesMap[preview.user_id] : null;
     const isLeft = side === 'left';
     return (
-      <div
-        className="hidden md:flex absolute top-0 bottom-0 items-center justify-center cursor-pointer z-10"
-        style={{ [isLeft ? 'right' : 'left']: '100%', width: '180px', paddingLeft: isLeft ? 0 : 16, paddingRight: isLeft ? 16 : 0 }}
-        onClick={() => isLeft ? goToGroupCube(currentGroupIndex - 1, 0, -1) : goToGroupCube(currentGroupIndex + 1, 0, 1)}
-      >
-        <div className="relative w-full h-[70%] rounded-2xl overflow-hidden opacity-60 hover:opacity-80 transition-opacity"
-          style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.6)' }}>
-          {preview?.media_url
-            ? <img src={preview.media_url} alt="" className="w-full h-full object-cover" />
-            : <div className="w-full h-full bg-gray-800" />}
-          <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
-                {user?.photos?.[0]
-                  ? <img src={user.photos[0]} alt="" className="w-full h-full object-cover" />
-                  : <div className="w-full h-full bg-[#542b9b] flex items-center justify-center text-[10px] text-white font-bold">{user?.display_name?.[0] || '?'}</div>}
-              </div>
-              <p className="text-white text-xs font-medium truncate">{user?.display_name || ''}</p>
+      <div className="relative w-[150px] h-[65vh] rounded-2xl overflow-hidden opacity-60 hover:opacity-90 transition-opacity"
+        style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.6)' }}>
+        {preview?.media_url
+          ? <img src={preview.media_url} alt="" className="w-full h-full object-cover" />
+          : <div className="w-full h-full bg-gray-800" />}
+        <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
+              {user?.photos?.[0]
+                ? <img src={user.photos[0]} alt="" className="w-full h-full object-cover" />
+                : <div className="w-full h-full bg-[#542b9b] flex items-center justify-center text-[10px] text-white font-bold">{user?.display_name?.[0] || '?'}</div>}
             </div>
+            <p className="text-white text-xs font-medium truncate">{user?.display_name || ''}</p>
           </div>
-          <div className="absolute top-1/2 -translate-y-1/2" style={{ [isLeft ? 'left' : 'right']: 8 }}>
-            {isLeft ? <ChevronLeft className="w-6 h-6 text-white drop-shadow" /> : <ChevronRight className="w-6 h-6 text-white drop-shadow" />}
-          </div>
+        </div>
+        <div className="absolute top-1/2 -translate-y-1/2" style={{ [isLeft ? 'left' : 'right']: 8 }}>
+          {isLeft ? <ChevronLeft className="w-6 h-6 text-white drop-shadow" /> : <ChevronRight className="w-6 h-6 text-white drop-shadow" />}
         </div>
       </div>
     );
