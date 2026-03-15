@@ -705,6 +705,7 @@ export default function StoryView() {
               )}
             </div>
           </div>
+          </div> {/* end 3D cube wrapper */}
         </div>
       </div>
 
