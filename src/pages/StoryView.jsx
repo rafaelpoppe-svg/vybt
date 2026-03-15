@@ -743,13 +743,13 @@ export default function StoryView() {
               )}
               <div className="flex gap-3 items-center">
                 {canChat && (
-                  <motion.button whileTap={{ scale: 0.95 }} onClick={() => setShowChatInput(true)}
+                  <motion.button whileTap={{ scale: 0.95 }} onClick={handleOpenChat}
                     className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-[#00c6d2]/80 to-[#00c6d2] text-[#0b0b0b] font-bold backdrop-blur-sm border border-[#00c6d2]/50">
                     <MessageCircle className="w-5 h-5" /><span>Send Chat</span>
                   </motion.button>
                 )}
                 <div className="relative">
-                  <motion.button whileTap={{ scale: 0.95 }} onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  <motion.button whileTap={{ scale: 0.95 }} onClick={() => showEmojiPicker ? handleCloseEmoji() : handleOpenEmoji()}
                     className="p-3 rounded-xl bg-gradient-to-r from-[#542b9b]/80 to-[#542b9b] text-white backdrop-blur-sm border border-[#542b9b]/50">
                     <span className="text-xl">😊</span>
                   </motion.button>
@@ -766,7 +766,7 @@ export default function StoryView() {
                 </div>
               </div>
               {showChatInput && canChat && (
-                <StoryChatInput storyId={story?.id} storyUser={storyUser} onMessageSent={handleChatSent} onClose={() => setShowChatInput(false)} />
+                <StoryChatInput story={story} storyUser={storyUser} onMessageSent={handleChatSent} onClose={handleCloseChat} />
               )}
             </div>
           </div> {/* end current face */}
