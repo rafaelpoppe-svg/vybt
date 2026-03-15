@@ -259,23 +259,19 @@ export default function StoryView() {
 
   const startProgress = () => {
     clearTimeout(progressTimerRef.current);
+    if (!progressBarRef.current) return;
 
-    // Small delay to ensure the DOM element is mounted after AnimatePresence
+    progressBarRef.current.style.transition = 'none';
+    progressBarRef.current.style.width = '0%';
+    // Force reflow so the transition reset applies before starting
+    progressBarRef.current.getBoundingClientRect();
+
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (!progressBarRef.current) return;
-        progressBarRef.current.style.transition = 'none';
-        progressBarRef.current.style.width = '0%';
-        progressBarRef.current.getBoundingClientRect();
-        requestAnimationFrame(() => {
-          if (!progressBarRef.current) return;
-          progressBarRef.current.style.transition = 'width 5s linear';
-          progressBarRef.current.style.width = '100%';
-        });
-      });
+      if (!progressBarRef.current) return;
+      progressBarRef.current.style.transition = 'width 5s linear';
+      progressBarRef.current.style.width = '100%';
     });
 
-    clearTimeout(progressTimerRef.current);
     progressTimerRef.current = setTimeout(() => {
       if (!isPausedRef.current) handleNextRef.current?.();
     }, 5000);
@@ -283,8 +279,11 @@ export default function StoryView() {
 
   useEffect(() => {
     if (!story) return;
-    startProgress();
+    // Small delay when groupKey changes (cube animation) to let DOM settle
+    const delay = groupKey > 0 ? 50 : 0;
+    const t = setTimeout(() => startProgress(), delay);
     return () => {
+      clearTimeout(t);
       clearTimeout(progressTimerRef.current);
     };
   }, [currentStoryInGroupIndex, currentGroupIndex, groupKey]);
