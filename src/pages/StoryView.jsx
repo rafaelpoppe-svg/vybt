@@ -551,24 +551,38 @@ export default function StoryView() {
             ))}
           </div>
 
-          {/* 3D cube wrapper — both faces live here, sharing the same perspective */}
+          {/* 3D cube wrapper — rotates the whole cube */}
           <div
             className="absolute inset-0"
-            style={{ transformStyle: 'preserve-3d' }}
+            style={showCube ? getCubeWrapperStyle(dragProgress, dragDir) : { position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}
           >
-            {/* Adjacent face (next/prev group preview) */}
-            {adjacentFaceStyle && adjacentStory && (
-              <div style={adjacentFaceStyle}>
-                <div className="absolute inset-0 bg-black">
-                  {adjacentStory.media_type === 'video'
-                    ? <video src={adjacentStory.media_url} className="h-full w-full object-cover" muted playsInline />
-                    : <img src={adjacentStory.media_url} alt="" className="h-full w-full object-cover" />}
+            {/* Adjacent face — offset 90° around Y + translateZ(half-width) */}
+            {showCube && adjacentStory && (() => {
+              const cubeR = `${window.innerWidth <= 768 ? window.innerWidth : 400}px`;
+              const adjAngle = dragDir >= 0 ? 90 : -90;
+              return (
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  backfaceVisibility: 'hidden',
+                  transform: `rotateY(${adjAngle}deg) translateZ(calc(${cubeR} / 2))`,
+                  zIndex: 2,
+                }}>
+                  <div className="absolute inset-0 bg-black">
+                    {adjacentStory.media_type === 'video'
+                      ? <video src={adjacentStory.media_url} className="h-full w-full object-cover" muted playsInline />
+                      : <img src={adjacentStory.media_url} alt="" className="h-full w-full object-cover" />}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
-          {/* Current face */}
-          <div style={currentFaceStyle}>
+          {/* Current face — translateZ(half-width) facing forward */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            backfaceVisibility: 'hidden',
+            transform: showCube ? `translateZ(calc(${window.innerWidth <= 768 ? window.innerWidth : 400}px / 2))` : 'none',
+            zIndex: 1,
+          }}>
             {/* Tap nav zones */}
             <button onClick={handlePrevious} className="absolute left-0 top-24 bottom-32 w-1/3 z-20" />
             <button onClick={handleNext} className="absolute right-0 top-24 bottom-32 w-1/3 z-20" />
