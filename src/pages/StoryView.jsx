@@ -258,16 +258,23 @@ export default function StoryView() {
   const handleNextRef = useRef(null);
 
   const startProgress = () => {
-    if (!progressBarRef.current) return;
     clearTimeout(progressTimerRef.current);
-    progressBarRef.current.style.transition = 'none';
-    progressBarRef.current.style.width = '0%';
-    progressBarRef.current.getBoundingClientRect();
+
+    // Small delay to ensure the DOM element is mounted after AnimatePresence
     requestAnimationFrame(() => {
-      if (!progressBarRef.current) return;
-      progressBarRef.current.style.transition = 'width 5s linear';
-      progressBarRef.current.style.width = '100%';
+      requestAnimationFrame(() => {
+        if (!progressBarRef.current) return;
+        progressBarRef.current.style.transition = 'none';
+        progressBarRef.current.style.width = '0%';
+        progressBarRef.current.getBoundingClientRect();
+        requestAnimationFrame(() => {
+          if (!progressBarRef.current) return;
+          progressBarRef.current.style.transition = 'width 5s linear';
+          progressBarRef.current.style.width = '100%';
+        });
+      });
     });
+
     clearTimeout(progressTimerRef.current);
     progressTimerRef.current = setTimeout(() => {
       if (!isPausedRef.current) handleNextRef.current?.();
@@ -279,9 +286,8 @@ export default function StoryView() {
     startProgress();
     return () => {
       clearTimeout(progressTimerRef.current);
-      if (progressBarRef.current) progressBarRef.current.style.transition = 'none';
     };
-  }, [currentStoryInGroupIndex, currentGroupIndex]);
+  }, [currentStoryInGroupIndex, currentGroupIndex, groupKey]);
 
   useEffect(() => { handleNextRef.current = handleNext; });
 
