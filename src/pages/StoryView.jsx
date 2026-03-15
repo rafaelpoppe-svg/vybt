@@ -1,51 +1,55 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { X, MapPin, Loader2, ChevronRight, ChevronLeft, MoreVertical, Trash2, Volume2, VolumeX, Flag, MessageCircle, Smile } from 'lucide-react';
+import { X, Loader2, ChevronRight, ChevronLeft, MoreVertical, Trash2, Volume2, VolumeX, Flag, MessageCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import StoryReactions from '../components/story/StoryReactions';
 import ReportContentModal from '../components/moderation/ReportContentModal';
 import StoryChatInput from '../components/story/StoryChatInput';
 import { useStoryGrouping } from '../components/story/useStoryGrouping';
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Cube/card flip transition (Instagram-style group change)
-const CUBE_DURATION = 0.35;
+// ─── Real 3D cube geometry ────────────────────────────────────────────────────
+// The "cube" trick: current face rotates away from viewer while adjacent face
+// rotates into view. transformOrigin on the hinge side makes it look like a real cube face.
+// progress: 0 = fully current, 1 = fully next, -1 = fully prev
+// direction: 1 = going forward (swiping left), -1 = going backward (swiping right)
 
-function getCubeVariants(direction) {
-  // direction: 1 = going forward (left swipe), -1 = going backward (right swipe)
-  return {
-    enter: (dir) => ({
-      rotateY: dir > 0 ? 60 : -60,
-      x: dir > 0 ? '40%' : '-40%',
-      opacity: 0,
-      scale: 0.85,
-      zIndex: 0,
-    }),
-    center: {
-      rotateY: 0,
-      x: 0,
-      opacity: 1,
-      scale: 1,
+function getCubeFaceStyle(role, progress, direction, screenW) {
+  // role: 'current' | 'adjacent'
+  const MAX_ANGLE = 90; // degrees — the angle that makes a true 90° cube face
+
+  if (role === 'current') {
+    // Current face rotates away. Forward: pivot on LEFT edge, rotates negative.
+    const angle = direction >= 0
+      ? -MAX_ANGLE * progress        // going forward: left edge pivot, rotates toward viewer from right
+      : MAX_ANGLE * Math.abs(progress); // going backward: right edge pivot
+    const origin = direction >= 0 ? 'left center' : 'right center';
+    return {
+      position: 'absolute', inset: 0,
+      transformOrigin: origin,
+      transform: `perspective(${screenW * 2}px) rotateY(${angle}deg)`,
+      backfaceVisibility: 'hidden',
       zIndex: 1,
-      transition: { duration: CUBE_DURATION, ease: [0.25, 0.46, 0.45, 0.94] },
-    },
-    exit: (dir) => ({
-      rotateY: dir > 0 ? -60 : 60,
-      x: dir > 0 ? '-40%' : '40%',
-      opacity: 0,
-      scale: 0.85,
-      zIndex: 0,
-      transition: { duration: CUBE_DURATION, ease: [0.25, 0.46, 0.45, 0.94] },
-    }),
-  };
+    };
+  } else {
+    // Adjacent face comes in from the side opposite to the pivot
+    const angle = direction >= 0
+      ? MAX_ANGLE * (1 - progress)   // starts at 90°, ends at 0°
+      : -MAX_ANGLE * (1 - Math.abs(progress)); // starts at -90°, ends at 0°
+    const origin = direction >= 0 ? 'right center' : 'left center';
+    return {
+      position: 'absolute', inset: 0,
+      transformOrigin: origin,
+      transform: `perspective(${screenW * 2}px) rotateY(${angle}deg)`,
+      backfaceVisibility: 'hidden',
+      zIndex: progress > 0 ? 2 : 0,
+    };
+  }
 }
 
 export default function StoryView() {
@@ -65,23 +69,33 @@ export default function StoryView() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [floatingReactions, setFloatingReactions] = useState([]);
 
-  // Cube transition state
-  const [cubeDirection, setCubeDirection] = useState(1); // 1=forward, -1=backward
-  const [isCubeTransition, setIsCubeTransition] = useState(false);
-  // Key to trigger AnimatePresence re-mount on group change
+  // 3D cube drag state
+  const [dragProgress, setDragProgress] = useState(0); // -1..0..1
+  const [isDragging, setIsDragging] = useState(false);
+  const [cubeDirection, setCubeDirection] = useState(1);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [pendingGroupIndex, setPendingGroupIndex] = useState(null);
+  const [pendingStoryIndex, setPendingStoryIndex] = useState(null);
   const [groupKey, setGroupKey] = useState(0);
 
-  const isPausedRef = useRef(false);
+  const dragProgressRef = useRef(0);
+  const animFrameRef = useRef(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
-  const isSwipeRef = useRef(false);
+  const touchStartTime = useRef(0);
+  const isDragHorizontal = useRef(null); // null = undecided
+  const isPausedRef = useRef(false);
+  const screenW = useRef(window.innerWidth);
+
+  useEffect(() => {
+    const onResize = () => { screenW.current = window.innerWidth; };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   useEffect(() => {
     const getUser = async () => {
-      try {
-        const user = await base44.auth.me();
-        setCurrentUser(user);
-      } catch (e) {}
+      try { const user = await base44.auth.me(); setCurrentUser(user); } catch (e) {}
     };
     getUser();
   }, []);
@@ -118,11 +132,7 @@ export default function StoryView() {
   });
 
   const { groupedStories, findStoryPosition } = useStoryGrouping(
-    allStories,
-    userProfiles,
-    plans,
-    currentUser,
-    friendships
+    allStories, userProfiles, plans, currentUser, friendships
   );
 
   const currentGroup = groupedStories[currentGroupIndex];
@@ -130,65 +140,140 @@ export default function StoryView() {
   const story = currentGroupStory || allStories[currentStoryIndex];
   const currentStoryId = story?.id || storyId;
 
-  const profilesMap = userProfiles.reduce((acc, p) => {
-    acc[p.user_id] = p;
-    return acc;
-  }, {});
+  const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
 
   const { data: reactions = [] } = useQuery({
     queryKey: ['storyReactions', currentStoryId],
     queryFn: () => base44.entities.StoryReaction.filter({ story_id: currentStoryId }),
-    enabled: !!currentStoryId
+    enabled: !!currentStoryId,
   });
 
   const storyUser = story ? profilesMap[story.user_id] : null;
   const storyPlan = story ? plans.find(p => p.id === story.plan_id) : null;
 
-  // ── Group change helpers ──────────────────────────────────────────────────
-  const goToGroup = useCallback((newGroupIndex, newStoryIndex, direction) => {
-    setCubeDirection(direction);
-    setIsCubeTransition(true);
-    setCurrentGroupIndex(newGroupIndex);
-    setCurrentStoryInGroupIndex(newStoryIndex);
-    setGroupKey(k => k + 1);
-    setTimeout(() => setIsCubeTransition(false), CUBE_DURATION * 1000 + 50);
+  // ── Adjacent group for cube face ──────────────────────────────────────────
+  const getAdjacentGroup = (dir) => {
+    if (dir > 0) return currentGroupIndex < groupedStories.length - 1 ? groupedStories[currentGroupIndex + 1] : null;
+    return currentGroupIndex > 0 ? groupedStories[currentGroupIndex - 1] : null;
+  };
+  const adjacentGroup = isDragging || isAnimating ? getAdjacentGroup(cubeDirection) : null;
+  const adjacentStory = adjacentGroup?.stories?.[cubeDirection > 0 ? 0 : adjacentGroup.stories.length - 1];
+
+  // ── Animate cube to completion or bounce back ─────────────────────────────
+  const animateCubeTo = useCallback((targetProgress, onDone) => {
+    const startProg = dragProgressRef.current;
+    const startTime = performance.now();
+    const duration = 220; // ms
+
+    const tick = (now) => {
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // easeInOut
+      const val = startProg + (targetProgress - startProg) * eased;
+      dragProgressRef.current = val;
+      setDragProgress(val);
+      if (t < 1) {
+        animFrameRef.current = requestAnimationFrame(tick);
+      } else {
+        dragProgressRef.current = targetProgress;
+        setDragProgress(targetProgress);
+        onDone?.();
+      }
+    };
+    animFrameRef.current = requestAnimationFrame(tick);
   }, []);
+
+  const commitGroupChange = useCallback((dir) => {
+    const target = dir > 0 ? 1 : -1;
+    setIsAnimating(true);
+
+    animateCubeTo(target, () => {
+      // Commit: switch group
+      const newGroupIdx = currentGroupIndex + dir;
+      const newStoryIdx = dir > 0 ? 0 : (groupedStories[newGroupIdx]?.stories?.length ?? 1) - 1;
+
+      dragProgressRef.current = 0;
+      setDragProgress(0);
+      setIsDragging(false);
+      setIsAnimating(false);
+      setCurrentGroupIndex(newGroupIdx);
+      setCurrentStoryInGroupIndex(newStoryIdx);
+      setGroupKey(k => k + 1);
+    });
+  }, [currentGroupIndex, groupedStories, animateCubeTo]);
+
+  const cancelDrag = useCallback(() => {
+    setIsAnimating(true);
+    animateCubeTo(0, () => {
+      dragProgressRef.current = 0;
+      setDragProgress(0);
+      setIsDragging(false);
+      setIsAnimating(false);
+    });
+  }, [animateCubeTo]);
 
   // ── Touch handlers ────────────────────────────────────────────────────────
   const handleTouchStart = (e) => {
+    if (isAnimating) return;
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
-    isSwipeRef.current = false;
+    touchStartTime.current = Date.now();
+    isDragHorizontal.current = null;
   };
 
-  const handleTouchEnd = (e) => {
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
-    const deltaX = touchEndX - touchStartX.current;
-    const deltaY = Math.abs(touchEndY - touchStartY.current);
+  const handleTouchMove = useCallback((e) => {
+    if (isAnimating) return;
+    const dx = e.touches[0].clientX - touchStartX.current;
+    const dy = e.touches[0].clientY - touchStartY.current;
 
-    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > deltaY * 2) {
-      isSwipeRef.current = true;
-      if (deltaX < 0) {
-        // Swipe left → always jump to next GROUP (skip remaining stories in current group)
-        if (currentGroupIndex < groupedStories.length - 1) {
-          goToGroup(currentGroupIndex + 1, 0, 1);
-        } else {
-          goToGroup(currentGroupIndex, 0, 1); // trigger cube exit anim then leave
-          setTimeout(() => navigate(-1), CUBE_DURATION * 1000);
-        }
-      } else {
-        // Swipe right → always jump to previous GROUP
-        if (currentGroupIndex > 0) {
-          const pg = groupedStories[currentGroupIndex - 1];
-          goToGroup(currentGroupIndex - 1, pg.stories.length - 1, -1);
-        } else {
-          goToGroup(currentGroupIndex, 0, -1); // trigger cube exit anim then leave
-          setTimeout(() => navigate(-1), CUBE_DURATION * 1000);
-        }
-      }
+    // Decide direction once
+    if (isDragHorizontal.current === null) {
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      isDragHorizontal.current = Math.abs(dx) > Math.abs(dy);
     }
-  };
+    if (!isDragHorizontal.current) return;
+
+    e.preventDefault();
+
+    const dir = dx < 0 ? 1 : -1; // 1=forward, -1=backward
+    const adjacentExists = dir > 0
+      ? currentGroupIndex < groupedStories.length - 1
+      : currentGroupIndex > 0;
+
+    if (!isDragging) {
+      setCubeDirection(dir);
+      setIsDragging(true);
+    }
+
+    // progress: 0..1 (forward) or 0..-1 (backward)
+    const raw = dx / screenW.current;
+    let progress = -raw; // invert: swiping left = positive progress forward
+    if (!adjacentExists) progress *= 0.15; // rubber band if no adjacent
+    progress = Math.max(-1, Math.min(1, progress));
+
+    dragProgressRef.current = progress;
+    setDragProgress(progress);
+    isPausedRef.current = true;
+  }, [isAnimating, isDragging, currentGroupIndex, groupedStories]);
+
+  const handleTouchEnd = useCallback((e) => {
+    isPausedRef.current = false;
+    if (!isDragging) return;
+
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dt = Date.now() - touchStartTime.current;
+    const velocity = Math.abs(dx) / dt; // px/ms
+    const absProgress = Math.abs(dragProgressRef.current);
+    const dir = dragProgressRef.current > 0 ? 1 : -1;
+    const adjacentExists = dir > 0
+      ? currentGroupIndex < groupedStories.length - 1
+      : currentGroupIndex > 0;
+
+    if (adjacentExists && (absProgress > 0.35 || velocity > 0.4)) {
+      commitGroupChange(dir);
+    } else {
+      cancelDrag();
+    }
+  }, [isDragging, currentGroupIndex, groupedStories, commitGroupChange, cancelDrag]);
 
   const triggerFloatingEmoji = (emoji) => {
     const id = Date.now();
@@ -212,22 +297,13 @@ export default function StoryView() {
 
   const deleteMutation = useMutation({
     mutationFn: () => base44.entities.ExperienceStory.delete(story.id),
-    onSuccess: () => {
-      queryClient.removeQueries(['allStories']);
-      queryClient.invalidateQueries(['allStories']);
-      navigate(-1);
-    }
+    onSuccess: () => { queryClient.removeQueries(['allStories']); queryClient.invalidateQueries(['allStories']); navigate(-1); }
   });
 
   const reportMutation = useMutation({
     mutationFn: ({ reason, details }) => base44.entities.Report.create({
-      reporter_user_id: currentUser.id,
-      reported_user_id: story.user_id,
-      reported_plan_id: story.id,
-      type: 'story',
-      reason,
-      details: details || '',
-      status: 'pending'
+      reporter_user_id: currentUser.id, reported_user_id: story.user_id,
+      reported_plan_id: story.id, type: 'story', reason, details: details || '', status: 'pending'
     }),
     onSuccess: () => setShowReportModal(false)
   });
@@ -236,89 +312,99 @@ export default function StoryView() {
   const isStoryOwner = story?.user_id === currentUser?.id;
   const canChat = !isStoryOwner && currentUser && story;
 
-  // Mark as viewed
   useEffect(() => {
     if (story && currentUser && !story.viewed_by?.includes(currentUser.id)) {
-      const updateViews = async () => {
-        const viewedBy = story.viewed_by || [];
-        await base44.entities.ExperienceStory.update(storyId, {
-          view_count: (story.view_count || 0) + 1,
-          viewed_by: [...viewedBy, currentUser.id]
-        });
-      };
-      updateViews();
+      const viewedBy = story.viewed_by || [];
+      base44.entities.ExperienceStory.update(storyId, {
+        view_count: (story.view_count || 0) + 1,
+        viewed_by: [...viewedBy, currentUser.id]
+      });
     }
   }, [story, currentUser, storyId]);
 
-  // Progress bar
+  // ── Progress bar ─────────────────────────────────────────────────────────
   const progressBarRef = useRef(null);
   const progressTimerRef = useRef(null);
   const handleNextRef = useRef(null);
 
-  const startProgress = () => {
+  const startProgress = useCallback(() => {
     clearTimeout(progressTimerRef.current);
     if (!progressBarRef.current) return;
-
     progressBarRef.current.style.transition = 'none';
     progressBarRef.current.style.width = '0%';
-    // Force reflow so the transition reset applies before starting
     progressBarRef.current.getBoundingClientRect();
-
     requestAnimationFrame(() => {
       if (!progressBarRef.current) return;
       progressBarRef.current.style.transition = 'width 5s linear';
       progressBarRef.current.style.width = '100%';
     });
-
     progressTimerRef.current = setTimeout(() => {
       if (!isPausedRef.current) handleNextRef.current?.();
     }, 5000);
-  };
+  }, []);
 
   useEffect(() => {
     if (!story) return;
-    // Small delay when groupKey changes (cube animation) to let DOM settle
-    const delay = groupKey > 0 ? 50 : 0;
-    const t = setTimeout(() => startProgress(), delay);
-    return () => {
-      clearTimeout(t);
-      clearTimeout(progressTimerRef.current);
-    };
+    const t = setTimeout(() => startProgress(), groupKey > 0 ? 50 : 0);
+    return () => { clearTimeout(t); clearTimeout(progressTimerRef.current); };
   }, [currentStoryInGroupIndex, currentGroupIndex, groupKey]);
 
   useEffect(() => { handleNextRef.current = handleNext; });
 
-  // Preload next
   useEffect(() => {
     const nextStory = groupedStories[currentGroupIndex]?.stories?.[currentStoryInGroupIndex + 1]
       || groupedStories[currentGroupIndex + 1]?.stories?.[0];
     if (nextStory?.media_url && nextStory.media_type !== 'video') {
-      const img = new Image();
-      img.src = nextStory.media_url;
+      const img = new Image(); img.src = nextStory.media_url;
     }
   }, [currentStoryInGroupIndex, currentGroupIndex, groupedStories]);
 
-  // ── Navigation ────────────────────────────────────────────────────────────
+  // ── Navigation (tap) ──────────────────────────────────────────────────────
+  const goToGroupCube = useCallback((newGroupIndex, newStoryIndex, dir) => {
+    setCubeDirection(dir);
+    setIsDragging(true);
+    setIsAnimating(true);
+    dragProgressRef.current = 0;
+    setDragProgress(0);
+
+    const target = dir > 0 ? 1 : -1;
+    const startTime = performance.now();
+    const duration = 280;
+
+    const tick = (now) => {
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const val = target * eased;
+      dragProgressRef.current = val;
+      setDragProgress(val);
+      if (t < 1) {
+        animFrameRef.current = requestAnimationFrame(tick);
+      } else {
+        dragProgressRef.current = 0;
+        setDragProgress(0);
+        setIsDragging(false);
+        setIsAnimating(false);
+        setCurrentGroupIndex(newGroupIndex);
+        setCurrentStoryInGroupIndex(newStoryIndex);
+        setGroupKey(k => k + 1);
+      }
+    };
+    animFrameRef.current = requestAnimationFrame(tick);
+  }, []);
+
   const handleNext = () => {
-    if (progressBarRef.current) {
-      progressBarRef.current.style.transition = 'none';
-      progressBarRef.current.style.width = '100%';
-    }
+    if (progressBarRef.current) { progressBarRef.current.style.transition = 'none'; progressBarRef.current.style.width = '100%'; }
     clearTimeout(progressTimerRef.current);
 
     if (groupedStories.length > 0) {
       const group = groupedStories[currentGroupIndex];
       if (currentStoryInGroupIndex < group.stories.length - 1) {
-        // Next story within same group → no cube
         setCurrentStoryInGroupIndex(currentStoryInGroupIndex + 1);
       } else if (currentGroupIndex < groupedStories.length - 1) {
-        // Next group → cube
-        goToGroup(currentGroupIndex + 1, 0, 1);
+        goToGroupCube(currentGroupIndex + 1, 0, 1);
       } else {
-        // End of all → cube exit
-        setCubeDirection(1);
-        setIsCubeTransition(true);
-        setTimeout(() => { setIsCubeTransition(false); navigate(-1); }, CUBE_DURATION * 1000);
+        goToGroupCube(currentGroupIndex, 0, 1);
+        setTimeout(() => navigate(-1), 300);
       }
     } else if (currentStoryIndex < allStories.length - 1) {
       setCurrentStoryIndex(currentStoryIndex + 1);
@@ -328,39 +414,22 @@ export default function StoryView() {
   };
 
   const handlePrevious = () => {
-    if (progressBarRef.current) {
-      progressBarRef.current.style.transition = 'none';
-      progressBarRef.current.style.width = '0%';
-    }
+    if (progressBarRef.current) { progressBarRef.current.style.transition = 'none'; progressBarRef.current.style.width = '0%'; }
     clearTimeout(progressTimerRef.current);
 
     if (groupedStories.length > 0) {
       if (currentStoryInGroupIndex > 0) {
-        // Previous story within same group → no cube
         setCurrentStoryInGroupIndex(currentStoryInGroupIndex - 1);
       } else if (currentGroupIndex > 0) {
-        // Previous group → cube
         const prevGroup = groupedStories[currentGroupIndex - 1];
-        goToGroup(currentGroupIndex - 1, prevGroup.stories.length - 1, -1);
+        goToGroupCube(currentGroupIndex - 1, prevGroup.stories.length - 1, -1);
       } else {
-        // First group first story → cube exit
-        setCubeDirection(-1);
-        setIsCubeTransition(true);
-        setTimeout(() => { setIsCubeTransition(false); navigate(-1); }, CUBE_DURATION * 1000);
+        goToGroupCube(currentGroupIndex, 0, -1);
+        setTimeout(() => navigate(-1), 300);
       }
     } else if (currentStoryIndex > 0) {
       setCurrentStoryIndex(currentStoryIndex - 1);
     }
-  };
-
-  const handleClickNext = () => {
-    if (isSwipeRef.current) { isSwipeRef.current = false; return; }
-    handleNext();
-  };
-
-  const handleClickPrev = () => {
-    if (isSwipeRef.current) { isSwipeRef.current = false; return; }
-    handlePrevious();
   };
 
   const reactMutation = useMutation({
@@ -369,27 +438,21 @@ export default function StoryView() {
       if (!targetStoryId) return;
       const existingReaction = reactions.find(r => r.user_id === currentUser?.id);
       if (existingReaction) {
-        if (existingReaction.emoji === emoji) {
-          await base44.entities.StoryReaction.delete(existingReaction.id);
-        } else {
-          await base44.entities.StoryReaction.update(existingReaction.id, { emoji });
-        }
+        if (existingReaction.emoji === emoji) await base44.entities.StoryReaction.delete(existingReaction.id);
+        else await base44.entities.StoryReaction.update(existingReaction.id, { emoji });
       } else {
         await base44.entities.StoryReaction.create({ story_id: targetStoryId, user_id: currentUser.id, emoji });
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['storyReactions', story?.id]);
-      setShowEmojiPicker(false);
-    }
+    onSuccess: () => { queryClient.invalidateQueries(['storyReactions', story?.id]); setShowEmojiPicker(false); }
   });
 
   const emojis = ['❤️', '🔥', '😍', '🎉', '👏', '💯'];
   const handleEmojiSelect = (emoji) => { reactMutation.mutate(emoji); triggerFloatingEmoji(emoji); };
   const handleChatSent = async () => {
     setShowChatInput(false);
-    const user = await base44.auth.me();
-    if (user && storyUser) navigate(createPageUrl('Chat'));
+    await base44.auth.me();
+    if (storyUser) navigate(createPageUrl('Chat'));
   };
 
   if (isLoading || !story) {
@@ -412,285 +475,230 @@ export default function StoryView() {
       <div
         className="hidden md:flex absolute top-0 bottom-0 items-center justify-center cursor-pointer z-10"
         style={{ [isLeft ? 'right' : 'left']: '100%', width: '180px', paddingLeft: isLeft ? 0 : 16, paddingRight: isLeft ? 16 : 0 }}
-        onClick={() => isLeft
-          ? goToGroup(currentGroupIndex - 1, 0, -1)
-          : goToGroup(currentGroupIndex + 1, 0, 1)
-        }
+        onClick={() => isLeft ? goToGroupCube(currentGroupIndex - 1, 0, -1) : goToGroupCube(currentGroupIndex + 1, 0, 1)}
       >
         <div className="relative w-full h-[70%] rounded-2xl overflow-hidden opacity-60 hover:opacity-80 transition-opacity"
           style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.6)' }}>
-          {preview?.media_url ? (
-            <img src={preview.media_url} alt="" className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full bg-gray-800" />
-          )}
-          {/* User overlay */}
+          {preview?.media_url
+            ? <img src={preview.media_url} alt="" className="w-full h-full object-cover" />
+            : <div className="w-full h-full bg-gray-800" />}
           <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
                 {user?.photos?.[0]
                   ? <img src={user.photos[0]} alt="" className="w-full h-full object-cover" />
-                  : <div className="w-full h-full bg-[#542b9b] flex items-center justify-center text-[10px] text-white font-bold">{user?.display_name?.[0] || '?'}</div>
-                }
+                  : <div className="w-full h-full bg-[#542b9b] flex items-center justify-center text-[10px] text-white font-bold">{user?.display_name?.[0] || '?'}</div>}
               </div>
               <p className="text-white text-xs font-medium truncate">{user?.display_name || ''}</p>
             </div>
           </div>
-          {/* Arrow */}
           <div className="absolute top-1/2 -translate-y-1/2" style={{ [isLeft ? 'left' : 'right']: 8 }}>
-            {isLeft
-              ? <ChevronLeft className="w-6 h-6 text-white drop-shadow" />
-              : <ChevronRight className="w-6 h-6 text-white drop-shadow" />
-            }
+            {isLeft ? <ChevronLeft className="w-6 h-6 text-white drop-shadow" /> : <ChevronRight className="w-6 h-6 text-white drop-shadow" />}
           </div>
         </div>
       </div>
     );
   };
 
-  // ── Cube variants ─────────────────────────────────────────────────────────
-  const cubeVariants = getCubeVariants(cubeDirection);
+  // ── Compute 3D styles ─────────────────────────────────────────────────────
+  const absProgress = Math.abs(dragProgress);
+  const dragDir = dragProgress >= 0 ? 1 : -1;
+  const showCube = (isDragging || isAnimating) && absProgress > 0;
 
+  const currentFaceStyle = showCube
+    ? getCubeFaceStyle('current', absProgress, dragDir, screenW.current)
+    : { position: 'absolute', inset: 0 };
+
+  const adjacentFaceStyle = showCube && adjacentStory
+    ? getCubeFaceStyle('adjacent', absProgress, dragDir, screenW.current)
+    : null;
+
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div
       className="fixed inset-0 bg-black z-50 overflow-hidden"
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Desktop: centered story with side groups */}
-      <div className="w-full h-full flex items-center justify-center" style={{ perspective: '1200px' }}>
-        <div className="relative w-full md:w-[400px] h-full md:h-[90vh] md:rounded-2xl overflow-hidden"
-          style={{ transformStyle: 'preserve-3d' }}>
-
-          {/* Side group cards (desktop only) */}
+      <div className="w-full h-full flex items-center justify-center">
+        <div
+          className="relative w-full md:w-[400px] h-full md:h-[90vh] md:rounded-2xl overflow-hidden"
+          style={{ perspective: `${screenW.current * 2}px` }}
+        >
+          {/* Desktop side group cards */}
           {prevGroup && <SideGroupCard group={prevGroup} side="left" />}
           {nextGroup && <SideGroupCard group={nextGroup} side="right" />}
 
-          {/* Progress bars — outside AnimatePresence so ref never loses DOM */}
-          <div className="absolute top-0 left-0 right-0 h-1 z-30 flex gap-1 px-2 pt-2">
+          {/* Progress bars — always outside cube, never re-mounts */}
+          <div className="absolute top-0 left-0 right-0 z-40 flex gap-1 px-2 pt-2">
             {(currentGroup?.stories || []).map((_, index) => (
               <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
-                {index < currentStoryInGroupIndex ? (
-                  <div className="h-full bg-white" style={{ width: '100%' }} />
-                ) : index === currentStoryInGroupIndex ? (
-                  <div ref={progressBarRef} className="h-full bg-white" style={{ width: '0%' }} />
-                ) : (
-                  <div className="h-full bg-white" style={{ width: '0%' }} />
-                )}
+                {index < currentStoryInGroupIndex
+                  ? <div className="h-full bg-white w-full" />
+                  : index === currentStoryInGroupIndex
+                    ? <div ref={progressBarRef} className="h-full bg-white" style={{ width: '0%' }} />
+                    : <div className="h-full bg-white w-0" />}
               </div>
             ))}
           </div>
 
-          {/* Main story with cube animation on group change */}
-          <AnimatePresence custom={cubeDirection} mode="sync">
-            <motion.div
-              key={`group-${groupKey}`}
-              custom={cubeDirection}
-              variants={cubeVariants}
-              initial={groupKey === 0 ? false : 'enter'}
-              animate="center"
-              exit="exit"
-              className="absolute inset-0"
-              style={{ transformOrigin: cubeDirection > 0 ? 'left center' : 'right center', transformStyle: 'preserve-3d' }}
-            >
-              {/* Progress bars placeholder (invisible, space taken by outer) */}
-
-              {/* Navigation tap zones */}
-              <button
-                onClick={handleClickPrev}
-                className="absolute left-0 top-24 bottom-32 w-1/3 z-20"
-              />
-              <button
-                onClick={handleClickNext}
-                className="absolute right-0 top-24 bottom-32 w-1/3 z-20"
-              />
-
-              {/* Pause zone */}
-              <div
-                className="absolute top-24 bottom-32 z-20"
-                style={{ left: '33%', right: '33%' }}
-                onTouchStart={() => { isPausedRef.current = true; }}
-                onTouchEnd={() => { isPausedRef.current = false; }}
-                onClick={() => { isPausedRef.current = !isPausedRef.current; }}
-              />
-
-              {/* Media */}
-              <div className="absolute inset-0 flex items-center justify-center bg-black">
-                {story.media_type === 'video' ? (
-                  <video
-                    key={story.id}
-                    src={story.media_url}
-                    className="h-full w-full object-cover"
-                    autoPlay
-                    muted={isMuted || !story.has_audio}
-                    playsInline
-                    loop
-                  />
-                ) : (
-                  <img
-                    key={story.id}
-                    src={story.media_url}
-                    alt=""
-                    loading="eager"
-                    decoding="async"
-                    className="h-full w-full object-cover"
-                  />
-                )}
+          {/* Adjacent face (next/prev group preview) */}
+          {adjacentFaceStyle && adjacentStory && (
+            <div style={adjacentFaceStyle}>
+              <div className="absolute inset-0 bg-black">
+                {adjacentStory.media_type === 'video'
+                  ? <video src={adjacentStory.media_url} className="h-full w-full object-cover" muted playsInline />
+                  : <img src={adjacentStory.media_url} alt="" className="h-full w-full object-cover" />}
               </div>
+            </div>
+          )}
 
-              {/* Header */}
-              <div className="absolute top-4 left-0 right-0 px-4 z-30">
-                <div className="flex items-center justify-between">
-                  <div
-                    className="flex items-center gap-3 cursor-pointer"
-                    onClick={() => story?.user_id && navigate(createPageUrl('UserProfile') + `?id=${story.user_id}`)}
-                  >
-                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800">
-                      {storyUser?.photos?.[0] ? (
-                        <img src={storyUser.photos[0]} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <span className="text-white font-bold">{storyUser?.display_name?.[0] || '?'}</span>
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-white font-medium">{storyUser?.display_name || 'User'}</p>
-                      <p className="text-gray-400 text-xs">{(() => {
-                        const diff = Date.now() - new Date(story.created_date).getTime();
-                        const mins = Math.floor(diff / 60000);
-                        const hours = Math.floor(mins / 60);
-                        const days = Math.floor(hours / 24);
-                        if (days > 0) return `há ${days}d`;
-                        if (hours > 0) return `há ${hours}h`;
-                        if (mins > 0) return `há ${mins}min`;
-                        return 'agora mesmo';
-                      })()}</p>
-                    </div>
+          {/* Current face */}
+          <div style={currentFaceStyle}>
+            {/* Tap nav zones */}
+            <button onClick={handlePrevious} className="absolute left-0 top-24 bottom-32 w-1/3 z-20" />
+            <button onClick={handleNext} className="absolute right-0 top-24 bottom-32 w-1/3 z-20" />
+
+            {/* Pause zone */}
+            <div
+              className="absolute top-24 bottom-32 z-20"
+              style={{ left: '33%', right: '33%' }}
+              onTouchStart={() => { isPausedRef.current = true; }}
+              onTouchEnd={() => { isPausedRef.current = false; }}
+              onClick={() => { isPausedRef.current = !isPausedRef.current; }}
+            />
+
+            {/* Media */}
+            <div className="absolute inset-0 bg-black">
+              {story.media_type === 'video'
+                ? <video key={story.id} src={story.media_url} className="h-full w-full object-cover" autoPlay muted={isMuted || !story.has_audio} playsInline loop />
+                : <img key={story.id} src={story.media_url} alt="" loading="eager" decoding="async" className="h-full w-full object-cover" />}
+            </div>
+
+            {/* Dark edge shadow while dragging — adds depth */}
+            {showCube && (
+              <div className="absolute inset-0 pointer-events-none z-10" style={{
+                background: dragDir > 0
+                  ? `linear-gradient(to left, rgba(0,0,0,${0.5 * absProgress}) 0%, transparent 40%)`
+                  : `linear-gradient(to right, rgba(0,0,0,${0.5 * absProgress}) 0%, transparent 40%)`
+              }} />
+            )}
+
+            {/* Header */}
+            <div className="absolute top-4 left-0 right-0 px-4 z-30">
+              <div className="flex items-center justify-between">
+                <div
+                  className="flex items-center gap-3 cursor-pointer"
+                  onClick={() => story?.user_id && navigate(createPageUrl('UserProfile') + `?id=${story.user_id}`)}
+                >
+                  <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800">
+                    {storyUser?.photos?.[0]
+                      ? <img src={storyUser.photos[0]} alt="" className="w-full h-full object-cover" />
+                      : <div className="w-full h-full flex items-center justify-center"><span className="text-white font-bold">{storyUser?.display_name?.[0] || '?'}</span></div>}
                   </div>
-
-                  <div className="flex gap-2">
-                    {story.media_type === 'video' && story.has_audio && (
-                      <motion.button
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => setIsMuted(!isMuted)}
-                        className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
-                      >
-                        {isMuted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white" />}
-                      </motion.button>
-                    )}
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <motion.button whileTap={{ scale: 0.9 }} className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
-                          <MoreVertical className="w-5 h-5 text-white" />
-                        </motion.button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="bg-gray-900 border-gray-800">
-                        {canDelete && (
-                          <DropdownMenuItem onClick={() => deleteMutation.mutate()} className="text-red-400 hover:text-red-300">
-                            <Trash2 className="w-4 h-4 mr-2" />Deletar Story
-                          </DropdownMenuItem>
-                        )}
-                        {!canDelete && currentUser && (
-                          <DropdownMenuItem onClick={() => setShowReportModal(true)} className="text-orange-400 hover:text-orange-300">
-                            <Flag className="w-4 h-4 mr-2" />Denunciar
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    <motion.button
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => { queryClient.removeQueries(['allStories']); navigate(-1); }}
-                      className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
-                    >
-                      <X className="w-6 h-6 text-white" />
-                    </motion.button>
+                  <div>
+                    <p className="text-white font-medium">{storyUser?.display_name || 'User'}</p>
+                    <p className="text-gray-400 text-xs">{(() => {
+                      const diff = Date.now() - new Date(story.created_date).getTime();
+                      const mins = Math.floor(diff / 60000);
+                      const hours = Math.floor(mins / 60);
+                      const days = Math.floor(hours / 24);
+                      if (days > 0) return `há ${days}d`;
+                      if (hours > 0) return `há ${hours}h`;
+                      if (mins > 0) return `há ${mins}min`;
+                      return 'agora mesmo';
+                    })()}</p>
                   </div>
                 </div>
-              </div>
-
-              {/* Bottom section */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent z-30 space-y-4">
-                {!isStoryOwner && (
-                  <StoryReactions
-                    reactions={reactions}
-                    currentUserId={currentUser?.id}
-                    onReact={(emoji) => reactMutation.mutate(emoji)}
-                  />
-                )}
-                {storyPlan && (
-                  <motion.button
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${storyPlan.id}`)}
-                    className="w-full p-3 rounded-xl backdrop-blur-sm flex items-center gap-3 border-2 hover:shadow-lg transition-all"
-                    style={{
-                      backgroundColor: storyPlan.theme_color ? `${storyPlan.theme_color}44` : 'rgba(255,255,255,0.1)',
-                      borderColor: storyPlan.theme_color ? `${storyPlan.theme_color}80` : 'rgba(255,255,255,0.2)'
-                    }}
-                  >
-                    {storyPlan.group_image ? (
-                      <img src={storyPlan.group_image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-white/20" />
-                    ) : storyPlan.cover_image ? (
-                      <img src={storyPlan.cover_image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-white/20" />
-                    ) : (
-                      <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-lg"
-                        style={{ backgroundColor: storyPlan.theme_color || '#542b9b' }}>🎉</div>
-                    )}
-                    <div className="flex-1 text-left">
-                      <p className="text-white font-medium">{storyPlan.title}</p>
-                      <p className="text-gray-300 text-xs">{storyPlan.city}</p>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-gray-400" />
-                  </motion.button>
-                )}
-                <div className="flex gap-3 items-center">
-                  {canChat && (
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setShowChatInput(true)}
-                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-[#00c6d2]/80 to-[#00c6d2] text-[#0b0b0b] font-bold backdrop-blur-sm border border-[#00c6d2]/50 hover:shadow-lg hover:shadow-[#00c6d2]/30 transition-all"
-                    >
-                      <MessageCircle className="w-5 h-5" /><span>Send Chat</span>
+                <div className="flex gap-2">
+                  {story.media_type === 'video' && story.has_audio && (
+                    <motion.button whileTap={{ scale: 0.9 }} onClick={() => setIsMuted(!isMuted)} className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
+                      {isMuted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white" />}
                     </motion.button>
                   )}
-                  <div className="relative">
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="p-3 rounded-xl bg-gradient-to-r from-[#542b9b]/80 to-[#542b9b] text-white backdrop-blur-sm border border-[#542b9b]/50 hover:shadow-lg hover:shadow-[#542b9b]/30 transition-all"
-                    >
-                      <span className="text-xl">😊</span>
-                    </motion.button>
-                    {showEmojiPicker && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                        className="absolute bottom-16 right-0 bg-gray-900 border border-[#542b9b]/50 rounded-xl p-2 z-50 flex flex-col gap-2"
-                      >
-                        {emojis.map((emoji) => (
-                          <motion.button
-                            key={emoji}
-                            whileTap={{ scale: 1.3 }}
-                            onClick={(e) => { e.stopPropagation(); handleEmojiSelect(emoji); }}
-                            className="text-2xl hover:scale-125 transition-transform"
-                          >{emoji}</motion.button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <motion.button whileTap={{ scale: 0.9 }} className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
+                        <MoreVertical className="w-5 h-5 text-white" />
+                      </motion.button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-gray-900 border-gray-800">
+                      {canDelete && (
+                        <DropdownMenuItem onClick={() => deleteMutation.mutate()} className="text-red-400 hover:text-red-300">
+                          <Trash2 className="w-4 h-4 mr-2" />Deletar Story
+                        </DropdownMenuItem>
+                      )}
+                      {!canDelete && currentUser && (
+                        <DropdownMenuItem onClick={() => setShowReportModal(true)} className="text-orange-400 hover:text-orange-300">
+                          <Flag className="w-4 h-4 mr-2" />Denunciar
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <motion.button whileTap={{ scale: 0.9 }} onClick={() => { queryClient.removeQueries(['allStories']); navigate(-1); }} className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
+                    <X className="w-6 h-6 text-white" />
+                  </motion.button>
                 </div>
-                {showChatInput && canChat && (
-                  <StoryChatInput
-                    storyId={story?.id}
-                    storyUser={storyUser}
-                    onMessageSent={handleChatSent}
-                    onClose={() => setShowChatInput(false)}
-                  />
-                )}
               </div>
-            </motion.div>
-          </AnimatePresence>
+            </div>
+
+            {/* Bottom */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent z-30 space-y-4">
+              {!isStoryOwner && (
+                <StoryReactions reactions={reactions} currentUserId={currentUser?.id} onReact={(emoji) => reactMutation.mutate(emoji)} />
+              )}
+              {storyPlan && (
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${storyPlan.id}`)}
+                  className="w-full p-3 rounded-xl backdrop-blur-sm flex items-center gap-3 border-2 hover:shadow-lg transition-all"
+                  style={{
+                    backgroundColor: storyPlan.theme_color ? `${storyPlan.theme_color}44` : 'rgba(255,255,255,0.1)',
+                    borderColor: storyPlan.theme_color ? `${storyPlan.theme_color}80` : 'rgba(255,255,255,0.2)'
+                  }}
+                >
+                  {storyPlan.group_image
+                    ? <img src={storyPlan.group_image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-white/20" />
+                    : storyPlan.cover_image
+                      ? <img src={storyPlan.cover_image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-white/20" />
+                      : <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-lg" style={{ backgroundColor: storyPlan.theme_color || '#542b9b' }}>🎉</div>}
+                  <div className="flex-1 text-left">
+                    <p className="text-white font-medium">{storyPlan.title}</p>
+                    <p className="text-gray-300 text-xs">{storyPlan.city}</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </motion.button>
+              )}
+              <div className="flex gap-3 items-center">
+                {canChat && (
+                  <motion.button whileTap={{ scale: 0.95 }} onClick={() => setShowChatInput(true)}
+                    className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-[#00c6d2]/80 to-[#00c6d2] text-[#0b0b0b] font-bold backdrop-blur-sm border border-[#00c6d2]/50">
+                    <MessageCircle className="w-5 h-5" /><span>Send Chat</span>
+                  </motion.button>
+                )}
+                <div className="relative">
+                  <motion.button whileTap={{ scale: 0.95 }} onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="p-3 rounded-xl bg-gradient-to-r from-[#542b9b]/80 to-[#542b9b] text-white backdrop-blur-sm border border-[#542b9b]/50">
+                    <span className="text-xl">😊</span>
+                  </motion.button>
+                  {showEmojiPicker && (
+                    <motion.div initial={{ opacity: 0, scale: 0.8, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+                      className="absolute bottom-16 right-0 bg-gray-900 border border-[#542b9b]/50 rounded-xl p-2 z-50 flex flex-col gap-2">
+                      {emojis.map((emoji) => (
+                        <motion.button key={emoji} whileTap={{ scale: 1.3 }}
+                          onClick={(e) => { e.stopPropagation(); handleEmojiSelect(emoji); }}
+                          className="text-2xl hover:scale-125 transition-transform">{emoji}</motion.button>
+                      ))}
+                    </motion.div>
+                  )}
+                </div>
+              </div>
+              {showChatInput && canChat && (
+                <StoryChatInput storyId={story?.id} storyUser={storyUser} onMessageSent={handleChatSent} onClose={() => setShowChatInput(false)} />
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -698,21 +706,13 @@ export default function StoryView() {
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
         onReport={(data) => reportMutation.mutate(data)}
-        contentType="story"
-        contentTitle={storyPlan?.title}
-        isLoading={reportMutation.isPending}
+        contentType="story" contentTitle={storyPlan?.title} isLoading={reportMutation.isPending}
       />
 
-      {/* Floating reactions */}
       {floatingReactions.map(({ id, emoji }) => (
-        <motion.div
-          key={id}
-          className="fixed text-4xl pointer-events-none z-50"
-          style={{ bottom: '20%', right: '10%' }}
-          initial={{ y: 0, opacity: 1, scale: 1 }}
-          animate={{ y: -400, opacity: 0, scale: 1.5 }}
-          transition={{ duration: 1.5, ease: 'easeOut' }}
-        >{emoji}</motion.div>
+        <motion.div key={id} className="fixed text-4xl pointer-events-none z-50" style={{ bottom: '20%', right: '10%' }}
+          initial={{ y: 0, opacity: 1, scale: 1 }} animate={{ y: -400, opacity: 0, scale: 1.5 }}
+          transition={{ duration: 1.5, ease: 'easeOut' }}>{emoji}</motion.div>
       ))}
     </div>
   );
