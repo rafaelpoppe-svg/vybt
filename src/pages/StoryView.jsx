@@ -504,17 +504,8 @@ export default function StoryView() {
 
   // ── Compute 3D styles ─────────────────────────────────────────────────────
   const absProgress = Math.abs(dragProgress);
-  // dragProgress: positive = forward (next), negative = backward (prev)
   const dragDir = dragProgress !== 0 ? (dragProgress > 0 ? 1 : -1) : cubeDirection;
   const showCube = (isDragging || isAnimating) && absProgress > 0;
-
-  const currentFaceStyle = showCube
-    ? getCubeFaceStyle('current', absProgress, dragDir)
-    : { position: 'absolute', inset: 0 };
-
-  const adjacentFaceStyle = showCube && adjacentStory
-    ? getCubeFaceStyle('adjacent', absProgress, dragDir)
-    : null;
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
