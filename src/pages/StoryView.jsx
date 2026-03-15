@@ -453,7 +453,16 @@ export default function StoryView() {
             </div>
             <div>
               <p className="text-white font-medium">{storyUser?.display_name || 'User'}</p>
-              <p className="text-gray-400 text-xs">{story.view_count || 0} views</p>
+              <p className="text-gray-400 text-xs">{(() => {
+                const diff = Date.now() - new Date(story.created_date).getTime();
+                const mins = Math.floor(diff / 60000);
+                const hours = Math.floor(mins / 60);
+                const days = Math.floor(hours / 24);
+                if (days > 0) return `há ${days}d`;
+                if (hours > 0) return `há ${hours}h`;
+                if (mins > 0) return `há ${mins}min`;
+                return 'agora mesmo';
+              })()}</p>
             </div>
           </div>
           
