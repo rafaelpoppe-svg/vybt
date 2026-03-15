@@ -479,11 +479,36 @@ export default function StoryView() {
   });
 
   const emojis = ['❤️', '🔥', '😍', '🎉', '👏', '💯'];
-  const handleEmojiSelect = (emoji) => { reactMutation.mutate(emoji); triggerFloatingEmoji(emoji); };
-  const handleChatSent = async () => {
+  const handleEmojiSelect = (emoji) => {
+    reactMutation.mutate(emoji);
+    triggerFloatingEmoji(emoji);
+    // Resume after sending emoji
+    setShowEmojiPicker(false);
+    isPausedRef.current = false;
+  };
+
+  const handleOpenChat = () => {
+    setShowChatInput(true);
+    isPausedRef.current = true;
+  };
+
+  const handleCloseChat = () => {
     setShowChatInput(false);
-    await base44.auth.me();
-    if (storyUser) navigate(createPageUrl('Chat'));
+    isPausedRef.current = false;
+  };
+
+  const handleOpenEmoji = () => {
+    setShowEmojiPicker(true);
+    isPausedRef.current = true;
+  };
+
+  const handleCloseEmoji = () => {
+    setShowEmojiPicker(false);
+    isPausedRef.current = false;
+  };
+
+  const handleChatSent = async () => {
+    handleCloseChat();
   };
 
   if (isLoading || !story) {
