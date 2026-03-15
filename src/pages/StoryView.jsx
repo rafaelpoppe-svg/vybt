@@ -735,9 +735,9 @@ export default function StoryView() {
                 <StoryChatInput storyId={story?.id} storyUser={storyUser} onMessageSent={handleChatSent} onClose={() => setShowChatInput(false)} />
               )}
             </div>
-          </div>
+          </div> {/* end current face */}
           </div> {/* end 3D cube wrapper */}
-        </div>
+        </div> {/* end clip container */}
       </div>
 
       <ReportContentModal
