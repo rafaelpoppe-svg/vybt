@@ -76,10 +76,34 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true,
           {isSticker ? (
             <motion.div
               whileTap={{ scale: 0.95 }}
-              onLongPress={() => setShowReactions(true)}
               className="w-24 h-24"
             >
               <img src={stickerUrl} alt="sticker" className="w-full h-full object-contain" />
+            </motion.div>
+          ) : isStoryReply ? (
+            <motion.div
+              whileTap={{ scale: 0.97 }}
+              onContextMenu={(e) => { e.preventDefault(); setShowReactions(v => !v); }}
+              className={`rounded-2xl overflow-hidden cursor-pointer select-none border ${
+                isMe ? 'rounded-br-sm border-[#00c6d2]/40' : 'rounded-bl-sm border-gray-700/40'
+              }`}
+              style={{ maxWidth: 220 }}
+            >
+              {/* Story thumbnail */}
+              <div className="relative w-full" style={{ aspectRatio: '9/16', maxHeight: 180 }}>
+                {storyReplyData.type === 'video'
+                  ? <video src={storyReplyData.url} className="w-full h-full object-cover" muted playsInline />
+                  : <img src={storyReplyData.url} alt="" className="w-full h-full object-cover" />}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 flex items-end p-2">
+                  <span className="text-white text-[10px] opacity-70">Story</span>
+                </div>
+              </div>
+              {/* Message text */}
+              {displayContent && (
+                <div className={`px-3 py-2 ${isMe ? 'bg-gradient-to-br from-[#00c6d2] to-[#0096a8] text-[#0b0b0b]' : 'bg-gray-800 text-white'}`}>
+                  <p className="text-sm leading-relaxed">{displayContent}</p>
+                </div>
+              )}
             </motion.div>
           ) : (
             <motion.div
