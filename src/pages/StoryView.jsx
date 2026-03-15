@@ -553,15 +553,28 @@ export default function StoryView() {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="w-full h-full flex items-center justify-center relative">
+        {/* Desktop side group cards — OUTSIDE the clipped container so they're visible */}
+        {prevGroup && (
+          <div className="hidden md:flex absolute top-0 bottom-0 items-center justify-center cursor-pointer z-20"
+            style={{ right: 'calc(50% + 200px)', width: '180px' }}
+            onClick={() => goToGroupCube(currentGroupIndex - 1, 0, -1)}>
+            <SideGroupCard group={prevGroup} side="left" />
+          </div>
+        )}
+        {nextGroup && (
+          <div className="hidden md:flex absolute top-0 bottom-0 items-center justify-center cursor-pointer z-20"
+            style={{ left: 'calc(50% + 200px)', width: '180px' }}
+            onClick={() => goToGroupCube(currentGroupIndex + 1, 0, 1)}>
+            <SideGroupCard group={nextGroup} side="right" />
+          </div>
+        )}
+
         {/* Outer clip container — clips the cube as it rotates */}
         <div
           className="relative w-full md:w-[400px] h-full md:h-[90vh] md:rounded-2xl overflow-hidden"
           style={{ perspective: '900px', perspectiveOrigin: '50% 120%' }}
         >
-          {/* Desktop side group cards */}
-          {prevGroup && <SideGroupCard group={prevGroup} side="left" />}
-          {nextGroup && <SideGroupCard group={nextGroup} side="right" />}
 
           {/* Progress bars — always outside cube, never re-mounts */}
           <div className="absolute top-0 left-0 right-0 z-40 flex gap-1 px-2 pt-2">
