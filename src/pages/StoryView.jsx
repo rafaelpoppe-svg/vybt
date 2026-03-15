@@ -25,30 +25,61 @@ import {
 //   current:  starts at 0° → ends at -90° (forward) or +90° (backward)
 //   adjacent: starts at +90° (forward) or -90° (backward) → ends at 0°
 
+// ─── Instagram cube geometry ──────────────────────────────────────────────────
+// Two faces pivot from the shared vertical edge between them.
+// Forward (swipe left):
+//   current  → pivot RIGHT edge, rotates from 0° to -90°
+//   adjacent → pivot LEFT edge,  rotates from +90° to 0°
+// Backward (swipe right):
+//   current  → pivot LEFT edge,  rotates from 0° to +90°
+//   adjacent → pivot RIGHT edge, rotates from -90° to 0°
 function getCubeFaceStyle(role, progress, direction) {
   const p = Math.abs(progress); // 0..1
-  const sign = direction >= 0 ? 1 : -1; // +1 forward, -1 backward
 
   if (role === 'current') {
-    const angle = sign * (-90 * p); // 0 → -90 (fwd) or 0 → +90 (bwd)
-    return {
-      position: 'absolute', inset: 0,
-      transform: `rotateY(${angle}deg)`,
-      transformOrigin: '50% 50%',
-      backfaceVisibility: 'hidden',
-      zIndex: 1,
-      willChange: 'transform',
-    };
+    if (direction >= 0) {
+      // Forward: current pivots on its RIGHT edge, swings back
+      return {
+        position: 'absolute', inset: 0,
+        transformOrigin: 'right center',
+        transform: `rotateY(${-90 * p}deg)`,
+        backfaceVisibility: 'hidden',
+        zIndex: 1,
+        willChange: 'transform',
+      };
+    } else {
+      // Backward: current pivots on its LEFT edge, swings back
+      return {
+        position: 'absolute', inset: 0,
+        transformOrigin: 'left center',
+        transform: `rotateY(${90 * p}deg)`,
+        backfaceVisibility: 'hidden',
+        zIndex: 1,
+        willChange: 'transform',
+      };
+    }
   } else {
-    const angle = sign * (90 - 90 * p); // 90 → 0 (fwd) or -90 → 0 (bwd)
-    return {
-      position: 'absolute', inset: 0,
-      transform: `rotateY(${angle}deg)`,
-      transformOrigin: '50% 50%',
-      backfaceVisibility: 'hidden',
-      zIndex: 2,
-      willChange: 'transform',
-    };
+    if (direction >= 0) {
+      // Forward: adjacent comes in from the right, pivots on its LEFT edge
+      return {
+        position: 'absolute', inset: 0,
+        transformOrigin: 'left center',
+        transform: `rotateY(${90 - 90 * p}deg)`,
+        backfaceVisibility: 'hidden',
+        zIndex: 2,
+        willChange: 'transform',
+      };
+    } else {
+      // Backward: adjacent comes in from the left, pivots on its RIGHT edge
+      return {
+        position: 'absolute', inset: 0,
+        transformOrigin: 'right center',
+        transform: `rotateY(${-90 + 90 * p}deg)`,
+        backfaceVisibility: 'hidden',
+        zIndex: 2,
+        willChange: 'transform',
+      };
+    }
   }
 }
 
