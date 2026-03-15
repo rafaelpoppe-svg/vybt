@@ -400,7 +400,7 @@ export default function StoryView() {
   return (
     <div
       data-hscroll="true" 
-      className="fixed inset-0 bg-gradient-to-b from-black via-black to-black z-50"
+      className="fixed inset-0 bg-gradient-to-b from-black via-black to-black z-50 overflow-hidden"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -440,8 +440,34 @@ export default function StoryView() {
         onClick={() => { isPausedRef.current = !isPausedRef.current}}
       />
 
-      {/* Media */}
-      <div className="absolute inset-0 flex items-center justify-center bg-black">
+      {/* Grupo anterior */}
+      {currentGroupIndex > 0 && (
+        <div
+          className="absolute inset-0 flex items-center justify-center bg-black"
+          style={{
+            transform: `translateX(${-SCREEN_WIDTH + dragX}px)`,
+            transition: isDraggingRef.current ? 'none' : 'transform 0.3s ease',
+          }}
+        >
+          {(() => {
+            const prevStory = groupedStories[currentGroupIndex - 1]?.stories?.[0];
+            return prevStory?.media_type === 'video' ? (
+              <video src={prevStory.media_url} className="h-full w-auto max-w-[400px] object-cover" muted />
+            ) : (
+              <img src={prevStory?.media_url} alt="" className="h-full w-auto max-w-[400px] object-cover" />
+            );
+          })()}
+        </div>
+      )}
+
+      {/* Grupo atual */}
+      <div
+        className="absolute inset-0 flex items-center justify-center bg-black"
+        style={{
+          transform: `translateX(${dragX}px)`,
+          transition: isDraggingRef.current ? 'none' : 'transform 0.3s ease',
+        }}
+      >
         {story.media_type === 'video' ? (
           <video
             key={story.id}
@@ -463,6 +489,26 @@ export default function StoryView() {
           />
         )}
       </div>
+
+      {/* Próximo grupo */}
+      {currentGroupIndex < groupedStories.length - 1 && (
+        <div
+          className="absolute inset-0 flex items-center justify-center bg-black"
+          style={{
+            transform: `translateX(${SCREEN_WIDTH + dragX}px)`,
+            transition: isDraggingRef.current ? 'none' : 'transform 0.3s ease',
+          }}
+        >
+          {(() => {
+            const nextStory = groupedStories[currentGroupIndex + 1]?.stories?.[0];
+            return nextStory?.media_type === 'video' ? (
+              <video src={nextStory.media_url} className="h-full w-auto max-w-[400px] object-cover" muted />
+            ) : (
+              <img src={nextStory?.media_url} alt="" className="h-full w-auto max-w-[400px] object-cover" />
+            );
+          })()}
+        </div>
+      )}
 
       {/* Header */}
       <div className="absolute top-4 left-0 right-0 px-4 z-30">
