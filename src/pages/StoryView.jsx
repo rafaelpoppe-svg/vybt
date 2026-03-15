@@ -176,30 +176,6 @@ export default function StoryView() {
     touchStartY.current = e.touches[0].clientY;
   };*/
 
-  const handleTouchEnd = (e) => {
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
-    const deltaX = touchEndX - touchStartX.current;
-    const deltaY = Math.abs(touchEndY - touchStartY.current);
-
-    // Only trigger if horizontal swipe > 50px and less vertical movement
-    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > deltaY * 2) {
-      if (deltaX > 0) {
-        // Swipe right: previous group
-        if (currentGroupIndex > 0) {
-          setCurrentGroupIndex(currentGroupIndex - 1);
-          setCurrentStoryInGroupIndex(0);
-        }
-      } else {
-        // Swipe left: next group
-        if (currentGroupIndex < groupedStories.length - 1) {
-          setCurrentGroupIndex(currentGroupIndex + 1);
-          setCurrentStoryInGroupIndex(0);
-        }
-      }
-    }
-  };
-
   const triggerFloatingEmoji = (emoji) => {
     const id = Date.now();
     setFloatingReactions(prev => [...prev, { id, emoji }]);
