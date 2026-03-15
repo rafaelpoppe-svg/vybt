@@ -720,26 +720,31 @@ export default function StoryView() {
                 <StoryReactions reactions={reactions} currentUserId={currentUser?.id} onReact={(emoji) => reactMutation.mutate(emoji)} />
               )}
               {storyPlan && (
-                <motion.button
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${storyPlan.id}`)}
-                  className="w-full p-3 rounded-xl backdrop-blur-sm flex items-center gap-3 border-2 hover:shadow-lg transition-all"
-                  style={{
-                    backgroundColor: storyPlan.theme_color ? `${storyPlan.theme_color}44` : 'rgba(255,255,255,0.1)',
-                    borderColor: storyPlan.theme_color ? `${storyPlan.theme_color}80` : 'rgba(255,255,255,0.2)'
-                  }}
-                >
-                  {storyPlan.group_image
-                    ? <img src={storyPlan.group_image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-white/20" />
-                    : storyPlan.cover_image
-                      ? <img src={storyPlan.cover_image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-white/20" />
-                      : <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-lg" style={{ backgroundColor: storyPlan.theme_color || '#542b9b' }}>🎉</div>}
-                  <div className="flex-1 text-left">
-                    <p className="text-white font-medium">{storyPlan.title}</p>
-                    <p className="text-gray-300 text-xs">{storyPlan.city}</p>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
-                </motion.button>
+                <div className="flex justify-start">
+                  <motion.button
+                    whileHover={{ scale: 1.03, x: 2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${storyPlan.id}`)}
+                    className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full backdrop-blur-md border transition-all max-w-[70%]"
+                    style={{
+                      backgroundColor: storyPlan.theme_color ? `${storyPlan.theme_color}33` : 'rgba(0,0,0,0.45)',
+                      borderColor: storyPlan.theme_color ? `${storyPlan.theme_color}66` : 'rgba(255,255,255,0.15)'
+                    }}
+                  >
+                    <div className="flex-shrink-0">
+                      {storyPlan.group_image
+                        ? <img src={storyPlan.group_image} alt="" className="w-7 h-7 rounded-full object-cover border border-white/20" />
+                        : storyPlan.cover_image
+                          ? <img src={storyPlan.cover_image} alt="" className="w-7 h-7 rounded-full object-cover border border-white/20" />
+                          : <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm" style={{ backgroundColor: storyPlan.theme_color || '#542b9b' }}>🎉</div>}
+                    </div>
+                    <div className="text-left min-w-0">
+                      <p className="text-white text-xs font-semibold truncate leading-tight">{storyPlan.title}</p>
+                      <p className="text-gray-300 text-[10px] truncate leading-tight">{storyPlan.city}</p>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+                  </motion.button>
+                </div>
               )}
               <div className="flex gap-3 items-center">
                 {canChat && (
