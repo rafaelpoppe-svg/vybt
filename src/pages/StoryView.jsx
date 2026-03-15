@@ -14,40 +14,40 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 // ─── Real 3D cube geometry ────────────────────────────────────────────────────
-// The "cube" trick: current face rotates away from viewer while adjacent face
-// rotates into view. transformOrigin on the hinge side makes it look like a real cube face.
-// progress: 0 = fully current, 1 = fully next, -1 = fully prev
-// direction: 1 = going forward (swiping left), -1 = going backward (swiping right)
+// Instagram-style cube: both faces share ONE perspective on the parent container.
+// The cube has a radius (half the width). Each face is offset by that radius on Z,
+// then rotated so they meet at a 90° angle — exactly like a physical cube corner.
+//
+// progress: 0..1 (forward) or 0..-1 (backward)
+// direction: 1 = going forward (swipe left), -1 = going backward (swipe right)
+//
+// Face angles:
+//   current:  starts at 0° → ends at -90° (forward) or +90° (backward)
+//   adjacent: starts at +90° (forward) or -90° (backward) → ends at 0°
 
-function getCubeFaceStyle(role, progress, direction, screenW) {
-  // role: 'current' | 'adjacent'
-  const MAX_ANGLE = 90; // degrees — the angle that makes a true 90° cube face
+function getCubeFaceStyle(role, progress, direction) {
+  const p = Math.abs(progress); // 0..1
+  const sign = direction >= 0 ? 1 : -1; // +1 forward, -1 backward
 
   if (role === 'current') {
-    // Current face rotates away. Forward: pivot on LEFT edge, rotates negative.
-    const angle = direction >= 0
-      ? -MAX_ANGLE * progress        // going forward: left edge pivot, rotates toward viewer from right
-      : MAX_ANGLE * Math.abs(progress); // going backward: right edge pivot
-    const origin = direction >= 0 ? 'left center' : 'right center';
+    const angle = sign * (-90 * p); // 0 → -90 (fwd) or 0 → +90 (bwd)
     return {
       position: 'absolute', inset: 0,
-      transformOrigin: origin,
-      transform: `perspective(${screenW * 2}px) rotateY(${angle}deg)`,
+      transform: `rotateY(${angle}deg)`,
+      transformOrigin: '50% 50%',
       backfaceVisibility: 'hidden',
       zIndex: 1,
+      willChange: 'transform',
     };
   } else {
-    // Adjacent face comes in from the side opposite to the pivot
-    const angle = direction >= 0
-      ? MAX_ANGLE * (1 - progress)   // starts at 90°, ends at 0°
-      : -MAX_ANGLE * (1 - Math.abs(progress)); // starts at -90°, ends at 0°
-    const origin = direction >= 0 ? 'right center' : 'left center';
+    const angle = sign * (90 - 90 * p); // 90 → 0 (fwd) or -90 → 0 (bwd)
     return {
       position: 'absolute', inset: 0,
-      transformOrigin: origin,
-      transform: `perspective(${screenW * 2}px) rotateY(${angle}deg)`,
+      transform: `rotateY(${angle}deg)`,
+      transformOrigin: '50% 50%',
       backfaceVisibility: 'hidden',
-      zIndex: progress > 0 ? 2 : 0,
+      zIndex: 2,
+      willChange: 'transform',
     };
   }
 }
