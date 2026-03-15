@@ -170,11 +170,11 @@ export default function StoryView() {
   const storyUser = story ? profilesMap[story.user_id] : null;
   const storyPlan = story ? plans.find(p => p.id === story.plan_id) : null;
 
-  // Handle horizontal swipe for group navigation
+  /* REMOVER SE DER CERTO Handle horizontal swipe for group navigation
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
-  };
+  };*/
 
   const handleTouchEnd = (e) => {
     const touchEndX = e.changedTouches[0].clientX;
