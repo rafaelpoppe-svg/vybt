@@ -209,13 +209,18 @@ export default function CommunityView() {
             <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
               <ChevronLeft className="w-5 h-5 text-white" />
             </motion.button>
-            {isAdmin && (
-              <div className="flex gap-2">
+            <div className="flex gap-2">
+              {isMember && (
+                <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowInviteModal(true)} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                  <UserPlus className="w-5 h-5 text-white" />
+                </motion.button>
+              )}
+              {isAdmin && (
                 <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowEditModal(true)} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
                   <Settings className="w-5 h-5 text-white" />
                 </motion.button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
 
@@ -401,6 +406,18 @@ export default function CommunityView() {
       <BottomNav />
 
       <StoryViewOverlay storyId={overlayStoryId} onClose={() => setOverlayStoryId(null)} />
+
+      <AnimatePresence>
+        {showInviteModal && (
+          <InviteToCommunityModal
+            community={community}
+            friends={friendIds}
+            profilesMap={profilesMap}
+            currentUser={currentUser}
+            onClose={() => setShowInviteModal(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
