@@ -24,6 +24,7 @@ import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { useLanguage } from '../components/common/LanguageContext';
 import HomeCommunitiesSection from '../components/home/HomeCommunitiesSection';
 import HomeCommunitiesBar from '../components/home/HomeCommunitiesBar';
+import HomeMyCommunitiesBar from '../components/home/HomeMyCommunitiesBar';
 
 
 export default function Home() {
@@ -143,6 +144,12 @@ export default function Home() {
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myParticipations', currentUser?.id],
     queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
+    enabled: !!currentUser?.id,
+  });
+
+  const { data: myCommunityMemberships = [] } = useQuery({
+    queryKey: ['myCommunityMemberships', currentUser?.id],
+    queryFn: () => base44.entities.CommunityMember.filter({ user_id: currentUser?.id }),
     enabled: !!currentUser?.id,
   });
 
@@ -372,7 +379,15 @@ export default function Home() {
           setFilters={setMapFilters}
         />
 
-        {/* Communities Bar — antes do mapa */}
+        {/* My Communities Bar */}
+        {currentUser && myCommunityMemberships.length > 0 && (
+          <HomeMyCommunitiesBar
+            communities={communities}
+            memberCommunityIds={myCommunityMemberships.map(m => m.community_id)}
+          />
+        )}
+
+        {/* Communities Near You */}
         <HomeCommunitiesBar communities={communities} city={city} />
 
         {/* Mapa interativo */}
