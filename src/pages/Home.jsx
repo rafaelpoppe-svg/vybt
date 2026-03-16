@@ -404,9 +404,6 @@ export default function Home() {
           />
         )}
 
-        {/* Communities */}
-        <HomeCommunitiesSection communities={communities} myProfile={myProfile} city={city} />
-
         {/* Live Activities */}
         <HomeLiveActivities
           friendIds={friendIds}
