@@ -21,6 +21,7 @@ import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated'
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
 import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { useLanguage } from '../components/common/LanguageContext';
+import HomeCommunitiesSection from '../components/home/HomeCommunitiesSection';
 
 
 export default function Home() {
@@ -129,6 +130,11 @@ export default function Home() {
     queryKey: ['reverseFriendships', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id, status: 'accepted' }),
     enabled: !!currentUser?.id,
+  });
+
+  const { data: communities = [] } = useQuery({
+    queryKey: ['communities', city],
+    queryFn: () => city ? base44.entities.Community.filter({ city }) : base44.entities.Community.list('-created_date', 20),
   });
 
   const { data: myParticipations = [] } = useQuery({
@@ -391,6 +397,9 @@ export default function Home() {
             onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
           />
         )}
+
+        {/* Communities */}
+        <HomeCommunitiesSection communities={communities} myProfile={myProfile} city={city} />
 
         {/* Live Activities */}
         <HomeLiveActivities
