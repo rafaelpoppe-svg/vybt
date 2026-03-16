@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, Settings, Plus, MessageCircle, Users, Image, Lock, Unlock, Loader2, X, Check, Trash2, UserPlus } from 'lucide-react';
+import { ChevronLeft, Settings, Plus, MessageCircle, Users, Image, Lock, Unlock, Loader2, X, Check, Trash2, UserPlus, MoreVertical, Flag } from 'lucide-react';
 import PlanCard from '../components/feed/PlanCard';
 import BottomNav from '../components/common/BottomNav';
 import CommunityChat from '../components/community/CommunityChat';
@@ -24,6 +24,7 @@ export default function CommunityView() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [overlayStoryId, setOverlayStoryId] = useState(null);
+  const [showReportMenu, setShowReportMenu] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
@@ -220,6 +221,23 @@ export default function CommunityView() {
                   <Settings className="w-5 h-5 text-white" />
                 </motion.button>
               )}
+              {!isAdmin && (
+                <div className="relative">
+                  <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowReportMenu(v => !v)} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                    <MoreVertical className="w-5 h-5 text-white" />
+                  </motion.button>
+                  {showReportMenu && (
+                    <div className="absolute right-0 top-12 bg-gray-900 border border-gray-700 rounded-xl shadow-xl z-50 min-w-[160px]">
+                      <button
+                        onClick={() => { setShowReportMenu(false); /* TODO: open report modal */ }}
+                        className="w-full px-4 py-3 text-left text-sm text-red-400 flex items-center gap-2 hover:bg-gray-800 rounded-xl"
+                      >
+                        <Flag className="w-4 h-4" /> Report Community
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -403,7 +421,7 @@ export default function CommunityView() {
           onDelete={() => setShowDeleteConfirm(true)} />
       )}
 
-      <BottomNav />
+      {/* No BottomNav in CommunityView — full-page experience */}
 
       <StoryViewOverlay storyId={overlayStoryId} onClose={() => setOverlayStoryId(null)} />
 
