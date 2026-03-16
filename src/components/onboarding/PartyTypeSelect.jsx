@@ -48,7 +48,7 @@ export default function PartyTypeSelect({ selected = [], onSelect, min = 2, max 
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 gap-2.5 max-h-[340px] overflow-y-auto pr-1 scrollbar-hide">
+      <div className="grid grid-cols-2 gap-2.5 max-h-[220px] overflow-y-auto pr-1 scrollbar-hide">
         {filtered.map((type) => {
           const isSelected = selected.includes(type);
           const config = partyTagConfig[type] || { icon: Flame, gradient: 'from-gray-500 to-gray-600' };

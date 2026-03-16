@@ -45,7 +45,7 @@ export default function VibesSelect({ selected = [], onSelect, min = 2, max = 5 
       </div>
 
       {/* Grid */}
-      <div className="flex flex-wrap gap-2 max-h-[340px] overflow-y-auto pr-1 scrollbar-hide">
+      <div className="flex flex-wrap gap-2 max-h-[220px] overflow-y-auto pr-1 scrollbar-hide">
         {filtered.map((vibe) => {
           const isDisabled = !selected.includes(vibe) && selected.length >= max;
           return (
