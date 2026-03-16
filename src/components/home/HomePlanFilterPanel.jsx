@@ -10,7 +10,6 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
 
   if (!isOpen) return null;
 
-  const upcomingDays = getUpcomingDays();
   const activeCount = (filters.partyTags?.length || 0) + (filters.startTime ? 1 : 0) + (filters.endTime ? 1 : 0) + (filters.planDate ? 1 : 0);
 
   return (
