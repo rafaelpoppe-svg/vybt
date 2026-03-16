@@ -10,7 +10,18 @@ export default function HomeCommunitiesBar({ plans = [] }) {
 
   const today = format(new Date(), 'yyyy-MM-dd');
 
-  const happeningPlans = plans.filter(p => p.status === 'happening');
+  const now = new Date();
+
+  const happeningPlans = plans.filter(p => {
+    if (p.status !== 'happening') return false;
+    // If the plan has an end_time today and it has already passed, exclude it
+    if (p.end_time && p.date) {
+      const endDateTime = new Date(`${p.date}T${p.end_time}`);
+      if (endDateTime < now) return false;
+    }
+    return true;
+  });
+
   const upcomingPlans = plans.filter(p => p.date === today && p.status === 'upcoming');
   const todayPlans = [...happeningPlans, ...upcomingPlans].slice(0, 12);
 
