@@ -10,13 +10,9 @@ export default function HomeCommunitiesBar({ plans = [] }) {
 
   const today = format(new Date(), 'yyyy-MM-dd');
 
-  const todayPlans = plans
-    .filter(p =>
-      p.date === today &&
-      (p.status === 'upcoming' || p.status === 'happening') &&
-      p.status !== 'terminated'
-    )
-    .slice(0, 12);
+  const happeningPlans = plans.filter(p => p.status === 'happening');
+  const upcomingPlans = plans.filter(p => p.date === today && p.status === 'upcoming');
+  const todayPlans = [...happeningPlans, ...upcomingPlans].slice(0, 12);
 
   if (!todayPlans.length) return null;
 
@@ -58,7 +54,7 @@ export default function HomeCommunitiesBar({ plans = [] }) {
                 {!isLive && (
                   <div
                     className="absolute inset-0 rounded-2xl pointer-events-none z-10"
-                    style={{ border: `1.5px solid ${color}55` }}
+                    style={{ border: `1.5px solid ${color}44` }}
                   />
                 )}
 
