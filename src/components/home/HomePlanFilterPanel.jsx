@@ -33,20 +33,23 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
           <label className="text-gray-400 text-xs mb-2 flex items-center gap-1">
             <CalendarDays className="w-3 h-3" /> Date
           </label>
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1" data-hscroll="1">
-            {upcomingDays.map(({ label, value }) => (
+          <div className="relative">
+            <input
+              type="date"
+              value={filters.planDate || ''}
+              onChange={e => setFilters({ ...filters, planDate: e.target.value })}
+              min={new Date().toISOString().split('T')[0]}
+              className="w-full bg-white/5 border border-white/10 text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#00c6d2]"
+              style={{ colorScheme: 'dark' }}
+            />
+            {filters.planDate && (
               <button
-                key={value}
-                onClick={() => setFilters({ ...filters, planDate: filters.planDate === value ? '' : value })}
-                className="flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
-                style={filters.planDate === value
-                  ? { background: '#00c6d2', color: '#0b0b0b' }
-                  : { background: 'rgba(255,255,255,0.05)', color: '#aaa', border: '1px solid rgba(255,255,255,0.1)' }
-                }
+                onClick={() => setFilters({ ...filters, planDate: '' })}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
               >
-                {label}
+                <X className="w-3 h-3" />
               </button>
-            ))}
+            )}
           </div>
         </div>
 
