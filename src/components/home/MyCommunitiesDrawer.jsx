@@ -51,7 +51,7 @@ export default function MyCommunitiesDrawer({ isOpen, onClose, communities, memb
             <div className="px-4 pb-2 space-y-2 max-h-[60vh] overflow-y-auto">
               {myCommunities.length === 0 ? (
                 <div className="text-center py-10">
-                  <div className="text-4xl mb-3">🏘️</div>
+                  <div className="text-4xl mb-3">⭐</div>
                   <p className="text-gray-400 text-sm">You haven't joined any community yet</p>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
@@ -81,7 +81,7 @@ export default function MyCommunitiesDrawer({ isOpen, onClose, communities, memb
                         {c.cover_image
                           ? <img src={c.cover_image} alt="" className="w-full h-full object-cover" />
                           : <div className="w-full h-full flex items-center justify-center text-xl"
-                              style={{ background: `linear-gradient(135deg, #1a1a2e, ${color})` }}>🏘️</div>
+                              style={{ background: `linear-gradient(135deg, #1a1a2e, ${color})` }}>⭐</div>
                         }
                       </div>
                       <div className="text-left flex-1 min-w-0">
