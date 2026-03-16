@@ -9,6 +9,7 @@ import PlanCard from '../components/feed/PlanCard';
 import BottomNav from '../components/common/BottomNav';
 import CommunityChat from '../components/community/CommunityChat';
 import CommunityEditModal from '../components/community/CommunityEditModal';
+import StoryViewOverlay from '../components/story/StoryViewOverlay';
 
 export default function CommunityView() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function CommunityView() {
   const [activeTab, setActiveTab] = useState('today'); // today | upcoming | stories | chat
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [overlayStoryId, setOverlayStoryId] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
@@ -335,7 +337,7 @@ export default function CommunityView() {
                   : (
                     <div className="grid grid-cols-3 gap-1.5">
                       {stories.map(story => (
-                        <motion.div key={story.id} whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+                        <motion.div key={story.id} whileTap={{ scale: 0.95 }} onClick={() => setOverlayStoryId(story.id)}
                           className="aspect-[9/16] rounded-xl overflow-hidden cursor-pointer relative">
                           {story.media_type === 'video'
                             ? <video src={story.media_url} className="w-full h-full object-cover" muted playsInline />
@@ -389,6 +391,8 @@ export default function CommunityView() {
       )}
 
       <BottomNav />
+
+      <StoryViewOverlay storyId={overlayStoryId} onClose={() => setOverlayStoryId(null)} />
     </div>
   );
 }
