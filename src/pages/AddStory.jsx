@@ -263,20 +263,23 @@ export default function AddStory() {
     navigate(createPageUrl('Home'));
   };
 
-  const processFile = async (file) => {
+  const processFile = async (file, mediaType = 'image') => {
     setProcessingMedia(true);
     setModerationError('');
 
     const { file_url } = await base44.integrations.Core.UploadFile({ file });
 
-    const modResult = await base44.functions.invoke('moderateImage', { image_url: file_url, context: 'story' });
-    if (!modResult.data.approved) {
-      setModerationError(modResult.data.reason || 'This content is not allowed.');
-      setProcessingMedia(false);
-      return;
+    // Only run image moderation for photos
+    if (mediaType === 'image') {
+      const modResult = await base44.functions.invoke('moderateImage', { image_url: file_url, context: 'story' });
+      if (!modResult.data.approved) {
+        setModerationError(modResult.data.reason || 'This content is not allowed.');
+        setProcessingMedia(false);
+        return;
+      }
     }
 
-    setMedia({ file, file_url, thumbUrl: '', isVideo: false });
+    setMedia({ file, file_url, thumbUrl: '', isVideo: mediaType === 'video' });
     setProcessingMedia(false);
     setStep(2);
   };
