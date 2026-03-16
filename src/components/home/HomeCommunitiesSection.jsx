@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Users2 } from 'lucide-react';
 import CommunityCard from '../community/CommunityCard';
 
 export default function HomeCommunitiesSection({ communities, myProfile, city }) {
@@ -19,7 +19,7 @@ export default function HomeCommunitiesSection({ communities, myProfile, city })
     <div className="mb-6">
       <div className="flex items-center justify-between px-4 mb-3">
         <div className="flex items-center gap-2">
-          <motion.span animate={{ scale: [1, 1.15, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="text-xl">🏘️</motion.span>
+          <Users2 className="w-5 h-5 text-[#00c6d2]" />
           <h2 className="text-white font-black text-base">Communities</h2>
         </div>
         <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('Explore') + '?tab=communities')}
