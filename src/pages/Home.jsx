@@ -24,7 +24,6 @@ import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { useLanguage } from '../components/common/LanguageContext';
 import HomeCommunitiesSection from '../components/home/HomeCommunitiesSection';
 import HomeCommunitiesBar from '../components/home/HomeCommunitiesBar';
-import HomeCommunitiesSection from '../components/home/HomeCommunitiesSection';
 import MyCommunitiesDrawer from '../components/home/MyCommunitiesDrawer';
 
 
