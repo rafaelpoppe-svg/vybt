@@ -247,47 +247,7 @@ export default function CreateCommunity() {
     ),
 
     2: (
-      <div className="space-y-6">
-        <div className="text-center">
-          <div className="text-5xl mb-3">📍</div>
-          <h2 className="text-2xl font-black text-white">Where is your community?</h2>
-          <p className="text-gray-400 mt-1">{isAdmin ? 'Choose any city 🌍' : 'Based on your current location 📡'}</p>
-        </div>
-        {isAdmin ? (
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">City *</label>
-            <Input value={data.city} onChange={(e) => setData({ ...data, city: e.target.value })}
-              placeholder="e.g. Braga, Porto, Lisbon..." className="bg-gray-900 border-gray-800 text-white text-lg py-6" />
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4 text-center">
-              <p className="text-gray-400 text-sm mb-3">Detecting your city... 📡</p>
-              <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
-                if (navigator.geolocation) {
-                  navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const { latitude, longitude } = pos.coords;
-                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`, { headers: { 'Accept-Language': 'en' } });
-                    const d = await res.json();
-                    const city = d.address?.city || d.address?.town || d.address?.village || '';
-                    if (city) setData(prev => ({ ...prev, city }));
-                  }, () => {});
-                }
-              }} className="px-6 py-3 rounded-xl font-bold text-sm" style={{ background: data.theme_color, color: '#0b0b0b' }}>
-                📡 Detect My City
-              </motion.button>
-            </div>
-            {data.city && (
-              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                className="rounded-2xl p-4 text-center border" style={{ borderColor: `${data.theme_color}50`, background: `${data.theme_color}15` }}>
-                <p className="text-2xl mb-1">📍</p>
-                <p className="text-white font-black text-xl">{data.city}</p>
-                <p className="text-gray-400 text-xs mt-1">Confirmed! ✅</p>
-              </motion.div>
-            )}
-          </div>
-        )}
-      </div>
+      <CityStep data={data} setData={setData} isAdmin={isAdmin} />
     ),
 
     3: (
