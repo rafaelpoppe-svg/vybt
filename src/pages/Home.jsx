@@ -370,6 +370,9 @@ export default function Home() {
           setFilters={setMapFilters}
         />
 
+        {/* Communities Bar — antes do mapa */}
+        <HomeCommunitiesBar communities={communities} city={city} />
+
         {/* Mapa interativo */}
         <div className="px-4 mb-5">
           <HomeLiveMap
