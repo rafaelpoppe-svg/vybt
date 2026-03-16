@@ -47,6 +47,8 @@ const slideVariants = {
 
 export default function CreatePlan() {
   const navigate = useNavigate();
+  const urlParams = new URLSearchParams(window.location.search);
+  const communityId = urlParams.get('communityId') || null;
   const [step, setStep] = useState(1);
 
   // Layer 2: block creation if user already has a happening plan they created
@@ -162,6 +164,7 @@ export default function CreatePlan() {
       show_in_explore: data.show_in_explore ?? true,
       show_in_map: data.is_private ? false : (data.show_in_map ?? true),
       audience_restrictions: data.audience_restrictions || {},
+      ...(communityId ? { community_id: communityId } : {}),
       ...(latitude && longitude ? { latitude, longitude } : {})
     });
 
