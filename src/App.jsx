@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import CreateCommunity from './pages/CreateCommunity';
+import CommunityView from './pages/CommunityView';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -58,6 +60,8 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
+      <Route path="/CreateCommunity" element={<LayoutWrapper currentPageName="CreateCommunity"><CreateCommunity /></LayoutWrapper>} />
+      <Route path="/CommunityView" element={<LayoutWrapper currentPageName="CommunityView"><CommunityView /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
