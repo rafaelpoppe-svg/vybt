@@ -69,6 +69,18 @@ export default function CommunityView() {
     queryFn: () => base44.entities.UserProfile.list('-created_date', 100),
   });
 
+  const { data: friendships = [] } = useQuery({
+    queryKey: ['myFriendshipsCommunity', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
+    enabled: !!currentUser?.id,
+  });
+
+  const { data: reverseFriendships = [] } = useQuery({
+    queryKey: ['myReverseFriendshipsCommunity', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id, status: 'accepted' }),
+    enabled: !!currentUser?.id,
+  });
+
   const { data: pendingRequests = [] } = useQuery({
     queryKey: ['communityPlanRequests', communityId],
     queryFn: () => base44.entities.CommunityPlanRequest.filter({ community_id: communityId, status: 'pending' }),
@@ -76,6 +88,7 @@ export default function CommunityView() {
   });
 
   const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
+  const friendIds = [...friendships.map(f => f.friend_id), ...reverseFriendships.map(f => f.user_id)];
 
   const myMembership = members.find(m => m.user_id === currentUser?.id);
   const isAdmin = myMembership?.role === 'admin' || currentUser?.role === 'admin';
