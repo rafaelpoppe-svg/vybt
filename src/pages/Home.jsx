@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Users } from 'lucide-react';
 import StoryViewOverlay from '../components/story/StoryViewOverlay';
 
 import BottomNav from '../components/common/BottomNav';
@@ -24,7 +24,7 @@ import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { useLanguage } from '../components/common/LanguageContext';
 import HomeCommunitiesSection from '../components/home/HomeCommunitiesSection';
 import HomeCommunitiesBar from '../components/home/HomeCommunitiesBar';
-import HomeMyCommunitiesBar from '../components/home/HomeMyCommunitiesBar';
+import MyCommunitiesDrawer from '../components/home/MyCommunitiesDrawer';
 
 
 export default function Home() {
@@ -39,6 +39,7 @@ export default function Home() {
   const [activeSort, setActiveSort] = useState('foryou');
   const [overlayStoryId, setOverlayStoryId] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
+  const [showMyCommunities, setShowMyCommunities] = useState(false);
   const [mapFilters, setMapFilters] = useState({ partyTags: [], startTime: '', endTime: '', planDate: '' });
 
 
