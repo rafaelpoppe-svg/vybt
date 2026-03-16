@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { X, Image as ImageIcon, Loader2, Check, Lock, Unlock, Trash2 } from 'lucide-react';
+import { X, Image as ImageIcon, Loader2, Check, Lock, Unlock, Trash2, Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -20,6 +20,7 @@ export default function CommunityEditModal({ community, onClose, onSaved, onDele
     background_image: community.background_image || '',
     chat_locked: community.chat_locked || false,
     plan_creation_policy: community.plan_creation_policy || 'anyone',
+    is_private: community.is_private || false,
   });
   const [loading, setLoading] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
@@ -114,6 +115,21 @@ export default function CommunityEditModal({ community, onClose, onSaved, onDele
               <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'background_image')} className="hidden" />
             </label>
           </div>
+          {/* Private community */}
+          <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-800 border border-gray-700">
+            <div className="flex items-center gap-3">
+              {data.is_private ? <EyeOff className="w-5 h-5 text-purple-400" /> : <Eye className="w-5 h-5 text-blue-400" />}
+              <div>
+                <p className="text-white font-semibold text-sm">Visibility</p>
+                <p className="text-gray-400 text-xs">{data.is_private ? 'Private — hidden from Home & Explore' : 'Public — visible to everyone'}</p>
+              </div>
+            </div>
+            <motion.button whileTap={{ scale: 0.9 }} onClick={() => setData({ ...data, is_private: !data.is_private })}
+              className="w-12 h-6 rounded-full transition-all relative" style={{ background: data.is_private ? tc : '#374151' }}>
+              <motion.div animate={{ x: data.is_private ? 24 : 2 }} className="absolute top-1 w-4 h-4 rounded-full bg-white shadow" />
+            </motion.button>
+          </div>
+
           {/* Chat lock */}
           <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-800 border border-gray-700">
             <div className="flex items-center gap-3">
