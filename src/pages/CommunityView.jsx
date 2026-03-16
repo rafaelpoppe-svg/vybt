@@ -269,14 +269,6 @@ export default function CommunityView() {
             </motion.div>
           )}
 
-          {/* Admin: delete */}
-          {isAdmin && (
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => setShowDeleteConfirm(true)}
-              className="flex items-center gap-2 text-red-400 text-sm mb-4 px-3 py-2 rounded-xl border border-red-500/20 bg-red-500/5">
-              <Trash2 className="w-4 h-4" /> Delete Community
-            </motion.button>
-          )}
-
           {/* Tab bar */}
           <div className="flex gap-1 bg-gray-900/80 rounded-2xl p-1 border border-gray-800">
             {TABS.map(tab => (
@@ -387,7 +379,8 @@ export default function CommunityView() {
 
       {showEditModal && (
         <CommunityEditModal community={community} onClose={() => setShowEditModal(false)}
-          onSaved={() => { setShowEditModal(false); queryClient.invalidateQueries(['community', communityId]); }} />
+          onSaved={() => { setShowEditModal(false); queryClient.invalidateQueries(['community', communityId]); }}
+          onDelete={() => setShowDeleteConfirm(true)} />
       )}
 
       <BottomNav />

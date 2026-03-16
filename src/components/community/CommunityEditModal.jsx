@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { X, Image as ImageIcon, Loader2, Check, Lock, Unlock } from 'lucide-react';
+import { X, Image as ImageIcon, Loader2, Check, Lock, Unlock, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -11,7 +11,7 @@ const THEME_COLORS = [
   '#ef4444','#a78bfa','#06b6d4','#fb923c','#ec4899',
 ];
 
-export default function CommunityEditModal({ community, onClose, onSaved }) {
+export default function CommunityEditModal({ community, onClose, onSaved, onDelete }) {
   const [data, setData] = useState({
     name: community.name || '',
     description: community.description || '',
@@ -152,6 +152,14 @@ export default function CommunityEditModal({ community, onClose, onSaved }) {
             style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)` }}>
             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save Changes ✅'}
           </motion.button>
+
+          {/* Delete community */}
+          {onDelete && (
+            <motion.button whileTap={{ scale: 0.97 }} onClick={() => { onClose(); onDelete(); }}
+              className="w-full py-3 rounded-2xl font-bold text-sm text-red-400 flex items-center justify-center gap-2 border border-red-500/20 bg-red-500/5">
+              <Trash2 className="w-4 h-4" /> Delete Community
+            </motion.button>
+          )}
         </div>
       </motion.div>
     </div>
