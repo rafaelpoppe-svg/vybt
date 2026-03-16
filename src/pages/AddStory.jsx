@@ -363,7 +363,7 @@ export default function AddStory() {
                 </div>
               ) : (
                 <CameraView
-                  onCapture={(file) => processFile(file)}
+                  onCapture={(file, mediaType) => processFile(file, mediaType)}
                   onClose={() => setStep(0)}
                 />
               )}
