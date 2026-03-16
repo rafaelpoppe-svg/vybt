@@ -69,7 +69,7 @@ export default function CreateCommunity() {
   };
 
   const canProceed = () => {
-    if (step === 1) return !!data.name;
+    if (step === 1) return !!data.name && !!data.cover_image;
     if (step === 2) return !!data.city;
     if (step === 3) return data.party_types.length >= 1;
     return true;
@@ -205,7 +205,7 @@ export default function CreateCommunity() {
         </div>
         {/* Cover Image */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Cover Image <span className="text-gray-600">(optional)</span></label>
+          <label className="block text-gray-400 text-sm mb-2">Cover Image <span className="text-red-500">*</span></label>
           <label className="block cursor-pointer">
             {data.cover_image
               ? <div className="relative h-40 rounded-2xl overflow-hidden">
@@ -288,29 +288,17 @@ export default function CreateCommunity() {
       <div className="space-y-6">
         <div className="text-center">
           <div className="text-5xl mb-3">🎉</div>
-          <h2 className="text-2xl font-black text-white">Community Vibes</h2>
-          <p className="text-gray-400 mt-1">Up to 3 party types + vibes</p>
+          <h2 className="text-2xl font-black text-white">Community Vibe</h2>
+          <p className="text-gray-400 mt-1">Choose up to 3 party types</p>
         </div>
         <div>
           <p className="text-gray-400 text-sm mb-2">Party Types * <span className="text-gray-600">({data.party_types.length}/3)</span></p>
-          <div className="flex flex-wrap gap-2 max-h-52 overflow-y-auto">
+          <div className="flex flex-wrap gap-2 max-h-72 overflow-y-auto">
             {ALL_PARTY_TYPES.map((tag) => (
               <PartyTag key={tag} tag={tag} size="md" interactive selected={data.party_types.includes(tag)}
                 onClick={() => {
                   if (data.party_types.includes(tag)) setData({ ...data, party_types: data.party_types.filter(t => t !== tag) });
                   else if (data.party_types.length < 3) setData({ ...data, party_types: [...data.party_types, tag] });
-                }} />
-            ))}
-          </div>
-        </div>
-        <div>
-          <p className="text-gray-400 text-sm mb-2">Vibes <span className="text-gray-600">(optional)</span></p>
-          <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
-            {ALL_VIBES.map((vibe) => (
-              <VibeTag key={vibe} vibe={vibe} size="sm" interactive selected={data.vibes.includes(vibe)}
-                onClick={() => {
-                  if (data.vibes.includes(vibe)) setData({ ...data, vibes: data.vibes.filter(v => v !== vibe) });
-                  else setData({ ...data, vibes: [...data.vibes, vibe] });
                 }} />
             ))}
           </div>
