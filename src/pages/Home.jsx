@@ -5,6 +5,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
+import StoryViewOverlay from '../components/story/StoryViewOverlay';
 
 import BottomNav from '../components/common/BottomNav';
 import HomeStoriesBar from '../components/home/HomeStoriesBar';
@@ -34,6 +35,7 @@ export default function Home() {
   const [myProfile, setMyProfile] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
   const [activeSort, setActiveSort] = useState('foryou');
+  const [overlayStoryId, setOverlayStoryId] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
   const [mapFilters, setMapFilters] = useState({ partyTags: [], startTime: '', endTime: '' });
 
@@ -332,10 +334,10 @@ export default function Home() {
             plans={visiblePlans}
             currentUserId={currentUser?.id}
             happeningPlan={happeningPlan}
-            onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+            onStoryClick={(story) => setOverlayStoryId(story.id)}
             onPlanStoriesClick={(plan, planStories) => {
               const firstStory = planStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))[0];
-              if (firstStory) navigate(createPageUrl('StoryView') + `?id=${firstStory.id}`);
+              if (firstStory) setOverlayStoryId(firstStory.id);
             }}
             onAddStory={() => navigate(createPageUrl('AddStory') + (happeningPlan ? `?planId=${happeningPlan.id}` : ''))}
           />
@@ -415,6 +417,8 @@ export default function Home() {
       </div>
 
       <BottomNav />
+
+      <StoryViewOverlay storyId={overlayStoryId} onClose={() => setOverlayStoryId(null)} />
 
       <AnimatePresence>
         {showTutorial && (
