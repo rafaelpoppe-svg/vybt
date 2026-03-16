@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import {
   Camera, Loader2, Bell, Settings, ShieldCheck, ShieldX,
-  PartyPopper, Users, Edit2, Trophy, Music2, ChevronRight
+  PartyPopper, Users, Edit2, Trophy, Music2, ChevronRight, Star
 } from 'lucide-react';
 import BottomNav from '../components/common/BottomNav';
 import VibeTag, { vibeConfig } from '../components/common/VibeTag';
@@ -83,6 +83,22 @@ export default function Profile() {
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 100),
   });
 
+  const { data: myCommunityMemberships = [] } = useQuery({
+    queryKey: ['myCommunityMembershipsProfile', currentUser?.id],
+    queryFn: () => base44.entities.CommunityMember.filter({ user_id: currentUser.id }),
+    enabled: !!currentUser?.id
+  });
+
+  const { data: allCommunities = [] } = useQuery({
+    queryKey: ['allCommunitiesProfile'],
+    queryFn: () => base44.entities.Community.list('-created_date', 100),
+    enabled: myCommunityMemberships.length > 0
+  });
+
+  const myCommunities = allCommunities.filter(c =>
+    myCommunityMemberships.some(m => m.community_id === c.id) && !c.is_deleted && !c.deletion_scheduled_at
+  );
+
   // Fetch friend profiles for friends tab
   const friendIds = friendships.map(f => f.friend_id);
   const { data: friendProfiles = [] } = useQuery({
@@ -130,6 +146,7 @@ export default function Profile() {
     { id: 'stories', icon: <Camera className="w-5 h-5" /> },
     { id: 'plans', icon: <PartyPopper className="w-5 h-5" /> },
     { id: 'friends', icon: <Users className="w-5 h-5" /> },
+    { id: 'communities', icon: <Star className="w-5 h-5" /> },
   ];
 
   return (
@@ -397,6 +414,49 @@ export default function Profile() {
                   )}
                 </motion.button>
               ))
+            )}
+          </motion.div>
+        )}
+
+        {activeTab === 'communities' && (
+          <motion.div key="communities" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4 space-y-3">
+            {myCommunities.length === 0 ? (
+              <div className="text-center py-10 space-y-2">
+                <p className="text-4xl">⭐</p>
+                <p className="text-gray-500 text-sm">No communities yet</p>
+                <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate(createPageUrl('Explore') + '?tab=communities')}
+                  className="px-4 py-2 rounded-xl text-sm font-bold text-[#0b0b0b] mt-2"
+                  style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}>
+                  Explore Communities
+                </motion.button>
+              </div>
+            ) : (
+              myCommunities.map(community => {
+                const tc = community.theme_color || '#00c6d2';
+                const membership = myCommunityMemberships.find(m => m.community_id === community.id);
+                return (
+                  <motion.button
+                    key={community.id}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => navigate(createPageUrl('CommunityView') + `?id=${community.id}`)}
+                    className="w-full flex items-center gap-3 p-3 bg-gray-900 rounded-xl border text-left"
+                    style={{ borderColor: `${tc}30` }}
+                  >
+                    {community.cover_image ? (
+                      <img src={community.cover_image} className="w-12 h-12 rounded-xl object-cover flex-shrink-0" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: `${tc}22` }}>⭐</div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-white text-sm truncate">{community.name}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">📍 {community.city} · {community.member_count || 0} members</p>
+                    </div>
+                    {membership?.role === 'admin' && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${tc}30`, color: tc }}>Admin</span>
+                    )}
+                  </motion.button>
+                );
+              })
             )}
           </motion.div>
         )}
