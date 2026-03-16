@@ -3,19 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Clock, Search, CalendarDays } from 'lucide-react';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
 
-// Generate days for the next 30 days (day + month only)
-function getUpcomingDays() {
-  const days = [];
-  const now = new Date();
-  for (let i = 0; i < 30; i++) {
-    const d = new Date(now);
-    d.setDate(now.getDate() + i);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    days.push({ label: `${day}/${month}`, value: `${d.getFullYear()}-${month}-${day}` });
-  }
-  return days;
-}
+
 
 export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilters }) {
   const [search, setSearch] = useState('');
