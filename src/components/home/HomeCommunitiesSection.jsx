@@ -5,12 +5,12 @@ import { createPageUrl } from '@/utils';
 import { ChevronRight, Users2 } from 'lucide-react';
 import CommunityCard from '../community/CommunityCard';
 
-export default function HomeCommunitiesSection({ communities, myProfile, city }) {
+export default function HomeCommunitiesSection({ communities, myProfile, city, memberCommunityIds = [] }) {
   const navigate = useNavigate();
 
   const filtered = communities
     .filter(c => !c.is_deleted && !c.deletion_scheduled_at)
-    .filter(c => !city || c.city?.toLowerCase() === city?.toLowerCase())
+    .filter(c => memberCommunityIds.includes(c.id))
     .slice(0, 6);
 
   if (!filtered.length) return null;
@@ -20,7 +20,7 @@ export default function HomeCommunitiesSection({ communities, myProfile, city })
       <div className="flex items-center justify-between px-4 mb-3">
         <div className="flex items-center gap-2">
           <Users2 className="w-5 h-5 text-[#00c6d2]" />
-          <h2 className="text-white font-black text-base">Communities</h2>
+          <h2 className="text-white font-black text-base">My Communities</h2>
         </div>
         <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('Explore') + '?tab=communities')}
           className="flex items-center gap-1 text-xs text-gray-400 hover:text-white">
