@@ -3,12 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { ChevronLeft, Image as ImageIcon, Loader2, Check, ArrowRight, Palette } from 'lucide-react';
+import { ChevronLeft, Image as ImageIcon, Loader2, Check, ArrowRight, Palette, Lock, Navigation } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
-import VibeTag, { ALL_VIBES } from '../components/common/VibeTag';
-import LocationSelector from '../components/common/LocationSelector';
 
 const THEME_COLORS = [
   '#00c6d2','#542b9b','#ff6b6b','#f8b500','#ff69b4',
