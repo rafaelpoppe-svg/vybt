@@ -21,6 +21,14 @@ const STEPS = [
   { id: 4, label: 'Settings', emoji: '⚙️' },
 ];
 
+const POPULAR_CITIES = [
+  'Amsterdam','Athens','Barcelona','Belgrade','Berlin','Bratislava','Brussels',
+  'Bucharest','Budapest','Copenhagen','Dublin','Helsinki','Lisbon','Ljubljana',
+  'London','Madrid','Milan','Oslo','Paris','Porto','Prague','Rome','Sofia',
+  'Stockholm','Vienna','Warsaw','Zagreb',
+  'New York','Los Angeles','Chicago','Miami','Austin','San Francisco','Boston','Las Vegas',
+];
+
 const slideVariants = {
   enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
   center: { x: 0, opacity: 1 },
