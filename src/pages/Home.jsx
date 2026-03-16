@@ -415,6 +415,9 @@ export default function Home() {
           onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
         />
 
+        {/* Communities Near You */}
+        <HomeCommunitiesSection communities={communities} city={city} />
+
         {/* Hot Plans Carousel */}
         {plansLoading ? (
           <div className="flex justify-center py-3">
