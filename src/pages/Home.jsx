@@ -325,18 +325,7 @@ export default function Home() {
             <h1 className="text-3xl font-black text-white">Vybt</h1>
           </div>
           <div className="flex items-center gap-2">
-            {currentUser && myCommunityMemberships.length > 0 && (
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setShowMyCommunities(true)}
-                className="relative w-9 h-9 rounded-full bg-gray-900 border border-gray-700 flex items-center justify-center"
-              >
-                <Users className="w-4 h-4 text-[#00c6d2]" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[9px] font-black flex items-center justify-center">
-                  {myCommunityMemberships.length}
-                </span>
-              </motion.button>
-            )}
+
             <LocationSelector
               city={city}
               radius={radius}
