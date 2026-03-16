@@ -394,8 +394,8 @@ export default function Home() {
           setFilters={setMapFilters}
         />
 
-        {/* Communities Near You */}
-        <HomeCommunitiesBar communities={communities} city={city} />
+        {/* Plans For You */}
+        <HomeCommunitiesBar plans={plans} />
 
         {/* Mapa interativo */}
         <div className="px-4 mb-5">
