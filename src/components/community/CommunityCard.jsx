@@ -25,7 +25,7 @@ export default function CommunityCard({ community, myProfile, onClick }) {
       <div className="relative h-36">
         {community.cover_image
           ? <img src={community.cover_image} alt="" className="w-full h-full object-cover" />
-          : <div className="w-full h-full flex items-center justify-center text-4xl" style={{ background: `linear-gradient(135deg, ${tc}44, #542b9b66)` }}>🏘️</div>}
+          : <div className="w-full h-full flex items-center justify-center text-4xl" style={{ background: `linear-gradient(135deg, ${tc}44, #542b9b66)` }}>⭐</div>}
         <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 40%, #0b0b0b 100%)` }} />
 
         {/* Match badge */}

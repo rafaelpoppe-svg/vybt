@@ -202,7 +202,7 @@ export default function CommunityView() {
         <div className="relative h-56 overflow-hidden">
           {community.cover_image
             ? <img src={community.cover_image} alt="" className="w-full h-full object-cover" />
-            : <div className="w-full h-full flex items-center justify-center text-7xl" style={{ background: `linear-gradient(135deg, ${tc}44, #542b9b66)` }}>🏘️</div>}
+            : <div className="w-full h-full flex items-center justify-center text-7xl" style={{ background: `linear-gradient(135deg, ${tc}44, #542b9b66)` }}>⭐</div>}
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 30%, #0b0b0b 100%)` }} />
 
           {/* Back */}

@@ -295,7 +295,7 @@ export default function Explore() {
           </button>
           <button onClick={() => setActiveView('communities')}
             className={`relative flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ${activeView === 'communities' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}>
-            🏘️ Groups
+            ⭐ Groups
           </button>
           <button onClick={() => setActiveView('users')}
             className={`relative flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ${activeView === 'users' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}>
@@ -432,7 +432,7 @@ export default function Explore() {
                       </motion.button>
                     </div>
                     {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && (!selectedCity || c.city?.toLowerCase() === selectedCity?.toLowerCase())).length === 0
-                      ? <div className="text-center py-16 space-y-3"><div className="text-5xl">🏘️</div><p className="text-gray-500 text-sm">No communities here yet</p><p className="text-gray-600 text-xs">Be the first to create one! 🚀</p></div>
+                      ? <div className="text-center py-16 space-y-3"><div className="text-5xl">⭐</div><p className="text-gray-500 text-sm">No communities here yet</p><p className="text-gray-600 text-xs">Be the first to create one! 🚀</p></div>
                       : <div className="grid grid-cols-2 gap-3">
                           {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && (!selectedCity || c.city?.toLowerCase() === selectedCity?.toLowerCase()))
                             .map((community, i) => (

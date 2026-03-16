@@ -136,7 +136,7 @@ export default function CreateCommunity() {
           >
             {createdCommunity.cover_image
               ? <img src={createdCommunity.cover_image} alt="" className="w-full h-40 object-cover" />
-              : <div className="h-40 flex items-center justify-center text-6xl" style={{ background: `linear-gradient(135deg, ${tc}44, #542b9b44)` }}>🏘️</div>}
+              : <div className="h-40 flex items-center justify-center text-6xl" style={{ background: `linear-gradient(135deg, ${tc}44, #542b9b44)` }}>⭐</div>}
             <div className="p-4" style={{ background: `linear-gradient(135deg, ${tc}22, #0b0b0b)` }}>
               <p className="text-white font-black text-xl">{createdCommunity.name}</p>
               <p className="text-gray-400 text-sm mt-1">{createdCommunity.city}</p>
@@ -171,7 +171,7 @@ export default function CreateCommunity() {
     1: (
       <div className="space-y-6">
         <div className="text-center">
-          <div className="text-5xl mb-3">🏘️</div>
+          <div className="text-5xl mb-3">⭐</div>
           <h2 className="text-2xl font-black text-white">Name your Community</h2>
           <p className="text-gray-400 mt-1">Give it a vibe! 🔥</p>
         </div>
