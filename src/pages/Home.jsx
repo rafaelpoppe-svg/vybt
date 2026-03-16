@@ -23,6 +23,7 @@ import { usePushNotifications } from '../components/notifications/usePushNotific
 import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { useLanguage } from '../components/common/LanguageContext';
 import HomeCommunitiesSection from '../components/home/HomeCommunitiesSection';
+import HomeCommunitiesBar from '../components/home/HomeCommunitiesBar';
 
 
 export default function Home() {
