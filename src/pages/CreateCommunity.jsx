@@ -35,6 +35,126 @@ const slideVariants = {
   exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
 };
 
+function CityStep({ data, setData, isAdmin }) {
+  const [detecting, setDetecting] = useState(false);
+  const [search, setSearch] = useState('');
+
+  const detectCity = () => {
+    if (!navigator.geolocation) return;
+    setDetecting(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+            { headers: { 'Accept-Language': 'en' } }
+          );
+          const d = await res.json();
+          const city = d.address?.city || d.address?.town || d.address?.village || '';
+          if (city) setData(prev => ({ ...prev, city }));
+        } catch (_) {}
+        setDetecting(false);
+      },
+      () => setDetecting(false),
+      { timeout: 8000 }
+    );
+  };
+
+  const filteredCities = POPULAR_CITIES.filter(c =>
+    c.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const tc = data.theme_color || '#00c6d2';
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center">
+        <div className="text-5xl mb-3">📍</div>
+        <h2 className="text-2xl font-black text-white">Where is your community?</h2>
+        <p className="text-gray-400 mt-1">Detect your city or choose one below</p>
+      </div>
+
+      {/* Detect button */}
+      <motion.button
+        whileTap={{ scale: 0.97 }}
+        onClick={detectCity}
+        disabled={detecting}
+        className="w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 disabled:opacity-60"
+        style={{ background: `linear-gradient(135deg, ${tc}33, #542b9b33)`, border: `1.5px solid ${tc}55`, color: tc }}
+      >
+        {detecting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Navigation className="w-5 h-5" />}
+        {detecting ? 'Detecting...' : 'Use My Current Location'}
+      </motion.button>
+
+      {/* Current selection */}
+      {data.city && (
+        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+          className="rounded-2xl p-3 flex items-center gap-3 border"
+          style={{ borderColor: `${tc}50`, background: `${tc}15` }}>
+          <span className="text-2xl">📍</span>
+          <div className="flex-1">
+            <p className="text-white font-black text-lg">{data.city}</p>
+            <p className="text-xs" style={{ color: tc }}>Selected ✅</p>
+          </div>
+          <motion.button whileTap={{ scale: 0.9 }} onClick={() => setData(prev => ({ ...prev, city: '' }))}
+            className="text-gray-500 text-xs px-2 py-1 rounded-lg bg-gray-800">Clear</motion.button>
+        </motion.div>
+      )}
+
+      {/* Divider */}
+      <div className="flex items-center gap-3">
+        <div className="flex-1 h-px bg-gray-800" />
+        <span className="text-gray-600 text-xs">or choose a city</span>
+        <div className="flex-1 h-px bg-gray-800" />
+      </div>
+
+      {/* Search (admin only) */}
+      {isAdmin && (
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search city..."
+          className="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-gray-600"
+        />
+      )}
+
+      {/* City list */}
+      <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-hide">
+        {filteredCities.map((c) => {
+          const selected = data.city === c;
+          if (isAdmin) {
+            return (
+              <motion.button
+                key={c}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setData(prev => ({ ...prev, city: c }))}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all"
+                style={selected
+                  ? { background: `${tc}22`, border: `1.5px solid ${tc}66`, color: tc }
+                  : { background: '#111', border: '1.5px solid #1f2937', color: '#d1d5db' }}
+              >
+                <span className="font-medium text-sm">{c}</span>
+                {selected && <Check className="w-4 h-4 flex-shrink-0" style={{ color: tc }} />}
+              </motion.button>
+            );
+          }
+          // Non-admin: locked cities
+          return (
+            <div key={c} className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-800/50 cursor-not-allowed">
+              <span className="text-sm text-gray-600">{c}</span>
+              <span className="text-[10px] text-gray-600 flex items-center gap-1">
+                <Lock className="w-2.5 h-2.5" /> Vybt Plus
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function CreateCommunity() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
