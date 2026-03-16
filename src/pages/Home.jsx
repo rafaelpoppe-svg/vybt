@@ -416,7 +416,7 @@ export default function Home() {
         />
 
         {/* Communities Near You */}
-        <HomeCommunitiesSection communities={communities} city={city} />
+        <HomeCommunitiesSection communities={communities} city={city} memberCommunityIds={myCommunityMemberships.map(m => m.community_id)} />
 
         {/* Hot Plans Carousel */}
         {plansLoading ? (
