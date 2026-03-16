@@ -10,7 +10,7 @@ export default function HomeCommunitiesBar({ plans = [] }) {
 
   const today = format(new Date(), 'yyyy-MM-dd');
 
-  const happeningPlans = plans.filter(p => p.date === today && p.status === 'happening');
+  const happeningPlans = plans.filter(p => p.status === 'happening');
   const upcomingPlans = plans.filter(p => p.date === today && p.status === 'upcoming');
   const todayPlans = [...happeningPlans, ...upcomingPlans].slice(0, 12);
 
