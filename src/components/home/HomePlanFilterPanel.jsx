@@ -1,14 +1,29 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, Search } from 'lucide-react';
+import { X, Clock, Search, CalendarDays } from 'lucide-react';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
+
+// Generate days for the next 30 days (day + month only)
+function getUpcomingDays() {
+  const days = [];
+  const now = new Date();
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(now);
+    d.setDate(now.getDate() + i);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    days.push({ label: `${day}/${month}`, value: `${d.getFullYear()}-${month}-${day}` });
+  }
+  return days;
+}
 
 export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilters }) {
   const [search, setSearch] = useState('');
 
   if (!isOpen) return null;
 
-  const activeCount = (filters.partyTags?.length || 0) + (filters.startTime ? 1 : 0) + (filters.endTime ? 1 : 0);
+  const upcomingDays = getUpcomingDays();
+  const activeCount = (filters.partyTags?.length || 0) + (filters.startTime ? 1 : 0) + (filters.endTime ? 1 : 0) + (filters.planDate ? 1 : 0);
 
   return (
     <AnimatePresence>
@@ -24,6 +39,28 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
           <button onClick={onClose}>
             <X className="w-4 h-4 text-gray-400" />
           </button>
+        </div>
+
+        {/* Date filter */}
+        <div className="mb-3">
+          <label className="text-gray-400 text-xs mb-2 flex items-center gap-1">
+            <CalendarDays className="w-3 h-3" /> Date
+          </label>
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1" data-hscroll="1">
+            {upcomingDays.map(({ label, value }) => (
+              <button
+                key={value}
+                onClick={() => setFilters({ ...filters, planDate: filters.planDate === value ? '' : value })}
+                className="flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
+                style={filters.planDate === value
+                  ? { background: '#00c6d2', color: '#0b0b0b' }
+                  : { background: 'rgba(255,255,255,0.05)', color: '#aaa', border: '1px solid rgba(255,255,255,0.1)' }
+                }
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Time range */}
@@ -80,7 +117,7 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
 
         {activeCount > 0 && (
           <button
-            onClick={() => setFilters({ partyTags: [], startTime: '', endTime: '' })}
+            onClick={() => setFilters({ partyTags: [], startTime: '', endTime: '', planDate: '' })}
             className="w-full mt-3 py-1.5 text-xs text-gray-400 hover:text-white"
           >
             Clear all filters
