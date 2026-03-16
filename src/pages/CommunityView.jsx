@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, Settings, Plus, MessageCircle, Users, Image, Lock, Unlock, Loader2, X, Check, Trash2 } from 'lucide-react';
+import { ChevronLeft, Settings, Plus, MessageCircle, Users, Image, Lock, Unlock, Loader2, X, Check, Trash2, UserPlus } from 'lucide-react';
 import PlanCard from '../components/feed/PlanCard';
 import BottomNav from '../components/common/BottomNav';
 import CommunityChat from '../components/community/CommunityChat';
 import CommunityEditModal from '../components/community/CommunityEditModal';
 import StoryViewOverlay from '../components/story/StoryViewOverlay';
+import InviteToCommunityModal from '../components/community/InviteToCommunityModal';
 
 export default function CommunityView() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function CommunityView() {
   const [activeTab, setActiveTab] = useState('today'); // today | upcoming | stories | chat
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const [overlayStoryId, setOverlayStoryId] = useState(null);
 
   useEffect(() => {
