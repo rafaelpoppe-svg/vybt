@@ -260,8 +260,8 @@ export default function Explore() {
               </motion.span>
             )}
           </div>
-          {/* Filter button up here */}
-          {activeView !== 'map' && (
+          {/* Filter button — only for plans and users, not communities */}
+          {activeView !== 'map' && activeView !== 'communities' && (
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setShowFilters(!showFilters)}
