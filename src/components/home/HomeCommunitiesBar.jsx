@@ -8,7 +8,7 @@ export default function HomeCommunitiesBar({ communities, city }) {
   const navigate = useNavigate();
 
   const filtered = communities
-    .filter(c => !c.is_deleted && !c.deletion_scheduled_at)
+    .filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private)
     .filter(c => !city || c.city?.toLowerCase() === city?.toLowerCase())
     .slice(0, 8);
 

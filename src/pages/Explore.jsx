@@ -424,17 +424,17 @@ export default function Explore() {
                 ) : (
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <p className="text-gray-400 text-sm">{communities.filter(c => !c.is_deleted).length} communities</p>
+                      <p className="text-gray-400 text-sm">{communities.filter(c => !c.is_deleted && !c.is_private).length} communities</p>
                       <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('CreateCommunity'))}
                         className="px-4 py-2 rounded-xl text-sm font-bold text-[#0b0b0b] flex items-center gap-1.5"
                         style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}>
                         + Create
                       </motion.button>
                     </div>
-                    {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && (!selectedCity || c.city?.toLowerCase() === selectedCity?.toLowerCase())).length === 0
+                    {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && (!selectedCity || c.city?.toLowerCase() === selectedCity?.toLowerCase())).length === 0
                       ? <div className="text-center py-16 space-y-3"><div className="text-5xl">🏘️</div><p className="text-gray-500 text-sm">No communities here yet</p><p className="text-gray-600 text-xs">Be the first to create one! 🚀</p></div>
                       : <div className="grid grid-cols-2 gap-3">
-                          {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && (!selectedCity || c.city?.toLowerCase() === selectedCity?.toLowerCase()))
+                          {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && (!selectedCity || c.city?.toLowerCase() === selectedCity?.toLowerCase()))
                             .map((community, i) => (
                               <motion.div key={community.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                                 <CommunityCard community={community} myProfile={myProfile}
