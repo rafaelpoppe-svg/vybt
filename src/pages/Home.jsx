@@ -38,7 +38,7 @@ export default function Home() {
   const [activeSort, setActiveSort] = useState('foryou');
   const [overlayStoryId, setOverlayStoryId] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
-  const [mapFilters, setMapFilters] = useState({ partyTags: [], startTime: '', endTime: '' });
+  const [mapFilters, setMapFilters] = useState({ partyTags: [], startTime: '', endTime: '', planDate: '' });
 
 
   useEffect(() => {
@@ -202,6 +202,8 @@ export default function Home() {
     // Time filter
     if (mapFilters.startTime) result = result.filter(p => p.time >= mapFilters.startTime);
     if (mapFilters.endTime) result = result.filter(p => p.time <= mapFilters.endTime);
+    // Date filter
+    if (mapFilters.planDate) result = result.filter(p => p.date === mapFilters.planDate);
 
     return result;
   }, [visiblePlans, activeSort, mapFilters, recommendedPlans, allParticipants]);
@@ -359,7 +361,7 @@ export default function Home() {
           activeSort={activeSort}
           setActiveSort={setActiveSort}
           onFilterClick={() => setShowFilter(v => !v)}
-          hasActiveFilters={mapFilters.partyTags?.length > 0 || !!mapFilters.startTime || !!mapFilters.endTime}
+          hasActiveFilters={mapFilters.partyTags?.length > 0 || !!mapFilters.startTime || !!mapFilters.endTime || !!mapFilters.planDate}
         />
 
         {/* Filter panel */}
