@@ -223,16 +223,11 @@ export default function Profile() {
             <Edit2 className="w-3.5 h-3.5" /> Edit Profile
           </motion.button>
 
-          {profile.ambassador_opted_in ? (
+          {profile.ambassador_opted_in && (
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate(createPageUrl('Ambassador'))}
               className="flex-1 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5"
               style={{ background: 'linear-gradient(135deg, #f59e0b, #ef4444)', color: '#fff' }}>
               <Trophy className="w-3.5 h-3.5" /> Ambassador
-            </motion.button>
-          ) : (
-            <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate(createPageUrl('Friends'))}
-              className="flex-1 py-2 rounded-xl text-sm font-bold bg-white/10 text-white border border-white/10 flex items-center justify-center gap-1.5">
-              <Users className="w-3.5 h-3.5" /> Friends
             </motion.button>
           )}
 
