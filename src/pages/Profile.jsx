@@ -119,8 +119,6 @@ export default function Profile() {
   const tabs = [
     { id: 'photos',      icon: <Grid3X3 className="w-5 h-5" />,      count: photos.length },
     { id: 'stories',     icon: <Camera className="w-5 h-5" />,       count: myStories.length },
-    { id: 'plans',       icon: <PartyPopper className="w-5 h-5" />,  count: myPlans.length },
-    { id: 'friends',     icon: <Users className="w-5 h-5" />,        count: friendships.length },
     { id: 'communities', icon: <Star className="w-5 h-5" />,         count: myCommunities.length },
   ];
 
