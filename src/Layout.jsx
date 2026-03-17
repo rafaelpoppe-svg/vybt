@@ -173,7 +173,9 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
       */}
       <div style={{
         width: '100%',
+        height: '100dvh',
         minHeight: '100dvh',
+        position: 'relative',
         display: 'flex',
         flexDirection: 'column',
         background: themeStyles?.background || '#0b0b0b',
@@ -199,6 +201,8 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
             overflow-y: auto !important; 
             max-width: 100vw !important;
             min-height: 100dvh;
+            height: 100%;
+            background: #0b0b0b !important;
           }
           * { max-width: 100%; box-sizing: border-box; }
           /* Prevent any element from creating horizontal scroll */
