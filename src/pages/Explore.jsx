@@ -423,7 +423,7 @@ export default function Explore() {
                 ) : (
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <p className="text-gray-400 text-sm">{communities.filter(c => !c.is_deleted && !c.is_private).length} communities</p>
+                      <p className="text-gray-400 text-sm">{communities.filter(c => !c.is_deleted && !c.is_private && (!myProfile?.city || c.city?.toLowerCase() === myProfile.city.toLowerCase())).length} communities</p>
                       <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('CreateCommunity'))}
                         className="px-4 py-2 rounded-xl text-sm font-bold text-[#0b0b0b] flex items-center gap-1.5"
                         style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}>
