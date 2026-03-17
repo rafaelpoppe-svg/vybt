@@ -289,7 +289,8 @@ export default function CommunityView() {
                             <PlanCard key={plan.id} plan={plan}
                               participants={allParticipants.filter(p => p.plan_id === plan.id).map(p => profilesMap[p.user_id]).filter(Boolean)}
                               onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                              currentUserId={currentUser?.id} />
+                              currentUserId={currentUser?.id}
+                              community={community} />
                           ))}
                         </div>
                       </>
@@ -302,7 +303,8 @@ export default function CommunityView() {
                             <PlanCard key={plan.id} plan={plan}
                               participants={allParticipants.filter(p => p.plan_id === plan.id).map(p => profilesMap[p.user_id]).filter(Boolean)}
                               onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                              currentUserId={currentUser?.id} />
+                              currentUserId={currentUser?.id}
+                              community={community} />
                           ))}
                         </div>
                       </>
