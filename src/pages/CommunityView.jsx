@@ -18,6 +18,7 @@ import CommunityMembersSpotlight from '../components/community/CommunityMembersS
 const TABS = [
   { key: 'plans', label: 'Plans', icon: <CalendarDays className="w-4 h-4" /> },
   { key: 'stories', label: 'Stories', icon: <Camera className="w-4 h-4" /> },
+  { key: 'members', label: 'Members', icon: <Users className="w-4 h-4" /> },
   { key: 'chat', label: 'Chat', icon: <MessageCircle className="w-4 h-4" /> },
 ];
 
