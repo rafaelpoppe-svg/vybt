@@ -10,6 +10,7 @@ import { base44 } from '@/api/base44Client';
 
 function LayoutContent({ children, currentPageName, profileTheme }) {
   const [authChecked, setAuthChecked] = useState(false);
+  const isAuthenticatedRef = React.useRef(false);
   const navigate = useNavigate();
 
   // Block pinch-to-zoom, gesture zoom, and horizontal swipe on iOS WebView
