@@ -9,7 +9,7 @@ export default function HomeCommunitiesSection({ communities, myProfile, city, m
   const navigate = useNavigate();
 
   const filtered = communities
-    .filter(c => !c.is_deleted && !c.deletion_scheduled_at)
+    .filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private)
     .filter(c => memberCommunityIds.includes(c.id))
     .slice(0, 6);
 

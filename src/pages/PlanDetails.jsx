@@ -69,6 +69,12 @@ export default function PlanDetails() {
     enabled: !!planId
   });
 
+  const { data: planCommunity } = useQuery({
+    queryKey: ['planCommunity', plan?.community_id],
+    queryFn: () => base44.entities.Community.filter({ id: plan.community_id }).then(r => r[0]),
+    enabled: !!plan?.community_id,
+  });
+
   // Check user's plan count in this region
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myAllParticipations', currentUser?.id],
