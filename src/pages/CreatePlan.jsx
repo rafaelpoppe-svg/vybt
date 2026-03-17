@@ -60,7 +60,7 @@ export default function CreatePlan() {
   const [step, setStep] = useState(1);
 
   // Layer 2: block creation if user already has a happening plan they created
-  React.useEffect(() => {
+  useEffect(() => {
     const checkActiveплан = async () => {
       const user = await base44.auth.me();
       if (!user) return;
