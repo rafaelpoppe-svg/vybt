@@ -104,6 +104,15 @@ export default function CommunityView() {
     queryFn: () => base44.entities.UserProfile.list('-created_date', 100),
   });
 
+  const { data: activeChallenge } = useQuery({
+    queryKey: ['communityChallenge', communityId],
+    queryFn: async () => {
+      const all = await base44.entities.CommunityChallenge.filter({ community_id: communityId, status: 'active' }, '-created_date', 1);
+      return all[0] || null;
+    },
+    enabled: !!communityId,
+  });
+
   const { data: pendingRequests = [] } = useQuery({
     queryKey: ['communityPlanRequests', communityId],
     queryFn: () => base44.entities.CommunityPlanRequest.filter({ community_id: communityId, status: 'pending' }),
