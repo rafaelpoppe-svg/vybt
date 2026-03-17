@@ -423,6 +423,13 @@ export default function Profile() {
         )}
       </AnimatePresence>
 
+      <FriendsListModal
+        isOpen={showFriends}
+        onClose={() => setShowFriends(false)}
+        friendProfiles={friendProfiles}
+        accent={accent}
+      />
+
       <BottomNav />
 
       <VerificationFlow
