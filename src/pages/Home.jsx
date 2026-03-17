@@ -359,11 +359,12 @@ export default function Home() {
       {/* Conteúdo scrollável */}
       <div
         className="flex-1 overflow-y-auto scrollbar-hide"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         style={{
           position: 'relative',
           zIndex: 1,
-          paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)'
+          paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 80px)',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
         }}
       >
         {/* Map Controls: sort tabs + date/time + filter button */}
