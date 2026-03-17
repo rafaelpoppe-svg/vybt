@@ -64,7 +64,7 @@ export default function BottomNav() {
             <motion.button
               whileTap={{ scale: 0.93 }}
               onClick={() => { setShowMenu(false); navigate(createPageUrl('AddStory')); }}
-              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#0b0b0b] border border-[#00d4ff]/40 shadow-lg shadow-[#00d4ff]/20 backdrop-blur-xl"
+              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#0b0b0b] border border-[#00d4ff]/40 shadow-lg shadow-[#00d4ff]/20"
             >
               <div className="w-8 h-8 rounded-full bg-[#00d4ff]/20 flex items-center justify-center">
                 <Camera className="w-4 h-4 text-[#00d4ff]" />
@@ -75,7 +75,7 @@ export default function BottomNav() {
             <motion.button
               whileTap={{ scale: 0.93 }}
               onClick={() => { setShowMenu(false); navigate(createPageUrl('CreatePlan')); }}
-              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#0b0b0b] border border-[#00c6d2]/40 shadow-lg shadow-[#00c6d2]/20 backdrop-blur-xl"
+              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#0b0b0b] border border-[#00c6d2]/40 shadow-lg shadow-[#00c6d2]/20"
             >
               <div className="w-8 h-8 rounded-full bg-[#00c6d2]/20 flex items-center justify-center">
                 <PlusCircle className="w-4 h-4 text-[#00c6d2]" />
@@ -86,7 +86,7 @@ export default function BottomNav() {
         )}
       </AnimatePresence>
 
-      <nav className="fixed bottom-0 bg-[#0b0b0b] backdrop-blur-2xl border-t border-[#00c6d2]/10"
+      <nav className="fixed bottom-0 bg-[#0b0b0b] border-t border-[#00c6d2]/10"
         style={{ left: 0, right: 0, width: '100%', zIndex: 700, paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)' }}
       >
         <div className="flex items-center justify-around px-2 py-2">
