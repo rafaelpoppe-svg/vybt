@@ -302,6 +302,24 @@ export default function PlanDetails() {
         {/* Title */}
         <h1 className="text-3xl font-bold text-white">{plan.title}</h1>
 
+        {/* Community badge */}
+        {planCommunity && (
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => navigate(createPageUrl('CommunityView') + `?id=${planCommunity.id}`)}
+            className="flex items-center gap-2 px-3 py-2 rounded-xl border w-fit"
+            style={{ borderColor: `${planCommunity.theme_color || '#00c6d2'}50`, background: `${planCommunity.theme_color || '#00c6d2'}12` }}
+          >
+            {planCommunity.cover_image
+              ? <img src={planCommunity.cover_image} alt="" className="w-5 h-5 rounded-md object-cover" />
+              : <span className="text-sm">⭐</span>}
+            <span className="text-xs font-bold" style={{ color: planCommunity.theme_color || '#00c6d2' }}>
+              {planCommunity.name}
+            </span>
+            <span className="text-gray-500 text-[10px]">Community →</span>
+          </motion.button>
+        )}
+
         {/* Info card with tags inside */}
         <div 
           className="space-y-3 p-4 rounded-xl"
