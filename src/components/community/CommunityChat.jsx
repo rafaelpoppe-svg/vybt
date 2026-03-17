@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Send, Lock } from 'lucide-react';
@@ -8,6 +8,7 @@ export default function CommunityChat({ communityId, community, currentUser, isM
   const queryClient = useQueryClient();
   const [message, setMessage] = useState('');
   const bottomRef = useRef(null);
+  const inputRef = useRef(null);
   const tc = themeColor || '#00c6d2';
 
   const { data: messages = [] } = useQuery({
@@ -27,14 +28,20 @@ export default function CommunityChat({ communityId, community, currentUser, isM
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages.length]);
+  }, [sorted.length]);
 
   const sendMutation = useMutation({
     mutationFn: () => base44.entities.ChatMessage.create({
-      sender_id: currentUser.id, plan_id: communityId,
-      message_type: 'group', content: message.trim(), is_read: false,
+      sender_id: currentUser.id,
+      plan_id: communityId,
+      message_type: 'group',
+      content: message.trim(),
+      is_read: false,
     }),
-    onSuccess: () => { setMessage(''); queryClient.invalidateQueries(['communityChat', communityId]); },
+    onSuccess: () => {
+      setMessage('');
+      queryClient.invalidateQueries(['communityChat', communityId]);
+    },
   });
 
   const handleSend = () => {
@@ -42,49 +49,64 @@ export default function CommunityChat({ communityId, community, currentUser, isM
     sendMutation.mutate();
   };
 
-  if (community?.chat_locked && !isMember) {
+  if (!isMember) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 gap-3">
-        <Lock className="w-10 h-10 text-gray-600" />
-        <p className="text-gray-500 text-center">Join the community to participate in the chat 💬</p>
+      <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
+        <div className="w-16 h-16 rounded-full bg-gray-900 flex items-center justify-center">
+          <Lock className="w-7 h-7 text-gray-600" />
+        </div>
+        <div>
+          <p className="text-white font-bold">Members only</p>
+          <p className="text-gray-500 text-sm mt-1">Join the community to chat with members 💬</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col" style={{ height: '55vh' }}>
+    <div className="flex flex-col" style={{ height: '65vh', minHeight: 300 }}>
       {community?.chat_locked && (
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl mb-3 text-sm" style={{ background: `${tc}20`, color: tc }}>
-          <Lock className="w-4 h-4" /> Chat is restricted to members only
+          <Lock className="w-4 h-4" /> Chat restricted to members
         </div>
       )}
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto space-y-3 pb-3 pr-1">
+      {/* Messages area */}
+      <div className="flex-1 overflow-y-auto space-y-3 pb-2 pr-1 scrollbar-hide">
         {sorted.length === 0 && (
-          <div className="text-center py-8">
-            <div className="text-3xl mb-2">💬</div>
-            <p className="text-gray-600 text-sm">Be the first to say something! 🎉</p>
+          <div className="text-center py-16">
+            <div className="text-4xl mb-3">💬</div>
+            <p className="text-gray-400 font-semibold">Start the conversation!</p>
+            <p className="text-gray-600 text-sm mt-1">Say hi to the community 👋</p>
           </div>
         )}
-        {sorted.map((msg) => {
+        {sorted.map((msg, i) => {
           const isMe = msg.sender_id === currentUser?.id;
           const sender = profilesMap[msg.sender_id];
+          const prevMsg = sorted[i - 1];
+          const showAvatar = !isMe && (!prevMsg || prevMsg.sender_id !== msg.sender_id);
           return (
             <div key={msg.id} className={`flex items-end gap-2 ${isMe ? 'flex-row-reverse' : ''}`}>
-              {!isMe && (
-                <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 bg-gray-800">
-                  {sender?.photos?.[0]
-                    ? <img src={sender.photos[0]} alt="" className="w-full h-full object-cover" />
-                    : <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white" style={{ background: tc }}>{sender?.display_name?.[0] || '?'}</div>}
-                </div>
-              )}
-              <div className={`max-w-[72%] ${isMe ? 'items-end' : 'items-start'} flex flex-col gap-0.5`}>
-                {!isMe && <p className="text-xs text-gray-500 px-1">{sender?.display_name || 'User'}</p>}
-                <div className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed"
+              {/* Avatar slot */}
+              <div className="w-7 flex-shrink-0">
+                {showAvatar && !isMe && (
+                  <div className="w-7 h-7 rounded-full overflow-hidden bg-gray-800">
+                    {sender?.photos?.[0]
+                      ? <img src={sender.photos[0]} alt="" className="w-full h-full object-cover" />
+                      : <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white" style={{ background: tc }}>{sender?.display_name?.[0] || '?'}</div>}
+                  </div>
+                )}
+              </div>
+              <div className={`max-w-[72%] flex flex-col gap-0.5 ${isMe ? 'items-end' : 'items-start'}`}>
+                {showAvatar && !isMe && (
+                  <p className="text-[10px] text-gray-500 px-1 font-medium">{sender?.display_name || 'User'}</p>
+                )}
+                <div
+                  className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed"
                   style={isMe
-                    ? { background: '#374151', color: '#fff', borderBottomRightRadius: 4 }
-                    : { background: `${tc}35`, color: '#fff', borderBottomLeftRadius: 4 }}>
+                    ? { background: `${tc}cc`, color: '#fff', borderBottomRightRadius: 4 }
+                    : { background: 'rgba(255,255,255,0.08)', color: '#e5e7eb', borderBottomLeftRadius: 4 }}
+                >
                   {msg.content}
                 </div>
               </div>
@@ -95,27 +117,26 @@ export default function CommunityChat({ communityId, community, currentUser, isM
       </div>
 
       {/* Input */}
-      {isMember ? (
-        <div className="flex gap-2 pt-3 border-t border-gray-800">
-          <input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            placeholder="Say something... 🎉"
-            className="flex-1 bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none"
-            style={{ fontSize: '16px' }}
-          />
-          <motion.button whileTap={{ scale: 0.9 }} onClick={handleSend} disabled={!message.trim()}
-            className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all disabled:opacity-40"
-            style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)` }}>
-            <Send className="w-4 h-4 text-white" />
-          </motion.button>
-        </div>
-      ) : (
-        <div className="pt-3 border-t border-gray-800 text-center text-gray-600 text-sm py-3">
-          Join the community to chat 💬
-        </div>
-      )}
+      <div className="flex gap-2 pt-3 border-t border-gray-800 mt-2">
+        <input
+          ref={inputRef}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+          placeholder="Say something... 🎉"
+          className="flex-1 bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-gray-700"
+          style={{ fontSize: '16px' }}
+        />
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          onClick={handleSend}
+          disabled={!message.trim() || sendMutation.isPending}
+          className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all disabled:opacity-40"
+          style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)` }}
+        >
+          <Send className="w-4 h-4 text-white" />
+        </motion.button>
+      </div>
     </div>
   );
 }
