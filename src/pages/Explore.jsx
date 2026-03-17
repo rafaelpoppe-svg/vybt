@@ -342,6 +342,39 @@ export default function Explore() {
           )}
         </div>
 
+        {/* City selector - visible for communities and plans */}
+        {(activeView === 'communities' || activeView === 'plans') && (
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3 mb-2" data-hscroll="1">
+            <motion.button
+              whileTap={{ scale: 0.92 }}
+              onClick={() => {
+                setSelectedCity('');
+                localStorage.removeItem('selectedCity');
+              }}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border flex-shrink-0 transition-all ${
+                !selectedCity ? 'bg-[#00c6d2] text-[#0b0b0b] border-[#00c6d2]' : 'bg-gray-900 text-gray-400 border-gray-800'
+              }`}
+            >
+              🌍 All Cities
+            </motion.button>
+            {['Lisboa', 'Porto', 'Covilhã', 'Braga'].map((city) => (
+              <motion.button
+                key={city}
+                whileTap={{ scale: 0.92 }}
+                onClick={() => {
+                  setSelectedCity(city);
+                  localStorage.setItem('selectedCity', city);
+                }}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border flex-shrink-0 transition-all ${
+                  selectedCity === city ? 'bg-[#00c6d2] text-[#0b0b0b] border-[#00c6d2]' : 'bg-gray-900 text-gray-400 border-gray-800'
+                }`}
+              >
+                📍 {city}
+              </motion.button>
+            ))}
+          </div>
+        )}
+
         {/* Tags + Sort — scrollable row, only for plans */}
         {activeView === 'plans' && (
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3" data-hscroll="1">
