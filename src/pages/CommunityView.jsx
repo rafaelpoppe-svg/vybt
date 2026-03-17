@@ -300,7 +300,7 @@ export default function CommunityView() {
               <motion.div key="plans" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }} className="space-y-4">
                 {/* Active Challenge Banner */}
                 {activeChallenge && (
-                  <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setActiveTab('activity')} />
+                  <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setShowChallengeDetail(true)} />
                 )}
                 {upcomingPlans.length === 0 && pastPlans.length === 0 ? (
                   <div className="text-center py-20">
