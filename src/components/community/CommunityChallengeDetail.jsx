@@ -45,6 +45,17 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
     },
   });
 
+  const { data: storyReactions = [] } = useQuery({
+    queryKey: ['storyReactions', challenge.id],
+    queryFn: async () => {
+      const allReactions = await base44.entities.StoryReaction.list('-created_date', 500);
+      return allReactions.filter(r => challengeStories.some(s => s.id === r.story_id));
+    },
+    enabled: challengeStories.length > 0,
+  });
+
+  const scores = useCalculateChallengeScores(challengeStories, storyReactions);
+
   const selectWinnerMutation = useMutation({
     mutationFn: (userId) => base44.entities.CommunityChallenge.update(challenge.id, {
       winner_user_id: userId,
@@ -133,6 +144,9 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
         </div>
 
         <div className="px-4 pt-4 space-y-5">
+          {/* Top 3 Ranking */}
+          <ChallengeRankingTop3 scores={scores} profilesMap={profilesMap} tc={tc} />
+
           {/* Winner announcement */}
           {winner && (
             <motion.div
