@@ -31,12 +31,13 @@ const themeColors = [
 ];
 
 const STEPS = [
-  { id: 1, label: 'Identity', emoji: '✨' },
-  { id: 2, label: 'Date', emoji: '📅' },
-  { id: 3, label: 'Time', emoji: '⏰' },
-  { id: 4, label: 'Location', emoji: '📍' },
-  { id: 5, label: 'Vibe', emoji: '🎉' },
-  { id: 6, label: 'Privacy', emoji: '🔒' },
+  { id: 1, label: 'Community', emoji: '⭐' },
+  { id: 2, label: 'Identity', emoji: '✨' },
+  { id: 3, label: 'Date', emoji: '📅' },
+  { id: 4, label: 'Time', emoji: '⏰' },
+  { id: 5, label: 'Location', emoji: '📍' },
+  { id: 6, label: 'Vibe', emoji: '🎉' },
+  { id: 7, label: 'Privacy', emoji: '🔒' },
 ];
 
 const slideVariants = {
