@@ -22,9 +22,9 @@ import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated'
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
 import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { useLanguage } from '../components/common/LanguageContext';
-import HomeCommunitiesSection from '../components/home/HomeCommunitiesSection';
 import HomeCommunitiesBar from '../components/home/HomeCommunitiesBar';
 import MyCommunitiesDrawer from '../components/home/MyCommunitiesDrawer';
+import HomeBottomFeed from '../components/home/HomeBottomFeed';
 
 
 export default function Home() {
