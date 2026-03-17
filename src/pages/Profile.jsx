@@ -33,6 +33,7 @@ export default function Profile() {
   const [showVerification, setShowVerification] = useState(false);
   const [activeTab, setActiveTab] = useState('photos');
   const [expandedPhoto, setExpandedPhoto] = useState(null);
+  const [showFriends, setShowFriends] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => navigate(createPageUrl('Onboarding')));
