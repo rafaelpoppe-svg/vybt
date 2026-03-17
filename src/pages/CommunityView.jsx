@@ -459,6 +459,15 @@ export default function CommunityView() {
       <StoryViewOverlay storyId={overlayStoryId} onClose={() => setOverlayStoryId(null)} />
 
       <AnimatePresence>
+        {showNewMemberGuide && (
+          <CommunityNewMemberGuide
+            communityId={communityId}
+            onClose={() => setShowNewMemberGuide(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
         {showInviteModal && (
           <InviteToCommunityModal
             community={community}
