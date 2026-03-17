@@ -1,81 +1,110 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Flame, Clock, Trophy, ChevronRight } from 'lucide-react';
+import { Clock, Trophy, Flame, Users, ChevronRight } from 'lucide-react';
 import { formatDistanceToNow, isPast } from 'date-fns';
 
 export default function CommunityChallengeBanner({ challenge, tc, onTap }) {
   if (!challenge) return null;
 
-  const isActive = challenge.status === 'active';
-  const timeLeft = challenge.ends_at ? formatDistanceToNow(new Date(challenge.ends_at), { addSuffix: false }) : null;
   const ended = challenge.ends_at ? isPast(new Date(challenge.ends_at)) : false;
+  const timeLeft = challenge.ends_at && !ended
+    ? formatDistanceToNow(new Date(challenge.ends_at), { addSuffix: false })
+    : null;
 
-  const typeColors = {
-    night: { bg: 'from-purple-900/80 to-indigo-900/80', border: 'border-purple-500/40', label: '🌙 Night Challenge' },
-    day: { bg: 'from-orange-900/60 to-yellow-900/60', border: 'border-orange-500/40', label: '☀️ Day Challenge' },
-    weekend: { bg: 'from-pink-900/60 to-rose-900/60', border: 'border-pink-500/40', label: '🎉 Weekend Challenge' },
-    custom: { bg: 'from-gray-900/80 to-gray-800/80', border: 'border-gray-600/40', label: '⚡ Challenge' },
+  const typeStyles = {
+    night: {
+      gradient: 'linear-gradient(135deg, #1a0a3e 0%, #2d1b69 50%, #0f0a1e 100%)',
+      border: 'rgba(139,92,246,0.5)',
+      accent: '#a78bfa',
+      label: '🌙 Night Challenge',
+    },
+    day: {
+      gradient: 'linear-gradient(135deg, #3d1a00 0%, #7c3d00 50%, #1a0d00 100%)',
+      border: 'rgba(251,146,60,0.5)',
+      accent: '#fb923c',
+      label: '☀️ Day Challenge',
+    },
+    weekend: {
+      gradient: 'linear-gradient(135deg, #3d0a2e 0%, #7c1a5c 50%, #1a0414 100%)',
+      border: 'rgba(236,72,153,0.5)',
+      accent: '#f472b6',
+      label: '🎉 Weekend Challenge',
+    },
+    custom: {
+      gradient: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+      border: 'rgba(148,163,184,0.3)',
+      accent: tc,
+      label: '⚡ Challenge',
+    },
   };
-  const style = typeColors[challenge.type] || typeColors.custom;
+
+  const s = typeStyles[challenge.type] || typeStyles.custom;
 
   return (
     <motion.button
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: 0.97 }}
       onClick={onTap}
-      className={`w-full bg-gradient-to-r ${style.bg} border ${style.border} rounded-2xl p-4 text-left relative overflow-hidden`}
+      className="w-full rounded-2xl overflow-hidden text-left relative"
+      style={{ background: s.gradient, border: `1.5px solid ${s.border}` }}
     >
-      {/* Animated glow pulse for active */}
-      {isActive && !ended && (
-        <span className="absolute top-3 right-3 flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400" />
+      {/* Shimmer bar */}
+      <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: `linear-gradient(90deg, transparent, ${s.accent}, transparent)` }} />
+
+      {/* Live pulse */}
+      {!ended && (
+        <span className="absolute top-3.5 right-12 flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: s.accent }} />
+          <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: s.accent }} />
         </span>
       )}
 
-      <div className="flex items-start gap-3">
-        {/* Emoji */}
-        <div className="text-3xl flex-shrink-0">{challenge.emoji || '🔥'}</div>
+      <div className="p-4 flex items-center gap-3">
+        {/* Emoji badge */}
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
+          style={{ background: 'rgba(255,255,255,0.08)' }}>
+          {challenge.emoji || '🔥'}
+        </div>
 
         <div className="flex-1 min-w-0">
-          {/* Label */}
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">{style.label}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest mb-0.5" style={{ color: s.accent }}>{s.label}</p>
+          <h4 className="text-white font-black text-sm leading-tight truncate">{challenge.title}</h4>
 
-          {/* Title */}
-          <h4 className="text-white font-black text-base leading-tight truncate">{challenge.title}</h4>
-
-          {/* Description */}
           {challenge.description && (
-            <p className="text-gray-400 text-xs mt-1 line-clamp-2">{challenge.description}</p>
+            <p className="text-white/50 text-[11px] mt-0.5 line-clamp-1">{challenge.description}</p>
           )}
 
-          {/* Footer */}
-          <div className="flex items-center gap-3 mt-2 flex-wrap">
-            {timeLeft && !ended && (
+          <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+            {timeLeft && (
               <span className="flex items-center gap-1 text-[10px] font-bold text-yellow-400">
-                <Clock className="w-3 h-3" />
-                {timeLeft} left
+                <Clock className="w-3 h-3" />{timeLeft} left
               </span>
             )}
-            {ended && (
-              <span className="text-[10px] font-bold text-gray-500">Challenge ended</span>
-            )}
+            {ended && <span className="text-[10px] font-bold text-gray-500">Challenge ended</span>}
             {challenge.submissions_count > 0 && (
-              <span className="flex items-center gap-1 text-[10px] text-gray-400">
-                <Flame className="w-3 h-3 text-orange-400" />
-                {challenge.submissions_count} submissions
+              <span className="flex items-center gap-1 text-[10px] text-white/40">
+                <Flame className="w-3 h-3 text-orange-400" />{challenge.submissions_count} stories
               </span>
             )}
             {challenge.prize_description && (
               <span className="flex items-center gap-1 text-[10px] font-bold text-yellow-300">
-                <Trophy className="w-3 h-3" />
-                {challenge.prize_description}
+                <Trophy className="w-3 h-3" />{challenge.prize_description}
               </span>
             )}
           </div>
         </div>
 
-        <ChevronRight className="w-4 h-4 text-gray-600 flex-shrink-0 mt-1" />
+        <ChevronRight className="w-4 h-4 text-white/30 flex-shrink-0" />
       </div>
+
+      {/* Tap to participate hint */}
+      {!ended && (
+        <div className="px-4 pb-3">
+          <div className="w-full py-2 rounded-xl text-center text-[11px] font-bold"
+            style={{ background: `${s.accent}20`, color: s.accent }}>
+            📸 Tap to see & participate →
+          </div>
+        </div>
+      )}
     </motion.button>
   );
 }
