@@ -6,13 +6,12 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import {
   Camera, Loader2, Bell, Settings, ShieldCheck, ShieldX,
-  PartyPopper, Users, Trophy, Music2, Star, MapPin,
-  Calendar, ChevronRight, Globe, Edit2, Heart
+  PartyPopper, Users, Trophy, Star, MapPin,
+  Calendar, ChevronRight, Edit2, Images
 } from 'lucide-react';
 import BottomNav from '../components/common/BottomNav';
 import VibeTag from '../components/common/VibeTag';
 import PartyTag from '../components/common/PartyTag';
-import VerificationBadge from '../components/profile/VerificationBadge';
 import VerificationFlow from '../components/profile/VerificationFlow';
 import { useLanguage } from '../components/common/LanguageContext';
 import { useProfileThemeContext } from '../components/common/ProfileThemeContext';
@@ -21,15 +20,9 @@ import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
 import { format } from 'date-fns';
 
 const THEME_ACCENTS = {
-  default: '#00c6d2',
-  beer: '#f59e0b',
-  dance: '#8b5cf6',
-  champagne: '#d4af37',
-  money: '#22c55e',
-  luxury: '#6366f1',
-  party: '#ec4899',
+  default: '#00c6d2', beer: '#f59e0b', dance: '#8b5cf6',
+  champagne: '#d4af37', money: '#22c55e', luxury: '#6366f1', party: '#ec4899',
 };
-
 const THEME_BACKGROUNDS = {
   default: 'linear-gradient(160deg, #0b0b0b 0%, #111118 100%)',
   beer: 'linear-gradient(160deg, #1a0e00 0%, #0b0b0b 50%, #0b0b0b 100%)',
@@ -46,7 +39,7 @@ export default function Profile() {
   const { setProfileTheme } = useProfileThemeContext();
   const [currentUser, setCurrentUser] = useState(null);
   const [showVerification, setShowVerification] = useState(false);
-  const [activeTab, setActiveTab] = useState('stories');
+  const [activeTab, setActiveTab] = useState('photos');
   const [expandedPhoto, setExpandedPhoto] = useState(null);
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
   const scrollRef = useRef(null);
@@ -115,7 +108,6 @@ export default function Profile() {
     if (profile?.profile_background_theme) setProfileTheme(profile.profile_background_theme);
   }, [profile?.profile_background_theme]);
 
-  // Sticky header collapse on scroll
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -142,11 +134,13 @@ export default function Profile() {
   const bgStyle = THEME_BACKGROUNDS[theme] || THEME_BACKGROUNDS.default;
   const coverPhoto = photos[0];
 
+  // Tabs: Photos first, then Stories, Friends, Plans, Communities
   const tabs = [
-    { id: 'stories', label: 'Stories', icon: <Camera className="w-4 h-4" />, count: myStories.length },
-    { id: 'plans', label: 'Plans', icon: <PartyPopper className="w-4 h-4" />, count: activePlans.length },
-    { id: 'friends', label: 'Friends', icon: <Users className="w-4 h-4" />, count: friendships.length },
-    { id: 'communities', label: 'Communities', icon: <Star className="w-4 h-4" />, count: myCommunities.length },
+    { id: 'photos',      label: 'Photos',      icon: <Images className="w-4 h-4" />,      count: photos.length },
+    { id: 'stories',     label: 'Stories',     icon: <Camera className="w-4 h-4" />,      count: myStories.length },
+    { id: 'friends',     label: 'Friends',     icon: <Users className="w-4 h-4" />,       count: friendships.length },
+    { id: 'plans',       label: 'Plans',       icon: <PartyPopper className="w-4 h-4" />, count: activePlans.length },
+    { id: 'communities', label: 'Groups',      icon: <Star className="w-4 h-4" />,        count: myCommunities.length },
   ];
 
   return (
@@ -166,10 +160,9 @@ export default function Profile() {
         }}
       >
         <div className="flex items-center justify-between px-4 py-3">
-          {/* Left: name when collapsed */}
-          <AnimatePresence>
+          <AnimatePresence mode="wait">
             {headerCollapsed ? (
-              <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
+              <motion.div key="collapsed" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
                 className="flex items-center gap-2">
                 {coverPhoto ? (
                   <img src={coverPhoto} className="w-7 h-7 rounded-full object-cover" />
@@ -179,7 +172,7 @@ export default function Profile() {
                 <span className="text-white font-bold text-sm">{profile.display_name || currentUser.full_name}</span>
               </motion.div>
             ) : (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <motion.div key="expanded" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 {nationalityInfo ? (
                   <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md rounded-full px-2.5 py-1">
                     <span className="text-base leading-none">{nationalityInfo.flag}</span>
@@ -190,7 +183,6 @@ export default function Profile() {
             )}
           </AnimatePresence>
 
-          {/* Right: action icons */}
           <div className="flex items-center gap-1">
             {profile.is_verified ? (
               <div className="flex items-center gap-1 bg-blue-500/20 rounded-full px-2.5 py-1">
@@ -219,7 +211,6 @@ export default function Profile() {
 
       {/* ── Hero: Cover + Avatar ── */}
       <div className="relative -mt-14">
-        {/* Cover strip from photos[1] or gradient */}
         <div className="w-full h-48 overflow-hidden">
           {photos[1] ? (
             <img src={photos[1]} className="w-full h-full object-cover" style={{ filter: 'brightness(0.55)' }} />
@@ -229,16 +220,13 @@ export default function Profile() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0b0b0b]" />
         </div>
 
-        {/* Avatar overlapping cover */}
+        {/* Avatar */}
         <div className="absolute bottom-0 left-4 translate-y-1/2 z-10">
-          <motion.div whileTap={{ scale: 0.97 }} onClick={() => coverPhoto && setExpandedPhoto(coverPhoto)}
-            className="relative">
+          <motion.div whileTap={{ scale: 0.97 }} onClick={() => coverPhoto && setExpandedPhoto(coverPhoto)} className="relative">
             {coverPhoto ? (
-              <img src={coverPhoto} className="w-24 h-24 rounded-2xl object-cover border-2"
-                style={{ borderColor: accent }} />
+              <img src={coverPhoto} className="w-24 h-24 rounded-2xl object-cover border-2" style={{ borderColor: accent }} />
             ) : (
-              <div className="w-24 h-24 rounded-2xl bg-gray-800 border-2 flex items-center justify-center"
-                style={{ borderColor: accent }}>
+              <div className="w-24 h-24 rounded-2xl bg-gray-800 border-2 flex items-center justify-center" style={{ borderColor: accent }}>
                 <Camera className="w-8 h-8 text-gray-600" />
               </div>
             )}
@@ -250,7 +238,7 @@ export default function Profile() {
           </motion.div>
         </div>
 
-        {/* Edit button top right of cover area */}
+        {/* Edit button */}
         <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('EditProfile'))}
           className="absolute bottom-2 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold"
           style={{ background: `${accent}22`, border: `1px solid ${accent}55`, color: accent }}>
@@ -266,12 +254,8 @@ export default function Profile() {
               <h1 className="text-2xl font-black text-white">
                 {profile.display_name || currentUser.full_name}
               </h1>
-              {age && (
-                <span className="text-base font-bold" style={{ color: accent }}>{age}</span>
-              )}
-              {profile.gender && (
-                <span className="text-xs text-gray-400 font-medium">{profile.gender}</span>
-              )}
+              {age && <span className="text-base font-bold" style={{ color: accent }}>{age}</span>}
+              {profile.gender && <span className="text-xs text-gray-400 font-medium">{profile.gender}</span>}
             </div>
             {profile.city && (
               <div className="flex items-center gap-1 mt-0.5">
@@ -281,7 +265,6 @@ export default function Profile() {
             )}
           </div>
 
-          {/* Ambassador / Friends button */}
           {profile.ambassador_opted_in ? (
             <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('Ambassador'))}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold"
@@ -298,72 +281,20 @@ export default function Profile() {
 
         {/* Bio */}
         {profile.bio && (
-          <p className="text-sm text-gray-300 mt-3 leading-relaxed">{profile.bio}</p>
+          <p className="text-sm text-gray-300 mt-2 leading-relaxed">{profile.bio}</p>
         )}
 
-        {/* ── Stats Row ── */}
-        <div className="grid grid-cols-4 gap-2 mt-4">
-          {[
-            { value: myStories.length, label: 'Stories', icon: '📸' },
-            { value: friendships.length, label: 'Friends', icon: '👥' },
-            { value: myPlans.length, label: 'Plans', icon: '🎉' },
-            { value: myCommunities.length, label: 'Groups', icon: '⭐' },
-          ].map(({ value, label, icon }) => (
-            <div key={label} className="flex flex-col items-center py-3 rounded-xl"
-              style={{ background: `${accent}10`, border: `1px solid ${accent}20` }}>
-              <span className="text-base mb-0.5">{icon}</span>
-              <span className="text-lg font-black text-white leading-tight">{value}</span>
-              <span className="text-[10px] text-gray-400 leading-tight">{label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Photo Strip ── */}
-        {photos.length > 1 && (
-          <div className="mt-4">
-            <p className="text-xs text-gray-500 font-semibold mb-2 uppercase tracking-wide">Photos</p>
-            <div className="flex gap-2 overflow-x-auto scrollbar-hide" data-hscroll="1">
-              {photos.slice(1).map((photo, i) => (
-                <motion.img key={i} whileTap={{ scale: 0.94 }} src={photo}
-                  onClick={() => setExpandedPhoto(photo)}
-                  className="w-24 h-32 rounded-xl object-cover flex-shrink-0 border border-gray-800 cursor-pointer" />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ── Vibes + Party types ── */}
+        {/* Vibes + Party types inline below bio */}
         {(profile.vibes?.length > 0 || profile.party_types?.length > 0) && (
-          <div className="mt-4 space-y-3">
-            {profile.vibes?.length > 0 && (
-              <div>
-                <div className="flex items-center gap-1.5 mb-2">
-                  <Music2 className="w-3.5 h-3.5" style={{ color: accent }} />
-                  <span className="text-xs font-bold text-gray-300 uppercase tracking-wide">Vibes</span>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {profile.vibes.map(vibe => <VibeTag key={vibe} vibe={vibe} size="sm" />)}
-                </div>
-              </div>
-            )}
-            {profile.party_types?.length > 0 && (
-              <div>
-                <div className="flex items-center gap-1.5 mb-2">
-                  <Heart className="w-3.5 h-3.5" style={{ color: accent }} />
-                  <span className="text-xs font-bold text-gray-300 uppercase tracking-wide">Party Types</span>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {profile.party_types.map(tag => <PartyTag key={tag} tag={tag} size="sm" />)}
-                </div>
-              </div>
-            )}
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {profile.vibes?.map(vibe => <VibeTag key={vibe} vibe={vibe} size="sm" />)}
+            {profile.party_types?.map(tag => <PartyTag key={tag} tag={tag} size="sm" />)}
           </div>
         )}
       </div>
 
-      {/* ── Tabs ── */}
-      <div className="sticky top-14 z-30 mt-4 px-4"
-        style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+      {/* ── Nav Tabs ── */}
+      <div className="sticky top-14 z-30 mt-4 px-4">
         <div className="flex gap-1 bg-black/60 backdrop-blur-lg rounded-2xl p-1 border border-white/5">
           {tabs.map(tab => (
             <motion.button key={tab.id} whileTap={{ scale: 0.94 }} onClick={() => setActiveTab(tab.id)}
@@ -384,6 +315,26 @@ export default function Profile() {
 
       {/* ── Tab Content ── */}
       <AnimatePresence mode="wait">
+
+        {/* Photos */}
+        {activeTab === 'photos' && (
+          <motion.div key="photos" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="p-4 mt-1">
+            {photos.length === 0 ? (
+              <EmptyState emoji="🖼️" text="No photos yet" subtext="Add photos in Edit Profile" />
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                {photos.map((photo, i) => (
+                  <motion.div key={i} whileTap={{ scale: 0.97 }} onClick={() => setExpandedPhoto(photo)}
+                    className={`rounded-2xl overflow-hidden cursor-pointer border border-gray-800 ${i === 0 ? 'col-span-2 h-64' : 'h-44'}`}>
+                    <img src={photo} className="w-full h-full object-cover" />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* Stories */}
         {activeTab === 'stories' && (
           <motion.div key="stories" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-3">
             {myStories.length === 0 ? (
@@ -397,29 +348,7 @@ export default function Profile() {
           </motion.div>
         )}
 
-        {activeTab === 'plans' && (
-          <motion.div key="plans" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="p-4 space-y-3 mt-1">
-            {activePlans.length === 0 && pastPlans.length === 0 ? (
-              <EmptyState emoji="🎉" text="No plans yet" subtext="Join a plan to see it here" />
-            ) : (
-              <>
-                {activePlans.length > 0 && (
-                  <>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Upcoming</p>
-                    {activePlans.map(plan => <PlanRow key={plan.id} plan={plan} accent={accent} onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)} />)}
-                  </>
-                )}
-                {pastPlans.length > 0 && (
-                  <>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mt-4">Past</p>
-                    {pastPlans.slice(0, 5).map(plan => <PlanRow key={plan.id} plan={plan} accent={accent} onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)} past />)}
-                  </>
-                )}
-              </>
-            )}
-          </motion.div>
-        )}
-
+        {/* Friends */}
         {activeTab === 'friends' && (
           <motion.div key="friends" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="p-4 mt-1">
             {friendships.length === 0 ? (
@@ -452,6 +381,37 @@ export default function Profile() {
           </motion.div>
         )}
 
+        {/* Plans */}
+        {activeTab === 'plans' && (
+          <motion.div key="plans" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="p-4 space-y-3 mt-1">
+            {activePlans.length === 0 && pastPlans.length === 0 ? (
+              <EmptyState emoji="🎉" text="No plans yet" subtext="Join a plan to see it here" />
+            ) : (
+              <>
+                {activePlans.length > 0 && (
+                  <>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Upcoming</p>
+                    {activePlans.map(plan => (
+                      <PlanRow key={plan.id} plan={plan} accent={accent}
+                        onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)} />
+                    ))}
+                  </>
+                )}
+                {pastPlans.length > 0 && (
+                  <>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mt-4">Past</p>
+                    {pastPlans.slice(0, 5).map(plan => (
+                      <PlanRow key={plan.id} plan={plan} accent={accent} past
+                        onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)} />
+                    ))}
+                  </>
+                )}
+              </>
+            )}
+          </motion.div>
+        )}
+
+        {/* Communities */}
         {activeTab === 'communities' && (
           <motion.div key="communities" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="p-4 space-y-3 mt-1">
             {myCommunities.length === 0 ? (
@@ -474,7 +434,6 @@ export default function Profile() {
                     onClick={() => navigate(createPageUrl('CommunityView') + `?id=${community.id}`)}
                     className="w-full flex items-center gap-3 p-3 rounded-2xl text-left overflow-hidden relative"
                     style={{ background: `${tc}0a`, border: `1px solid ${tc}30` }}>
-                    {/* Cover strip bg */}
                     {community.cover_image && (
                       <div className="absolute inset-0 opacity-10"
                         style={{ backgroundImage: `url(${community.cover_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
@@ -483,26 +442,23 @@ export default function Profile() {
                       {community.cover_image ? (
                         <img src={community.cover_image} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
                       ) : (
-                        <div className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                          style={{ background: `${tc}22` }}>⭐</div>
+                        <div className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: `${tc}22` }}>⭐</div>
                       )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="font-bold text-white truncate">{community.name}</p>
                           {membership?.role === 'admin' && (
-                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full flex-shrink-0"
+                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full"
                               style={{ background: `${tc}30`, color: tc }}>ADMIN</span>
                           )}
                         </div>
                         <div className="flex items-center gap-3 mt-1">
-                          <div className="flex items-center gap-1 text-[11px] text-gray-400">
-                            <MapPin className="w-3 h-3" style={{ color: tc }} />
-                            {community.city}
-                          </div>
-                          <div className="flex items-center gap-1 text-[11px] text-gray-400">
-                            <Users className="w-3 h-3" style={{ color: tc }} />
-                            {community.member_count || 0}
-                          </div>
+                          <span className="flex items-center gap-1 text-[11px] text-gray-400">
+                            <MapPin className="w-3 h-3" style={{ color: tc }} />{community.city}
+                          </span>
+                          <span className="flex items-center gap-1 text-[11px] text-gray-400">
+                            <Users className="w-3 h-3" style={{ color: tc }} />{community.member_count || 0}
+                          </span>
                         </div>
                         {community.party_types?.length > 0 && (
                           <p className="text-[10px] mt-1 truncate" style={{ color: tc }}>
@@ -547,7 +503,6 @@ export default function Profile() {
 function PlanRow({ plan, accent, onClick, past = false }) {
   let dateLabel = '';
   try { dateLabel = plan.date ? format(new Date(plan.date), 'EEE, MMM d') : ''; } catch (_) {}
-
   return (
     <motion.button whileTap={{ scale: 0.97 }} onClick={onClick}
       className="w-full flex items-center gap-3 p-3 rounded-2xl text-left"
@@ -561,12 +516,8 @@ function PlanRow({ plan, accent, onClick, past = false }) {
       <div className="min-w-0 flex-1">
         <p className={`font-bold truncate ${past ? 'text-gray-400' : 'text-white'}`}>{plan.title}</p>
         <div className="flex items-center gap-2 mt-0.5">
-          <div className="flex items-center gap-1 text-[11px] text-gray-500">
-            <MapPin className="w-3 h-3" /> {plan.city}
-          </div>
-          <div className="flex items-center gap-1 text-[11px] text-gray-500">
-            <Calendar className="w-3 h-3" /> {dateLabel}
-          </div>
+          <span className="flex items-center gap-1 text-[11px] text-gray-500"><MapPin className="w-3 h-3" />{plan.city}</span>
+          <span className="flex items-center gap-1 text-[11px] text-gray-500"><Calendar className="w-3 h-3" />{dateLabel}</span>
         </div>
         {plan.status === 'happening' && (
           <span className="text-[10px] font-bold text-green-400 mt-0.5 flex items-center gap-1">
