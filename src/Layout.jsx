@@ -116,13 +116,19 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
   // Inject critical iOS meta tags + force bg color as early as possible
   useEffect(() => {
     // Force background immediately — prevents white flash on iOS WebView
-    document.documentElement.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
+    /*document.documentElement.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
     document.body.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
 
     const root = document.getElementById('root');
     if (root) {
       root.style.cssText += ';background:#0b0b0b!important;height:100%!important;min-height:100%!important;';
-    }
+    }*/
+    document.documentElement.style.border = '4px solid red';
+    document.body.style.border = '4px solid blue';
+    const rootTest = document.getElementById('root');
+    if (rootTest) rootTest.style.border = '4px solid green';
+
+    document.body.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
 
     // theme-color
     let themeMeta = document.querySelector('meta[name="theme-color"]');
