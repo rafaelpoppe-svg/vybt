@@ -36,6 +36,8 @@ function PlanFeedCard({ plan, participantCount, communityName, onClick }) {
   let dateLabel = '';
   try { dateLabel = plan.date ? format(new Date(plan.date), 'EEE, MMM d') : ''; } catch (_) {}
 
+  const badgeLabel = isCommunityPlan ? communityName : 'Individual';
+
   const priceLabel = plan.price != null
     ? plan.price === 0 ? 'Free' : `€${plan.price}`
     : null;
