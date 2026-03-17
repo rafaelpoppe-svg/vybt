@@ -304,6 +304,37 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
               </div>
             </div>
 
+            {/* Price & Min Age */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Entry Price</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">€</span>
+                  <Input
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    value={formData.price ?? ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value === '' ? undefined : Number(e.target.value) }))}
+                    placeholder="0 = free"
+                    className="bg-gray-800 border-gray-700 text-white pl-7"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Min Age</label>
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={formData.min_age ?? ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, min_age: e.target.value === '' ? undefined : Number(e.target.value) }))}
+                  placeholder="e.g. 18"
+                  className="bg-gray-800 border-gray-700 text-white"
+                />
+              </div>
+            </div>
+
             {/* Privacy & Visibility */}
             <div>
               <label className="block text-gray-400 text-sm mb-3 font-medium">🔒 Privacy & Visibility</label>
