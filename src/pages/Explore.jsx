@@ -33,7 +33,6 @@ export default function Explore() {
   const [userFilters, setUserFilters] = useState({ sortBy: 'foryou' });
   const [currentUser, setCurrentUser] = useState(null);
   const [myProfile, setMyProfile] = useState(null);
-  const [selectedCity, setSelectedCity] = useState(() => localStorage.getItem('selectedCity') || '');
 
   useEffect(() => {
     const getUser = async () => {
