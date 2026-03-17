@@ -715,7 +715,7 @@ export default function CreatePlan() {
       </div>
     ),
 
-    6: (
+    7: (
       <div className="space-y-6">
         <div className="text-center">
           <div className="text-5xl mb-3">🔒</div>
