@@ -399,19 +399,73 @@ export default function CreatePlan() {
     1: (
       <div className="space-y-6">
         <div className="text-center">
+          <div className="text-5xl mb-3">⭐</div>
+          <h2 className="text-2xl font-black text-white">Add to a Community?</h2>
+          <p className="text-gray-400 mt-1">Associate your plan with a community or keep it individual</p>
+        </div>
+
+        {loadingCommunities ? (
+          <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin" /></div>
+        ) : myCommunities.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 py-8 text-center">
+            <div className="text-4xl">🏜️</div>
+            <p className="text-gray-400 text-sm">You're not part of any community yet.</p>
+            <p className="text-gray-600 text-xs">Your plan will be created as an individual plan.</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {/* Individual option */}
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setSelectedCommunityId(null)}
+              className="w-full flex items-center gap-3 p-4 rounded-2xl border transition-all"
+              style={!selectedCommunityId
+                ? { borderColor: '#00c6d2', background: '#00c6d210' }
+                : { borderColor: '#374151', background: 'transparent' }}
+            >
+              <div className="w-12 h-12 rounded-xl bg-gray-800 flex items-center justify-center text-2xl shrink-0">🎯</div>
+              <div className="text-left flex-1">
+                <p className="text-white font-bold">Individual Plan</p>
+                <p className="text-gray-500 text-xs">Just you creating a standalone plan</p>
+              </div>
+              {!selectedCommunityId && <Check className="w-5 h-5 text-[#00c6d2] shrink-0" />}
+            </motion.button>
+
+            {/* Community options */}
+            {myCommunities.map(c => (
+              <motion.button
+                key={c.id}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setSelectedCommunityId(c.id)}
+                className="w-full flex items-center gap-3 p-4 rounded-2xl border transition-all"
+                style={selectedCommunityId === c.id
+                  ? { borderColor: c.theme_color || '#00c6d2', background: `${c.theme_color || '#00c6d2'}12` }
+                  : { borderColor: '#374151', background: 'transparent' }}
+              >
+                <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0">
+                  {c.cover_image
+                    ? <img src={c.cover_image} alt="" className="w-full h-full object-cover" />
+                    : <div className="w-full h-full flex items-center justify-center text-xl" style={{ background: `${c.theme_color || '#00c6d2'}44` }}>⭐</div>}
+                </div>
+                <div className="text-left flex-1 min-w-0">
+                  <p className="text-white font-bold truncate">{c.name}</p>
+                  <p className="text-gray-500 text-xs">📍 {c.city}</p>
+                </div>
+                {selectedCommunityId === c.id && <Check className="w-5 h-5 shrink-0" style={{ color: c.theme_color || '#00c6d2' }} />}
+              </motion.button>
+            ))}
+          </div>
+        )}
+      </div>
+    ),
+
+    2: (
+      <div className="space-y-6">
+        <div className="text-center">
           <div className="text-5xl mb-3">✨</div>
           <h2 className="text-2xl font-black text-white">Name your plan</h2>
           <p className="text-gray-400 mt-1">Give it a vibe! What's this plan about?</p>
         </div>
-        {communityId && communityName && (
-          <div className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-[#00c6d2]/30 bg-[#00c6d2]/10">
-            <span className="text-lg">⭐</span>
-            <div>
-              <p className="text-xs text-gray-400">Creating inside community</p>
-              <p className="text-white font-bold text-sm">{communityName}</p>
-            </div>
-          </div>
-        )}
 
         <div>
           <label className="block text-gray-400 text-sm mb-2">Plan Name *</label>
