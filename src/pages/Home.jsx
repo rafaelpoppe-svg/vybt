@@ -403,21 +403,16 @@ export default function Home() {
           onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
         />
 
-        {/* Communities Near You */}
-        <HomeCommunitiesSection communities={communities} city={city} memberCommunityIds={myCommunityMemberships.map(m => m.community_id)} />
-
-        {/* Hot Plans Carousel */}
-        {plansLoading ? (
-          <div className="flex justify-center py-3">
-            <Loader2 className="w-5 h-5 text-[#00c6d2] animate-spin" />
-          </div>
-        ) : (
-          <HomeHotPlansCarousel
-            plans={visiblePlans}
-            allParticipants={allParticipants}
-            onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-          />
-        )}
+        {/* Bottom Feed: For You / My Space */}
+        <HomeBottomFeed
+          plans={visiblePlans}
+          allParticipants={allParticipants}
+          communities={communities}
+          memberCommunityIds={myCommunityMemberships.map(m => m.community_id)}
+          myParticipations={myParticipations}
+          recommendedPlans={recommendedPlans}
+          onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+        />
 
         {/* Live Activities */}
         <HomeLiveActivities
