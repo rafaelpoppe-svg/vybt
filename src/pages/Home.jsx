@@ -359,6 +359,7 @@ export default function Home() {
       {/* Conteúdo scrollável */}
       <div
         className="flex-1 overflow-y-auto scrollbar-hide"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         style={{
           position: 'relative',
           zIndex: 1,
