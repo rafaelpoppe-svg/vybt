@@ -73,36 +73,35 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
   useEffect(() => {
     const checkAuthAndRedirect = async () => {
       const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
-      
-      // Detect if running as mobile app (Capacitor/native wrapper)
       const isMobileApp = !!(window.Capacitor || window.cordova || navigator.userAgent.includes('VybtApp') || window.location.protocol === 'capacitor:');
 
-      
       try {
         const user = await base44.auth.me();
-        
-        // Utilizador logado
+
         if (user) {
+          // Mark as authenticated so future errors don't kick user out
+          isAuthenticatedRef.current = true;
           if (currentPageName === 'Welcome' && !isPreview) {
             navigate(createPageUrl('Home'));
             return;
           }
         } else {
-          // Utilizador não logado
-          // Se tenta aceder a página protegida, redireciona para Welcome
-          if (protectedPages.includes(currentPageName)) {
-            navigate(createPageUrl('Welcome'));
-            return;
-          }
-          // Mobile app sem login: redireciona Welcome para login direto
-          if (currentPageName === 'Welcome' && isMobileApp) {
-            base44.auth.redirectToLogin();
-            return;
+          // Only redirect if we've never confirmed auth before
+          if (!isAuthenticatedRef.current) {
+            if (protectedPages.includes(currentPageName)) {
+              navigate(createPageUrl('Welcome'));
+              return;
+            }
+            if (currentPageName === 'Welcome' && isMobileApp) {
+              base44.auth.redirectToLogin();
+              return;
+            }
           }
         }
       } catch (e) {
-        // Não logado
-        if (protectedPages.includes(currentPageName)) {
+        // CRITICAL: only redirect to Welcome if we have never confirmed the user was authenticated.
+        // This prevents a transient network/token error from logging the user out mid-session.
+        if (!isAuthenticatedRef.current && protectedPages.includes(currentPageName)) {
           navigate(createPageUrl('Welcome'));
           return;
         }
@@ -112,7 +111,7 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
     };
 
     checkAuthAndRedirect();
-  }, [currentPageName, navigate]);
+  }, [currentPageName]);
 
   // Inject critical iOS meta tags + force bg color as early as possible
   useEffect(() => {
