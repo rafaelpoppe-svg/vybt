@@ -10,9 +10,6 @@ import {
   Lock, Camera, ShieldCheck
 } from 'lucide-react';
 import VibeTag from '../components/common/VibeTag';
-import PartyTag from '../components/common/PartyTag';
-import BottomNav from '../components/common/BottomNav';
-import VerificationBadge from '../components/profile/VerificationBadge';
 import { notifyFriendRequest } from '../components/notifications/NotificationTriggers';
 import ReportUserModal from '../components/user/ReportUserModal';
 import BlockUserModal from '../components/user/BlockUserModal';
