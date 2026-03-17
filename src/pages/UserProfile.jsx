@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   ChevronLeft, MapPin, Camera, Loader2, MessageCircle, Check, 
-  UserPlus, ShieldCheck, Lock, Music2, Grid3X3, Ban, Flag, MoreVertical
+  UserPlus, ShieldCheck, Lock, Music2, Grid3X3, Ban, Flag, MoreVertical, PartyPopper
 } from 'lucide-react';
 import VibeTag from '../components/common/VibeTag';
 import PartyTag from '../components/common/PartyTag';
