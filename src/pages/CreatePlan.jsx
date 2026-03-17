@@ -154,12 +154,13 @@ export default function CreatePlan() {
   };
 
   const canProceed = () => {
-    if (step === 1) return !!data.title;
-    if (step === 2) return !!data.date;
-    if (step === 3) return !!data.time && !!data.end_time && isEndTimeValid(data.time, data.end_time);
-    if (step === 4) return !!data.location_address && !!data.city;
-    if (step === 5) return data.tags.length >= 1;
-    if (step === 6) return true; // Privacy is always optional/valid
+    if (step === 1) return true; // community step always ok
+    if (step === 2) return !!data.title;
+    if (step === 3) return !!data.date;
+    if (step === 4) return !!data.time && !!data.end_time && isEndTimeValid(data.time, data.end_time);
+    if (step === 5) return !!data.location_address && !!data.city;
+    if (step === 6) return data.tags.length >= 1;
+    if (step === 7) return true;
     return false;
   };
 
