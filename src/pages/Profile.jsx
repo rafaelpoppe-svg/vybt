@@ -442,7 +442,15 @@ export default function Profile() {
   );
 }
 
-function StatCol({ value, label }) {
+function StatCol({ value, label, onClick, accent }) {
+  if (onClick) {
+    return (
+      <motion.button whileTap={{ scale: 0.93 }} onClick={onClick} className="flex flex-col items-center">
+        <span className="font-black text-xl leading-tight" style={{ color: accent }}>{value}</span>
+        <span className="text-xs font-semibold" style={{ color: accent }}>{label}</span>
+      </motion.button>
+    );
+  }
   return (
     <div className="flex flex-col items-center">
       <span className="text-white font-black text-xl leading-tight">{value}</span>
