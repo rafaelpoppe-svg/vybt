@@ -119,6 +119,11 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
     document.documentElement.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
     document.body.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
 
+    const root = document.getElementById('root');
+    if (root) {
+      root.style.cssText += ';background:#0b0b0b!important;height:100%!important;min-height:100%!important;';
+    }
+
     // theme-color
     let themeMeta = document.querySelector('meta[name="theme-color"]');
     if (!themeMeta) { themeMeta = document.createElement('meta'); themeMeta.name = 'theme-color'; document.head.prepend(themeMeta); }
