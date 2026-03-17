@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Loader2, X, Check, Trash2, Grid3X3, CalendarDays, MessageCircle, Camera } from 'lucide-react';
+import { Plus, Loader2, X, Check, Trash2, CalendarDays, MessageCircle, Camera, Users } from 'lucide-react';
 import PlanCard from '../components/feed/PlanCard';
 import CommunityChat from '../components/community/CommunityChat';
 import CommunityEditModal from '../components/community/CommunityEditModal';
