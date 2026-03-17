@@ -351,7 +351,7 @@ export default function CommunityView() {
                 {/* Active Challenge Banner */}
                 {activeChallenge && (
                   <div className="mb-4">
-                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setActiveTab('activity')} />
+                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setShowChallengeDetail(true)} />
                   </div>
                 )}
                 {/* Live stories section */}
