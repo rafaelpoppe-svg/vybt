@@ -197,10 +197,9 @@ export default function Home() {
     if (activeSort === 'foryou') {
       const recIds = recommendedPlans.map(r => r.id);
       result = [...result.filter(p => recIds.includes(p.id)), ...result.filter(p => !recIds.includes(p.id))];
-    } else if (activeSort === 'hot') {
-      result = result.filter(p => p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted || p.status === 'happening');
-    } else if (activeSort === 'members') {
-      result = result.sort((a, b) => allParticipants.filter(p => p.plan_id === b.id).length - allParticipants.filter(p => p.plan_id === a.id).length);
+    } else if (activeSort === 'myplans') {
+      const myIds = myParticipations.map(p => p.plan_id);
+      result = result.filter(p => myIds.includes(p.id));
     }
 
     // Tag filter
