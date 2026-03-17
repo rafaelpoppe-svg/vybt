@@ -469,6 +469,26 @@ export default function CreatePlan() {
           <p className="text-gray-400 mt-1">Give it a vibe! What's this plan about?</p>
         </div>
 
+        {/* Community badge — show when plan is linked to a community */}
+        {communityId && (() => {
+          const c = myCommunities.find(c => c.id === communityId);
+          if (!c) return null;
+          return (
+            <div className="flex items-center gap-3 px-4 py-3 rounded-2xl border" style={{ borderColor: `${c.theme_color || '#00c6d2'}50`, background: `${c.theme_color || '#00c6d2'}12` }}>
+              <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0">
+                {c.cover_image
+                  ? <img src={c.cover_image} alt="" className="w-full h-full object-cover" />
+                  : <div className="w-full h-full flex items-center justify-center text-lg" style={{ background: `${c.theme_color || '#00c6d2'}44` }}>⭐</div>}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-gray-500 mb-0.5">Adding to community</p>
+                <p className="text-white font-bold truncate">{c.name}</p>
+              </div>
+              <span className="text-lg">⭐</span>
+            </div>
+          );
+        })()}
+
         <div>
           <label className="block text-gray-400 text-sm mb-2">Plan Name *</label>
           <Input
