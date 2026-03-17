@@ -82,11 +82,16 @@ export default function CommunityView() {
     queryFn: async () => {
       const planIds = (await base44.entities.PartyPlan.filter({ community_id: communityId })).map(p => p.id);
       if (!planIds.length) return [];
-      const all = await base44.entities.ExperienceStory.list('-created_date', 100);
-      const now = new Date();
-      return all.filter(s => planIds.includes(s.plan_id) && (s.expires_at ? new Date(s.expires_at) > now : (now - new Date(s.created_date)) < 24 * 3600 * 1000));
+      const all = await base44.entities.ExperienceStory.list('-created_date', 200);
+      return all.filter(s => planIds.includes(s.plan_id));
     },
     enabled: !!communityId,
+  });
+
+  // Live stories (last 24h) for the Stories tab active badge
+  const liveStories = stories.filter(s => {
+    const now = new Date();
+    return s.expires_at ? new Date(s.expires_at) > now : (now - new Date(s.created_date)) < 24 * 3600 * 1000;
   });
 
   const { data: userProfiles = [] } = useQuery({
