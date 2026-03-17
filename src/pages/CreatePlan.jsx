@@ -729,7 +729,7 @@ export default function CreatePlan() {
       <div className="p-6 border-t border-gray-900 bg-[#0b0b0b]">
         <motion.button
           whileTap={{ scale: 0.97 }}
-          onClick={step < 6 ? goNext : handleSubmit}
+          onClick={step < 7 ? goNext : handleSubmit}
           disabled={!canProceed() || loading}
           className={`w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
             canProceed() && !loading
@@ -739,7 +739,7 @@ export default function CreatePlan() {
         >
           {loading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
-          ) : step < 6 ? (
+          ) : step < 7 ? (
             <>Next <ArrowRight className="w-5 h-5" /></>
           ) : (
             <>Create Plan 🔥</>
