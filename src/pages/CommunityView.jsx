@@ -12,6 +12,8 @@ import StoryViewOverlay from '../components/story/StoryViewOverlay';
 import InviteToCommunityModal from '../components/community/InviteToCommunityModal';
 import CommunityHero from '../components/community/CommunityHero';
 import CommunityAbout from '../components/community/CommunityAbout';
+import CommunityStoriesGallery from '../components/community/CommunityStoriesGallery';
+import CommunityMembersSpotlight from '../components/community/CommunityMembersSpotlight';
 
 const TABS = [
   { key: 'plans', label: 'Plans', icon: <CalendarDays className="w-4 h-4" /> },
