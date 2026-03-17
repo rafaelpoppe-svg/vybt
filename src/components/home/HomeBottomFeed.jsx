@@ -28,7 +28,7 @@ function InfoPill({ icon: Icon, label, accent }) {
   );
 }
 
-function PlanFeedCard({ plan, participantCount, communityName, onClick }) {
+function PlanFeedCard({ plan, participantCount, communityName, communityColor, onClick }) {
   const accent = accentOf(plan);
   const isHappening = isLiveNow(plan);
   const isCommunityPlan = !!plan.community_id;
@@ -64,10 +64,14 @@ function PlanFeedCard({ plan, participantCount, communityName, onClick }) {
         {/* Type badge — top left */}
          <div
            className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
-           style={{
-             background: isCommunityPlan ? 'rgba(84,43,155,0.8)' : 'rgba(0,0,0,0.65)',
-             border: isCommunityPlan ? '1px solid #542b9b88' : '1px solid rgba(255,255,255,0.15)',
-             color: isCommunityPlan ? '#e0c9ff' : '#ccc',
+           style={isCommunityPlan ? {
+             background: `${communityColor || '#542b9b'}cc`,
+             border: `1px solid ${communityColor || '#542b9b'}88`,
+             color: '#fff',
+           } : {
+             background: 'rgba(0,0,0,0.65)',
+             border: '1px solid rgba(255,255,255,0.15)',
+             color: '#ccc',
            }}
          >
            {isCommunityPlan && badgeLabel && <><Building2 className="w-2.5 h-2.5" /> {badgeLabel}</> || <>🎯 Individual</>}
@@ -326,6 +330,11 @@ export default function HomeBottomFeed({
                       communityName={
                         item.data.community_id
                           ? communities.find(c => c.id === item.data.community_id)?.name
+                          : null
+                      }
+                      communityColor={
+                        item.data.community_id
+                          ? communities.find(c => c.id === item.data.community_id)?.theme_color
                           : null
                       }
                       onClick={() => onPlanClick(item.data)}
