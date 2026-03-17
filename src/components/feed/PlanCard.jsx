@@ -46,7 +46,7 @@ const reasonLabels = {
   location: 'Near you'
 };
 
-export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false, currentUserId }) {
+export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false, currentUserId, community }) {
   const themeColor = plan.theme_color || '#542b9b';
   const { isLive, timeLeft } = useLiveCountdown(plan);
   const isHappening = isLive;
