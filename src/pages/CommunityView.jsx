@@ -120,6 +120,9 @@ export default function CommunityView() {
       base44.entities.Community.update(communityId, { member_count: (community?.member_count || 0) + 1 });
       queryClient.invalidateQueries(['communityMembers', communityId]);
       queryClient.invalidateQueries(['community', communityId]);
+      // Show guide to new members
+      const storageKey = `community_guide_${communityId}`;
+      if (!localStorage.getItem(storageKey)) setShowNewMemberGuide(true);
     },
   });
 
