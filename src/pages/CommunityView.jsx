@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -18,7 +18,7 @@ import CommunityActivityFeed from '../components/community/CommunityActivityFeed
 import CommunityNewMemberGuide from '../components/community/CommunityNewMemberGuide';
 import CommunityChallengeBanner from '../components/community/CommunityChallengeBanner';
 import CommunityCreateChallengeModal from '../components/community/CommunityCreateChallengeModal';
-import CommunityChallengeDetail from '../components/community/CommunityChallengeDetail';
+import CommunityChallengeDetail from '../components/community/CommunityChallengeDetail.jsx';
 
 const TABS = [
   { key: 'plans', label: 'Plans', icon: <CalendarDays className="w-4 h-4" /> },
