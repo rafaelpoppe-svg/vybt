@@ -8,6 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 
+function getStatusBarPadding() {
+  const ua = navigator.userAgent;
+  const isAndroid = /android/i.test(ua);
+  if (isAndroid) {
+    return '0px';
+  }
+  return 'env(safe-area-inset-top, 0px)';
+}
+
 function LayoutContent({ children, currentPageName, profileTheme }) {
   const [authChecked, setAuthChecked] = useState(false);
   const isAuthenticatedRef = React.useRef(false);
@@ -189,7 +198,7 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
         touchAction: 'pan-y pinch-zoom',
         overscrollBehavior: 'none',
         WebkitOverflowScrolling: 'touch',
-        paddingTop: 'env(safe-area-inset-top, 0px)',
+        paddingTop: getStatusBarPadding(),
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}>
         <style>{`
