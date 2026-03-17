@@ -298,63 +298,6 @@ export default function Profile() {
           </motion.div>
         )}
 
-        {/* Plans */}
-        {activeTab === 'plans' && (
-          <motion.div key="plans" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4 space-y-3">
-            {activePlans.length === 0 && pastPlans.length === 0 ? (
-              <EmptyState emoji="🎉" text="No plans yet" subtext="Join a plan to see it here" />
-            ) : (
-              <>
-                {activePlans.length > 0 && (
-                  <>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Upcoming</p>
-                    {activePlans.map(plan => (
-                      <PlanRow key={plan.id} plan={plan} accent={accent}
-                        onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)} />
-                    ))}
-                  </>
-                )}
-                {pastPlans.length > 0 && (
-                  <>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mt-4">Past</p>
-                    {pastPlans.slice(0, 5).map(plan => (
-                      <PlanRow key={plan.id} plan={plan} accent={accent} past
-                        onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)} />
-                    ))}
-                  </>
-                )}
-              </>
-            )}
-          </motion.div>
-        )}
-
-        {/* Friends */}
-        {activeTab === 'friends' && (
-          <motion.div key="friends" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4">
-            {friendships.length === 0 ? (
-              <EmptyState emoji="👥" text="No friends yet" subtext="Connect with people at plans" />
-            ) : (
-              <div className="grid grid-cols-3 gap-2">
-                {friendProfiles.map(fp => (
-                  <motion.button key={fp.user_id} whileTap={{ scale: 0.96 }}
-                    onClick={() => navigate(createPageUrl('UserProfile') + `?id=${fp.user_id}`)}
-                    className="flex flex-col items-center gap-1.5 p-2 rounded-2xl bg-gray-900/60 border border-gray-800 text-center">
-                    {fp.photos?.[0] ? (
-                      <img src={fp.photos[0]} className="w-14 h-14 rounded-xl object-cover" />
-                    ) : (
-                      <div className="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center">
-                        <Users className="w-5 h-5 text-gray-500" />
-                      </div>
-                    )}
-                    <p className="text-xs font-bold text-white truncate w-full px-1">{fp.display_name || 'User'}</p>
-                    {fp.city && <p className="text-[9px] text-gray-500 truncate w-full px-1">{fp.city}</p>}
-                  </motion.button>
-                ))}
-              </div>
-            )}
-          </motion.div>
-        )}
-
         {/* Communities */}
         {activeTab === 'communities' && (
           <motion.div key="communities" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4 space-y-3">
