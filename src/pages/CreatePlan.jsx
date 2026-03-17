@@ -49,15 +49,28 @@ const slideVariants = {
 export default function CreatePlan() {
   const navigate = useNavigate();
   const urlParams = new URLSearchParams(window.location.search);
-  const communityId = urlParams.get('communityId') || null;
-  const [communityName, setCommunityName] = React.useState(null);
+  const communityIdFromUrl = urlParams.get('communityId') || null;
+  const [selectedCommunityId, setSelectedCommunityId] = useState(communityIdFromUrl);
+  const [myCommunities, setMyCommunities] = useState([]);
+  const [loadingCommunities, setLoadingCommunities] = useState(true);
 
   useEffect(() => {
-    if (!communityId) return;
-    base44.entities.Community.filter({ id: communityId }).then(r => {
-      if (r[0]) setCommunityName(r[0].name);
-    }).catch(() => {});
-  }, [communityId]);
+    const load = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return;
+        const memberships = await base44.entities.CommunityMember.filter({ user_id: user.id });
+        if (memberships.length === 0) { setMyCommunities([]); setLoadingCommunities(false); return; }
+        const communities = await base44.entities.Community.list('-created_date', 100);
+        const joined = communities.filter(c => memberships.some(m => m.community_id === c.id) && !c.is_deleted);
+        setMyCommunities(joined);
+      } catch (_) {}
+      setLoadingCommunities(false);
+    };
+    load();
+  }, []);
+
+  const communityId = selectedCommunityId;
   const [step, setStep] = useState(1);
 
   // Layer 2: block creation if user already has a happening plan they created
