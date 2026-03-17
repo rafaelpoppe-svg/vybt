@@ -392,15 +392,18 @@ export default function CommunityView() {
               </motion.div>
             )}
 
-            {/* Chat Tab */}
-            {activeTab === 'chat' && (
-              <motion.div key="chat" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
-                <CommunityChat
-                  communityId={communityId}
+            {/* Activity Tab */}
+            {activeTab === 'activity' && (
+              <motion.div key="activity" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
+                <CommunityActivityFeed
                   community={community}
+                  members={members}
+                  plans={plans}
+                  stories={stories}
+                  profilesMap={profilesMap}
+                  tc={tc}
+                  isAdmin={isAdmin}
                   currentUser={currentUser}
-                  isMember={isMember}
-                  themeColor={tc}
                 />
               </motion.div>
             )}
