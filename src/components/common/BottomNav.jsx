@@ -86,7 +86,7 @@ export default function BottomNav() {
         )}
       </AnimatePresence>
 
-      <nav className="fixed bottom-0 bg-[#0b0b0b]/90 backdrop-blur-2xl border-t border-[#00c6d2]/10"
+      <nav className="fixed bottom-0 bg-[#0b0b0b] backdrop-blur-2xl border-t border-[#00c6d2]/10"
         style={{ left: 0, right: 0, width: '100%', zIndex: 700, paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)' }}
       >
         <div className="flex items-center justify-around px-2 py-2">
