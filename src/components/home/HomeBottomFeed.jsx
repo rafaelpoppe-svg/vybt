@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Users, MapPin, Calendar, Clock, ChevronRight, Flame, Sparkles, Building2 } from 'lucide-react';
+import { Users, MapPin, Calendar, Clock, Flame, Sparkles, Building2, Ticket, UserCheck, CalendarDays } from 'lucide-react';
 import { format } from 'date-fns';
 
 const isLiveNow = (p) => {
@@ -19,71 +19,68 @@ const isLiveNow = (p) => {
 const accentOf = (p) =>
   p.is_highlighted ? '#a855f7' : isLiveNow(p) ? '#f97316' : p.is_on_fire ? '#ef4444' : p.theme_color || '#00c6d2';
 
+function InfoPill({ icon: Icon, label, accent }) {
+  return (
+    <div className="flex items-center gap-1 text-gray-300 text-xs">
+      <Icon className="w-3 h-3 flex-shrink-0" style={{ color: accent }} />
+      <span>{label}</span>
+    </div>
+  );
+}
+
 function PlanFeedCard({ plan, participantCount, communityName, onClick }) {
   const accent = accentOf(plan);
   const isHappening = isLiveNow(plan);
   const isCommunityPlan = !!plan.community_id;
 
   let dateLabel = '';
-  try {
-    dateLabel = plan.date ? format(new Date(plan.date), 'EEE, MMM d') : '';
-  } catch (_) {}
+  try { dateLabel = plan.date ? format(new Date(plan.date), 'EEE, MMM d') : ''; } catch (_) {}
+
+  const priceLabel = plan.price != null
+    ? plan.price === 0 ? 'Free' : `€${plan.price}`
+    : null;
 
   return (
     <motion.button
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="flex-shrink-0 w-full snap-start rounded-2xl overflow-hidden text-left relative"
-      style={{
-        border: `1px solid ${accent}44`,
-        background: 'rgba(255,255,255,0.04)',
-        minHeight: 180,
-      }}
+      className="w-full rounded-2xl overflow-hidden text-left relative"
+      style={{ border: `1px solid ${accent}44`, background: 'rgba(255,255,255,0.04)' }}
     >
-      {/* Cover image or gradient */}
-      <div className="relative w-full h-44">
+      {/* Cover */}
+      <div className="relative w-full" style={{ height: 200 }}>
         {plan.cover_image ? (
           <img src={plan.cover_image} className="w-full h-full object-cover" alt="" />
         ) : (
-          <div
-            className="w-full h-full flex items-center justify-center text-5xl"
-            style={{ background: `linear-gradient(135deg, #1a0a2e, ${accent}88)` }}
-          >
+          <div className="w-full h-full flex items-center justify-center text-6xl"
+            style={{ background: `linear-gradient(135deg, #1a0a2e, ${accent}88)` }}>
             {isCommunityPlan ? '⭐' : '🎉'}
           </div>
         )}
-        {/* Gradient overlay bottom */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/20 to-transparent" />
 
         {/* Type badge — top left */}
         <div
           className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
           style={{
-            background: isCommunityPlan ? 'rgba(84,43,155,0.75)' : 'rgba(0,0,0,0.6)',
+            background: isCommunityPlan ? 'rgba(84,43,155,0.8)' : 'rgba(0,0,0,0.65)',
             border: isCommunityPlan ? '1px solid #542b9b88' : '1px solid rgba(255,255,255,0.15)',
             color: isCommunityPlan ? '#e0c9ff' : '#ccc',
           }}
         >
-          {isCommunityPlan ? (
-            <><Building2 className="w-2.5 h-2.5" /> Community</>
-          ) : (
-            <>🎯 Individual</>
-          )}
+          {isCommunityPlan ? <><Building2 className="w-2.5 h-2.5" /> Community</> : <>🎯 Individual</>}
         </div>
 
-        {/* Live / On Fire badge — top right */}
+        {/* Status badges — top right */}
         <div className="absolute top-3 right-3 flex flex-col items-end gap-1">
           {isHappening && (
-            <motion.div
-              animate={{ opacity: [1, 0.5, 1] }}
-              transition={{ repeat: Infinity, duration: 1 }}
-              className="flex items-center gap-1 bg-orange-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full"
-            >
+            <motion.div animate={{ opacity: [1, 0.5, 1] }} transition={{ repeat: Infinity, duration: 1 }}
+              className="flex items-center gap-1 bg-orange-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
               ● LIVE
             </motion.div>
           )}
           {plan.is_highlighted && (
-            <div className="flex items-center gap-1 bg-purple-500/80 text-white text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur">
+            <div className="flex items-center gap-1 bg-purple-600/80 text-white text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur">
               <Sparkles className="w-2.5 h-2.5" /> Featured
             </div>
           )}
@@ -93,57 +90,46 @@ function PlanFeedCard({ plan, participantCount, communityName, onClick }) {
             </div>
           )}
         </div>
+
+        {/* Price pill — bottom right of image */}
+        {priceLabel && (
+          <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full backdrop-blur-md text-xs font-bold"
+            style={{ background: plan.price === 0 ? 'rgba(34,197,94,0.85)' : `${accent}cc`, color: '#fff' }}>
+            <Ticket className="w-3 h-3" /> {priceLabel}
+          </div>
+        )}
       </div>
 
       {/* Content */}
-      <div className="p-4 -mt-6 relative z-10">
-        {/* Community name */}
+      <div className="px-4 pt-3 pb-4">
         {communityName && (
-          <p className="text-[10px] font-bold mb-1" style={{ color: accent }}>
-            ⭐ {communityName}
-          </p>
+          <p className="text-[10px] font-bold mb-1" style={{ color: accent }}>⭐ {communityName}</p>
+        )}
+        <h3 className="text-white font-bold text-xl leading-tight mb-3">{plan.title}</h3>
+
+        {plan.description && (
+          <p className="text-gray-400 text-xs mb-3 line-clamp-2">{plan.description}</p>
         )}
 
-        {/* Title */}
-        <h3 className="text-white font-bold text-lg leading-tight mb-2">{plan.title}</h3>
-
-        {/* Meta info row */}
-        <div className="flex flex-wrap gap-x-4 gap-y-1 mb-2">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-3">
           {plan.location_address && (
-            <div className="flex items-center gap-1 text-gray-400 text-xs">
-              <MapPin className="w-3 h-3 flex-shrink-0" style={{ color: accent }} />
-              <span className="truncate max-w-[160px]">{plan.location_address}</span>
-            </div>
+            <InfoPill icon={MapPin} label={plan.location_address} accent={accent} />
           )}
-          {dateLabel && (
-            <div className="flex items-center gap-1 text-gray-400 text-xs">
-              <Calendar className="w-3 h-3 flex-shrink-0" style={{ color: accent }} />
-              <span>{dateLabel}</span>
-            </div>
-          )}
+          {dateLabel && <InfoPill icon={Calendar} label={dateLabel} accent={accent} />}
           {plan.time && (
-            <div className="flex items-center gap-1 text-gray-400 text-xs">
-              <Clock className="w-3 h-3 flex-shrink-0" style={{ color: accent }} />
-              <span>{plan.time}{plan.end_time ? ` — ${plan.end_time}` : ''}</span>
-            </div>
+            <InfoPill icon={Clock} label={`${plan.time}${plan.end_time ? ` — ${plan.end_time}` : ''}`} accent={accent} />
           )}
-          <div className="flex items-center gap-1 text-gray-400 text-xs">
-            <Users className="w-3 h-3 flex-shrink-0" style={{ color: accent }} />
-            <span>{participantCount} going</span>
-          </div>
+          <InfoPill icon={Users} label={`${participantCount} going`} accent={accent} />
+          {plan.min_age != null && (
+            <InfoPill icon={UserCheck} label={`${plan.min_age}+ years`} accent={accent} />
+          )}
         </div>
 
-        {/* Tags */}
         {plan.tags?.length > 0 && (
           <div className="flex gap-1.5 flex-wrap">
             {plan.tags.map((tag, i) => (
-              <span
-                key={i}
-                className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                style={{ background: `${accent}22`, color: accent }}
-              >
-                {tag}
-              </span>
+              <span key={i} className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                style={{ background: `${accent}22`, color: accent }}>{tag}</span>
             ))}
           </div>
         )}
@@ -152,70 +138,71 @@ function PlanFeedCard({ plan, participantCount, communityName, onClick }) {
   );
 }
 
-function CommunityFeedCard({ community, memberCount, onClick }) {
+function CommunityFeedCard({ community, memberCount, friendsInCommunity, lastPlan, onClick }) {
   const accent = community.theme_color || '#00c6d2';
+
+  let lastPlanLabel = '';
+  try {
+    if (lastPlan?.date) lastPlanLabel = format(new Date(lastPlan.date), 'EEE, MMM d');
+  } catch (_) {}
 
   return (
     <motion.button
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="flex-shrink-0 w-full snap-start rounded-2xl overflow-hidden text-left relative"
-      style={{
-        border: `1px solid ${accent}44`,
-        background: 'rgba(255,255,255,0.04)',
-      }}
+      className="w-full rounded-2xl overflow-hidden text-left relative"
+      style={{ border: `1px solid ${accent}44`, background: 'rgba(255,255,255,0.04)' }}
     >
       {/* Cover */}
-      <div className="relative w-full h-44">
+      <div className="relative w-full" style={{ height: 200 }}>
         {community.cover_image ? (
           <img src={community.cover_image} className="w-full h-full object-cover" alt="" />
         ) : (
-          <div
-            className="w-full h-full flex items-center justify-center text-5xl"
-            style={{ background: `linear-gradient(135deg, #1a0a2e, ${accent}88)` }}
-          >
-            ⭐
-          </div>
+          <div className="w-full h-full flex items-center justify-center text-6xl"
+            style={{ background: `linear-gradient(135deg, #1a0a2e, ${accent}88)` }}>⭐</div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/20 to-transparent" />
 
-        {/* Community type badge */}
-        <div
-          className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
-          style={{ background: 'rgba(84,43,155,0.75)', border: '1px solid #542b9b88', color: '#e0c9ff' }}
-        >
+        {/* Community badge */}
+        <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
+          style={{ background: 'rgba(84,43,155,0.8)', border: '1px solid #542b9b88', color: '#e0c9ff' }}>
           <Building2 className="w-2.5 h-2.5" /> Community
+        </div>
+
+        {/* Member count pill */}
+        <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full backdrop-blur-md text-xs font-bold"
+          style={{ background: `${accent}cc`, color: '#fff' }}>
+          <Users className="w-3 h-3" /> {memberCount}
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-4 -mt-6 relative z-10">
-        <h3 className="text-white font-bold text-lg leading-tight mb-1">{community.name}</h3>
+      <div className="px-4 pt-3 pb-4">
+        <h3 className="text-white font-bold text-xl leading-tight mb-1">{community.name}</h3>
         {community.description && (
-          <p className="text-gray-400 text-xs mb-2 line-clamp-2">{community.description}</p>
+          <p className="text-gray-400 text-xs mb-3 line-clamp-2">{community.description}</p>
         )}
-        <div className="flex gap-4">
-          {community.city && (
-            <div className="flex items-center gap-1 text-gray-400 text-xs">
-              <MapPin className="w-3 h-3" style={{ color: accent }} />
-              <span>{community.city}</span>
-            </div>
+
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-3">
+          {community.city && <InfoPill icon={MapPin} label={community.city} accent={accent} />}
+          <InfoPill icon={Users} label={`${memberCount} members`} accent={accent} />
+          {friendsInCommunity > 0 && (
+            <InfoPill icon={UserCheck} label={`${friendsInCommunity} friend${friendsInCommunity > 1 ? 's' : ''} here`} accent={accent} />
           )}
-          <div className="flex items-center gap-1 text-gray-400 text-xs">
-            <Users className="w-3 h-3" style={{ color: accent }} />
-            <span>{memberCount} members</span>
-          </div>
+          {lastPlan && (
+            <InfoPill
+              icon={CalendarDays}
+              label={`Last: ${lastPlan.title?.slice(0, 16)}${lastPlan.title?.length > 16 ? '…' : ''} · ${lastPlanLabel}`}
+              accent={accent}
+            />
+          )}
         </div>
+
         {community.party_types?.length > 0 && (
-          <div className="flex gap-1.5 flex-wrap mt-2">
+          <div className="flex gap-1.5 flex-wrap">
             {community.party_types.map((tag, i) => (
-              <span
-                key={i}
-                className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                style={{ background: `${accent}22`, color: accent }}
-              >
-                {tag}
-              </span>
+              <span key={i} className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                style={{ background: `${accent}22`, color: accent }}>{tag}</span>
             ))}
           </div>
         )}
@@ -231,20 +218,20 @@ export default function HomeBottomFeed({
   memberCommunityIds = [],
   myParticipations = [],
   recommendedPlans = [],
+  friendIds = [],
+  communityMembers = [],
   onPlanClick,
 }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('foryou');
 
-  // For You: highlighted first, then recommended, then hot/live
   const forYouItems = (() => {
     const active = plans.filter(p => !['ended', 'terminated', 'voting', 'renewed'].includes(p.status));
     const highlighted = active.filter(p => p.is_highlighted);
     const recIds = recommendedPlans.map(r => r.id);
     const recommended = active.filter(p => !p.is_highlighted && recIds.includes(p.id));
     const rest = active.filter(p => !p.is_highlighted && !recIds.includes(p.id))
-      .filter(p => p.is_on_fire || (p.recent_joins >= 10) || isLiveNow(p));
-    // Also add non-member communities for discovery
+      .filter(p => p.is_on_fire || isLiveNow(p));
     const discoverCommunities = communities.filter(c => !memberCommunityIds.includes(c.id) && !c.is_deleted && !c.is_private);
     return [
       ...highlighted.map(p => ({ type: 'plan', data: p })),
@@ -254,7 +241,6 @@ export default function HomeBottomFeed({
     ];
   })();
 
-  // My Space: my plans + my communities
   const myPlanIds = myParticipations.map(p => p.plan_id);
   const myPlans = plans.filter(p => myPlanIds.includes(p.id) && !['terminated'].includes(p.status));
   const myCommunities = communities.filter(c => memberCommunityIds.includes(c.id) && !c.is_deleted);
@@ -276,10 +262,27 @@ export default function HomeBottomFeed({
     return acc;
   }, {});
 
+  // Friends per community
+  const friendsPerCommunity = communityMembers.reduce((acc, m) => {
+    if (friendIds.includes(m.user_id)) {
+      acc[m.community_id] = (acc[m.community_id] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  // Last plan per community
+  const lastPlanByCommunity = plans.reduce((acc, p) => {
+    if (!p.community_id) return acc;
+    if (!acc[p.community_id] || p.date > acc[p.community_id].date) {
+      acc[p.community_id] = p;
+    }
+    return acc;
+  }, {});
+
   return (
-    <section className="mb-5">
+    <section className="mb-5 px-4">
       {/* Tab bar */}
-      <div className="flex items-center gap-1 bg-white/5 rounded-xl p-1 mx-4 mb-4 w-fit">
+      <div className="flex items-center gap-1 bg-white/5 rounded-xl p-1 mb-4 w-fit">
         {TABS.map(tab => (
           <motion.button
             key={tab.id}
@@ -300,28 +303,20 @@ export default function HomeBottomFeed({
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
         >
           {items.length === 0 ? (
-            <div className="text-center py-10 text-gray-600 text-sm px-4">
+            <div className="text-center py-10 text-gray-600 text-sm">
               {activeTab === 'myspace' ? "You haven't joined any plans or communities yet" : 'Nothing to show yet'}
             </div>
           ) : (
-            /* Horizontal snap-scroll feed */
-            <div
-              className="flex gap-3 overflow-x-auto scrollbar-hide px-4 pb-2 snap-x snap-mandatory"
-              data-hscroll="true"
-              style={{ scrollSnapType: 'x mandatory' }}
-            >
-              {items.map((item, i) => (
-                <div
-                  key={`${item.type}-${item.data.id}`}
-                  className="flex-shrink-0 snap-start"
-                  style={{ width: 'calc(85vw)', maxWidth: 360 }}
-                >
+            /* Vertical stacked feed — full width, one card per view */
+            <div className="flex flex-col gap-4">
+              {items.map((item) => (
+                <div key={`${item.type}-${item.data.id}`}>
                   {item.type === 'plan' ? (
                     <PlanFeedCard
                       plan={item.data}
@@ -337,6 +332,8 @@ export default function HomeBottomFeed({
                     <CommunityFeedCard
                       community={item.data}
                       memberCount={item.data.member_count || 0}
+                      friendsInCommunity={friendsPerCommunity[item.data.id] || 0}
+                      lastPlan={lastPlanByCommunity[item.data.id] || null}
                       onClick={() => navigate(createPageUrl('CommunityView') + `?id=${item.data.id}`)}
                     />
                   )}
