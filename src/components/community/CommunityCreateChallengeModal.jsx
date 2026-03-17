@@ -49,6 +49,16 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
         plan_id: form.plan_id || undefined,
         submissions_count: 0,
       });
+      // Notify all community members
+      const members = await base44.entities.CommunityMember.filter({ community_id: communityId });
+      await Promise.all(members.map(m =>
+        base44.entities.Notification.create({
+          user_id: m.user_id,
+          type: 'plan_highlighted',
+          title: `${form.emoji} New Challenge: ${form.title}`,
+          message: form.description || `A new ${form.type} challenge just launched! Post your story to participate.`,
+        })
+      ));
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['communityChallenge', communityId]);
