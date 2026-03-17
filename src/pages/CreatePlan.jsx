@@ -388,6 +388,15 @@ export default function CreatePlan() {
           <h2 className="text-2xl font-black text-white">Name your plan</h2>
           <p className="text-gray-400 mt-1">Give it a vibe! What's this plan about?</p>
         </div>
+        {communityId && communityName && (
+          <div className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-[#00c6d2]/30 bg-[#00c6d2]/10">
+            <span className="text-lg">⭐</span>
+            <div>
+              <p className="text-xs text-gray-400">Creating inside community</p>
+              <p className="text-white font-bold text-sm">{communityName}</p>
+            </div>
+          </div>
+        )}
 
         <div>
           <label className="block text-gray-400 text-sm mb-2">Plan Name *</label>
