@@ -422,7 +422,7 @@ export default function CommunityView() {
                 {/* Active challenge or create button for admins */}
                 {activeChallenge ? (
                   <div className="mb-4">
-                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => {}} />
+                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setShowChallengeDetail(true)} />
                     {isAdmin && (
                       <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCreateChallenge(true)}
                         className="w-full mt-2 py-2.5 rounded-xl text-xs font-bold border border-white/10 text-gray-400">
