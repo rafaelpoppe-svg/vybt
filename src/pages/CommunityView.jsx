@@ -504,6 +504,20 @@ export default function CommunityView() {
       <StoryViewOverlay storyId={overlayStoryId} onClose={() => setOverlayStoryId(null)} />
 
       <AnimatePresence>
+        {showChallengeDetail && activeChallenge && (
+          <CommunityChallengeDetail
+            challenge={activeChallenge}
+            communityId={communityId}
+            profilesMap={profilesMap}
+            isAdmin={isAdmin}
+            currentUser={currentUser}
+            tc={tc}
+            onClose={() => setShowChallengeDetail(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
         {showNewMemberGuide && (
           <CommunityNewMemberGuide
             communityId={communityId}
