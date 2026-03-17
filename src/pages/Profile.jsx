@@ -181,7 +181,7 @@ export default function Profile() {
           {/* Stats */}
           <div className="flex-1 grid grid-cols-3 gap-1 text-center">
             <StatCol value={myPlans.length} label="Plans" />
-            <StatCol value={friendships.length} label="Friends" />
+            <StatCol value={friendships.length} label="Friends" onClick={() => setShowFriends(true)} accent={accent} />
             <StatCol value={myStories.length} label="Stories" />
           </div>
         </div>
