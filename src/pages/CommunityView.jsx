@@ -417,6 +417,27 @@ export default function CommunityView() {
             {/* Activity Tab */}
             {activeTab === 'activity' && (
               <motion.div key="activity" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
+                {/* Active challenge or create button for admins */}
+                {activeChallenge ? (
+                  <div className="mb-4">
+                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => {}} />
+                    {isAdmin && (
+                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCreateChallenge(true)}
+                        className="w-full mt-2 py-2.5 rounded-xl text-xs font-bold border border-white/10 text-gray-400">
+                        Replace with new challenge
+                      </motion.button>
+                    )}
+                  </div>
+                ) : isAdmin && (
+                  <motion.button
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setShowCreateChallenge(true)}
+                    className="w-full mb-4 py-3.5 rounded-2xl flex items-center justify-center gap-2 font-bold text-sm border"
+                    style={{ background: `${tc}15`, borderColor: `${tc}40`, color: tc }}
+                  >
+                    🏆 Launch a Story Challenge
+                  </motion.button>
+                )}
                 <CommunityActivityFeed
                   community={community}
                   members={members}
