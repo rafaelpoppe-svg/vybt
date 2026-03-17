@@ -172,6 +172,19 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           )}
         </div>
         
+        {/* Community badge */}
+        {community && plan.community_id && (
+          <div className="absolute top-3 left-3">
+            <div
+              className="flex items-center gap-1 px-2 py-1 rounded-full backdrop-blur-sm border text-[10px] font-bold text-white"
+              style={{ background: `${community.theme_color || '#00c6d2'}cc`, borderColor: `${community.theme_color || '#00c6d2'}50` }}
+            >
+              <span>⭐</span>
+              <span className="max-w-[80px] truncate">{community.name}</span>
+            </div>
+          </div>
+        )}
+
         {matchReasons && matchReasons.length > 0 && (
           <div className="absolute top-3 left-3 flex flex-wrap gap-1">
             {matchReasons.slice(0, 2).map((reason) => {
