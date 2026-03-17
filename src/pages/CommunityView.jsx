@@ -40,6 +40,7 @@ export default function CommunityView() {
   const [overlayStoryId, setOverlayStoryId] = useState(null);
   const [showNewMemberGuide, setShowNewMemberGuide] = useState(false);
   const [showCreateChallenge, setShowCreateChallenge] = useState(false);
+  const [showChallengeDetail, setShowChallengeDetail] = useState(false);
 
   const scrollRef = useRef(null);
   const touchStartX = useRef(null);
