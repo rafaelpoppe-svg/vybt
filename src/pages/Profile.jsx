@@ -206,11 +206,10 @@ export default function Profile() {
             <p className="text-sm text-gray-300 mt-1.5 leading-relaxed">{profile.bio}</p>
           )}
 
-          {/* Vibe + Party tags */}
-          {(profile.vibes?.length > 0 || profile.party_types?.length > 0) && (
+          {/* Vibes */}
+          {profile.vibes?.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1.5">
-              {profile.vibes?.map(vibe => <VibeTag key={vibe} vibe={vibe} size="sm" />)}
-              {profile.party_types?.map(tag => <PartyTag key={tag} tag={tag} size="sm" />)}
+              {profile.vibes.map(vibe => <VibeTag key={vibe} vibe={vibe} size="sm" />)}
             </div>
           )}
         </div>
