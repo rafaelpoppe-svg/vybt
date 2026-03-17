@@ -1,16 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, Settings, Plus, MessageCircle, Users, Image, Lock, Unlock, Loader2, X, Check, Trash2, UserPlus, MoreVertical, Flag } from 'lucide-react';
+import { Plus, Loader2, X, Check, Trash2 } from 'lucide-react';
 import PlanCard from '../components/feed/PlanCard';
-import BottomNav from '../components/common/BottomNav';
 import CommunityChat from '../components/community/CommunityChat';
 import CommunityEditModal from '../components/community/CommunityEditModal';
 import StoryViewOverlay from '../components/story/StoryViewOverlay';
 import InviteToCommunityModal from '../components/community/InviteToCommunityModal';
+import CommunityHero from '../components/community/CommunityHero';
+import CommunityAbout from '../components/community/CommunityAbout';
+import CommunityActivityFeed from '../components/community/CommunityActivityFeed';
+
+const TABS = [
+  { key: 'today', label: "Today", emoji: '🔥' },
+  { key: 'upcoming', label: 'Upcoming', emoji: '📅' },
+  { key: 'stories', label: 'Stories', emoji: '📸' },
+  { key: 'chat', label: 'Chat', emoji: '💬' },
+];
 
 export default function CommunityView() {
   const navigate = useNavigate();
@@ -19,16 +28,45 @@ export default function CommunityView() {
   const communityId = urlParams.get('id');
 
   const [currentUser, setCurrentUser] = useState(null);
-  const [activeTab, setActiveTab] = useState('today'); // today | upcoming | stories | chat
+  const [activeTab, setActiveTab] = useState('today');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [overlayStoryId, setOverlayStoryId] = useState(null);
-  const [showReportMenu, setShowReportMenu] = useState(false);
+  const [tabsSticky, setTabsSticky] = useState(false);
+
+  const scrollRef = useRef(null);
+  const tabBarRef = useRef(null);
+  const heroRef = useRef(null);
+  const touchStartX = useRef(null);
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
+
+  // Sticky tabs on scroll
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const handler = () => {
+      const heroH = heroRef.current?.offsetHeight || 280;
+      setTabsSticky(el.scrollTop > heroH - 60);
+    };
+    el.addEventListener('scroll', handler, { passive: true });
+    return () => el.removeEventListener('scroll', handler);
+  }, []);
+
+  // Swipe gesture between tabs
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(dx) < 50) return;
+    const idx = TABS.findIndex(t => t.key === activeTab);
+    if (dx < 0 && idx < TABS.length - 1) setActiveTab(TABS[idx + 1].key);
+    if (dx > 0 && idx > 0) setActiveTab(TABS[idx - 1].key);
+    touchStartX.current = null;
+  };
 
   const { data: community, isLoading: loadingCommunity } = useQuery({
     queryKey: ['community', communityId],
@@ -94,7 +132,6 @@ export default function CommunityView() {
   const myMembership = members.find(m => m.user_id === currentUser?.id);
   const isAdmin = myMembership?.role === 'admin' || currentUser?.role === 'admin';
   const isMember = !!myMembership;
-
   const tc = community?.theme_color || '#00c6d2';
 
   const joinMutation = useMutation({
@@ -116,10 +153,8 @@ export default function CommunityView() {
 
   const deleteMutation = useMutation({
     mutationFn: async () => {
-      // Schedule deletion in 24h, notify members
       const scheduledAt = new Date(Date.now() + 24 * 3600 * 1000).toISOString();
       await base44.entities.Community.update(communityId, { deletion_scheduled_at: scheduledAt });
-      // Notify all members
       for (const m of members) {
         if (m.user_id !== currentUser.id) {
           await base44.entities.Notification.create({
@@ -144,16 +179,8 @@ export default function CommunityView() {
   });
 
   const now = new Date();
-  const todayPlans = plans.filter(p => {
-    if (!p.date) return false;
-    const planDate = new Date(p.date);
-    return planDate.toDateString() === now.toDateString();
-  });
-  const upcomingPlans = plans.filter(p => {
-    if (!p.date) return false;
-    const planDate = new Date(p.date);
-    return planDate > now && planDate.toDateString() !== now.toDateString();
-  });
+  const todayPlans = plans.filter(p => p.date && new Date(p.date).toDateString() === now.toDateString());
+  const upcomingPlans = plans.filter(p => p.date && new Date(p.date) > now && new Date(p.date).toDateString() !== now.toDateString());
 
   const canCreatePlan = () => {
     if (!isMember) return false;
@@ -161,9 +188,7 @@ export default function CommunityView() {
     return true;
   };
 
-  const handleCreatePlan = () => {
-    navigate(createPageUrl('CreatePlan') + `?communityId=${communityId}`);
-  };
+  const handleCreatePlan = () => navigate(createPageUrl('CreatePlan') + `?communityId=${communityId}`);
 
   if (loadingCommunity) {
     return (
@@ -183,187 +208,137 @@ export default function CommunityView() {
     );
   }
 
-  const TABS = [
-    { key: 'today', label: "Today's Plans", emoji: '🔥' },
-    { key: 'upcoming', label: 'Upcoming', emoji: '📅' },
-    { key: 'stories', label: 'Stories', emoji: '📸' },
-    { key: 'chat', label: 'Chat', emoji: '💬' },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#0b0b0b] relative" style={{ paddingBottom: 'max(env(safe-area-inset-bottom,0px), 80px)' }}>
-      {/* Background */}
+    <div
+      ref={scrollRef}
+      data-scroll-root
+      className="min-h-screen bg-[#0b0b0b] overflow-y-auto overflow-x-hidden relative"
+      style={{ paddingBottom: 'max(env(safe-area-inset-bottom,0px), 100px)' }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Background texture */}
       {community.background_image && (
-        <div className="fixed inset-0 z-0 pointer-events-none" style={{ backgroundImage: `url(${community.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.08 }} />
+        <div className="fixed inset-0 z-0 pointer-events-none" style={{ backgroundImage: `url(${community.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.06 }} />
       )}
 
-      {/* Hero */}
       <div className="relative z-10">
-        <div className="relative h-56 overflow-hidden">
-          {community.cover_image
-            ? <img src={community.cover_image} alt="" className="w-full h-full object-cover" />
-            : <div className="w-full h-full flex items-center justify-center text-7xl" style={{ background: `linear-gradient(135deg, ${tc}44, #542b9b66)` }}>⭐</div>}
-          <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 30%, #0b0b0b 100%)` }} />
-
-          {/* Back */}
-          <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4" style={{ paddingTop: 'max(env(safe-area-inset-top,0px),16px)' }}>
-            <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-              <ChevronLeft className="w-5 h-5 text-white" />
-            </motion.button>
-            <div className="flex gap-2">
-              {isMember && (
-                <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowInviteModal(true)} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-                  <UserPlus className="w-5 h-5 text-white" />
-                </motion.button>
-              )}
-              {isAdmin && (
-                <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowEditModal(true)} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-                  <Settings className="w-5 h-5 text-white" />
-                </motion.button>
-              )}
-              {!isAdmin && (
-                <div className="relative">
-                  <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowReportMenu(v => !v)} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-                    <MoreVertical className="w-5 h-5 text-white" />
-                  </motion.button>
-                  {showReportMenu && (
-                    <div className="absolute right-0 top-12 bg-gray-900 border border-gray-700 rounded-xl shadow-xl z-50 min-w-[160px]">
-                      <button
-                        onClick={() => { setShowReportMenu(false); /* TODO: open report modal */ }}
-                        className="w-full px-4 py-3 text-left text-sm text-red-400 flex items-center gap-2 hover:bg-gray-800 rounded-xl"
-                      >
-                        <Flag className="w-4 h-4" /> Report Community
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
+        {/* Hero */}
+        <div ref={heroRef}>
+          <CommunityHero
+            community={community}
+            isMember={isMember}
+            isAdmin={isAdmin}
+            tc={tc}
+            joinMutation={joinMutation}
+            leaveMutation={leaveMutation}
+            onBack={() => navigate(-1)}
+            onEdit={() => setShowEditModal(true)}
+            onInvite={() => setShowInviteModal(true)}
+            onReport={() => {/* TODO */}}
+          />
         </div>
 
-        {/* Info */}
-        <div className="px-5 -mt-8 relative z-10 pb-4">
-          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-3">
-            <div className="flex items-end justify-between">
-              <div>
-                <h1 className="text-2xl font-black text-white">{community.name}</h1>
-                <p className="text-gray-400 text-sm flex items-center gap-1 mt-0.5">
-                  <span>📍</span>{community.city}
-                  <span className="mx-1">•</span>
-                  <Users className="w-3.5 h-3.5" />
-                  <span>{community.member_count || members.length} members</span>
-                </p>
-              </div>
-              {/* Join / Leave */}
-              {!isMember ? (
-                <motion.button whileTap={{ scale: 0.95 }} onClick={() => joinMutation.mutate()}
-                  disabled={joinMutation.isPending}
-                  className="px-5 py-2.5 rounded-xl font-bold text-sm text-[#0b0b0b]"
-                  style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)` }}>
-                  {joinMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Join 🚀'}
-                </motion.button>
-              ) : !isAdmin ? (
-                <motion.button whileTap={{ scale: 0.95 }} onClick={() => leaveMutation.mutate()}
-                  className="px-4 py-2 rounded-xl text-sm text-gray-400 border border-gray-700">
-                  Leave
-                </motion.button>
-              ) : null}
-            </div>
+        {/* About / Stats (expandable) */}
+        <CommunityAbout
+          community={community}
+          members={members}
+          plans={plans}
+          profilesMap={profilesMap}
+          tc={tc}
+          currentUser={currentUser}
+        />
 
-            {community.description && <p className="text-gray-400 text-sm mt-2 leading-relaxed">{community.description}</p>}
+        {/* Activity Feed */}
+        <CommunityActivityFeed
+          plans={plans}
+          members={members}
+          profilesMap={profilesMap}
+          tc={tc}
+        />
 
-            {/* Party type tags */}
-            <div className="flex gap-1.5 flex-wrap mt-3">
-              {community.party_types?.map((tag, i) => (
-                <span key={i} className="px-2.5 py-1 rounded-full text-xs font-semibold text-[#0b0b0b]" style={{ background: tc }}>
-                  {tag}
-                </span>
-              ))}
-              {community.vibes?.slice(0, 3).map((v, i) => (
-                <span key={i} className="px-2.5 py-1 rounded-full text-xs font-semibold text-white bg-white/10 border border-white/10">
-                  {v}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Admin: pending plan requests */}
-          {isAdmin && pendingRequests.length > 0 && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl p-4 mb-4 border" style={{ borderColor: `${tc}50`, background: `${tc}12` }}>
-              <p className="font-bold text-white mb-3">⏳ Plan Requests ({pendingRequests.length})</p>
-              {pendingRequests.map(req => {
-                const planData = plans.find(p => p.id === req.plan_id);
-                return (
-                  <div key={req.id} className="flex items-center justify-between py-2 border-t border-white/5">
-                    <p className="text-gray-300 text-sm truncate flex-1">{planData?.title || 'Unknown plan'}</p>
-                    <div className="flex gap-2 ml-2">
-                      <motion.button whileTap={{ scale: 0.9 }} onClick={() => approveRequest.mutate(req)} className="p-1.5 rounded-lg bg-green-500/20 text-green-400"><Check className="w-4 h-4" /></motion.button>
-                      <motion.button whileTap={{ scale: 0.9 }} onClick={() => rejectRequest.mutate(req)} className="p-1.5 rounded-lg bg-red-500/20 text-red-400"><X className="w-4 h-4" /></motion.button>
-                    </div>
+        {/* Admin: pending plan requests */}
+        {isAdmin && pendingRequests.length > 0 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl p-4 mx-4 mb-3 border" style={{ borderColor: `${tc}50`, background: `${tc}12` }}>
+            <p className="font-bold text-white mb-3">⏳ Plan Requests ({pendingRequests.length})</p>
+            {pendingRequests.map(req => {
+              const planData = plans.find(p => p.id === req.plan_id);
+              return (
+                <div key={req.id} className="flex items-center justify-between py-2 border-t border-white/5">
+                  <p className="text-gray-300 text-sm truncate flex-1">{planData?.title || 'Unknown plan'}</p>
+                  <div className="flex gap-2 ml-2">
+                    <motion.button whileTap={{ scale: 0.9 }} onClick={() => approveRequest.mutate(req)} className="p-1.5 rounded-lg bg-green-500/20 text-green-400"><Check className="w-4 h-4" /></motion.button>
+                    <motion.button whileTap={{ scale: 0.9 }} onClick={() => rejectRequest.mutate(req)} className="p-1.5 rounded-lg bg-red-500/20 text-red-400"><X className="w-4 h-4" /></motion.button>
                   </div>
-                );
-              })}
-            </motion.div>
-          )}
+                </div>
+              );
+            })}
+          </motion.div>
+        )}
 
-          {/* Tab bar */}
-          <div className="flex gap-1 bg-gray-900/80 rounded-2xl p-1 border border-gray-800">
+        {/* Sticky Tab Bar */}
+        <div
+          ref={tabBarRef}
+          className="transition-all duration-200 z-30"
+          style={tabsSticky ? {
+            position: 'sticky',
+            top: 0,
+            background: 'rgba(11,11,11,0.95)',
+            backdropFilter: 'blur(16px)',
+            borderBottom: `1px solid ${tc}30`,
+            paddingTop: 'max(env(safe-area-inset-top,0px),0px)',
+          } : {}}
+        >
+          <div className="flex gap-1 bg-gray-900/80 rounded-2xl p-1 border border-gray-800 mx-4 my-2">
             {TABS.map(tab => (
-              <motion.button key={tab.key} whileTap={{ scale: 0.95 }} onClick={() => setActiveTab(tab.key)}
+              <motion.button
+                key={tab.key}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveTab(tab.key)}
                 className="relative flex-1 py-2 text-xs font-bold rounded-xl transition-all flex flex-col items-center gap-0.5"
-                style={activeTab === tab.key ? { background: `${tc}30`, color: tc } : { color: '#6b7280' }}>
-                {activeTab === tab.key && <motion.div layoutId="tab-bg" className="absolute inset-0 rounded-xl" style={{ background: `${tc}25` }} />}
+                style={activeTab === tab.key ? { background: `${tc}30`, color: tc } : { color: '#6b7280' }}
+              >
+                {activeTab === tab.key && (
+                  <motion.div layoutId="tab-bg" className="absolute inset-0 rounded-xl" style={{ background: `${tc}25` }} />
+                )}
                 <span className="text-base relative z-10">{tab.emoji}</span>
-                <span className="relative z-10 hidden sm:block">{tab.label}</span>
+                <span className="relative z-10 text-[10px]">{tab.label}</span>
               </motion.button>
             ))}
           </div>
         </div>
 
         {/* Tab Content */}
-        <div className="px-4 mt-2">
+        <div className="px-4 mt-1">
           <AnimatePresence mode="wait">
             {activeTab === 'today' && (
-              <motion.div key="today" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                {canCreatePlan() && (
-                  <motion.button whileTap={{ scale: 0.97 }} onClick={handleCreatePlan}
-                    className="w-full py-3.5 rounded-2xl font-bold flex items-center justify-center gap-2 mb-4 text-[#0b0b0b]"
-                    style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)` }}>
-                    <Plus className="w-5 h-5" /> Create Plan for Today 🔥
-                  </motion.button>
-                )}
+              <motion.div key="today" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}>
                 {todayPlans.length === 0
-                  ? <div className="text-center py-12"><div className="text-4xl mb-3">🌙</div><p className="text-gray-500">No plans today yet</p><p className="text-gray-600 text-sm">Be the first to create one! 🔥</p></div>
+                  ? <div className="text-center py-16"><div className="text-5xl mb-3">🌙</div><p className="text-gray-500">No plans today yet</p><p className="text-gray-600 text-sm mt-1">Be the first to create one! 🔥</p></div>
                   : <div className="grid gap-4">{todayPlans.map(plan => (
-                    <PlanCard key={plan.id} plan={plan} participants={allParticipants.filter(p => p.plan_id === plan.id).map(p => profilesMap[p.user_id]).filter(Boolean)}
+                    <PlanCard key={plan.id} plan={plan}
+                      participants={allParticipants.filter(p => p.plan_id === plan.id).map(p => profilesMap[p.user_id]).filter(Boolean)}
                       onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)} currentUserId={currentUser?.id} />
                   ))}</div>}
               </motion.div>
             )}
 
             {activeTab === 'upcoming' && (
-              <motion.div key="upcoming" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                {canCreatePlan() && (
-                  <motion.button whileTap={{ scale: 0.97 }} onClick={handleCreatePlan}
-                    className="w-full py-3.5 rounded-2xl font-bold flex items-center justify-center gap-2 mb-4 text-[#0b0b0b]"
-                    style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)` }}>
-                    <Plus className="w-5 h-5" /> Schedule a Plan 📅
-                  </motion.button>
-                )}
+              <motion.div key="upcoming" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}>
                 {upcomingPlans.length === 0
-                  ? <div className="text-center py-12"><div className="text-4xl mb-3">📅</div><p className="text-gray-500">No upcoming plans yet</p></div>
+                  ? <div className="text-center py-16"><div className="text-5xl mb-3">📅</div><p className="text-gray-500">No upcoming plans yet</p></div>
                   : <div className="grid gap-4">{upcomingPlans.map(plan => (
-                    <PlanCard key={plan.id} plan={plan} participants={allParticipants.filter(p => p.plan_id === plan.id).map(p => profilesMap[p.user_id]).filter(Boolean)}
+                    <PlanCard key={plan.id} plan={plan}
+                      participants={allParticipants.filter(p => p.plan_id === plan.id).map(p => profilesMap[p.user_id]).filter(Boolean)}
                       onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)} currentUserId={currentUser?.id} />
                   ))}</div>}
               </motion.div>
             )}
 
             {activeTab === 'stories' && (
-              <motion.div key="stories" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+              <motion.div key="stories" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}>
                 {stories.length === 0
-                  ? <div className="text-center py-12"><div className="text-4xl mb-3">📸</div><p className="text-gray-500">No stories yet</p><p className="text-gray-600 text-sm">Stories from plans will appear here 🎉</p></div>
+                  ? <div className="text-center py-16"><div className="text-5xl mb-3">📸</div><p className="text-gray-500">No stories yet</p><p className="text-gray-600 text-sm mt-1">Stories from plans will appear here 🎉</p></div>
                   : (
                     <div className="grid grid-cols-3 gap-1.5">
                       {stories.map(story => (
@@ -372,11 +347,13 @@ export default function CommunityView() {
                           {story.media_type === 'video'
                             ? <video src={story.media_url} className="w-full h-full object-cover" muted playsInline />
                             : <img src={story.media_url} alt="" className="w-full h-full object-cover" />}
-                          <div className="absolute bottom-1 left-1"><div className="w-6 h-6 rounded-full overflow-hidden border border-white/30">
-                            {profilesMap[story.user_id]?.photos?.[0]
-                              ? <img src={profilesMap[story.user_id].photos[0]} alt="" className="w-full h-full object-cover" />
-                              : <div className="w-full h-full flex items-center justify-center text-[8px] text-white font-bold" style={{ background: tc }}>{profilesMap[story.user_id]?.display_name?.[0] || '?'}</div>}
-                          </div></div>
+                          <div className="absolute bottom-1 left-1">
+                            <div className="w-6 h-6 rounded-full overflow-hidden border border-white/30">
+                              {profilesMap[story.user_id]?.photos?.[0]
+                                ? <img src={profilesMap[story.user_id].photos[0]} alt="" className="w-full h-full object-cover" />
+                                : <div className="w-full h-full flex items-center justify-center text-[8px] text-white font-bold" style={{ background: tc }}>{profilesMap[story.user_id]?.display_name?.[0] || '?'}</div>}
+                            </div>
+                          </div>
                         </motion.div>
                       ))}
                     </div>
@@ -385,13 +362,29 @@ export default function CommunityView() {
             )}
 
             {activeTab === 'chat' && (
-              <motion.div key="chat" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+              <motion.div key="chat" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}>
                 <CommunityChat communityId={communityId} community={community} currentUser={currentUser} isMember={isMember} themeColor={tc} />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       </div>
+
+      {/* FAB — Create Plan */}
+      {canCreatePlan() && activeTab !== 'chat' && (
+        <motion.button
+          whileTap={{ scale: 0.92 }}
+          whileHover={{ scale: 1.05 }}
+          onClick={handleCreatePlan}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          className="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center"
+          style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)`, boxShadow: `0 4px 24px ${tc}60` }}
+        >
+          <Plus className="w-6 h-6 text-white" />
+        </motion.button>
+      )}
 
       {/* Delete confirm modal */}
       <AnimatePresence>
@@ -420,8 +413,6 @@ export default function CommunityView() {
           onSaved={() => { setShowEditModal(false); queryClient.invalidateQueries(['community', communityId]); }}
           onDelete={() => setShowDeleteConfirm(true)} />
       )}
-
-      {/* No BottomNav in CommunityView — full-page experience */}
 
       <StoryViewOverlay storyId={overlayStoryId} onClose={() => setOverlayStoryId(null)} />
 
