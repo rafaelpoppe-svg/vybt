@@ -128,18 +128,20 @@ export default function GroupChatHeader({
           {/* Admin actions — only after plan end time has passed */}
           {planStatus === 'ended' && isAdmin && plan?.status !== 'terminated' && plan?.status !== 'renewed' && (
             <div className="flex gap-2">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={(e) => { e.stopPropagation(); onRenew(); }}
-                className="flex-1 py-2.5 rounded-xl bg-[#00c6d2]/20 border border-[#00c6d2]/30 text-[#00c6d2] text-sm font-semibold flex items-center justify-center gap-2"
-              >
-                <RefreshCw className="w-4 h-4" />
-                {t.renewPlan}
-              </motion.button>
+              {canRenew && (
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => { e.stopPropagation(); onRenew(); }}
+                  className="flex-1 py-2.5 rounded-xl bg-[#00c6d2]/20 border border-[#00c6d2]/30 text-[#00c6d2] text-sm font-semibold flex items-center justify-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  {t.renewPlan}
+                </motion.button>
+              )}
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={(e) => { e.stopPropagation(); onDelete(); }}
-                className="flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2"
+                className={`flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2`}
               >
                 <Trash2 className="w-4 h-4" />
                 {t.terminatePlan}
