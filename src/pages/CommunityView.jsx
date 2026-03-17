@@ -322,63 +322,68 @@ export default function CommunityView() {
               </motion.div>
             )}
 
-            {/* Stories Tab — grouped by plan */}
+            {/* Stories Tab */}
             {activeTab === 'stories' && (
-              <motion.div key="stories" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }} className="space-y-6">
-                {Object.keys(storiesByPlan).length === 0 ? (
+              <motion.div key="stories" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
+                {/* Live stories section */}
+                {liveStories.length > 0 && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                      <span className="text-green-400 text-xs font-bold uppercase tracking-wider">Live Now</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1">
+                      {liveStories.map(story => (
+                        <motion.div key={story.id} whileTap={{ scale: 0.95 }} onClick={() => setOverlayStoryId(story.id)}
+                          className="aspect-[9/16] rounded-xl overflow-hidden cursor-pointer relative">
+                          {story.media_type === 'video'
+                            ? <video src={story.media_url} className="w-full h-full object-cover" muted playsInline />
+                            : <img src={story.media_url} alt="" className="w-full h-full object-cover" />}
+                          <div className="absolute bottom-1.5 left-1.5">
+                            <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-green-400">
+                              {profilesMap[story.user_id]?.photos?.[0]
+                                ? <img src={profilesMap[story.user_id].photos[0]} alt="" className="w-full h-full object-cover" />
+                                : <div className="w-full h-full flex items-center justify-center text-[8px] text-white font-bold" style={{ background: tc }}>{profilesMap[story.user_id]?.display_name?.[0] || '?'}</div>}
+                            </div>
+                          </div>
+                          {story.is_highlighted && (
+                            <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full text-[8px] font-bold text-white" style={{ background: tc }}>⭐</div>
+                          )}
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* All stories gallery */}
+                <CommunityStoriesGallery
+                  stories={stories}
+                  plans={plans}
+                  profilesMap={profilesMap}
+                  tc={tc}
+                  onStoryClick={setOverlayStoryId}
+                />
+
+                {stories.length === 0 && (
                   <div className="text-center py-20">
                     <div className="text-5xl mb-3">📸</div>
                     <p className="text-gray-400 font-semibold">No stories yet</p>
                     <p className="text-gray-600 text-sm mt-1">Members post stories from their plans</p>
                   </div>
-                ) : (
-                  Object.entries(storiesByPlan).map(([planId, planStories]) => {
-                    const plan = plans.find(p => p.id === planId);
-                    return (
-                      <div key={planId}>
-                        {/* Plan label */}
-                        <motion.button
-                          whileTap={{ scale: 0.97 }}
-                          onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${planId}`)}
-                          className="flex items-center gap-2 mb-2.5 w-full text-left"
-                        >
-                          {plan?.cover_image
-                            ? <img src={plan.cover_image} className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
-                            : <div className="w-8 h-8 rounded-lg flex items-center justify-center text-base flex-shrink-0" style={{ background: `${tc}30` }}>🎉</div>}
-                          <div className="min-w-0">
-                            <p className="text-white font-bold text-sm truncate">{plan?.title || 'Unknown Plan'}</p>
-                            <p className="text-gray-500 text-[10px]">{planStories.length} {planStories.length === 1 ? 'story' : 'stories'}</p>
-                          </div>
-                          <span className="text-gray-600 text-xs ml-auto">View plan →</span>
-                        </motion.button>
-
-                        {/* Stories grid */}
-                        <div className="grid grid-cols-3 gap-1">
-                          {planStories.map(story => (
-                            <motion.div key={story.id} whileTap={{ scale: 0.95 }} onClick={() => setOverlayStoryId(story.id)}
-                              className="aspect-[9/16] rounded-xl overflow-hidden cursor-pointer relative">
-                              {story.media_type === 'video'
-                                ? <video src={story.media_url} className="w-full h-full object-cover" muted playsInline />
-                                : <img src={story.media_url} alt="" className="w-full h-full object-cover" />}
-                              {/* Author avatar */}
-                              <div className="absolute bottom-1.5 left-1.5">
-                                <div className="w-6 h-6 rounded-full overflow-hidden border border-white/40">
-                                  {profilesMap[story.user_id]?.photos?.[0]
-                                    ? <img src={profilesMap[story.user_id].photos[0]} alt="" className="w-full h-full object-cover" />
-                                    : <div className="w-full h-full flex items-center justify-center text-[8px] text-white font-bold" style={{ background: tc }}>{profilesMap[story.user_id]?.display_name?.[0] || '?'}</div>}
-                                </div>
-                              </div>
-                              {/* Highlighted badge */}
-                              {story.is_highlighted && (
-                                <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full text-[8px] font-bold text-white" style={{ background: tc }}>⭐</div>
-                              )}
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  })
                 )}
+              </motion.div>
+            )}
+
+            {/* Members Tab */}
+            {activeTab === 'members' && (
+              <motion.div key="members" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
+                <CommunityMembersSpotlight
+                  members={members}
+                  profilesMap={profilesMap}
+                  plans={plans}
+                  tc={tc}
+                  currentUser={currentUser}
+                />
               </motion.div>
             )}
 
