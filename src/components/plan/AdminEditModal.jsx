@@ -31,6 +31,8 @@ export default function AdminEditModal({ isOpen, onClose, plan, onSave, isLoadin
     show_in_explore: plan?.show_in_explore ?? true,
     show_in_map: plan?.show_in_map ?? true,
     audience_restrictions: plan?.audience_restrictions || {},
+    price: plan?.price ?? undefined,
+    min_age: plan?.min_age ?? undefined,
   });
   const [uploading, setUploading] = useState(false);
 

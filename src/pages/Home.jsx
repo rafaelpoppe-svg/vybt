@@ -412,6 +412,8 @@ export default function Home() {
           memberCommunityIds={myCommunityMemberships.map(m => m.community_id)}
           myParticipations={myParticipations}
           recommendedPlans={recommendedPlans}
+          friendIds={friendIds}
+          communityMembers={myCommunityMemberships}
           onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
         />
 
