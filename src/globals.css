@@ -5,7 +5,7 @@
 /* ─── CRITICAL iOS FULL-SCREEN FIX ─── */
 /* Force black background at the very root level before React mounts */
 :root {
-  background-color: #00d8cd;
+  background-color: #0b0b0b;
   color-scheme: dark;
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
