@@ -511,6 +511,17 @@ export default function CommunityView() {
       </AnimatePresence>
 
       <AnimatePresence>
+        {showCreateChallenge && (
+          <CommunityCreateChallengeModal
+            communityId={communityId}
+            plans={plans}
+            tc={tc}
+            onClose={() => setShowCreateChallenge(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
         {showInviteModal && (
           <InviteToCommunityModal
             community={community}
