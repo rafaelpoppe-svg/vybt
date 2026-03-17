@@ -346,6 +346,12 @@ export default function CommunityView() {
             {/* Stories Tab */}
             {activeTab === 'stories' && (
               <motion.div key="stories" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
+                {/* Active Challenge Banner */}
+                {activeChallenge && (
+                  <div className="mb-4">
+                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setActiveTab('activity')} />
+                  </div>
+                )}
                 {/* Live stories section */}
                 {liveStories.length > 0 && (
                   <div className="mb-4">
