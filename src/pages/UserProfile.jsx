@@ -145,14 +145,13 @@ export default function UserProfile() {
 
   return (
     <div
-      className="min-h-screen overflow-y-auto overflow-x-hidden pb-24"
+      className="min-h-screen overflow-y-auto overflow-x-hidden pb-24 safe-top"
       style={{ background: THEME_BACKGROUNDS[profile.profile_background_theme] || THEME_BACKGROUNDS.default, WebkitOverflowScrolling: 'touch' }}
     >
 
       {/* ── Top Bar ── */}
       <div
         className="flex items-center justify-between px-4 pt-3 pb-2"
-        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}
       >
         <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="p-2 rounded-full bg-black/40 backdrop-blur-md">
           <ChevronLeft className="w-5 h-5 text-white" />
@@ -160,9 +159,9 @@ export default function UserProfile() {
 
         <div className="flex items-center gap-2">
           {nationalityInfo && (
-            <div className="flex items-center gap-1 bg-gray-800/70 rounded-full px-2.5 py-1">
-              <span className="text-base leading-none">{nationalityInfo.flag}</span>
-              <span className="text-xs text-gray-300 font-medium">{nationalityInfo.name}</span>
+            <div className="flex items-center gap-1 bg-gray-800/70 rounded-full px-2 py-0.5">
+              <span className="text-sm leading-none">{nationalityInfo.flag}</span>
+              <span className="text-[11px] text-gray-300 font-medium">{nationalityInfo.name}</span>
             </div>
           )}
           {currentUser && currentUser.id !== userId && (
