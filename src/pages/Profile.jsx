@@ -17,6 +17,7 @@ import { useLanguage } from '../components/common/LanguageContext';
 import { useProfileThemeContext } from '../components/common/ProfileThemeContext';
 import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
 import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
+import FriendsListModal from '../components/profile/FriendsListModal';
 import { format } from 'date-fns';
 
 const THEME_ACCENTS = {
