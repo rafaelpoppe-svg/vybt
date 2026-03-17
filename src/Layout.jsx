@@ -176,21 +176,20 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
         height: '100dvh',
         minHeight: '100dvh',
         position: 'fixed',
-        inset: 0,
+        top: '-100px',        // ADICIONA — estende para cima da status bar
+        left: 0,
+        right: 0,
+        bottom: '-100px',     // ADICIONA — estende para baixo da nav bar
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 100px)',   // compensa o top negativo
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 100px)', // compensa o bottom negativo
         display: 'flex',
         flexDirection: 'column',
         background: themeStyles?.background || '#0b0b0b',
-        backgroundImage: themeStyles?.backgroundImage,
-        backgroundSize: 'cover',
-        backgroundAttachment: 'fixed',
         overflowX: 'hidden',
         overflowY: 'auto',
-        // CRITICAL: prevent iOS WKWebView back-swipe gesture from sliding the layer
         touchAction: 'pan-y pinch-zoom',
         overscrollBehavior: 'none',
         WebkitOverflowScrolling: 'touch',
-        paddingTop: getStatusBarPadding(),
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}>
         <style>{`
           /* Force dark color-scheme so iOS renders status bar dark */
