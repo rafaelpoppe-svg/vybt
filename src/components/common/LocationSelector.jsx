@@ -83,7 +83,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
-            className="absolute top-full left-0 mt-2 p-3 rounded-2xl bg-[#111] border border-white/10 z-50 min-w-64 shadow-xl shadow-black/60"
+            className="absolute top-full right-0 mt-2 p-3 rounded-2xl bg-[#111] border border-white/10 z-50 w-64 max-h-80 overflow-hidden shadow-xl shadow-black/60"
             style={{ background: 'linear-gradient(145deg, #161616 0%, #111 100%)' }}
           >
             {/* Detect my location button */}
