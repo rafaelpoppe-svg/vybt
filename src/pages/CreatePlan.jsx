@@ -71,7 +71,9 @@ export default function CreatePlan() {
   }, []);
 
   const communityId = selectedCommunityId;
-  const [step, setStep] = useState(1);
+  // If coming from a community page, skip step 1 (community selection)
+  const startStep = communityIdFromUrl ? 2 : 1;
+  const [step, setStep] = useState(startStep);
 
   // Layer 2: block creation if user already has a happening plan they created
   useEffect(() => {
