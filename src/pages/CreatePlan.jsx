@@ -150,7 +150,7 @@ export default function CreatePlan() {
   };
 
   const goBack = () => {
-    if (step === 1) { navigate(-1); return; }
+    if (step === startStep) { navigate(-1); return; }
     setDirection(-1);
     setStep(s => s - 1);
   };
