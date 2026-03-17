@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { 
   ChevronLeft, MapPin, Camera, Loader2, MessageCircle, Check, 
   UserPlus, ShieldCheck, Lock, Music2, Grid3X3, Ban, Flag, MoreVertical, PartyPopper
@@ -36,7 +36,6 @@ const THEME_ACCENTS = {
 
 export default function UserProfile() {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('id');
 
@@ -92,18 +91,7 @@ export default function UserProfile() {
 
   const userPlans = allPlans.filter(p => participations.some(pa => pa.plan_id === p.id));
 
-  const addFriendMutation = useMutation({
-    mutationFn: async () => {
-      await base44.entities.Friendship.create({
-        user_id: currentUser.id,
-        friend_id: userId,
-        status: 'pending',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['friendRequests', currentUser?.id]);
-    },
-  });
+
 
 
 
@@ -267,15 +255,16 @@ export default function UserProfile() {
             ) : (
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => addFriendMutation.mutate()}
-                disabled={addFriendMutation.isPending}
+                onClick={async () => {
+                  await base44.entities.Friendship.create({
+                    user_id: currentUser.id,
+                    friend_id: userId,
+                    status: 'pending',
+                  });
+                }}
                 className="flex-1 py-2.5 bg-[#00c6d2]/20 border border-[#00c6d2]/50 rounded-xl text-[#00c6d2] text-sm font-semibold flex items-center justify-center gap-1.5"
               >
-                {addFriendMutation.isPending ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <><UserPlus className="w-4 h-4" /> Add Friend</>
-                )}
+                <><UserPlus className="w-4 h-4" /> Add Friend</>
               </motion.button>
             )}
           </div>
