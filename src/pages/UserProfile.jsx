@@ -4,29 +4,36 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  ChevronLeft, UserPlus, MessageCircle, Check, Loader2, MapPin, Users,
-  PartyPopper, Clapperboard, Music2, Sparkles, MoreVertical, Flag, Ban,
-  Lock, Camera, ShieldCheck
+import { 
+  ChevronLeft, MapPin, Camera, Loader2, MessageCircle, Check, 
+  UserPlus, ShieldCheck, Lock, Music2, Grid3X3, Ban, Flag, MoreVertical
 } from 'lucide-react';
 import VibeTag from '../components/common/VibeTag';
-import { notifyFriendRequest } from '../components/notifications/NotificationTriggers';
-import ReportUserModal from '../components/user/ReportUserModal';
-import BlockUserModal from '../components/user/BlockUserModal';
-import { toast } from 'sonner';
-import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import PartyTag from '../components/common/PartyTag';
 import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
+import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
+import ReportUserModal from '../components/moderation/ReportUserModal';
+import BlockUserModal from '../components/user/BlockUserModal';
 
 const THEME_BACKGROUNDS = {
-  default:   'linear-gradient(160deg, #0b0b0b 0%, #111118 100%)',
-  beer:      'linear-gradient(160deg, #1a0e00 0%, #0b0b0b 50%, #0b0b0b 100%)',
-  dance:     'linear-gradient(160deg, #1a0a2e 0%, #0b0b0b 50%, #0b0b0b 100%)',
-  champagne: 'linear-gradient(160deg, #1c1500 0%, #0b0b0b 50%, #0b0b0b 100%)',
-  money:     'linear-gradient(160deg, #001a0a 0%, #0b0b0b 50%, #0b0b0b 100%)',
-  luxury:    'linear-gradient(160deg, #0a0a1f 0%, #0b0b0b 50%, #0b0b0b 100%)',
-  party:     'linear-gradient(160deg, #1a0010 0%, #0b0b0b 50%, #0b0b0b 100%)',
+  default: 'linear-gradient(135deg, #0b0b0b 0%, #1a1a1a 100%)',
+  beer: 'linear-gradient(135deg, #2d1810 0%, #5c3d2e 100%)',
+  dance: 'linear-gradient(135deg, #1a0a2e 0%, #16213e 100%)',
+  champagne: 'linear-gradient(135deg, #3d3d2e 0%, #5c5c42 100%)',
+  money: 'linear-gradient(135deg, #1a2e1a 0%, #2d5c2d 100%)',
+  luxury: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+  party: 'linear-gradient(135deg, #2e1a2e 0%, #5c2d5c 100%)',
+};
+
+const THEME_ACCENTS = {
+  default: '#00c6d2', beer: '#f59e0b', dance: '#8b5cf6',
+  champagne: '#d4af37', money: '#22c55e', luxury: '#6366f1', party: '#ec4899',
 };
 
 export default function UserProfile() {
@@ -36,93 +43,95 @@ export default function UserProfile() {
   const userId = urlParams.get('id');
 
   const [currentUser, setCurrentUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('photos');
   const [expandedPhoto, setExpandedPhoto] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showBlockModal, setShowBlockModal] = useState(false);
-  const [activeTab, setActiveTab] = useState('stories');
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
 
-  const { data: profile, isLoading } = useQuery({
+  const { data: profile } = useQuery({
     queryKey: ['userProfile', userId],
-    queryFn: () => base44.entities.UserProfile.filter({ user_id: userId }),
-    select: (data) => data[0],
+    queryFn: () => base44.entities.UserProfile.filter({ user_id: userId }).then(r => r[0]),
     enabled: !!userId,
-    staleTime: 60_000,
-  });
-
-  const { data: friendships = [] } = useQuery({
-    queryKey: ['friendshipStatus', currentUser?.id, userId],
-    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, friend_id: userId }),
-    enabled: !!currentUser?.id && !!userId,
-    staleTime: 30_000,
-  });
-
-  const { data: userFriendships = [] } = useQuery({
-    queryKey: ['userFriendships', userId],
-    queryFn: () => base44.entities.Friendship.filter({ user_id: userId, status: 'accepted' }),
-    enabled: !!userId,
-    staleTime: 60_000,
-  });
-
-  const { data: participations = [] } = useQuery({
-    queryKey: ['userParticipations', userId],
-    queryFn: () => base44.entities.PlanParticipant.filter({ user_id: userId }),
-    enabled: !!userId,
-    staleTime: 60_000,
   });
 
   const { data: stories = [] } = useQuery({
     queryKey: ['userStories', userId],
     queryFn: () => base44.entities.ExperienceStory.filter({ user_id: userId }),
     enabled: !!userId,
-    staleTime: 60_000,
+  });
+
+  const { data: participations = [] } = useQuery({
+    queryKey: ['userParticipations', userId],
+    queryFn: () => base44.entities.PlanParticipant.filter({ user_id: userId }),
+    enabled: !!userId,
   });
 
   const { data: allPlans = [] } = useQuery({
-    queryKey: ['allPlansForUser'],
+    queryKey: ['allPlans'],
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 100),
-    enabled: !!userId,
-    staleTime: 60_000,
   });
 
-  const existingFriendship = friendships[0];
-  const isFriend = existingFriendship?.status === 'accepted';
-  const isPending = existingFriendship?.status === 'pending';
-  const isPrivate = profile?.is_private && !isFriend && currentUser?.id !== userId;
+  const { data: userFriendships = [] } = useQuery({
+    queryKey: ['userFriendships', userId],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: userId, status: 'accepted' }),
+    enabled: !!userId,
+  });
 
-  const userPlans = allPlans.filter(plan =>
-    participations.some(p => p.plan_id === plan.id) &&
-    ['upcoming', 'happening'].includes(plan.status)
-  );
+  const { data: myFriendships = [] } = useQuery({
+    queryKey: ['myFriendships', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id }),
+    enabled: !!currentUser?.id,
+  });
+
+  const { data: friendRequests = [] } = useQuery({
+    queryKey: ['friendRequests', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id }),
+    enabled: !!currentUser?.id,
+  });
+
+  const userPlans = allPlans.filter(p => participations.some(pa => pa.plan_id === p.id));
+
+  const addFriendMutation = useMutation({
+    mutationFn: async () => {
+      await base44.entities.Friendship.create({
+        user_id: currentUser.id,
+        friend_id: userId,
+        status: 'pending',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['friendRequests', currentUser?.id]);
+    },
+  });
 
   const reportUserMutation = useMutation({
     mutationFn: ({ reason, details }) => base44.entities.Report.create({
       reporter_user_id: currentUser.id,
       reported_user_id: userId,
-      type: 'user', reason, details: details || '', status: 'pending'
+      type: 'user',
+      reason,
+      details: details || '',
+      status: 'pending'
     }),
-    onSuccess: () => { setShowReportModal(false); toast.success('Denúncia enviada'); }
+    onSuccess: () => setShowReportModal(false),
   });
 
   const blockUserMutation = useMutation({
-    mutationFn: () => base44.entities.BlockedUser.create({ user_id: currentUser.id, blocked_user_id: userId }),
-    onSuccess: () => { setShowBlockModal(false); toast.success('Utilizador bloqueado'); navigate(-1); }
-  });
-
-  const addFriendMutation = useMutation({
-    mutationFn: async () => {
-      await base44.entities.Friendship.create({ user_id: currentUser.id, friend_id: userId, status: 'pending' });
-      const myProfiles = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
-      const myName = myProfiles[0]?.display_name || currentUser.full_name || 'Alguém';
-      await notifyFriendRequest(userId, currentUser.id, myName);
+    mutationFn: () => base44.entities.BlockedUser.create({
+      user_id: currentUser.id,
+      blocked_user_id: userId,
+    }),
+    onSuccess: () => {
+      setShowBlockModal(false);
+      navigate(-1);
     },
-    onSuccess: () => queryClient.invalidateQueries(['friendshipStatus', currentUser?.id, userId])
   });
 
-  if (!profile) {
+  if (!profile || !currentUser) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
@@ -131,32 +140,33 @@ export default function UserProfile() {
   }
 
   const photos = profile.photos?.filter(Boolean) || [];
-  const hasPhotos = photos.length > 0;
   const nationalityInfo = profile.nationality ? NATIONALITIES.find(n => n.code === profile.nationality) : null;
   const age = profile.date_of_birth
     ? Math.floor((new Date() - new Date(profile.date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000))
     : null;
+  const theme = profile.profile_background_theme || 'default';
+  const accent = THEME_ACCENTS[theme] || '#00c6d2';
+  const coverPhoto = photos[0];
+  const isPrivate = profile.is_private;
+  const isFriend = myFriendships.some(f => (f.friend_id === userId || f.user_id === userId) && f.status === 'accepted');
+  const isPending = friendRequests.some(f => f.friend_id === userId && f.status === 'pending');
 
   const tabs = [
-    { id: 'stories', icon: <Clapperboard className="w-5 h-5" /> },
+    { id: 'photos', icon: <Grid3X3 className="w-5 h-5" /> },
+    { id: 'stories', icon: <Camera className="w-5 h-5" /> },
     { id: 'plans', icon: <PartyPopper className="w-5 h-5" /> },
-    { id: 'friends', icon: <Users className="w-5 h-5" /> },
   ];
 
   return (
     <div
       className="min-h-screen overflow-y-auto overflow-x-hidden pb-24 safe-top"
-      style={{ background: THEME_BACKGROUNDS[profile.profile_background_theme] || THEME_BACKGROUNDS.default, WebkitOverflowScrolling: 'touch' }}
+      style={{ background: THEME_BACKGROUNDS[theme] || THEME_BACKGROUNDS.default, WebkitOverflowScrolling: 'touch' }}
     >
-
-      {/* ── Top Bar ── */}
-      <div
-        className="flex items-center justify-between px-4 pt-3 pb-2"
-      >
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-4 py-3">
         <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="p-2 rounded-full bg-black/40 backdrop-blur-md">
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
-
         <div className="flex items-center gap-2">
           {nationalityInfo && (
             <div className="flex items-center gap-1 bg-gray-800/70 rounded-full px-2 py-0.5">
@@ -184,54 +194,79 @@ export default function UserProfile() {
         </div>
       </div>
 
-      {/* ── Profile Card ── */}
+      {/* Profile Card */}
       <div className="px-4 pb-4">
-        <div className="flex gap-4 items-start">
+        <div className="flex items-center gap-5">
           {/* Avatar */}
-          <div className="flex-shrink-0">
-            {hasPhotos ? (
-              <img
-                src={photos[0]}
-                alt="profile"
-                onClick={() => setExpandedPhoto(photos[0])}
-                className="w-24 h-28 rounded-2xl object-cover border border-gray-700 cursor-pointer"
-              />
-            ) : (
-              <div className="w-24 h-28 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center">
-                <Camera className="w-8 h-8 text-gray-600" />
+          <motion.div whileTap={{ scale: 0.96 }} onClick={() => coverPhoto && setExpandedPhoto(coverPhoto)} className="relative flex-shrink-0">
+            <div
+              className="w-[82px] h-[82px] rounded-full p-[2.5px]"
+              style={{ background: `linear-gradient(135deg, ${accent}, #542b9b)` }}
+            >
+              {coverPhoto ? (
+                <img src={coverPhoto} className="w-full h-full rounded-full object-cover border-2 border-[#0b0b0b]" />
+              ) : (
+                <div className="w-full h-full rounded-full bg-gray-800 border-2 border-[#0b0b0b] flex items-center justify-center">
+                  <Camera className="w-7 h-7 text-gray-500" />
+                </div>
+              )}
+            </div>
+            {profile.is_verified && (
+              <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center border-2 border-[#0b0b0b]">
+                <ShieldCheck className="w-2.5 h-2.5 text-white" />
               </div>
             )}
-          </div>
+          </motion.div>
 
-          {/* Name + Stats */}
-          <div className="flex-1 min-w-0 pt-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="font-bold text-white text-lg leading-tight">{profile.display_name}</h2>
-              {age && <span className="text-sm font-semibold text-[#00c6d2]">{age}y</span>}
-              {profile.is_verified && <ShieldCheck className="w-4 h-4 text-blue-400" />}
-              {isPrivate && <Lock className="w-3.5 h-3.5 text-gray-500" />}
+          {/* Stats */}
+          <div className="flex-1 grid grid-cols-3 gap-1 text-center">
+            <div className="flex flex-col items-center">
+              <span className="font-black text-xl leading-tight" style={{ color: accent }}>{userPlans.length}</span>
+              <span className="text-xs font-semibold" style={{ color: accent }}>Plans</span>
             </div>
-
-            <div className="flex gap-5 mt-3">
-              {[
-                { value: stories.length, label: 'stories' },
-                { value: userFriendships.length, label: 'friends' },
-                { value: participations.length, label: 'plans' },
-              ].map(({ value, label }) => (
-                <div key={label} className="flex flex-col items-center">
-                  <p className="text-lg font-bold text-white leading-tight">{isPrivate ? '—' : value}</p>
-                  <p className="text-xs text-gray-400 leading-tight">{label}</p>
-                </div>
-              ))}
+            <div className="flex flex-col items-center">
+              <span className="text-white font-black text-xl leading-tight">{isPrivate ? '—' : userFriendships.length}</span>
+              <span className="text-gray-500 text-xs">Friends</span>
             </div>
-
-            {profile.bio && (
-              <p className="text-xs text-gray-300 mt-2 line-clamp-3">{profile.bio}</p>
-            )}
+            <div className="flex flex-col items-center">
+              <span className="text-white font-black text-xl leading-tight">{isPrivate ? '—' : stories.length}</span>
+              <span className="text-gray-500 text-xs">Stories</span>
+            </div>
           </div>
         </div>
 
-        {/* ── Action Buttons ── */}
+        {/* Name + details */}
+        <div className="mt-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-white font-bold text-base leading-tight">
+              {profile.display_name}
+            </span>
+            {age && <span className="text-sm font-bold" style={{ color: accent }}>{age}</span>}
+            {profile.gender && <span className="text-xs text-gray-500">{profile.gender}</span>}
+            {profile.is_verified && <ShieldCheck className="w-4 h-4 text-blue-400" />}
+            {isPrivate && <Lock className="w-3.5 h-3.5 text-gray-500" />}
+          </div>
+
+          {profile.city && (
+            <div className="flex items-center gap-1 mt-0.5">
+              <MapPin className="w-3 h-3 text-gray-500" />
+              <span className="text-xs text-gray-500">{profile.city}</span>
+            </div>
+          )}
+
+          {profile.bio && (
+            <p className="text-sm text-gray-300 mt-1.5 leading-relaxed">{profile.bio}</p>
+          )}
+
+          {/* Vibes */}
+          {profile.vibes?.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {profile.vibes.map(vibe => <VibeTag key={vibe} vibe={vibe} size="sm" />)}
+            </div>
+          )}
+        </div>
+
+        {/* Action buttons */}
         {currentUser && currentUser.id !== userId && (
           <div className="flex gap-3 mt-4">
             {isFriend ? (
@@ -270,7 +305,7 @@ export default function UserProfile() {
           </div>
         )}
 
-        {/* ── Extra photos strip ── */}
+        {/* Extra photos strip */}
         {!isPrivate && photos.length > 1 && (
           <div className="mt-4 flex gap-2 overflow-x-auto scrollbar-hide" data-hscroll="1">
             {photos.slice(1).map((photo, i) => (
@@ -286,21 +321,20 @@ export default function UserProfile() {
           </div>
         )}
 
-        {/* ── Vibes ── */}
-        {profile.vibes?.length > 0 && (
+        {/* Party Types */}
+        {profile.party_types?.length > 0 && (
           <div className="mt-4">
             <div className="flex items-center gap-2 mb-2">
-              <Music2 className="w-4 h-4 text-[#00c6d2]" />
-              <span className="text-sm font-semibold text-white">Vibes</span>
+              <span className="text-sm font-semibold text-white">Party Types</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              {profile.vibes.map(vibe => <VibeTag key={vibe} vibe={vibe} size="sm" />)}
+              {profile.party_types.map(type => <PartyTag key={type} tag={type} size="sm" />)}
             </div>
           </div>
         )}
       </div>
 
-      {/* ── Private Profile Gate for tabs ── */}
+      {/* Private Profile Gate for tabs */}
       {isPrivate ? (
         <div className="mx-4 mt-4 py-12 flex flex-col items-center gap-3 bg-gray-900/50 border border-gray-800 rounded-2xl">
           <Lock className="w-8 h-8 text-gray-500" />
@@ -309,33 +343,60 @@ export default function UserProfile() {
         </div>
       ) : (
         <>
-          {/* ── Tabs ── */}
-          <div className="sticky top-0 z-30 bg-[#0b0b0b] border-b border-gray-800 flex">
-            {tabs.map(tab => (
-              <motion.button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-3 flex items-center justify-center border-b-2 transition-colors ${
-                  activeTab === tab.id ? 'border-[#00c6d2] text-[#00c6d2]' : 'border-transparent text-gray-500'
-                }`}
-              >
-                {tab.icon}
-              </motion.button>
-            ))}
+          {/* Tabs */}
+          <div className="sticky top-0 z-30 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/8">
+            <div className="flex">
+              {tabs.map(tab => (
+                <motion.button key={tab.id} whileTap={{ scale: 0.9 }}
+                  onClick={() => setActiveTab(tab.id)}
+                  className="relative flex-1 py-3 flex items-center justify-center transition-colors"
+                  style={{ color: activeTab === tab.id ? accent : '#4b5563' }}
+                >
+                  {tab.icon}
+                  {activeTab === tab.id && (
+                    <motion.div layoutId="tab-underline"
+                      className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full"
+                      style={{ background: accent }} />
+                  )}
+                </motion.button>
+              ))}
+            </div>
           </div>
 
-          {/* ── Tab Content ── */}
+          {/* Tab Content */}
           <AnimatePresence mode="wait">
-            {activeTab === 'stories' && (
-              <motion.div key="stories" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="grid grid-cols-3 gap-0.5 p-0.5">
-                {stories.length === 0 ? (
-                  <p className="col-span-3 text-center text-gray-500 text-sm py-10">No stories yet</p>
+            {activeTab === 'photos' && (
+              <motion.div key="photos" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                {photos.length === 0 ? (
+                  <div className="text-center py-16 space-y-2">
+                    <p className="text-5xl">🖼️</p>
+                    <p className="text-gray-400 font-semibold">No photos</p>
+                  </div>
                 ) : (
-                  stories.map(story => (
-                    <div key={story.id} className="aspect-square bg-gray-900 relative overflow-hidden">
-                      <img src={story.media_url} alt="" className="w-full h-full object-cover" />
-                    </div>
-                  ))
+                  <div className="grid grid-cols-3 gap-[1px]">
+                    {photos.map((photo, i) => (
+                      <motion.div key={i} whileTap={{ scale: 0.97 }} onClick={() => setExpandedPhoto(photo)}
+                        className="aspect-square overflow-hidden cursor-pointer">
+                        <img src={photo} className="w-full h-full object-cover" />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === 'stories' && (
+              <motion.div key="stories" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                {stories.length === 0 ? (
+                  <div className="text-center py-16 space-y-2">
+                    <p className="text-5xl">📸</p>
+                    <p className="text-gray-400 font-semibold">No stories</p>
+                  </div>
+                ) : (
+                  <ProfileStoryGrid
+                    stories={stories}
+                    onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+                  />
                 )}
               </motion.div>
             )}
@@ -343,7 +404,10 @@ export default function UserProfile() {
             {activeTab === 'plans' && (
               <motion.div key="plans" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4 space-y-3">
                 {userPlans.length === 0 ? (
-                  <p className="text-center text-gray-500 text-sm py-10">No active plans</p>
+                  <div className="text-center py-16 space-y-2">
+                    <p className="text-5xl">🎉</p>
+                    <p className="text-gray-400 font-semibold">No plans</p>
+                  </div>
                 ) : (
                   userPlans.map(plan => (
                     <motion.button
@@ -368,17 +432,11 @@ export default function UserProfile() {
                 )}
               </motion.div>
             )}
-
-            {activeTab === 'friends' && (
-              <motion.div key="friends" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4">
-                <p className="text-center text-gray-500 text-sm py-10">{userFriendships.length} friends</p>
-              </motion.div>
-            )}
           </AnimatePresence>
         </>
       )}
 
-      {/* ── Photo Expand Modal ── */}
+      {/* Photo Expand Modal */}
       <AnimatePresence>
         {expandedPhoto && (
           <motion.div
