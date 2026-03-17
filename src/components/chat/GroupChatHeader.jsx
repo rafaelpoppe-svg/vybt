@@ -9,6 +9,8 @@ export default function GroupChatHeader({
   plan, planStatus, isChatLocked, hasVoted, isAdmin, themeColor,
   onBack, onInfo, onAdminActions, onVote, onRenew, onDelete, onHighlight
 }) {
+  // Only community plans can be renewed
+  const canRenew = !!plan?.community_id;
   const { t } = useLanguage();
   return (
     <header
