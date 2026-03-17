@@ -51,7 +51,7 @@ export default function CreatePlan() {
   const communityId = urlParams.get('communityId') || null;
   const [communityName, setCommunityName] = React.useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!communityId) return;
     base44.entities.Community.filter({ id: communityId }).then(r => {
       if (r[0]) setCommunityName(r[0].name);
