@@ -118,11 +118,8 @@ function PlanFeedCard({ plan, participantCount, communityName, communityColor, c
       </div>
 
       {/* Content */}
-      <div className="px-4 pt-3 pb-4">
-        {communityName && (
-          <p className="text-[10px] font-bold mb-1" style={{ color: accent }}>⭐ {communityName}</p>
-        )}
-        <h3 className="text-white font-bold text-xl leading-tight mb-3">{plan.title}</h3>
+       <div className="px-4 pt-3 pb-4">
+         <h3 className="text-white font-bold text-xl leading-tight mb-3">{plan.title}</h3>
 
         {plan.description && (
           <p className="text-gray-400 text-xs mb-3 line-clamp-2">{plan.description}</p>
