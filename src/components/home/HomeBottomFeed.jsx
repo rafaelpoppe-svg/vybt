@@ -28,7 +28,7 @@ function InfoPill({ icon: Icon, label, accent }) {
   );
 }
 
-function PlanFeedCard({ plan, participantCount, communityName, communityColor, onClick }) {
+function PlanFeedCard({ plan, participantCount, communityName, communityColor, communityImage, onClick }) {
   const accent = accentOf(plan);
   const isHappening = isLiveNow(plan);
   const isCommunityPlan = !!plan.community_id;
@@ -74,7 +74,18 @@ function PlanFeedCard({ plan, participantCount, communityName, communityColor, o
              color: '#ccc',
            }}
          >
-           {isCommunityPlan && badgeLabel && <><Building2 className="w-2.5 h-2.5" /> {badgeLabel}</> || <>🎯 Individual</>}
+           {isCommunityPlan && badgeLabel ? (
+             <>
+               {communityImage ? (
+                 <img src={communityImage} alt="" className="w-4 h-4 rounded object-cover" />
+               ) : (
+                 <Building2 className="w-2.5 h-2.5" />
+               )}
+               {badgeLabel}
+             </>
+           ) : (
+             <>🎯 Individual</>
+           )}
          </div>
 
         {/* Status badges — top right */}
@@ -335,6 +346,11 @@ export default function HomeBottomFeed({
                       communityColor={
                         item.data.community_id
                           ? communities.find(c => c.id === item.data.community_id)?.theme_color
+                          : null
+                      }
+                      communityImage={
+                        item.data.community_id
+                          ? communities.find(c => c.id === item.data.community_id)?.cover_image
                           : null
                       }
                       onClick={() => onPlanClick(item.data)}
