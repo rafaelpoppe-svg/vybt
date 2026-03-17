@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Settings, UserPlus, MoreVertical, Flag, Loader2, Users } from 'lucide-react';
 
-export default function CommunityHero({ community, isMember, isAdmin, tc, joinMutation, leaveMutation, onBack, onEdit, onInvite, onReport }) {
+export default function CommunityHero({ community, isMember, isAdmin, tc, joinMutation, leaveMutation, onBack, onEdit, onInvite, onLeave, onReport }) {
   const [scrollY, setScrollY] = useState(0);
   const [showReportMenu, setShowReportMenu] = useState(false);
   const containerRef = useRef(null);
@@ -90,7 +90,7 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
                 {joinMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Join 🚀'}
               </motion.button>
             ) : !isAdmin ? (
-              <motion.button whileTap={{ scale: 0.95 }} onClick={() => leaveMutation.mutate()}
+              <motion.button whileTap={{ scale: 0.95 }} onClick={onLeave}
                 className="px-4 py-2 rounded-xl text-sm text-gray-400 border border-gray-700 shrink-0">
                 Leave
               </motion.button>
