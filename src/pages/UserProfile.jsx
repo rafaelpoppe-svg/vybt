@@ -18,8 +18,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import ReportUserModal from '../components/moderation/ReportUserModal';
-import BlockUserModal from '../components/user/BlockUserModal';
 
 const THEME_BACKGROUNDS = {
   default: 'linear-gradient(135deg, #0b0b0b 0%, #1a1a1a 100%)',
@@ -45,8 +43,7 @@ export default function UserProfile() {
   const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('photos');
   const [expandedPhoto, setExpandedPhoto] = useState(null);
-  const [showReportModal, setShowReportModal] = useState(false);
-  const [showBlockModal, setShowBlockModal] = useState(false);
+
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
@@ -108,28 +105,7 @@ export default function UserProfile() {
     },
   });
 
-  const reportUserMutation = useMutation({
-    mutationFn: ({ reason, details }) => base44.entities.Report.create({
-      reporter_user_id: currentUser.id,
-      reported_user_id: userId,
-      type: 'user',
-      reason,
-      details: details || '',
-      status: 'pending'
-    }),
-    onSuccess: () => setShowReportModal(false),
-  });
 
-  const blockUserMutation = useMutation({
-    mutationFn: () => base44.entities.BlockedUser.create({
-      user_id: currentUser.id,
-      blocked_user_id: userId,
-    }),
-    onSuccess: () => {
-      setShowBlockModal(false);
-      navigate(-1);
-    },
-  });
 
   if (!profile || !currentUser) {
     return (
@@ -182,10 +158,10 @@ export default function UserProfile() {
                 </motion.button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-gray-900 border-gray-800">
-                <DropdownMenuItem onClick={() => setShowReportModal(true)} className="text-orange-400 hover:text-orange-300">
+                <DropdownMenuItem className="text-orange-400 hover:text-orange-300">
                   <Flag className="w-4 h-4 mr-2" /> Denunciar
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setShowBlockModal(true)} className="text-red-400 hover:text-red-300">
+                <DropdownMenuItem className="text-red-400 hover:text-red-300">
                   <Ban className="w-4 h-4 mr-2" /> Bloquear
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -453,21 +429,7 @@ export default function UserProfile() {
         )}
       </AnimatePresence>
 
-      <ReportUserModal
-        isOpen={showReportModal}
-        onClose={() => setShowReportModal(false)}
-        onReport={(data) => reportUserMutation.mutate(data)}
-        userName={profile?.display_name}
-        isLoading={reportUserMutation.isPending}
-      />
 
-      <BlockUserModal
-        isOpen={showBlockModal}
-        onClose={() => setShowBlockModal(false)}
-        onBlock={() => blockUserMutation.mutate()}
-        userName={profile?.display_name}
-        isLoading={blockUserMutation.isPending}
-      />
     </div>
   );
 }
