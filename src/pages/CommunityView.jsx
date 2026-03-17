@@ -15,6 +15,8 @@ import CommunityStoriesGallery from '../components/community/CommunityStoriesGal
 import CommunityMembersSpotlight from '../components/community/CommunityMembersSpotlight';
 import CommunityActivityFeed from '../components/community/CommunityActivityFeed';
 import CommunityNewMemberGuide from '../components/community/CommunityNewMemberGuide';
+import CommunityChallengeBanner from '../components/community/CommunityChallengeBanner';
+import CommunityCreateChallengeModal from '../components/community/CommunityCreateChallengeModal';
 
 const TABS = [
   { key: 'plans', label: 'Plans', icon: <CalendarDays className="w-4 h-4" /> },
