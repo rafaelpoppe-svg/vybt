@@ -430,10 +430,10 @@ export default function Explore() {
                         + Create
                       </motion.button>
                     </div>
-                    {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && (!selectedCity || c.city?.toLowerCase() === selectedCity?.toLowerCase())).length === 0
+                    {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && (!myProfile?.city || c.city?.toLowerCase() === myProfile.city.toLowerCase())).length === 0
                       ? <div className="text-center py-16 space-y-3"><div className="text-5xl">⭐</div><p className="text-gray-500 text-sm">No communities here yet</p><p className="text-gray-600 text-xs">Be the first to create one! 🚀</p></div>
                       : <div className="grid grid-cols-2 gap-3">
-                          {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && (!selectedCity || c.city?.toLowerCase() === selectedCity?.toLowerCase()))
+                          {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && (!myProfile?.city || c.city?.toLowerCase() === myProfile.city.toLowerCase()))
                             .map((community, i) => (
                               <motion.div key={community.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                                 <CommunityCard community={community} myProfile={myProfile}
