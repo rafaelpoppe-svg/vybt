@@ -14,7 +14,6 @@ import HappeningNowBanner from '../components/feed/HappeningNowBanner';
 import HomeLiveMap from '../components/home/HomeLiveMap';
 import HomeMapControls from '../components/home/HomeMapControls';
 import HomePlanFilterPanel from '../components/home/HomePlanFilterPanel';
-import HomeHotPlansCarousel from '../components/home/HomeHotPlansCarousel';
 import HomeLiveActivities from '../components/home/HomeLiveActivities';
 import HomeHappeningNowSection from '../components/home/HomeHappeningNowSection';
 import { useRecommendations } from '../components/recommendation/useRecommendations';
