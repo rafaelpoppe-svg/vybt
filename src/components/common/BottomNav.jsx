@@ -143,6 +143,15 @@ export default function BottomNav() {
         })}
         </div>
       </nav>
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 'env(safe-area-inset-bottom, 0px)',
+        background: '#0b0b0b',
+        zIndex: 699,
+      }} />
     </>
   );
 }
