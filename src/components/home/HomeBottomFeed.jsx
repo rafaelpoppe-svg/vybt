@@ -62,16 +62,16 @@ function PlanFeedCard({ plan, participantCount, communityName, onClick }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/20 to-transparent" />
 
         {/* Type badge — top left */}
-        <div
-          className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
-          style={{
-            background: isCommunityPlan ? 'rgba(84,43,155,0.8)' : 'rgba(0,0,0,0.65)',
-            border: isCommunityPlan ? '1px solid #542b9b88' : '1px solid rgba(255,255,255,0.15)',
-            color: isCommunityPlan ? '#e0c9ff' : '#ccc',
-          }}
-        >
-          {isCommunityPlan ? <><Building2 className="w-2.5 h-2.5" /> Community</> : <>🎯 Individual</>}
-        </div>
+         <div
+           className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
+           style={{
+             background: isCommunityPlan ? 'rgba(84,43,155,0.8)' : 'rgba(0,0,0,0.65)',
+             border: isCommunityPlan ? '1px solid #542b9b88' : '1px solid rgba(255,255,255,0.15)',
+             color: isCommunityPlan ? '#e0c9ff' : '#ccc',
+           }}
+         >
+           {isCommunityPlan && badgeLabel && <><Building2 className="w-2.5 h-2.5" /> {badgeLabel}</> || <>🎯 Individual</>}
+         </div>
 
         {/* Status badges — top right */}
         <div className="absolute top-3 right-3 flex flex-col items-end gap-1">
