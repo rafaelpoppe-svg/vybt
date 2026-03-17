@@ -339,7 +339,7 @@ export default function Welcome() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-gray-400"
+          className="absolute bottom-8 left-0 right-0 mx-auto z-10 flex flex-col items-center gap-1 text-gray-400 w-fit"
         >
           <span className="text-xs font-medium tracking-widest uppercase opacity-60">scroll</span>
           <ChevronDown className="w-5 h-5" />
