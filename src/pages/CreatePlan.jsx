@@ -49,6 +49,14 @@ export default function CreatePlan() {
   const navigate = useNavigate();
   const urlParams = new URLSearchParams(window.location.search);
   const communityId = urlParams.get('communityId') || null;
+  const [communityName, setCommunityName] = React.useState(null);
+
+  React.useEffect(() => {
+    if (!communityId) return;
+    base44.entities.Community.filter({ id: communityId }).then(r => {
+      if (r[0]) setCommunityName(r[0].name);
+    }).catch(() => {});
+  }, [communityId]);
   const [step, setStep] = useState(1);
 
   // Layer 2: block creation if user already has a happening plan they created
