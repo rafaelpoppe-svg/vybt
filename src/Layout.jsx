@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NotificationProvider } from '@/components/notifications/NotificationProvider';
 import { Toaster } from 'sonner';
 import PageTransition from '@/components/common/PageTransition';
