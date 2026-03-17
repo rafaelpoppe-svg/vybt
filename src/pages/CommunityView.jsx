@@ -4,9 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Loader2, X, Check, Trash2, CalendarDays, MessageCircle, Camera, Users } from 'lucide-react';
+import { Plus, Loader2, X, Check, Trash2, CalendarDays, Camera, Users, Zap } from 'lucide-react';
 import PlanCard from '../components/feed/PlanCard';
-import CommunityChat from '../components/community/CommunityChat';
 import CommunityEditModal from '../components/community/CommunityEditModal';
 import StoryViewOverlay from '../components/story/StoryViewOverlay';
 import InviteToCommunityModal from '../components/community/InviteToCommunityModal';
@@ -14,12 +13,14 @@ import CommunityHero from '../components/community/CommunityHero';
 import CommunityAbout from '../components/community/CommunityAbout';
 import CommunityStoriesGallery from '../components/community/CommunityStoriesGallery';
 import CommunityMembersSpotlight from '../components/community/CommunityMembersSpotlight';
+import CommunityActivityFeed from '../components/community/CommunityActivityFeed';
+import CommunityNewMemberGuide from '../components/community/CommunityNewMemberGuide';
 
 const TABS = [
   { key: 'plans', label: 'Plans', icon: <CalendarDays className="w-4 h-4" /> },
   { key: 'stories', label: 'Stories', icon: <Camera className="w-4 h-4" /> },
   { key: 'members', label: 'Members', icon: <Users className="w-4 h-4" /> },
-  { key: 'chat', label: 'Chat', icon: <MessageCircle className="w-4 h-4" /> },
+  { key: 'activity', label: 'Activity', icon: <Zap className="w-4 h-4" /> },
 ];
 
 export default function CommunityView() {
