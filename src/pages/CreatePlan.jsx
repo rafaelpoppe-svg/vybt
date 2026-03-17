@@ -703,7 +703,7 @@ export default function CreatePlan() {
         </div>
 
         <div className="text-gray-500 text-sm w-10 text-right">
-          {step}/6
+          {step}/7
         </div>
       </header>
 
