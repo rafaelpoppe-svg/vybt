@@ -144,8 +144,8 @@ export default function Explore() {
     const participantCount = allParticipants.filter(p => p.plan_id === plan.id).length;
     if (participantCount === 0) return false;
 
-    // Filter by current city
-    if (selectedCity && plan.city?.toLowerCase() !== selectedCity.toLowerCase()) return false;
+    // Filter by current user's city
+    if (myProfile?.city && plan.city?.toLowerCase() !== myProfile.city.toLowerCase()) return false;
     
     const matchesSearch = plan.title.toLowerCase().includes(search.toLowerCase()) ||
       plan.location_address?.toLowerCase().includes(search.toLowerCase());
