@@ -18,6 +18,7 @@ import CommunityNewMemberGuide from '../components/community/CommunityNewMemberG
 import CommunityChallengeBanner from '../components/community/CommunityChallengeBanner';
 import CommunityCreateChallengeModal from '../components/community/CommunityCreateChallengeModal';
 import CommunityChallengeDetail from '../components/community/CommunityChallengeDetail';
+import LeaveCommunityModal from '../components/community/LeaveCommunityModal';
 
 const TABS = [
   { key: 'plans', label: 'Plans', icon: <CalendarDays className="w-4 h-4" /> },
@@ -41,6 +42,7 @@ export default function CommunityView() {
   const [showNewMemberGuide, setShowNewMemberGuide] = useState(false);
   const [showCreateChallenge, setShowCreateChallenge] = useState(false);
   const [showChallengeDetail, setShowChallengeDetail] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
 
   const scrollRef = useRef(null);
   const touchStartX = useRef(null);
@@ -238,6 +240,7 @@ export default function CommunityView() {
           onBack={() => navigate(-1)}
           onEdit={() => setShowEditModal(true)}
           onInvite={() => setShowInviteModal(true)}
+          onLeave={() => setShowLeaveModal(true)}
           onReport={() => {}}
         />
 
@@ -537,6 +540,17 @@ export default function CommunityView() {
           />
         )}
       </AnimatePresence>
+
+      <LeaveCommunityModal
+        isOpen={showLeaveModal}
+        onClose={() => setShowLeaveModal(false)}
+        onConfirm={() => {
+          setShowLeaveModal(false);
+          leaveMutation.mutate();
+        }}
+        communityName={community.name}
+        isLoading={leaveMutation.isPending}
+      />
     </div>
   );
 }
