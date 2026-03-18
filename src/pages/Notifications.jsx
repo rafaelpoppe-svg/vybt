@@ -7,7 +7,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Settings, Flame, Camera, Loader2, ChevronRight, ChevronLeft } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
-import BottomNav from '../components/common/BottomNav';
 import { useNotifications } from '../components/notifications/NotificationProvider';
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
