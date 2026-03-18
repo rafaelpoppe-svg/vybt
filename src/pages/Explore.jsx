@@ -32,19 +32,18 @@ export default function Explore() {
   const [planFilters, setPlanFilters] = useState({ sortBy: initialTab === 'foryou' ? 'foryou' : 'onfire' });
   const [userFilters, setUserFilters] = useState({ sortBy: 'foryou' });
   const [currentUser, setCurrentUser] = useState(null);
-  const [myProfile, setMyProfile] = useState(null);
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const user = await base44.auth.me();
-        setCurrentUser(user);
-        const profiles = await base44.entities.UserProfile.filter({ user_id: user.id });
-        if (profiles?.[0]) setMyProfile(profiles[0]);
-      } catch (e) {}
-    };
-    getUser();
+    base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
+
+  const { data: myProfileData } = useQuery({
+    queryKey: ['myProfile', currentUser?.id],
+    queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser?.id }).then(r => r[0] || null),
+    enabled: !!currentUser?.id,
+  });
+
+  const myProfile = myProfileData;
 
   const { data: communities = [], isLoading: loadingCommunities } = useQuery({
     queryKey: ['allCommunities'],
