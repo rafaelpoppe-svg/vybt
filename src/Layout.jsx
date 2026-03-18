@@ -189,7 +189,6 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
         touchAction: 'pan-y pinch-zoom',
         overscrollBehavior: 'none',
         WebkitOverflowScrolling: 'touch',
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}>
         <style>{`
           /* Force dark color-scheme so iOS renders status bar dark */
