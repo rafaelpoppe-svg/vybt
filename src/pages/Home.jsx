@@ -333,6 +333,18 @@ export default function Home() {
               onRadiusChange={(r) => { setRadius(r); localStorage.setItem('selectedRadius', r); }}
               adminMode={currentUser?.role === 'admin'}
             />
+            <motion.button
+              whileTap={{ scale: 0.85 }}
+              onClick={() => navigate(createPageUrl('Notifications'))}
+              className="relative p-2 rounded-full bg-white/5 border border-white/10"
+            >
+              <Bell className="w-5 h-5 text-white" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[10px] font-black px-1">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </motion.button>
           </div>
         </div>
 
