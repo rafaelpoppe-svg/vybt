@@ -116,7 +116,32 @@ export default function UserProfile() {
   const coverPhoto = photos[0];
   const isPrivate = profile.is_private;
   const isFriend = myFriendships.some(f => (f.friend_id === userId || f.user_id === userId) && f.status === 'accepted');
-  const isPending = friendRequests.some(f => f.friend_id === userId && f.status === 'pending');
+  const isPending = myFriendships.some(f => f.friend_id === userId && f.status === 'pending');
+  const existingFriendship = myFriendships.find(f => (f.friend_id === userId || f.user_id === userId));
+
+  const handleAddFriend = async () => {
+    setFriendshipLoading(true);
+    await base44.entities.Friendship.create({
+      user_id: currentUser.id,
+      friend_id: userId,
+      status: 'pending',
+    });
+    await queryClient.invalidateQueries(['myFriendships', currentUser?.id]);
+    await queryClient.invalidateQueries(['friendRequests', currentUser?.id]);
+    setFriendshipLoading(false);
+  };
+
+  const handleUnfriend = async () => {
+    setFriendshipLoading(true);
+    if (existingFriendship) {
+      await base44.entities.Friendship.delete(existingFriendship.id);
+    }
+    await queryClient.invalidateQueries(['myFriendships', currentUser?.id]);
+    await queryClient.invalidateQueries(['friendRequests', currentUser?.id]);
+    await queryClient.invalidateQueries(['userFriendships', userId]);
+    setFriendshipLoading(false);
+    setShowUnfriendModal(false);
+  };
 
   const tabs = [
     { id: 'photos', icon: <Grid3X3 className="w-5 h-5" /> },
