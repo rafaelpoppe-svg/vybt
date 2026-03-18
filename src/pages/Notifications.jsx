@@ -279,6 +279,7 @@ const typeConfig = {
   plan_time_changed:     { emoji: '🕐', ring: 'linear-gradient(135deg,#f59e0b,#f97316)', badge: '#f59e0b' },
   plan_location_changed: { emoji: '📍', ring: 'linear-gradient(135deg,#f59e0b,#f97316)', badge: '#f59e0b' },
   new_story_in_plan:     { emoji: '📸', ring: 'linear-gradient(135deg,#a855f7,#ec4899)', badge: '#a855f7' },
+  story_reaction:        { emoji: '❤️', ring: 'linear-gradient(135deg,#ec4899,#f97316)', badge: '#ec4899' },
 };
 
 function NotifRow({ notification, plan, relatedProfile, onMark }) {
