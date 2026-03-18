@@ -36,12 +36,15 @@ const THEME_ACCENTS = {
 
 export default function UserProfile() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('id');
 
   const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('photos');
   const [expandedPhoto, setExpandedPhoto] = useState(null);
+  const [showUnfriendModal, setShowUnfriendModal] = useState(false);
+  const [friendshipLoading, setFriendshipLoading] = useState(false);
 
 
   useEffect(() => {
