@@ -288,8 +288,13 @@ function NotifRow({ notification, plan, relatedProfile, onMark }) {
 
   const handleClick = () => {
     onMark(notification.id);
-    if (notification.plan_id) navigate(createPageUrl('PlanDetails') + `?id=${notification.plan_id}`);
-    else if (notification.related_user_id) navigate(createPageUrl('UserProfile') + `?id=${notification.related_user_id}`);
+    if (notification.type === 'story_reaction' && notification.plan_id) {
+      navigate(createPageUrl('StoryView') + `?id=${notification.plan_id}`);
+    } else if (notification.plan_id) {
+      navigate(createPageUrl('PlanDetails') + `?id=${notification.plan_id}`);
+    } else if (notification.related_user_id) {
+      navigate(createPageUrl('UserProfile') + `?id=${notification.related_user_id}`);
+    }
   };
 
   return (
