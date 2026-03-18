@@ -151,6 +151,52 @@ function LivePlanCard({ notification, plan, onMark }) {
   );
 }
 
+// ─── UPCOMING PLAN ROW (plan_recommendation — nearby, not live) ──────────────
+
+function UpcomingPlanRow({ notification, plan, onMark }) {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    onMark(notification.id);
+    navigate(createPageUrl('PlanDetails') + `?id=${plan?.id || notification.plan_id}`);
+  };
+
+  return (
+    <motion.button
+      whileTap={{ scale: 0.985 }}
+      onClick={handleClick}
+      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left ${!notification.is_read ? 'bg-[#00c6d2]/5' : ''}`}
+    >
+      {/* Plan thumbnail with calendar badge */}
+      <div className="relative flex-shrink-0 w-11 h-11 rounded-xl overflow-hidden"
+        style={{ border: '1.5px solid rgba(0,198,210,0.35)' }}>
+        {plan?.cover_image
+          ? <img src={plan.cover_image} alt="" className="w-full h-full object-cover" />
+          : <div className="w-full h-full bg-gradient-to-br from-[#00c6d2]/40 to-[#542b9b]/40 flex items-center justify-center text-lg">📍</div>}
+        <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#0b0b0b] flex items-center justify-center"
+          style={{ padding: 1 }}>
+          <div className="w-full h-full rounded-full bg-[#00c6d2] flex items-center justify-center text-[9px]">📅</div>
+        </div>
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <p className="text-white text-[13.5px] leading-snug">
+          <span className="font-bold">{plan?.title || notification.title} </span>
+          <span className="text-gray-300">is happening near you</span>
+        </p>
+        <div className="flex items-center gap-1.5 mt-0.5">
+          {plan?.date && (
+            <span className="text-[#00c6d2] text-[11px] font-semibold">{plan.date}</span>
+          )}
+          {plan?.date && <span className="text-gray-600 text-[10px]">·</span>}
+          <span className="text-gray-500 text-[11px]">{timeAgo(notification.created_date)}</span>
+        </div>
+      </div>
+
+      {!notification.is_read && <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 bg-[#00c6d2]" />}
+    </motion.button>
+  );
+}
+
 // ─── FRIEND REQUEST ROW ───────────────────────────────────────────────────────
 
 function FriendRequestRow({ notification, requesterProfile, onMark }) {
