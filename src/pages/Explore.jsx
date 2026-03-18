@@ -140,11 +140,7 @@ export default function Explore() {
     // Hide plans that admin chose to hide from Explore
     if (plan.show_in_explore === false) return false;
 
-    // Hide plans with no participants (at least 1 required to appear in Explore)
-    const participantCount = allParticipants.filter(p => p.plan_id === plan.id).length;
-    if (participantCount === 0) return false;
-
-    // Filter by current user's city — always enforce if profile loaded
+    // Filter by current user's city — wait for profile to load
     if (!userCity) return false;
     if (plan.city?.toLowerCase() !== userCity) return false;
     
