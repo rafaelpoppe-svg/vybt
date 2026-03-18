@@ -138,10 +138,9 @@ export default function Explore() {
     // Hide plans that admin chose to hide from Explore
     if (plan.show_in_explore === false) return false;
 
-    // Filter by current user's city — always enforce
-    if (!userCity) return false;
-    if (plan.city?.toLowerCase() !== userCity) return false;
-    
+    // Filter by city only if user has a city set
+    if (userCity && plan.city?.toLowerCase() !== userCity) return false;
+
     const matchesSearch = plan.title.toLowerCase().includes(search.toLowerCase()) ||
       plan.location_address?.toLowerCase().includes(search.toLowerCase());
     const matchesTag = selectedTag === 'All' || plan.tags?.some(t => 
