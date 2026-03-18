@@ -441,6 +441,10 @@ export default function Explore() {
                         </div>}
                   </div>
                 )
+              ) : !myProfile ? (
+                <div className="flex justify-center py-12">
+                  <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
+                </div>
               ) : isLoading ? (
                 <div className="flex justify-center py-12">
                   <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
