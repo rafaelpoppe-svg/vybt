@@ -37,13 +37,11 @@ export default function Explore() {
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
 
-  const { data: myProfileData } = useQuery({
+  const { data: myProfile, isLoading: isLoadingProfile } = useQuery({
     queryKey: ['myProfile', currentUser?.id],
     queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser?.id }).then(r => r[0] || null),
     enabled: !!currentUser?.id,
   });
-
-  const myProfile = myProfileData;
 
   const { data: communities = [], isLoading: loadingCommunities } = useQuery({
     queryKey: ['allCommunities'],
