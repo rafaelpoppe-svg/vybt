@@ -31,6 +31,7 @@ export default function Home() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { t } = useLanguage();
+  const { unreadCount } = useNotificationContext();
   const [city, setCity] = useState(() => localStorage.getItem('selectedCity') || '');
   const [radius, setRadius] = useState(() => Number(localStorage.getItem('selectedRadius')) || 10);
   const [currentUser, setCurrentUser] = useState(null);
