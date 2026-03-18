@@ -443,6 +443,20 @@ export default function Explore() {
                 <div className="flex justify-center py-12">
                   <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
                 </div>
+              ) : !userCity ? (
+                <div className="text-center py-20 space-y-4 px-6">
+                  <div className="text-5xl">📍</div>
+                  <p className="text-white font-semibold text-lg">Set your city first</p>
+                  <p className="text-gray-400 text-sm">To see plans, people and communities near you, add your city to your profile.</p>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => navigate(createPageUrl('EditProfile'))}
+                    className="mt-2 px-6 py-3 rounded-full font-bold text-[#0b0b0b] text-sm"
+                    style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}
+                  >
+                    Go to Profile Settings
+                  </motion.button>
+                </div>
               ) : activeView === 'plans' ? (
                 filteredPlans.length > 0 ? (
                   <>
