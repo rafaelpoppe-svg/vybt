@@ -127,11 +127,12 @@ export default function Profile() {
 
       {/* ── Top bar ── */}
       <div
-        className="flex items-center justify-between px-4 py-3 sticky top-0 z-40 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/5"
+        className="relative flex items-center justify-between px-4 py-3 sticky top-0 z-40 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/5"
         style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}
       >
-        <div className="flex items-center gap-2">
-          <span className="text-white font-black text-lg tracking-tight">
+        <div className="w-10" />
+        <div className="absolute left-0 right-0 flex items-center justify-center gap-2 pointer-events-none">
+          <span className="text-white font-black text-xl tracking-tight">
             {profile.display_name || currentUser.full_name}
           </span>
           {profile.is_verified && (
