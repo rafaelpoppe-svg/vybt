@@ -116,8 +116,8 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
   // Inject critical iOS meta tags + force bg color as early as possible
   useEffect(() => {
     // Force background immediately — prevents white flash on iOS WebView
-    document.documentElement.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
-    document.body.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;overflow:hidden!important;margin:0!important;padding:0!important;height:100%!important;';
+    document.documentElement.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;margin:0!important;padding:0!important;height:100%!important;';
+    document.body.style.cssText += ';background:#0b0b0b!important;background-color:#0b0b0b!important;margin:0!important;padding:0!important;height:100%!important;';
 
     const root = document.getElementById('root');
     if (root) {
@@ -173,8 +173,10 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
       */}
       <div style={{
         width: '100%',
+        height: '100dvh',
         minHeight: '100dvh',
         position: 'relative',
+        inset: 0,
         display: 'flex',
         flexDirection: 'column',
         background: themeStyles?.background || '#0b0b0b',
