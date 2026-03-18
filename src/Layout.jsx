@@ -8,6 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 
+function getStatusBarPadding() {
+  const ua = navigator.userAgent;
+  const isAndroid = /android/i.test(ua);
+  if (isAndroid) {
+    return '0px';
+  }
+  return 'env(safe-area-inset-top, 0px)';
+}
+
 function LayoutContent({ children, currentPageName, profileTheme }) {
   const [authChecked, setAuthChecked] = useState(false);
   const isAuthenticatedRef = React.useRef(false);
@@ -123,7 +132,7 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
     if (root) {
       root.style.cssText += ';background:#0b0b0b!important;height:100%!important;min-height:100%!important;';
     }
-    
+
     // theme-color
     let themeMeta = document.querySelector('meta[name="theme-color"]');
     if (!themeMeta) { themeMeta = document.createElement('meta'); themeMeta.name = 'theme-color'; document.head.prepend(themeMeta); }
@@ -176,20 +185,21 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
         height: '100dvh',
         minHeight: '100dvh',
         position: 'fixed',
-        top: '-100px',        // ADICIONA — estende para cima da status bar
-        left: 0,
-        right: 0,
-        bottom: '-100px',     // ADICIONA — estende para baixo da nav bar
-        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 100px)',   // compensa o top negativo
-        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 100px)', // compensa o bottom negativo
+        inset: 0,
         display: 'flex',
         flexDirection: 'column',
         background: themeStyles?.background || '#0b0b0b',
+        backgroundImage: themeStyles?.backgroundImage,
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
         overflowX: 'hidden',
         overflowY: 'auto',
+        // CRITICAL: prevent iOS WKWebView back-swipe gesture from sliding the layer
         touchAction: 'pan-y pinch-zoom',
         overscrollBehavior: 'none',
         WebkitOverflowScrolling: 'touch',
+        paddingTop: getStatusBarPadding(),
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}>
         <style>{`
           /* Force dark color-scheme so iOS renders status bar dark */
