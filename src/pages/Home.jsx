@@ -21,7 +21,7 @@ import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated'
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
 import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { useLanguage } from '../components/common/LanguageContext';
-import { useNotificationContext } from '../components/notifications/NotificationProvider';
+import { useNotifications } from '../components/notifications/NotificationProvider';
 import HomeCommunitiesBar from '../components/home/HomeCommunitiesBar';
 import MyCommunitiesDrawer from '../components/home/MyCommunitiesDrawer';
 import HomeBottomFeed from '../components/home/HomeBottomFeed';
@@ -31,7 +31,7 @@ export default function Home() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { t } = useLanguage();
-  const { unreadCount } = useNotificationContext();
+  const { unreadCount } = useNotifications();
   const [city, setCity] = useState(() => localStorage.getItem('selectedCity') || '');
   const [radius, setRadius] = useState(() => Number(localStorage.getItem('selectedRadius')) || 10);
   const [currentUser, setCurrentUser] = useState(null);
