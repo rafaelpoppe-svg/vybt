@@ -534,7 +534,6 @@ export default function Notifications() {
         )}
       </div>
 
-      <div className="flex-shrink-0"><BottomNav /></div>
     </div>
   );
 }
