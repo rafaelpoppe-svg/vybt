@@ -185,6 +185,8 @@ export default function Explore() {
   // Filter users
   let filteredUsers = userProfiles.filter(profile => {
     if (profile.user_id === currentUser?.id) return false;
+    // Hide friends from "Matches My Vibes" discover tab
+    if (friendIds.includes(profile.user_id)) return false;
 
     // Filter by current user's city — always enforce
     if (!userCity) return false;
