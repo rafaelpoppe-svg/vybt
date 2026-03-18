@@ -344,11 +344,22 @@ export default function Notifications() {
 
   const HIDDEN = ['new_group_message', 'new_direct_message'];
 
-  const filtered = useMemo(() =>
-    notifications.filter(n => !HIDDEN.includes(n.type))
-      .sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
-    [notifications]
-  );
+  const filtered = useMemo(() => {
+    return notifications
+      .filter(n => {
+        if (HIDDEN.includes(n.type)) return false;
+        // plan_happening_now: only show if user is actually a participant in that plan
+        // and the plan hasn't ended (status not ended/terminated/voting)
+        if (n.type === 'plan_happening_now') {
+          if (!n.plan_id) return false;
+          if (!myPlanIds.has(n.plan_id)) return false;
+          const plan = plansMap[n.plan_id];
+          if (plan && ['ended', 'terminated', 'voting', 'unsuccessful'].includes(plan.status)) return false;
+        }
+        return true;
+      })
+      .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+  }, [notifications, myPlanIds, plansMap]);
 
   const groups = useMemo(() => groupByPeriod(filtered), [filtered]);
   const unreadCount = filtered.filter(n => !n.is_read).length;
@@ -356,6 +367,8 @@ export default function Notifications() {
   const renderNotif = (n) => {
     if (n.type === 'plan_happening_now')
       return <LivePlanCard key={n.id} notification={n} plan={plansMap[n.plan_id]} onMark={handleMark} />;
+    if (n.type === 'plan_recommendation')
+      return <UpcomingPlanRow key={n.id} notification={n} plan={plansMap[n.plan_id]} onMark={handleMark} />;
     if (n.type === 'friend_request')
       return <FriendRequestRow key={n.id} notification={n} requesterProfile={profilesMap[n.related_user_id]} onMark={handleMark} />;
     return <NotifRow key={n.id} notification={n} plan={plansMap[n.plan_id]} relatedProfile={profilesMap[n.related_user_id]} onMark={handleMark} />;
