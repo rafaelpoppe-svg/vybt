@@ -175,7 +175,7 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
         width: '100%',
         height: '100dvh',
         minHeight: '100dvh',
-        position: 'fixed',
+        position: 'relative',
         inset: 0,
         display: 'flex',
         flexDirection: 'column',
