@@ -19,6 +19,7 @@ const typeToPrefsKey = {
   plan_location_changed: 'plan_update',
   plan_highlighted: 'plan_update',
   story_highlighted: 'friend_story',
+  story_reaction: 'friend_story',
 };
 
 // Check if user allows push notification of a certain type
