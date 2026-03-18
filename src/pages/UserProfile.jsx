@@ -428,6 +428,57 @@ export default function UserProfile() {
         </>
       )}
 
+      {/* Unfriend Confirmation Modal */}
+      <AnimatePresence>
+        {showUnfriendModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowUnfriendModal(false)}
+            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end justify-center"
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full rounded-t-3xl p-6 space-y-4"
+              style={{ background: 'linear-gradient(160deg, #1a1a2e 0%, #111 100%)', border: '1px solid rgba(255,255,255,0.1)', borderBottom: 'none' }}
+            >
+              <div className="flex justify-center">
+                <div className="w-10 h-1 rounded-full bg-white/20" />
+              </div>
+              <div className="text-center">
+                <div className="text-4xl mb-2">💔</div>
+                <h3 className="text-white font-bold text-lg">Remove Friend?</h3>
+                <p className="text-gray-400 text-sm mt-1">
+                  Are you sure you want to remove <span className="text-white font-semibold">{profile?.display_name}</span> from your friends?
+                </p>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <motion.button
+                  whileTap={{ scale: 0.96 }}
+                  onClick={() => setShowUnfriendModal(false)}
+                  className="flex-1 py-3 rounded-2xl bg-gray-800 text-gray-300 font-semibold text-sm border border-gray-700"
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileTap={{ scale: 0.96 }}
+                  onClick={handleUnfriend}
+                  disabled={friendshipLoading}
+                  className="flex-1 py-3 rounded-2xl bg-red-500/20 border border-red-500/40 text-red-400 font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
+                >
+                  {friendshipLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><UserMinus className="w-4 h-4" /> Remove</>}
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Photo Expand Modal */}
       <AnimatePresence>
         {expandedPhoto && (
