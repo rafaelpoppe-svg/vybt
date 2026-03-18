@@ -390,21 +390,47 @@ export default function Notifications() {
 
   const HIDDEN = ['new_group_message', 'new_direct_message'];
 
+  // Helper: check if a plan is truly still live (happening and end time not passed)
+  const isPlanTrulyLive = (plan) => {
+    if (!plan) return false;
+    if (['ended', 'terminated', 'voting'].includes(plan.status)) return false;
+    // If end_time exists, check if it has passed
+    if (plan.date && plan.end_time) {
+      const end = new Date(`${plan.date}T${plan.end_time}:00`);
+      if (new Date() > end) return false;
+    }
+    // If no end_time, assume 8h after start
+    if (plan.date && plan.time) {
+      const start = new Date(`${plan.date}T${plan.time}:00`);
+      const end = new Date(start.getTime() + 8 * 60 * 60 * 1000);
+      if (new Date() > end) return false;
+    }
+    return true;
+  };
+
   const filtered = useMemo(() => {
+    const seenPlanNotifType = new Set(); // deduplicate same plan+type combos
+
     return notifications
+      .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
       .filter(n => {
         if (HIDDEN.includes(n.type)) return false;
-        // plan_happening_now: only show if user is actually a participant in that plan
-        // and the plan hasn't ended (status not ended/terminated/voting)
-        if (n.type === 'plan_happening_now') {
-          if (!n.plan_id) return false;
-          if (!myPlanIds.has(n.plan_id)) return false;
-          const plan = plansMap[n.plan_id];
-          if (plan && ['ended', 'terminated', 'voting', 'unsuccessful'].includes(plan.status)) return false;
+
+        // Deduplicate: keep only the most recent notification per plan+type
+        if (n.plan_id) {
+          const key = `${n.plan_id}::${n.type}`;
+          if (seenPlanNotifType.has(key)) return false;
+          seenPlanNotifType.add(key);
         }
+
+        // plan_happening_now: only show if user is participant AND plan is truly still live
+        if (n.type === 'plan_happening_now') {
+          if (!n.plan_id || !myPlanIds.has(n.plan_id)) return false;
+          if (!isPlanTrulyLive(plansMap[n.plan_id])) return false;
+        }
+
         return true;
-      })
-      .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+      });
   }, [notifications, myPlanIds, plansMap]);
 
   const groups = useMemo(() => groupByPeriod(filtered), [filtered]);
