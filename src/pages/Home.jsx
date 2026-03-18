@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Loader2, Users } from 'lucide-react';
+import { Loader2, Users, Bell } from 'lucide-react';
 import StoryViewOverlay from '../components/story/StoryViewOverlay';
 
 import BottomNav from '../components/common/BottomNav';
@@ -21,6 +21,7 @@ import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated'
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
 import PlatformTutorial from '../components/onboarding/PlatformTutorial';
 import { useLanguage } from '../components/common/LanguageContext';
+import { useNotificationContext } from '../components/notifications/NotificationProvider';
 import HomeCommunitiesBar from '../components/home/HomeCommunitiesBar';
 import MyCommunitiesDrawer from '../components/home/MyCommunitiesDrawer';
 import HomeBottomFeed from '../components/home/HomeBottomFeed';
