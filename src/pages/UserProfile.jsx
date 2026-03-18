@@ -263,10 +263,14 @@ export default function UserProfile() {
           <div className="flex gap-3 mt-4">
             {isFriend ? (
               <>
-                <div className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-green-500/20 border border-green-500/40 text-green-400 text-sm font-semibold">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowUnfriendModal(true)}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-green-500/20 border border-green-500/40 text-green-400 text-sm font-semibold"
+                >
                   <Check className="w-4 h-4" />
                   Friends
-                </div>
+                </motion.button>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate(createPageUrl('Chat') + `?userId=${userId}`)}
@@ -278,21 +282,16 @@ export default function UserProfile() {
               </>
             ) : isPending ? (
               <div className="flex-1 flex items-center justify-center py-2.5 rounded-xl bg-gray-800 text-gray-400 text-sm font-medium border border-gray-700">
-                Request Sent
+                ⏳ Request Sent
               </div>
             ) : (
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={async () => {
-                  await base44.entities.Friendship.create({
-                    user_id: currentUser.id,
-                    friend_id: userId,
-                    status: 'pending',
-                  });
-                }}
-                className="flex-1 py-2.5 bg-[#00c6d2]/20 border border-[#00c6d2]/50 rounded-xl text-[#00c6d2] text-sm font-semibold flex items-center justify-center gap-1.5"
+                onClick={handleAddFriend}
+                disabled={friendshipLoading}
+                className="flex-1 py-2.5 bg-[#00c6d2]/20 border border-[#00c6d2]/50 rounded-xl text-[#00c6d2] text-sm font-semibold flex items-center justify-center gap-1.5 disabled:opacity-60"
               >
-                <><UserPlus className="w-4 h-4" /> Add Friend</>
+                {friendshipLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><UserPlus className="w-4 h-4" /> Add Friend</>}
               </motion.button>
             )}
           </div>
