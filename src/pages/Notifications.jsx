@@ -311,6 +311,14 @@ export default function Notifications() {
     enabled: planIds.length > 0,
   });
 
+  // Fetch user's participations to know which plans they're actually in
+  const { data: myParticipations = [] } = useQuery({
+    queryKey: ['myParticipationsNotif', currentUser?.id],
+    queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
+    enabled: !!currentUser?.id,
+  });
+  const myPlanIds = useMemo(() => new Set(myParticipations.map(p => p.plan_id)), [myParticipations]);
+
   const { data: relatedProfiles = [] } = useQuery({
     queryKey: ['notif-profiles', userIds.join(',')],
     queryFn: () => Promise.all(userIds.map(uid => base44.entities.UserProfile.filter({ user_id: uid }).then(r => r[0]))),
