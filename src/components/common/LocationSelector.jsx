@@ -59,22 +59,33 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
   return (
     <div className="relative">
       <motion.button
-        whileTap={{ scale: 0.96 }}
+        whileTap={{ scale: 0.94 }}
+        whileHover={{ scale: 1.03 }}
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-1 px-2 py-1 rounded-lg transition-all border text-xs ${
-          isOpen
-            ? 'bg-gradient-to-r from-[#00c6d2]/20 to-[#7c3aed]/20 border-[#00c6d2]/50'
-            : 'bg-white/5 border-white/10'
-        }`}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all"
+        style={{
+          background: isOpen
+            ? 'linear-gradient(135deg, #00c6d2, #7c3aed)'
+            : 'linear-gradient(135deg, rgba(0,198,210,0.25), rgba(124,58,237,0.25))',
+          border: '1.5px solid',
+          borderColor: isOpen ? 'transparent' : 'rgba(0,198,210,0.4)',
+          boxShadow: isOpen ? '0 0 14px rgba(0,198,210,0.4)' : 'none',
+        }}
       >
-        <span className="text-xs">📍</span>
-        <span className="text-white text-[11px] font-bold max-w-[60px] truncate">
-          {city || 'Loc'}
-        </span>
-        <span className="text-[#00c6d2] text-[9px] font-semibold bg-[#00c6d2]/10 px-1 py-0.5 rounded-full whitespace-nowrap">
-          {radius}km
-        </span>
-        <ChevronDown className={`w-3 h-3 text-gray-400 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+        <motion.span
+          animate={{ scale: [1, 1.3, 1] }}
+          transition={{ repeat: Infinity, repeatDelay: 3, duration: 0.5 }}
+          className="text-sm"
+        >📍</motion.span>
+        <div className="flex flex-col items-start leading-none">
+          <span className={`text-[11px] font-bold truncate max-w-[70px] ${isOpen ? 'text-white' : 'text-[#00c6d2]'}`}>
+            {city || 'Set city'}
+          </span>
+          <span className={`text-[9px] font-medium ${isOpen ? 'text-white/80' : 'text-gray-400'}`}>
+            {radius}km radius
+          </span>
+        </div>
+        <ChevronDown className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180 text-white' : 'text-[#00c6d2]'}`} />
       </motion.button>
 
       <AnimatePresence>
