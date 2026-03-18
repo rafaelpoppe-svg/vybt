@@ -459,7 +459,13 @@ export default function Notifications() {
       <header className="flex-shrink-0 bg-[#0b0b0b] px-4 pb-2"
         style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
         <div className="flex items-center justify-between">
-          <h1 className="text-[22px] font-black text-white tracking-tight">Notifications</h1>
+          <div className="flex items-center gap-3">
+            <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(createPageUrl('Home'))}
+              className="p-2 rounded-full bg-gray-900">
+              <ChevronLeft className="w-5 h-5 text-white" />
+            </motion.button>
+            <h1 className="text-[22px] font-black text-white tracking-tight">Notifications</h1>
+          </div>
           <div className="flex items-center gap-3">
             {unreadCount > 0 && (
               <motion.button whileTap={{ scale: 0.95 }} onClick={markAllAsRead}
