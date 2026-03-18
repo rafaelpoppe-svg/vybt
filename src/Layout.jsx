@@ -173,10 +173,8 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
       */}
       <div style={{
         width: '100%',
-        height: '100dvh',
         minHeight: '100dvh',
         position: 'relative',
-        inset: 0,
         display: 'flex',
         flexDirection: 'column',
         background: themeStyles?.background || '#0b0b0b',
