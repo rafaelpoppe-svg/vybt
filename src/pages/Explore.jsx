@@ -119,8 +119,8 @@ export default function Explore() {
   // Use recommended plans for "For You" sort, otherwise use regular plans
   const basePlans = planFilters.sortBy === 'foryou' ? recommendedPlans : plans;
 
-  // Don't show anything until we know the user's city
-  const userCity = myProfile?.city?.toLowerCase();
+  // Only use city if it's a non-empty string
+  const userCity = myProfile?.city?.trim()?.toLowerCase() || null;
 
   let filteredPlans = basePlans.filter(plan => {
     // Hide voting and terminated plans from everyone in Explore
