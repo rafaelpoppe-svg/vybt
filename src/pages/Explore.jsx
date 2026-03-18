@@ -122,9 +122,10 @@ export default function Explore() {
   // Use recommended plans for "For You" sort, otherwise use regular plans
   const basePlans = planFilters.sortBy === 'foryou' ? recommendedPlans : plans;
 
-  let filteredPlans = basePlans.filter(plan => {
-    const isMember = myParticipations.some(p => p.plan_id === plan.id);
+  // Don't show anything until we know the user's city
+  const userCity = myProfile?.city?.toLowerCase();
 
+  let filteredPlans = basePlans.filter(plan => {
     // Hide voting and terminated plans from everyone in Explore
     if (plan.status === 'voting' || plan.status === 'terminated') return false;
 
@@ -144,8 +145,9 @@ export default function Explore() {
     const participantCount = allParticipants.filter(p => p.plan_id === plan.id).length;
     if (participantCount === 0) return false;
 
-    // Filter by current user's city
-    if (myProfile?.city && plan.city?.toLowerCase() !== myProfile.city.toLowerCase()) return false;
+    // Filter by current user's city — always enforce if profile loaded
+    if (!userCity) return false;
+    if (plan.city?.toLowerCase() !== userCity) return false;
     
     const matchesSearch = plan.title.toLowerCase().includes(search.toLowerCase()) ||
       plan.location_address?.toLowerCase().includes(search.toLowerCase());
@@ -191,8 +193,9 @@ export default function Explore() {
   let filteredUsers = userProfiles.filter(profile => {
     if (profile.user_id === currentUser?.id) return false;
 
-    // Filter by current user's city
-    if (myProfile?.city && profile.city?.toLowerCase() !== myProfile.city.toLowerCase()) return false;
+    // Filter by current user's city — always enforce
+    if (!userCity) return false;
+    if (profile.city?.toLowerCase() !== userCity) return false;
     
     const matchesSearch = profile.display_name?.toLowerCase().includes(search.toLowerCase());
     
