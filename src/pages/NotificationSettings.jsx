@@ -3,65 +3,58 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, Loader2, Bell, Smartphone, Mail, Check } from 'lucide-react';
+import { ChevronLeft, Loader2, Bell, BellOff, Check } from 'lucide-react';
 import { toast } from 'sonner';
 
-const notificationTypes = [
+const SECTIONS = [
   {
-    key: 'new_plan',
-    label: 'New plans nearby',
-    desc: 'When a new plan is created in your city',
-    emoji: '🎉'
+    title: 'Social',
+    items: [
+      { key: 'friend_request', emoji: '👋', label: 'Friend requests', desc: 'When someone sends you a friend request' },
+      { key: 'friend_story', emoji: '📸', label: 'Friends\' stories', desc: 'When a friend posts a new story' },
+      { key: 'friend_created_plan', emoji: '🎉', label: 'Friend created a plan', desc: 'When a friend creates a new plan' },
+    ]
   },
   {
-    key: 'friend_story',
-    label: 'Friend stories',
-    desc: 'When a friend posts a new story',
-    emoji: '📸'
+    title: 'Plans',
+    items: [
+      { key: 'plan_happening_now', emoji: '🔥', label: 'Happening Now', desc: 'When a plan you\'re in is live — post stories!' },
+      { key: 'plan_recommendation', emoji: '📍', label: 'Plan recommendations', desc: 'Plans nearby that match your vibe' },
+      { key: 'plan_update', emoji: '🕐', label: 'Plan updates', desc: 'Time or location changes in your plans' },
+      { key: 'voting', emoji: '🗳️', label: 'Voting & results', desc: 'Voting started or plan result' },
+    ]
   },
   {
-    key: 'plan_update',
-    label: 'Plan updates',
-    desc: 'Changes to plans you joined (time, location)',
-    emoji: '📍'
+    title: 'Reminders',
+    items: [
+      { key: 'plan_reminder_1day', emoji: '⏰', label: '1 day before', desc: 'Reminder the day before the plan' },
+      { key: 'plan_reminder_1hour', emoji: '⏱️', label: '1 hour before', desc: 'Reminder 1 hour before the plan starts' },
+    ]
   },
-  {
-    key: 'friend_request',
-    label: 'Friend requests',
-    desc: 'New friend requests and acceptances',
-    emoji: '👋'
-  },
-  {
-    key: 'group_message',
-    label: 'Group messages',
-    desc: 'New messages in your plan groups',
-    emoji: '💬'
-  },
-  {
-    key: 'voting',
-    label: 'Voting & results',
-    desc: 'When voting starts or plan results are out',
-    emoji: '🗳️'
-  }
 ];
 
 const defaultPrefs = {
-  new_plan_push: true,    new_plan_email: false,
-  friend_story_push: true, friend_story_email: false,
-  plan_update_push: true,  plan_update_email: false,
-  friend_request_push: true, friend_request_email: false,
-  group_message_push: true,  group_message_email: false,
-  voting_push: true,       voting_email: false,
+  new_plan_push: true,
+  friend_story_push: true,
+  friend_story_email: false,
+  plan_update_push: true,
+  friend_request_push: true,
+  plan_recommendation_push: true,
+  voting_push: true,
+  plan_happening_now_push: true,
+  friend_created_plan_push: true,
   plan_reminder_1day: false,
-  plan_reminder_1hour: true
+  plan_reminder_1hour: true,
+  mute_all: false,
 };
 
-function Toggle({ enabled, onToggle }) {
+function Toggle({ enabled, onToggle, disabled }) {
   return (
     <motion.button
       whileTap={{ scale: 0.9 }}
       onClick={onToggle}
-      className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${enabled ? 'bg-[#00c6d2]' : 'bg-gray-700'}`}
+      disabled={disabled}
+      className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${enabled ? 'bg-[#00c6d2]' : 'bg-gray-700'} ${disabled ? 'opacity-40' : ''}`}
     >
       <motion.div
         animate={{ x: enabled ? 20 : 2 }}
@@ -70,6 +63,22 @@ function Toggle({ enabled, onToggle }) {
       />
     </motion.button>
   );
+}
+
+// Map our simplified keys to actual prefs keys
+function prefKey(key) {
+  const map = {
+    friend_request: 'friend_request_push',
+    friend_story: 'friend_story_push',
+    friend_created_plan: 'friend_created_plan_push',
+    plan_happening_now: 'plan_happening_now_push',
+    plan_recommendation: 'plan_recommendation_push',
+    plan_update: 'plan_update_push',
+    voting: 'voting_push',
+    plan_reminder_1day: 'plan_reminder_1day',
+    plan_reminder_1hour: 'plan_reminder_1hour',
+  };
+  return map[key] || `${key}_push`;
 }
 
 export default function NotificationSettings() {
@@ -87,11 +96,6 @@ export default function NotificationSettings() {
     queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser.id }),
     select: (d) => d[0],
     enabled: !!currentUser?.id,
-    onSuccess: (p) => {
-      if (p?.notification_prefs) {
-        setPrefs({ ...defaultPrefs, ...p.notification_prefs });
-      }
-    }
   });
 
   useEffect(() => {
@@ -108,41 +112,28 @@ export default function NotificationSettings() {
     }
   });
 
-  const toggle = (key) => {
-    setPrefs(prev => ({ ...prev, [key]: !prev[key] }));
-  };
+  const toggle = (key) => setPrefs(prev => ({ ...prev, [key]: !prev[key] }));
+  const muteAll = prefs.mute_all;
 
   return (
     <div className="min-h-screen bg-[#0b0b0b]">
-      {/* Header */}
       <header
         className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 flex items-center justify-between px-4 py-4"
         style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
       >
         <div className="flex items-center gap-3">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-full bg-gray-900"
-          >
+          <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="p-2 rounded-full bg-gray-900">
             <ChevronLeft className="w-5 h-5 text-white" />
           </motion.button>
-          <h1 className="text-xl font-bold text-white">Notifications</h1>
+          <h1 className="text-xl font-bold text-white">Notification Settings</h1>
         </div>
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => saveMutation.mutate()}
-          disabled={saveMutation.isPending}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold text-sm"
+          disabled={saveMutation.isPending || !profile}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold text-sm disabled:opacity-50"
         >
-          {saveMutation.isPending ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <>
-              <Check className="w-4 h-4" />
-              Save
-            </>
-          )}
+          {saveMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Check className="w-4 h-4" /> Save</>}
         </motion.button>
       </header>
 
@@ -151,84 +142,61 @@ export default function NotificationSettings() {
           <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
         </div>
       ) : (
-        <div className="px-4 py-6 pb-16 space-y-4">
-          {/* Channel legend */}
-          <div className="flex items-center gap-6 px-1 mb-2">
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Smartphone className="w-3.5 h-3.5 text-[#00c6d2]" />
-              Push
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Mail className="w-3.5 h-3.5 text-purple-400" />
-              Email
-            </div>
-          </div>
+        <div className="px-4 py-6 pb-16 space-y-5">
 
-          {notificationTypes.map((type) => (
-            <div
-              key={type.key}
-              className="bg-gray-900 border border-gray-800 rounded-2xl px-4 py-4"
-            >
-              <div className="flex items-start gap-3 mb-4">
-                <span className="text-2xl">{type.emoji}</span>
-                <div className="flex-1">
-                  <p className="text-white font-semibold text-sm">{type.label}</p>
-                  <p className="text-gray-500 text-xs mt-0.5">{type.desc}</p>
-                </div>
+          {/* Mute ALL toggle — big prominent card */}
+          <motion.div
+            whileTap={{ scale: 0.99 }}
+            className="rounded-2xl px-5 py-4 flex items-center justify-between"
+            style={{
+              background: muteAll
+                ? 'linear-gradient(135deg, rgba(239,68,68,0.15), rgba(185,28,28,0.1))'
+                : 'linear-gradient(135deg, rgba(0,198,210,0.1), rgba(84,43,155,0.1))',
+              border: muteAll ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(0,198,210,0.2)'
+            }}
+          >
+            <div className="flex items-center gap-3">
+              {muteAll
+                ? <BellOff className="w-5 h-5 text-red-400" />
+                : <Bell className="w-5 h-5 text-[#00c6d2]" />}
+              <div>
+                <p className="text-white font-bold text-sm">Mute all notifications</p>
+                <p className="text-gray-400 text-xs mt-0.5">You won't receive any notifications</p>
               </div>
-              <div className="flex items-center gap-6 pl-9">
-                {/* Push */}
-                <div className="flex items-center gap-2">
-                  <Smartphone className="w-3.5 h-3.5 text-[#00c6d2]" />
-                  <Toggle
-                    enabled={prefs[`${type.key}_push`]}
-                    onToggle={() => toggle(`${type.key}_push`)}
-                  />
-                </div>
-                {/* Email */}
-                <div className="flex items-center gap-2">
-                  <Mail className="w-3.5 h-3.5 text-purple-400" />
-                  <Toggle
-                    enabled={prefs[`${type.key}_email`]}
-                    onToggle={() => toggle(`${type.key}_email`)}
-                  />
-                </div>
+            </div>
+            <Toggle enabled={muteAll} onToggle={() => toggle('mute_all')} />
+          </motion.div>
+
+          {/* Individual sections */}
+          {SECTIONS.map(section => (
+            <div key={section.title}>
+              <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 px-1">{section.title}</p>
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl divide-y divide-gray-800 overflow-hidden">
+                {section.items.map((item) => {
+                  const pk = prefKey(item.key);
+                  return (
+                    <div key={item.key} className="flex items-center gap-3 px-4 py-3.5">
+                      <span className="text-xl w-8 text-center flex-shrink-0">{item.emoji}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white text-sm font-semibold">{item.label}</p>
+                        <p className="text-gray-500 text-xs mt-0.5">{item.desc}</p>
+                      </div>
+                      <Toggle
+                        enabled={!muteAll && !!prefs[pk]}
+                        onToggle={() => toggle(pk)}
+                        disabled={muteAll}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}
 
-          {/* Plan Reminders */}
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl px-4 py-4">
-            <div className="flex items-start gap-3 mb-4">
-              <span className="text-2xl">⏰</span>
-              <div className="flex-1">
-                <p className="text-white font-semibold text-sm">Plan reminders</p>
-                <p className="text-gray-500 text-xs mt-0.5">Get reminded before plans you joined start</p>
-              </div>
-            </div>
-            <div className="pl-9 space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-white">1 day before</p>
-                  <p className="text-xs text-gray-500">Reminder the day before the plan</p>
-                </div>
-                <Toggle enabled={prefs.plan_reminder_1day} onToggle={() => toggle('plan_reminder_1day')} />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-white">1 hour before</p>
-                  <p className="text-xs text-gray-500">Reminder 1 hour before the plan starts</p>
-                </div>
-                <Toggle enabled={prefs.plan_reminder_1hour} onToggle={() => toggle('plan_reminder_1hour')} />
-              </div>
-            </div>
-          </div>
-
-          {/* Info */}
-          <div className="flex items-start gap-3 p-3 rounded-xl bg-gray-900/50 border border-gray-800 mt-2">
+          <div className="flex items-start gap-3 p-3 rounded-xl bg-gray-900/50 border border-gray-800">
             <Bell className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-gray-500">
-              Push notifications require permission from your device. Email notifications are sent to your registered address.
+              Push notifications require permission from your device. Message notifications (DMs & group chat) are never sent — check them in the Chat tab.
             </p>
           </div>
         </div>
