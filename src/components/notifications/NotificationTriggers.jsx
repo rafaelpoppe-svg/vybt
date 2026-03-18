@@ -272,3 +272,16 @@ export const notifyPlanUnsuccessful = async (userId, plan) => {
     { planId: plan.id, title: 'Plano encerrado' }
   );
 };
+
+/**
+ * Notify story owner that someone reacted to their story.
+ */
+export const notifyStoryReaction = async (storyOwnerId, reactorId, reactorName, emoji, storyId) => {
+  if (storyOwnerId === reactorId) return; // don't notify yourself
+  await createNotification(
+    storyOwnerId,
+    'story_reaction',
+    `${reactorName} reagiu ao teu story ${emoji}`,
+    { relatedUserId: reactorId, planId: storyId } // reuse plan_id field to store story id
+  );
+};
