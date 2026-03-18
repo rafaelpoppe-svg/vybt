@@ -372,13 +372,28 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
   const reactMutation = useMutation({
     mutationFn: async (emoji) => {
       const targetStoryId = story?.id;
-      if (!targetStoryId) return;
-      const existingReaction = reactions.find(r => r.user_id === currentUser?.id);
+      if (!targetStoryId || !currentUser) return;
+      const existingReaction = reactions.find(r => r.user_id === currentUser.id);
       if (existingReaction) {
-        if (existingReaction.emoji === emoji) await base44.entities.StoryReaction.delete(existingReaction.id);
-        else await base44.entities.StoryReaction.update(existingReaction.id, { emoji });
+        if (existingReaction.emoji === emoji) {
+          await base44.entities.StoryReaction.delete(existingReaction.id);
+        } else {
+          await base44.entities.StoryReaction.update(existingReaction.id, { emoji });
+          // notify owner about the new emoji
+          if (story.user_id !== currentUser.id) {
+            const myProfiles = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
+            const myName = myProfiles[0]?.display_name || currentUser.full_name || 'Alguém';
+            await notifyStoryReaction(story.user_id, currentUser.id, myName, emoji, targetStoryId);
+          }
+        }
       } else {
         await base44.entities.StoryReaction.create({ story_id: targetStoryId, user_id: currentUser.id, emoji });
+        // notify story owner
+        if (story.user_id !== currentUser.id) {
+          const myProfiles = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
+          const myName = myProfiles[0]?.display_name || currentUser.full_name || 'Alguém';
+          await notifyStoryReaction(story.user_id, currentUser.id, myName, emoji, targetStoryId);
+        }
       }
     },
     onSuccess: () => { queryClient.invalidateQueries(['storyReactions', story?.id]); setShowEmojiPicker(false); }
