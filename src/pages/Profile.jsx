@@ -135,8 +135,10 @@ export default function Profile() {
           <span className="text-white font-black text-xl tracking-tight">
             {profile.display_name || currentUser.full_name}
           </span>
-          {profile.is_verified && (
-            <ShieldCheck className="w-4 h-4 text-blue-400" />
+          {profile.is_verified ? (
+            <ShieldCheck className="w-5 h-5 text-blue-400" />
+          ) : (
+            <span className="text-[11px] text-gray-500 font-medium">Not verified</span>
           )}
         </div>
         <div className="flex items-center gap-1.5">
