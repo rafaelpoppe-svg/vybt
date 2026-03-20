@@ -8,6 +8,12 @@ import { toast } from 'sonner';
 
 const SECTIONS = [
   {
+    title: 'Messages',
+    items: [
+      { key: 'group_message', emoji: '💬', label: 'Group & Direct messages', desc: 'Notifications for new chat messages' },
+    ]
+  },
+  {
     title: 'Social',
     items: [
       { key: 'friend_request', emoji: '👋', label: 'Friend requests', desc: 'When someone sends you a friend request' },
@@ -43,6 +49,7 @@ const defaultPrefs = {
   voting_push: true,
   plan_happening_now_push: true,
   friend_created_plan_push: true,
+  group_message_push: true,
   plan_reminder_1day: false,
   plan_reminder_1hour: true,
   mute_all: false,
@@ -68,6 +75,7 @@ function Toggle({ enabled, onToggle, disabled }) {
 // Map our simplified keys to actual prefs keys
 function prefKey(key) {
   const map = {
+    group_message: 'group_message_push',
     friend_request: 'friend_request_push',
     friend_story: 'friend_story_push',
     friend_created_plan: 'friend_created_plan_push',
