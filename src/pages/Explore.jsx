@@ -187,9 +187,9 @@ export default function Explore() {
       return scoreB - scoreA;
     });
 
-  // ── MOST MEMBERS plans ──
+  // ── MOST MEMBERS plans — only upcoming/happening ──
   const mostMembersPlans = plans
-    .filter(baseFilter)
+    .filter(p => baseFilter(p) && (p.status === 'upcoming' || p.status === 'happening'))
     .sort((a, b) => {
       if (a.is_highlighted && !b.is_highlighted) return -1;
       if (!a.is_highlighted && b.is_highlighted) return 1;
