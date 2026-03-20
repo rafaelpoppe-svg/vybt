@@ -589,6 +589,15 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
               <div className="absolute inset-0 bg-black">
                 {story.media_type === 'video'
                   ? <>
+                      {/* Thumbnail placeholder shown instantly while video loads */}
+                      {videoLoading && story.thumbnail_url && (
+                        <img
+                          src={story.thumbnail_url}
+                          alt=""
+                          className="absolute inset-0 w-full h-full object-cover z-0"
+                          style={{ filter: 'blur(2px)', transform: 'scale(1.04)' }}
+                        />
+                      )}
                       {videoLoading && (
                         <div className="absolute inset-0 flex items-center justify-center z-10">
                           <Loader2 className="w-8 h-8 text-white animate-spin" />
@@ -599,6 +608,7 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
                         ref={videoRef}
                         src={story.media_url}
                         className="h-full w-full object-cover"
+                        style={{ opacity: videoLoading ? 0 : 1, transition: 'opacity 0.2s' }}
                         muted={isMuted || !story.has_audio}
                         playsInline
                         preload="auto"
@@ -606,10 +616,8 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
                         onCanPlay={(e) => {
                           setVideoLoading(false);
                           const vid = e.target;
-                          // Must be muted for autoplay on mobile without user gesture
                           vid.muted = isMuted || !story.has_audio;
                           vid.play().catch(() => {
-                            // fallback: mute and retry
                             vid.muted = true;
                             vid.play().catch(() => {});
                           });
