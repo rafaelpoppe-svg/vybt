@@ -103,10 +103,10 @@ export default function GroupChat() {
     (a, b) => new Date(a.created_date) - new Date(b.created_date)
   );
 
-  // Auto-scroll
+  // Auto-scroll when new messages arrive or keyboard opens
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [sortedMessages.length]);
+    setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+  }, [sortedMessages.length, keyboardHeight]);
 
   // ── Plan Status ────────────────────────────────────────────────────────────
   const myParticipation = participants.find(p => p.user_id === currentUser?.id);

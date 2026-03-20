@@ -133,8 +133,8 @@ export default function Chat() {
   }, [selectedFriendId, currentUser?.id, queryClient]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [sortedDMs.length]);
+    setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+  }, [sortedDMs.length, keyboardHeight]);
 
   const sendDMMutation = useMutation({
     mutationFn: async (content) => {
