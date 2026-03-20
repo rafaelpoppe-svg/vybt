@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Sticker, Lock } from 'lucide-react';
 import StickerPicker from './StickerPicker';
 import { useLanguage } from '../common/LanguageContext';
@@ -7,13 +7,16 @@ import { useLanguage } from '../common/LanguageContext';
 export default function GroupChatInput({ isChatLocked, isPending, themeColor = '#00c6d2', userId, onSend }) {
   const [message, setMessage] = useState('');
   const [showStickers, setShowStickers] = useState(false);
+  const [sending, setSending] = useState(false);
   const { t } = useLanguage();
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const trimmed = message.trim();
-    if (trimmed && !isPending) {
-      onSend(trimmed);
+    if (trimmed && !isPending && !sending) {
+      setSending(true);
       setMessage('');
+      onSend(trimmed);
+      setTimeout(() => setSending(false), 400);
     }
   };
 
@@ -68,13 +71,29 @@ export default function GroupChatInput({ isChatLocked, isPending, themeColor = '
         />
 
         <motion.button
-          whileTap={{ scale: 0.9 }}
+          whileTap={{ scale: 0.85 }}
+          animate={sending ? { scale: [1, 1.25, 0.9, 1], rotate: [0, -15, 5, 0] } : {}}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
           onClick={handleSend}
           disabled={!message.trim() || isPending}
-          className="w-11 h-11 rounded-full flex items-center justify-center disabled:opacity-40 transition-all flex-shrink-0"
+          className="w-11 h-11 rounded-full flex items-center justify-center disabled:opacity-40 transition-all flex-shrink-0 relative overflow-hidden"
           style={{ backgroundColor: themeColor }}
         >
-          <Send className="w-6 h-6 text-[#0b0b0b]" />
+          {/* Ripple on send */}
+          <AnimatePresence>
+            {sending && (
+              <motion.span
+                key="ripple"
+                initial={{ scale: 0, opacity: 0.6 }}
+                animate={{ scale: 2.5, opacity: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="absolute inset-0 rounded-full"
+                style={{ backgroundColor: themeColor }}
+              />
+            )}
+          </AnimatePresence>
+          <Send className="w-5 h-5 text-[#0b0b0b] relative z-10" />
         </motion.button>
       </div>
     </div>
