@@ -94,6 +94,8 @@ export default function NotificationSettings() {
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
   const [prefs, setPrefs] = useState(defaultPrefs);
+  // Track whether user has made local changes — if so, don't overwrite from remote
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => navigate('/'));
@@ -106,16 +108,17 @@ export default function NotificationSettings() {
     enabled: !!currentUser?.id,
   });
 
+  // Only sync from remote on first load, never after that
   useEffect(() => {
-    if (profile?.notification_prefs) {
+    if (profile?.notification_prefs && !initialized) {
       setPrefs({ ...defaultPrefs, ...profile.notification_prefs });
+      setInitialized(true);
     }
-  }, [profile]);
+  }, [profile, initialized]);
 
   const saveMutation = useMutation({
     mutationFn: () => base44.entities.UserProfile.update(profile.id, { notification_prefs: prefs }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['myProfile', currentUser?.id]);
       toast.success('Preferences saved');
     }
   });
