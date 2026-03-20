@@ -10,6 +10,7 @@ import ChatMessage from '../components/chat/ChatMessage';
 import StickerPicker from '../components/chat/StickerPicker';
 import PartyTag from '../components/common/PartyTag';
 import { notifyNewDirectMessage } from '../components/notifications/NotificationTriggers';
+import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 
 export default function Chat() {
   const navigate = useNavigate();
