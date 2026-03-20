@@ -175,9 +175,9 @@ export default function Explore() {
       return (b.matchScore || 0) - (a.matchScore || 0);
     });
 
-  // ── ON FIRE plans — most going + view_count + members ──
+  // ── ON FIRE plans — most going + view_count + members, only upcoming/happening ──
   const onFirePlans = plans
-    .filter(baseFilter)
+    .filter(p => baseFilter(p) && (p.status === 'upcoming' || p.status === 'happening'))
     .sort((a, b) => {
       if (a.is_highlighted && !b.is_highlighted) return -1;
       if (!a.is_highlighted && b.is_highlighted) return 1;
