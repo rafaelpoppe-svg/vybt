@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { X, Send, ChevronLeft, Camera, Video, RotateCcw, MapPin, Loader2, ZapOff } from 'lucide-react';
+import { X, Send, ChevronLeft, RotateCcw, MapPin, Loader2, Zap, ZapOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 // ─── Plan Selector Sheet ──────────────────────────────────────────────────────
