@@ -368,7 +368,7 @@ export default function CreatePlan() {
             )}
             <motion.button
               whileTap={{ scale: 0.97 }}
-              onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${createdPlan.id}`)}
+              onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${createdPlan.id}`, { replace: true })}
               className="w-full py-4 rounded-2xl bg-[#00c6d2] text-[#0b0b0b] font-bold text-lg"
             >
               Open my Plan 🚀
