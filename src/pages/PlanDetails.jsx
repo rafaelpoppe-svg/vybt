@@ -452,8 +452,8 @@ export default function PlanDetails() {
           </div>
         )}
 
-        {/* Add Story Button (if joined, not during voting) */}
-        {isJoined && !isVoting && (
+        {/* Add Story Button (only for members AND only when plan is happening) */}
+        {isJoined && plan.status === 'happening' && (
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate(createPageUrl('AddStory') + `?planId=${planId}`)}
