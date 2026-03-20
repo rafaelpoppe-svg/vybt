@@ -33,6 +33,7 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState('');
   const [showStickers, setShowStickers] = useState(false);
   const messagesEndRef = useRef(null);
+  const keyboardHeight = useKeyboardHeight();
 
   useEffect(() => {
     const getUser = async () => {
