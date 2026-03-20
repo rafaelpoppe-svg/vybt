@@ -205,8 +205,14 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
 
   const accept = useMutation({
     mutationFn: async () => {
-      const reqs = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, status: 'pending' });
+      const reqs = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id, status: 'pending' });
       if (reqs[0]) await base44.entities.Friendship.update(reqs[0].id, { status: 'accepted' });
+      // Criar amizade simétrica para o recetor (utilizador atual)
+      await base44.entities.Friendship.create({
+        user_id: notification.user_id,
+        friend_id: notification.related_user_id,
+        status: 'accepted',
+      });
       await base44.entities.Notification.update(notification.id, { is_read: true });
     },
     onSuccess: () => { setLocalStatus('accepted'); queryClient.invalidateQueries(['myFriendships']); onMark(notification.id); }
