@@ -290,6 +290,8 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
 
   useEffect(() => {
     if (!story) return;
+    if (story.media_type === 'video') setVideoLoading(true);
+    else setVideoLoading(false);
     const t = setTimeout(() => startProgress(), groupKey > 0 ? 50 : 0);
     return () => { clearTimeout(t); clearTimeout(progressTimerRef.current); };
   }, [currentStoryInGroupIndex, currentGroupIndex, groupKey]);
