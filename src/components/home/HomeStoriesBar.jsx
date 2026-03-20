@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Play, Video } from 'lucide-react';
+import { Plus, Video } from 'lucide-react';
 
 const STORY_BORDER_COLORS = [
   ['#f43f5e', '#fb7185'],
