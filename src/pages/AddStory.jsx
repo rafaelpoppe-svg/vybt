@@ -271,7 +271,8 @@ export default function AddStory() {
           </div>
 
           {/* Photo / Video toggle */}
-          <div className="absolute bottom-28 left-0 right-0 flex justify-center gap-6 z-10">
+          <div className="absolute left-0 right-0 flex justify-center gap-6 z-10"
+            style={{ bottom: 'calc(env(safe-area-inset-bottom,0px) + 110px)' }}>
             {['photo', 'video'].map(m => (
               <motion.button key={m} whileTap={{ scale: 0.95 }} onClick={() => setMode(m)}
                 className={`px-5 py-1.5 rounded-full text-sm font-semibold transition-all ${mode === m ? 'bg-white text-black' : 'bg-black/40 text-white'}`}>
@@ -281,8 +282,8 @@ export default function AddStory() {
           </div>
 
           {/* Shutter */}
-          <div className="absolute bottom-10 left-0 right-0 flex justify-center items-center z-10"
-            style={{ paddingBottom: 'env(safe-area-inset-bottom,0px)' }}>
+          <div className="absolute left-0 right-0 flex justify-center items-center z-10"
+            style={{ bottom: 'calc(env(safe-area-inset-bottom,0px) + 30px)' }}>
             {mode === 'video' && isRecording && (
               <svg className="absolute w-24 h-24 -rotate-90" viewBox="0 0 96 96">
                 <circle cx="48" cy="48" r="44" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="4" />
