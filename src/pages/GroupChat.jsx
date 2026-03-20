@@ -370,7 +370,7 @@ export default function GroupChat() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" style={{ height: '100dvh' }}>
+    <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" style={{ height: '100dvh', maxHeight: '100dvh' }}>
 
       {/* Chat background theme (emojis) */}
       <GroupChatBackground theme={plan?.chat_background_theme} />
@@ -430,7 +430,7 @@ export default function GroupChat() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto relative z-10 px-4 py-4">
+      <div className="flex-1 overflow-y-auto relative z-10 px-4 py-4" style={{ overscrollBehavior: 'contain' }}>
         {messagesLoading ? (
           <div className="flex justify-center items-center h-full">
             <div
@@ -468,7 +468,7 @@ export default function GroupChat() {
       </div>
 
       {/* Input */}
-      <div className="relative z-10">
+      <div className="relative z-10 flex-shrink-0">
         <GroupChatInput
           isChatLocked={isChatLocked}
           isPending={sendMutation.isPending}
