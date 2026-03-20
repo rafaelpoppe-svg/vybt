@@ -23,6 +23,7 @@ import {
 } from '../components/notifications/NotificationTriggers';
 import { useLanguage } from '../components/common/LanguageContext';
 import GroupChatBackground from '../components/chat/GroupChatBackground';
+import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 
 export default function GroupChat() {
   const navigate = useNavigate();
