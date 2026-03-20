@@ -1,14 +1,12 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import CreateCommunity from './pages/CreateCommunity';
-import CommunityView from './pages/CommunityView';
+import AddStory from './pages/AddStory';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -60,8 +58,6 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
-      <Route path="/CreateCommunity" element={<LayoutWrapper currentPageName="CreateCommunity"><CreateCommunity /></LayoutWrapper>} />
-      <Route path="/CommunityView" element={<LayoutWrapper currentPageName="CommunityView"><CommunityView /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
@@ -74,7 +70,6 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <NavigationTracker />
           <AuthenticatedApp />
         </Router>
         <Toaster />
