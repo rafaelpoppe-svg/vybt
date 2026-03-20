@@ -1,405 +1,403 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import {
-  ChevronLeft, X, Loader2, AlertCircle, ShieldAlert,
-  Users, Lock, Sparkles, Check, Eye
-} from 'lucide-react';
-import HighlightStoryModal from '../components/story/HighlightStoryModal';
-import CameraView from '../components/story/CameraView';
-import GalleryUpload from '../components/story/GalleryUpload';
+import { X, Send, ChevronLeft, Camera, Video, RotateCcw, MapPin, Loader2, ZapOff } from 'lucide-react';
+import { toast } from 'sonner';
 
-// Step 1: Select Plan
-function StepSelectPlan({ activePlans, myParticipations, selectedPlan, onSelect, onNext }) {
+// ─── Plan Selector Sheet ──────────────────────────────────────────────────────
+function PlanSelectorSheet({ plans, selectedPlanId, onSelect, onClose }) {
   return (
     <motion.div
-      initial={{ opacity: 0, x: 40 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -40 }}
-      className="flex flex-col h-full"
+      initial={{ y: '100%' }}
+      animate={{ y: 0 }}
+      exit={{ y: '100%' }}
+      transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+      className="absolute bottom-0 left-0 right-0 z-50 bg-[#111] border-t border-gray-800 rounded-t-3xl overflow-hidden"
     >
-      <div className="px-4 pt-4 pb-2">
-        <p className="text-gray-400 text-sm">Which plan is this for?</p>
-      </div>
-      <div className="flex-1 overflow-y-auto px-4 space-y-2 pb-4">
-        {activePlans.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-48 gap-3">
-            <AlertCircle className="w-10 h-10 text-gray-600" />
-            <p className="text-gray-500 text-center text-sm">No active plans yet.<br />Join a plan and wait for it to start.</p>
-          </div>
-        ) : (
-          activePlans.map((plan) => {
-            const participation = myParticipations.find(p => p.plan_id === plan.id);
-            const posted = participation?.stories_posted || 0;
-            const full = posted >= 5;
-            return (
-              <motion.button
-                key={plan.id}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => !full && onSelect(plan.id)}
-                className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 transition-all ${
-                  selectedPlan === plan.id
-                    ? 'border-[#00c6d2] bg-[#00c6d2]/10'
-                    : full
-                    ? 'border-gray-800 bg-gray-900/50 opacity-50'
-                    : 'border-gray-800 bg-gray-900 active:border-gray-600'
-                }`}
-              >
-                <div className="w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-br from-[#542b9b] to-[#00c6d2]/40 flex items-center justify-center flex-shrink-0">
-                  {plan.cover_image ? (
-                    <img src={plan.cover_image} alt="" className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-xl">🎉</span>
-                  )}
-                </div>
-                <div className="flex-1 text-left min-w-0">
-                  <p className={`font-semibold truncate ${selectedPlan === plan.id ? 'text-[#00c6d2]' : 'text-white'}`}>
-                    {plan.title}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-0.5">{plan.city} • {posted}/5 stories</p>
-                </div>
-                {selectedPlan === plan.id && <Check className="w-5 h-5 text-[#00c6d2] flex-shrink-0" />}
-                {full && <span className="text-xs text-red-400 flex-shrink-0">Full</span>}
-              </motion.button>
-            );
-          })
-        )}
-      </div>
-      <div className="px-4" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          onClick={onNext}
-          disabled={!selectedPlan}
-          className={`w-full py-4 rounded-full font-bold text-base transition-all ${
-            selectedPlan ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'bg-gray-800 text-gray-600'
-          }`}
-        >
-          Next →
+      <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-gray-800">
+        <div className="w-10 h-1 rounded-full bg-gray-700 mx-auto absolute left-1/2 -translate-x-1/2 top-3" />
+        <p className="text-white font-bold text-base pt-2">Post to Plan</p>
+        <motion.button whileTap={{ scale: 0.9 }} onClick={onClose} className="p-1.5 rounded-full bg-gray-800">
+          <X className="w-4 h-4 text-gray-400" />
         </motion.button>
+      </div>
+      <div className="px-4 py-3 space-y-2 max-h-72 overflow-y-auto">
+        {plans.length === 0 && (
+          <p className="text-gray-500 text-sm text-center py-6">No happening plans right now</p>
+        )}
+        {plans.map(plan => (
+          <motion.button
+            key={plan.id}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => { onSelect(plan); onClose(); }}
+            className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all ${
+              selectedPlanId === plan.id
+                ? 'border-[#00c6d2] bg-[#00c6d2]/10'
+                : 'border-gray-800 bg-gray-900/60'
+            }`}
+          >
+            {plan.cover_image
+              ? <img src={plan.cover_image} className="w-10 h-10 rounded-lg object-cover flex-shrink-0" alt="" />
+              : <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#00c6d2]/30 to-[#542b9b]/30 flex items-center justify-center text-lg flex-shrink-0">🎉</div>
+            }
+            <div className="flex-1 text-left min-w-0">
+              <p className="text-white font-semibold text-sm truncate">{plan.title}</p>
+              <p className="text-gray-400 text-xs flex items-center gap-1 mt-0.5">
+                <MapPin className="w-3 h-3" />{plan.location_address}
+              </p>
+            </div>
+            {selectedPlanId === plan.id && (
+              <div className="w-5 h-5 rounded-full bg-[#00c6d2] flex items-center justify-center flex-shrink-0">
+                <div className="w-2 h-2 rounded-full bg-white" />
+              </div>
+            )}
+          </motion.button>
+        ))}
       </div>
     </motion.div>
   );
 }
 
-// Step 2: handled by CameraView
-
-// Step 3: Preview & Publish
-function StepPreview({ media, plans, selectedPlan, onPublish, onRetake, submitting, onVisibilityChange, visibility }) {
-  const plan = plans.find(p => p.id === selectedPlan);
-
-  const visibilityOptions = [
-    { id: 'friends', icon: Users, label: 'Friends' },
-    { id: 'group_only', icon: Lock, label: 'Group' },
-    { id: 'highlighted', icon: Sparkles, label: 'Highlight', paid: true },
-  ];
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.97 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.97 }}
-      className="relative flex flex-col h-full"
-    >
-      {/* Full-screen preview */}
-      <div className="absolute inset-0">
-        {media.isVideo ? (
-          <video
-            src={media.file_url}
-            className="w-full h-full object-cover"
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-        ) : (
-          <img src={media.file_url} alt="Story preview" className="w-full h-full object-cover" />
-        )}
-        {/* Dark overlay at bottom */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
-      </div>
-
-      {/* Top bar */}
-      <div className="relative z-10 flex items-center justify-between p-4">
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={onRetake}
-          className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center"
-        >
-          <X className="w-5 h-5 text-white" />
-        </motion.button>
-
-        {plan && (
-          <div className="px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm">
-            <p className="text-white text-xs font-medium">📍 {plan.title}</p>
-          </div>
-        )}
-      </div>
-
-      {/* Bottom controls */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 space-y-3" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
-        {/* Visibility quick toggle */}
-        <div className="flex gap-2 justify-center">
-          {visibilityOptions.map((opt) => {
-            const Icon = opt.icon;
-            return (
-              <motion.button
-                key={opt.id}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => onVisibilityChange(opt.id)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-all ${
-                  visibility === opt.id
-                    ? 'bg-[#00c6d2] text-[#0b0b0b]'
-                    : 'bg-black/50 backdrop-blur-sm text-white border border-white/20'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                {opt.label}
-                {opt.paid && <span className="ml-0.5 text-[9px] opacity-70">€</span>}
-              </motion.button>
-            );
-          })}
-        </div>
-
-        {/* Share button */}
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          onClick={onPublish}
-          disabled={submitting}
-          className="w-full py-4 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold text-base flex items-center justify-center gap-2"
-        >
-          {submitting ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
-          ) : (
-            <>
-              <Eye className="w-5 h-5" />
-              Share Story
-            </>
-          )}
-        </motion.button>
-      </div>
-    </motion.div>
-  );
-}
-
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function AddStory() {
   const navigate = useNavigate();
-  const urlParams = new URLSearchParams(window.location.search);
-  const preselectedPlanId = urlParams.get('planId');
 
-  const [step, setStep] = useState(preselectedPlanId ? 1 : 0); // 0=select plan, 1=camera, 2=preview
+  const [phase, setPhase] = useState('camera'); // 'camera' | 'preview'
+  const [mode, setMode] = useState('photo'); // 'photo' | 'video'
+  const [facingMode, setFacingMode] = useState('user');
+  const [capturedMedia, setCapturedMedia] = useState(null); // { url, type, file }
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordProgress, setRecordProgress] = useState(0);
+  const [showPlanSheet, setShowPlanSheet] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [isPosting, setIsPosting] = useState(false);
+  const [caption, setCaption] = useState('');
+
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+  const canvasRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const chunksRef = useRef([]);
+  const recordTimerRef = useRef(null);
   const [currentUser, setCurrentUser] = useState(null);
-  const [selectedPlan, setSelectedPlan] = useState(preselectedPlanId || '');
-  const [media, setMedia] = useState(null);
-  const [visibility, setVisibility] = useState('friends');
-  const [submitting, setSubmitting] = useState(false);
-  const [showHighlightModal, setShowHighlightModal] = useState(false);
-  const [processingMedia, setProcessingMedia] = useState(false);
-  const [moderationError, setModerationError] = useState('');
 
   useEffect(() => {
-    base44.auth.me().then(setCurrentUser).catch(() => navigate(createPageUrl('Onboarding')));
+    base44.auth.me().then(setCurrentUser).catch(() => navigate('/'));
   }, []);
 
-  const { data: myParticipations = [] } = useQuery({
-    queryKey: ['myParticipations', currentUser?.id],
-    queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
-    enabled: !!currentUser?.id
+  // Fetch user's happening plans
+  const { data: happeningParticipations = [] } = useQuery({
+    queryKey: ['happeningParticipations', currentUser?.id],
+    queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser.id }),
+    enabled: !!currentUser?.id,
   });
 
-  const { data: plans = [] } = useQuery({
-    queryKey: ['allPlans'],
-    queryFn: () => base44.entities.PartyPlan.list('-created_date', 50),
+  const { data: allPlans = [] } = useQuery({
+    queryKey: ['happeningPlans'],
+    queryFn: () => base44.entities.PartyPlan.filter({ status: 'happening' }),
+    enabled: happeningParticipations.length > 0,
   });
 
-  const myPlanIds = myParticipations.map(p => p.plan_id);
-  const myPlans = plans.filter(p => myPlanIds.includes(p.id));
-  const activePlans = myPlans.filter((plan) => {
-    const now = new Date();
-    const planDateTime = new Date(`${plan.date}T${plan.time}`);
-    const blockedStatuses = ['voting', 'ended', 'renewed', 'terminated'];
-    return now >= planDateTime && !blockedStatuses.includes(plan.status);
-  });
+  const happeningPlans = allPlans.filter(p =>
+    happeningParticipations.some(pp => pp.plan_id === p.id)
+  );
 
-  const currentParticipation = myParticipations.find(p => p.plan_id === selectedPlan);
-  const storiesPosted = currentParticipation?.stories_posted || 0;
-  const canPostMore = storiesPosted < 5;
-
-  const handlePublish = async (highlightData = null) => {
-    if (!media || !selectedPlan || !canPostMore) return;
-    setSubmitting(true);
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 24);
-
-    const storyData = {
-      user_id: currentUser.id,
-      plan_id: selectedPlan,
-      media_url: media.file_url,
-      thumbnail_url: media.isVideo ? media.thumbUrl : '',
-      media_type: media.isVideo ? 'video' : 'image',
-      visibility,
-      is_highlighted: visibility === 'highlighted',
-      view_count: 0,
-      viewed_by: [],
-      expires_at: expiresAt.toISOString()
-    };
-
-    if (highlightData) {
-      storyData.target_vibes = highlightData.targetVibes;
-      storyData.target_party_types = highlightData.targetPartyTypes;
-    }
-
-    await base44.entities.ExperienceStory.create(storyData);
-
-    if (currentParticipation) {
-      await base44.entities.PlanParticipant.update(currentParticipation.id, {
-        stories_posted: storiesPosted + 1
-      });
-    }
-
-    setSubmitting(false);
-    navigate(createPageUrl('Home'));
-  };
-
-  const processFile = async (file, mediaType = 'image') => {
-    setProcessingMedia(true);
-    setModerationError('');
-
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-
-    // Only run image moderation for photos
-    if (mediaType === 'image') {
-      const modResult = await base44.functions.invoke('moderateImage', { image_url: file_url, context: 'story' });
-      if (!modResult.data.approved) {
-        setModerationError(modResult.data.reason || 'This content is not allowed.');
-        setProcessingMedia(false);
-        return;
+  // Start camera
+  const startCamera = useCallback(async () => {
+    try {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(t => t.stop());
       }
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode, width: { ideal: 1080 }, height: { ideal: 1920 } },
+        audio: mode === 'video',
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
+    } catch (e) {
+      toast.error('Camera not available');
     }
+  }, [facingMode, mode]);
 
-    setMedia({ file, file_url, thumbUrl: '', isVideo: mediaType === 'video' });
-    setProcessingMedia(false);
-    setStep(2);
+  useEffect(() => {
+    if (phase === 'camera') {
+      startCamera();
+    }
+    return () => {
+      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+    };
+  }, [phase, facingMode, mode]);
+
+  const flipCamera = () => setFacingMode(f => f === 'user' ? 'environment' : 'user');
+
+  // Take photo
+  const takePhoto = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const file = new File([blob], `story_${Date.now()}.jpg`, { type: 'image/jpeg' });
+      setCapturedMedia({ url, type: 'image', file });
+      setPhase('preview');
+      streamRef.current?.getTracks().forEach(t => t.stop());
+    }, 'image/jpeg', 0.92);
   };
 
-  const handleVisibilityChange = (v) => {
-    setVisibility(v);
-    if (v === 'highlighted') setShowHighlightModal(true);
+  // Record video
+  const startRecording = () => {
+    if (!streamRef.current) return;
+    chunksRef.current = [];
+    const mr = new MediaRecorder(streamRef.current, { mimeType: 'video/webm;codecs=vp8,opus' });
+    mr.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
+    mr.onstop = () => {
+      const blob = new Blob(chunksRef.current, { type: 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const file = new File([blob], `story_${Date.now()}.webm`, { type: 'video/webm' });
+      setCapturedMedia({ url, type: 'video', file });
+      setPhase('preview');
+      streamRef.current?.getTracks().forEach(t => t.stop());
+    };
+    mr.start();
+    mediaRecorderRef.current = mr;
+    setIsRecording(true);
+    setRecordProgress(0);
+    let elapsed = 0;
+    recordTimerRef.current = setInterval(() => {
+      elapsed += 100;
+      setRecordProgress(elapsed / 15000);
+      if (elapsed >= 15000) stopRecording();
+    }, 100);
   };
 
-  const selectedPlanData = plans.find(p => p.id === selectedPlan);
-  const isAdmin = currentUser?.role === 'admin';
-  const steps = isAdmin ? ['Plan', 'Source', 'Preview'] : ['Plan', 'Capture', 'Preview'];
+  const stopRecording = () => {
+    clearInterval(recordTimerRef.current);
+    mediaRecorderRef.current?.stop();
+    setIsRecording(false);
+    setRecordProgress(0);
+  };
+
+  const handleCameraPress = () => {
+    if (mode === 'photo') {
+      takePhoto();
+    } else {
+      if (isRecording) stopRecording();
+      else startRecording();
+    }
+  };
+
+  const retake = () => {
+    setCapturedMedia(null);
+    setSelectedPlan(null);
+    setCaption('');
+    setPhase('camera');
+  };
+
+  // Post story
+  const postStory = async () => {
+    if (!selectedPlan) { toast.error('Select a plan first'); return; }
+    if (!capturedMedia?.file) return;
+    setIsPosting(true);
+
+    try {
+      // 1. Upload file
+      const { file_url } = await base44.integrations.Core.UploadFile({ file: capturedMedia.file });
+
+      // 2. Create story record (pending moderation)
+      await base44.entities.ExperienceStory.create({
+        user_id: currentUser.id,
+        plan_id: selectedPlan.id,
+        media_url: file_url,
+        media_type: capturedMedia.type,
+        caption: caption.trim() || undefined,
+        visibility: 'friends',
+        moderation_status: 'pending',
+        expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      });
+
+      // 3. Update user profile story count
+      const profiles = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
+      if (profiles[0]) {
+        await base44.entities.UserProfile.update(profiles[0].id, {
+          total_stories_count: (profiles[0].total_stories_count || 0) + 1,
+          current_story_plan_id: selectedPlan.id,
+        });
+      }
+
+      // Navigate home — story will show as loading/pending
+      navigate('/', { replace: true });
+    } catch (e) {
+      toast.error('Failed to post story');
+      setIsPosting(false);
+    }
+  };
 
   return (
-    <div className="fixed inset-0 bg-[#0b0b0b] flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-      {/* Header - only show on steps 0 */}
-      {step === 0 && (
-        <header className="flex-shrink-0 flex items-center gap-3 px-4 py-4 border-b border-gray-800">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-full bg-gray-900"
-          >
-            <ChevronLeft className="w-5 h-5 text-white" />
-          </motion.button>
-          <h1 className="text-lg font-bold text-white">Add Story</h1>
+    <div className="fixed inset-0 bg-black z-50 flex flex-col">
+      <canvas ref={canvasRef} className="hidden" />
 
-          {/* Step indicator */}
-          <div className="ml-auto flex items-center gap-1.5">
-            {steps.map((_, i) => (
-              <div
-                key={i}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === step ? 'w-6 bg-[#00c6d2]' : i < step ? 'w-3 bg-[#00c6d2]/50' : 'w-3 bg-gray-700'
-                }`}
-              />
+      {/* ── CAMERA PHASE ── */}
+      {phase === 'camera' && (
+        <>
+          {/* Live viewfinder */}
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ transform: facingMode === 'user' ? 'scaleX(-1)' : 'none' }}
+          />
+
+          {/* Top controls */}
+          <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-4 z-10"
+            style={{ paddingTop: 'calc(env(safe-area-inset-top,0px) + 16px)' }}>
+            <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)}
+              className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              <X className="w-5 h-5 text-white" />
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.9 }} onClick={flipCamera}
+              className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              <RotateCcw className="w-5 h-5 text-white" />
+            </motion.button>
+          </div>
+
+          {/* Photo / Video toggle */}
+          <div className="absolute bottom-28 left-0 right-0 flex justify-center gap-6 z-10">
+            {['photo', 'video'].map(m => (
+              <motion.button key={m} whileTap={{ scale: 0.95 }} onClick={() => setMode(m)}
+                className={`px-5 py-1.5 rounded-full text-sm font-semibold transition-all ${mode === m ? 'bg-white text-black' : 'bg-black/40 text-white'}`}>
+                {m === 'photo' ? '📷 Photo' : '🎥 Video'}
+              </motion.button>
             ))}
           </div>
-        </header>
+
+          {/* Shutter */}
+          <div className="absolute bottom-10 left-0 right-0 flex justify-center items-center z-10"
+            style={{ paddingBottom: 'env(safe-area-inset-bottom,0px)' }}>
+            {mode === 'video' && isRecording && (
+              <svg className="absolute w-24 h-24 -rotate-90" viewBox="0 0 96 96">
+                <circle cx="48" cy="48" r="44" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="4" />
+                <circle cx="48" cy="48" r="44" fill="none" stroke="#ff4444" strokeWidth="4"
+                  strokeDasharray={`${2 * Math.PI * 44 * recordProgress} ${2 * Math.PI * 44 * (1 - recordProgress)}`} />
+              </svg>
+            )}
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onPointerDown={mode === 'video' ? handleCameraPress : undefined}
+              onClick={mode === 'photo' ? handleCameraPress : undefined}
+              className={`w-20 h-20 rounded-full border-4 border-white flex items-center justify-center transition-all ${isRecording ? 'bg-red-500' : 'bg-white/20 backdrop-blur-sm'}`}
+            >
+              {mode === 'photo'
+                ? <div className="w-14 h-14 rounded-full bg-white" />
+                : isRecording
+                  ? <div className="w-7 h-7 rounded bg-white" />
+                  : <div className="w-14 h-14 rounded-full bg-white" />
+              }
+            </motion.button>
+          </div>
+        </>
       )}
 
-      {/* Step 1: Camera is fullscreen, no header needed (CameraView has its own close button) */}
+      {/* ── PREVIEW PHASE ── */}
+      {phase === 'preview' && capturedMedia && (
+        <div className="relative w-full h-full flex flex-col">
+          {/* Media */}
+          <div className="flex-1 relative overflow-hidden">
+            {capturedMedia.type === 'image'
+              ? <img src={capturedMedia.url} className="absolute inset-0 w-full h-full object-cover" alt="" />
+              : <video src={capturedMedia.url} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover" />
+            }
 
-      {/* Content */}
-      <div className="flex-1 relative overflow-hidden">
-        <AnimatePresence mode="wait">
-          {step === 0 && (
-            <div key="plan" className="absolute inset-0 flex flex-col">
-              <StepSelectPlan
-                activePlans={activePlans}
-                myParticipations={myParticipations}
-                selectedPlan={selectedPlan}
-                onSelect={setSelectedPlan}
-                onNext={() => setStep(1)}
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" />
+
+            {/* Top left — back/retake */}
+            <motion.button whileTap={{ scale: 0.9 }} onClick={retake}
+              className="absolute top-4 left-4 z-20 p-2.5 rounded-full bg-black/60 backdrop-blur-sm"
+              style={{ top: 'calc(env(safe-area-inset-top,0px) + 12px)' }}>
+              <ChevronLeft className="w-5 h-5 text-white" />
+            </motion.button>
+
+            {/* Caption input */}
+            <div className="absolute bottom-28 left-4 right-4 z-20">
+              <input
+                value={caption}
+                onChange={e => setCaption(e.target.value)}
+                placeholder="Add a caption..."
+                maxLength={120}
+                className="w-full bg-black/40 backdrop-blur-md text-white placeholder:text-white/60 rounded-2xl px-4 py-3 outline-none border border-white/20 text-sm"
+                style={{ fontSize: '16px' }}
               />
             </div>
-          )}
 
-          {step === 1 && (
-            <div key="source" className="absolute inset-0 flex flex-col">
-              {processingMedia ? (
-                <div className="absolute inset-0 bg-black flex flex-col items-center justify-center gap-4 z-50">
-                  <Loader2 className="w-12 h-12 text-[#00c6d2] animate-spin" />
-                  <p className="text-gray-300 text-sm">Processing & checking content...</p>
-                </div>
-              ) : isAdmin ? (
-                <div className="flex-1 overflow-y-auto">
-                  <GalleryUpload
-                    onFileSelect={processFile}
-                    isLoading={processingMedia}
-                  />
-                  <div className="px-4 pb-32">
-                    <motion.button
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => setStep(0)}
-                      className="w-full py-4 rounded-full bg-gray-800 text-white font-bold mt-4"
-                    >
-                      ← Back
-                    </motion.button>
-                  </div>
-                </div>
-              ) : (
-                <CameraView
-                  onCapture={(file, mediaType) => processFile(file, mediaType)}
-                  onClose={() => setStep(0)}
+            {/* Bottom row — plan selector + post */}
+            <div className="absolute bottom-0 left-0 right-0 z-20 px-4 pb-safe flex items-center justify-between gap-3"
+              style={{ paddingBottom: 'calc(env(safe-area-inset-bottom,0px) + 20px)' }}>
+
+              {/* Plan selector button (left) */}
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowPlanSheet(true)}
+                className={`flex items-center gap-2 px-4 py-3 rounded-2xl border backdrop-blur-md transition-all ${
+                  selectedPlan
+                    ? 'bg-[#00c6d2]/20 border-[#00c6d2]/50'
+                    : 'bg-black/50 border-white/20'
+                }`}
+              >
+                {selectedPlan?.cover_image
+                  ? <img src={selectedPlan.cover_image} className="w-6 h-6 rounded-lg object-cover" alt="" />
+                  : <MapPin className="w-4 h-4 text-white/80" />
+                }
+                <span className="text-white text-sm font-medium max-w-[120px] truncate">
+                  {selectedPlan ? selectedPlan.title : 'Select plan'}
+                </span>
+              </motion.button>
+
+              {/* Post button (right) */}
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={postStory}
+                disabled={!selectedPlan || isPosting}
+                className="flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm disabled:opacity-40 transition-all"
+                style={{ background: selectedPlan ? 'linear-gradient(135deg, #00c6d2, #542b9b)' : 'rgba(255,255,255,0.15)' }}
+              >
+                {isPosting
+                  ? <Loader2 className="w-5 h-5 text-white animate-spin" />
+                  : <><Send className="w-4 h-4 text-white" /><span className="text-white">Post Story</span></>
+                }
+              </motion.button>
+            </div>
+          </div>
+
+          {/* Plan selector sheet */}
+          <AnimatePresence>
+            {showPlanSheet && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="absolute inset-0 bg-black/60 z-40"
+                  onClick={() => setShowPlanSheet(false)}
                 />
-              )}
-              {moderationError && (
-                <div className="absolute bottom-36 left-4 right-4 p-3 rounded-xl bg-red-500/90 flex items-start gap-3 z-50">
-                  <ShieldAlert className="w-5 h-5 text-white flex-shrink-0" />
-                  <p className="text-sm text-white">{moderationError}</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {step === 2 && media && (
-            <div key="preview" className="absolute inset-0">
-              <StepPreview
-                media={media}
-                plans={plans}
-                selectedPlan={selectedPlan}
-                visibility={visibility}
-                onVisibilityChange={handleVisibilityChange}
-                onPublish={() => visibility === 'highlighted' ? setShowHighlightModal(true) : handlePublish()}
-                onRetake={() => { setMedia(null); setStep(1); }}
-                submitting={submitting}
-              />
-            </div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      <HighlightStoryModal
-        isOpen={showHighlightModal}
-        onClose={() => { setShowHighlightModal(false); setVisibility('friends'); }}
-        onConfirm={(data) => { setShowHighlightModal(false); handlePublish(data); }}
-        planCity={selectedPlanData?.city || ''}
-        isLoading={submitting}
-      />
+                <PlanSelectorSheet
+                  plans={happeningPlans}
+                  selectedPlanId={selectedPlan?.id}
+                  onSelect={setSelectedPlan}
+                  onClose={() => setShowPlanSheet(false)}
+                />
+              </>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 }
