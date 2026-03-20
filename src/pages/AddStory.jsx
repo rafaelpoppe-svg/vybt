@@ -265,10 +265,16 @@ export default function AddStory() {
               className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
               <X className="w-5 h-5 text-white" />
             </motion.button>
-            <motion.button whileTap={{ scale: 0.9 }} onClick={flipCamera}
-              className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-              <RotateCcw className="w-5 h-5 text-white" />
-            </motion.button>
+            <div className="flex gap-3">
+              <motion.button whileTap={{ scale: 0.9 }} onClick={() => setFlashOn(f => !f)}
+                className={`w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center transition-colors ${flashOn ? 'bg-yellow-400/80' : 'bg-black/50'}`}>
+                {flashOn ? <Zap className="w-5 h-5 text-black" /> : <ZapOff className="w-5 h-5 text-white" />}
+              </motion.button>
+              <motion.button whileTap={{ scale: 0.9 }} onClick={flipCamera}
+                className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                <RotateCcw className="w-5 h-5 text-white" />
+              </motion.button>
+            </div>
           </div>
 
           {/* Photo / Video toggle */}
