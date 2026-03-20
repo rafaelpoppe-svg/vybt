@@ -125,8 +125,8 @@ export default function Explore() {
   // Use recommended plans for "For You" sort, otherwise use regular plans
   const basePlans = planFilters.sortBy === 'foryou' ? recommendedPlans : plans;
 
-  // Only use city if it's a non-empty string
-  const userCity = myProfile?.city?.trim()?.toLowerCase() || null;
+  // Use profile city when available, fallback to localStorage cache so explore works immediately
+  const userCity = (myProfile?.city || cachedCity)?.trim()?.toLowerCase() || null;
 
   let filteredPlans = basePlans.filter(plan => {
     // Hide voting and terminated plans from everyone in Explore
@@ -447,7 +447,7 @@ export default function Explore() {
                         </div>}
                   </div>
                 )
-              ) : (isLoadingProfile && !!currentUser) || isLoading ? (
+              ) : isLoading ? (
                 <div className="flex justify-center py-12">
                   <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
                 </div>
