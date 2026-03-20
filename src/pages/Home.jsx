@@ -116,9 +116,6 @@ export default function Home() {
     queryFn: () => base44.entities.PartyPlan.filter({ city }, '-created_date', 100),
   });
 
-  
-  console.log("plans:", plans);
-
   const { data: stories = [] } = useQuery({
     queryKey: ['stories'],
     queryFn: async () => {
@@ -252,34 +249,17 @@ export default function Home() {
     // Stories de planos na cidade/raio
     return visiblePlans.some(p => p.id === s.plan_id);
   });*/
-  //console.log('0. currentUser:', currentUser);
-  console.log('0. myProfile:', {
-    ...myProfile,
-    myPlans: myParticipations.map(p => {
-      const plan = plans.find(pl => pl.id === p.plan_id);
-      return { plan_id: p.plan_id, title: plan?.title, status: plan?.status };
-    })
-  });
-  console.log('1. stories:', stories.map(s => ({ ...s, display_name: profilesMap[s.user_id]?.display_name })));
-
   const ownStories = useMemo(() => 
     stories
       .filter(s => s.user_id === currentUser?.id)
       .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
   , [stories, currentUser?.id]);
-  console.log('2. ownStories:', ownStories);
-
   const friendStories = useMemo(() => 
     stories.filter(s => friendIds.includes(s.user_id))
   , [stories, friendIds]);
-  console.log('3. friendStories:', friendStories.map(s => ({ ...s, display_name: profilesMap[s.user_id]?.display_name })));
-
-  console.log('3.5. visible plans:', visiblePlans);
   const planStories = useMemo(() => 
     stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
   , [stories, visiblePlans]);
-  console.log('4. planStories:', planStories);
-
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
 
