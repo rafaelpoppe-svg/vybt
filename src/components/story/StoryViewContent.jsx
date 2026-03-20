@@ -571,13 +571,22 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
                         ref={videoRef}
                         src={story.media_url}
                         className="h-full w-full object-cover"
-                        autoPlay
                         muted={isMuted || !story.has_audio}
                         playsInline
-                        loop
                         preload="auto"
                         onLoadStart={() => setVideoLoading(true)}
-                        onCanPlay={(e) => { setVideoLoading(false); e.target.play().catch(() => {}); }}
+                        onCanPlay={(e) => {
+                          setVideoLoading(false);
+                          const vid = e.target;
+                          // Must be muted for autoplay on mobile without user gesture
+                          vid.muted = isMuted || !story.has_audio;
+                          vid.play().catch(() => {
+                            // fallback: mute and retry
+                            vid.muted = true;
+                            vid.play().catch(() => {});
+                          });
+                          startVideoProgress();
+                        }}
                         onError={() => setVideoLoading(false)}
                       />
                     </>
