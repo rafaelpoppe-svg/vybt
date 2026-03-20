@@ -360,17 +360,19 @@ export default function Chat() {
                 >
                   <div className="flex items-center gap-3 p-3.5">
                     {/* Plan image */}
-                    <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
-                      {plan.group_image || plan.cover_image ? (
-                        <img src={plan.group_image || plan.cover_image} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-2xl"
-                          style={{ background: `linear-gradient(135deg, ${color}60, #542b9b60)` }}>
-                          🎉
-                        </div>
-                      )}
+                    <div className="relative w-14 h-14 flex-shrink-0">
+                      <div className="w-full h-full rounded-xl overflow-hidden">
+                        {plan.group_image || plan.cover_image ? (
+                          <img src={plan.group_image || plan.cover_image} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-2xl"
+                            style={{ background: `linear-gradient(135deg, ${color}60, #542b9b60)` }}>
+                            🎉
+                          </div>
+                        )}
+                      </div>
                       {groupUnread > 0 && (
-                        <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[10px] font-bold flex items-center justify-center px-1">
+                        <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[10px] font-bold flex items-center justify-center px-1 z-10">
                           {groupUnread}
                         </div>
                       )}
