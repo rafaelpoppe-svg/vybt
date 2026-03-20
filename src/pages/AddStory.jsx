@@ -300,8 +300,7 @@ export default function AddStory() {
             )}
             <motion.button
               whileTap={{ scale: 0.9 }}
-              onPointerDown={mode === 'video' ? handleCameraPress : undefined}
-              onClick={mode === 'photo' ? handleCameraPress : undefined}
+              onClick={handleCameraPress}
               className={`w-20 h-20 rounded-full border-4 border-white flex items-center justify-center transition-all ${isRecording ? 'bg-red-500' : 'bg-white/20 backdrop-blur-sm'}`}
             >
               {mode === 'photo'
