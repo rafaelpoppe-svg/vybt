@@ -294,6 +294,47 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
         {validPlans.length} plans
       </div>
 
+      {/* Cluster bottom sheet */}
+      <AnimatePresence>
+        {selectedCluster && (
+          <motion.div
+            initial={{ y: '100%', opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: '100%', opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="absolute bottom-0 left-0 right-0 z-[999] bg-[#161616] border-t border-gray-800 rounded-t-2xl p-4"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-gray-400 text-sm font-semibold">📍 {selectedCluster.length} planos neste local</p>
+              <button onClick={() => setSelectedCluster(null)} className="p-1.5 rounded-full bg-gray-800">
+                <X className="w-4 h-4 text-gray-400" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {selectedCluster.map(plan => (
+                <motion.button
+                  key={plan.id}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-gray-800 text-left"
+                >
+                  <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0" style={{ border: `1.5px solid ${plan.theme_color || '#00fea3'}44` }}>
+                    {plan.cover_image
+                      ? <img src={plan.cover_image} className="w-full h-full object-cover" />
+                      : <div className="w-full h-full flex items-center justify-center text-lg" style={{ background: `linear-gradient(135deg,#1a1a2e,${plan.theme_color || '#00fea3'}66)` }}>🎉</div>}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-bold text-sm truncate">{plan.title}</p>
+                    <p className="text-gray-500 text-xs">{plan.time}{plan.date ? ` · ${format(new Date(plan.date), 'MMM d')}` : ''} · {getParticipantCount(plan.id)} going</p>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Selected plan bottom sheet */}
       <AnimatePresence>
         {selectedPlan && (

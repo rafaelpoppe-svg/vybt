@@ -339,6 +339,57 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
 
       {/* Mode toggle & POI popup hidden for now */}
 
+      {/* Cluster selection popup */}
+      <AnimatePresence>
+        {selectedCluster && (
+          <motion.div
+            initial={{ y: 20, opacity: 0, scale: 0.97 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: 20, opacity: 0, scale: 0.97 }}
+            transition={{ type: 'spring', damping: 22, stiffness: 320 }}
+            style={{
+              position: 'absolute', bottom: 12, left: 12, right: 12, zIndex: 600,
+              borderRadius: 22, overflow: 'hidden',
+              background: 'rgba(14,14,14,0.97)',
+              border: '1.5px solid rgba(0,254,163,0.3)',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 8px 32px rgba(0,254,163,0.15)',
+            }}
+          >
+            <div style={{ height: 3, background: 'linear-gradient(90deg,#542b9b,#00fea3)' }} />
+            <div style={{ padding: '10px 12px' }}>
+              <p style={{ color: '#aaa', fontSize: 11, fontWeight: 700, marginBottom: 8 }}>
+                📍 {selectedCluster.length} planos neste local
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {selectedCluster.map(plan => (
+                  <motion.button
+                    key={plan.id}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => { onPlanClick(plan); setSelectedCluster(null); }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      background: 'rgba(255,255,255,0.05)', border: `1px solid ${accentOf(plan)}33`,
+                      borderRadius: 14, padding: '8px 10px', cursor: 'pointer', textAlign: 'left'
+                    }}
+                  >
+                    <div style={{ width: 36, height: 36, borderRadius: 10, overflow: 'hidden', flexShrink: 0, border: `1.5px solid ${accentOf(plan)}44` }}>
+                      {plan.cover_image
+                        ? <img src={plan.cover_image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, background: `linear-gradient(135deg,#1a1a2e,${accentOf(plan)}66)` }}>🎉</div>}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ color: '#fff', fontWeight: 800, fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{plan.title}</p>
+                      <p style={{ color: '#666', fontSize: 10 }}>{plan.time}{plan.date ? ` · ${new Date(plan.date).toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })}` : ''}</p>
+                    </div>
+                    <span style={{ color: accentOf(plan), fontSize: 12, fontWeight: 800 }}>→</span>
+                  </motion.button>
+                ))}
+              </div>
+              <button onClick={() => setSelectedCluster(null)} style={{ color: '#555', fontSize: 10, background: 'none', border: 'none', cursor: 'pointer', marginTop: 8, width: '100%' }}>fechar</button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Selected plan popup */}
       <AnimatePresence>
         {selected && (
