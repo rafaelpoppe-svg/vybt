@@ -119,6 +119,8 @@ export default function UserProfile() {
   const isFriend = myFriendships.some(f => (f.friend_id === userId || f.user_id === userId) && f.status === 'accepted');
   const isPending = myFriendships.some(f => f.friend_id === userId && f.status === 'pending');
   const existingFriendship = myFriendships.find(f => (f.friend_id === userId || f.user_id === userId));
+  // Pedido que recebi desta pessoa (ela quer ser minha amiga)
+  const incomingRequest = receivedFromUser[0] || null;
 
   const handleAddFriend = async () => {
     setFriendshipLoading(true);
