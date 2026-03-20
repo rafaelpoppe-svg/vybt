@@ -119,9 +119,54 @@ function FlyToCity({ coords }) {
   return null;
 }
 
+// Group plans by location (same lat/lng within small tolerance)
+function groupPlansByLocation(plans) {
+  const TOLERANCE = 0.0001;
+  const groups = [];
+  const used = new Set();
+  for (let i = 0; i < plans.length; i++) {
+    if (used.has(i)) continue;
+    const group = [plans[i]];
+    used.add(i);
+    for (let j = i + 1; j < plans.length; j++) {
+      if (used.has(j)) continue;
+      if (Math.abs(plans[i].latitude - plans[j].latitude) < TOLERANCE &&
+          Math.abs(plans[i].longitude - plans[j].longitude) < TOLERANCE) {
+        group.push(plans[j]);
+        used.add(j);
+      }
+    }
+    groups.push(group);
+  }
+  return groups;
+}
+
+function createClusterIcon(count) {
+  return L.divIcon({
+    className: '',
+    html: `
+      <div style="
+        width: 44px; height: 44px;
+        background: linear-gradient(135deg, #542b9b, #00fea3);
+        border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg);
+        border: 2px solid white;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+        display: flex; align-items: center; justify-content: center;
+      ">
+        <span style="transform: rotate(45deg); font-size: 15px; font-weight: 900; color: white;">${count}</span>
+      </div>
+    `,
+    iconSize: [44, 44],
+    iconAnchor: [22, 44],
+    popupAnchor: [0, -46],
+  });
+}
+
 export default function PlanMap({ plans, allParticipants, profilesMap, myParticipations, selectedCity: initialCity, selectedRadius: initialRadius, onCityChange, onRadiusChange }) {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedCluster, setSelectedCluster] = useState(null);
   const [flyCoords, setFlyCoords] = useState(null);
   const [mapCity, setMapCity] = useState(initialCity || localStorage.getItem('selectedCity') || '');
   const [mapRadius, setMapRadius] = useState(initialRadius || Number(localStorage.getItem('selectedRadius')) || 10);

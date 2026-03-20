@@ -179,10 +179,54 @@ function createPoiIcon(poi) {
   });
 }
 
+// Group plans by location (same lat/lng within small tolerance)
+function groupPlansByLocation(plans) {
+  const TOLERANCE = 0.0001;
+  const groups = [];
+  const used = new Set();
+  for (let i = 0; i < plans.length; i++) {
+    if (used.has(i)) continue;
+    const group = [plans[i]];
+    used.add(i);
+    for (let j = i + 1; j < plans.length; j++) {
+      if (used.has(j)) continue;
+      if (Math.abs(plans[i].latitude - plans[j].latitude) < TOLERANCE &&
+          Math.abs(plans[i].longitude - plans[j].longitude) < TOLERANCE) {
+        group.push(plans[j]);
+        used.add(j);
+      }
+    }
+    groups.push(group);
+  }
+  return groups;
+}
+
+function createClusterIcon(count, color) {
+  return L.divIcon({
+    className: '',
+    html: `
+      <div class="hlm-icon-root" style="position:relative;width:50px;height:64px;display:flex;flex-direction:column;align-items:center;pointer-events:auto;cursor:pointer;">
+        <div style="position:relative;margin-top:4px;flex-shrink:0;">
+          <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#542b9b,${color});border:2.5px solid ${color};display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px ${color}99;">
+            <span style="color:#fff;font-weight:900;font-size:16px;line-height:1;">${count}</span>
+          </div>
+          <div style="position:absolute;top:-6px;right:-4px;width:18px;height:18px;border-radius:50%;background:#ff4757;border:2px solid #0b0b0b;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:white;pointer-events:none;">🎉</div>
+        </div>
+        <div style="width:2px;height:8px;background:${color};margin-top:2px;border-radius:1px;opacity:0.8;flex-shrink:0;"></div>
+        <div style="width:5px;height:5px;background:${color};border-radius:50%;opacity:0.6;flex-shrink:0;"></div>
+      </div>
+    `,
+    iconSize: [50, 64],
+    iconAnchor: [25, 64],
+    popupAnchor: [0, -68],
+  });
+}
+
 export default function HomeLiveMap({ plans = [], allParticipants = [], city = '', pois = [], onPlanClick }) {
   const [flyCoords, setFlyCoords] = useState(null);
   const [mapReady, setMapReady] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [selectedCluster, setSelectedCluster] = useState(null); // array of plans
   const [selectedPoi, setSelectedPoi] = useState(null);
   const [mapMode, setMapMode] = useState('plans'); // 'plans' | 'pois' | 'all'
 
