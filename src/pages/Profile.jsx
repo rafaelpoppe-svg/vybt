@@ -99,7 +99,8 @@ export default function Profile() {
     if (profile?.profile_background_theme) setProfileTheme(profile.profile_background_theme);
   }, [profile?.profile_background_theme]);
 
-  if (!currentUser || !profile) {
+  // Only block render while we don't have the profile yet (currentUser loads fast from cache)
+  if (!profile) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />

@@ -72,6 +72,8 @@ export default function UserProfile() {
   const { data: allPlans = [] } = useQuery({
     queryKey: ['allPlans'],
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 100),
+    enabled: !!userId,
+    staleTime: 60000,
   });
 
   const { data: userFriendships = [] } = useQuery({
