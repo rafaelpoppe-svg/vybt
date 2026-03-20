@@ -375,7 +375,7 @@ export default function CreatePlan() {
             </motion.button>
             <motion.button
               whileTap={{ scale: 0.97 }}
-              onClick={() => navigate(createPageUrl('GroupChat') + `?planId=${createdPlan.id}`)}
+              onClick={() => navigate(createPageUrl('GroupChat') + `?planId=${createdPlan.id}`, { replace: true })}
               className="w-full py-4 rounded-2xl bg-gray-900 text-white font-bold border border-gray-700"
             >
               Go to Group Chat 💬
