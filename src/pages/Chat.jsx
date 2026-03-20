@@ -336,7 +336,7 @@ export default function Chat() {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-4 space-y-2.5 pb-28" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <main className="flex-1 overflow-y-auto px-4 space-y-2.5 pb-36" style={{ WebkitOverflowScrolling: 'touch' }}>
         {activeTab === 'groups' ? (
           myPlans.length > 0 ? (
             myPlans.map((plan, idx) => {

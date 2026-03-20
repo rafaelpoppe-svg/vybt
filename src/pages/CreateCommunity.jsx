@@ -436,16 +436,16 @@ export default function CreateCommunity() {
         <div className="text-gray-500 text-sm w-10 text-right">{step}/4</div>
       </header>
 
-      <div className="flex-1 overflow-y-auto relative">
+      <div className="flex-1 overflow-y-auto">
         <AnimatePresence custom={direction} mode="wait">
           <motion.div key={step} custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit"
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }} className="absolute inset-0 overflow-y-auto px-6 py-8">
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }} className="px-6 pt-8 pb-6">
             {stepContent[step]}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      <div className="p-6 border-t border-gray-900 bg-[#0b0b0b]">
+      <div className="flex-shrink-0 p-6 border-t border-gray-900 bg-[#0b0b0b]" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
         <motion.button whileTap={{ scale: 0.97 }} onClick={step < 4 ? goNext : handleSubmit}
           disabled={!canProceed() || loading}
           className="w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all text-[#0b0b0b] disabled:opacity-40"
