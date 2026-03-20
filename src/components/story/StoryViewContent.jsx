@@ -618,7 +618,7 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
                         onError={() => setVideoLoading(false)}
                       />
                     </>
-                  : <img key={story.id} src={story.media_url} alt="" loading="eager" decoding="async" className="h-full w-full object-cover" />}
+                  : <img key={story.id} src={story.media_url} alt="" loading="eager" decoding="async" fetchPriority="high" className="h-full w-full object-cover" />}
               </div>
 
               {showCube && (
