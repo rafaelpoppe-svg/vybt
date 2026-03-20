@@ -45,6 +45,8 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
   const [showChatInput, setShowChatInput] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [floatingReactions, setFloatingReactions] = useState([]);
+  const [videoLoading, setVideoLoading] = useState(false);
+  const videoRef = useRef(null);
 
   const [dragProgress, setDragProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
