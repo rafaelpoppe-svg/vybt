@@ -175,7 +175,7 @@ export default function Chat() {
   // ── DM Chat View ─────────────────────────────────────────────────────────
   if (selectedFriendId) {
     return (
-      <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh' }}>
+      <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh', paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined }}>
         {/* Header */}
         <header className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-xl border-b border-gray-800/50 px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)' }}>
           <motion.button
