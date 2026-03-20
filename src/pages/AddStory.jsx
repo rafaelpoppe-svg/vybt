@@ -68,6 +68,7 @@ export default function AddStory() {
   const [mode, setMode] = useState('photo'); // 'photo' | 'video'
   const [facingMode, setFacingMode] = useState('user');
   const [capturedMedia, setCapturedMedia] = useState(null); // { url, type, file }
+  const [flashOn, setFlashOn] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordProgress, setRecordProgress] = useState(0);
   const [showPlanSheet, setShowPlanSheet] = useState(false);
