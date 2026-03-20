@@ -670,6 +670,7 @@ export default function CreatePlan() {
               setData(prev => ({ ...prev, location_address: address, city, latitude, longitude }));
             }}
             placeholder="e.g. Gran Via 123, Madrid..."
+            userCity={localStorage.getItem('selectedCity') || ''}
           />
         </div>
         {data.location_address ? (
