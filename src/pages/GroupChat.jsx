@@ -41,6 +41,7 @@ export default function GroupChat() {
   const [showHighlightModal, setShowHighlightModal] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const messagesEndRef = useRef(null);
+  const keyboardHeight = useKeyboardHeight();
 
   useEffect(() => {
     const getUser = async () => {
@@ -371,7 +372,7 @@ export default function GroupChat() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" style={{ height: '100dvh', maxHeight: '100dvh' }}>
+    <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" style={{ height: '100dvh', maxHeight: '100dvh', paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined }}>
 
       {/* Chat background theme (emojis) */}
       <GroupChatBackground theme={plan?.chat_background_theme} />
