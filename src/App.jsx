@@ -60,6 +60,7 @@ const AuthenticatedApp = () => {
         />
       ))}
       <Route path="/AddStory" element={<AddStory />} />
+      <Route path="/StoryView" element={<StoryView />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
