@@ -123,14 +123,46 @@ export default function UserProfile() {
   const incomingRequest = receivedFromUser[0] || null;
 
   const handleAddFriend = async () => {
+    if (isPending || incomingRequest) return; // evitar duplicado
     setFriendshipLoading(true);
+    const myProfile = await base44.entities.UserProfile.filter({ user_id: currentUser.id }).then(r => r[0]);
     await base44.entities.Friendship.create({
       user_id: currentUser.id,
       friend_id: userId,
       status: 'pending',
     });
+    // Notificar a outra pessoa
+    const { notifyFriendRequest } = await import('../components/notifications/NotificationTriggers');
+    await notifyFriendRequest(userId, currentUser.id, myProfile?.display_name || currentUser.full_name || 'Alguém');
     await queryClient.invalidateQueries(['myFriendships', currentUser?.id]);
-    await queryClient.invalidateQueries(['friendRequests', currentUser?.id]);
+    setFriendshipLoading(false);
+  };
+
+  const handleAcceptRequest = async () => {
+    if (!incomingRequest) return;
+    setFriendshipLoading(true);
+    // Aceitar o pedido da outra pessoa
+    await base44.entities.Friendship.update(incomingRequest.id, { status: 'accepted' });
+    // Criar amizade simétrica para o utilizador atual (se não existir)
+    const existing = myFriendships.find(f => f.friend_id === userId && f.status === 'accepted');
+    if (!existing) {
+      await base44.entities.Friendship.create({
+        user_id: currentUser.id,
+        friend_id: userId,
+        status: 'accepted',
+      });
+    }
+    await queryClient.invalidateQueries(['myFriendships', currentUser?.id]);
+    await queryClient.invalidateQueries(['receivedFromUser', currentUser?.id, userId]);
+    await queryClient.invalidateQueries(['userFriendships', userId]);
+    setFriendshipLoading(false);
+  };
+
+  const handleDeclineRequest = async () => {
+    if (!incomingRequest) return;
+    setFriendshipLoading(true);
+    await base44.entities.Friendship.update(incomingRequest.id, { status: 'declined' });
+    await queryClient.invalidateQueries(['receivedFromUser', currentUser?.id, userId]);
     setFriendshipLoading(false);
   };
 
@@ -139,8 +171,12 @@ export default function UserProfile() {
     if (existingFriendship) {
       await base44.entities.Friendship.delete(existingFriendship.id);
     }
+    // Apagar também o lado inverso
+    const inverseFriendships = await base44.entities.Friendship.filter({ user_id: userId, friend_id: currentUser.id });
+    for (const f of inverseFriendships) {
+      await base44.entities.Friendship.delete(f.id);
+    }
     await queryClient.invalidateQueries(['myFriendships', currentUser?.id]);
-    await queryClient.invalidateQueries(['friendRequests', currentUser?.id]);
     await queryClient.invalidateQueries(['userFriendships', userId]);
     setFriendshipLoading(false);
     setShowUnfriendModal(false);
