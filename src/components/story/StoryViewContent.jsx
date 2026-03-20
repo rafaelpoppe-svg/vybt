@@ -341,11 +341,21 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
     }
   }, [isMuted]);
 
+  // Prefetch next image
   useEffect(() => {
     const nextStory = groupedStories[currentGroupIndex]?.stories?.[currentStoryInGroupIndex + 1]
       || groupedStories[currentGroupIndex + 1]?.stories?.[0];
     if (nextStory?.media_url && nextStory.media_type !== 'video') {
       const img = new Image(); img.src = nextStory.media_url;
+    }
+    // Prefetch next video
+    if (nextStory?.media_url && nextStory.media_type === 'video') {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'video';
+      link.href = nextStory.media_url;
+      document.head.appendChild(link);
+      setTimeout(() => document.head.removeChild(link), 10000);
     }
   }, [currentStoryInGroupIndex, currentGroupIndex, groupedStories]);
 
