@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQueryClient } from '@tanstack/react-query';
@@ -26,92 +26,152 @@ const notificationIcons = {
   plan_recommendation: Heart,
 };
 
+// Map notification type → prefs key
+const notifTypeToPrefKey = {
+  new_group_message:    'group_message_push',
+  new_direct_message:   'group_message_push',
+  new_group_member:     'plan_update_push',
+  voting_started:       'voting_push',
+  plan_happening_now:   'plan_happening_now_push',
+  plan_highlighted:     'plan_update_push',
+  story_highlighted:    'friend_story_push',
+  new_story_in_plan:    'friend_story_push',
+  friend_posted_story:  'friend_story_push',
+  friend_request:       'friend_request_push',
+  plan_time_changed:    'plan_update_push',
+  plan_location_changed:'plan_update_push',
+  plan_recommendation:  'plan_recommendation_push',
+  friend_created_plan:  'friend_created_plan_push',
+  plan_renewed:         'plan_update_push',
+  plan_unsuccessful:    'voting_push',
+  plan_successful:      'voting_push',
+  story_reaction:       'friend_story_push',
+};
+
+const defaultPrefs = {
+  new_plan_push: true,
+  friend_story_push: true,
+  plan_update_push: true,
+  friend_request_push: true,
+  plan_recommendation_push: true,
+  voting_push: true,
+  plan_happening_now_push: true,
+  friend_created_plan_push: true,
+  group_message_push: true,
+  plan_reminder_1day: false,
+  plan_reminder_1hour: true,
+  mute_all: false,
+};
+
 export function NotificationProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [userPrefs, setUserPrefs] = useState(defaultPrefs);
   const queryClient = useQueryClient();
+  // Track already-shown notification IDs to avoid duplicates
+  const shownIds = useRef(new Set());
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const user = await base44.auth.me();
         setCurrentUser(user);
-        
-        // Get initial unread count
-        const notifications = await base44.entities.Notification.filter({ 
-          user_id: user.id, 
-          is_read: false 
-        });
+
+        const [notifications, profiles] = await Promise.all([
+          base44.entities.Notification.filter({ user_id: user.id, is_read: false }),
+          base44.entities.UserProfile.filter({ user_id: user.id }),
+        ]);
         setUnreadCount(notifications.length);
+        if (profiles[0]?.notification_prefs) {
+          setUserPrefs({ ...defaultPrefs, ...profiles[0].notification_prefs });
+        }
       } catch (e) {}
     };
     getUser();
   }, []);
+
+  // Re-fetch prefs whenever profile is updated
+  useEffect(() => {
+    if (!currentUser?.id) return;
+    const unsub = base44.entities.UserProfile.subscribe((event) => {
+      if (event.data?.user_id === currentUser.id && event.data?.notification_prefs) {
+        setUserPrefs({ ...defaultPrefs, ...event.data.notification_prefs });
+      }
+    });
+    return () => unsub();
+  }, [currentUser?.id]);
 
   // Real-time notification subscription
   useEffect(() => {
     if (!currentUser?.id) return;
 
     const unsubscribe = base44.entities.Notification.subscribe((event) => {
-      if (event.type === 'create' && event.data.user_id === currentUser.id) {
-        const notification = event.data;
-        
-        // Update unread count
-        setUnreadCount(prev => prev + 1);
-        
-        // Invalidate queries
-        queryClient.invalidateQueries(['notifications', currentUser.id]);
-        
-        // Show toast notification
-        const Icon = notificationIcons[notification.type] || MessageCircle;
-        toast.custom((t) => (
-          <motion.div
-            initial={{ opacity: 0, y: -30, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-            className="bg-gray-900 border border-[#00c6d2]/30 rounded-2xl p-4 shadow-2xl shadow-[#00c6d2]/10 max-w-sm cursor-pointer"
-            onClick={() => {
-              toast.dismiss(t);
-              handleNotificationClick(notification);
-            }}
-          >
-            <div className="flex gap-3 items-start">
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
-                className="w-10 h-10 rounded-full bg-[#00c6d2]/20 flex items-center justify-center flex-shrink-0"
-              >
-                <Icon className="w-5 h-5 text-[#00c6d2]" />
-              </motion.div>
-              <div className="flex-1 min-w-0">
-                <p className="text-white font-medium text-sm">
-                  {notification.title || notification.message}
-                </p>
-                {notification.title && (
-                  <p className="text-gray-400 text-xs mt-1">{notification.message}</p>
-                )}
-              </div>
+      if (event.type !== 'create') return;
+      const notification = event.data;
+      if (notification.user_id !== currentUser.id) return;
+
+      // Deduplicate — never show the same notification twice
+      if (shownIds.current.has(notification.id)) return;
+      shownIds.current.add(notification.id);
+
+      // Update unread count
+      setUnreadCount(prev => prev + 1);
+      queryClient.invalidateQueries(['notifications', currentUser.id]);
+
+      // Check user preferences before showing toast
+      const prefs = userPrefs;
+      if (prefs.mute_all) return;
+
+      const prefKey = notifTypeToPrefKey[notification.type];
+      if (prefKey && prefs[prefKey] === false) return;
+
+      // Show toast
+      const Icon = notificationIcons[notification.type] || MessageCircle;
+      toast.custom((t) => (
+        <motion.div
+          initial={{ opacity: 0, y: -30, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.95 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+          className="bg-gray-900 border border-[#00c6d2]/30 rounded-2xl p-4 shadow-2xl shadow-[#00c6d2]/10 max-w-sm cursor-pointer"
+          onClick={() => {
+            toast.dismiss(t);
+            handleNotificationClick(notification);
+          }}
+        >
+          <div className="flex gap-3 items-start">
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
+              className="w-10 h-10 rounded-full bg-[#00c6d2]/20 flex items-center justify-center flex-shrink-0"
+            >
+              <Icon className="w-5 h-5 text-[#00c6d2]" />
+            </motion.div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-medium text-sm">
+                {notification.title || notification.message}
+              </p>
+              {notification.title && (
+                <p className="text-gray-400 text-xs mt-1">{notification.message}</p>
+              )}
             </div>
-          </motion.div>
-        ), {
-          duration: 5000,
-          position: 'top-center',
-        });
-      }
+          </div>
+        </motion.div>
+      ), {
+        duration: 4000,
+        position: 'top-center',
+      });
     });
 
     return () => unsubscribe();
-  }, [currentUser?.id, queryClient]);
+  }, [currentUser?.id, queryClient, userPrefs]);
 
   const handleNotificationClick = async (notification) => {
-    // Mark as read
     await base44.entities.Notification.update(notification.id, { is_read: true });
     setUnreadCount(prev => Math.max(0, prev - 1));
     queryClient.invalidateQueries(['notifications', currentUser.id]);
 
-    // Navigate based on type
     if (notification.plan_id) {
       if (['new_group_message', 'voting_started'].includes(notification.type)) {
         window.location.href = `/Chat?planId=${notification.plan_id}`;
@@ -131,15 +191,13 @@ export function NotificationProvider({ children }) {
 
   const markAllAsRead = async () => {
     if (!currentUser?.id) return;
-    const notifications = await base44.entities.Notification.filter({ 
-      user_id: currentUser.id, 
-      is_read: false 
+    const notifications = await base44.entities.Notification.filter({
+      user_id: currentUser.id,
+      is_read: false
     });
-    
-    for (const notification of notifications) {
-      await base44.entities.Notification.update(notification.id, { is_read: true });
+    for (const n of notifications) {
+      await base44.entities.Notification.update(n.id, { is_read: true });
     }
-    
     setUnreadCount(0);
     queryClient.invalidateQueries(['notifications', currentUser.id]);
   };
