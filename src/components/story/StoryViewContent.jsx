@@ -341,22 +341,33 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
     }
   }, [isMuted]);
 
-  // Prefetch next image
+  // Prefetch next 2 stories aggressively
   useEffect(() => {
-    const nextStory = groupedStories[currentGroupIndex]?.stories?.[currentStoryInGroupIndex + 1]
-      || groupedStories[currentGroupIndex + 1]?.stories?.[0];
-    if (nextStory?.media_url && nextStory.media_type !== 'video') {
-      const img = new Image(); img.src = nextStory.media_url;
-    }
-    // Prefetch next video
-    if (nextStory?.media_url && nextStory.media_type === 'video') {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'video';
-      link.href = nextStory.media_url;
-      document.head.appendChild(link);
-      setTimeout(() => document.head.removeChild(link), 10000);
-    }
+    const getNext = (gi, si, offset) => {
+      let g = gi, s = si + offset;
+      if (s >= (groupedStories[g]?.stories?.length || 0)) { g += 1; s = 0; }
+      return groupedStories[g]?.stories?.[s] || null;
+    };
+    [getNext(currentGroupIndex, currentStoryInGroupIndex, 1), getNext(currentGroupIndex, currentStoryInGroupIndex, 2)].forEach(next => {
+      if (!next?.media_url) return;
+      if (next.media_type !== 'video') {
+        const img = new Image();
+        img.fetchPriority = 'high';
+        img.src = next.media_url;
+      } else {
+        // Hidden video element forces browser to buffer next video
+        const vid = document.createElement('video');
+        vid.src = next.media_url;
+        vid.preload = 'auto';
+        vid.muted = true;
+        vid.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
+        vid.id = `prefetch-${next.id}`;
+        if (!document.getElementById(`prefetch-${next.id}`)) {
+          document.body.appendChild(vid);
+          setTimeout(() => { try { document.body.removeChild(vid); } catch {} }, 15000);
+        }
+      }
+    });
   }, [currentStoryInGroupIndex, currentGroupIndex, groupedStories]);
 
   const goToGroupCube = useCallback((newGroupIndex, newStoryIndex, dir) => {
