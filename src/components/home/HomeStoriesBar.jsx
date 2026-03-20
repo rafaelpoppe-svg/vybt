@@ -145,23 +145,8 @@ function UserCircle({ story, user, isOwn, onClick }) {
         }}
       >
         <div className="w-full h-full rounded-full bg-[#0b0b0b] p-[2px] overflow-hidden relative">
-          {story?.media_url ? (
-            <>
-              <img
-                src={story.media_type === 'video' && story.thumbnail_url ? story.thumbnail_url : story.media_url}
-                alt=""
-                className="w-full h-full rounded-full object-cover"
-              />
-              {story.media_type === 'video' && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-full">
-                  <div className="w-5 h-5 rounded-full bg-black/60 flex items-center justify-center">
-                    <Play className="w-2.5 h-2.5 text-white fill-white ml-0.5" />
-                  </div>
-                </div>
-              )}
-            </>
-          ) : user?.photos?.[0] ? (
-            <img src={user.photos[0]} alt={user.display_name} className="w-full h-full rounded-full object-cover" />
+          {user?.photos?.[0] ? (
+            <img src={user.photos[0]} alt={user?.display_name} className="w-full h-full rounded-full object-cover" />
           ) : (
             <div
               className="w-full h-full rounded-full flex items-center justify-center"
