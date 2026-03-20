@@ -391,16 +391,23 @@ export default function PlanDetails() {
           </motion.button>
         )}
 
-        {/* Highlight Plan Button (for creator) */}
+        {/* Highlight Plan Button (for creator) — requires 7+ members */}
         {isCreator && !plan.is_highlighted && (
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setShowHighlightModal(true)}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 flex items-center justify-center gap-2 text-orange-400"
-          >
-            <Flame className="w-5 h-5" />
-            Highlight this plan - €2.99
-          </motion.button>
+          participants.length >= 7 ? (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowHighlightModal(true)}
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 flex items-center justify-center gap-2 text-orange-400"
+            >
+              <Flame className="w-5 h-5" />
+              Highlight this plan - €2.99
+            </motion.button>
+          ) : (
+            <div className="w-full py-3 rounded-xl bg-gray-900/50 border border-gray-800 flex items-center justify-center gap-2 text-gray-600 text-sm">
+              <Flame className="w-4 h-4" />
+              Highlight unlocks at 7 members ({participants.length}/7)
+            </div>
+          )
         )}
 
         {/* Attending toggle (only for joined users, not during voting) */}
