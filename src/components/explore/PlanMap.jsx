@@ -245,14 +245,25 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {flyCoords && <FlyToCity coords={flyCoords} />}
 
-        {validPlans.map((plan) => {
+        {groupPlansByLocation(validPlans).map((group, idx) => {
+          const plan = group[0];
           const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
+          if (group.length === 1) {
+            return (
+              <Marker
+                key={plan.id}
+                position={[plan.latitude, plan.longitude]}
+                icon={createCustomIcon(plan.theme_color, plan.is_highlighted, isOnFire)}
+                eventHandlers={{ click: () => { setSelectedPlan(plan); setSelectedCluster(null); } }}
+              />
+            );
+          }
           return (
             <Marker
-              key={plan.id}
+              key={`cluster_${idx}`}
               position={[plan.latitude, plan.longitude]}
-              icon={createCustomIcon(plan.theme_color, plan.is_highlighted, isOnFire)}
-              eventHandlers={{ click: () => setSelectedPlan(plan) }}
+              icon={createClusterIcon(group.length)}
+              eventHandlers={{ click: () => { setSelectedCluster(group); setSelectedPlan(null); } }}
             />
           );
         })}

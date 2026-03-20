@@ -290,14 +290,29 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {flyCoords && mapReady && <FlyToCity coords={flyCoords} />}
         <MapTapToDismiss onDismiss={() => setSelected(null)} />
-        {showPlans && validPlans.map(plan => (
-          <Marker
-            key={`${plan.id}_${plan.status}`}
-            position={[plan.latitude, plan.longitude]}
-            icon={createPlanIcon(plan)}
-            eventHandlers={{ click: () => { setSelected(plan); setSelectedPoi(null); } }}
-          />
-        ))}
+        {showPlans && groupPlansByLocation(validPlans).map((group, idx) => {
+          const plan = group[0];
+          if (group.length === 1) {
+            return (
+              <Marker
+                key={`${plan.id}_${plan.status}`}
+                position={[plan.latitude, plan.longitude]}
+                icon={createPlanIcon(plan)}
+                eventHandlers={{ click: () => { setSelected(plan); setSelectedCluster(null); setSelectedPoi(null); } }}
+              />
+            );
+          }
+          // Cluster marker
+          const clusterColor = plan.theme_color || '#00fea3';
+          return (
+            <Marker
+              key={`cluster_${idx}`}
+              position={[plan.latitude, plan.longitude]}
+              icon={createClusterIcon(group.length, clusterColor)}
+              eventHandlers={{ click: () => { setSelectedCluster(group); setSelected(null); setSelectedPoi(null); } }}
+            />
+          );
+        })}
         {showPois && validPois.map(poi => (
           <Marker
             key={poi.id}
