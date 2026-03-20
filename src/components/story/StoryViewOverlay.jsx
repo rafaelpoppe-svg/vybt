@@ -16,7 +16,7 @@ export default function StoryViewOverlay({ storyId, onClose }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
-          className="fixed inset-0 z-50"
+          className="fixed inset-0" style={{ zIndex: 800 }}
         >
           <StoryViewContent initialStoryId={storyId} onClose={onClose} />
         </motion.div>
