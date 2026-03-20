@@ -37,20 +37,26 @@ export default function Explore() {
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
 
-  const { data: myProfile, isLoading: isLoadingProfile } = useQuery({
+  // Pre-load city from localStorage so we don't wait for currentUser/profile
+  const [cachedCity] = useState(() => localStorage.getItem('selectedCity') || '');
+
+  const { data: myProfile } = useQuery({
     queryKey: ['myProfile', currentUser?.id],
     queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser?.id }).then(r => r[0] || null),
     enabled: !!currentUser?.id,
+    staleTime: 30000,
   });
 
   const { data: communities = [], isLoading: loadingCommunities } = useQuery({
     queryKey: ['allCommunities'],
     queryFn: () => base44.entities.Community.list('-created_date', 50),
+    staleTime: 30000,
   });
 
   const { data: plans = [], isLoading } = useQuery({
     queryKey: ['allPlans'],
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 50),
+    staleTime: 30000,
   });
 
   const { data: allParticipants = [] } = useQuery({
