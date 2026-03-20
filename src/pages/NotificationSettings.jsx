@@ -204,7 +204,7 @@ export default function NotificationSettings() {
           <div className="flex items-start gap-3 p-3 rounded-xl bg-gray-900/50 border border-gray-800">
             <Bell className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-gray-500">
-              Push notifications require permission from your device. Message notifications (DMs & group chat) are never sent — check them in the Chat tab.
+              Push notifications require device permission. Each notification appears only once — even when you're active in the app. Disable any category above to stop receiving that type.
             </p>
           </div>
         </div>
