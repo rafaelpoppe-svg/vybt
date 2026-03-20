@@ -165,9 +165,9 @@ export default function Explore() {
     .filter(p => p.status === 'happening' && baseFilter(p))
     .sort((a, b) => getGoingCount(b.id) - getGoingCount(a.id));
 
-  // ── FOR YOU plans — sorted by matchScore, any status that passed baseFilter ──
+  // ── FOR YOU plans — sorted by matchScore, only upcoming/happening, no community plans ──
   const forYouPlans = recommendedPlans
-    .filter(baseFilter)
+    .filter(p => baseFilter(p) && !p.community_id && (p.status === 'upcoming' || p.status === 'happening'))
     .sort((a, b) => {
       // Highlighted first
       if (a.is_highlighted && !b.is_highlighted) return -1;
