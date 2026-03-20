@@ -101,7 +101,8 @@ export default function UserProfile() {
 
 
 
-  if (!profile || !currentUser) {
+  // Only block on profile — currentUser loads async but isn't needed to show the profile
+  if (!profile) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
