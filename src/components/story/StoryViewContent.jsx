@@ -334,6 +334,13 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
 
   useEffect(() => { handleNextRef.current = handleNext; });
 
+  // When mute state changes while video is playing, sync muted attribute
+  useEffect(() => {
+    if (videoRef.current && story?.media_type === 'video') {
+      videoRef.current.muted = isMuted || !story.has_audio;
+    }
+  }, [isMuted]);
+
   useEffect(() => {
     const nextStory = groupedStories[currentGroupIndex]?.stories?.[currentStoryInGroupIndex + 1]
       || groupedStories[currentGroupIndex + 1]?.stories?.[0];
