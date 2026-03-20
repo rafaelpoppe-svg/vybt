@@ -522,7 +522,27 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
               {/* Media */}
               <div className="absolute inset-0 bg-black">
                 {story.media_type === 'video'
-                  ? <video key={story.id} src={story.media_url} className="h-full w-full object-cover" autoPlay muted={isMuted || !story.has_audio} playsInline loop />
+                  ? <>
+                      {videoLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center z-10">
+                          <Loader2 className="w-8 h-8 text-white animate-spin" />
+                        </div>
+                      )}
+                      <video
+                        key={story.id}
+                        ref={videoRef}
+                        src={story.media_url}
+                        className="h-full w-full object-cover"
+                        autoPlay
+                        muted={isMuted || !story.has_audio}
+                        playsInline
+                        loop
+                        preload="auto"
+                        onLoadStart={() => setVideoLoading(true)}
+                        onCanPlay={(e) => { setVideoLoading(false); e.target.play().catch(() => {}); }}
+                        onError={() => setVideoLoading(false)}
+                      />
+                    </>
                   : <img key={story.id} src={story.media_url} alt="" loading="eager" decoding="async" className="h-full w-full object-cover" />}
               </div>
 
