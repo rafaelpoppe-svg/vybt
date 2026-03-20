@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, Loader2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function AddressAutocomplete({ value, onChange, onSelect, placeholder = 'Search address...', className = '' }) {
+export default function AddressAutocomplete({ value, onChange, onSelect, placeholder = 'Search address...', className = '', userCity = '' }) {
   const [query, setQuery] = useState(value || '');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,13 +30,35 @@ export default function AddressAutocomplete({ value, onChange, onSelect, placeho
     if (q.length < 3) { setResults([]); setOpen(false); return; }
     setLoading(true);
     try {
+      // Build query biased toward user's city if available
+      const city = userCity || localStorage.getItem('selectedCity') || '';
+      const biasedQuery = city && !q.toLowerCase().includes(city.toLowerCase())
+        ? `${q}, ${city}`
+        : q;
+
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&addressdetails=1`,
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(biasedQuery)}&format=json&limit=6&addressdetails=1`,
         { headers: { 'Accept-Language': 'en' } }
       );
       const data = await res.json();
-      setResults(data);
-      setOpen(data.length > 0);
+
+      // If biased query returned results, use them; otherwise fallback to plain query
+      if (data.length > 0) {
+        setResults(data);
+        setOpen(true);
+      } else if (city) {
+        // Fallback: search without city bias
+        const fallbackRes = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&addressdetails=1`,
+          { headers: { 'Accept-Language': 'en' } }
+        );
+        const fallbackData = await fallbackRes.json();
+        setResults(fallbackData);
+        setOpen(fallbackData.length > 0);
+      } else {
+        setResults([]);
+        setOpen(false);
+      }
     } catch (_) {}
     setLoading(false);
   };
