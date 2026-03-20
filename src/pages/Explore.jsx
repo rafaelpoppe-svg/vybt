@@ -26,19 +26,19 @@ export default function Explore() {
   
   const [search, setSearch] = useState('');
   const [selectedTag, setSelectedTag] = useState('All');
-  const [activeView, setActiveView] = useState(initialTab === 'communities' ? 'communities' : 'plans'); // 'plans', 'users', 'communities'
-  const [userSubTab, setUserSubTab] = useState('discover'); // 'discover' or 'requests'
+  const [activeView, setActiveView] = useState(initialTab === 'communities' ? 'communities' : 'plans');
+  const [userSubTab, setUserSubTab] = useState('discover');
   const [showFilters, setShowFilters] = useState(false);
-  const [planFilters, setPlanFilters] = useState({ sortBy: initialTab === 'foryou' ? 'foryou' : 'onfire' });
+  const [planFilters, setPlanFilters] = useState({ sortBy: 'foryou' });
   const [userFilters, setUserFilters] = useState({ sortBy: 'foryou' });
   const [currentUser, setCurrentUser] = useState(null);
+
+  // Pre-load city from localStorage so we don't wait for currentUser/profile
+  const [cachedCity] = useState(() => localStorage.getItem('selectedCity') || '');
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
-
-  // Pre-load city from localStorage so we don't wait for currentUser/profile
-  const [cachedCity] = useState(() => localStorage.getItem('selectedCity') || '');
 
   const { data: myProfile } = useQuery({
     queryKey: ['myProfile', currentUser?.id],
@@ -62,11 +62,13 @@ export default function Explore() {
   const { data: allParticipants = [] } = useQuery({
     queryKey: ['allParticipants'],
     queryFn: () => base44.entities.PlanParticipant.list('-created_date', 200),
+    staleTime: 30000,
   });
 
   const { data: userProfiles = [] } = useQuery({
     queryKey: ['userProfiles'],
     queryFn: () => base44.entities.UserProfile.list('-created_date', 100),
+    staleTime: 30000,
   });
 
   const { data: friendships = [] } = useQuery({
@@ -101,6 +103,9 @@ export default function Explore() {
   const friendIds = friendships.map(f => f.friend_id);
   const pastPlanIds = myParticipations.map(p => p.plan_id);
 
+  // Use profile city or cached city
+  const userCity = (myProfile?.city || cachedCity)?.trim()?.toLowerCase() || null;
+
   // Get personalized recommendations
   const recommendedPlans = useRecommendations({
     plans,
@@ -115,6 +120,10 @@ export default function Explore() {
     return allParticipants.filter(p => p.plan_id === planId).length;
   };
 
+  const getGoingCount = (planId) => {
+    return allParticipants.filter(p => p.plan_id === planId && p.status === 'going').length;
+  };
+
   const getParticipants = (planId) => {
     return allParticipants
       .filter(p => p.plan_id === planId)
@@ -122,17 +131,9 @@ export default function Explore() {
       .filter(Boolean);
   };
 
-  // Use recommended plans for "For You" sort, otherwise use regular plans
-  const basePlans = planFilters.sortBy === 'foryou' ? recommendedPlans : plans;
-
-  // Use profile city when available, fallback to localStorage cache so explore works immediately
-  const userCity = (myProfile?.city || cachedCity)?.trim()?.toLowerCase() || null;
-
-  let filteredPlans = basePlans.filter(plan => {
-    // Hide voting and terminated plans from everyone in Explore
+  // Base filter: remove invalid/expired plans, apply city + tag + search
+  const baseFilter = (plan) => {
     if (plan.status === 'voting' || plan.status === 'terminated') return false;
-
-    // Client-side: hide plans whose time has passed (ended or in voting window)
     if (plan.date && plan.time) {
       const start = new Date(`${plan.date}T${plan.time}:00`);
       const end = plan.end_time
@@ -140,21 +141,15 @@ export default function Explore() {
         : new Date(start.getTime() + 8 * 60 * 60 * 1000);
       if (new Date() > end) return false;
     }
-
-    // Hide plans that admin chose to hide from Explore
     if (plan.show_in_explore === false) return false;
-
-    // Filter by current user's city — always enforce
     if (!userCity) return false;
     if (plan.city?.toLowerCase() !== userCity) return false;
 
     const matchesSearch = plan.title.toLowerCase().includes(search.toLowerCase()) ||
       plan.location_address?.toLowerCase().includes(search.toLowerCase());
-    const matchesTag = selectedTag === 'All' || plan.tags?.some(t => 
+    const matchesTag = selectedTag === 'All' || plan.tags?.some(t =>
       t.toLowerCase().includes(selectedTag.toLowerCase())
     );
-    
-    // Apply additional filters
     let matchesFilters = true;
     if (planFilters.vibes?.length > 0) {
       matchesFilters = plan.tags?.some(t => planFilters.vibes.includes(t));
@@ -162,44 +157,59 @@ export default function Explore() {
     if (planFilters.partyTags?.length > 0) {
       matchesFilters = matchesFilters && plan.tags?.some(t => planFilters.partyTags.includes(t));
     }
-    
     return matchesSearch && matchesTag && matchesFilters;
-  });
+  };
 
-  // Sort plans - Highlighted plans always first, then apply other sorting
-  filteredPlans = filteredPlans.sort((a, b) => {
-    // Highlighted (paid) plans always come first
-    if (a.is_highlighted && !b.is_highlighted) return -1;
-    if (!a.is_highlighted && b.is_highlighted) return 1;
-    
-    // Then apply specific sort
-    if (planFilters.sortBy === 'onfire') {
-      // OnFire plans (100+ joins in 2 hours) next
-      const aOnFire = a.is_on_fire || (a.recent_joins >= 100);
-      const bOnFire = b.is_on_fire || (b.recent_joins >= 100);
-      if (aOnFire && !bOnFire) return -1;
-      if (!aOnFire && bOnFire) return 1;
-      return (b.view_count || 0) - (a.view_count || 0);
-    } else if (planFilters.sortBy === 'popular') {
-      return getParticipantCount(b.id) - getParticipantCount(a.id);
-    } else if (planFilters.sortBy === 'foryou') {
+  // ── LIVE NOW plans (status = happening) ──
+  const liveNowPlans = plans
+    .filter(p => p.status === 'happening' && baseFilter(p))
+    .sort((a, b) => getGoingCount(b.id) - getGoingCount(a.id));
+
+  // ── FOR YOU plans — sorted by matchScore, any status that passed baseFilter ──
+  const forYouPlans = recommendedPlans
+    .filter(baseFilter)
+    .sort((a, b) => {
+      // Highlighted first
+      if (a.is_highlighted && !b.is_highlighted) return -1;
+      if (!a.is_highlighted && b.is_highlighted) return 1;
       return (b.matchScore || 0) - (a.matchScore || 0);
-    }
-    return 0;
-  });
+    });
+
+  // ── ON FIRE plans — most going + view_count + members ──
+  const onFirePlans = plans
+    .filter(baseFilter)
+    .sort((a, b) => {
+      if (a.is_highlighted && !b.is_highlighted) return -1;
+      if (!a.is_highlighted && b.is_highlighted) return 1;
+      // Score = going*3 + total_members*2 + views
+      const scoreA = getGoingCount(a.id) * 3 + getParticipantCount(a.id) * 2 + (a.view_count || 0);
+      const scoreB = getGoingCount(b.id) * 3 + getParticipantCount(b.id) * 2 + (b.view_count || 0);
+      return scoreB - scoreA;
+    });
+
+  // ── MOST MEMBERS plans ──
+  const mostMembersPlans = plans
+    .filter(baseFilter)
+    .sort((a, b) => {
+      if (a.is_highlighted && !b.is_highlighted) return -1;
+      if (!a.is_highlighted && b.is_highlighted) return 1;
+      return getParticipantCount(b.id) - getParticipantCount(a.id);
+    });
+
+  // Select which list to show
+  let filteredPlans;
+  if (planFilters.sortBy === 'livenow') filteredPlans = liveNowPlans;
+  else if (planFilters.sortBy === 'foryou') filteredPlans = forYouPlans;
+  else if (planFilters.sortBy === 'onfire') filteredPlans = onFirePlans;
+  else filteredPlans = mostMembersPlans;
 
   // Filter users
   let filteredUsers = userProfiles.filter(profile => {
     if (profile.user_id === currentUser?.id) return false;
-    // Hide friends from "Matches My Vibes" discover tab
     if (friendIds.includes(profile.user_id)) return false;
-
-    // Filter by current user's city — always enforce
     if (!userCity) return false;
     if (profile.city?.toLowerCase() !== userCity) return false;
-    
     const matchesSearch = profile.display_name?.toLowerCase().includes(search.toLowerCase());
-    
     let matchesFilters = true;
     if (userFilters.gender) {
       matchesFilters = profile.gender === userFilters.gender;
@@ -207,11 +217,9 @@ export default function Explore() {
     if (userFilters.vibes?.length > 0) {
       matchesFilters = matchesFilters && profile.vibes?.some(v => userFilters.vibes.includes(v));
     }
-    
     return matchesSearch && matchesFilters;
   });
 
-  // Sort users by matching vibes
   if (userFilters.sortBy === 'foryou' && myProfile?.vibes) {
     filteredUsers = filteredUsers.sort((a, b) => {
       const aMatches = a.vibes?.filter(v => myProfile.vibes.includes(v)).length || 0;
@@ -239,6 +247,34 @@ export default function Explore() {
     }
   });
 
+  const sortChips = [
+    {
+      key: 'livenow',
+      label: 'Live Now',
+      emoji: '🔴',
+      activeClass: 'bg-red-500/20 text-red-400 border-red-500/30',
+      badge: liveNowPlans.length > 0 ? liveNowPlans.length : null,
+    },
+    {
+      key: 'foryou',
+      label: t.forYou,
+      emoji: '❤️',
+      activeClass: 'bg-gradient-to-r from-[#00c6d2]/30 to-[#542b9b]/30 text-[#00c6d2] border-[#00c6d2]/30',
+    },
+    {
+      key: 'onfire',
+      label: t.onFire,
+      emoji: '🔥',
+      activeClass: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+    },
+    {
+      key: 'popular',
+      label: t.mostMembers,
+      emoji: '👥',
+      activeClass: 'bg-[#542b9b]/30 text-purple-300 border-[#542b9b]/30',
+    },
+  ];
+
   return (
     <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh', overscrollBehavior: 'none' }}>
       {/* Header */}
@@ -263,7 +299,6 @@ export default function Explore() {
               </motion.span>
             )}
           </div>
-          {/* Filter button — only for plans and users, not communities */}
           {activeView !== 'map' && activeView !== 'communities' && (
             <motion.button
               whileTap={{ scale: 0.9 }}
@@ -345,24 +380,33 @@ export default function Explore() {
           )}
         </div>
 
-        {/* Tags + Sort — scrollable row, only for plans */}
+        {/* Sort chips + Tag filter — only for plans */}
         {activeView === 'plans' && (
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3" data-hscroll="1">
-            {/* Sort pills */}
-            {[
-              { key: 'foryou', label: t.forYou, emoji: '❤️', activeClass: 'bg-gradient-to-r from-[#00c6d2]/30 to-[#542b9b]/30 text-[#00c6d2] border-[#00c6d2]/30' },
-              { key: 'onfire', label: t.onFire, emoji: '🔥', activeClass: 'bg-orange-500/20 text-orange-400 border-orange-500/30' },
-              { key: 'popular', label: t.mostMembers, emoji: '👥', activeClass: 'bg-[#542b9b]/30 text-purple-300 border-[#542b9b]/30' },
-            ].map(({ key, label, emoji, activeClass }) => (
+            {sortChips.map(({ key, label, emoji, activeClass, badge }) => (
               <motion.button
                 key={key}
                 whileTap={{ scale: 0.92 }}
                 onClick={() => setPlanFilters({ ...planFilters, sortBy: key })}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border transition-all flex-shrink-0 ${
+                className={`relative flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border transition-all flex-shrink-0 ${
                   planFilters.sortBy === key ? activeClass : 'bg-gray-900 text-gray-400 border-gray-800'
                 }`}
               >
-                <span>{emoji}</span> {label}
+                {key === 'livenow' && planFilters.sortBy === key && (
+                  <motion.span
+                    animate={{ opacity: [1, 0.3, 1] }}
+                    transition={{ repeat: Infinity, duration: 1 }}
+                    className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"
+                  />
+                )}
+                {key !== 'livenow' && <span>{emoji}</span>}
+                {key === 'livenow' && planFilters.sortBy !== key && <span>{emoji}</span>}
+                {label}
+                {badge && (
+                  <span className="ml-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold">
+                    {badge > 9 ? '9+' : badge}
+                  </span>
+                )}
               </motion.button>
             ))}
 
@@ -419,169 +463,190 @@ export default function Explore() {
 
       {/* Content — scrollable area */}
       <div className="flex-1 overflow-y-auto">
-          <PullToRefresh onRefresh={handleRefresh}>
-            <main className="p-4 pb-28 space-y-5">
-              {activeView === 'communities' ? (
-                loadingCommunities ? (
-                  <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" /></div>
-                ) : (
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <p className="text-gray-400 text-sm">{communities.filter(c => !c.is_deleted && !c.is_private && userCity && c.city?.toLowerCase() === userCity).length} communities</p>
-                      <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('CreateCommunity'))}
-                        className="px-4 py-2 rounded-xl text-sm font-bold text-[#0b0b0b] flex items-center gap-1.5"
-                        style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}>
-                        + Create
-                      </motion.button>
-                    </div>
-                    {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && userCity && c.city?.toLowerCase() === userCity).length === 0
-                      ? <div className="text-center py-16 space-y-3"><div className="text-5xl">⭐</div><p className="text-gray-500 text-sm">No communities here yet</p><p className="text-gray-600 text-xs">Be the first to create one! 🚀</p></div>
-                      : <div className="grid grid-cols-2 gap-3">
-                          {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && userCity && c.city?.toLowerCase() === userCity)
-                            .map((community, i) => (
-                              <motion.div key={community.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                                <CommunityCard community={community} myProfile={myProfile}
-                                  onClick={() => navigate(createPageUrl('CommunityView') + `?id=${community.id}`)} />
-                              </motion.div>
-                            ))}
-                        </div>}
-                  </div>
-                )
-              ) : isLoading ? (
-                <div className="flex justify-center py-12">
-                  <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
-                </div>
-              ) : !userCity ? (
-                <div className="text-center py-20 space-y-4 px-6">
-                  <div className="text-5xl">📍</div>
-                  <p className="text-white font-semibold text-lg">Set your city first</p>
-                  <p className="text-gray-400 text-sm">To see plans, people and communities near you, add your city to your profile.</p>
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate(createPageUrl('EditProfile'))}
-                    className="mt-2 px-6 py-3 rounded-full font-bold text-[#0b0b0b] text-sm"
-                    style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}
-                  >
-                    Go to Profile Settings
-                  </motion.button>
-                </div>
-              ) : activeView === 'plans' ? (
-                filteredPlans.length > 0 ? (
-                  <>
-                    {/* On Fire banner */}
-                    {filteredPlans.some(p => p.is_on_fire || p.recent_joins >= 100) && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="rounded-2xl p-3 flex items-center gap-3 overflow-hidden relative"
-                        style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.18), rgba(249,115,22,0.1))', border: '1px solid rgba(239,68,68,0.3)' }}
-                      >
-                        <motion.span
-                          animate={{ scale: [1, 1.25, 1] }}
-                          transition={{ repeat: Infinity, duration: 0.8 }}
-                          className="text-2xl flex-shrink-0"
-                        >🔥</motion.span>
-                        <div>
-                          <p className="text-red-400 font-bold text-sm">On Fire Plans 🌶️</p>
-                          <p className="text-red-300/70 text-xs">These are blowing up right now!</p>
-                        </div>
-                        <motion.div
-                          animate={{ opacity: [0.3, 0.8, 0.3] }}
-                          transition={{ repeat: Infinity, duration: 1.5 }}
-                          className="absolute right-4 text-3xl pointer-events-none"
-                        >🎸</motion.div>
-                      </motion.div>
-                    )}
-
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      {filteredPlans.map((plan, idx) => {
-                        const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
-                        return (
-                          <motion.div
-                            key={plan.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.04, type: 'spring', stiffness: 260, damping: 22 }}
-                          >
-                            <PlanCard
-                              plan={plan}
-                              participants={getParticipants(plan.id)}
-                              featured={plan.is_highlighted}
-                              matchScore={planFilters.sortBy === 'foryou' ? plan.matchScore : null}
-                              matchReasons={planFilters.sortBy === 'foryou' ? plan.matchReasons : null}
-                              isOnFire={isOnFire}
-                              onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-                              currentUserId={currentUser?.id}
-                            />
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-center py-16 space-y-3">
-                    <div className="text-5xl">🎭</div>
-                    <p className="text-gray-500 text-sm">{t.noPlansFound}</p>
-                    <p className="text-gray-600 text-xs">Try changing filters or city 🌍</p>
-                  </div>
-                )
-              ) : userSubTab === 'requests' ? (
-                receivedFriendRequests.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-3">
-                    {receivedFriendRequests.map((request) => {
-                      const requester = profilesMap[request.user_id];
-                      if (!requester) return null;
-                      return (
-                        <UserCard
-                          key={request.id}
-                          profile={requester}
-                          myProfile={myProfile}
-                          currentUser={currentUser}
-                          isFriend={false}
-                          isPendingSent={false}
-                          mode="request"
-                          friendshipId={request.id}
-                        />
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="text-center py-16 space-y-3">
-                    <div className="text-5xl">👥</div>
-                    <p className="text-gray-500 text-sm">No pending friend requests</p>
-                  </div>
-                )
+        <PullToRefresh onRefresh={handleRefresh}>
+          <main className="p-4 pb-28 space-y-5">
+            {activeView === 'communities' ? (
+              loadingCommunities ? (
+                <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" /></div>
               ) : (
-                filteredUsers.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-3">
-                    {filteredUsers.map((profile) => {
-                      const isFriend = friendIds.includes(profile.user_id);
-                      const isPendingSent = sentFriendRequests.some(
-                        r => r.friend_id === profile.user_id && r.status === 'pending'
-                      );
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-gray-400 text-sm">{communities.filter(c => !c.is_deleted && !c.is_private && userCity && c.city?.toLowerCase() === userCity).length} communities</p>
+                    <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('CreateCommunity'))}
+                      className="px-4 py-2 rounded-xl text-sm font-bold text-[#0b0b0b] flex items-center gap-1.5"
+                      style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}>
+                      + Create
+                    </motion.button>
+                  </div>
+                  {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && userCity && c.city?.toLowerCase() === userCity).length === 0
+                    ? <div className="text-center py-16 space-y-3"><div className="text-5xl">⭐</div><p className="text-gray-500 text-sm">No communities here yet</p><p className="text-gray-600 text-xs">Be the first to create one! 🚀</p></div>
+                    : <div className="grid grid-cols-2 gap-3">
+                        {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && userCity && c.city?.toLowerCase() === userCity)
+                          .map((community, i) => (
+                            <motion.div key={community.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+                              <CommunityCard community={community} myProfile={myProfile}
+                                onClick={() => navigate(createPageUrl('CommunityView') + `?id=${community.id}`)} />
+                            </motion.div>
+                          ))}
+                      </div>}
+                </div>
+              )
+            ) : isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
+              </div>
+            ) : !userCity ? (
+              <div className="text-center py-20 space-y-4 px-6">
+                <div className="text-5xl">📍</div>
+                <p className="text-white font-semibold text-lg">Set your city first</p>
+                <p className="text-gray-400 text-sm">To see plans, people and communities near you, add your city to your profile.</p>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate(createPageUrl('EditProfile'))}
+                  className="mt-2 px-6 py-3 rounded-full font-bold text-[#0b0b0b] text-sm"
+                  style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}
+                >
+                  Go to Profile Settings
+                </motion.button>
+              </div>
+            ) : activeView === 'plans' ? (
+              filteredPlans.length > 0 ? (
+                <>
+                  {/* Live Now banner */}
+                  {planFilters.sortBy === 'livenow' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="rounded-2xl p-3 flex items-center gap-3 overflow-hidden relative"
+                      style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(220,38,38,0.1))', border: '1px solid rgba(239,68,68,0.4)' }}
+                    >
+                      <motion.span
+                        animate={{ opacity: [1, 0.3, 1] }}
+                        transition={{ repeat: Infinity, duration: 1 }}
+                        className="w-3 h-3 rounded-full bg-red-500 flex-shrink-0"
+                      />
+                      <div>
+                        <p className="text-red-400 font-bold text-sm">Happening Right Now 🎉</p>
+                        <p className="text-red-300/70 text-xs">These plans are live in your city!</p>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* On Fire banner */}
+                  {planFilters.sortBy === 'onfire' && filteredPlans.some(p => p.is_on_fire || p.recent_joins >= 100) && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="rounded-2xl p-3 flex items-center gap-3 overflow-hidden relative"
+                      style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.18), rgba(249,115,22,0.1))', border: '1px solid rgba(239,68,68,0.3)' }}
+                    >
+                      <motion.span
+                        animate={{ scale: [1, 1.25, 1] }}
+                        transition={{ repeat: Infinity, duration: 0.8 }}
+                        className="text-2xl flex-shrink-0"
+                      >🔥</motion.span>
+                      <div>
+                        <p className="text-red-400 font-bold text-sm">On Fire Plans 🌶️</p>
+                        <p className="text-red-300/70 text-xs">These are blowing up right now!</p>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {filteredPlans.map((plan, idx) => {
+                      const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
                       return (
-                        <UserCard
-                          key={profile.id}
-                          profile={profile}
-                          myProfile={myProfile}
-                          currentUser={currentUser}
-                          isFriend={isFriend}
-                          isPendingSent={isPendingSent}
-                        />
+                        <motion.div
+                          key={plan.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.04, type: 'spring', stiffness: 260, damping: 22 }}
+                        >
+                          <PlanCard
+                            plan={plan}
+                            participants={getParticipants(plan.id)}
+                            featured={plan.is_highlighted}
+                            matchScore={planFilters.sortBy === 'foryou' ? plan.matchScore : null}
+                            matchReasons={planFilters.sortBy === 'foryou' ? plan.matchReasons : null}
+                            isOnFire={isOnFire}
+                            onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
+                            currentUserId={currentUser?.id}
+                          />
+                        </motion.div>
                       );
                     })}
                   </div>
-                ) : (
-                  <div className="text-center py-16 space-y-3">
-                    <div className="text-5xl">🕺</div>
-                    <p className="text-gray-500 text-sm">{t.noUsersFound}</p>
-                    <p className="text-gray-600 text-xs">No one found with those filters 🎭</p>
-                  </div>
-                )
-              )}
-            </main>
-          </PullToRefresh>
-        </div>
+                </>
+              ) : planFilters.sortBy === 'livenow' ? (
+                <div className="text-center py-16 space-y-3">
+                  <div className="text-5xl">🎙️</div>
+                  <p className="text-gray-500 text-sm">No live plans right now</p>
+                  <p className="text-gray-600 text-xs">Check back later or explore upcoming plans 🎭</p>
+                </div>
+              ) : (
+                <div className="text-center py-16 space-y-3">
+                  <div className="text-5xl">🎭</div>
+                  <p className="text-gray-500 text-sm">{t.noPlansFound}</p>
+                  <p className="text-gray-600 text-xs">Try changing filters or city 🌍</p>
+                </div>
+              )
+            ) : userSubTab === 'requests' ? (
+              receivedFriendRequests.length > 0 ? (
+                <div className="grid grid-cols-2 gap-3">
+                  {receivedFriendRequests.map((request) => {
+                    const requester = profilesMap[request.user_id];
+                    if (!requester) return null;
+                    return (
+                      <UserCard
+                        key={request.id}
+                        profile={requester}
+                        myProfile={myProfile}
+                        currentUser={currentUser}
+                        isFriend={false}
+                        isPendingSent={false}
+                        mode="request"
+                        friendshipId={request.id}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-16 space-y-3">
+                  <div className="text-5xl">👥</div>
+                  <p className="text-gray-500 text-sm">No pending friend requests</p>
+                </div>
+              )
+            ) : (
+              filteredUsers.length > 0 ? (
+                <div className="grid grid-cols-2 gap-3">
+                  {filteredUsers.map((profile) => {
+                    const isFriend = friendIds.includes(profile.user_id);
+                    const isPendingSent = sentFriendRequests.some(
+                      r => r.friend_id === profile.user_id && r.status === 'pending'
+                    );
+                    return (
+                      <UserCard
+                        key={profile.id}
+                        profile={profile}
+                        myProfile={myProfile}
+                        currentUser={currentUser}
+                        isFriend={isFriend}
+                        isPendingSent={isPendingSent}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-16 space-y-3">
+                  <div className="text-5xl">🕺</div>
+                  <p className="text-gray-500 text-sm">{t.noUsersFound}</p>
+                  <p className="text-gray-600 text-xs">No one found with those filters 🎭</p>
+                </div>
+              )
+            )}
+          </main>
+        </PullToRefresh>
+      </div>
 
       <div className="flex-shrink-0">
         <BottomNav />
