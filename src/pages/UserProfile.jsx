@@ -86,10 +86,11 @@ export default function UserProfile() {
     enabled: !!currentUser?.id,
   });
 
-  const { data: friendRequests = [] } = useQuery({
-    queryKey: ['friendRequests', currentUser?.id],
-    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id }),
-    enabled: !!currentUser?.id,
+  // Pedidos que RECEBI desta pessoa (ela enviou para mim)
+  const { data: receivedFromUser = [] } = useQuery({
+    queryKey: ['receivedFromUser', currentUser?.id, userId],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: userId, friend_id: currentUser?.id, status: 'pending' }),
+    enabled: !!currentUser?.id && !!userId,
   });
 
   const userPlans = allPlans.filter(p => participations.some(pa => pa.plan_id === p.id));
