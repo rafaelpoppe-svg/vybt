@@ -57,6 +57,18 @@ export default function Home() {
           if (!profiles[0].programs_shown) { navigate(createPageUrl('WelcomePrograms')); return; }
           if (!profiles[0].tutorial_completed) setShowTutorial(true);
 
+          // Always sync profile city to localStorage as the default location
+          // This ensures Explore and other pages that read from localStorage get the correct city
+          if (profiles[0].city) {
+            // Always update if no city cached, or if user hasn't manually changed it
+            if (!localStorage.getItem('selectedCity')) {
+              setCity(profiles[0].city);
+              localStorage.setItem('selectedCity', profiles[0].city);
+              setRadius(profiles[0].radius_km || 10);
+              localStorage.setItem('selectedRadius', profiles[0].radius_km || 10);
+            }
+          }
+
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
               async (position) => {
@@ -68,22 +80,25 @@ export default function Home() {
                   );
                   const data = await res.json();
                   const detectedCity = data.address?.city || data.address?.town || data.address?.village || null;
-                  if (detectedCity) { setCity(detectedCity); localStorage.setItem('selectedCity', detectedCity); }
+                  // Only override with geolocation if it matches the user's profile city
+                  // to avoid showing a different city than what the user set in their profile
+                  if (detectedCity) {
+                    const profileCity = profiles[0]?.city?.toLowerCase() || '';
+                    const geoCity = detectedCity.toLowerCase();
+                    // Use geolocation city only if it matches profile city (case-insensitive)
+                    if (!profileCity || geoCity === profileCity) {
+                      setCity(detectedCity);
+                      localStorage.setItem('selectedCity', detectedCity);
+                    }
+                    // else: keep profile city — user set their location manually
+                  }
                 } catch (_) {}
               },
               () => {
-                if (profiles[0].city && !localStorage.getItem('selectedCity')) {
-                  setCity(profiles[0].city);
-                  localStorage.setItem('selectedCity', profiles[0].city);
-                  setRadius(profiles[0].radius_km || 10);
-                  localStorage.setItem('selectedRadius', profiles[0].radius_km || 10);
-                }
+                // Geolocation denied — profile city already set above
               },
               { timeout: 8000, maximumAge: 60000 }
             );
-          } else if (profiles[0].city && !localStorage.getItem('selectedCity')) {
-            setCity(profiles[0].city);
-            localStorage.setItem('selectedCity', profiles[0].city);
           }
         }
       } catch (e) {}
