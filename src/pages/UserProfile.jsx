@@ -323,6 +323,27 @@ export default function UserProfile() {
               <div className="flex-1 flex items-center justify-center py-2.5 rounded-xl bg-gray-800 text-gray-400 text-sm font-medium border border-gray-700">
                 ⏳ Request Sent
               </div>
+            ) : incomingRequest ? (
+              // Esta pessoa enviou-nos um pedido — mostrar Aceitar/Recusar
+              <div className="flex gap-2 flex-1">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleAcceptRequest}
+                  disabled={friendshipLoading}
+                  className="flex-1 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-1.5 disabled:opacity-60 text-white"
+                  style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}
+                >
+                  {friendshipLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Check className="w-4 h-4" /> Accept</>}
+                </motion.button>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleDeclineRequest}
+                  disabled={friendshipLoading}
+                  className="flex-1 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-gray-400 text-sm font-semibold flex items-center justify-center gap-1.5 disabled:opacity-60"
+                >
+                  Decline
+                </motion.button>
+              </div>
             ) : (
               <motion.button
                 whileTap={{ scale: 0.95 }}
