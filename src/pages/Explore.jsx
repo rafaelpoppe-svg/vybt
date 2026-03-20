@@ -414,7 +414,7 @@ export default function Explore() {
       {/* Content — scrollable area */}
       <div className="flex-1 overflow-y-auto">
           <PullToRefresh onRefresh={handleRefresh}>
-            <main className="p-4 pb-4 space-y-5">
+            <main className="p-4 pb-28 space-y-5">
               {activeView === 'communities' ? (
                 loadingCommunities ? (
                   <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" /></div>
