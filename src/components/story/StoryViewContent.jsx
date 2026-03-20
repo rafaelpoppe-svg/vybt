@@ -271,29 +271,65 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
   const progressBarRef = useRef(null);
   const progressTimerRef = useRef(null);
   const handleNextRef = useRef(null);
+  const progressRafRef = useRef(null);
+  const videoProgressStartRef = useRef(null);
 
-  const startProgress = useCallback(() => {
+  // For images: fixed 5s progress animation
+  const startImageProgress = useCallback((duration = 5000) => {
     clearTimeout(progressTimerRef.current);
+    cancelAnimationFrame(progressRafRef.current);
     if (!progressBarRef.current) return;
     progressBarRef.current.style.transition = 'none';
     progressBarRef.current.style.width = '0%';
     progressBarRef.current.getBoundingClientRect();
     requestAnimationFrame(() => {
       if (!progressBarRef.current) return;
-      progressBarRef.current.style.transition = 'width 5s linear';
+      progressBarRef.current.style.transition = `width ${duration / 1000}s linear`;
       progressBarRef.current.style.width = '100%';
     });
     progressTimerRef.current = setTimeout(() => {
       if (!isPausedRef.current) handleNextRef.current?.();
-    }, 5000);
+    }, duration);
+  }, []);
+
+  // For videos: sync progress bar with actual video currentTime
+  const startVideoProgress = useCallback(() => {
+    clearTimeout(progressTimerRef.current);
+    cancelAnimationFrame(progressRafRef.current);
+    if (!progressBarRef.current) return;
+    progressBarRef.current.style.transition = 'none';
+    progressBarRef.current.style.width = '0%';
+
+    const tick = () => {
+      const video = videoRef.current;
+      if (!video || !progressBarRef.current) return;
+      if (!isPausedRef.current && video.duration > 0) {
+        const pct = (video.currentTime / video.duration) * 100;
+        progressBarRef.current.style.transition = 'none';
+        progressBarRef.current.style.width = `${pct}%`;
+        if (pct >= 99.5) {
+          handleNextRef.current?.();
+          return;
+        }
+      }
+      progressRafRef.current = requestAnimationFrame(tick);
+    };
+    progressRafRef.current = requestAnimationFrame(tick);
   }, []);
 
   useEffect(() => {
     if (!story) return;
-    if (story.media_type === 'video') setVideoLoading(true);
-    else setVideoLoading(false);
-    const t = setTimeout(() => startProgress(), groupKey > 0 ? 50 : 0);
-    return () => { clearTimeout(t); clearTimeout(progressTimerRef.current); };
+    cancelAnimationFrame(progressRafRef.current);
+    clearTimeout(progressTimerRef.current);
+    if (story.media_type === 'video') {
+      setVideoLoading(true);
+      // progress will start once video can play (onCanPlay)
+    } else {
+      setVideoLoading(false);
+      const t = setTimeout(() => startImageProgress(), groupKey > 0 ? 50 : 0);
+      return () => { clearTimeout(t); clearTimeout(progressTimerRef.current); cancelAnimationFrame(progressRafRef.current); };
+    }
+    return () => { clearTimeout(progressTimerRef.current); cancelAnimationFrame(progressRafRef.current); };
   }, [currentStoryInGroupIndex, currentGroupIndex, groupKey]);
 
   useEffect(() => { handleNextRef.current = handleNext; });
