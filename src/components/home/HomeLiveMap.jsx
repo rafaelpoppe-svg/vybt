@@ -289,7 +289,7 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {flyCoords && mapReady && <FlyToCity coords={flyCoords} />}
-        <MapTapToDismiss onDismiss={() => setSelected(null)} />
+        <MapTapToDismiss onDismiss={() => { setSelected(null); setSelectedCluster(null); }} />
         {showPlans && groupPlansByLocation(validPlans).map((group, idx) => {
           const plan = group[0];
           if (group.length === 1) {
