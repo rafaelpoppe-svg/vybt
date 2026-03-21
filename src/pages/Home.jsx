@@ -255,8 +255,11 @@ export default function Home() {
       .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
   , [stories, currentUser?.id]);
   const friendStories = useMemo(() => 
-    stories.filter(s => friendIds.includes(s.user_id))
-  , [stories, friendIds]);
+    stories.filter(s => 
+      friendIds.includes(s.user_id) && 
+      !(s.viewed_by || []).includes(currentUser?.id)
+    )
+  , [stories, friendIds, currentUser?.id]);
   const planStories = useMemo(() => 
     stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
   , [stories, visiblePlans]);
