@@ -463,10 +463,6 @@ export default function Explore() {
 
       {/* Content — scrollable area */}
       <div className="flex-1 overflow-y-auto scrollbar-hide">
-          style={{
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-          }}
         <PullToRefresh onRefresh={handleRefresh}>
           <main className="p-4 pb-36 space-y-5">
             {activeView === 'communities' ? (
