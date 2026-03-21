@@ -57,8 +57,18 @@ export default function Friends() {
   const pendingRequests = receivedFriendships.filter(f => f.status === 'pending');
 
   const acceptMutation = useMutation({
-    mutationFn: async (friendshipId) => {
+    mutationFn: async ({ friendshipId, requesterId }) => {
+      // Actualiza o pedido original para accepted
       await base44.entities.Friendship.update(friendshipId, { status: 'accepted' });
+      // Cria a amizade simétrica para que o aceitador também apareça como amigo
+      const existing = sentFriendships.find(f => f.friend_id === requesterId && f.status === 'accepted');
+      if (!existing) {
+        await base44.entities.Friendship.create({
+          user_id: currentUser.id,
+          friend_id: requesterId,
+          status: 'accepted',
+        });
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['sentFriendships']);
