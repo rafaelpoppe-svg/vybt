@@ -8,9 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 
+// Module-level ref — persists across page navigations (component re-mounts)
+const isAuthenticatedRef = { current: false };
+
 function LayoutContent({ children, currentPageName, profileTheme }) {
   const [authChecked, setAuthChecked] = useState(false);
-  const isAuthenticatedRef = React.useRef(false);
   const navigate = useNavigate();
 
   // Block pinch-to-zoom, gesture zoom, and horizontal swipe on iOS WebView
