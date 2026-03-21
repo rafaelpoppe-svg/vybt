@@ -40,16 +40,16 @@ export default function UserProfile() {
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('id');
 
-  const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('photos');
   const [expandedPhoto, setExpandedPhoto] = useState(null);
   const [showUnfriendModal, setShowUnfriendModal] = useState(false);
   const [friendshipLoading, setFriendshipLoading] = useState(false);
 
-
-  useEffect(() => {
-    base44.auth.me().then(setCurrentUser).catch(() => {});
-  }, []);
+  const { data: currentUser } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => base44.auth.me(),
+    staleTime: 5 * 60 * 1000,
+  });
 
   const { data: profile } = useQuery({
     queryKey: ['userProfile', userId],
