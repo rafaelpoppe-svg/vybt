@@ -75,29 +75,36 @@ export default function PhotoUploadStep({ photos, onChange }) {
         {[0, 1, 2].map((i) => (
           <label key={i} className="relative">
             <div className={`${i === 0 ? 'w-32 h-32' : 'w-24 h-24'} rounded-xl overflow-hidden cursor-pointer ${
-              photos[i] ? '' : 'bg-gray-800 border-2 border-dashed border-gray-700'
+              (photos[i] || previews[i]) ? '' : 'bg-gray-800 border-2 border-dashed border-gray-700'
             }`}>
-              {photos[i] ? (
+              {(photos[i] || previews[i]) ? (
                 <>
                   <img 
-                    src={photos[i]} 
+                    src={previews[i] || photos[i]} 
                     alt="" 
                     className="w-full h-full object-cover"
                   />
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      removePhoto(i);
-                    }}
-                    className="absolute top-1 right-1 p-1 rounded-full bg-black/70"
-                  >
-                    <X className="w-3 h-3 text-white" />
-                  </button>
+                  {uploadingIndex === i && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <Loader2 className="w-5 h-5 text-white animate-spin" />
+                    </div>
+                  )}
+                  {uploadingIndex !== i && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        removePhoto(i);
+                      }}
+                      className="absolute top-1 right-1 p-1 rounded-full bg-black/70"
+                    >
+                      <X className="w-3 h-3 text-white" />
+                    </button>
+                  )}
                 </>
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  {uploading ? (
+                  {uploadingIndex === i ? (
                     <Loader2 className="w-5 h-5 text-gray-500 animate-spin" />
                   ) : (
                     <Camera className="w-6 h-6 text-gray-600" />
