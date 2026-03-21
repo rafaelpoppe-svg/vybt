@@ -6,37 +6,49 @@ import { useLanguage } from '../common/LanguageContext';
 
 export default function PhotoUploadStep({ photos, onChange }) {
   const { t } = useLanguage();
-  const [uploading, setUploading] = useState(false);
+  const [uploadingIndex, setUploadingIndex] = useState(null);
   const [moderationError, setModerationError] = useState('');
+  const [previews, setPreviews] = useState({});
 
   const handlePhotoUpload = async (e, index) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setUploading(true);
-      setModerationError('');
-      try {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    if (!file) return;
 
-        // Moderate the image before accepting it
+    setModerationError('');
+    setUploadingIndex(index);
+
+    // Show local preview immediately
+    const localUrl = URL.createObjectURL(file);
+    setPreviews(prev => ({ ...prev, [index]: localUrl }));
+
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+
+      // Moderate in background — if rejected, remove preview
+      try {
         const result = await base44.functions.invoke('moderateImage', {
           image_url: file_url,
           context: 'profile_photo'
         });
-
-        if (!result.data.approved) {
+        if (result.data && result.data.approved === false) {
           setModerationError(result.data.reason || 'This photo is not allowed. Please use a real photo of yourself.');
-          setUploading(false);
+          setPreviews(prev => { const n = { ...prev }; delete n[index]; return n; });
+          setUploadingIndex(null);
           return;
         }
-
-        const newPhotos = [...photos];
-        newPhotos[index] = file_url;
-        onChange(newPhotos);
-      } catch (err) {
-        console.error(err);
+      } catch (_) {
+        // Moderation failed — allow photo anyway
       }
-      setUploading(false);
+
+      const newPhotos = [...photos];
+      newPhotos[index] = file_url;
+      onChange(newPhotos);
+      setPreviews(prev => { const n = { ...prev }; delete n[index]; return n; });
+    } catch (err) {
+      console.error(err);
+      setPreviews(prev => { const n = { ...prev }; delete n[index]; return n; });
     }
+    setUploadingIndex(null);
   };
 
   const removePhoto = (index) => {
