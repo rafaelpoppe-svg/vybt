@@ -337,23 +337,7 @@ export default function PlanDetails() {
             <MapPin className="w-5 h-5" style={{ color: themeColor }} />
             <span>{plan.location_address}, {plan.city}</span>
           </div>
-          {/* Price & Min Age */}
-          {(plan.price != null || plan.min_age != null) && (
-            <div className="flex gap-4">
-              {plan.price != null && (
-                <div className="flex items-center gap-2 text-gray-300">
-                  <span style={{ color: themeColor }}>🎟️</span>
-                  <span>{plan.price === 0 ? 'Free entry' : `€${plan.price} entry`}</span>
-                </div>
-              )}
-              {plan.min_age != null && (
-                <div className="flex items-center gap-2 text-gray-300">
-                  <span style={{ color: themeColor }}>🔞</span>
-                  <span>{plan.min_age}+ years</span>
-                </div>
-              )}
-            </div>
-          )}
+
           {/* Tags — below the divider inside the card */}
           {plan.tags?.length > 0 && (
             <>

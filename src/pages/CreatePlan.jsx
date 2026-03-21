@@ -746,37 +746,6 @@ export default function CreatePlan() {
           <p className="text-gray-400 mt-1">Control who can see and join your plan</p>
         </div>
 
-        {/* Price & Age */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">Entry Price <span className="text-gray-600">(optional)</span></label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">€</span>
-              <Input
-                type="number"
-                min="0"
-                step="0.5"
-                value={data.price ?? ''}
-                onChange={(e) => setData(prev => ({ ...prev, price: e.target.value === '' ? undefined : Number(e.target.value) }))}
-                placeholder="0 = free"
-                className="bg-gray-900 border-gray-800 text-white pl-7"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">Min Age <span className="text-gray-600">(optional)</span></label>
-            <Input
-              type="number"
-              min="0"
-              max="100"
-              value={data.min_age ?? ''}
-              onChange={(e) => setData(prev => ({ ...prev, min_age: e.target.value === '' ? undefined : Number(e.target.value) }))}
-              placeholder="e.g. 18"
-              className="bg-gray-900 border-gray-800 text-white"
-            />
-          </div>
-        </div>
-
         <PlanPrivacySettings
           data={data}
           onChange={(updates) => setData(prev => ({ ...prev, ...updates }))}
