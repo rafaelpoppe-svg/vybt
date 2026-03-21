@@ -49,7 +49,7 @@ export default function FriendsListModal({ isOpen, onClose, friendProfiles, acce
                   <p className="text-gray-600 text-sm">Connect with people at plans</p>
                 </div>
               ) : (
-                <div className="p-4 space-y-2 pb-[72px]">
+                <div className="p-4 space-y-2 pb-[80px]">
                   {friendProfiles.map(fp => (
                     <motion.button
                       key={fp.user_id}
