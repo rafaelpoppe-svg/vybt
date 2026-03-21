@@ -53,6 +53,7 @@ import Chat from './pages/Chat';
 import CommunityGuidelines from './pages/CommunityGuidelines';
 import CommunityView from './pages/CommunityView';
 import CreatePlan from './pages/CreatePlan';
+import CreateCommunity from './pages/CreateCommunity';
 import EditProfile from './pages/EditProfile';
 import EditStory from './pages/EditStory';
 import Explore from './pages/Explore';
@@ -85,6 +86,7 @@ export const PAGES = {
     "Chat": Chat,
     "CommunityGuidelines": CommunityGuidelines,
     "CommunityView": CommunityView,
+    "CreateCommunity": CreateCommunity,
     "CreatePlan": CreatePlan,
     "EditProfile": EditProfile,
     "EditStory": EditStory,
