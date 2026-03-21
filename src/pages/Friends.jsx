@@ -193,9 +193,9 @@ export default function Friends() {
                   </div>
                   <div className="flex gap-2">
                     <Button
-                      size="sm"
-                      onClick={() => acceptMutation.mutate(request.id)}
-                      disabled={acceptMutation.isPending}
+                    size="sm"
+                    onClick={() => acceptMutation.mutate({ friendshipId: request.id, requesterId: request.user_id })}
+                    disabled={acceptMutation.isPending}
                       className="bg-[#00c6d2] text-[#0b0b0b] hover:bg-[#00c6d2]/90"
                     >
                       <Check className="w-4 h-4" />
