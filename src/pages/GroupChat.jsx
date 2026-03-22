@@ -514,7 +514,17 @@ export default function GroupChat() {
         onPinMessage={handlePinMessage}
         onUnpinMessage={handleUnpinMessage}
         onRemoveMember={handleRemoveMember}
-        onInviteUser={() => {}}
+        onInviteUser={async (friendId) => {
+          if (!currentUser?.id) return;
+          await base44.entities.ChatMessage.create({
+            sender_id: currentUser.id,
+            receiver_id: friendId,
+            message_type: 'direct',
+            content: `plan_invite:${planId}`,
+            is_read: false,
+          });
+        }}
+        friends={friendProfiles}
         currentUserId={currentUser?.id}
         isAdmin={isAdmin}
         planStatus={planStatus}
