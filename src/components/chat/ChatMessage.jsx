@@ -77,7 +77,9 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true,
       <div className={`max-w-[72%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
         {/* Bubble */}
         <div className="relative">
-          {isSticker ? (
+          {isCommunityInvite ? (
+            <CommunityInviteCard communityId={communityInviteId} />
+          ) : isSticker ? (
             <motion.div
               whileTap={{ scale: 0.95 }}
               className="w-24 h-24"
