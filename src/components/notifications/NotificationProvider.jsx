@@ -106,9 +106,19 @@ export function NotificationProvider({ children }) {
     if (!currentUser?.id) return;
 
     const unsubscribe = base44.entities.Notification.subscribe((event) => {
-      if (event.type !== 'create') return;
       const notification = event.data;
-      if (notification.user_id !== currentUser.id) return;
+      if (!notification || notification.user_id !== currentUser.id) return;
+
+      // Handle updates (mark as read) — decrement counter
+      if (event.type === 'update') {
+        if (notification.is_read) {
+          setUnreadCount(prev => Math.max(0, prev - 1));
+          queryClient.invalidateQueries(['notifications', currentUser.id]);
+        }
+        return;
+      }
+
+      if (event.type !== 'create') return;
 
       // Deduplicate — never show the same notification twice
       if (shownIds.current.has(notification.id)) return;
