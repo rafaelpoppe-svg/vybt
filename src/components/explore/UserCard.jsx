@@ -5,6 +5,7 @@ import { createPageUrl } from '@/utils';
 import { Plus, Check, MapPin, ShieldCheck } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { notifyFriendRequest } from '../notifications/NotificationTriggers';
 
 // mode: 'discover' | 'request'
 // For 'request': pass friendshipId + onAccept callback
