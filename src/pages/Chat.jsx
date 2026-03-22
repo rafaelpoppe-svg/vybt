@@ -177,8 +177,15 @@ export default function Chat() {
       queryClient.setQueryData(['dmMessages', selectedFriendId, currentUser.id], (old = []) => [...old, optimisticMsg]);
       setNewMessage('');
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['dmMessages', selectedFriendId, currentUser.id]);
+    onSuccess: (realMsg) => {
+      // Replace optimistic message with the real one from the server
+      if (realMsg) {
+        queryClient.setQueryData(['dmMessages', selectedFriendId, currentUser?.id], (old = []) => {
+          const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
+          if (withoutOptimistic.some(m => m.id === realMsg.id)) return withoutOptimistic;
+          return [...withoutOptimistic, realMsg];
+        });
+      }
     },
   });
 
