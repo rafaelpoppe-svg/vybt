@@ -83,6 +83,8 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true,
         <div className="relative">
           {isCommunityInvite ? (
             <CommunityInviteCard communityId={communityInviteId} />
+          ) : isPlanInvite ? (
+            <PlanInviteCard planId={planInviteId} />
           ) : isSticker ? (
             <motion.div whileTap={{ scale: 0.95 }} className="w-24 h-24">
               <img src={stickerUrl} alt="sticker" className="w-full h-full object-contain" />
