@@ -115,17 +115,27 @@ export default function Chat() {
     }
   }, [selectedFriendId, allDMMessages, currentUser?.id, queryClient]);
 
-  // Real-time DM subscription
+  // Real-time DM subscription — inject messages directly into cache (no refetch delay)
   useEffect(() => {
     if (!selectedFriendId || !currentUser?.id) return;
     const unsubscribe = base44.entities.ChatMessage.subscribe((event) => {
-      if (event.type === 'create' && event.data.message_type === 'direct') {
-        const { sender_id, receiver_id } = event.data;
-        if (
+      if (event.type === 'create' && event.data?.message_type === 'direct') {
+        const { sender_id, receiver_id, id } = event.data;
+        const isThisConvo =
           (sender_id === selectedFriendId && receiver_id === currentUser.id) ||
-          (sender_id === currentUser.id && receiver_id === selectedFriendId)
-        ) {
-          queryClient.invalidateQueries(['dmMessages', selectedFriendId, currentUser.id]);
+          (sender_id === currentUser.id && receiver_id === selectedFriendId);
+        if (!isThisConvo) return;
+
+        queryClient.setQueryData(['dmMessages', selectedFriendId, currentUser.id], (old = []) => {
+          // Avoid duplicates: remove any optimistic placeholder + skip if real id already exists
+          const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
+          if (withoutOptimistic.some(m => m.id === id)) return old;
+          return [...withoutOptimistic, event.data];
+        });
+
+        // Mark as read instantly if incoming (we're in the chat)
+        if (sender_id === selectedFriendId && receiver_id === currentUser.id) {
+          base44.entities.ChatMessage.update(id, { is_read: true });
         }
       }
     });
