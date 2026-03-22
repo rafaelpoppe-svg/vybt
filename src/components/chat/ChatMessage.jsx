@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Check, CheckCheck } from 'lucide-react';
+import CommunityInviteCard from './CommunityInviteCard';
 
 const QUICK_REACTIONS = ['❤️', '😂', '🔥', '😍', '👏', '😮'];
 
