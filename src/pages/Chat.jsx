@@ -454,61 +454,56 @@ export default function Chat() {
               return (
                 <motion.button
                   key={f.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.04 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setSelectedFriendId(f.friend_id)}
-                  className="w-full rounded-2xl overflow-hidden text-left"
-                  style={{
-                    background: unreadCount > 0
-                      ? 'linear-gradient(135deg, #0d1f20 0%, #111 100%)'
-                      : 'linear-gradient(135deg, #111 0%, #181818 100%)',
-                    border: unreadCount > 0 ? '1px solid #00c6d230' : '1px solid #ffffff10'
-                  }}
+                  className="w-full text-left flex items-center gap-3.5 px-2 py-3 rounded-2xl active:bg-white/5 transition-colors"
                 >
-                  <div className="flex items-center gap-3 p-3.5">
-                    <div className="relative w-14 h-14 flex-shrink-0">
-                     <div className={`w-full h-full rounded-full overflow-hidden ${unreadCount > 0 ? 'ring-2 ring-[#00c6d2]' : ''}`}>
-                       {friend?.photos?.[0] ? (
-                         <img src={friend.photos[0]} alt="" className="w-full h-full object-cover" />
-                       ) : (
-                         <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2] flex items-center justify-center">
-                           <span className="text-white font-bold text-lg">{friend?.display_name?.[0] || '?'}</span>
-                         </div>
-                       )}
-                     </div>
-                     {unreadCount > 0 && (
-                       <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[10px] font-bold flex items-center justify-center px-1 z-10">
-                         {unreadCount}
-                       </div>
-                     )}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-0.5">
-                        <p className={`font-semibold truncate text-sm ${unreadCount > 0 ? 'text-white' : 'text-gray-200'}`}>
-                          {friend?.display_name || 'User'}
-                        </p>
-                        <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
-                          {lastMsg && (
-                            <span className="text-[10px] text-gray-600">
-                              {new Date(lastMsg.created_date).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' })}
-                            </span>
-                          )}
+                  {/* Avatar */}
+                  <div className="relative flex-shrink-0">
+                    <div className={`w-[58px] h-[58px] rounded-full overflow-hidden ${unreadCount > 0 ? 'ring-2 ring-[#00c6d2] ring-offset-2 ring-offset-[#0b0b0b]' : ''}`}>
+                      {friend?.photos?.[0] ? (
+                        <img src={friend.photos[0]} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2] flex items-center justify-center">
+                          <span className="text-white font-bold text-xl">{friend?.display_name?.[0] || '?'}</span>
                         </div>
-                      </div>
-                      <p className={`text-xs truncate ${unreadCount > 0 ? 'text-gray-300 font-medium' : 'text-gray-500'}`}>
+                      )}
+                    </div>
+                    {/* Online dot placeholder */}
+                    <div className="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full bg-[#0b0b0b] flex items-center justify-center">
+                      <div className={`w-2 h-2 rounded-full ${unreadCount > 0 ? 'bg-[#00c6d2]' : 'bg-gray-700'}`} />
+                    </div>
+                  </div>
+
+                  {/* Text */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <p className={`font-${unreadCount > 0 ? 'bold' : 'semibold'} truncate text-[15px] ${unreadCount > 0 ? 'text-white' : 'text-gray-300'}`}>
+                        {friend?.display_name || 'User'}
+                      </p>
+                      {lastMsg && (
+                        <span className={`text-[11px] flex-shrink-0 ${unreadCount > 0 ? 'text-[#00c6d2] font-semibold' : 'text-gray-600'}`}>
+                          {new Date(lastMsg.created_date).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between gap-2 mt-0.5">
+                      <p className={`text-[13px] truncate ${unreadCount > 0 ? 'text-gray-200 font-medium' : 'text-gray-500'}`}>
                         {previewText
-                          ? <>{isLastMine && <span className="text-[#00c6d2]">Tu: </span>}{previewText}</>
+                          ? <>{isLastMine && <span className="text-[#00c6d2] font-semibold">Tu · </span>}{previewText}</>
                           : <span className="italic text-gray-600">Inicia uma conversa 👋</span>
                         }
                       </p>
+                      {unreadCount > 0 && (
+                        <div className="flex-shrink-0 min-w-[20px] h-5 rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[11px] font-black flex items-center justify-center px-1.5">
+                          {unreadCount}
+                        </div>
+                      )}
                     </div>
                   </div>
-                  {unreadCount > 0 && (
-                    <div className="h-0.5 bg-gradient-to-r from-[#00c6d2] to-[#542b9b]" />
-                  )}
                 </motion.button>
               );
             })
