@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Home, Compass, PlusCircle, MessageCircle, User, Camera, X } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
+import { useNotifications } from '../notifications/NotificationProvider';
 
 // Labels are now dynamic via t(), defined inside component
 
