@@ -235,7 +235,7 @@ export function NotificationProvider({ children }) {
   };
 
   return (
-    <NotificationContext.Provider value={{ unreadCount, markAllAsRead }}>
+    <NotificationContext.Provider value={{ unreadCount, unreadDMCount, markAllAsRead }}>
       {children}
     </NotificationContext.Provider>
   );
