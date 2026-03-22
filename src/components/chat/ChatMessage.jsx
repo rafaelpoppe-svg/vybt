@@ -15,6 +15,9 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true,
   const isSticker = message.content?.startsWith('sticker:');
   const stickerUrl = isSticker ? message.content.replace('sticker:', '') : null;
 
+  const isCommunityInvite = message.content?.startsWith('community_invite:');
+  const communityInviteId = isCommunityInvite ? message.content.replace('community_invite:', '') : null;
+
   // Story reply: "story_reply:<id>:<url>:<type>\n<message>"
   const isStoryReply = message.content?.startsWith('story_reply:');
   let storyReplyData = null;
