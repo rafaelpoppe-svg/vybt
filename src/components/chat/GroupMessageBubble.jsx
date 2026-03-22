@@ -19,6 +19,11 @@ export default function GroupMessageBubble({ message, isMe, sender, isFirstInGro
   const navigate = useNavigate();
   const isSticker = message.content?.startsWith('sticker:');
   const stickerUrl = isSticker ? message.content.replace('sticker:', '') : null;
+  const isCommunityInvite = message.content?.startsWith('community_invite:');
+  const communityInviteId = isCommunityInvite ? message.content.replace('community_invite:', '') : null;
+  const isPlanInvite = message.content?.startsWith('plan_invite:');
+  const planInviteId = isPlanInvite ? message.content.replace('plan_invite:', '') : null;
+  const isCard = isCommunityInvite || isPlanInvite;
 
   if (isMe) {
     return (
