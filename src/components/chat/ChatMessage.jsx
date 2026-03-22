@@ -80,10 +80,7 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true,
           {isCommunityInvite ? (
             <CommunityInviteCard communityId={communityInviteId} />
           ) : isSticker ? (
-            <motion.div
-              whileTap={{ scale: 0.95 }}
-              className="w-24 h-24"
-            >
+            <motion.div whileTap={{ scale: 0.95 }} className="w-24 h-24">
               <img src={stickerUrl} alt="sticker" className="w-full h-full object-contain" />
             </motion.div>
           ) : isStoryReply ? (
