@@ -72,6 +72,23 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
   // Páginas protegidas que requerem autenticação
   const protectedPages = ['Home', 'AddStory', 'Friends', 'Chat', 'GroupChat', 'Profile', 'MyPlans', 'CreatePlan', 'PlanDetails', 'Explore', 'MyStories', 'EditProfile', 'Settings', 'Notifications', 'NotificationSettings', 'Ambassador', 'WelcomePrograms', 'StoryView', 'UserProfile', 'Onboarding', 'Moderation'];
 
+  // Presence: update last_seen every 2 minutes while the app is open
+  useEffect(() => {
+    const updatePresence = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return;
+        const profiles = await base44.entities.UserProfile.filter({ user_id: user.id });
+        if (profiles?.[0]) {
+          await base44.entities.UserProfile.update(profiles[0].id, { last_seen: new Date().toISOString() });
+        }
+      } catch (e) {}
+    };
+    updatePresence();
+    const interval = setInterval(updatePresence, 2 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const checkAuthAndRedirect = async () => {
       const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
