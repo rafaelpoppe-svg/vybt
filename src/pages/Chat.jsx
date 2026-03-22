@@ -244,7 +244,89 @@ export default function Chat() {
               )}
             </div>
           </motion.button>
+
+          {/* Three dots menu */}
+          <div className="relative flex-shrink-0">
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setShowChatMenu(v => !v)}
+              className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center"
+            >
+              <MoreVertical className="w-5 h-5 text-gray-400" />
+            </motion.button>
+
+            {showChatMenu && (
+              <>
+                {/* Backdrop */}
+                <div className="fixed inset-0 z-40" onClick={() => setShowChatMenu(false)} />
+                <div className="absolute right-0 top-11 z-50 w-52 rounded-2xl bg-[#1a1a1a] border border-gray-700/50 shadow-2xl overflow-hidden">
+                  <button
+                    onClick={() => { setShowClearConfirm(true); setShowChatMenu(false); }}
+                    className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-gray-200 hover:bg-white/5 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4 text-gray-400" />
+                    Clear Chat
+                  </button>
+                  <div className="h-px bg-gray-800" />
+                  <button
+                    onClick={() => { navigate(createPageUrl('UserProfile') + `?id=${selectedFriendId}&report=1`); setShowChatMenu(false); }}
+                    className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-orange-400 hover:bg-white/5 transition-colors"
+                  >
+                    <Flag className="w-4 h-4" />
+                    Report User
+                  </button>
+                  <div className="h-px bg-gray-800" />
+                  <button
+                    onClick={() => { navigate(createPageUrl('UserProfile') + `?id=${selectedFriendId}&block=1`); setShowChatMenu(false); }}
+                    className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-red-400 hover:bg-white/5 transition-colors"
+                  >
+                    <ShieldOff className="w-4 h-4" />
+                    Block User
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </header>
+
+        {/* Clear Chat Confirmation */}
+        {showClearConfirm && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={() => setShowClearConfirm(false)}>
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="relative w-full bg-[#1a1a1a] rounded-t-3xl p-6 pb-10 z-10"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="w-10 h-1 bg-gray-700 rounded-full mx-auto mb-6" />
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center">
+                  <Trash2 className="w-5 h-5 text-red-400" />
+                </div>
+                <h3 className="text-white font-bold text-lg">Clear Chat</h3>
+              </div>
+              <p className="text-gray-400 text-sm mb-6 ml-13">
+                Apagar todo o histórico desta conversa? Esta ação não pode ser desfeita.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowClearConfirm(false)}
+                  className="flex-1 py-3 rounded-2xl bg-gray-800 text-gray-300 font-semibold text-sm"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => clearChatMutation.mutate()}
+                  disabled={clearChatMutation.isPending}
+                  className="flex-1 py-3 rounded-2xl bg-red-500 text-white font-semibold text-sm disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {clearChatMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Apagar tudo'}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3" style={{ WebkitOverflowScrolling: 'touch' }}>
