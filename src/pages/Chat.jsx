@@ -117,6 +117,17 @@ export default function Chat() {
     }
   }, [selectedFriendId, allDMMessages, currentUser?.id, queryClient]);
 
+  // Real-time subscription for DM list updates (mark as read, new messages)
+  useEffect(() => {
+    if (!currentUser?.id) return;
+    const unsub = base44.entities.ChatMessage.subscribe((event) => {
+      if (event.data?.message_type !== 'direct') return;
+      // Update allDMMessages cache on any create/update/delete
+      queryClient.invalidateQueries(['allDMMessages', currentUser.id]);
+    });
+    return () => unsub();
+  }, [currentUser?.id, queryClient]);
+
   // Real-time DM subscription — inject messages directly into cache (no refetch delay)
   useEffect(() => {
     if (!selectedFriendId || !currentUser?.id) return;
