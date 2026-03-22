@@ -127,6 +127,11 @@ export default function BottomNav() {
                       className={`w-5 h-5 transition-colors duration-200 ${active ? 'text-[#00c6d2]' : 'text-gray-500'}`}
                       strokeWidth={active ? 2.5 : 1.8}
                     />
+                    {name === 'Chat' && unreadDMCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 flex items-center justify-center rounded-full bg-[#00c6d2] text-[#0b0b0b] text-[9px] font-black px-1">
+                        {unreadDMCount > 99 ? '99+' : unreadDMCount}
+                      </span>
+                    )}
                     {active && (
                       <motion.div
                         layoutId={`dot-${name}`}
