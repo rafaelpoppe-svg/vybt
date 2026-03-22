@@ -137,6 +137,13 @@ export default function CommunityView() {
 
   const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
 
+  // All friend IDs (both directions), excluding already-members
+  const memberIds = new Set(members.map(m => m.user_id));
+  const friendIds = [
+    ...myFriendships.map(f => f.friend_id),
+    ...friendshipsReceived.map(f => f.user_id),
+  ].filter((id, idx, arr) => arr.indexOf(id) === idx && !memberIds.has(id));
+
   const myMembership = members.find(m => m.user_id === currentUser?.id);
   const isAdmin = myMembership?.role === 'admin' || currentUser?.role === 'admin';
   const isMember = !!myMembership;
