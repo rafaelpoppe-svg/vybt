@@ -23,6 +23,7 @@ export default function GroupAdminActions({
   onUnpinMessage,
   onRemoveMember,
   onInviteUser,
+  friends = [],
   currentUserId,
   isAdmin,
   planStatus,
@@ -33,18 +34,20 @@ export default function GroupAdminActions({
 }) {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('stories');
-  const [inviteEmail, setInviteEmail] = useState('');
-  const [inviting, setInviting] = useState(false);
+  const [sentInvites, setSentInvites] = useState({});
 
   if (!isOpen || !isAdmin) return null;
 
-  const handleInvite = async () => {
-    if (!inviteEmail.trim()) return;
-    setInviting(true);
-    await onInviteUser(inviteEmail);
-    setInviteEmail('');
-    setInviting(false);
+  const handleInviteFriend = async (friendId) => {
+    if (sentInvites[friendId]) return;
+    setSentInvites(prev => ({ ...prev, [friendId]: 'sending' }));
+    await onInviteUser(friendId);
+    setSentInvites(prev => ({ ...prev, [friendId]: 'sent' }));
   };
+
+  // Friends not yet in the plan
+  const participantIds = new Set(participants.map(p => p.user_id));
+  const eligibleFriends = friends.filter(f => !participantIds.has(f.user_id));
 
   return (
     <AnimatePresence>
