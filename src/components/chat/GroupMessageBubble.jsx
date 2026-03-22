@@ -49,7 +49,10 @@ export default function GroupMessageBubble({ message, isMe, sender, isFirstInGro
       {/* Avatar col */}
       <div className="w-8 flex-shrink-0">
         {isLastInGroup ? (
-          <div className="w-8 h-8 rounded-full bg-gray-800 overflow-hidden">
+          <div
+            className="w-8 h-8 rounded-full bg-gray-800 overflow-hidden cursor-pointer"
+            onClick={() => sender?.user_id && navigate(createPageUrl('UserProfile') + `?id=${sender.user_id}`)}
+          >
             <Avatar sender={sender} />
           </div>
         ) : null}
