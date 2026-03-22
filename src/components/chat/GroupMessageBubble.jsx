@@ -77,6 +77,10 @@ export default function GroupMessageBubble({ message, isMe, sender, isFirstInGro
         )}
         {isSticker ? (
           <img src={stickerUrl} alt="sticker" className="w-28 h-28 object-contain" />
+        ) : isCommunityInvite ? (
+          <CommunityInviteCard communityId={communityInviteId} />
+        ) : isPlanInvite ? (
+          <PlanInviteCard planId={planInviteId} />
         ) : (
           <div
             className={`px-4 py-2.5 bg-gray-800/90 text-white text-sm leading-relaxed shadow-sm
