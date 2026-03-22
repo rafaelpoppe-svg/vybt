@@ -216,7 +216,16 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
       });
       await base44.entities.Notification.update(notification.id, { is_read: true });
     },
-    onSuccess: () => { setLocalStatus('accepted'); queryClient.invalidateQueries(['myFriendships']); onMark(notification.id); }
+    onSuccess: () => {
+      setLocalStatus('accepted');
+      queryClient.invalidateQueries(['myFriendships']);
+      queryClient.invalidateQueries(['sentFriendships']);
+      queryClient.invalidateQueries(['receivedFriendships']);
+      queryClient.invalidateQueries(['myFriendshipsExplore']);
+      queryClient.invalidateQueries(['receivedFriendRequestsExplore']);
+      queryClient.invalidateQueries(['sentFriendRequests']);
+      onMark(notification.id);
+    }
   });
 
   const decline = useMutation({
