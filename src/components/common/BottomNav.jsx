@@ -12,6 +12,7 @@ export default function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useLanguage();
+  const { unreadDMCount } = useNotifications();
   const [showMenu, setShowMenu] = useState(false);
 
   const tabs = [
