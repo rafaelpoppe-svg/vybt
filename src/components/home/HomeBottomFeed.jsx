@@ -240,7 +240,7 @@ export default function HomeBottomFeed({
   const [activeTab, setActiveTab] = useState('foryou');
 
   const forYouItems = (() => {
-    const active = plans.filter(p => !['ended', 'terminated', 'voting', 'renewed'].includes(p.status));
+    const active = plans.filter(p => !['ended', 'terminated', 'voting', 'renewed'].includes(p.status) && !p.is_private);
     const highlighted = active.filter(p => p.is_highlighted);
     const recIds = recommendedPlans.map(r => r.id);
     const recommended = active.filter(p => !p.is_highlighted && recIds.includes(p.id));
