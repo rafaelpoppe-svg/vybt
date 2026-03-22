@@ -29,15 +29,16 @@ export default function Profile() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { setProfileTheme } = useProfileThemeContext();
-  const [currentUser, setCurrentUser] = useState(null);
   const [showVerification, setShowVerification] = useState(false);
   const [activeTab, setActiveTab] = useState('photos');
   const [expandedPhoto, setExpandedPhoto] = useState(null);
   const [showFriends, setShowFriends] = useState(false);
 
-  useEffect(() => {
-    base44.auth.me().then(setCurrentUser).catch(() => navigate(createPageUrl('Onboarding')));
-  }, []);
+  const { data: currentUser } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => base44.auth.me(),
+    staleTime: 5 * 60 * 1000,
+  });
 
   const { data: profile } = useQuery({
     queryKey: ['myProfile', currentUser?.id],
