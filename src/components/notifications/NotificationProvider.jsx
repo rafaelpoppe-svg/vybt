@@ -180,6 +180,25 @@ export function NotificationProvider({ children }) {
     return () => unsubscribe();
   }, [currentUser?.id, queryClient, userPrefs]);
 
+  // Real-time DM unread count
+  useEffect(() => {
+    if (!currentUser?.id) return;
+    const unsub = base44.entities.ChatMessage.subscribe((event) => {
+      const msg = event.data;
+      if (!msg || msg.message_type !== 'direct') return;
+      if (event.type === 'create' && msg.receiver_id === currentUser.id && !msg.is_read) {
+        setUnreadDMCount(prev => prev + 1);
+      }
+      if (event.type === 'update' && msg.receiver_id === currentUser.id && msg.is_read) {
+        setUnreadDMCount(prev => Math.max(0, prev - 1));
+      }
+      if (event.type === 'delete' && msg.receiver_id === currentUser.id && !msg.is_read) {
+        setUnreadDMCount(prev => Math.max(0, prev - 1));
+      }
+    });
+    return () => unsub();
+  }, [currentUser?.id]);
+
   const handleNotificationClick = async (notification) => {
     await base44.entities.Notification.update(notification.id, { is_read: true });
     setUnreadCount(prev => Math.max(0, prev - 1));
