@@ -572,10 +572,16 @@ export default function Chat() {
                         </div>
                       )}
                     </div>
-                    {/* Online dot placeholder */}
-                    <div className="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full bg-[#0b0b0b] flex items-center justify-center">
-                      <div className={`w-2 h-2 rounded-full ${unreadCount > 0 ? 'bg-[#00c6d2]' : 'bg-gray-700'}`} />
-                    </div>
+                    {/* Online dot */}
+                    {(() => {
+                      const ls = friend?.last_seen;
+                      const isOnline = ls && (Date.now() - new Date(ls).getTime()) < 5 * 60 * 1000;
+                      return isOnline ? (
+                        <div className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-[#0b0b0b] flex items-center justify-center">
+                          <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                        </div>
+                      ) : null;
+                    })()}
                   </div>
 
                   {/* Text */}
