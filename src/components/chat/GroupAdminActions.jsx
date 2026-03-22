@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, Pin, UserMinus, UserPlus, Share2, MoreVertical, 
-  MessageSquare, Camera, Check, Loader2, Edit 
+  MessageSquare, Camera, Check, Loader2, Edit, Send
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function GroupAdminActions({
