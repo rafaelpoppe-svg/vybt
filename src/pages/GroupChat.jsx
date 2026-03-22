@@ -87,18 +87,12 @@ export default function GroupChat() {
   });
   const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
 
-  // ── Real-time Subscription — inject directly into cache (no refetch delay) ──
+  // ── Real-time Subscription ─────────────────────────────────────────────────
   useEffect(() => {
     if (!planId || !currentUser?.id) return;
     const unsubscribe = base44.entities.ChatMessage.subscribe((event) => {
-      if (event.type === 'create' && event.data?.plan_id === planId) {
-        const { id } = event.data;
-        queryClient.setQueryData(['groupMessages', planId], (old = []) => {
-          // Remove optimistic placeholders and avoid duplicates
-          const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
-          if (withoutOptimistic.some(m => m.id === id)) return old;
-          return [...withoutOptimistic, event.data];
-        });
+      if (event.type === 'create' && event.data.plan_id === planId) {
+        queryClient.invalidateQueries(['groupMessages', planId]);
       }
     });
     return () => unsubscribe();
@@ -186,9 +180,15 @@ export default function GroupChat() {
         queryClient.setQueryData(['groupMessages', planId], context.previous);
       }
     },
-    onSuccess: () => {
-      // Sync with real data after server confirms
-      queryClient.invalidateQueries(['groupMessages', planId]);
+    onSuccess: (realMsg) => {
+      // Replace optimistic message with the real one — no refetch needed
+      if (realMsg) {
+        queryClient.setQueryData(['groupMessages', planId], (old = []) => {
+          const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
+          if (withoutOptimistic.some(m => m.id === realMsg.id)) return withoutOptimistic;
+          return [...withoutOptimistic, realMsg];
+        });
+      }
     },
   });
 
