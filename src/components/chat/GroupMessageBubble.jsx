@@ -2,6 +2,8 @@ import React from 'react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import CommunityInviteCard from './CommunityInviteCard';
+import PlanInviteCard from './PlanInviteCard';
 
 function Avatar({ sender }) {
   return sender?.photos?.[0] ? (
