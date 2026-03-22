@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Send, ChevronLeft, Loader2, Sticker, MessageCircle } from 'lucide-react';
+import { Send, ChevronLeft, Loader2, Sticker, MessageCircle, MoreVertical, Trash2, Flag, ShieldOff } from 'lucide-react';
 import BottomNav from '../components/common/BottomNav';
 import ChatMessage from '../components/chat/ChatMessage';
 import StickerPicker from '../components/chat/StickerPicker';
@@ -32,6 +32,8 @@ export default function Chat() {
   const [selectedFriendId, setSelectedFriendId] = useState(directUserId || null);
   const [newMessage, setNewMessage] = useState('');
   const [showStickers, setShowStickers] = useState(false);
+  const [showChatMenu, setShowChatMenu] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const messagesEndRef = useRef(null);
   const keyboardHeight = useKeyboardHeight();
 
