@@ -407,9 +407,12 @@ export default function Chat() {
                         )}
                       </div>
                       {lastGroupMsg ? (
-                        <p className={`text-xs truncate ${groupUnread > 0 ? 'text-gray-300 font-medium' : 'text-gray-500'}`}>
-                          {lastGroupMsg.content.startsWith('sticker:') ? '🖼 Sticker' : lastGroupMsg.content}
-                        </p>
+                      <p className={`text-xs truncate ${groupUnread > 0 ? 'text-gray-300 font-medium' : 'text-gray-500'}`}>
+                        {lastGroupMsg.content.startsWith('sticker:') ? '🖼 Sticker'
+                          : lastGroupMsg.content.startsWith('community_invite:') ? '🏘️ Community invitation'
+                          : lastGroupMsg.content.startsWith('plan_invite:') ? '🎉 Plan invitation'
+                          : lastGroupMsg.content}
+                      </p>
                       ) : (
                         <div className="flex gap-1 mt-0.5">
                           {plan.tags?.slice(0, 2).map((tag, i) => (
