@@ -191,6 +191,22 @@ export default function Chat() {
     },
   });
 
+  const clearChatMutation = useMutation({
+    mutationFn: async () => {
+      const msgs = [...dmMessages].filter(m =>
+        (m.sender_id === currentUser?.id && m.receiver_id === selectedFriendId) ||
+        (m.sender_id === selectedFriendId && m.receiver_id === currentUser?.id)
+      );
+      await Promise.all(msgs.map(m => base44.entities.ChatMessage.delete(m.id)));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['dmMessages', selectedFriendId, currentUser?.id]);
+      queryClient.invalidateQueries(['allDMMessages', currentUser?.id]);
+      setShowClearConfirm(false);
+      setShowChatMenu(false);
+    }
+  });
+
   // ── DM Chat View ─────────────────────────────────────────────────────────
   if (selectedFriendId) {
     return (
