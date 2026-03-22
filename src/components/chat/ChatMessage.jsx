@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Check, CheckCheck } from 'lucide-react';
 import CommunityInviteCard from './CommunityInviteCard';
+import PlanInviteCard from './PlanInviteCard';
 
 const QUICK_REACTIONS = ['❤️', '😂', '🔥', '😍', '👏', '😮'];
 
