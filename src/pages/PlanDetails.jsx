@@ -95,6 +95,13 @@ export default function PlanDetails() {
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 100),
   });
 
+  const { data: myFriendships = [] } = useQuery({
+    queryKey: ['myFriendshipsPlanDetails', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
+    enabled: !!currentUser?.id,
+  });
+  const friendIds = myFriendships.map(f => f.friend_id);
+
   const profilesMap = userProfiles.reduce((acc, p) => {
     acc[p.user_id] = p;
     return acc;
