@@ -34,6 +34,7 @@ export default function PlanDetails() {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const [joinRequestSent, setJoinRequestSent] = useState(false);
 
   useEffect(() => {
