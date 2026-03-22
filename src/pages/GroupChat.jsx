@@ -87,6 +87,13 @@ export default function GroupChat() {
   });
   const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
 
+  const { data: myFriendships = [] } = useQuery({
+    queryKey: ['myFriendships', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
+    enabled: !!currentUser?.id,
+  });
+  const friendProfiles = myFriendships.map(f => profilesMap[f.friend_id]).filter(Boolean);
+
   // ── Real-time Subscription — inject directly into cache (no refetch delay) ──
   useEffect(() => {
     if (!planId || !currentUser?.id) return;
