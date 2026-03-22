@@ -367,6 +367,23 @@ export default function PlanDetails() {
           </div>
         )}
 
+        {/* Invite Friends Button (for admins only) */}
+        {isAdminOfPlan && plan.status !== 'terminated' && (
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowInviteModal(true)}
+            className="w-full py-3 rounded-xl flex items-center justify-center gap-2 font-medium border"
+            style={{
+              background: `linear-gradient(135deg, ${themeColor}22, ${themeColor}11)`,
+              borderColor: `${themeColor}44`,
+              color: themeColor,
+            }}
+          >
+            <Users className="w-5 h-5" />
+            Invite Friends
+          </motion.button>
+        )}
+
         {/* Edit Plan Button (for admins only) */}
         {isAdminOfPlan && plan.status !== 'terminated' && (
           <motion.button
