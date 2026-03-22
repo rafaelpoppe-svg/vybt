@@ -31,6 +31,10 @@ export default function GroupMessageBubble({ message, isMe, sender, isFirstInGro
         <div className="max-w-[72%]">
           {isSticker ? (
             <img src={stickerUrl} alt="sticker" className="w-28 h-28 object-contain ml-auto" />
+          ) : isCommunityInvite ? (
+            <CommunityInviteCard communityId={communityInviteId} />
+          ) : isPlanInvite ? (
+            <PlanInviteCard planId={planInviteId} />
           ) : (
             <div
               className={`px-4 py-2.5 text-[#0b0b0b] text-sm leading-relaxed shadow-sm
