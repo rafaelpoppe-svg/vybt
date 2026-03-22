@@ -1,5 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
 function Avatar({ sender }) {
   return sender?.photos?.[0] ? (
