@@ -235,7 +235,13 @@ export default function Chat() {
                 </div>
               )}
               {/* Online dot */}
-              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-[#0b0b0b]" />
+              {(() => {
+                const ls = selectedFriendProfile?.last_seen;
+                const isOnline = ls && (Date.now() - new Date(ls).getTime()) < 5 * 60 * 1000;
+                return isOnline ? (
+                  <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-[#0b0b0b]" />
+                ) : null;
+              })()}
             </div>
             <div className="text-left min-w-0">
               <p className="text-white font-semibold text-sm truncate">{selectedFriendProfile?.display_name || 'User'}</p>
