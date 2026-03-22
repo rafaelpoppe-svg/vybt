@@ -445,7 +445,10 @@ export default function Chat() {
               const unreadCount = convoMsgs.filter(m => m.sender_id === f.friend_id && m.receiver_id === currentUser?.id && !m.is_read).length;
               const isLastMine = lastMsg?.sender_id === currentUser?.id;
               const previewText = lastMsg
-                ? lastMsg.content.startsWith('sticker:') ? '🖼 Sticker' : lastMsg.content
+                ? lastMsg.content.startsWith('sticker:') ? '🖼 Sticker'
+                  : lastMsg.content.startsWith('community_invite:') ? '🏘️ Community invitation'
+                  : lastMsg.content.startsWith('plan_invite:') ? '🎉 Plan invitation'
+                  : lastMsg.content
                 : null;
 
               return (
