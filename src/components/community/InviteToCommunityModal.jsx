@@ -7,11 +7,10 @@ export default function InviteToCommunityModal({ community, friends, profilesMap
   const [sent, setSent] = useState({}); // { userId: true }
   const [sending, setSending] = useState({});
 
-  const communityUrl = `${window.location.origin}/CommunityView?id=${community.id}`;
-
   const handleSend = async (friendId) => {
     setSending(prev => ({ ...prev, [friendId]: true }));
-    const msg = `🏘️ Join my community *${community.name}*!\n${communityUrl}`;
+    // Structured invite format parsed by ChatMessage to render a card
+    const msg = `community_invite:${community.id}`;
     await base44.entities.ChatMessage.create({
       sender_id: currentUser.id,
       receiver_id: friendId,
