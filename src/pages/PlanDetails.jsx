@@ -623,6 +623,18 @@ export default function PlanDetails() {
         isLive={plan.status === 'happening'}
       />
 
+      {/* Invite Friends Modal */}
+      {showInviteModal && (
+        <InviteToPlanModal
+          plan={plan}
+          friends={friendIds}
+          profilesMap={profilesMap}
+          currentUser={currentUser}
+          participantIds={new Set(participants.map(p => p.user_id))}
+          onClose={() => setShowInviteModal(false)}
+        />
+      )}
+
       {/* Leave Modal */}
       <LeavePlanModal
         isOpen={showLeaveModal}
