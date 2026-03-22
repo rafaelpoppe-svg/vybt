@@ -28,11 +28,16 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
   ];
 
   const sendRequest = useMutation({
-    mutationFn: () => base44.entities.Friendship.create({
-      user_id: currentUser.id,
-      friend_id: profile.user_id,
-      status: 'pending'
-    }),
+    mutationFn: async () => {
+      await base44.entities.Friendship.create({
+        user_id: currentUser.id,
+        friend_id: profile.user_id,
+        status: 'pending'
+      });
+      // Criar notificação para o destinatário
+      const myName = currentUser.full_name || 'Alguém';
+      await notifyFriendRequest(profile.user_id, currentUser.id, myName);
+    },
     onSuccess: () => {
       setLocalSent(true);
       queryClient.invalidateQueries(['sentFriendRequests', currentUser?.id]);
