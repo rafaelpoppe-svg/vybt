@@ -14,6 +14,7 @@ function Avatar({ sender }) {
 }
 
 export default function GroupMessageBubble({ message, isMe, sender, isFirstInGroup, isLastInGroup, themeColor = '#00fea3' }) {
+  const navigate = useNavigate();
   const isSticker = message.content?.startsWith('sticker:');
   const stickerUrl = isSticker ? message.content.replace('sticker:', '') : null;
 
