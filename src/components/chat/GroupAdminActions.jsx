@@ -192,27 +192,47 @@ export default function GroupAdminActions({
             {/* Members Tab */}
             {activeTab === 'members' && (
               <div className="space-y-4">
-                {/* Invite Section */}
+                {/* Invite Friends Section */}
                 <div className="p-4 rounded-xl bg-gray-800 space-y-3">
                   <div className="flex items-center gap-2 text-white font-medium">
                     <UserPlus className="w-4 h-4 text-[#00c6d2]" />
-                    Invite User
+                    Invite Friends
                   </div>
-                  <div className="flex gap-2">
-                    <Input
-                      value={inviteEmail}
-                      onChange={(e) => setInviteEmail(e.target.value)}
-                      placeholder="Enter email or username"
-                      className="flex-1 bg-gray-900 border-gray-700 text-white text-sm"
-                    />
-                    <Button
-                      onClick={handleInvite}
-                      disabled={inviting || !inviteEmail.trim()}
-                      className="bg-[#00c6d2] text-[#0b0b0b]"
-                    >
-                      {inviting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Share2 className="w-4 h-4" />}
-                    </Button>
-                  </div>
+                  {eligibleFriends.length === 0 ? (
+                    <p className="text-gray-500 text-xs text-center py-2">No friends to invite</p>
+                  ) : (
+                    <div className="space-y-2 max-h-48 overflow-y-auto">
+                      {eligibleFriends.map(friend => {
+                        const status = sentInvites[friend.user_id];
+                        return (
+                          <div key={friend.user_id} className="flex items-center gap-3 p-2 rounded-xl bg-gray-900">
+                            <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 bg-gray-700">
+                              {friend.photos?.[0]
+                                ? <img src={friend.photos[0]} alt="" className="w-full h-full object-cover" />
+                                : <div className="w-full h-full flex items-center justify-center">
+                                    <span className="text-white text-xs font-bold">{friend.display_name?.[0] || '?'}</span>
+                                  </div>
+                              }
+                            </div>
+                            <p className="flex-1 text-white text-sm truncate">{friend.display_name}</p>
+                            <button
+                              onClick={() => handleInviteFriend(friend.user_id)}
+                              disabled={!!status}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all disabled:opacity-60 flex items-center gap-1 ${
+                                status === 'sent'
+                                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                                  : 'bg-[#00c6d2]/20 text-[#00c6d2] border border-[#00c6d2]/40'
+                              }`}
+                            >
+                              {status === 'sending' ? <Loader2 className="w-3 h-3 animate-spin" />
+                                : status === 'sent' ? <><Check className="w-3 h-3" /> Sent</>
+                                : <><Send className="w-3 h-3" /> Invite</>}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 {/* Members List */}
