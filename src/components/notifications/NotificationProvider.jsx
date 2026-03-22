@@ -66,6 +66,7 @@ const defaultPrefs = {
 export function NotificationProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadDMCount, setUnreadDMCount] = useState(0);
   const [userPrefs, setUserPrefs] = useState(defaultPrefs);
   const queryClient = useQueryClient();
   // Track already-shown notification IDs to avoid duplicates
@@ -77,11 +78,13 @@ export function NotificationProvider({ children }) {
         const user = await base44.auth.me();
         setCurrentUser(user);
 
-        const [notifications, profiles] = await Promise.all([
+        const [notifications, profiles, dmMessages] = await Promise.all([
           base44.entities.Notification.filter({ user_id: user.id, is_read: false }),
           base44.entities.UserProfile.filter({ user_id: user.id }),
+          base44.entities.ChatMessage.filter({ receiver_id: user.id, message_type: 'direct', is_read: false }),
         ]);
         setUnreadCount(notifications.length);
+        setUnreadDMCount(dmMessages.length);
         if (profiles[0]?.notification_prefs) {
           setUserPrefs({ ...defaultPrefs, ...profiles[0].notification_prefs });
         }
