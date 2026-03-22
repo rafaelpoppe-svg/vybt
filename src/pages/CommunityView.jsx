@@ -552,7 +552,7 @@ export default function CommunityView() {
         {showInviteModal && (
           <InviteToCommunityModal
             community={community}
-            friends={[]}
+            friends={friendIds}
             profilesMap={profilesMap}
             currentUser={currentUser}
             onClose={() => setShowInviteModal(false)}
