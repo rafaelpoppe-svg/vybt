@@ -117,6 +117,18 @@ export default function CommunityView() {
     enabled: !!communityId,
   });
 
+  const { data: myFriendships = [] } = useQuery({
+    queryKey: ['myFriendships', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
+    enabled: !!currentUser?.id,
+  });
+  // Also fetch friendships where I am the friend_id
+  const { data: friendshipsReceived = [] } = useQuery({
+    queryKey: ['friendshipsReceived', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id, status: 'accepted' }),
+    enabled: !!currentUser?.id,
+  });
+
   const { data: pendingRequests = [] } = useQuery({
     queryKey: ['communityPlanRequests', communityId],
     queryFn: () => base44.entities.CommunityPlanRequest.filter({ community_id: communityId, status: 'pending' }),
