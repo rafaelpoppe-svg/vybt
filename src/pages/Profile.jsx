@@ -159,7 +159,7 @@ export default function Profile() {
       </div>
 
       {/* ── Instagram-style header ── */}
-      <div className="px-4 pt-5 pb-4">
+      <div className="px-4 pt-5 pb-4 flex-shrink-0">
         {/* Avatar row + stats */}
         <div className="flex items-center gap-5">
           {/* Avatar */}
