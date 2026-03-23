@@ -127,11 +127,11 @@ export default function Profile() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-28">
+    <div className="h-screen bg-[#0b0b0b] overflow-hidden flex flex-col">
 
       {/* ── Top bar ── */}
       <div
-        className="relative flex items-center justify-between px-4 py-3 sticky top-0 z-40 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/5"
+        className="relative flex-shrink-0 flex items-center justify-between px-4 py-3 z-40 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/5"
         style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}
       >
         <div className="w-10" />
@@ -246,7 +246,7 @@ export default function Profile() {
       </div>
 
       {/* ── Tabs (Instagram icon tabs) ── */}
-      <div className="sticky top-[57px] z-30 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/8">
+      <div className="flex-shrink-0 z-30 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/8">
         <div className="flex">
           {tabs.map(tab => (
             <motion.button key={tab.id} whileTap={{ scale: 0.9 }}
@@ -271,6 +271,7 @@ export default function Profile() {
       </div>
 
       {/* ── Tab Content ── */}
+      <div className="flex-1 overflow-y-auto pb-28">
       <AnimatePresence mode="wait">
 
         {/* Photos grid */}
@@ -358,6 +359,7 @@ export default function Profile() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
 
       {/* ── Photo Expand Modal ── */}
       <AnimatePresence>
