@@ -111,6 +111,18 @@ export default function GroupChat() {
     return () => unsubscribe();
   }, [planId, currentUser?.id, queryClient]);
 
+  // ── Mark group messages as read when viewing ──────────────────────────────
+  useEffect(() => {
+    if (!currentUser?.id || messages.length === 0) return;
+    const unread = messages.filter(
+      m => m.sender_id !== currentUser.id && !m.is_read
+    );
+    if (unread.length === 0) return;
+    unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }));
+    // Invalidate the global group messages cache so Chat list updates
+    queryClient.invalidateQueries(['allGroupMessages', currentUser.id]);
+  }, [messages, currentUser?.id, queryClient]);
+
   // ── Sorted Messages ────────────────────────────────────────────────────────
   const sortedMessages = [...messages].sort(
     (a, b) => new Date(a.created_date) - new Date(b.created_date)
