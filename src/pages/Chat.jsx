@@ -55,6 +55,8 @@ export default function Chat() {
     queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'group' }),
     enabled: !!currentUser?.id,
     staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   // Plans (for group list)
