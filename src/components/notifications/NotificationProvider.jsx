@@ -1,9 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
-import { MessageCircle, Users, Camera, Flame, Calendar, Heart, UserPlus } from 'lucide-react';
 
 const NotificationContext = createContext();
 
