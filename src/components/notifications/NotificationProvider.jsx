@@ -127,51 +127,6 @@ export function NotificationProvider({ children }) {
       // Update unread count
       setUnreadCount(prev => prev + 1);
       queryClient.invalidateQueries(['notifications', currentUser.id]);
-
-      // Check user preferences before showing toast
-      const prefs = userPrefs;
-      if (prefs.mute_all) return;
-
-      const prefKey = notifTypeToPrefKey[notification.type];
-      if (prefKey && prefs[prefKey] === false) return;
-
-      // Show toast
-      const Icon = notificationIcons[notification.type] || MessageCircle;
-      toast.custom((t) => (
-        <motion.div
-          initial={{ opacity: 0, y: -30, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -20, scale: 0.95 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-          className="bg-gray-900 border border-[#00c6d2]/30 rounded-2xl p-4 shadow-2xl shadow-[#00c6d2]/10 max-w-sm cursor-pointer"
-          onClick={() => {
-            toast.dismiss(t);
-            handleNotificationClick(notification);
-          }}
-        >
-          <div className="flex gap-3 items-start">
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
-              className="w-10 h-10 rounded-full bg-[#00c6d2]/20 flex items-center justify-center flex-shrink-0"
-            >
-              <Icon className="w-5 h-5 text-[#00c6d2]" />
-            </motion.div>
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-medium text-sm">
-                {notification.title || notification.message}
-              </p>
-              {notification.title && (
-                <p className="text-gray-400 text-xs mt-1">{notification.message}</p>
-              )}
-            </div>
-          </div>
-        </motion.div>
-      ), {
-        duration: 4000,
-        position: 'top-center',
-      });
     });
 
     return () => unsubscribe();
