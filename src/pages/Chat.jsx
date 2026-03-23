@@ -243,15 +243,17 @@ export default function Chat() {
             onClick={() => navigate(createPageUrl('UserProfile') + `?id=${selectedFriendId}`)}
             className="flex items-center gap-3 flex-1 min-w-0"
           >
-            <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-[#00c6d2]/40 flex-shrink-0">
-              {selectedFriendProfile?.photos?.[0] ? (
-                <img src={selectedFriendProfile.photos[0]} alt="" className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2] flex items-center justify-center">
-                  <span className="text-white font-bold">{selectedFriendProfile?.display_name?.[0] || '?'}</span>
-                </div>
-              )}
-              {/* Online dot */}
+            <div className="relative flex-shrink-0">
+              <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-[#00c6d2]/40">
+                {selectedFriendProfile?.photos?.[0] ? (
+                  <img src={selectedFriendProfile.photos[0]} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-[#542b9b] to-[#00c6d2] flex items-center justify-center">
+                    <span className="text-white font-bold">{selectedFriendProfile?.display_name?.[0] || '?'}</span>
+                  </div>
+                )}
+              </div>
+              {/* Online dot — fora do overflow-hidden */}
               {(() => {
                 const ls = selectedFriendProfile?.last_seen;
                 const isOnline = ls && (Date.now() - new Date(ls).getTime()) < 5 * 60 * 1000;
