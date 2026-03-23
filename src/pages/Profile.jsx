@@ -127,7 +127,7 @@ export default function Profile() {
   ];
 
   return (
-    <div className="h-screen bg-[#0b0b0b] overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-[#0b0b0b] overflow-y-auto overflow-x-hidden pb-28">
 
       {/* ── Top bar ── */}
       <div
