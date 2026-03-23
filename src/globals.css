@@ -21,8 +21,7 @@ html {
   min-height: 100dvh !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
+  overflow: hidden !important;
   overscroll-behavior: none !important;
   overscroll-behavior-x: none !important;
   /* Block horizontal swipe at the html level — prevents iOS WKWebView back gesture */
@@ -40,8 +39,7 @@ body {
   min-height: 100dvh !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
+  overflow: hidden !important;
   overscroll-behavior: none !important;
   overscroll-behavior-x: none !important;
   overscroll-behavior-y: none !important;
@@ -54,13 +52,13 @@ body {
 
 /* Reset body padding only for #root so it fills edge-to-edge */
 body > #root {
-  position: relative !important;
+  position: fixed !important;
+  inset: 0 !important;
   width: 100% !important;
-  min-height: 100dvh !important;
+  height: 100% !important;
   background-color: #0b0b0b !important;
   background: #0b0b0b !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
+  overflow: hidden !important;
   /* Ensure it sits BEHIND safe area — content handles its own padding */
   padding: 0 !important;
   margin: 0 !important;
