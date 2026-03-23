@@ -127,9 +127,12 @@ export default function Profile() {
   ];
 
   return (
-    <div 
-      className="h-screen bg-[#0b0b0b] overflow-hidden flex flex-col ">
-
+    /*<div 
+      className="h-screen bg-[#0b0b0b] overflow-hidden flex flex-col ">*/
+    <div
+      className="bg-[#0b0b0b] overflow-hidden"
+      style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}
+    >
       {/* ── Top bar ── */}
       <div
         className="relative flex-shrink-0 flex items-center justify-between px-4 py-3 z-40 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/5"
