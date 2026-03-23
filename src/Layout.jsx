@@ -190,27 +190,20 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
         Root wrapper: fixed, edge-to-edge.
         Uses inset:0 so it covers status bar on iOS (with viewport-fit=cover).
       */}
-      <div style={{
-        width: '100%',
-        height: '100dvh',
-        minHeight: '100dvh',
-        position: 'relative',
-        inset: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        background: themeStyles?.background || '#0b0b0b',
-        backgroundImage: themeStyles?.backgroundImage,
-        backgroundSize: 'cover',
-        backgroundAttachment: 'fixed',
-        overflowX: 'hidden',
-        overflowY: 'auto',
-        // CRITICAL: prevent iOS WKWebView back-swipe gesture from sliding the layer
-        touchAction: 'pan-y pinch-zoom',
-        overscrollBehavior: 'none',
-        WebkitOverflowScrolling: 'touch',
-        paddingTop: 'env(safe-area-inset-top, 0px)',
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-      }}>
+        <div style={{
+          position: 'fixed',        // ← ancora ao viewport
+          inset: 0,                 // ← cobre tudo
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          background: themeStyles?.background || '#0b0b0b',
+          backgroundImage: themeStyles?.backgroundImage,
+          backgroundSize: 'cover',
+          overflow: 'hidden',       // ← cada página controla o seu scroll
+          touchAction: 'pan-y pinch-zoom',
+          overscrollBehavior: 'none',
+        }}>
         <div style={{
           flex: 1,
           position: 'relative',
