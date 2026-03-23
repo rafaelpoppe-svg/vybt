@@ -211,38 +211,11 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
         paddingTop: 'env(safe-area-inset-top, 0px)',
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}>
-        <style>{`
-          /* Force dark color-scheme so iOS renders status bar dark */
-          :root { color-scheme: dark; }
-          @media (prefers-color-scheme: light) { :root { color-scheme: dark; } }
-          /* Block horizontal swipe/overflow everywhere */
-          html, body, #root {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden !important;
-            overflow-y: auto !important; 
-            max-width: 100vw !important;
-            min-height: 100dvh;
-            height: 100%;
-            background: #0b0b0b !important;
-          }
-          * { max-width: 100%; box-sizing: border-box; }
-          /* Prevent any element from creating horizontal scroll */
-          body > #root {
-            overflow-x: hidden !important;
-            overflow-y: auto !important;
-          }
-        `}</style>
         <div style={{
           flex: 1,
           position: 'relative',
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          background: '#0b0b0b',
+          overflow: 'hidden',      // ← hidden aqui também
           width: '100%',
-          maxWidth: '100vw',
-          minHeight: '100%',
-          touchAction: 'pan-y pinch-zoom',
         }}>
           <PageTransition>
             {children}
