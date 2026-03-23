@@ -276,7 +276,10 @@ export default function Explore() {
   ];
 
   return (
-    <div className="flex flex-col bg-[#0b0b0b]" style={{ height: '100dvh', overscrollBehavior: 'none' }}>
+    <div
+      className="bg-[#0b0b0b] overflow-hidden flex flex-col"
+      style={{ position: 'fixed', inset: 0 }}
+    >
       {/* Header */}
       <header className="flex-shrink-0 z-40 backdrop-blur-lg border-b border-gray-800/60 px-4 pt-3 pb-0" style={{ background: 'linear-gradient(180deg, #0b0b0b 60%, rgba(11,11,11,0.92) 100%)' }}>
         {/* Title row */}
