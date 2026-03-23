@@ -404,7 +404,7 @@ export default function GroupChat() {
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" 
-      style={{ position: 'fixed', inset: 0, paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined }}
+      style={{ position: 'fixed', inset: 0 }}
     >
 
       {/* Chat background theme (emojis) */}
@@ -465,7 +465,7 @@ export default function GroupChat() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto relative z-10 px-4 py-4" style={{ overscrollBehavior: 'contain' }}>
+      <div className="flex-1 overflow-y-auto relative z-10 px-4 py-4" style={{ overscrollBehavior: 'contain', paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined }}>
         {messagesLoading ? (
           <div className="flex justify-center items-center h-full">
             <div
