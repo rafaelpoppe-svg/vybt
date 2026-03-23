@@ -234,8 +234,14 @@ export function NotificationProvider({ children }) {
     queryClient.invalidateQueries(['notifications', currentUser.id]);
   };
 
+  const refreshUnreadCount = async () => {
+    if (!currentUser?.id) return;
+    const notifications = await base44.entities.Notification.filter({ user_id: currentUser.id, is_read: false });
+    setUnreadCount(notifications.length);
+  };
+
   return (
-    <NotificationContext.Provider value={{ unreadCount, unreadDMCount, markAllAsRead }}>
+    <NotificationContext.Provider value={{ unreadCount, unreadDMCount, markAllAsRead, refreshUnreadCount }}>
       {children}
     </NotificationContext.Provider>
   );
