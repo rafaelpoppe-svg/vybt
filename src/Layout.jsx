@@ -192,7 +192,8 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
       */}
         <div style={{
           position: 'fixed',        // ← ancora ao viewport
-          inset: 0,                 // ← cobre tudo
+          inset: 0,
+          paddingTop: 'env(safe-area-inset-top, 0px)',
           width: '100%',
           height: '100%',
           display: 'flex',
