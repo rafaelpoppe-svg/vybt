@@ -434,7 +434,7 @@ export default function Chat() {
   }, 0);
 
   return (
-    <div className="h-screen flex flex-col bg-[#0b0b0b] overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#0b0b0b] overflow-hidden" style={{ height: '100dvh' }}>
       {/* Header */}
       <header className="flex-shrink-0 z-40" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="px-4 pt-4 pb-2 flex items-center justify-between">
