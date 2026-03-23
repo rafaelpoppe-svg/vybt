@@ -121,9 +121,11 @@ export default function Chat() {
   useEffect(() => {
     if (!currentUser?.id) return;
     const unsub = base44.entities.ChatMessage.subscribe((event) => {
-      if (event.data?.message_type !== 'direct') return;
-      // Update allDMMessages cache on any create/update/delete
-      queryClient.invalidateQueries(['allDMMessages', currentUser.id]);
+      if (event.data?.message_type === 'direct') {
+        queryClient.invalidateQueries(['allDMMessages', currentUser.id]);
+      } else if (event.data?.message_type === 'group') {
+        queryClient.invalidateQueries(['allGroupMessages', currentUser.id]);
+      }
     });
     return () => unsub();
   }, [currentUser?.id, queryClient]);
