@@ -228,11 +228,12 @@ export default function Chat() {
         style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}
       >
         {/* Header */}
-        <header className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-xl border-b border-gray-800/50 px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)' }}>
+        <header className="flex-shrink-0 bg-[#0b0b0b]/95 backdrop-blur-xl border-b border-gray-800/50 px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)', position: 'relative', zIndex: 50 }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setSelectedFriendId(null)}
-            className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0"
+            className="w-11 h-11 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0"
+            style={{ touchAction: 'manipulation' }}
           >
             <ChevronLeft className="w-5 h-5 text-white" />
           </motion.button>
