@@ -126,7 +126,7 @@ export default function GroupChatHeader({
           )}
 
           {/* Admin actions — only after plan end time has passed */}
-          {planStatus === 'ended' && isAdmin && plan?.status !== 'terminated' && plan?.status !== 'renewed' && (
+          {planStatus === 'ended' && isAdmin && plan?.status !== 'renewed' && (
             <div className="flex gap-2">
               {canRenew && (
                 <motion.button
@@ -138,19 +138,21 @@ export default function GroupChatHeader({
                   {t.renewPlan}
                 </motion.button>
               )}
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={(e) => { e.stopPropagation(); onDelete(); }}
-                className={`flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2`}
-              >
-                <Trash2 className="w-4 h-4" />
-                {t.terminatePlan}
-              </motion.button>
+              {plan?.status !== 'terminated' && (
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                  className={`flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2`}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {t.terminatePlan}
+                </motion.button>
+              )}
             </div>
           )}
 
-          {/* Terminated banner */}
-          {plan?.status === 'terminated' && (
+          {/* Terminated banner — only for non-admins or non-community plans */}
+          {plan?.status === 'terminated' && (!isAdmin || !canRenew) && (
             <div className="w-full py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2">
               ❌ Terminated
             </div>
