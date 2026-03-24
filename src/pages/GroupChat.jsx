@@ -57,7 +57,20 @@ export default function GroupChat() {
   // ── Data Fetching ──────────────────────────────────────────────────────────
   const { data: plans = [] } = useQuery({
     queryKey: ['allPlans'],
-    queryFn: () => base44.entities.PartyPlan.list('-created_date', 50),
+    queryFn: async () => {
+      const urlPlanId = new URLSearchParams(window.location.search).get('planId');
+      if (urlPlanId) {
+        // Always include the current plan + recent ones
+        const [specific, recent] = await Promise.all([
+          base44.entities.PartyPlan.filter({ id: urlPlanId }),
+          base44.entities.PartyPlan.list('-created_date', 100),
+        ]);
+        const merged = [...recent];
+        if (specific[0] && !merged.find(p => p.id === urlPlanId)) merged.push(specific[0]);
+        return merged;
+      }
+      return base44.entities.PartyPlan.list('-created_date', 100);
+    },
   });
   const plan = plans.find(p => p.id === planId);
 
