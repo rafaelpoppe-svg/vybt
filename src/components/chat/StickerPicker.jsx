@@ -41,11 +41,14 @@ export default function StickerPicker({ isOpen, onClose, onSelect, userId }) {
   return (
     <AnimatePresence>
       {isOpen && (
+        <>
+        <div className="fixed inset-0 z-50" style={{ zIndex: 99 }} onClick={onClose} />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="absolute bottom-full left-0 right-0 mb-2 bg-gray-900 rounded-2xl border border-gray-800 p-4 max-h-64 overflow-y-auto"
+          className="fixed left-0 right-0 bg-gray-900 border-t border-gray-800 p-4 overflow-y-auto"
+          style={{ bottom: 'calc(64px + env(safe-area-inset-bottom, 0px))', zIndex: 100, maxHeight: '260px' }}
         >
           <div className="flex items-center justify-between mb-3">
             <h4 className="text-white font-medium flex items-center gap-2">
@@ -99,6 +102,7 @@ export default function StickerPicker({ isOpen, onClose, onSelect, userId }) {
             </p>
           )}
         </motion.div>
+        </>
       )}
     </AnimatePresence>
   );
