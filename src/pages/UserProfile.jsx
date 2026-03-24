@@ -51,7 +51,7 @@ export default function UserProfile() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading: profileLoading } = useQuery({
     queryKey: ['userProfile', userId],
     queryFn: () => base44.entities.UserProfile.filter({ user_id: userId }).then(r => r[0]),
     enabled: !!userId,
@@ -102,10 +102,22 @@ export default function UserProfile() {
 
 
   // Only block on profile — currentUser loads async but isn't needed to show the profile
-  if (!profile) {
+  if (profileLoading) {
     return (
       <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center gap-3">
+        <p className="text-5xl">👤</p>
+        <p className="text-white font-semibold">Profile not found</p>
+        <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="text-[#00c6d2] text-sm font-medium">
+          Go back
+        </motion.button>
       </div>
     );
   }
