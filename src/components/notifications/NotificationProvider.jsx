@@ -10,18 +10,7 @@ export const useNotifications = () => {
   return context;
 };
 
-const notificationIcons = {
-  new_group_message: MessageCircle,
-  new_direct_message: MessageCircle,
-  new_group_member: Users,
-  voting_started: Flame,
-  plan_happening_now: Flame,
-  new_story_in_plan: Camera,
-  friend_request: UserPlus,
-  plan_time_changed: Calendar,
-  plan_location_changed: Calendar,
-  plan_recommendation: Heart,
-};
+
 
 // Map notification type → prefs key
 const notifTypeToPrefKey = {
