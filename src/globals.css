@@ -179,7 +179,7 @@ p, .bio-text, .selectable, input, textarea, [contenteditable] {
 
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  filter: invert(1) !important;
 }
 
 @layer base {
