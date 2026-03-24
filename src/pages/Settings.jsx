@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import DeleteAccountModal from '../components/profile/DeleteAccountModal';
 import { useLanguage } from '../components/common/LanguageContext';
+import { useTheme } from '../lib/ThemeContext';
+import { Sun, Moon } from 'lucide-react';
 
 const LANGUAGES = [
   { code: 'pt', flag: '🇵🇹', name: 'Português' },
@@ -22,8 +24,8 @@ const LANGUAGES = [
 
 const Section = ({ title, children }) => (
   <div>
-    <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-2 px-1">{title}</p>
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">
+    <p className="text-[11px] uppercase tracking-widest mb-2 px-1" style={{ color: 'var(--text-muted)' }}>{title}</p>
+    <div className="rounded-2xl overflow-hidden divide-y" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderColor: 'var(--border)', divideColor: 'var(--border)' }}>
       {children}
     </div>
   </div>
@@ -35,20 +37,21 @@ const Row = ({ icon: Icon, iconColor = 'text-[#00c6d2]', label, sublabel, onClic
     onClick={onClick}
     className="w-full flex items-center gap-4 px-4 py-4"
   >
-    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${destructive ? 'bg-red-500/15' : 'bg-gray-800'}`}>
+    <div className={`w-8 h-8 rounded-xl flex items-center justify-center`} style={{ background: destructive ? 'rgba(239,68,68,0.15)' : 'var(--surface-2)' }}>
       <Icon className={`w-4 h-4 ${destructive ? 'text-red-400' : iconColor}`} />
     </div>
     <div className="flex-1 text-left">
-      <p className={`font-medium text-sm ${destructive ? 'text-red-400' : 'text-white'}`}>{label}</p>
-      {sublabel && <p className="text-xs text-gray-500 mt-0.5">{sublabel}</p>}
+      <p className={`font-medium text-sm ${destructive ? 'text-red-400' : ''}`} style={destructive ? {} : { color: 'var(--text-primary)' }}>{label}</p>
+      {sublabel && <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{sublabel}</p>}
     </div>
-    <ChevronRight className="w-4 h-4 text-gray-600" />
+    <ChevronRight className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
   </motion.button>
 );
 
 export default function Settings() {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const [currentUser, setCurrentUser] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
@@ -82,23 +85,58 @@ export default function Settings() {
   const openUrl = (url) => window.open(url, '_blank');
 
   return (
-    <div className="bg-[#0b0b0b] flex flex-col overflow-hidden" style={{ height: '100dvh', minHeight: '100dvh' }}>
+    <div className="flex flex-col overflow-hidden" style={{ height: '100dvh', minHeight: '100dvh', background: 'var(--bg)' }}>
       {/* Header */}
       <header
-        className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 flex items-center gap-4 px-4 py-4"
-        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+        className="flex-shrink-0 z-40 backdrop-blur-lg border-b flex items-center gap-4 px-4 py-4"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)', background: 'var(--header-bg)', borderColor: 'var(--border)' }}
       >
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)}
-          className="p-2 rounded-full bg-gray-900"
+          className="p-2 rounded-full"
+          style={{ background: 'var(--surface-2)' }}
         >
-          <ChevronLeft className="w-5 h-5 text-white" />
+          <ChevronLeft className="w-5 h-5" style={{ color: 'var(--text-primary)' }} />
         </motion.button>
-        <h1 className="text-xl font-bold text-white">{t.settings}</h1>
+        <h1 className="text-xl font-bold flex-1" style={{ color: 'var(--text-primary)' }}>{t.settings}</h1>
       </header>
 
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-16" style={{ WebkitOverflowScrolling: 'touch' }}>
+
+        {/* Appearance */}
+        <Section title="Appearance">
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={toggleTheme}
+            className="w-full flex items-center gap-4 px-4 py-4"
+          >
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: 'var(--surface-2)' }}>
+              {theme === 'dark'
+                ? <Moon className="w-4 h-4 text-[#00c6d2]" />
+                : <Sun className="w-4 h-4 text-yellow-500" />
+              }
+            </div>
+            <div className="flex-1 text-left">
+              <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                {theme === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
+              </p>
+            </div>
+            {/* Toggle switch */}
+            <div
+              className="w-12 h-6 rounded-full relative transition-colors duration-300 flex-shrink-0"
+              style={{ background: theme === 'light' ? '#f59e0b' : '#374151' }}
+            >
+              <div
+                className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300"
+                style={{ transform: theme === 'light' ? 'translateX(26px)' : 'translateX(2px)' }}
+              />
+            </div>
+          </motion.button>
+        </Section>
 
         {/* Account */}
         <Section title={t.account}>
@@ -166,25 +204,24 @@ export default function Settings() {
                 animate={{ y: 0 }}
                 exit={{ y: '100%' }}
                 transition={{ type: 'spring', damping: 25 }}
-                className="w-full bg-gray-900 rounded-t-3xl p-6 pb-10"
+                className="w-full rounded-t-3xl p-6 pb-10" style={{ background: 'var(--surface)' }}
                 onClick={e => e.stopPropagation()}
               >
                 <div className="w-10 h-1 bg-gray-700 rounded-full mx-auto mb-6" />
-                <h3 className="text-white font-bold text-lg mb-4">{t.chooseLanguageTitle}</h3>
+                <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--text-primary)' }}>{t.chooseLanguageTitle}</h3>
                 <div className="space-y-2">
                   {LANGUAGES.map(lang => (
                     <motion.button
                       key={lang.code}
                       whileTap={{ scale: 0.97 }}
                       onClick={() => handleLanguageChange(lang.code)}
-                      className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all ${
-                        selectedLanguage === lang.code
-                          ? 'bg-[#00c6d2]/15 border border-[#00c6d2]/40'
-                          : 'bg-gray-800 border border-transparent'
+                      className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all border ${
+                        selectedLanguage === lang.code ? 'border-[#00c6d2]/40' : 'border-transparent'
                       }`}
+                      style={{ background: selectedLanguage === lang.code ? 'rgba(0,198,210,0.12)' : 'var(--surface-2)' }}
                     >
                       <span className="text-2xl">{lang.flag}</span>
-                      <span className={`flex-1 text-left font-medium ${selectedLanguage === lang.code ? 'text-[#00c6d2]' : 'text-white'}`}>
+                      <span className={`flex-1 text-left font-medium ${selectedLanguage === lang.code ? 'text-[#00c6d2]' : ''}`} style={selectedLanguage === lang.code ? {} : { color: 'var(--text-primary)' }}>
                         {lang.name}
                       </span>
                       {selectedLanguage === lang.code && (

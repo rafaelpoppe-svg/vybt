@@ -198,7 +198,7 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          background: themeStyles?.background || '#0b0b0b',
+          background: themeStyles?.background || 'var(--bg)',
           backgroundImage: themeStyles?.backgroundImage,
           backgroundSize: 'cover',
           overflow: 'hidden',       // ← cada página controla o seu scroll

@@ -292,8 +292,8 @@ export default function Home() {
 
   return (
     <div
-      className="bg-[#0b0b0b] overflow-hidden"
-      style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}
+      className="overflow-hidden"
+      style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}
     >
       {/* City background overlay */}
       {cityBg && (
@@ -308,7 +308,7 @@ export default function Home() {
         />
       )}
       {/* Header fixo */}
-      <header className="flex-shrink-0 bg-[#0b0b0b] z-40" style={{ position: 'relative', zIndex: 40 }}>
+      <header className="flex-shrink-0 z-40" style={{ position: 'relative', zIndex: 40, background: 'var(--bg)' }}>
         <div
           className="px-4 pb-3 flex items-center justify-between"
           style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 16px)' }}
@@ -320,7 +320,7 @@ export default function Home() {
               className="w-8 h-8 rounded-xl object-contain"
               onError={(e) => e.target.style.display = 'none'}
             />
-            <h1 className="text-3xl font-black text-white">Vybt</h1>
+            <h1 className="text-3xl font-black" style={{ color: 'var(--text-primary)' }}>Vybt</h1>
           </div>
           <div className="flex items-center gap-2">
 

@@ -224,11 +224,11 @@ export default function Chat() {
   // ── DM Chat View ─────────────────────────────────────────────────────────
   if (selectedFriendId) {
     return (
-      <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" 
-        style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}
+      <div className="flex flex-col overflow-hidden" 
+        style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: 'var(--bg)' }}
       >
         {/* Header */}
-        <header className="flex-shrink-0 bg-[#0b0b0b]/95 backdrop-blur-xl border-b border-gray-800/50 px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)', position: 'relative', zIndex: 50 }}>
+        <header className="flex-shrink-0 backdrop-blur-xl border-b px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)', position: 'relative', zIndex: 50, background: 'var(--header-bg)', borderColor: 'var(--border)' }}>
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setSelectedFriendId(null)}
@@ -439,14 +439,14 @@ export default function Chat() {
 
   return (
     <div
-      className="bg-[#0b0b0b] overflow-hidden flex flex-col"
-      style={{ position: 'fixed', inset: 0 }}
+      className="overflow-hidden flex flex-col"
+      style={{ position: 'fixed', inset: 0, background: 'var(--bg)' }}
     >
       {/* Header */}
-      <header className="flex-shrink-0 z-40" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+      <header className="flex-shrink-0 z-40" style={{ paddingTop: 'env(safe-area-inset-top)', background: 'var(--bg)' }}>
         <div className="px-4 pt-4 pb-2 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">Messages</h1>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Messages</h1>
             <p className="text-xs text-gray-500 mt-0.5">
               {totalUnreadDMs + totalUnreadGroups > 0
                 ? <span className="text-[#00c6d2] font-medium">{totalUnreadDMs + totalUnreadGroups} não lidas</span>

@@ -105,7 +105,7 @@ export default function Profile() {
   // Only block render while we don't have the profile yet (currentUser loads fast from cache)
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
@@ -130,12 +130,13 @@ export default function Profile() {
     /*<div 
       className="h-screen bg-[#0b0b0b] overflow-hidden flex flex-col ">*/
     <div
-      className="bg-[#0b0b0b] overflow-hidden"
-      style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}
+      className="overflow-hidden"
+      style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}
     >
       {/* ── Top bar ── */}
       <div
-        className="relative flex-shrink-0 flex items-center justify-between px-4 py-3 z-40 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/5"
+        className="relative flex-shrink-0 flex items-center justify-between px-4 py-3 z-40 backdrop-blur-md border-b border-black/5"
+        style={{ background: 'var(--header-bg)' }}
         style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}
       >
         <div className="w-10" />
@@ -250,7 +251,7 @@ export default function Profile() {
       </div>
 
       {/* ── Tabs (Instagram icon tabs) ── */}
-      <div className="flex-shrink-0 z-30 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/8">
+      <div className="flex-shrink-0 z-30 backdrop-blur-md border-b border-black/5" style={{ background: 'var(--header-bg)' }}>
         <div className="flex">
           {tabs.map(tab => (
             <motion.button key={tab.id} whileTap={{ scale: 0.9 }}
