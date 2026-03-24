@@ -336,9 +336,35 @@ export default function GroupChat() {
   });
 
   const adminEditMutation = useMutation({
-    mutationFn: (data) => base44.entities.PartyPlan.update(planId, data),
+    mutationFn: async (data) => {
+      // Build change summary before saving
+      const changes = [];
+      if (plan && data.title && data.title !== plan.title)
+        changes.push(`Alterou o nome de "${plan.title}" para "${data.title}"`);
+      if (plan && data.time && data.time !== plan.time)
+        changes.push(`Mudou o horário de início para ${data.time}`);
+      if (plan && data.end_time && data.end_time !== plan.end_time)
+        changes.push(`Mudou o horário de término para ${data.end_time}`);
+      if (plan && data.location_address && data.location_address !== plan.location_address)
+        changes.push(`Editou o endereço para "${data.location_address}"`);
+      if (plan && data.cover_image && data.cover_image !== plan.cover_image)
+        changes.push('Editou a imagem do grupo');
+
+      await base44.entities.PartyPlan.update(planId, data);
+
+      if (changes.length > 0 && currentUser?.id) {
+        await base44.entities.ChatMessage.create({
+          sender_id: currentUser.id,
+          plan_id: planId,
+          message_type: 'group',
+          content: `plan_update:${changes.join('\n')}`,
+          is_read: false,
+        });
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['allPlans']);
+      queryClient.invalidateQueries(['groupMessages', planId]);
       setShowAdminEditModal(false);
     },
   });

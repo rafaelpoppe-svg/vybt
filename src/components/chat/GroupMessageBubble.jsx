@@ -25,6 +25,25 @@ export default function GroupMessageBubble({ message, isMe, sender, isFirstInGro
   const planInviteId = isPlanInvite ? message.content.replace('plan_invite:', '') : null;
   const isCard = isCommunityInvite || isPlanInvite;
 
+  // ── Plan update system message (WhatsApp-style center notification) ──
+  const isPlanUpdate = message.content?.startsWith('plan_update:');
+  if (isPlanUpdate) {
+    const lines = message.content.replace('plan_update:', '').split('\n').filter(Boolean);
+    return (
+      <div className="flex justify-center my-3">
+        <div className="bg-gray-800/60 backdrop-blur-sm rounded-2xl px-4 py-2.5 max-w-[85%] border border-gray-700/40">
+          <p className="text-[11px] text-gray-400 font-semibold text-center mb-1.5">✏️ Plano atualizado</p>
+          {lines.map((line, i) => (
+            <p key={i} className="text-[11px] text-gray-300 text-center leading-relaxed">{line}</p>
+          ))}
+          <p className="text-[10px] text-gray-600 text-center mt-1.5">
+            {format(new Date(message.created_date), 'HH:mm')}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (isMe) {
     return (
       <div className={`flex justify-end items-end gap-2 ${isLastInGroup ? 'mb-3' : 'mb-0.5'}`}>
