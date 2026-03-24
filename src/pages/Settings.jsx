@@ -122,7 +122,7 @@ export default function Settings() {
                 {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
               </p>
               <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                {theme === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
+                {theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
               </p>
             </div>
             {/* Toggle switch */}
@@ -165,20 +165,20 @@ export default function Settings() {
               disabled={togglePrivacyMutation.isPending}
               className="w-full flex items-center gap-4 px-4 py-4"
             >
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-gray-800">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: 'var(--surface-2)' }}>
                 {profile.is_private
                   ? <EyeOff className="w-4 h-4 text-purple-400" />
                   : <Eye className="w-4 h-4 text-[#00c6d2]" />
                 }
               </div>
               <div className="flex-1 text-left">
-                <p className="font-medium text-sm text-white">
-                  {profile.is_private ? 'Perfil Privado' : 'Perfil Público'}
+                <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                  {profile.is_private ? 'Private Profile' : 'Public Profile'}
                 </p>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
                   {profile.is_private
-                    ? 'Só amigos vêem os teus stories, planos e amigos'
-                    : 'Toda a gente pode ver o teu perfil completo'
+                    ? 'Only friends can see your stories, plans and friends'
+                    : 'Everyone can see your full profile'
                   }
                 </p>
               </div>

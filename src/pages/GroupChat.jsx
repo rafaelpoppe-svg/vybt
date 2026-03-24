@@ -189,7 +189,7 @@ export default function GroupChat() {
       });
       notifyNewGroupMessage(
         planId, currentUser.id,
-        myProfile?.display_name || currentUser.full_name || 'Alguém'
+        myProfile?.display_name || currentUser.full_name || 'Someone'
       ); // intentionally not awaited
       return msgPromise;
     },
@@ -340,15 +340,15 @@ export default function GroupChat() {
       // Build change summary before saving
       const changes = [];
       if (plan && data.title && data.title !== plan.title)
-        changes.push(`Alterou o nome de "${plan.title}" para "${data.title}"`);
+        changes.push(`Renamed from "${plan.title}" to "${data.title}"`);
       if (plan && data.time && data.time !== plan.time)
-        changes.push(`Mudou o horário de início para ${data.time}`);
+        changes.push(`Start time changed to ${data.time}`);
       if (plan && data.end_time && data.end_time !== plan.end_time)
-        changes.push(`Mudou o horário de término para ${data.end_time}`);
+        changes.push(`End time changed to ${data.end_time}`);
       if (plan && data.location_address && data.location_address !== plan.location_address)
-        changes.push(`Editou o endereço para "${data.location_address}"`);
+        changes.push(`Address updated to "${data.location_address}"`);
       if (plan && data.cover_image && data.cover_image !== plan.cover_image)
-        changes.push('Editou a imagem do grupo');
+        changes.push('Group image updated');
 
       await base44.entities.PartyPlan.update(planId, data);
 
@@ -419,8 +419,8 @@ export default function GroupChat() {
             : <span className="flex items-center justify-center w-full h-full text-4xl">🎉</span>}
         </div>
         <div>
-          <h2 className="text-white font-bold text-xl mb-1">{plan?.title || 'Plano'}</h2>
-          <p className="text-gray-400 text-sm">Junta-te ao plano para acederes ao grupo e conversar.</p>
+          <h2 className="text-white font-bold text-xl mb-1">{plan?.title || 'Plan'}</h2>
+          <p className="text-gray-400 text-sm">Join the plan to access the group and chat.</p>
         </div>
         <button
           onClick={() => navigate(createPageUrl('PlanDetails') + '?id=' + planId)}
@@ -433,7 +433,7 @@ export default function GroupChat() {
           onClick={() => navigate(createPageUrl('Chat'))}
           className="text-gray-500 text-sm"
         >
-          ← Voltar
+          ← Back
         </button>
       </div>
     );

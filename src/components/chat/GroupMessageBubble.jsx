@@ -32,7 +32,7 @@ export default function GroupMessageBubble({ message, isMe, sender, isFirstInGro
     return (
       <div className="flex justify-center my-3">
         <div className="bg-gray-800/60 backdrop-blur-sm rounded-2xl px-4 py-2.5 max-w-[85%] border border-gray-700/40">
-          <p className="text-[11px] text-gray-400 font-semibold text-center mb-1.5">✏️ Plano atualizado</p>
+          <p className="text-[11px] text-gray-400 font-semibold text-center mb-1.5">✏️ Plan updated</p>
           {lines.map((line, i) => (
             <p key={i} className="text-[11px] text-gray-300 text-center leading-relaxed">{line}</p>
           ))}

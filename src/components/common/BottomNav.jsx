@@ -71,7 +71,7 @@ export default function BottomNav() {
               <div className="w-8 h-8 rounded-full bg-[#00d4ff]/20 flex items-center justify-center">
                 <Camera className="w-4 h-4 text-[#00d4ff]" />
               </div>
-              <span className="text-white font-semibold text-sm whitespace-nowrap">Adicionar Story</span>
+              <span className="font-semibold text-sm whitespace-nowrap" style={{ color: 'var(--text-primary)' }}>{t.addStory}</span>
             </motion.button>
 
             <motion.button
@@ -82,7 +82,7 @@ export default function BottomNav() {
               <div className="w-8 h-8 rounded-full bg-[#00c6d2]/20 flex items-center justify-center">
                 <PlusCircle className="w-4 h-4 text-[#00c6d2]" />
               </div>
-              <span className="text-white font-semibold text-sm whitespace-nowrap">Criar novo Plano</span>
+              <span className="font-semibold text-sm whitespace-nowrap" style={{ color: 'var(--text-primary)' }}>{t.createNewPlan}</span>
             </motion.button>
           </motion.div>
         )}
