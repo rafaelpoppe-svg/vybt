@@ -10,6 +10,16 @@ Deno.serve(async (req) => {
     let updated = 0;
 
     for (const plan of allPlans) {
+      // Move voting → ended when voting period expires
+      if (plan.status === 'voting' && plan.voting_ends_at) {
+        const votingEndsAt = new Date(plan.voting_ends_at);
+        if (!isNaN(votingEndsAt.getTime()) && now > votingEndsAt) {
+          await base44.asServiceRole.entities.PartyPlan.update(plan.id, { status: 'ended' });
+          updated++;
+          continue;
+        }
+      }
+
       if (!['upcoming', 'happening'].includes(plan.status)) continue;
       if (!plan.date || !plan.end_time) continue;
 
