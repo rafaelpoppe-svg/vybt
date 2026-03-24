@@ -152,7 +152,7 @@ export default function GroupChatHeader({
           {/* Terminated banner */}
           {plan?.status === 'terminated' && (
             <div className="w-full py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-semibold flex items-center justify-center gap-2">
-              ❌ Terminated
+              {t.terminatedBanner}
             </div>
           )}
         </div>

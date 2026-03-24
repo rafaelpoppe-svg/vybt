@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import CommunityInviteCard from './CommunityInviteCard';
 import PlanInviteCard from './PlanInviteCard';
+import { useLanguage } from '../common/LanguageContext';
 
 function Avatar({ sender }) {
   return sender?.photos?.[0] ? (
@@ -17,6 +18,7 @@ function Avatar({ sender }) {
 
 export default function GroupMessageBubble({ message, isMe, sender, isFirstInGroup, isLastInGroup, themeColor = '#00fea3' }) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const isSticker = message.content?.startsWith('sticker:');
   const stickerUrl = isSticker ? message.content.replace('sticker:', '') : null;
   const isCommunityInvite = message.content?.startsWith('community_invite:');
@@ -32,7 +34,7 @@ export default function GroupMessageBubble({ message, isMe, sender, isFirstInGro
     return (
       <div className="flex justify-center my-3">
         <div className="bg-gray-800/60 backdrop-blur-sm rounded-2xl px-4 py-2.5 max-w-[85%] border border-gray-700/40">
-          <p className="text-[11px] text-gray-400 font-semibold text-center mb-1.5">✏️ Plan updated</p>
+          <p className="text-[11px] text-gray-400 font-semibold text-center mb-1.5">{t.planUpdated}</p>
           {lines.map((line, i) => (
             <p key={i} className="text-[11px] text-gray-300 text-center leading-relaxed">{line}</p>
           ))}

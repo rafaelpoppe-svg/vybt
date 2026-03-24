@@ -105,7 +105,7 @@ export default function Settings() {
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-16" style={{ WebkitOverflowScrolling: 'touch' }}>
 
         {/* Appearance */}
-        <Section title="Appearance">
+        <Section title={t.appearance}>
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={toggleTheme}
@@ -119,10 +119,10 @@ export default function Settings() {
             </div>
             <div className="flex-1 text-left">
               <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
-                {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+                {theme === 'dark' ? t.darkMode : t.lightMode}
               </p>
               <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                {theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+                {theme === 'dark' ? t.switchToLight : t.switchToDark}
               </p>
             </div>
             {/* Toggle switch */}
@@ -173,13 +173,10 @@ export default function Settings() {
               </div>
               <div className="flex-1 text-left">
                 <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
-                  {profile.is_private ? 'Private Profile' : 'Public Profile'}
+                  {profile.is_private ? t.privateProfile : t.publicProfile}
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                  {profile.is_private
-                    ? 'Only friends can see your stories, plans and friends'
-                    : 'Everyone can see your full profile'
-                  }
+                  {profile.is_private ? t.privateProfileDesc : t.publicProfileDesc}
                 </p>
               </div>
               <div className={`w-11 h-6 rounded-full relative transition-colors ${profile.is_private ? 'bg-purple-500' : 'bg-gray-700'}`}>

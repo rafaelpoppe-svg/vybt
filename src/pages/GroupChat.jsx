@@ -419,8 +419,8 @@ export default function GroupChat() {
             : <span className="flex items-center justify-center w-full h-full text-4xl">🎉</span>}
         </div>
         <div>
-          <h2 className="text-white font-bold text-xl mb-1">{plan?.title || 'Plan'}</h2>
-          <p className="text-gray-400 text-sm">Join the plan to access the group and chat.</p>
+          <h2 className="text-white font-bold text-xl mb-1">{plan?.title || t.plans}</h2>
+          <p className="text-gray-400 text-sm">{t.joinPlanToAccess}</p>
         </div>
         <button
           onClick={() => navigate(createPageUrl('PlanDetails') + '?id=' + planId)}
@@ -433,7 +433,7 @@ export default function GroupChat() {
           onClick={() => navigate(createPageUrl('Chat'))}
           className="text-gray-500 text-sm"
         >
-          ← Back
+          {t.backBtn}
         </button>
       </div>
     );

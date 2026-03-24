@@ -239,6 +239,21 @@ export const translations = {
     ambassadorCtaTitle: 'Sê o primeiro na tua cidade!',
     ambassadorCtaDesc: 'Não há planos em {city} ainda. Torna-te um Vybt Ambassador e traz o vibe para a tua área!',
     becomeAmbassador: 'Tornar-me Ambassador',
+    // Settings - Appearance & Privacy
+    appearance: 'Aparência',
+    switchToLight: 'Mudar para tema claro',
+    switchToDark: 'Mudar para tema escuro',
+    darkMode: 'Modo Escuro',
+    lightMode: 'Modo Claro',
+    privateProfile: 'Perfil Privado',
+    publicProfile: 'Perfil Público',
+    privateProfileDesc: 'Só amigos vêem os teus stories, planos e amigos',
+    publicProfileDesc: 'Toda a gente pode ver o teu perfil completo',
+    // GroupChat
+    joinPlanToAccess: 'Junta-te ao plano para acederes ao grupo e conversar.',
+    backBtn: '← Voltar',
+    planUpdated: '✏️ Plano atualizado',
+    terminatedBanner: '❌ Terminado',
   },
 
   en: {
@@ -479,6 +494,21 @@ export const translations = {
     ambassadorCtaTitle: 'Be the first in your city!',
     ambassadorCtaDesc: 'There are no plans in {city} yet. Become a Vybt Ambassador and help bring the vibe to your area!',
     becomeAmbassador: 'Become an Ambassador',
+    // Settings - Appearance & Privacy
+    appearance: 'Appearance',
+    switchToLight: 'Switch to light theme',
+    switchToDark: 'Switch to dark theme',
+    darkMode: 'Dark Mode',
+    lightMode: 'Light Mode',
+    privateProfile: 'Private Profile',
+    publicProfile: 'Public Profile',
+    privateProfileDesc: 'Only friends can see your stories, plans and friends',
+    publicProfileDesc: 'Everyone can see your full profile',
+    // GroupChat
+    joinPlanToAccess: 'Join the plan to access the group and chat.',
+    backBtn: '← Back',
+    planUpdated: '✏️ Plan updated',
+    terminatedBanner: '❌ Terminated',
   },
 
   es: {
@@ -714,6 +744,21 @@ export const translations = {
     ambassadorCtaTitle: '¡Sé el primero en tu ciudad!',
     ambassadorCtaDesc: 'No hay planes en {city} todavía. ¡Conviértete en Vybt Ambassador y trae el vibe a tu área!',
     becomeAmbassador: 'Convertirme en Ambassador',
+    // Settings - Appearance & Privacy
+    appearance: 'Apariencia',
+    switchToLight: 'Cambiar a tema claro',
+    switchToDark: 'Cambiar a tema oscuro',
+    darkMode: 'Modo Oscuro',
+    lightMode: 'Modo Claro',
+    privateProfile: 'Perfil Privado',
+    publicProfile: 'Perfil Público',
+    privateProfileDesc: 'Solo los amigos pueden ver tus stories, planes y amigos',
+    publicProfileDesc: 'Todo el mundo puede ver tu perfil completo',
+    // GroupChat
+    joinPlanToAccess: 'Únete al plan para acceder al grupo y chatear.',
+    backBtn: '← Volver',
+    planUpdated: '✏️ Plan actualizado',
+    terminatedBanner: '❌ Terminado',
   },
 
   fr: {
@@ -949,6 +994,21 @@ export const translations = {
     ambassadorCtaTitle: 'Sois le premier dans ta ville !',
     ambassadorCtaDesc: 'Il n\'y a pas encore de plans à {city}. Deviens Vybt Ambassador et apporte le vibe dans ta région !',
     becomeAmbassador: 'Devenir Ambassador',
+    // Settings - Appearance & Privacy
+    appearance: 'Apparence',
+    switchToLight: 'Passer au thème clair',
+    switchToDark: 'Passer au thème sombre',
+    darkMode: 'Mode Sombre',
+    lightMode: 'Mode Clair',
+    privateProfile: 'Profil Privé',
+    publicProfile: 'Profil Public',
+    privateProfileDesc: 'Seuls tes amis voient tes stories, plans et amis',
+    publicProfileDesc: 'Tout le monde peut voir ton profil complet',
+    // GroupChat
+    joinPlanToAccess: 'Rejoins le plan pour accéder au groupe et discuter.',
+    backBtn: '← Retour',
+    planUpdated: '✏️ Plan mis à jour',
+    terminatedBanner: '❌ Terminé',
   },
 
   it: {
@@ -1184,6 +1244,21 @@ export const translations = {
     ambassadorCtaTitle: 'Sii il primo nella tua città!',
     ambassadorCtaDesc: 'Non ci sono ancora piani a {city}. Diventa Vybt Ambassador e porta il vibe nella tua area!',
     becomeAmbassador: 'Diventare Ambassador',
+    // Settings - Appearance & Privacy
+    appearance: 'Aspetto',
+    switchToLight: 'Passa al tema chiaro',
+    switchToDark: 'Passa al tema scuro',
+    darkMode: 'Modalità Scura',
+    lightMode: 'Modalità Chiara',
+    privateProfile: 'Profilo Privato',
+    publicProfile: 'Profilo Pubblico',
+    privateProfileDesc: 'Solo gli amici vedono le tue storie, piani e amici',
+    publicProfileDesc: 'Tutti possono vedere il tuo profilo completo',
+    // GroupChat
+    joinPlanToAccess: 'Unisciti al piano per accedere al gruppo e chattare.',
+    backBtn: '← Indietro',
+    planUpdated: '✏️ Piano aggiornato',
+    terminatedBanner: '❌ Terminato',
   },
 };
 
