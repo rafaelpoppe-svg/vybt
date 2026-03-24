@@ -10,7 +10,6 @@ import ChatMessage from '../components/chat/ChatMessage';
 import StickerPicker from '../components/chat/StickerPicker';
 import PartyTag from '../components/common/PartyTag';
 import { notifyNewDirectMessage } from '../components/notifications/NotificationTriggers';
-import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -35,7 +34,7 @@ export default function Chat() {
   const [showChatMenu, setShowChatMenu] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const messagesEndRef = useRef(null);
-  const keyboardHeight = useKeyboardHeight();
+
 
   useEffect(() => {
     const getUser = async () => {
@@ -161,7 +160,7 @@ export default function Chat() {
 
   useEffect(() => {
     setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
-  }, [sortedDMs.length, keyboardHeight]);
+  }, [sortedDMs.length]);
 
   const sendDMMutation = useMutation({
     mutationFn: async (content) => {
@@ -226,7 +225,7 @@ export default function Chat() {
   if (selectedFriendId) {
     return (
       <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" 
-        style={{ position: 'fixed', inset: 0}}
+        style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}
       >
         {/* Header */}
         <header className="flex-shrink-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-xl border-b border-gray-800/50 px-4 pb-3 flex items-center gap-3" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)' }}>
@@ -354,7 +353,7 @@ export default function Chat() {
         )}
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3" style={{ WebkitOverflowScrolling: 'touch', paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined  }}>
+        <div className="flex-1 overflow-y-auto px-3 py-4 pb-24 space-y-3" style={{ WebkitOverflowScrolling: 'touch' }}>
           {dmLoading ? (
             <div className="flex justify-center py-8">
               <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin" />
@@ -385,9 +384,7 @@ export default function Chat() {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="relative border-t border-gray-800/50 bg-[#0b0b0b]/90 backdrop-blur-xl"
-          style={{paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined }}
-        >
+        <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-gray-800/50 bg-[#0b0b0b]/90 backdrop-blur-xl">
           <StickerPicker
             isOpen={showStickers}
             onClose={() => setShowStickers(false)}

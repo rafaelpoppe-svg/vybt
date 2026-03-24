@@ -23,7 +23,6 @@ import {
 } from '../components/notifications/NotificationTriggers';
 import { useLanguage } from '../components/common/LanguageContext';
 import GroupChatBackground from '../components/chat/GroupChatBackground';
-import { useKeyboardHeight } from '../hooks/useKeyboardHeight';
 
 export default function GroupChat() {
   const navigate = useNavigate();
@@ -41,7 +40,7 @@ export default function GroupChat() {
   const [showHighlightModal, setShowHighlightModal] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const messagesEndRef = useRef(null);
-  const keyboardHeight = useKeyboardHeight();
+
 
   useEffect(() => {
     const getUser = async () => {
@@ -128,10 +127,10 @@ export default function GroupChat() {
     (a, b) => new Date(a.created_date) - new Date(b.created_date)
   );
 
-  // Auto-scroll when new messages arrive or keyboard opens
+  // Auto-scroll when new messages arrive
   useEffect(() => {
     setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
-  }, [sortedMessages.length, keyboardHeight]);
+  }, [sortedMessages.length]);
 
   // ── Plan Status ────────────────────────────────────────────────────────────
   const myParticipation = participants.find(p => p.user_id === currentUser?.id);
@@ -442,9 +441,7 @@ export default function GroupChat() {
       />
 
       {/* Stories Bar + Gallery Toggle */}
-      <div className="relative z-10 border-b border-gray-800/40 bg-black/30 backdrop-blur-sm"
-        style={{ marginBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined }}
-      >
+      <div className="relative z-10 border-b border-gray-800/40 bg-black/30 backdrop-blur-sm flex-shrink-0">
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex-1">
             <ChatStoryBar
@@ -467,7 +464,7 @@ export default function GroupChat() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto relative z-10 px-4 py-4" style={{ overscrollBehavior: 'contain', paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined }}>
+      <div className="flex-1 overflow-y-auto relative z-10 px-4 py-4 pb-24" style={{ overscrollBehavior: 'contain' }}>
         {messagesLoading ? (
           <div className="flex justify-center items-center h-full">
             <div
@@ -504,8 +501,8 @@ export default function GroupChat() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className="relative z-10 flex-shrink-0">
+      {/* Input — flutuante */}
+      <div className="absolute bottom-0 left-0 right-0 z-20">
         <GroupChatInput
           isChatLocked={isChatLocked}
           isPending={sendMutation.isPending}
