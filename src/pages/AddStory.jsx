@@ -112,7 +112,12 @@ export default function AddStory() {
         streamRef.current.getTracks().forEach(t => t.stop());
       }
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode, width: { ideal: 1080 }, height: { ideal: 1920 } },
+        video: {
+          facingMode,
+          width: { ideal: 1080 },
+          height: { ideal: 1920 },
+          aspectRatio: { ideal: 9 / 16 },
+        },
         audio: mode === 'video',
       });
       streamRef.current = stream;
