@@ -25,6 +25,8 @@ import { useNotifications } from '../components/notifications/NotificationProvid
 import HomeCommunitiesBar from '../components/home/HomeCommunitiesBar';
 import MyCommunitiesDrawer from '../components/home/MyCommunitiesDrawer';
 import HomeBottomFeed from '../components/home/HomeBottomFeed';
+import { usePullToRefresh } from '../hooks/usePullToRefresh';
+import PullRefreshIndicator from '../components/common/PullRefreshIndicator';
 
 
 export default function Home() {
@@ -266,6 +268,16 @@ export default function Home() {
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
 
+  const handleRefresh = useCallback(async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['plans', city] }),
+      queryClient.invalidateQueries({ queryKey: ['stories'] }),
+      queryClient.invalidateQueries({ queryKey: ['participants'] }),
+    ]);
+  }, [queryClient, city]);
+
+  const { containerRef: scrollRef, pullDistance, isRefreshing } = usePullToRefresh(handleRefresh);
+
   // City background map (only famous/capital cities)
   const CITY_BACKGROUNDS = {
     'Madrid': 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800&q=60',
@@ -370,6 +382,8 @@ export default function Home() {
 
       {/* Conteúdo scrollável */}
       <div
+        ref={scrollRef}
+        data-tab-scroll
         className="flex-1 overflow-y-auto scrollbar-hide"
         style={{
           position: 'relative',
@@ -379,6 +393,7 @@ export default function Home() {
           msOverflowStyle: 'none',
         }}
       >
+        <PullRefreshIndicator pullDistance={pullDistance} isRefreshing={isRefreshing} />
         {/* Map Controls: sort tabs + date/time + filter button */}
         <HomeMapControls
           activeSort={activeSort}
@@ -440,7 +455,7 @@ export default function Home() {
           onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
           onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
         />
-      </div>
+      </div> {/* end scrollable */}
 
       <BottomNav />
 

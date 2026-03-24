@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Home, Compass, PlusCircle, MessageCircle, User, Camera, X } from 'lucide-react';
+import { Home, Compass, PlusCircle, MessageCircle, User, Camera } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 import { useNotifications } from '../notifications/NotificationProvider';
+import { useTabHistory } from '@/lib/TabHistoryContext';
 
 // Labels are now dynamic via t(), defined inside component
 
@@ -14,6 +15,7 @@ export default function BottomNav() {
   const { t } = useLanguage();
   const { unreadDMCount } = useNotifications();
   const [showMenu, setShowMenu] = useState(false);
+  const { resetTab, saveScroll, getScroll } = useTabHistory();
 
   const tabs = [
     { name: 'Home',       icon: Home,          label: t.home },
@@ -23,18 +25,27 @@ export default function BottomNav() {
     { name: 'Profile',    icon: User,          label: t.profile },
   ];
 
-  const isActive = (pageName) => {
+  const isActive = useCallback((pageName) => {
     const path = location.pathname;
-    return path === `/${pageName}` || path.endsWith(`/${pageName}`);
-  };
+    return path === `/${pageName}` || path === '/' && pageName === 'Home' || path.endsWith(`/${pageName}`);
+  }, [location.pathname]);
 
-  const handleTabPress = (pageName) => {
-    if (isActive(pageName)) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleTabPress = useCallback((pageName) => {
+    const active = isActive(pageName);
+    if (active) {
+      // Scroll-to-top: find first scrollable container in main area
+      const scrollable = document.querySelector('[data-tab-scroll]');
+      if (scrollable) scrollable.scrollTo({ top: 0, behavior: 'smooth' });
+      else window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
+      // Save current scroll before leaving
+      const scrollable = document.querySelector('[data-tab-scroll]');
+      if (scrollable) saveScroll(location.pathname, scrollable.scrollTop);
+      // Reset the target tab's stack to its root
+      resetTab(pageName, `/${pageName}`);
       navigate(createPageUrl(pageName));
     }
-  };
+  }, [isActive, location.pathname, navigate, resetTab, saveScroll]);
 
   return (
     <>
@@ -100,7 +111,8 @@ export default function BottomNav() {
               whileTap={{ scale: 0.8, rotate: -3 }}
               whileHover={{ scale: 1.1 }}
               onClick={() => handleTabPress(name)}
-              className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-2xl relative"
+              className="flex flex-col items-center gap-0.5 rounded-2xl relative"
+              style={{ minWidth: 44, minHeight: 44, padding: '6px 10px' }}
             >
               {active && (
                 <motion.div

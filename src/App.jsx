@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import { ThemeProvider } from '@/lib/ThemeContext';
+import { TabHistoryProvider } from '@/lib/TabHistoryContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import AddStory from './pages/AddStory';
 import StoryView from './pages/StoryView';
@@ -75,7 +76,9 @@ function App() {
       <AuthProvider>
         <QueryClientProvider client={queryClientInstance}>
           <Router>
-            <AuthenticatedApp />
+            <TabHistoryProvider>
+              <AuthenticatedApp />
+            </TabHistoryProvider>
           </Router>
           <Toaster />
         </QueryClientProvider>
