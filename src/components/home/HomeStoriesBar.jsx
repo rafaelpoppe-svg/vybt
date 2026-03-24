@@ -42,11 +42,11 @@ function AddCircle({ happeningPlan, onClick }) {
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center"
           style={{
-            background: isHappening ? 'rgba(0,212,255,0.15)' : 'rgba(255,255,255,0.05)',
-            border: isHappening ? '2.5px solid #00d4ff' : '2.5px dashed #00c6d2',
+            background: isHappening ? 'rgba(0,212,255,0.15)' : 'rgba(255,255,255,0.08)',
+            border: isHappening ? '2.5px solid #00d4ff' : '2.5px dashed rgba(255,255,255,0.6)',
           }}
         >
-          {isHappening ? <Video className="w-6 h-6 text-[#00d4ff]" /> : <Plus className="w-6 h-6 text-[#00c6d2]" />}
+          {isHappening ? <Video className="w-6 h-6 text-[#00d4ff]" /> : <Plus className="w-6 h-6 text-white" />}
         </div>
       </div>
       <span className="text-[10px] text-gray-400 max-w-[64px] text-center leading-tight truncate">
