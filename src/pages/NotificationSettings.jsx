@@ -207,7 +207,10 @@ export default function NotificationSettings() {
             </div>
           ))}
 
-          <div className="flex items-start gap-3 p-3 rounded-xl bg-gray-900/50 border border-gray-800">
+          <div 
+            className="flex items-start gap-3 p-3 rounded-xl border border-gray-800"
+            style={{ background: 'var(--bg)', opacity: 0.5 }}
+          >
             <Bell className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-gray-500">
               Push notifications require device permission. Each notification appears only once — even when you're active in the app. Disable any category above to stop receiving that type.
