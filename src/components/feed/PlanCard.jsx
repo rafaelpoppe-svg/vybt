@@ -222,34 +222,35 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
 
       {/* Content */}
       <div className="p-4 space-y-3">
-        <h3 className="text-white font-bold text-lg line-clamp-1 tracking-tight">{plan.title}</h3>
+        <h3 className="font-bold text-lg line-clamp-1 tracking-tight" style={{ color: 'var(--text-primary)' }}>{plan.title}</h3>
         
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 text-gray-300 text-xs">
+            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs" style={{ background: 'var(--surface-2)', color: 'var(--text-secondary)' }}>
               <Calendar className="w-3 h-3 text-[#00c6d2]" />
               {format(new Date(plan.date), 'EEE, MMM d')}
             </span>
-            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 text-gray-300 text-xs">
+            <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs" style={{ background: 'var(--surface-2)', color: 'var(--text-secondary)' }}>
               <Clock className="w-3 h-3 text-[#00c6d2]" />
               {plan.time}
             </span>
           </div>
           
-          <div className="flex items-center gap-1.5 text-gray-400 text-xs">
+          <div className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-secondary)' }}>
             <MapPin className="w-3.5 h-3.5 text-[#00c6d2]/70 flex-shrink-0" />
             <span className="line-clamp-1">{plan.location_address}</span>
           </div>
         </div>
 
         {/* Participants */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/5">
+        <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: 'var(--border)' }}>
           <div className="flex items-center gap-2">
             <div className="flex -space-x-2">
               {participants.slice(0, 3).map((p, i) => (
                 <div 
                   key={i}
-                  className="w-6 h-6 rounded-full bg-gradient-to-br from-[#00c6d2]/30 to-[#542b9b]/30 border-2 border-gray-900 flex items-center justify-center"
+                  className="w-6 h-6 rounded-full bg-gradient-to-br from-[#00c6d2]/30 to-[#542b9b]/30 border-2 flex items-center justify-center"
+                  style={{ borderColor: 'var(--bg)' }}
                 >
                   <span className="text-[10px] text-white font-bold">
                     {p.display_name?.[0] || '?'}
@@ -262,7 +263,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
             </span>
           </div>
           
-          <div className="flex items-center gap-1 text-gray-600">
+          <div className="flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
             <Users className="w-3.5 h-3.5" />
             <span className="text-xs">{plan.view_count || 0}</span>
           </div>

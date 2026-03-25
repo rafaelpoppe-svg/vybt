@@ -142,13 +142,13 @@ export default function Profile() {
         <div className="w-10" />
         <div className="absolute left-0 right-0 flex flex-col items-center justify-center pointer-events-none">
           <div className="flex items-center gap-2">
-            <span className="text-white font-black text-xl tracking-tight">
+            <span className="font-black text-xl tracking-tight" style={{ color: 'var(--text-primary)' }}>
               {profile.username ? `@${profile.username}` : (profile.display_name || currentUser.full_name)}
             </span>
             {profile.is_verified && <ShieldCheck className="w-5 h-5 text-blue-400" />}
           </div>
           {profile.username && (
-            <span className="text-gray-500 text-xs">{profile.display_name || currentUser.full_name}</span>
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{profile.display_name || currentUser.full_name}</span>
           )}
         </div>
         <div className="flex items-center gap-1.5">
@@ -177,13 +177,13 @@ export default function Profile() {
               {coverPhoto ? (
                 <img src={coverPhoto} className="w-full h-full rounded-full object-cover border-2 border-[#0b0b0b]" />
               ) : (
-                <div className="w-full h-full rounded-full bg-gray-800 border-2 border-[#0b0b0b] flex items-center justify-center">
-                  <Camera className="w-7 h-7 text-gray-500" />
+                <div className="w-full h-full rounded-full flex items-center justify-center border-2" style={{ background: 'var(--surface)', borderColor: 'var(--bg)' }}>
+                  <Camera className="w-7 h-7" style={{ color: 'var(--text-muted)' }} />
                 </div>
               )}
             </div>
             {profile.is_verified && (
-              <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center border-2 border-[#0b0b0b]">
+              <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center border-2" style={{ borderColor: 'var(--bg)' }}>
                 <ShieldCheck className="w-2.5 h-2.5 text-white" />
               </div>
             )}
@@ -200,7 +200,7 @@ export default function Profile() {
         {/* Name + details */}
         <div className="mt-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-white font-bold text-base leading-tight">
+            <span className="font-bold text-base leading-tight" style={{ color: 'var(--text-primary)' }}>
               {profile.display_name || currentUser.full_name}
             </span>
             {age && <span className="text-sm font-bold" style={{ color: accent }}>{age}</span>}

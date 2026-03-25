@@ -223,7 +223,7 @@ export default function PlanDetails() {
 
   if (planLoading || !plan) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
@@ -235,7 +235,7 @@ export default function PlanDetails() {
   const declinedJoinRequest = myJoinRequests.find(r => r.plan_id === planId && r.status === 'declined');
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] pb-36">
+    <div className="min-h-screen pb-36" style={{ background: 'var(--bg)' }}>
       {/* Header Image */}
       <div className="relative h-64">
         {plan.cover_image ? (
@@ -248,7 +248,7 @@ export default function PlanDetails() {
             <span className="text-6xl">🎉</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
         
         {/* Back button */}
         <motion.button
@@ -309,7 +309,7 @@ export default function PlanDetails() {
       {/* Content */}
       <main className="px-4 pt-6 relative z-10 space-y-6">
         {/* Title */}
-        <h1 className="text-3xl font-bold text-white">{plan.title}</h1>
+        <h1 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>{plan.title}</h1>
 
         {/* Community badge */}
         {planCommunity && (
@@ -334,15 +334,15 @@ export default function PlanDetails() {
           className="space-y-3 p-4 rounded-xl"
           style={{ backgroundColor: `${themeColor}10`, borderLeft: `3px solid ${themeColor}` }}
         >
-          <div className="flex items-center gap-3 text-gray-300">
+          <div className="flex items-center gap-3" style={{ color: 'var(--text-secondary)' }}>
             <Calendar className="w-5 h-5" style={{ color: themeColor }} />
             <span>{format(new Date(plan.date), 'EEEE, MMMM d, yyyy')}</span>
           </div>
-          <div className="flex items-center gap-3 text-gray-300">
+          <div className="flex items-center gap-3" style={{ color: 'var(--text-secondary)' }}>
             <Clock className="w-5 h-5" style={{ color: themeColor }} />
             <span>{plan.time}{plan.end_time && ` - ${plan.end_time}`}</span>
           </div>
-          <div className="flex items-center gap-3 text-gray-300">
+          <div className="flex items-center gap-3" style={{ color: 'var(--text-secondary)' }}>
             <MapPin className="w-5 h-5" style={{ color: themeColor }} />
             <span>{plan.location_address}, {plan.city}</span>
           </div>
@@ -362,8 +362,8 @@ export default function PlanDetails() {
         {/* Description */}
         {plan.description && (
           <div>
-            <h3 className="text-white font-semibold mb-2">About</h3>
-            <p className="text-gray-400">{plan.description}</p>
+            <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>About</h3>
+            <p style={{ color: 'var(--text-secondary)' }}>{plan.description}</p>
           </div>
         )}
 
@@ -413,7 +413,7 @@ export default function PlanDetails() {
               Highlight this plan - €2.99
             </motion.button>
           ) : (
-            <div className="w-full py-3 rounded-xl bg-gray-900/50 border border-gray-800 flex items-center justify-center gap-2 text-gray-600 text-sm">
+            <div className="w-full py-3 rounded-xl border flex items-center justify-center gap-2 text-sm" style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
               <Flame className="w-4 h-4" />
               Highlight unlocks at 7 members ({participants.length}/7)
             </div>
@@ -424,7 +424,7 @@ export default function PlanDetails() {
         {isJoined && canJoinOrLeave && (() => {
           const myParticipation = participants.find(p => p.user_id === currentUser?.id);
           return myParticipation ? (
-            <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-900 border border-gray-800">
+            <div className="flex items-center justify-between py-3 px-4 rounded-xl border" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
               <AttendingToggle
                 participation={myParticipation}
                 planId={planId}
@@ -436,7 +436,7 @@ export default function PlanDetails() {
 
         {/* Participants */}
         <div>
-          <h3 className="text-white font-semibold flex items-center gap-2 mb-3">
+          <h3 className="font-semibold flex items-center gap-2 mb-3" style={{ color: 'var(--text-primary)' }}>
             <Users className="w-5 h-5" style={{ color: themeColor }} />
             {participants.length} Attending
           </h3>
@@ -450,7 +450,7 @@ export default function PlanDetails() {
         {/* Experience Stories */}
         {planStories.length > 0 && (
           <div>
-            <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+            <h3 className="font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
               <Camera className="w-5 h-5 text-[#542b9b]" />
               Experience Stories
             </h3>
@@ -474,14 +474,15 @@ export default function PlanDetails() {
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate(createPageUrl('AddStory') + `?planId=${planId}`)}
-            className="w-full py-3 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center gap-2 text-gray-400"
+            className="w-full py-3 rounded-xl border flex items-center justify-center gap-2"
+          style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-muted)' }}
           >
             <Camera className="w-5 h-5" />
             Share your experience
           </motion.button>
         )}
         {isJoined && isVoting && (
-          <div className="w-full py-3 rounded-xl bg-gray-900/50 border border-gray-800 flex items-center justify-center gap-2 text-gray-600 cursor-not-allowed">
+          <div className="w-full py-3 rounded-xl border flex items-center justify-center gap-2 cursor-not-allowed" style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
             <Camera className="w-5 h-5" />
             Stories unavailable during voting
           </div>
@@ -505,7 +506,7 @@ export default function PlanDetails() {
         {plan.status === 'terminated' && (
           <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-center">
             <p className="text-red-400 font-bold text-lg mb-1">❌ Plan Terminated</p>
-            <p className="text-gray-400 text-sm">
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
               This plan was terminated by the admin and will be deleted in 24 hours
             </p>
           </div>
@@ -514,13 +515,13 @@ export default function PlanDetails() {
 
       {/* Bottom Actions */}
       {plan.status !== 'terminated' && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 z-50 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/95 to-transparent" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)' }}>
+        <div className="fixed bottom-0 left-0 right-0 p-4 z-50" style={{ background: 'linear-gradient(to top, var(--bg) 60%, transparent)', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)' }}>
           <div className="flex gap-3">
             {isJoined && (
               <Button
                 onClick={() => navigate(createPageUrl('Chat') + `?planId=${planId}`)}
                 variant="outline"
-                className="flex-1 py-6 rounded-full border-gray-700 bg-gray-900 text-white hover:bg-gray-800"
+                className="flex-1 py-6 rounded-full border" style={{ background: 'var(--surface-2)', color: 'var(--text-primary)', borderColor: 'var(--border)' }}
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Group Chat
@@ -532,7 +533,7 @@ export default function PlanDetails() {
                 <Button
                   onClick={() => setShowLeaveModal(true)}
                   disabled={leaveMutation.isPending}
-                  className="flex-1 py-6 rounded-full bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-50"
+                  className="flex-1 py-6 rounded-full disabled:opacity-50" style={{ background: 'var(--surface-2)', color: 'var(--text-primary)' }}
                 >
                   {leaveMutation.isPending ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -548,13 +549,13 @@ export default function PlanDetails() {
                 pendingJoinRequest || joinRequestSent ? (
                   <Button
                     disabled
-                    className="flex-1 py-6 rounded-full bg-gray-800 text-gray-400 cursor-not-allowed"
+                    className="flex-1 py-6 rounded-full cursor-not-allowed" style={{ background: 'var(--surface-2)', color: 'var(--text-muted)' }}
                   >
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                     Request Pending...
                   </Button>
                 ) : declinedJoinRequest ? (
-                  <Button disabled className="flex-1 py-6 rounded-full bg-gray-900 text-red-400 border border-red-500/30 cursor-not-allowed">
+                  <Button disabled className="flex-1 py-6 rounded-full text-red-400 border border-red-500/30 cursor-not-allowed" style={{ background: 'var(--surface)' }}>
                     ❌ Request Declined
                   </Button>
                 ) : (
