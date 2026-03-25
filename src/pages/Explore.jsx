@@ -204,14 +204,25 @@ export default function Explore() {
   else filteredPlans = mostMembersPlans;
 
   // Filter users
+  // When searching: global search (all users, any city)
+  // When not searching: only users in same city (area)
+  const isSearchingUsers = activeView === 'users' && search.trim().length > 0;
+  const searchTerm = search.replace(/^@/, '').toLowerCase().trim();
+
   let filteredUsers = userProfiles.filter(profile => {
     if (profile.user_id === currentUser?.id) return false;
     if (friendIds.includes(profile.user_id)) return false;
+
+    if (isSearchingUsers) {
+      // Global search by username or display name
+      return profile.display_name?.toLowerCase().includes(searchTerm) ||
+        (profile.username && profile.username.toLowerCase().includes(searchTerm));
+    }
+
+    // No search: restrict to user's area
     if (!userCity) return false;
     if (profile.city?.toLowerCase() !== userCity) return false;
-    const searchTerm = search.replace(/^@/, '').toLowerCase();
-    const matchesSearch = profile.display_name?.toLowerCase().includes(searchTerm) ||
-      (profile.username && profile.username.toLowerCase().includes(searchTerm));
+
     let matchesFilters = true;
     if (userFilters.gender) {
       matchesFilters = profile.gender === userFilters.gender;
@@ -219,10 +230,10 @@ export default function Explore() {
     if (userFilters.vibes?.length > 0) {
       matchesFilters = matchesFilters && profile.vibes?.some(v => userFilters.vibes.includes(v));
     }
-    return matchesSearch && matchesFilters;
+    return matchesFilters;
   });
 
-  if (userFilters.sortBy === 'foryou' && myProfile?.vibes) {
+  if (!isSearchingUsers && userFilters.sortBy === 'foryou' && myProfile?.vibes) {
     filteredUsers = filteredUsers.sort((a, b) => {
       const aMatches = a.vibes?.filter(v => myProfile.vibes.includes(v)).length || 0;
       const bMatches = b.vibes?.filter(v => myProfile.vibes.includes(v)).length || 0;
@@ -623,6 +634,13 @@ export default function Explore() {
               )
             ) : (
               filteredUsers.length > 0 ? (
+                <div>
+                  {/* Contextual label */}
+                  <p className="text-xs text-gray-500 mb-3 px-1">
+                    {isSearchingUsers
+                      ? `🔍 Search results for "${search}"`
+                      : `📍 Users in your area${userCity ? ` · ${userCity}` : ''}`}
+                  </p>
                 <div className="grid grid-cols-2 gap-3">
                   {filteredUsers.map((profile) => {
                     const isFriend = friendIds.includes(profile.user_id);
@@ -640,6 +658,7 @@ export default function Explore() {
                       />
                     );
                   })}
+                </div>
                 </div>
               ) : (
                 <div className="text-center py-16 space-y-3">
