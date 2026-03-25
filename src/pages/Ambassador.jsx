@@ -130,7 +130,10 @@ export default function Ambassador() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+      <div 
+        className="min-h-screen flex items-center justify-center"
+        style={{background: 'var(--bg)'}}
+      >
         <div className="w-8 h-8 border-2 border-[#542b9b] border-t-transparent rounded-full animate-spin" />
       </div>
     );
