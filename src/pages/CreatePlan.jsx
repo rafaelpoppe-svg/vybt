@@ -755,9 +755,15 @@ export default function CreatePlan() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] flex flex-col">
+    <div 
+      className="min-h-screen flex flex-col"
+      style={{background: 'var(--bg)'}}
+    >
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4">
+      <header 
+        className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4"
+        style={{background: 'var(--bg)', opacity: 0.95}}
+      >
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={goBack}
@@ -804,7 +810,7 @@ export default function CreatePlan() {
       </div>
 
       {/* Next / Create Button */}
-      <div className="flex-shrink-0 p-6 border-t border-gray-900 bg-[#0b0b0b]" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+      <div className="flex-shrink-0 p-6 border-t border-gray-900" style={{background: 'var(--bg)', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={step < 7 ? goNext : handleSubmit}
