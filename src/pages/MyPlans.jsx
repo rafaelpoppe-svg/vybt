@@ -61,9 +61,15 @@ export default function MyPlans() {
   const isLoading = participationsLoading || plansLoading;
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b]">
+    <div 
+      className="min-h-screen"
+      style={{background: 'var(--bg)'}}
+    >
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4">
+      <header 
+        className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4"
+        style={{background: 'var(--bg)', opacity: 0.95}}
+      >
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)}
