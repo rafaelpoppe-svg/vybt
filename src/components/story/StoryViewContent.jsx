@@ -477,7 +477,10 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
 
   if (isLoading || !story) {
     return (
-      <div className="fixed inset-0 bg-[#0b0b0b] flex items-center justify-center z-50">
+      <div 
+        className="fixed inset-0 flex items-center justify-center z-50"
+        style={{background: 'var(--bg)'}}
+      >
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
