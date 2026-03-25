@@ -67,15 +67,15 @@ export default function PhotoUploadStep({ photos, onChange }) {
         <div className="w-16 h-16 rounded-full bg-[#00c6d2]/20 flex items-center justify-center mx-auto mb-4">
           <Camera className="w-8 h-8 text-[#00c6d2]" />
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">{t.addYourPhotos}</h2>
-        <p className="text-gray-400">{t.photosSubtitle}</p>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t.addYourPhotos}</h2>
+        <p style={{ color: 'var(--text-secondary)' }}>{t.photosSubtitle}</p>
       </div>
 
       <div className="flex gap-3 justify-center mb-4">
         {[0, 1, 2].map((i) => (
           <label key={i} className="relative">
             <div className={`${i === 0 ? 'w-32 h-32' : 'w-24 h-24'} rounded-xl overflow-hidden cursor-pointer ${
-              (photos[i] || previews[i]) ? '' : 'bg-gray-800 border-2 border-dashed border-gray-700'
+              (photos[i] || previews[i]) ? '' : 'border-2 border-dashed'
             }`}>
               {(photos[i] || previews[i]) ? (
                 <>
@@ -118,7 +118,7 @@ export default function PhotoUploadStep({ photos, onChange }) {
               onChange={(e) => handlePhotoUpload(e, i)} 
               className="hidden" 
             />
-            <span className="text-[10px] text-gray-500 absolute -bottom-5 left-0 right-0 text-center">
+            <span className="text-[10px] absolute -bottom-5 left-0 right-0 text-center" style={{ color: 'var(--text-muted)' }}>
               {i === 0 ? t.mainPhoto : `${t.photo} ${i + 1}`}
             </span>
           </label>

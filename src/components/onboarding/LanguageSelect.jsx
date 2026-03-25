@@ -8,10 +8,10 @@ export default function LanguageSelect({ selected, onSelect }) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-white mb-2">
+        <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
           {translations[selected]?.chooseLanguage || translations.en.chooseLanguage}
         </h2>
-        <p className="text-gray-400">
+        <p style={{ color: 'var(--text-secondary)' }}>
           {translations[selected]?.languageSubtitle || translations.en.languageSubtitle}
         </p>
       </div>
@@ -26,10 +26,9 @@ export default function LanguageSelect({ selected, onSelect }) {
               whileTap={{ scale: 0.97 }}
               onClick={() => onSelect(lang)}
               className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl border transition-all ${
-                isSelected
-                  ? 'bg-[#00fea3]/10 border-[#00fea3] text-white'
-                  : 'bg-gray-900/50 border-gray-800 text-gray-300'
+                isSelected ? 'bg-[#00fea3]/10 border-[#00fea3]' : ''
               }`}
+              style={!isSelected ? { background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-secondary)' } : { color: 'var(--text-primary)' }}
             >
               <span className="text-3xl">{info.flag}</span>
               <span className="text-lg font-semibold">{info.name}</span>

@@ -28,18 +28,18 @@ export default function WelcomeComplete({ onExplore }) {
       </motion.div>
 
       <div>
-        <h1 className="text-4xl font-bold text-white mb-3">{t.welcomeTitle}</h1>
+        <h1 className="text-4xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>{t.welcomeTitle}</h1>
         <p className="text-xl text-[#00c6d2] font-medium">{t.accountReady}</p>
       </div>
 
       <div className="space-y-4 max-w-xs mx-auto">
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-gray-900/50 border border-gray-800">
+        <div className="flex items-center gap-3 p-4 rounded-xl border" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
           <Sparkles className="w-6 h-6 text-[#00c6d2]" />
-          <span className="text-gray-300">{t.searchPlansTonight}</span>
+          <span style={{ color: 'var(--text-secondary)' }}>{t.searchPlansTonight}</span>
         </div>
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-gray-900/50 border border-gray-800">
+        <div className="flex items-center gap-3 p-4 rounded-xl border" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
           <MapPin className="w-6 h-6 text-[#542b9b]" />
-          <span className="text-gray-300">{t.explorePlansLocation}</span>
+          <span style={{ color: 'var(--text-secondary)' }}>{t.explorePlansLocation}</span>
         </div>
       </div>
 

@@ -59,8 +59,8 @@ export default function DateOfBirthSelect({ value, onChange }) {
         <div className="w-16 h-16 rounded-full bg-[#00fea3]/20 flex items-center justify-center mx-auto mb-4">
           <Calendar className="w-8 h-8 text-[#00fea3]" />
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">{t.whatsYourBirthday}</h2>
-        <p className="text-gray-400">{t.birthdaySubtitle}</p>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t.whatsYourBirthday}</h2>
+        <p style={{ color: 'var(--text-secondary)' }}>{t.birthdaySubtitle}</p>
       </div>
 
       <div className="space-y-4">
@@ -70,7 +70,8 @@ export default function DateOfBirthSelect({ value, onChange }) {
           onChange={handleDateChange}
           max={maxDateString}
           min={minDateString}
-          className="bg-gray-900 border-gray-800 text-white text-lg py-6 text-center"
+          className="text-lg py-6 text-center border"
+          style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
         />
 
         {error && (

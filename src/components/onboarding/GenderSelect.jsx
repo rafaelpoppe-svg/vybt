@@ -16,8 +16,8 @@ export default function GenderSelect({ selected, onSelect }) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">{t.whatsYourGender}</h2>
-        <p className="text-gray-400 text-sm">{t.genderSubtitle}</p>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t.whatsYourGender}</h2>
+        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t.genderSubtitle}</p>
       </div>
       
       <div className="grid grid-cols-3 gap-4">
@@ -28,15 +28,12 @@ export default function GenderSelect({ selected, onSelect }) {
             whileTap={{ scale: 0.98 }}
             onClick={() => onSelect(option.id)}
             className={`p-6 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center ${
-              selected === option.id
-                ? 'border-[#00fea3] bg-[#00fea3]/10'
-                : 'border-gray-700 bg-gray-900/50 hover:border-gray-600'
+              selected === option.id ? 'border-[#00fea3] bg-[#00fea3]/10' : ''
             }`}
-          >
-            <div className="text-4xl mb-3">{option.icon}</div>
-            <span className={`font-medium ${
-              selected === option.id ? 'text-[#00fea3]' : 'text-white'
-            }`}>
+            style={selected !== option.id ? { borderColor: 'var(--border)', background: 'var(--surface)' } : {}}
+            >
+              <div className="text-4xl mb-3">{option.icon}</div>
+              <span className={`font-medium ${selected === option.id ? 'text-[#00fea3]' : ''}`} style={selected !== option.id ? { color: 'var(--text-primary)' } : {}}>
               {labels[option.id]}
             </span>
           </motion.button>

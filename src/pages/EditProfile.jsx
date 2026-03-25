@@ -18,13 +18,14 @@ function PartyTypeFilterList({ allTypes, selected, onToggle }) {
   return (
     <div>
       <div className="relative mb-3">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search party types..."
-          className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
+          className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-[#00c6d2] border"
+          style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
         />
       </div>
       <div className="flex flex-wrap gap-2">
@@ -268,7 +269,7 @@ export default function EditProfile() {
                   onChange={(e) => handlePhotoUpload(e, i)} 
                   className="hidden" 
                 />
-                <span className="text-[10px] text-gray-500 absolute -bottom-4 left-0 right-0 text-center">
+                <span className="text-[10px] absolute -bottom-4 left-0 right-0 text-center" style={{ color: 'var(--text-muted)' }}>
                   {i === 0 ? '📸 Main' : `Photo ${i + 1}`}
                 </span>
               </label>
@@ -396,12 +397,12 @@ export default function EditProfile() {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-sm" style={{ color: 'var(--text-secondary)' }}>Your Vibes (max 5)</label>
-            <span className={`text-xs font-medium ${formData.vibes.length >= 5 ? 'text-[#00c6d2]' : 'text-gray-500'}`}>
+            <span className={`text-xs font-medium ${formData.vibes.length >= 5 ? 'text-[#00c6d2]' : ''}`} style={formData.vibes.length < 5 ? { color: 'var(--text-muted)' } : {}}>
               {formData.vibes.length}/5
             </span>
           </div>
           <div className="relative mb-3">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
             <input
               type="text"
               placeholder="Search vibes..."
@@ -409,7 +410,8 @@ export default function EditProfile() {
                 const val = e.target.value.toLowerCase();
                 setVibeSearch(val);
               }}
-              className="w-full pl-9 pr-4 py-2.5 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-[#00c6d2] border"
+              style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
             />
           </div>
           {formData.vibes.length >= 5 && (
@@ -433,7 +435,7 @@ export default function EditProfile() {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-sm" style={{ color: 'var(--text-secondary)' }}>Preferred Party Types</label>
-            <span className={`text-xs font-medium ${formData.party_types.length >= 5 ? 'text-[#00c6d2]' : 'text-gray-500'}`}>
+            <span className={`text-xs font-medium ${formData.party_types.length >= 5 ? 'text-[#00c6d2]' : ''}`} style={formData.party_types.length < 5 ? { color: 'var(--text-muted)' } : {}}>
               {formData.party_types.length}/5
             </span>
           </div>
