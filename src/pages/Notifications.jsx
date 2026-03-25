@@ -475,7 +475,7 @@ export default function Notifications() {
 
       {/* ── Header ── */}
       <header className="flex-shrink-0 bg-[#0b0b0b] px-4 pb-2"
-        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
+        style={{ background: 'var(--bg)', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(createPageUrl('Home'))}
