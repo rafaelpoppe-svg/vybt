@@ -469,8 +469,8 @@ export default function Notifications() {
 
   return (
     <div
-      className="bg-[#0b0b0b] overflow-hidden flex flex-col"
-      style={{ position: 'fixed', inset: 0 }}
+      className="overflow-hidden flex flex-col"
+      style={{ background: 'var(--bg)', position: 'fixed', inset: 0 }}
     >
 
       {/* ── Header ── */}
