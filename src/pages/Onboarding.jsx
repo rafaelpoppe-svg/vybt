@@ -37,6 +37,7 @@ function OnboardingInner() {
   const [detectingCity, setDetectingCity] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
   const [createdProfile, setCreatedProfile] = useState(null);
+  const [usernameAvailable, setUsernameAvailable] = useState(null);
 
   const detectLocation = () => {
     if (!navigator.geolocation) return;
@@ -83,7 +84,7 @@ function OnboardingInner() {
     switch(step) {
       case 0: return data.language !== '';
       case 1: return data.display_name.trim().length >= 2;
-      case 2: return /^[a-z0-9_.]{3,24}$/.test(data.username); // username valid & available checked in component
+      case 2: return /^[a-z0-9_.]{3,24}$/.test(data.username) && usernameAvailable === true;
       case 3: return data.gender !== '';
       case 4: return data.date_of_birth !== '';
       case 5: return data.photos.length > 0;
@@ -157,7 +158,8 @@ function OnboardingInner() {
     />,
     <UsernameSelect
       value={data.username}
-      onChange={(username) => setData({...data, username})}
+      onChange={(username) => { setData({...data, username}); setUsernameAvailable(null); }}
+      onAvailabilityChange={setUsernameAvailable}
     />,
     <GenderSelect 
       selected={data.gender} 

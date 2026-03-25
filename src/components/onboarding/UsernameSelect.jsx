@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { AtSign, Check, X, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
-export default function UsernameSelect({ value, onChange }) {
+export default function UsernameSelect({ value, onChange, onAvailabilityChange }) {
   const [checking, setChecking] = useState(false);
   const [available, setAvailable] = useState(null); // null | true | false
 
@@ -13,17 +13,25 @@ export default function UsernameSelect({ value, onChange }) {
     const sanitized = sanitize(raw);
     onChange(sanitized);
     setAvailable(null);
+    onAvailabilityChange?.(null);
   };
 
   useEffect(() => {
-    if (value.length < 3) { setAvailable(null); return; }
+    if (value.length < 3) {
+      setAvailable(null);
+      onAvailabilityChange?.(null);
+      return;
+    }
     const timer = setTimeout(async () => {
       setChecking(true);
       try {
         const existing = await base44.entities.UserProfile.filter({ username: value });
-        setAvailable(existing.length === 0);
+        const isAvailable = existing.length === 0;
+        setAvailable(isAvailable);
+        onAvailabilityChange?.(isAvailable);
       } catch (_) {
         setAvailable(null);
+        onAvailabilityChange?.(null);
       }
       setChecking(false);
     }, 600);
