@@ -137,9 +137,15 @@ export default function Ambassador() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] pb-10">
+    <div 
+      className="min-h-screen pb-10"
+      style={{background: 'var(--bg)'}}
+    >
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 px-5 py-4 flex items-center gap-3">
+      <div 
+        className="sticky top-0 z-10 backdrop-blur-lg border-b border-gray-800 px-5 py-4 flex items-center gap-3"
+        style={{background: 'var(--bg)', opacity: 0.95}}
+      >
         <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)}>
           <ChevronLeft className="w-6 h-6 text-white" />
         </motion.button>
