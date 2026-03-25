@@ -411,7 +411,7 @@ export default function GroupChat() {
 
   if (currentUser && participantsLoaded && !isMember) {
     return (
-      <div className="flex flex-col items-center justify-center bg-[#0b0b0b] text-center px-6 gap-6" style={{ height: '100dvh' }}>
+      <div className="flex flex-col items-center justify-center text-center px-6 gap-6" style={{background: 'var(--bg)', height: '100dvh' }}>
         <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0"
           style={{ background: `linear-gradient(135deg, ${plan?.theme_color || '#00c6d2'}60, #542b9b60)` }}>
           {plan?.cover_image
@@ -441,8 +441,8 @@ export default function GroupChat() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col bg-[#0b0b0b] overflow-hidden" 
-      style={{ position: 'fixed', inset: 0 }}
+    <div className="flex flex-col overflow-hidden" 
+      style={{ position: 'fixed', inset: 0, background: 'var(--bg)' }}
     >
 
       {/* Chat background theme (emojis) */}
@@ -631,7 +631,10 @@ export default function GroupChat() {
 
       {/* Gallery Modal */}
       {showGallery && (
-        <div className="fixed inset-0 z-50 bg-[#0b0b0b] overflow-hidden">
+        <div 
+          className="fixed inset-0 z-50 overflow-hidden"
+          style={{background: 'var(--bg)'}}
+        >
           <GroupChatGalleryTab
             stories={stories}
             profilesMap={profilesMap}
