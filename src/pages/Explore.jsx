@@ -290,11 +290,11 @@ export default function Explore() {
 
   return (
     <div
-      className="bg-[#0b0b0b] overflow-hidden flex flex-col"
-      style={{ position: 'fixed', inset: 0 }}
+      className="overflow-hidden flex flex-col"
+      style={{ position: 'fixed', inset: 0, background: 'var(--bg)' }}
     >
       {/* Header */}
-      <header className="flex-shrink-0 z-40 backdrop-blur-lg border-b border-gray-800/60 px-4 pt-3 pb-0" style={{ background: 'linear-gradient(180deg, #0b0b0b 60%, rgba(11,11,11,0.92) 100%)' }}>
+      <header className="flex-shrink-0 z-40 backdrop-blur-lg border-b px-4 pt-3 pb-0" style={{ background: 'var(--header-bg)', borderColor: 'var(--border)' }}>
         {/* Title row */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -303,7 +303,7 @@ export default function Explore() {
               transition={{ repeat: Infinity, repeatDelay: 4, duration: 0.6 }}
               className="text-xl"
             >🔍</motion.span>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">{t.explore}</h1>
+            <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{t.explore}</h1>
             {activeView === 'plans' && filteredPlans.length > 0 && (
               <motion.span
                 key={filteredPlans.length}
@@ -319,7 +319,8 @@ export default function Explore() {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setShowFilters(!showFilters)}
-              className={`relative p-2.5 rounded-xl transition-all ${showFilters ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400 border border-gray-800'}`}
+              className={`relative p-2.5 rounded-xl transition-all ${showFilters ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'border'}`}
+          style={showFilters ? {} : { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' }}
             >
               <Filter className="w-4 h-4" />
               {showFilters && (
@@ -333,7 +334,7 @@ export default function Explore() {
         </div>
 
         {/* View Toggle — pill style */}
-        <div className="relative flex bg-gray-900 rounded-2xl p-1 mb-3">
+        <div className="relative flex rounded-2xl p-1 mb-3" style={{ background: 'var(--surface)' }}>
           <motion.div
             className="absolute top-1 bottom-1 rounded-xl"
             style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}
@@ -365,7 +366,8 @@ export default function Explore() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={activeView === 'plans' ? t.searchPlans : 'Search by @username or name...'}
-            className="pl-9 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500 rounded-xl h-10"
+            className="pl-9 rounded-xl h-10"
+            style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
           />
           {search && (
             <motion.button
@@ -405,8 +407,9 @@ export default function Explore() {
                 whileTap={{ scale: 0.92 }}
                 onClick={() => setPlanFilters({ ...planFilters, sortBy: key })}
                 className={`relative flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border transition-all flex-shrink-0 ${
-                  planFilters.sortBy === key ? activeClass : 'bg-gray-900 text-gray-400 border-gray-800'
+                  planFilters.sortBy === key ? activeClass : ''
                 }`}
+                style={planFilters.sortBy !== key ? { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' } : {}}
               >
                 {key === 'livenow' && planFilters.sortBy === key && (
                   <motion.span
@@ -433,8 +436,9 @@ export default function Explore() {
               whileTap={{ scale: 0.92 }}
               onClick={() => setSelectedTag('All')}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border flex-shrink-0 transition-all ${
-                selectedTag === 'All' ? 'bg-[#00c6d2] text-[#0b0b0b] border-[#00c6d2]' : 'bg-gray-900 text-gray-400 border-gray-800'
+                selectedTag === 'All' ? 'bg-[#00c6d2] text-[#0b0b0b] border-[#00c6d2]' : ''
               }`}
+            style={selectedTag !== 'All' ? { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' } : {}}
             >
               {t.allTag}
             </motion.button>
@@ -457,11 +461,12 @@ export default function Explore() {
                 key={key}
                 whileTap={{ scale: 0.93 }}
                 onClick={() => setUserSubTab(key)}
-                className={`relative flex-1 py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-1.5 transition-all ${
+                className={`relative flex-1 py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-1.5 transition-all border ${
                   userSubTab === key
-                    ? 'bg-gradient-to-r from-[#00c6d2]/25 to-[#542b9b]/25 text-[#00c6d2] border border-[#00c6d2]/30'
-                    : 'bg-gray-900 text-gray-400 border border-gray-800'
+                    ? 'bg-gradient-to-r from-[#00c6d2]/25 to-[#542b9b]/25 text-[#00c6d2] border-[#00c6d2]/30'
+                    : ''
                 }`}
+                style={userSubTab !== key ? { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' } : {}}
               >
                 <span>{emoji}</span> {label}
                 {badge > 0 && (
@@ -514,8 +519,8 @@ export default function Explore() {
             ) : !userCity ? (
               <div className="text-center py-20 space-y-4 px-6">
                 <div className="text-5xl">📍</div>
-                <p className="text-white font-semibold text-lg">Set your city first</p>
-                <p className="text-gray-400 text-sm">To see plans, people and communities near you, add your city to your profile.</p>
+                <p className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>Set your city first</p>
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>To see plans, people and communities near you, add your city to your profile.</p>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate(createPageUrl('EditProfile'))}

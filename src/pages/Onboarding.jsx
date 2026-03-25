@@ -184,8 +184,8 @@ function OnboardingInner() {
     // Location step
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-white mb-2">{t.whereAreYou}</h2>
-        <p className="text-gray-400">{t.locationSubtitle}</p>
+        <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t.whereAreYou}</h2>
+        <p style={{ color: 'var(--text-secondary)' }}>{t.locationSubtitle}</p>
       </div>
       <button
         type="button"
@@ -199,11 +199,11 @@ function OnboardingInner() {
           <Navigation className="w-6 h-6 text-[#00c6d2] flex-shrink-0" />
         )}
         <div>
-          <p className="text-white font-semibold">
+          <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
             {detectingCity ? t.detecting : data.city ? data.city : t.useMyLocation}
           </p>
           {!detectingCity && !data.city && (
-            <p className="text-gray-500 text-sm mt-0.5">{t.tapToDetect}</p>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.tapToDetect}</p>
           )}
         </div>
       </button>
@@ -225,16 +225,17 @@ function OnboardingInner() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
       {/* Header */}
       <div className="p-6 flex items-center justify-between">
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => step > 0 && setStep(step - 1)}
-          className={`p-2 rounded-full ${step === 0 ? 'opacity-0' : 'bg-gray-900'}`}
+          className={`p-2 rounded-full ${step === 0 ? 'opacity-0' : ''}`}
+          style={step === 0 ? {} : { background: 'var(--surface)' }}
           disabled={step === 0}
         >
-          <ChevronLeft className="w-6 h-6 text-white" />
+          <ChevronLeft className="w-6 h-6" style={{ color: 'var(--text-primary)' }} />
         </motion.button>
         
         <div className="flex-1 flex justify-center">
@@ -281,8 +282,8 @@ function OnboardingInner() {
                   <ShieldCheck className="w-12 h-12 text-blue-400" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-white mb-2">Verify your profile</h2>
-                  <p className="text-gray-400">Take a live selfie to get a <span className="text-blue-400 font-semibold">blue verified badge</span> and build trust with other users.</p>
+                  <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Verify your profile</h2>
+                  <p style={{ color: 'var(--text-secondary)' }}>Take a live selfie to get a <span className="text-blue-400 font-semibold">blue verified badge</span> and build trust with other users.</p>
                 </div>
                 <motion.button
                   whileTap={{ scale: 0.97 }}
@@ -295,7 +296,8 @@ function OnboardingInner() {
                 </motion.button>
                 <button
                   onClick={skipToHome}
-                  className="w-full py-3 text-gray-500 text-sm hover:text-gray-300 transition-colors"
+                  className="w-full py-3 text-sm transition-colors"
+                  style={{ color: 'var(--text-muted)' }}
                 >
                   Skip for now
                 </button>
@@ -309,7 +311,7 @@ function OnboardingInner() {
 
       {/* Footer Button */}
       {step < 10 && (
-        <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
+        <div className="fixed bottom-0 left-0 right-0 p-6" style={{ background: 'linear-gradient(to top, var(--bg) 60%, transparent)' }}>
           <motion.button
             whileHover={{ scale: canProceed() ? 1.02 : 1 }}
             whileTap={{ scale: canProceed() ? 0.98 : 1 }}
@@ -318,8 +320,9 @@ function OnboardingInner() {
             className={`w-full py-4 rounded-full font-bold text-lg flex items-center justify-center gap-2 transition-all ${
               canProceed()
                 ? 'bg-[#00c6d2] text-[#0b0b0b]'
-                : 'bg-gray-800 text-gray-500'
+                : ''
             }`}
+            style={canProceed() ? {} : { background: 'var(--surface-2)', color: 'var(--text-muted)' }}
           >
             {t.continue}
             <ChevronRight className="w-5 h-5" />

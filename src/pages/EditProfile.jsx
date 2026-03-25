@@ -203,35 +203,36 @@ export default function EditProfile() {
 
   if (isLoading || !profile) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b]">
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4">
+      <header className="sticky top-0 z-40 backdrop-blur-lg border-b p-4 flex items-center gap-4" style={{ background: 'var(--header-bg)', borderColor: 'var(--border)' }}>
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)}
-          className="p-2 rounded-full bg-gray-900"
+          className="p-2 rounded-full"
+          style={{ background: 'var(--surface-2)' }}
         >
-          <ChevronLeft className="w-5 h-5 text-white" />
+          <ChevronLeft className="w-5 h-5" style={{ color: 'var(--text-primary)' }} />
         </motion.button>
-        <h1 className="text-xl font-bold text-white">Edit Profile</h1>
+        <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Edit Profile</h1>
       </header>
 
       <main className="p-4 pb-32 space-y-6">
         {/* Photos */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Photos (max 5) — 1st is profile picture</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Photos (max 5) — 1st is profile picture</label>
           <div className="flex gap-3 flex-wrap">
             {[0, 1, 2, 3, 4].map((i) => (
               <label key={i} className="relative" style={{ marginBottom: '1.25rem' }}>
                 <div className={`${i === 0 ? 'w-28 h-28' : 'w-[72px] h-[72px]'} rounded-xl overflow-hidden cursor-pointer ${
-                  formData.photos[i] ? '' : 'bg-gray-800 border-2 border-dashed border-gray-700'
+                  formData.photos[i] ? '' : 'border-2 border-dashed'
                 }`}>
                   {formData.photos[i] ? (
                     <>
@@ -277,9 +278,9 @@ export default function EditProfile() {
 
         {/* Username */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Username</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Username</label>
           <div className="relative">
-            <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
             <Input
               value={formData.username}
               onChange={(e) => {
@@ -290,7 +291,8 @@ export default function EditProfile() {
               placeholder="yourname"
               autoCapitalize="none"
               autoCorrect="off"
-              className="bg-gray-900 border-gray-800 text-white pl-9 pr-9"
+              className="pl-9 pr-9"
+              style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
               {checkingUsername && <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />}
@@ -307,40 +309,41 @@ export default function EditProfile() {
 
         {/* Display Name */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Display Name</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Display Name</label>
           <Input
             value={formData.display_name}
             onChange={(e) => setFormData({ ...formData, display_name: e.target.value })}
             placeholder="Your name"
-            className="bg-gray-900 border-gray-800 text-white"
+            style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
           />
         </div>
 
         {/* Bio */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Bio</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Bio</label>
           <Textarea
             value={formData.bio}
             onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
             placeholder="Tell others about yourself..."
-            className="bg-gray-900 border-gray-800 text-white min-h-20"
+            className="min-h-20"
+            style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
             maxLength={70}
           />
-          <p className="text-xs text-gray-500 mt-1 text-right">{formData.bio.length}/70</p>
+          <p className="text-xs mt-1 text-right" style={{ color: 'var(--text-muted)' }}>{formData.bio.length}/70</p>
         </div>
 
         {/* Date of Birth */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Date of Birth</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Date of Birth</label>
           <Input
             type="date"
             value={formData.date_of_birth}
             onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
-            className="bg-gray-900 border-gray-800 text-white"
+            style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
             max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
           />
           {formData.date_of_birth && (
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
               Age: {Math.floor((new Date() - new Date(formData.date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000))} years old
             </p>
           )}
@@ -348,12 +351,13 @@ export default function EditProfile() {
 
         {/* City / Location */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Your Location</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Your Location</label>
           <button
             type="button"
             onClick={detectLocation}
             disabled={detectingLocation}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-left disabled:opacity-50"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left disabled:opacity-50 border"
+            style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
           >
             {detectingLocation ? (
               <Loader2 className="w-5 h-5 text-[#00c6d2] animate-spin flex-shrink-0" />
@@ -364,10 +368,10 @@ export default function EditProfile() {
               {formData.city ? (
                 <div className="flex items-center gap-2">
                   <MapPin className="w-3.5 h-3.5 text-[#00c6d2]" />
-                  <span className="text-white text-sm font-medium truncate">{formData.city}</span>
+                  <span className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>{formData.city}</span>
                 </div>
               ) : (
-                <span className="text-gray-500 text-sm">
+                <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
                   {detectingLocation ? 'Detecting your location...' : 'Tap to use current location'}
                 </span>
               )}
@@ -377,7 +381,7 @@ export default function EditProfile() {
 
         {/* Radius */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Search Radius: {formData.radius_km}km</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Search Radius: {formData.radius_km}km</label>
           <input
             type="range"
             min="5"
@@ -391,7 +395,7 @@ export default function EditProfile() {
         {/* Vibes */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-gray-400 text-sm">Your Vibes (max 5)</label>
+            <label className="text-sm" style={{ color: 'var(--text-secondary)' }}>Your Vibes (max 5)</label>
             <span className={`text-xs font-medium ${formData.vibes.length >= 5 ? 'text-[#00c6d2]' : 'text-gray-500'}`}>
               {formData.vibes.length}/5
             </span>
@@ -428,7 +432,7 @@ export default function EditProfile() {
         {/* Party Types */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-gray-400 text-sm">Preferred Party Types</label>
+            <label className="text-sm" style={{ color: 'var(--text-secondary)' }}>Preferred Party Types</label>
             <span className={`text-xs font-medium ${formData.party_types.length >= 5 ? 'text-[#00c6d2]' : 'text-gray-500'}`}>
               {formData.party_types.length}/5
             </span>
@@ -453,7 +457,7 @@ export default function EditProfile() {
         </main>
 
       {/* Save Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
+      <div className="fixed bottom-0 left-0 right-0 p-4" style={{ background: 'linear-gradient(to top, var(--bg) 60%, transparent)' }}>
         <Button
           onClick={() => updateMutation.mutate()}
           disabled={updateMutation.isPending}
