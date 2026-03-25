@@ -87,7 +87,10 @@ export default function StoryChatInput({ story, storyUser, onMessageSent, onClos
         </div>
       )}
 
-      <div className="flex gap-2 bg-[#0b0b0b]/95 backdrop-blur-xl rounded-2xl border border-white/10 p-2">
+      <div 
+        className="flex gap-2 backdrop-blur-xl rounded-2xl border border-white/10 p-2"
+        style={{background: 'var(--bg)', opacity: 0.95}}
+      >
         <input
           ref={inputRef}
           type="text"
