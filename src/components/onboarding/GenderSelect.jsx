@@ -27,7 +27,7 @@ export default function GenderSelect({ selected, onSelect }) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => onSelect(option.id)}
-            className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
+            className={`p-6 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center ${
               selected === option.id
                 ? 'border-[#00fea3] bg-[#00fea3]/10'
                 : 'border-gray-700 bg-gray-900/50 hover:border-gray-600'
