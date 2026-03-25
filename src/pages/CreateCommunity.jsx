@@ -448,7 +448,7 @@ export default function CreateCommunity() {
         </AnimatePresence>
       </div>
 
-      <div className="flex-shrink-0 p-6 border-t border-gray-900 bg-[#0b0b0b]" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+      <div className="flex-shrink-0 p-6 border-t border-gray-900" style={{background: 'var(--bg)', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
         <motion.button whileTap={{ scale: 0.97 }} onClick={step < 4 ? goNext : handleSubmit}
           disabled={!canProceed() || loading}
           className="w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all text-[#0b0b0b] disabled:opacity-40"
