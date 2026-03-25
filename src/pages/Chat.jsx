@@ -385,7 +385,10 @@ export default function Chat() {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-gray-800/50 bg-[#0b0b0b]/90 backdrop-blur-xl">
+        <div 
+          className="absolute bottom-0 left-0 right-0 z-20 border-t border-gray-800/50 backdrop-blur-xl"
+          style={{background: 'var(--bg)'}}
+        >
           <StickerPicker
             isOpen={showStickers}
             onClose={() => setShowStickers(false)}
@@ -605,7 +608,10 @@ export default function Chat() {
                       const ls = friend?.last_seen;
                       const isOnline = ls && (Date.now() - new Date(ls).getTime()) < 5 * 60 * 1000;
                       return isOnline ? (
-                        <div className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-[#0b0b0b] flex items-center justify-center">
+                        <div 
+                          className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center"
+                          style={{background: 'var(--bg)'}}  
+                        >
                           <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
                         </div>
                       ) : null;
