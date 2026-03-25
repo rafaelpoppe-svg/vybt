@@ -293,7 +293,10 @@ export default function CommunityView() {
         )}
 
         {/* Tab Bar */}
-        <div className="sticky top-0 z-30 bg-[#0b0b0b]/95 backdrop-blur-md border-b border-white/8 px-4 py-2">
+        <div 
+          className="sticky top-0 z-30 backdrop-blur-md border-b border-white/8 px-4 py-2"
+          style={{background: 'var(--bg)'}}
+        >
           <div className="flex gap-1 bg-gray-900/80 rounded-2xl p-1 border border-gray-800">
             {TABS.map(tab => (
               <motion.button
