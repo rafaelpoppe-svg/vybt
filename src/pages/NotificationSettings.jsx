@@ -127,10 +127,13 @@ export default function NotificationSettings() {
   const muteAll = prefs.mute_all;
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b]">
+    <div 
+      className="min-h-screen"
+      style={{ background: 'var(--bg)' }}
+    >
       <header
-        className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 flex items-center justify-between px-4 py-4"
-        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+        className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 flex items-center justify-between px-4 py-4"
+        style={{ background: 'var(--bg)', opacity: 0.95, paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
       >
         <div className="flex items-center gap-3">
           <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="p-2 rounded-full bg-gray-900">
