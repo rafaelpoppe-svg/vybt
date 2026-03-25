@@ -237,8 +237,8 @@ export default function CommunityView() {
     <div
       ref={scrollRef}
       data-scroll-root
-      className="min-h-screen bg-[#0b0b0b] overflow-y-auto overflow-x-hidden relative"
-      style={{ paddingBottom: 'max(env(safe-area-inset-bottom,0px), 24px)' }}
+      className="min-h-screen overflow-y-auto overflow-x-hidden relative"
+      style={{background: 'var(--bg)', paddingBottom: 'max(env(safe-area-inset-bottom,0px), 24px)' }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
