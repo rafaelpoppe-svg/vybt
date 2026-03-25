@@ -104,7 +104,10 @@ export default function UserProfile() {
   // Only block on profile — currentUser loads async but isn't needed to show the profile
   if (profileLoading) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+      <div 
+        className="min-h-screen flex items-center justify-center"
+        style={{background: 'var(--bg)'}}
+      >
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
@@ -112,7 +115,10 @@ export default function UserProfile() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center gap-3">
+      <div 
+        className="min-h-screen flex flex-col items-center justify-center gap-3"
+        style={{background: 'var(--bg)'}}  
+      >
         <p className="text-5xl">👤</p>
         <p className="text-white font-semibold">Profile not found</p>
         <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="text-[#00c6d2] text-sm font-medium">
@@ -420,7 +426,10 @@ export default function UserProfile() {
       ) : (
         <>
           {/* Tabs */}
-          <div className="sticky top-0 z-30 bg-[#0b0b0b]/90 backdrop-blur-md border-b border-white/8">
+          <div 
+            className="sticky top-0 z-30 backdrop-blur-md border-b border-white/8"
+            style={{background: 'var(--bg)', opacity: 0.9}}
+          >
             <div className="flex">
               {tabs.map(tab => (
                 <motion.button key={tab.id} whileTap={{ scale: 0.9 }}
