@@ -122,7 +122,7 @@ export default function EditStory() {
   ];
 
   return (
-    <div className="fixed inset-0 bg-[#0b0b0b] flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+    <div className="fixed inset-0 flex flex-col" style={{ background: 'var(--bg)', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       {/* Header */}
       <header className="flex-shrink-0 flex items-center justify-between px-4 py-4 border-b border-gray-800">
         <motion.button
