@@ -224,7 +224,7 @@ export default function CreateCommunity() {
     const tc = createdCommunity.theme_color || '#00c6d2';
     const lightnings = ['⚡','⚡','⚡','⚡','⚡','⚡'];
     return (
-      <div className="fixed inset-0 bg-[#0b0b0b] flex flex-col items-center justify-center overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top,0px)' }}>
+      <div className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden" style={{background: 'var(--bg)', paddingTop: 'env(safe-area-inset-top,0px)' }}>
         {/* Blue lightning rays */}
         {lightnings.map((_, i) => (
           <motion.div key={i}
