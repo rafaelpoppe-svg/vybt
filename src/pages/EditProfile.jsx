@@ -4,13 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, Camera, Loader2, X, Navigation, MapPin } from 'lucide-react';
+import { ChevronLeft, Camera, Loader2, X, Navigation, MapPin, Search, Flame, AtSign, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import VibeTag, { ALL_VIBES } from '../components/common/VibeTag';
 import PartyTag, { ALL_PARTY_TYPES, partyTagConfig } from '../components/common/PartyTag';
-import { Search, Flame, AtSign, Check, X, Loader2 as SpinIcon } from 'lucide-react';
 import BackgroundThemeSelector from '../components/profile/BackgroundThemeSelector';
 
 function PartyTypeFilterList({ allTypes, selected, onToggle }) {
@@ -294,7 +293,7 @@ export default function EditProfile() {
               className="bg-gray-900 border-gray-800 text-white pl-9 pr-9"
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              {checkingUsername && <SpinIcon className="w-4 h-4 text-gray-400 animate-spin" />}
+              {checkingUsername && <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />}
               {!checkingUsername && usernameAvailable === true && <Check className="w-4 h-4 text-green-400" />}
               {!checkingUsername && usernameAvailable === false && <X className="w-4 h-4 text-red-400" />}
             </div>
