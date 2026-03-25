@@ -153,13 +153,13 @@ export default function Profile() {
         </div>
         <div className="flex items-center gap-1.5">
           <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(createPageUrl('Notifications'))}
-            className="p-2 rounded-xl bg-white/5 relative">
-            <Bell className="w-5 h-5 text-white" />
+            className="p-2 rounded-xl relative" style={{ background: 'var(--surface)' }}>
+            <Bell className="w-5 h-5" style={{ color: 'var(--text-primary)' }} />
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full" />
           </motion.button>
           <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(createPageUrl('Settings'))}
-            className="p-2 rounded-xl bg-white/5">
-            <Settings className="w-5 h-5 text-gray-300" />
+            className="p-2 rounded-xl" style={{ background: 'var(--surface)' }}>
+            <Settings className="w-5 h-5" style={{ color: 'var(--text-secondary)' }} />
           </motion.button>
         </div>
       </div>
@@ -175,7 +175,7 @@ export default function Profile() {
               style={{ background: `linear-gradient(135deg, ${accent}, #542b9b)` }}
             >
               {coverPhoto ? (
-                <img src={coverPhoto} className="w-full h-full rounded-full object-cover border-2 border-[#0b0b0b]" />
+                <img src={coverPhoto} className="w-full h-full rounded-full object-cover border-2" style={{ borderColor: 'var(--bg)' }} />
               ) : (
                 <div className="w-full h-full rounded-full flex items-center justify-center border-2" style={{ background: 'var(--surface)', borderColor: 'var(--bg)' }}>
                   <Camera className="w-7 h-7" style={{ color: 'var(--text-muted)' }} />
@@ -204,19 +204,19 @@ export default function Profile() {
               {profile.display_name || currentUser.full_name}
             </span>
             {age && <span className="text-sm font-bold" style={{ color: accent }}>{age}</span>}
-            {profile.gender && <span className="text-xs text-gray-500">{profile.gender}</span>}
+            {profile.gender && <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{profile.gender}</span>}
             {nationalityInfo && <span className="text-base leading-none">{nationalityInfo.flag}</span>}
           </div>
 
           {profile.city && (
             <div className="flex items-center gap-1 mt-0.5">
-              <MapPin className="w-3 h-3 text-gray-500" />
-              <span className="text-xs text-gray-500">{profile.city}</span>
+              <MapPin className="w-3 h-3" style={{ color: 'var(--text-muted)' }} />
+              <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{profile.city}</span>
             </div>
           )}
 
           {profile.bio && (
-            <p className="text-sm text-gray-300 mt-1.5 leading-relaxed">{profile.bio}</p>
+            <p className="text-sm mt-1.5 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{profile.bio}</p>
           )}
 
           {/* Vibes */}
@@ -230,7 +230,8 @@ export default function Profile() {
         {/* Action buttons */}
         <div className="flex gap-2 mt-4">
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate(createPageUrl('EditProfile'))}
-            className="flex-1 py-2 rounded-xl text-sm font-bold bg-white/10 text-white border border-white/10 flex items-center justify-center gap-1.5">
+            className="flex-1 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5"
+            style={{ background: 'var(--surface-2)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}>
             <Edit2 className="w-3.5 h-3.5" /> Edit Profile
           </motion.button>
 
@@ -244,8 +245,9 @@ export default function Profile() {
 
           {!profile.is_verified && (
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowVerification(true)}
-              className="py-2 px-3 rounded-xl border border-white/10 bg-white/5 flex items-center gap-1">
-              <ShieldX className="w-4 h-4 text-gray-400" />
+              className="py-2 px-3 rounded-xl flex items-center gap-1"
+              style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
+              <ShieldX className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
             </motion.button>
           )}
         </div>
@@ -267,7 +269,7 @@ export default function Profile() {
                   style={{ background: accent }} />
               )}
               {tab.count > 0 && activeTab !== tab.id && (
-                <span className="absolute top-1.5 right-3 text-[9px] font-black w-3.5 h-3.5 rounded-full bg-gray-700 text-gray-400 flex items-center justify-center">
+                <span className="absolute top-1.5 right-3 text-[9px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center" style={{ background: 'var(--surface-2)', color: 'var(--text-muted)' }}>
                   {tab.count > 9 ? '9+' : tab.count}
                 </span>
               )}
@@ -318,7 +320,7 @@ export default function Profile() {
             {myCommunities.length === 0 ? (
               <div className="text-center py-10 space-y-3">
                 <p className="text-4xl">⭐</p>
-                <p className="text-gray-500 text-sm">No communities yet</p>
+                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No communities yet</p>
                 <motion.button whileTap={{ scale: 0.97 }}
                   onClick={() => navigate(createPageUrl('Explore') + '?tab=communities')}
                   className="px-5 py-2.5 rounded-xl text-sm font-bold"
@@ -342,22 +344,22 @@ export default function Profile() {
                     )}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <p className="font-bold text-white truncate text-sm">{community.name}</p>
+                        <p className="font-bold truncate text-sm" style={{ color: 'var(--text-primary)' }}>{community.name}</p>
                         {membership?.role === 'admin' && (
                           <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full flex-shrink-0"
                             style={{ background: `${tc}30`, color: tc }}>ADMIN</span>
                         )}
                       </div>
                       <div className="flex items-center gap-3 mt-0.5">
-                        <span className="flex items-center gap-1 text-[10px] text-gray-500">
+                        <span className="flex items-center gap-1 text-[10px]" style={{ color: 'var(--text-muted)' }}>
                           <MapPin className="w-2.5 h-2.5" style={{ color: tc }} />{community.city}
                         </span>
-                        <span className="flex items-center gap-1 text-[10px] text-gray-500">
+                        <span className="flex items-center gap-1 text-[10px]" style={{ color: 'var(--text-muted)' }}>
                           <Users className="w-2.5 h-2.5" style={{ color: tc }} />{community.member_count || 0}
                         </span>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                    <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--text-muted)' }} />
                   </motion.button>
                 );
               })
@@ -409,8 +411,8 @@ function StatCol({ value, label, onClick, accent }) {
   }
   return (
     <div className="flex flex-col items-center">
-      <span className="text-white font-black text-xl leading-tight">{value}</span>
-      <span className="text-gray-500 text-xs">{label}</span>
+      <span className="font-black text-xl leading-tight" style={{ color: 'var(--text-primary)' }}>{value}</span>
+      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{label}</span>
     </div>
   );
 }
@@ -421,18 +423,18 @@ function PlanRow({ plan, accent, onClick, past = false }) {
   return (
     <motion.button whileTap={{ scale: 0.97 }} onClick={onClick}
       className="w-full flex items-center gap-3 p-3 rounded-2xl text-left"
-      style={{ background: past ? 'rgba(255,255,255,0.02)' : `${accent}0d`, border: `1px solid ${past ? 'rgba(255,255,255,0.05)' : accent + '25'}` }}>
+      style={{ background: past ? 'var(--surface)' : `${accent}0d`, border: `1px solid ${past ? 'var(--border)' : accent + '25'}` }}>
       {plan.cover_image ? (
         <img src={plan.cover_image} className={`w-12 h-12 rounded-xl object-cover flex-shrink-0 ${past ? 'opacity-50 grayscale' : ''}`} />
       ) : (
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0 ${past ? 'opacity-40' : ''}`}
-          style={{ background: past ? '#1f2937' : `${accent}20` }}>🎉</div>
+          style={{ background: past ? 'var(--surface-2)' : `${accent}20` }}>🎉</div>
       )}
       <div className="min-w-0 flex-1">
-        <p className={`font-bold text-sm truncate ${past ? 'text-gray-400' : 'text-white'}`}>{plan.title}</p>
+        <p className="font-bold text-sm truncate" style={{ color: past ? 'var(--text-muted)' : 'var(--text-primary)' }}>{plan.title}</p>
         <div className="flex items-center gap-2 mt-0.5">
-          <span className="flex items-center gap-1 text-[10px] text-gray-500"><MapPin className="w-2.5 h-2.5" />{plan.city}</span>
-          <span className="flex items-center gap-1 text-[10px] text-gray-500"><Calendar className="w-2.5 h-2.5" />{dateLabel}</span>
+          <span className="flex items-center gap-1 text-[10px]" style={{ color: 'var(--text-muted)' }}><MapPin className="w-2.5 h-2.5" />{plan.city}</span>
+          <span className="flex items-center gap-1 text-[10px]" style={{ color: 'var(--text-muted)' }}><Calendar className="w-2.5 h-2.5" />{dateLabel}</span>
         </div>
         {plan.status === 'happening' && (
           <span className="text-[10px] font-bold text-green-400 flex items-center gap-1 mt-0.5">
@@ -440,7 +442,7 @@ function PlanRow({ plan, accent, onClick, past = false }) {
           </span>
         )}
       </div>
-      <ChevronRight className="w-4 h-4 text-gray-600 flex-shrink-0" />
+      <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--text-muted)' }} />
     </motion.button>
   );
 }
@@ -449,8 +451,8 @@ function EmptyState({ emoji, text, subtext }) {
   return (
     <div className="text-center py-16 space-y-2">
       <p className="text-5xl">{emoji}</p>
-      <p className="text-gray-400 font-semibold">{text}</p>
-      {subtext && <p className="text-gray-600 text-sm">{subtext}</p>}
+      <p className="font-semibold" style={{ color: 'var(--text-secondary)' }}>{text}</p>
+      {subtext && <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{subtext}</p>}
     </div>
   );
 }
