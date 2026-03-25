@@ -423,8 +423,11 @@ export default function CreateCommunity() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] flex flex-col">
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4" style={{ paddingTop: 'max(env(safe-area-inset-top,0px),16px)' }}>
+    <div 
+      className="min-h-screen flex flex-col"
+      style={{background: 'var(--bg)'}}
+    >
+      <header className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4" style={{background: 'var(--bg)', opacity: 0.95, paddingTop: 'max(env(safe-area-inset-top,0px),16px)' }}>
         <motion.button whileTap={{ scale: 0.9 }} onClick={goBack} className="p-2 rounded-full bg-gray-900">
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
