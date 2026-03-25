@@ -209,7 +209,9 @@ export default function Explore() {
     if (friendIds.includes(profile.user_id)) return false;
     if (!userCity) return false;
     if (profile.city?.toLowerCase() !== userCity) return false;
-    const matchesSearch = profile.display_name?.toLowerCase().includes(search.toLowerCase());
+    const searchTerm = search.replace(/^@/, '').toLowerCase();
+    const matchesSearch = profile.display_name?.toLowerCase().includes(searchTerm) ||
+      (profile.username && profile.username.toLowerCase().includes(searchTerm));
     let matchesFilters = true;
     if (userFilters.gender) {
       matchesFilters = profile.gender === userFilters.gender;
@@ -351,7 +353,7 @@ export default function Explore() {
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={activeView === 'plans' ? t.searchPlans : t.searchPeople}
+            placeholder={activeView === 'plans' ? t.searchPlans : 'Search by @username or name...'}
             className="pl-9 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500 rounded-xl h-10"
           />
           {search && (

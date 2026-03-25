@@ -124,6 +124,9 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
         <div className="flex items-end justify-between gap-2">
           <div className="min-w-0 flex-1">
             <p className="text-white font-semibold text-sm truncate leading-tight">{profile.display_name || 'User'}</p>
+            {profile.username && (
+              <p className="text-[#00c6d2] text-[10px] font-medium truncate leading-tight">@{profile.username}</p>
+            )}
             {profile.city && (
               <p className="text-gray-400 text-[10px] flex items-center gap-0.5 mt-0.5">
                 <MapPin className="w-2.5 h-2.5 flex-shrink-0" />

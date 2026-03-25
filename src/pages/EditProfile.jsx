@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import VibeTag, { ALL_VIBES } from '../components/common/VibeTag';
 import PartyTag, { ALL_PARTY_TYPES, partyTagConfig } from '../components/common/PartyTag';
-import { Search, Flame } from 'lucide-react';
+import { Search, Flame, AtSign, Check, X, Loader2 as SpinIcon } from 'lucide-react';
 import BackgroundThemeSelector from '../components/profile/BackgroundThemeSelector';
 
 function PartyTypeFilterList({ allTypes, selected, onToggle }) {
@@ -52,6 +52,7 @@ export default function EditProfile() {
   const [currentUser, setCurrentUser] = useState(null);
   const [formData, setFormData] = useState({
     display_name: '',
+    username: '',
     bio: '',
     city: '',
     date_of_birth: '',
@@ -62,6 +63,8 @@ export default function EditProfile() {
     profile_background_theme: 'default'
   });
   const [uploading, setUploading] = useState(false);
+  const [checkingUsername, setCheckingUsername] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState(null);
   const [detectingLocation, setDetectingLocation] = useState(false);
   const [vibeSearch, setVibeSearch] = useState('');
 
@@ -115,6 +118,7 @@ export default function EditProfile() {
     if (profile) {
       setFormData({
         display_name: profile.display_name || '',
+        username: profile.username || '',
         bio: profile.bio || '',
         city: profile.city || '',
         date_of_birth: profile.date_of_birth || '',
@@ -126,6 +130,22 @@ export default function EditProfile() {
       });
     }
   }, [profile]);
+
+  // Check username availability (debounced)
+  useEffect(() => {
+    const username = formData.username.trim();
+    if (!username || username === profile?.username) { setUsernameAvailable(null); return; }
+    if (!/^[a-z0-9_.]{3,24}$/.test(username)) { setUsernameAvailable(null); return; }
+    const timer = setTimeout(async () => {
+      setCheckingUsername(true);
+      try {
+        const existing = await base44.entities.UserProfile.filter({ username });
+        setUsernameAvailable(existing.length === 0 || existing[0]?.user_id === currentUser?.id);
+      } catch (_) {}
+      setCheckingUsername(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [formData.username]);
 
   const updateMutation = useMutation({
     mutationFn: async () => {
@@ -254,6 +274,36 @@ export default function EditProfile() {
               </label>
             ))}
           </div>
+        </div>
+
+        {/* Username */}
+        <div>
+          <label className="block text-gray-400 text-sm mb-2">Username</label>
+          <div className="relative">
+            <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Input
+              value={formData.username}
+              onChange={(e) => {
+                const v = e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, '').slice(0, 24);
+                setFormData({ ...formData, username: v });
+                setUsernameAvailable(null);
+              }}
+              placeholder="yourname"
+              autoCapitalize="none"
+              autoCorrect="off"
+              className="bg-gray-900 border-gray-800 text-white pl-9 pr-9"
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              {checkingUsername && <SpinIcon className="w-4 h-4 text-gray-400 animate-spin" />}
+              {!checkingUsername && usernameAvailable === true && <Check className="w-4 h-4 text-green-400" />}
+              {!checkingUsername && usernameAvailable === false && <X className="w-4 h-4 text-red-400" />}
+            </div>
+          </div>
+          {formData.username && !/^[a-z0-9_.]{3,24}$/.test(formData.username) && (
+            <p className="text-xs text-red-400 mt-1">3–24 chars, only letters, numbers, _ and .</p>
+          )}
+          {usernameAvailable === false && <p className="text-xs text-red-400 mt-1">@{formData.username} is already taken.</p>}
+          {usernameAvailable === true && <p className="text-xs text-green-400 mt-1">@{formData.username} is available!</p>}
         </div>
 
         {/* Display Name */}

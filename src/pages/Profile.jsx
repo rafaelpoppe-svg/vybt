@@ -140,14 +140,15 @@ export default function Profile() {
         style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}
       >
         <div className="w-10" />
-        <div className="absolute left-0 right-0 flex items-center justify-center gap-2 pointer-events-none">
-          <span className="text-white font-black text-xl tracking-tight">
-            {profile.display_name || currentUser.full_name}
-          </span>
-          {profile.is_verified ? (
-            <ShieldCheck className="w-5 h-5 text-blue-400" />
-          ) : (
-            <span className="text-[11px] text-gray-500 font-medium">Not verified</span>
+        <div className="absolute left-0 right-0 flex flex-col items-center justify-center pointer-events-none">
+          <div className="flex items-center gap-2">
+            <span className="text-white font-black text-xl tracking-tight">
+              {profile.username ? `@${profile.username}` : (profile.display_name || currentUser.full_name)}
+            </span>
+            {profile.is_verified && <ShieldCheck className="w-5 h-5 text-blue-400" />}
+          </div>
+          {profile.username && (
+            <span className="text-gray-500 text-xs">{profile.display_name || currentUser.full_name}</span>
           )}
         </div>
         <div className="flex items-center gap-1.5">

@@ -213,7 +213,16 @@ export default function UserProfile() {
         <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="p-2 rounded-full bg-black/40 backdrop-blur-md">
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
-        <div className="flex items-center gap-2">
+        {/* Username in header */}
+        <div className="flex flex-col items-center absolute left-0 right-0 pointer-events-none">
+          <span className="text-white font-black text-base tracking-tight">
+            {profile.username ? `@${profile.username}` : profile.display_name}
+          </span>
+          {profile.username && (
+            <span className="text-gray-500 text-xs">{profile.display_name}</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2 relative z-10">
           {nationalityInfo && (
             <div className="flex items-center gap-1 bg-gray-800/70 rounded-full px-2 py-0.5">
               <span className="text-sm leading-none">{nationalityInfo.flag}</span>
@@ -223,7 +232,7 @@ export default function UserProfile() {
           {currentUser && currentUser.id !== userId && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <motion.button whileTap={{ scale: 0.9 }} className="p-2 rounded-full bg-black/40 backdrop-blur-md">
+                <motion.button whileTap={{ scale: 0.9 }} className="relative z-10 p-2 rounded-full bg-black/40 backdrop-blur-md">
                   <MoreVertical className="w-5 h-5 text-white" />
                 </motion.button>
               </DropdownMenuTrigger>

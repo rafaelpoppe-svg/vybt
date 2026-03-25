@@ -155,6 +155,9 @@ export default function Friends() {
                   </div>
                   <div className="flex-1">
                     <p className="text-white font-medium">{friend?.display_name || 'User'}</p>
+                    {friend?.username && (
+                      <p className="text-[#00c6d2] text-xs">@{friend.username}</p>
+                    )}
                     <p className="text-gray-500 text-sm">{friend?.city || 'No location'}</p>
                   </div>
                   <Button

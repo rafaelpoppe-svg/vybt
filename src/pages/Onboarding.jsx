@@ -14,6 +14,7 @@ import LanguageSelect from '../components/onboarding/LanguageSelect';
 import NameSelect from '../components/onboarding/NameSelect';
 import VerificationFlow from '../components/profile/VerificationFlow';
 import NationalitySelect from '../components/onboarding/NationalitySelect';
+import UsernameSelect from '../components/onboarding/UsernameSelect';
 import { useLanguage } from '../components/common/LanguageContext';
 
 function OnboardingInner() {
@@ -23,6 +24,7 @@ function OnboardingInner() {
   const [data, setData] = useState({
     language: language,
     display_name: '',
+    username: '',
     gender: '',
     date_of_birth: '',
     photos: [],
@@ -81,13 +83,14 @@ function OnboardingInner() {
     switch(step) {
       case 0: return data.language !== '';
       case 1: return data.display_name.trim().length >= 2;
-      case 2: return data.gender !== '';
-      case 3: return data.date_of_birth !== '';
-      case 4: return data.photos.length > 0;
-      case 5: return data.vibes.length >= 2;
-      case 6: return data.party_types.length >= 2;
-      case 7: return true; // location is optional
-      case 8: return true; // nationality is optional
+      case 2: return /^[a-z0-9_.]{3,24}$/.test(data.username); // username valid & available checked in component
+      case 3: return data.gender !== '';
+      case 4: return data.date_of_birth !== '';
+      case 5: return data.photos.length > 0;
+      case 6: return data.vibes.length >= 2;
+      case 7: return data.party_types.length >= 2;
+      case 8: return true; // location is optional
+      case 9: return true; // nationality is optional
       default: return true;
     }
   };
@@ -103,6 +106,7 @@ function OnboardingInner() {
 
       const profile = await base44.entities.UserProfile.create({
         user_id: user.id,
+        username: data.username.trim() || undefined,
         display_name: data.display_name.trim() || user.full_name,
         gender: data.gender,
         date_of_birth: data.date_of_birth,
@@ -133,7 +137,7 @@ function OnboardingInner() {
         } catch (e) {}
       }
       setCreatedProfile(profile);
-      setStep(10); // verification step
+      setStep(11); // verification step
     } catch (error) {
       console.error(error);
     }
@@ -150,6 +154,10 @@ function OnboardingInner() {
     <NameSelect
       value={data.display_name}
       onChange={(display_name) => setData({...data, display_name})}
+    />,
+    <UsernameSelect
+      value={data.username}
+      onChange={(username) => setData({...data, username})}
     />,
     <GenderSelect 
       selected={data.gender} 
@@ -210,7 +218,7 @@ function OnboardingInner() {
       onSelect={(nationality) => setData({...data, nationality})}
     />,
     <WelcomeComplete onExplore={handleComplete} />,
-    // step 10 — verify (handled separately below)
+    // step 11 — verify (handled separately below)
     null,
   ];
 
@@ -237,10 +245,10 @@ function OnboardingInner() {
       </div>
 
       {/* Progress */}
-      {step < 9 && (
+      {step < 10 && (
         <div className="px-6 mb-8">
           <div className="flex gap-2">
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
               <motion.div 
                 key={i}
                 animate={{
@@ -265,7 +273,7 @@ function OnboardingInner() {
             exit={{ opacity: 0, x: -60, scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 350, damping: 30 }}
           >
-            {step === 10 ? (
+            {step === 11 ? (
               <div className="space-y-6 text-center">
                 <div className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto">
                   <ShieldCheck className="w-12 h-12 text-blue-400" />
@@ -278,6 +286,7 @@ function OnboardingInner() {
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setShowVerification(true)}
                   className="w-full py-4 rounded-full font-bold text-lg bg-blue-500 text-white flex items-center justify-center gap-2"
+
                 >
                   <Camera className="w-5 h-5" />
                   Verify Now
@@ -297,7 +306,7 @@ function OnboardingInner() {
       </div>
 
       {/* Footer Button */}
-      {step < 9 && (
+      {step < 10 && (
         <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b] to-transparent">
           <motion.button
             whileHover={{ scale: canProceed() ? 1.02 : 1 }}
