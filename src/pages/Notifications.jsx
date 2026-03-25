@@ -171,8 +171,8 @@ function UpcomingPlanRow({ notification, plan, onMark }) {
         {plan?.cover_image
           ? <img src={plan.cover_image} alt="" className="w-full h-full object-cover" />
           : <div className="w-full h-full bg-gradient-to-br from-[#00c6d2]/40 to-[#542b9b]/40 flex items-center justify-center text-lg">📍</div>}
-        <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#0b0b0b] flex items-center justify-center"
-          style={{ padding: 1 }}>
+        <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full flex items-center justify-center"
+          style={{background: 'var(--bg)', padding: 1}}>
           <div className="w-full h-full rounded-full bg-[#00c6d2] flex items-center justify-center text-[9px]">📅</div>
         </div>
       </div>
@@ -474,7 +474,7 @@ export default function Notifications() {
     >
 
       {/* ── Header ── */}
-      <header className="flex-shrink-0 bg-[#0b0b0b] px-4 pb-2"
+      <header className="flex-shrink-0 px-4 pb-2"
         style={{ background: 'var(--bg)', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
