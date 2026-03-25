@@ -217,7 +217,10 @@ export default function CommunityView() {
 
   if (loadingCommunity) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex items-center justify-center">
+      <div 
+        className="min-h-screen flex items-center justify-center"
+        style={{background: 'var(--bg)'}}
+      >
         <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#00c6d2' }} />
       </div>
     );
@@ -225,7 +228,10 @@ export default function CommunityView() {
 
   if (!community) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center gap-4">
+      <div 
+        className="min-h-screen flex flex-col items-center justify-center gap-4"
+        style={{background: 'var(--bg)'}}
+      >
         <div className="text-5xl">😕</div>
         <p className="text-gray-400">Community not found</p>
         <button onClick={() => navigate(-1)} className="px-6 py-3 rounded-xl bg-gray-900 text-white">Go Back</button>
