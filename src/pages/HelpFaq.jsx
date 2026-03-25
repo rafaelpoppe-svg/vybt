@@ -125,11 +125,14 @@ export default function HelpFaq() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] text-white">
+    <div 
+      className="min-h-screen text-white"
+      style={{background: 'var(--bg)'}}
+    >
       {/* Header */}
       <div
-        className="sticky top-0 z-10 bg-[#0b0b0b]/90 backdrop-blur-xl border-b border-white/5 px-4 py-3 flex items-center gap-3"
-        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}
+        className="sticky top-0 z-10 backdrop-blur-xl border-b border-white/5 px-4 py-3 flex items-center gap-3"
+        style={{background: 'var(--bg)', opacity: 0.9, paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}
       >
         <button
           onClick={() => navigate(-1)}
