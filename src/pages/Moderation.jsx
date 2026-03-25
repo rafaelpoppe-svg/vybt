@@ -110,9 +110,15 @@ export default function Moderation() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] pb-10">
+    <div 
+      className="min-h-screen pb-10"
+      style={{background: 'var(--bg)'}}
+    >
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-lg border-b border-gray-800 px-4 py-4">
+      <header 
+        className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 px-4 py-4"
+        style={{background: 'var(--bg)', opacity: 0.95}}  
+      >
         <div className="flex items-center gap-3 mb-4">
           <button onClick={() => navigate(-1)} className="p-2 rounded-full bg-gray-900">
             <ChevronLeft className="w-5 h-5 text-white" />
