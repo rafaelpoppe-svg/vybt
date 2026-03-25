@@ -207,7 +207,10 @@ export default function CreatePlan() {
   // Layer 2: block UI if user already has a plan happening
   if (blockedByActive) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center px-6 text-center">
+      <div 
+        className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
+        style={{background: 'var(--bg)'}}  
+      >
         <div className="text-6xl mb-4">🚫</div>
         <h2 className="text-2xl font-black text-white mb-3">You already have a plan Live Now</h2>
         <p className="text-gray-400 mb-6 max-w-xs">You can only create a new plan when your current happening plan ends. This keeps the map fair for everyone.</p>
@@ -225,7 +228,10 @@ export default function CreatePlan() {
   // ---- SUCCESS SCREEN ----
   if (done && createdPlan) {
     return (
-      <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center px-6 text-center overflow-y-auto">
+      <div 
+        className="min-h-screen flex flex-col items-center justify-center px-6 text-center overflow-y-auto"
+        style={{background: 'var(--bg)'}}  
+      >
         {/* Confetti-like floating emojis */}
         {['🎉', '🔥', '🎶', '✨', '🥂', '💃', '🎊', '🕺'].map((emoji, i) => (
           <motion.div
