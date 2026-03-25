@@ -24,7 +24,8 @@ export default function EditStoryModal({ isOpen, onClose, story, onSave, isLoadi
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          className="relative bg-[#0b0b0b] rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-md mx-4 border border-gray-800"
+          className="relative rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-md mx-4 border border-gray-800"
+          style={{background: 'var(--bg)'}}
         >
           <button
             onClick={onClose}
