@@ -27,7 +27,10 @@ export default function GroupChatGalleryTab({
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#0b0b0b]">
+    <div 
+      className="flex flex-col h-full"
+      style={{background: 'var(--bg)'}}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800/40 flex-shrink-0">
         <h2 className="text-white font-bold text-lg">📸 Galeria</h2>
