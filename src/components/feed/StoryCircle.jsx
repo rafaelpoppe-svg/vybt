@@ -41,7 +41,10 @@ export default function StoryCircle({
           ? 'bg-gradient-to-br from-[#542b9b] via-[#00fea3] to-[#542b9b]' 
           : 'bg-gradient-to-br from-[#00fea3] to-[#542b9b]'
       }`}>
-        <div className="w-full h-full rounded-full bg-[#0b0b0b] p-0.5">
+        <div 
+          className="w-full h-full rounded-full p-0.5"
+          style={{background: 'var(--bg)'}}
+        >
           {user?.photos?.[0] ? (
             <img 
               src={user.photos[0]} 
