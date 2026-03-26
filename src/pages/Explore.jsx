@@ -5,7 +5,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PullToRefresh from '../components/common/PullToRefresh';
-import { Search, Flame, Users, Loader2, Filter, LayoutGrid, User, Check, X, UserPlus } from 'lucide-react';
+import { Search, Flame, Users, Loader2, LayoutGrid, User, Check, X, UserPlus } from 'lucide-react';
 import UserCard from '../components/explore/UserCard';
 import { useMutation } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
