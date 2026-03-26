@@ -147,7 +147,10 @@ function UserCircle({ story, user, isOwn, onClick }) {
           boxShadow: `0 0 12px ${colors[0]}55`,
         }}
       >
-        <div className="w-full h-full rounded-full bg-[#0b0b0b] p-[2px] overflow-hidden relative">
+        <div 
+          className="w-full h-full rounded-full p-[2px] overflow-hidden relative"
+          style={{background: 'var(--bg)'}}
+        >
           {user?.photos?.[0] ? (
             <img src={user.photos[0]} alt={user?.display_name} className="w-full h-full rounded-full object-cover" />
           ) : (
