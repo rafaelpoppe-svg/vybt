@@ -22,7 +22,10 @@ export default function GroupChatInput({ isChatLocked, isPending, themeColor = '
 
   if (isChatLocked) {
     return (
-      <div className="px-4 py-4 border-t border-gray-800/50 bg-[#0b0b0b]/90 backdrop-blur-xl">
+      <div 
+        className="px-4 py-4 border-t border-gray-800/50 backdrop-blur-xl"
+        style={{background: 'var(--bg)', opacity: 0.9}}
+      >
         <div className="flex items-center justify-center gap-2 text-gray-500 py-1">
           <Lock className="w-4 h-4" />
           <span className="text-sm">{t.chatLocked}</span>
@@ -32,7 +35,10 @@ export default function GroupChatInput({ isChatLocked, isPending, themeColor = '
   }
 
   return (
-    <div className="relative border-t border-gray-800/50 bg-[#0b0b0b]/90 backdrop-blur-xl">
+    <div 
+      className="relative border-t border-gray-800/50 backdrop-blur-xl"
+      style={{background: 'var(--bg)', opacity: 0.9}}
+    >
       <StickerPicker
         isOpen={showStickers}
         onClose={() => setShowStickers(false)}
