@@ -74,7 +74,10 @@ function CircleStory({ story, user, isOwn, isAdd, onClick, isHappening }) {
           boxShadow: `0 0 12px ${colors[0]}55`,
         }}
       >
-        <div className="w-full h-full rounded-full bg-[#0b0b0b] p-[2px] overflow-hidden relative">
+        <div 
+          className="w-full h-full rounded-full p-[2px] overflow-hidden relative"
+          style={{background: 'var(--bg)'}}
+        >
           {story?.media_url ? (
             <>
               <img
