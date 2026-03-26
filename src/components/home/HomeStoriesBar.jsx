@@ -99,7 +99,10 @@ function PlanCircle({ plan, onClick, index }) {
             boxShadow: `0 0 12px ${themeColor}55`,
           }}
         >
-          <div className="w-full h-full rounded-full bg-[#0b0b0b] p-[2px] overflow-hidden relative">
+          <div 
+            className="w-full h-full rounded-full p-[2px] overflow-hidden relative"
+            style={{background: 'var(--bg)'}}
+          >
             {planImage ? (
               <img src={planImage} alt={plan.title} className="w-full h-full rounded-full object-cover" />
             ) : (
