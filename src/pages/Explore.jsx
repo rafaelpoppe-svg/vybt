@@ -323,7 +323,7 @@ export default function Explore() {
               className={`relative p-2.5 rounded-xl transition-all ${showFilters ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'border'}`}
           style={showFilters ? {} : { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' }}
             >
-              <Filter className="w-4 h-4" />
+              <SlidersHorizontal className="w-4 h-4" />
               {showFilters && (
                 <motion.span
                   layoutId="filter-dot"
