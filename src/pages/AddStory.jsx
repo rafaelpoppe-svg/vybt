@@ -259,6 +259,9 @@ export default function AddStory() {
             autoPlay
             playsInline
             muted
+            disablePictureInPicture
+            x-webkit-airplay="deny"
+            controlsList="nodownload nofullscreen noremoteplayback"
             className="absolute inset-0 w-full h-full object-cover"
             style={{ transform: facingMode === 'user' ? 'scaleX(-1)' : 'none' }}
           />
@@ -326,7 +329,7 @@ export default function AddStory() {
           <div className="flex-1 relative overflow-hidden">
             {capturedMedia.type === 'image'
               ? <img src={capturedMedia.url} className="absolute inset-0 w-full h-full object-cover" alt="" />
-              : <video src={capturedMedia.url} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover" />
+              : <video src={capturedMedia.url} autoPlay loop muted playsInline disablePictureInPicture x-webkit-airplay="deny" controlsList="nodownload nofullscreen noremoteplayback" className="absolute inset-0 w-full h-full object-cover" />
             }
 
             {/* Gradient overlays */}

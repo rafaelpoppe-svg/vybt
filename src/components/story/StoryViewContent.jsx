@@ -360,6 +360,10 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
         vid.src = next.media_url;
         vid.preload = 'auto';
         vid.muted = true;
+        vid.setAttribute('playsinline', '');
+        vid.setAttribute('disablepictureinpicture', '');
+        vid.setAttribute('x-webkit-airplay', 'deny');
+        vid.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
         vid.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
         vid.id = `prefetch-${next.id}`;
         if (!document.getElementById(`prefetch-${next.id}`)) {
@@ -568,7 +572,7 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
                 <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: `rotateY(${adjAngle}deg) translateZ(calc(${cubeR} / 2))`, zIndex: 2 }}>
                   <div className="absolute inset-0 bg-black">
                     {adjacentStory.media_type === 'video'
-                      ? <video src={adjacentStory.media_url} className="h-full w-full object-cover" muted playsInline />
+                      ? <video src={adjacentStory.media_url} className="h-full w-full object-cover" muted playsInline disablePictureInPicture x-webkit-airplay="deny" controlsList="nodownload nofullscreen noremoteplayback" />
                       : <img src={adjacentStory.media_url} alt="" className="h-full w-full object-cover" />}
                   </div>
                 </div>
@@ -607,14 +611,17 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
                         </div>
                       )}
                       <video
-                        key={story.id}
-                        ref={videoRef}
-                        src={story.media_url}
-                        className="h-full w-full object-cover"
-                        style={{ opacity: videoLoading ? 0 : 1, transition: 'opacity 0.2s' }}
-                        muted={isMuted || !story.has_audio}
-                        playsInline
-                        preload="auto"
+                       key={story.id}
+                       ref={videoRef}
+                       src={story.media_url}
+                       className="h-full w-full object-cover"
+                       style={{ opacity: videoLoading ? 0 : 1, transition: 'opacity 0.2s' }}
+                       muted={isMuted || !story.has_audio}
+                       playsInline
+                       preload="auto"
+                       disablePictureInPicture
+                       x-webkit-airplay="deny"
+                       controlsList="nodownload nofullscreen noremoteplayback"
                         onLoadStart={() => setVideoLoading(true)}
                         onCanPlay={(e) => {
                           setVideoLoading(false);
