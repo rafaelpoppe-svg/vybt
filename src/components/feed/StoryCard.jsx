@@ -102,7 +102,10 @@ export default function StoryCard({
       <div className={`${currentSize.width} ${currentSize.height} rounded-2xl p-0.5 bg-gradient-to-b ${borderColor}`}
         style={{ boxShadow: isOwn ? '0 0 12px #00fea330' : undefined }}
       >
-        <div className="w-full h-full rounded-[14px] bg-[#0b0b0b] p-0.5 overflow-hidden relative">
+        <div 
+          className="w-full h-full rounded-[14px] p-0.5 overflow-hidden relative"
+          style={{background: 'var(--bg)'}}
+        >
           {story?.media_url ? (
             <>
               <img 
