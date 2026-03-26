@@ -161,6 +161,10 @@ export default function GroupChatGalleryTab({
                   controls
                   className="max-w-[90vw] max-h-[80vh] rounded-xl"
                   autoPlay
+                  playsInline
+                  disablePictureInPicture
+                  x-webkit-airplay="deny"
+                  controlsList="nodownload nofullscreen noremoteplayback"
                 />
               ) : (
                 <img

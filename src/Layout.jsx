@@ -15,6 +15,31 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
 
+  // Disable Picture-in-Picture globally — iOS WKWebView activates PiP for any video/camera stream
+  useEffect(() => {
+    // Exit PiP if it somehow gets activated
+    const exitPiP = () => {
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture().catch(() => {});
+      }
+    };
+    document.addEventListener('enterpictureinpicture', exitPiP);
+
+    // Prevent PiP via CSS (disables the PiP button in supported browsers)
+    const style = document.createElement('style');
+    style.id = 'disable-pip-style';
+    style.textContent = `
+      video::-webkit-media-controls-pip-button { display: none !important; }
+      video { -webkit-playsinline: 1; }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.removeEventListener('enterpictureinpicture', exitPiP);
+      document.getElementById('disable-pip-style')?.remove();
+    };
+  }, []);
+
   // Block pinch-to-zoom, gesture zoom, and horizontal swipe on iOS WebView
   useEffect(() => {
     const preventGesture = (e) => e.preventDefault();

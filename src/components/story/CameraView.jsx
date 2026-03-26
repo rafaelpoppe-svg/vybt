@@ -155,7 +155,12 @@ export default function CameraView({ onCapture, onClose }) {
         ) : (
           <video
             ref={videoRef}
-            autoPlay playsInline muted
+            autoPlay
+            playsInline
+            muted
+            disablePictureInPicture
+            x-webkit-airplay="deny"
+            controlsList="nodownload nofullscreen noremoteplayback"
             onCanPlay={handleVideoReady}
             className="absolute inset-0 w-full h-full object-cover"
             style={{ transform: facingMode === 'user' ? 'scaleX(-1)' : 'none' }}
