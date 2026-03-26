@@ -79,6 +79,22 @@ export default function AddStory() {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const canvasRef = useRef(null);
+
+  // Forcefully block PiP on a video element (iOS WKWebView workaround)
+  const blockPiP = useCallback((el) => {
+    if (!el) return;
+    el.disablePictureInPicture = true;
+    el.setAttribute('disablepictureinpicture', '');
+    el.setAttribute('x-webkit-airplay', 'deny');
+    el.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+    el.addEventListener('enterpictureinpicture', (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture().catch(() => {});
+      }
+    }, true);
+  }, []);
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
   const recordTimerRef = useRef(null);
@@ -122,13 +138,14 @@ export default function AddStory() {
       });
       streamRef.current = stream;
       if (videoRef.current) {
+        blockPiP(videoRef.current);
         videoRef.current.srcObject = stream;
         videoRef.current.play();
       }
     } catch (e) {
       toast.error('Camera not available');
     }
-  }, [facingMode, mode]);
+  }, [facingMode, mode, blockPiP]);
 
   useEffect(() => {
     if (phase === 'camera') {

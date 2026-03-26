@@ -21,6 +21,23 @@ export default function CameraView({ onCapture, onClose }) {
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState('photo'); // 'photo' | 'video' — hint label
 
+  // Forcefully block PiP on the video element
+  const blockPiP = useCallback((el) => {
+    if (!el) return;
+    el.disablePictureInPicture = true;
+    el.setAttribute('disablepictureinpicture', '');
+    el.setAttribute('x-webkit-airplay', 'deny');
+    el.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+    // iOS fires this event before entering PiP — cancel it immediately
+    el.addEventListener('enterpictureinpicture', (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture().catch(() => {});
+      }
+    }, true);
+  }, []);
+
   const startCamera = useCallback(async (facing) => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(t => t.stop());
@@ -35,11 +52,14 @@ export default function CameraView({ onCapture, onClose }) {
         audio: true,
       });
       streamRef.current = stream;
-      if (videoRef.current) videoRef.current.srcObject = stream;
+      if (videoRef.current) {
+        blockPiP(videoRef.current);
+        videoRef.current.srcObject = stream;
+      }
     } catch (err) {
       setCameraError('Camera access denied. Please allow camera permissions in Settings.');
     }
-  }, []);
+  }, [blockPiP]);
 
   useEffect(() => {
     startCamera(facingMode);
@@ -49,7 +69,10 @@ export default function CameraView({ onCapture, onClose }) {
     };
   }, [facingMode]);
 
-  const handleVideoReady = () => setReady(true);
+  const handleVideoReady = () => {
+    if (videoRef.current) blockPiP(videoRef.current);
+    setReady(true);
+  };
 
   const flipCamera = () => setFacingMode(f => f === 'environment' ? 'user' : 'environment');
 

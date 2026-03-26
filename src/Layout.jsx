@@ -17,25 +17,48 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
 
   // Disable Picture-in-Picture globally — iOS WKWebView activates PiP for any video/camera stream
   useEffect(() => {
-    // Exit PiP if it somehow gets activated
-    const exitPiP = () => {
+    // Exit PiP immediately when it's entered
+    const exitPiP = (e) => {
+      e?.preventDefault?.();
       if (document.pictureInPictureElement) {
         document.exitPictureInPicture().catch(() => {});
       }
     };
-    document.addEventListener('enterpictureinpicture', exitPiP);
 
-    // Prevent PiP via CSS (disables the PiP button in supported browsers)
+    // Capture phase — fires before the video element's own handler
+    document.addEventListener('enterpictureinpicture', exitPiP, true);
+
+    // Poll every 500ms as a safety net (iOS sometimes bypasses event listeners)
+    const pipPoller = setInterval(() => {
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture().catch(() => {});
+      }
+      // Also patch any new <video> elements that appeared in the DOM
+      document.querySelectorAll('video').forEach(v => {
+        if (!v._pipBlocked) {
+          v._pipBlocked = true;
+          v.disablePictureInPicture = true;
+          v.setAttribute('disablepictureinpicture', '');
+          v.setAttribute('x-webkit-airplay', 'deny');
+          v.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+          v.addEventListener('enterpictureinpicture', exitPiP, true);
+        }
+      });
+    }, 500);
+
+    // Prevent PiP via CSS (hides the PiP button in Safari/Chrome controls)
     const style = document.createElement('style');
     style.id = 'disable-pip-style';
     style.textContent = `
       video::-webkit-media-controls-pip-button { display: none !important; }
+      video::-webkit-media-controls-wireless-playback-button { display: none !important; }
       video { -webkit-playsinline: 1; }
     `;
     document.head.appendChild(style);
 
     return () => {
-      document.removeEventListener('enterpictureinpicture', exitPiP);
+      document.removeEventListener('enterpictureinpicture', exitPiP, true);
+      clearInterval(pipPoller);
       document.getElementById('disable-pip-style')?.remove();
     };
   }, []);
