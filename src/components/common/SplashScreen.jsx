@@ -19,7 +19,8 @@ export default function SplashScreen({ onFinish }) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
-          className="fixed inset-0 z-[9999] bg-[#0b0b0b] flex flex-col items-center justify-center"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
+          style={{background: 'var(--bg)'}}
         >
           {/* Glow background */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
