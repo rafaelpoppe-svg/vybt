@@ -16,6 +16,7 @@ import { PlanFilters, UserFilters } from '../components/explore/ExploreFilters';
 import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
 import { useLanguage } from '../components/common/LanguageContext';
 import CommunityCard from '../components/community/CommunityCard';
+import { SlidersHorizontal } from 'lucide-react';
 
 export default function Explore() {
   const navigate = useNavigate();
