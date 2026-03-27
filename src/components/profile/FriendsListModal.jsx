@@ -23,8 +23,8 @@ export default function FriendsListModal({ isOpen, onClose, friendProfiles, acce
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
             onClick={e => e.stopPropagation()}
-            className="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-white/10 overflow-hidden"
-            style={{ maxHeight: '75vh' }}
+            className="w-full max-w-lg rounded-t-3xl border-t border-white/10 overflow-hidden"
+            style={{ maxHeight: '75vh', background: 'var(--bg)' }}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
