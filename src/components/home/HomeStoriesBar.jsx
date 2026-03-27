@@ -251,9 +251,11 @@ export default function HomeStoriesBar({
     }));
   }, [stories, currentUserId, friendUserIds]);*/
 
+  // Só stories de amigos SEM plan_id — os que têm plan_id já aparecem no PlanCircle
   const friendStoryGroups = useMemo(() => {
     const byUser = {};
     friendStories.forEach(s => {
+      if (s.plan_id) return; // já coberto pelo PlanCircle
       if (!byUser[s.user_id]) byUser[s.user_id] = [];
       byUser[s.user_id].push(s);
     });
