@@ -515,7 +515,10 @@ export default function Chat() {
                   className="w-full rounded-2xl overflow-hidden text-left"
                   style={{ background: 'linear-gradient(135deg, #111 0%, #181818 100%)', border: `1px solid ${color}25` }}
                 >
-                  <div className="flex items-center gap-3 p-3.5">
+                  <div 
+                    className="flex items-center gap-3 p-3.5"
+                    style={{background: 'var(--bg)'}}
+                  >
                     {/* Plan image */}
                     <div className="relative w-14 h-14 flex-shrink-0">
                       <div className="w-full h-full rounded-xl overflow-hidden">
