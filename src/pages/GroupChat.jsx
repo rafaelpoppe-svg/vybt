@@ -493,12 +493,12 @@ export default function GroupChat() {
               onAddStory={() => navigate(createPageUrl('AddStory') + `?planId=${planId}`)}
             />
           </div>
-          <motion.button
+          <button
             onClick={() => setShowGallery(true)}
             className="flex-shrink-0 ml-2 px-3 py-2 rounded-lg bg-gray-800/50 hover:bg-gray-700/70 text-white text-sm font-semibold transition-colors"
           >
             📸
-          </motion.button>
+          </button>
         </div>
       </div>
 
@@ -632,7 +632,7 @@ export default function GroupChat() {
       {/* Gallery Modal */}
       {showGallery && (
         <div 
-          className="fixed inset-0 z-[100] overflow-hidden"
+          className="fixed inset-0 z-50 overflow-hidden"
           style={{background: 'var(--bg)'}}
         >
           <GroupChatGalleryTab
