@@ -223,7 +223,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
     <div className="relative w-full h-full">
       {/* Map styles override for dark theme */}
       <style>{`
-        .leaflet-container { background: #1a1a1a !important; }
+        .leaflet-container { background: var(--bg) !important; }
         .leaflet-tile { filter: brightness(0.75) saturate(0.8) hue-rotate(180deg) invert(1); }
         .leaflet-control-attribution { display: none; }
         .leaflet-popup-content-wrapper {
