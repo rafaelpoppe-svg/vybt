@@ -493,12 +493,12 @@ export default function GroupChat() {
               onAddStory={() => navigate(createPageUrl('AddStory') + `?planId=${planId}`)}
             />
           </div>
-          <button
+          <motion.button
             onClick={() => setShowGallery(true)}
             className="flex-shrink-0 ml-2 px-3 py-2 rounded-lg bg-gray-800/50 hover:bg-gray-700/70 text-white text-sm font-semibold transition-colors"
           >
             📸
-          </button>
+          </motion.button>
         </div>
       </div>
 
