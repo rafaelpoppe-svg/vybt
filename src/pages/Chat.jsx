@@ -292,7 +292,9 @@ export default function Chat() {
                     onClick={() => { setShowClearConfirm(true); setShowChatMenu(false); }}
                     className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-gray-200 hover:bg-white/5 transition-colors"
                   >
-                    <Trash2 className="w-4 h-4 text-gray-400" />
+                    <Trash2 className="w-4 h-4" 
+                      style={{color: 'var(--text-secondary)'}}
+                    />
                     Clear Chat
                   </button>
                   <div className="h-px bg-gray-800" />
