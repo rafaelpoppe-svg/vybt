@@ -22,7 +22,7 @@ const STEPS = [
 ];
 
 const POPULAR_CITIES = [
-  'Amsterdam','Athens','Barcelona','Belgrade','Berlin','Bratislava','Brussels',
+  'Amsterdam','Athens','Barcelona','Belgrade','Berlin','Bratislava','Braga','Brussels',
   'Bucharest','Budapest','Copenhagen','Dublin','Helsinki','Lisbon','Ljubljana',
   'London','Madrid','Milan','Oslo','Paris','Porto','Prague','Rome','Sofia',
   'Stockholm','Vienna','Warsaw','Zagreb',
