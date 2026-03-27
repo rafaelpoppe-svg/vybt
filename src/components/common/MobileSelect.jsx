@@ -95,7 +95,10 @@ export default function MobileSelect({
 
       {/* Bottom Sheet */}
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerContent className="bg-[#141414] border-gray-800 pb-safe">
+        <DrawerContent 
+          className="bg-[#141414] border-gray-800 pb-safe"
+          style={{background: 'var(--bg-secondary)'}}
+        >
           {title && (
             <DrawerHeader>
               <DrawerTitle className="text-white">{title}</DrawerTitle>
