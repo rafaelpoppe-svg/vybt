@@ -17,6 +17,90 @@ import NationalitySelect from '../components/onboarding/NationalitySelect';
 import UsernameSelect from '../components/onboarding/UsernameSelect';
 import { useLanguage } from '../components/common/LanguageContext';
 
+const ONBOARDING_CITIES = [
+  'Braga', 'Porto', 'Lisbon',
+  'London', 'Madrid', 'Barcelona', 'Paris', 'Berlin', 'Amsterdam',
+  'Rome', 'Milan', 'Vienna', 'Prague', 'Warsaw', 'Bucharest',
+  'Budapest', 'Athens', 'Dublin', 'Stockholm', 'Oslo', 'Copenhagen',
+  'New York', 'Los Angeles', 'Miami', 'Chicago', 'San Francisco',
+];
+
+function LocationStep({ city, onCityChange, detectLocation, detectingCity, t }) {
+  const [search, setSearch] = React.useState('');
+  const filtered = ONBOARDING_CITIES.filter(c =>
+    c.toLowerCase().includes(search.toLowerCase())
+  );
+  return (
+    <div className="space-y-5">
+      <div>
+        <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t.whereAreYou}</h2>
+        <p style={{ color: 'var(--text-secondary)' }}>{t.locationSubtitle}</p>
+      </div>
+      <button
+        type="button"
+        onClick={detectLocation}
+        disabled={detectingCity}
+        className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl bg-[#00c6d2]/10 border border-[#00c6d2]/40 text-left disabled:opacity-50"
+      >
+        {detectingCity ? (
+          <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin flex-shrink-0" />
+        ) : (
+          <Navigation className="w-6 h-6 text-[#00c6d2] flex-shrink-0" />
+        )}
+        <div>
+          <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+            {detectingCity ? t.detecting : city ? city : t.useMyLocation}
+          </p>
+          {!detectingCity && !city && (
+            <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.tapToDetect}</p>
+          )}
+        </div>
+      </button>
+      {city && (
+        <div className="flex items-center gap-2 text-[#00c6d2] text-sm">
+          <MapPin className="w-4 h-4" />
+          <span>{t.locationSetTo} <strong>{city}</strong></span>
+        </div>
+      )}
+      <div className="flex items-center gap-3">
+        <div className="flex-1 h-px bg-white/10" />
+        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>or search city</span>
+        <div className="flex-1 h-px bg-white/10" />
+      </div>
+      <input
+        type="text"
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        placeholder="🔍 Search city..."
+        className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500 border border-white/10 focus:outline-none focus:border-[#00c6d2]/60"
+        style={{ background: 'rgba(255,255,255,0.06)', fontSize: '16px' }}
+      />
+      <div className="space-y-1.5 max-h-52 overflow-y-auto scrollbar-hide">
+        {filtered.map(c => (
+          <motion.button
+            key={c}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => onCityChange(c)}
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm text-left transition-all"
+            style={city === c ? {
+              background: 'rgba(0,198,210,0.15)',
+              border: '1px solid rgba(0,198,210,0.4)',
+              color: '#00c6d2',
+            } : {
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid transparent',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            <span className={city === c ? 'font-bold' : ''}>{c}</span>
+            {city === c && <span className="text-xs font-bold text-[#00c6d2]">✓</span>}
+          </motion.button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function OnboardingInner() {
   const navigate = useNavigate();
   const { language, changeLanguage, t } = useLanguage();
@@ -182,38 +266,13 @@ function OnboardingInner() {
       onSelect={(party_types) => setData({...data, party_types})} 
     />,
     // Location step
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t.whereAreYou}</h2>
-        <p style={{ color: 'var(--text-secondary)' }}>{t.locationSubtitle}</p>
-      </div>
-      <button
-        type="button"
-        onClick={detectLocation}
-        disabled={detectingCity}
-        className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl bg-[#00c6d2]/10 border border-[#00c6d2]/40 text-left disabled:opacity-50"
-      >
-        {detectingCity ? (
-          <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin flex-shrink-0" />
-        ) : (
-          <Navigation className="w-6 h-6 text-[#00c6d2] flex-shrink-0" />
-        )}
-        <div>
-          <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-            {detectingCity ? t.detecting : data.city ? data.city : t.useMyLocation}
-          </p>
-          {!detectingCity && !data.city && (
-            <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.tapToDetect}</p>
-          )}
-        </div>
-      </button>
-      {data.city && (
-        <div className="flex items-center gap-2 text-[#00c6d2] text-sm">
-          <MapPin className="w-4 h-4" />
-          <span>{t.locationSetTo} <strong>{data.city}</strong></span>
-        </div>
-      )}
-    </div>,
+    <LocationStep
+      city={data.city}
+      onCityChange={(city) => setData(prev => ({ ...prev, city }))}
+      detectLocation={detectLocation}
+      detectingCity={detectingCity}
+      t={t}
+    />,
     // Nationality step (optional)
     <NationalitySelect
       selected={data.nationality}

@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Loader2, Lock, X } from 'lucide-react';
 
 const popularCities = [
-  'Amsterdam', 'Athens', 'Belgrade', 'Berlin', 'Bern', 'Bratislava', 'Brussels',
+  'Amsterdam', 'Athens', 'Belgrade', 'Berlin', 'Bern', 'Braga', 'Bratislava', 'Brussels',
   'Bucharest', 'Budapest', 'Copenhagen', 'Dublin', 'Helsinki', 'Kiev',
   'Lisbon', 'Ljubljana', 'London', 'Luxembourg', 'Madrid', 'Minsk',
-  'Monaco', 'Nicosia', 'Oslo', 'Paris', 'Podgorica', 'Prague',
+  'Monaco', 'Nicosia', 'Oslo', 'Paris', 'Podgorica', 'Porto', 'Prague',
   'Reykjavik', 'Riga', 'Rome', 'San Marino', 'Sarajevo', 'Skopje',
   'Sofia', 'Stockholm', 'Tallinn', 'Tirana', 'Valletta', 'Vienna',
   'Vilnius', 'Warsaw', 'Zagreb',
