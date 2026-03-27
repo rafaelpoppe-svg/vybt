@@ -232,7 +232,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
           border-radius: 12px !important;
           padding: 0 !important;
         }
-        .leaflet-popup-tip { background: #1a1a1a !important; }
+        .leaflet-popup-tip { background: var(--bg) !important; }
         .leaflet-popup-content { margin: 0 !important; }
       `}</style>
 
