@@ -26,7 +26,7 @@ export default function CommunityCard({ community, myProfile, onClick }) {
         {community.cover_image
           ? <img src={community.cover_image} alt="" className="w-full h-full object-cover" />
           : <div className="w-full h-full flex items-center justify-center text-4xl" style={{ background: `linear-gradient(135deg, ${tc}44, #542b9b66)` }}>⭐</div>}
-        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 40%, #0b0b0b 100%)` }} />
+        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 40%, var(--bg) 100%)` }} />
 
         {/* Match badge */}
         {matchScore !== null && matchScore > 0 && (
@@ -38,7 +38,7 @@ export default function CommunityCard({ community, myProfile, onClick }) {
       </div>
 
       {/* Info */}
-      <div className="px-3 pb-3 -mt-4 relative z-10" style={{ background: '#0f0f0f' }}>
+      <div className="px-3 pb-3 -mt-4 relative z-10" style={{ background: 'var(--bg)' }}>
         <h3 className="text-white font-black text-base truncate">{community.name}</h3>
         <div className="flex items-center justify-between mt-1">
           <p className="text-gray-500 text-xs flex items-center gap-1"><span>📍</span>{community.city}</p>
