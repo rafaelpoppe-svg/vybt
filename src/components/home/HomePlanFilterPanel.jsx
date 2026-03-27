@@ -19,7 +19,7 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         className="mx-4 mb-3 rounded-2xl p-4"
-        style={{ background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.1)' }}
+        style={{ background: 'var(--bg)', border: '1px solid rgba(255,255,255,0.1)' }}
       >
         <div className="flex justify-between items-center mb-3">
           <h3 className="text-white font-bold text-sm">Filter Plans</h3>
