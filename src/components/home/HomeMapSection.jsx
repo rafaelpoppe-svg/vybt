@@ -254,7 +254,7 @@ export default function HomeMapSection({ plans = [], allParticipants = [], profi
       <style>{`
         .leaflet-div-icon { background: none !important; border: none !important; box-shadow: none !important; }
         .vybt-pin { background: none !important; border: none !important; box-shadow: none !important; }
-        .vybt-leaflet-map .leaflet-container { background: #1a1a1a !important; }
+        .vybt-leaflet-map .leaflet-container { background: var(--bg) !important; }
         .vybt-leaflet-map .leaflet-tile { filter: brightness(0.6) saturate(0.6) hue-rotate(185deg) invert(1) !important; }
         .vybt-leaflet-map .leaflet-control-attribution,
         .vybt-leaflet-map .leaflet-control-zoom { display: none !important; }
