@@ -133,7 +133,7 @@ function CityStep({ data, setData, isAdmin }) {
                 className="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all"
                 style={selected
                   ? { background: `${tc}22`, border: `1.5px solid ${tc}66`, color: tc }
-                  : { background: '#111', border: '1.5px solid #1f2937', color: '#d1d5db' }}
+                  : { background: 'var(--bg)', border: '1.5px solid #1f2937', color: 'var(--text-primary)' }}
               >
                 <span className="font-medium text-sm">{c}</span>
                 {selected && <Check className="w-4 h-4 flex-shrink-0" style={{ color: tc }} />}
