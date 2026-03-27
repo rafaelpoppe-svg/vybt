@@ -272,7 +272,7 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
   return (
     <div
       className="hlm-wrap rounded-3xl overflow-hidden"
-      style={{ position: 'relative', height: 280, width: '100%', border: '1px solid rgba(255,255,255,0.1)', background: '#111', zIndex: 450, isolation: "isolate" }}
+      style={{ position: 'relative', height: 280, width: '100%', border: '1px solid rgba(255,255,255,0.1)', background: 'var(--bg)', zIndex: 450, isolation: "isolate" }}
     >
       {/* Map */}
       <MapContainer
