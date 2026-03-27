@@ -255,9 +255,14 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
     // Hide plans whose time has already passed (regardless of backend status)
     if (p.date && p.time) {
       const start = new Date(`${p.date}T${p.time}:00`);
-      const end = p.end_time
-        ? new Date(`${p.date}T${p.end_time}:00`)
-        : new Date(start.getTime() + 8 * 60 * 60 * 1000);
+      let end;
+      if (p.end_time) {
+        end = new Date(`${p.date}T${p.end_time}:00`);
+        // If end_time is before start_time, it means the plan ends the next day
+        if (end <= start) end = new Date(end.getTime() + 24 * 60 * 60 * 1000);
+      } else {
+        end = new Date(start.getTime() + 8 * 60 * 60 * 1000);
+      }
       if (now > end) return false;
     }
     return true;
