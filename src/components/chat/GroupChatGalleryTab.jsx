@@ -26,6 +26,23 @@ export default function GroupChatGalleryTab({
     }
   };
 
+  // Helper para fechar com suporte a touch e click
+  const handleClose = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    onClose();
+  };
+
+  const handleCloseViewer = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setSelectedMedia(null);
+  };
+
   return (
     <div 
       className="flex flex-col h-full"
@@ -35,8 +52,10 @@ export default function GroupChatGalleryTab({
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800/40 flex-shrink-0">
         <h2 className="text-white font-bold text-lg">📸 Galeria</h2>
         <button
-          onClick={onClose}
-          className="text-gray-400 hover:text-white transition-colors"
+          onClick={handleClose}
+          onTouchEnd={handleClose}
+          className="text-gray-400 hover:text-white active:text-white transition-colors flex items-center justify-center"
+          style={{ minWidth: 44, minHeight: 44, touchAction: 'manipulation' }}
         >
           <X className="w-5 h-5" />
         </button>
@@ -101,6 +120,7 @@ export default function GroupChatGalleryTab({
                   }}
                   disabled={downloadingId === story.id}
                   className="absolute top-2 right-2 bg-black/60 hover:bg-black/80 rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-all duration-200 disabled:opacity-50"
+                  style={{ touchAction: 'manipulation' }}
                 >
                   {downloadingId === story.id ? (
                     <Loader2 className="w-4 h-4 text-[#00fea3] animate-spin" />
@@ -122,11 +142,15 @@ export default function GroupChatGalleryTab({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
-            onClick={() => setSelectedMedia(null)}
+            onClick={handleCloseViewer}
+            onTouchEnd={handleCloseViewer}
           >
+            {/* Botão X do viewer */}
             <button
-              onClick={() => setSelectedMedia(null)}
-              className="absolute top-4 right-4 z-50 text-white hover:text-gray-300 transition-colors"
+              onClick={handleCloseViewer}
+              onTouchEnd={handleCloseViewer}
+              className="absolute top-4 right-4 z-50 text-white hover:text-gray-300 active:text-gray-300 transition-colors flex items-center justify-center"
+              style={{ minWidth: 44, minHeight: 44, touchAction: 'manipulation' }}
             >
               <X className="w-6 h-6" />
             </button>
@@ -137,8 +161,14 @@ export default function GroupChatGalleryTab({
                   e.stopPropagation();
                   handleDownload(selectedMedia);
                 }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleDownload(selectedMedia);
+                }}
                 disabled={downloadingId === selectedMedia.id}
                 className="bg-[#00fea3] text-black rounded-lg px-4 py-2 font-semibold text-sm flex items-center gap-2 hover:bg-[#00d4ff] transition-colors disabled:opacity-50"
+                style={{ touchAction: 'manipulation' }}
               >
                 {downloadingId === selectedMedia.id ? (
                   <>
@@ -154,7 +184,11 @@ export default function GroupChatGalleryTab({
               </button>
             </div>
 
-            <div className="flex flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="flex flex-col items-center gap-4"
+              onClick={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+            >
               {selectedMedia.media_type === 'video' ? (
                 <video
                   src={selectedMedia.media_url}
