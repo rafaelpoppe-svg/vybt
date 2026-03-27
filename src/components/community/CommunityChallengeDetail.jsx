@@ -105,7 +105,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
         transition={{ type: 'spring', stiffness: 280, damping: 28 }}
         onClick={e => e.stopPropagation()}
         className="w-full max-w-lg rounded-t-3xl overflow-y-auto"
-        style={{ maxHeight: '92dvh', background: '#0d0d14', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}
+        style={{ maxHeight: '92dvh', background: 'var(--bg)', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}
       >
         {/* Hero header */}
         <div className="relative p-5 pb-4" style={{ background: s.gradient }}>
