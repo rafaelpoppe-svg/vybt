@@ -227,7 +227,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
         .leaflet-tile { filter: brightness(0.75) saturate(0.8) hue-rotate(180deg) invert(1); }
         .leaflet-control-attribution { display: none; }
         .leaflet-popup-content-wrapper {
-          background: #1a1a1a !important;
+          background: var(--bg);
           border: 1px solid #333 !important;
           border-radius: 12px !important;
           padding: 0 !important;
