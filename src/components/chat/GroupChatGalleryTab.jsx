@@ -35,11 +35,12 @@ export default function GroupChatGalleryTab({
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800/40 flex-shrink-0">
         <h2 className="text-white font-bold text-lg">📸 Galeria</h2>
         <motion.button
-          whileTap={{ scale: 0.85 }}
-          onClick={onClose}
-          className="text-gray-400 hover:text-white transition-colors"
-        >
-          <X className="w-5 h-5" />
+            whileTap={{ scale: 0.9 }}
+            onClick={onClose}
+            className="w-11 h-11 flex items-center justify-center -mr-2 text-gray-400 active:text-white transition-colors touch-manipulation"
+            style={{ touchAction: 'manipulation' }}
+          >
+            <X className="w-6 h-6" />
         </motion.button>
       </div>
 
