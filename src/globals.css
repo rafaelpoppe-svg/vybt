@@ -117,7 +117,7 @@ html.light .divide-gray-800 > * + * { border-color: rgba(0,0,0,0.06) !important;
 
 html.light {
   --bg: #f5f0eb;
-  --bg-secondary: #ede8e3;
+  --bg-secondary: #e9dcd0;
   --surface: #ffffff;
   --surface-2: #f0ebe5;
   --border: rgba(0,0,0,0.08);
