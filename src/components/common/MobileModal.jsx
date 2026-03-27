@@ -29,7 +29,10 @@ export default function MobileModal({ open, onClose, title, children, className,
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={(v) => !v && onClose()}>
-        <DrawerContent className={cn('bg-[#141414] border-gray-800', contentClassName)}>
+        <DrawerContent 
+          className={cn('border-gray-800', contentClassName)}
+          style={{background: 'var(--bg-secondary)'}}
+        >
           {title && (
             <DrawerHeader className="relative">
               <DrawerTitle className="text-white text-center">{title}</DrawerTitle>
