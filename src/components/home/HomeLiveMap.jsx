@@ -10,7 +10,7 @@ if (typeof document !== 'undefined' && !document.getElementById('hlm-styles')) {
   s.id = 'hlm-styles';
   s.textContent = `
     .hlm-wrap .leaflet-tile { filter: brightness(0.55) saturate(0.5) hue-rotate(190deg) invert(1) !important; }
-    .hlm-wrap .leaflet-container { background: #111 !important; }
+    .hlm-wrap .leaflet-container { background: var(--bg-secondary) !important; }
     .hlm-wrap .leaflet-control-attribution,
     .hlm-wrap .leaflet-control-zoom { display: none !important; }
     /* Reset ALL default Leaflet icon styles */
