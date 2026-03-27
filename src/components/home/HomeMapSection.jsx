@@ -60,7 +60,7 @@ if (typeof document !== 'undefined' && !document.getElementById('vybt-map-styles
       filter: brightness(0.6) saturate(0.6) hue-rotate(185deg) invert(1) !important;
     }
     .vybt-leaflet-map .leaflet-container {
-      background: var(-bg) !important;
+      background: var(--bg) !important;
     }
     .vybt-leaflet-map .leaflet-control-attribution,
     .vybt-leaflet-map .leaflet-control-zoom {
