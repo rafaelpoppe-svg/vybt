@@ -41,7 +41,8 @@ export default function DeleteAccountModal({ isOpen, onClose, userId, profile })
             initial={{ y: 60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 60, opacity: 0 }}
-            className="bg-[#141414] border border-red-900/40 rounded-2xl p-6 w-full max-w-sm space-y-5"
+            className="border border-red-900/40 rounded-2xl p-6 w-full max-w-sm space-y-5"
+            style={{background: 'var(--bg)'}}
           >
             {/* Header */}
             <div className="flex items-start justify-between">
