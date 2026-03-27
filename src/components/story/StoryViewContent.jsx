@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
@@ -30,8 +30,12 @@ function getCubeWrapperStyle(progress, direction) {
  * Props:
  *   initialStoryId: string  — which story to open first
  *   onClose: () => void     — called when user closes (X button or last story)
+ *   scope: { type: 'friend', userId } | { type: 'plan', planId } | null
+ *     - 'friend': only shows stories from that specific user (swipe to close)
+ *     - 'plan': shows all stories from that plan (swipe between users of that plan)
+ *     - null: shows all grouped stories (global feed)
  */
-export default function StoryViewContent({ initialStoryId, onClose }) {
+export default function StoryViewContent({ initialStoryId, onClose, scope = null }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -104,9 +108,33 @@ export default function StoryViewContent({ initialStoryId, onClose }) {
     staleTime: 5 * 60 * 1000,
   });
 
-  const { groupedStories, findStoryPosition } = useStoryGrouping(
+  const { groupedStories: allGroupedStories, findStoryPosition } = useStoryGrouping(
     allStories, userProfiles, plans, currentUser, friendships
   );
+
+  // Filter groups based on scope
+  const groupedStories = useMemo(() => {
+    if (!scope) return allGroupedStories;
+    if (scope.type === 'friend') {
+      // Build a single group with all stories from this specific user
+      const userStories = allStories.filter(s => s.user_id === scope.userId);
+      if (userStories.length === 0) return allGroupedStories;
+      const profile = userProfiles.find(p => p.user_id === scope.userId);
+      return [{
+        type: 'friend',
+        user_id: scope.userId,
+        userName: profile?.display_name || 'User',
+        userPhoto: profile?.photos?.[0],
+        stories: userStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
+      }];
+    }
+    if (scope.type === 'plan') {
+      // Only show the group for this plan
+      const found = allGroupedStories.filter(g => g.type === 'plan' && g.plan_id === scope.planId);
+      return found.length > 0 ? found : allGroupedStories;
+    }
+    return allGroupedStories;
+  }, [allGroupedStories, scope, allStories, userProfiles]);
 
   const currentGroup = groupedStories[currentGroupIndex];
   const currentGroupStory = currentGroup?.stories?.[currentStoryInGroupIndex];

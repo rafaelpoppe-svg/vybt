@@ -6,7 +6,7 @@ import StoryViewContent from './StoryViewContent';
  * Renders StoryView as a fullscreen overlay on top of the current page.
  * Usage: <StoryViewOverlay storyId={id} onClose={() => setStoryId(null)} />
  */
-export default function StoryViewOverlay({ storyId, onClose }) {
+export default function StoryViewOverlay({ storyId, onClose, scope = null }) {
   return (
     <AnimatePresence>
       {storyId && (
@@ -18,7 +18,7 @@ export default function StoryViewOverlay({ storyId, onClose }) {
           transition={{ duration: 0.18 }}
           className="fixed inset-0" style={{ zIndex: 800 }}
         >
-          <StoryViewContent initialStoryId={storyId} onClose={onClose} />
+          <StoryViewContent initialStoryId={storyId} onClose={onClose} scope={scope} />
         </motion.div>
       )}
     </AnimatePresence>

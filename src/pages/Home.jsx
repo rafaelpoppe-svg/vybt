@@ -41,6 +41,7 @@ export default function Home() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [activeSort, setActiveSort] = useState('foryou');
   const [overlayStoryId, setOverlayStoryId] = useState(null);
+  const [overlayScope, setOverlayScope] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
   const [showMyCommunities, setShowMyCommunities] = useState(false);
   const [mapFilters, setMapFilters] = useState({ partyTags: [], startTime: '', endTime: '', planDate: '' });
@@ -370,10 +371,16 @@ export default function Home() {
             plans={visiblePlans}
             currentUserId={currentUser?.id}
             happeningPlan={happeningPlan}
-            onStoryClick={(story) => setOverlayStoryId(story.id)}
+            onStoryClick={(story) => {
+              setOverlayScope({ type: 'friend', userId: story.user_id });
+              setOverlayStoryId(story.id);
+            }}
             onPlanStoriesClick={(plan, planStories) => {
               const firstStory = planStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))[0];
-              if (firstStory) setOverlayStoryId(firstStory.id);
+              if (firstStory) {
+                setOverlayScope({ type: 'plan', planId: plan.id });
+                setOverlayStoryId(firstStory.id);
+              }
             }}
             onAddStory={() => navigate(createPageUrl('AddStory') + (happeningPlan ? `?planId=${happeningPlan.id}` : ''))}
           />
@@ -453,13 +460,16 @@ export default function Home() {
           profilesMap={profilesMap}
           plans={visiblePlans}
           onPlanClick={(plan) => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
-          onStoryClick={(story) => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
+          onStoryClick={(story) => {
+            setOverlayScope({ type: 'friend', userId: story.user_id });
+            setOverlayStoryId(story.id);
+          }}
         />
       </div> {/* end scrollable */}
 
       <BottomNav />
 
-      <StoryViewOverlay storyId={overlayStoryId} onClose={() => setOverlayStoryId(null)} />
+      <StoryViewOverlay storyId={overlayStoryId} onClose={() => { setOverlayStoryId(null); setOverlayScope(null); }} scope={overlayScope} />
 
       <MyCommunitiesDrawer
         isOpen={showMyCommunities}
