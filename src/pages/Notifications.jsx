@@ -59,7 +59,7 @@ function Avatar({ profile, size = 44, ringColor, badge }) {
       </div>
       {badge && (
         <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[11px]"
-          style={{ background: '#0b0b0b', padding: 1 }}>
+          style={{ background: 'var(--bg)', padding: 1 }}>
           <div className="w-full h-full rounded-full flex items-center justify-center"
             style={{ background: badge.bg }}>
             <span>{badge.emoji}</span>
