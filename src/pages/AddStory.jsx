@@ -14,7 +14,8 @@ function PlanSelectorSheet({ plans, selectedPlanId, onSelect, onClose }) {
       animate={{ y: 0 }}
       exit={{ y: '100%' }}
       transition={{ type: 'spring', stiffness: 400, damping: 40 }}
-      className="absolute bottom-0 left-0 right-0 z-50 bg-[#111] border-t border-gray-800 rounded-t-3xl overflow-hidden"
+      className="absolute bottom-0 left-0 right-0 z-50 border-t border-gray-800 rounded-t-3xl overflow-hidden"
+      style={{background: 'var(--bg)'}}
     >
       <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-gray-800">
         <div className="w-10 h-1 rounded-full bg-gray-700 mx-auto absolute left-1/2 -translate-x-1/2 top-3" />
