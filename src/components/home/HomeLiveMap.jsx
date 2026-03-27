@@ -94,7 +94,7 @@ function createPlanIcon(plan) {
   }
 
   // Ripple rings for happening plans
-  const ripples = isHappening
+  const ripples = (isHappening || isHot)
     ? `<div class="hlm-ripple"   style="width:36px;height:36px;top:0;left:0;color:${color};"></div>
        <div class="hlm-ripple hlm-ripple-2" style="width:36px;height:36px;top:0;left:0;color:${color};"></div>
        <div class="hlm-ripple hlm-ripple-3" style="width:36px;height:36px;top:0;left:0;color:${color};"></div>`
@@ -124,7 +124,7 @@ function createPlanIcon(plan) {
         ${statusBadge}
         <div style="position:relative;margin-top:4px;flex-shrink:0;">
           ${ripples}
-          <div class="${isHappening ? 'hlm-pulse' : ''}" style="width:36px;height:36px;border-radius:50%;border:2px solid ${color};overflow:hidden;box-shadow:0 0 ${isHappening ? '12px' : '5px'} ${color}88;">
+          <div class="${(isHappening || isHot) ? 'hlm-pulse' : ''}" style="width:36px;height:36px;border-radius:50%;border:2px solid ${color};overflow:hidden;box-shadow:0 0 ${(isHappening || isHot) ? '12px' : '5px'} ${color}88;">
             ${inner}
           </div>
           ${tagBadge}
