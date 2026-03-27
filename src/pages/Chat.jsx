@@ -284,7 +284,10 @@ export default function Chat() {
               <>
                 {/* Backdrop */}
                 <div className="fixed inset-0 z-40" onClick={() => setShowChatMenu(false)} />
-                <div className="absolute right-0 top-11 z-50 w-52 rounded-2xl bg-[#1a1a1a] border border-gray-700/50 shadow-2xl overflow-hidden">
+                <div 
+                  className="absolute right-0 top-11 z-50 w-52 rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden"
+                  style={{background: 'var(--bg)'}}
+                >
                   <button
                     onClick={() => { setShowClearConfirm(true); setShowChatMenu(false); }}
                     className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-gray-200 hover:bg-white/5 transition-colors"
@@ -321,7 +324,8 @@ export default function Chat() {
             <motion.div
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="relative w-full bg-[#1a1a1a] rounded-t-3xl p-6 pb-10 z-10"
+              className="relative w-full rounded-t-3xl p-6 pb-10 z-10"
+              style={{background: 'var(--bg)'}}
               onClick={e => e.stopPropagation()}
             >
               <div className="w-10 h-1 bg-gray-700 rounded-full mx-auto mb-6" />
