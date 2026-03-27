@@ -18,7 +18,7 @@ export default function PageTransition({ children }) {
         height: '100%',
         overflowX: 'hidden',
         overflowY: 'auto',
-        background: '#0b0b0b',
+        background: 'var(--bg)',
         // Block ALL horizontal touch gestures at this level
         touchAction: 'pan-y pinch-zoom',
         overscrollBehaviorX: 'none',
