@@ -409,7 +409,7 @@ export default function CreateCommunity() {
             className={`w-full p-4 rounded-2xl border-2 text-left flex items-start gap-3 transition-all`}
             style={data.plan_creation_policy === opt.key
               ? { borderColor: data.theme_color, background: `${data.theme_color}18` }
-              : { borderColor: '#374151', background: '#111827' }}>
+              : { borderColor: 'var(--bg-secondary)', background: 'var(--bg)' }}>
             <span className="text-2xl flex-shrink-0">{opt.emoji}</span>
             <div className="flex-1">
               <p className="text-white font-bold">{opt.title}</p>
