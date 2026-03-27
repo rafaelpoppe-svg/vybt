@@ -632,7 +632,7 @@ export default function GroupChat() {
       {/* Gallery Modal */}
       {showGallery && (
         <div 
-          className="fixed inset-0 z-50 overflow-hidden"
+          className="fixed inset-0 z-[100] overflow-hidden"
           style={{background: 'var(--bg)'}}
         >
           <GroupChatGalleryTab
