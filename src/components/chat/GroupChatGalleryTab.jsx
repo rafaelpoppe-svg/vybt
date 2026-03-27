@@ -34,13 +34,13 @@ export default function GroupChatGalleryTab({
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800/40 flex-shrink-0">
         <h2 className="text-white font-bold text-lg">📸 Galeria</h2>
-        <button
+        <motion.button
+          whileTap={{ scale: 0.85 }}
           onClick={onClose}
-          onTouchEnd={onClose}
           className="text-gray-400 hover:text-white transition-colors"
         >
           <X className="w-5 h-5" />
-        </button>
+        </motion.button>
       </div>
 
       {/* Gallery Grid */}
