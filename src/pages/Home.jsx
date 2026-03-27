@@ -257,15 +257,21 @@ export default function Home() {
       .filter(s => s.user_id === currentUser?.id)
       .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
   , [stories, currentUser?.id]);
-  const friendStories = useMemo(() => 
-    stories.filter(s => 
-      friendIds.includes(s.user_id) && 
-      !(s.viewed_by || []).includes(currentUser?.id)
-    )
-  , [stories, friendIds, currentUser?.id]);
   const planStories = useMemo(() => 
     stories.filter(s => !!s.plan_id && visiblePlans.some(p => p.id === s.plan_id))
   , [stories, visiblePlans]);
+
+  const planStoryPlanIds = useMemo(() => new Set(planStories.map(s => s.plan_id)), [planStories]);
+
+  // Friend stories: only stories without a plan_id that already appears in planStories
+  // This prevents a friend's plan story from showing twice (once as user, once as plan)
+  const friendStories = useMemo(() => 
+    stories.filter(s => 
+      friendIds.includes(s.user_id) && 
+      !(s.viewed_by || []).includes(currentUser?.id) &&
+      !planStoryPlanIds.has(s.plan_id)
+    )
+  , [stories, friendIds, currentUser?.id, planStoryPlanIds]);
   useAutoDeleteTerminated(plans);
   usePushNotifications({ currentUser, userCity: city, plans: visiblePlans, friendIds, myParticipations, userProfile: myProfile });
 
