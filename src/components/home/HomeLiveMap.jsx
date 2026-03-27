@@ -23,6 +23,20 @@ if (typeof document !== 'undefined' && !document.getElementById('hlm-styles')) {
     .hlm-ripple { position:absolute;border-radius:50%;border:2px solid currentColor;animation:hlm-ripple 2s ease-out infinite;pointer-events:none; }
     .hlm-ripple-2 { animation-delay:0.65s; }
     .hlm-ripple-3 { animation-delay:1.3s; }
+    /* 🔥 On Fire flame animations */
+    @keyframes hlm-fire-ring { 0%{transform:scale(1);opacity:0.8} 60%{opacity:0.4} 100%{transform:scale(2.2);opacity:0} }
+    @keyframes hlm-fire-glow { 0%,100%{box-shadow:0 0 8px 3px rgba(251,146,60,0.9),0 0 20px 6px rgba(239,68,68,0.5)} 50%{box-shadow:0 0 16px 6px rgba(251,191,36,0.9),0 0 32px 10px rgba(249,115,22,0.6)} }
+    @keyframes hlm-flame-1 { 0%,100%{transform:translateY(0) scaleX(1);opacity:1} 33%{transform:translateY(-5px) scaleX(0.8);opacity:0.9} 66%{transform:translateY(-3px) scaleX(1.2);opacity:0.7} }
+    @keyframes hlm-flame-2 { 0%,100%{transform:translateY(0) scaleX(1);opacity:0.9} 40%{transform:translateY(-6px) scaleX(0.7);opacity:1} 75%{transform:translateY(-2px) scaleX(1.1);opacity:0.6} }
+    @keyframes hlm-flame-3 { 0%,100%{transform:translateY(0) scaleX(1);opacity:0.8} 50%{transform:translateY(-7px) scaleX(0.6);opacity:1} }
+    .hlm-fire-pulse { animation: hlm-fire-glow 1s ease-in-out infinite; }
+    .hlm-fire-ring { position:absolute;border-radius:50%;border:2px solid;animation:hlm-fire-ring 1.2s ease-out infinite;pointer-events:none; }
+    .hlm-fire-ring-2 { animation-delay:0.4s; }
+    .hlm-fire-ring-3 { animation-delay:0.8s; }
+    .hlm-flame { position:absolute;pointer-events:none;font-size:11px;line-height:1; }
+    .hlm-flame-a { animation: hlm-flame-1 0.7s ease-in-out infinite; }
+    .hlm-flame-b { animation: hlm-flame-2 0.9s ease-in-out infinite; }
+    .hlm-flame-c { animation: hlm-flame-3 0.6s ease-in-out infinite; }
   `;
   document.head.appendChild(s);
 }
@@ -93,17 +107,26 @@ function createPlanIcon(plan) {
     });
   }
 
-  // Ripple rings for happening plans
-  const ripples = (isHappening || isHot)
+  // 🔥 Fire rings for on-fire plans, regular ripples for happening
+  const ripples = isHot
+    ? `<div class="hlm-fire-ring hlm-fire-ring"   style="width:36px;height:36px;top:0;left:0;border-color:#f97316;"></div>
+       <div class="hlm-fire-ring hlm-fire-ring-2" style="width:36px;height:36px;top:0;left:0;border-color:#ef4444;"></div>
+       <div class="hlm-fire-ring hlm-fire-ring-3" style="width:36px;height:36px;top:0;left:0;border-color:#fbbf24;"></div>`
+    : isHappening
     ? `<div class="hlm-ripple"   style="width:36px;height:36px;top:0;left:0;color:${color};"></div>
        <div class="hlm-ripple hlm-ripple-2" style="width:36px;height:36px;top:0;left:0;color:${color};"></div>
        <div class="hlm-ripple hlm-ripple-3" style="width:36px;height:36px;top:0;left:0;color:${color};"></div>`
     : '';
 
+  // 🔥 Animated flames around the icon for on-fire plans
+  const flames = isHot
+    ? `<div class="hlm-flame hlm-flame-a" style="top:-14px;left:4px;">🔥</div>
+       <div class="hlm-flame hlm-flame-b" style="top:-12px;right:4px;">🔥</div>
+       <div class="hlm-flame hlm-flame-c" style="top:-10px;left:50%;margin-left:-6px;">🔥</div>`
+    : '';
+
   const statusBadge = isHappening
     ? ``
-    : isHot
-    ? `<div style="position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:11px;pointer-events:none;">🔥</div>`
     : '';
 
   // Tag badge (bottom-right corner of the circle)
@@ -120,11 +143,12 @@ function createPlanIcon(plan) {
   return L.divIcon({
     className: '',
     html: `
-      <div class="hlm-icon-root" style="position:relative;width:48px;height:62px;display:flex;flex-direction:column;align-items:center;pointer-events:auto;cursor:pointer;">
+      <div class="hlm-icon-root" style="position:relative;width:48px;height:${isHot ? '74' : '62'}px;display:flex;flex-direction:column;align-items:center;pointer-events:auto;cursor:pointer;">
         ${statusBadge}
-        <div style="position:relative;margin-top:4px;flex-shrink:0;">
+        <div style="position:relative;margin-top:${isHot ? '16' : '4'}px;flex-shrink:0;">
+          ${flames}
           ${ripples}
-          <div class="${(isHappening || isHot) ? 'hlm-pulse' : ''}" style="width:36px;height:36px;border-radius:50%;border:2px solid ${color};overflow:hidden;box-shadow:0 0 ${(isHappening || isHot) ? '12px' : '5px'} ${color}88;">
+          <div class="${isHot ? 'hlm-fire-pulse' : isHappening ? 'hlm-pulse' : ''}" style="width:36px;height:36px;border-radius:50%;border:2px solid ${color};overflow:hidden;box-shadow:0 0 ${(isHappening || isHot) ? '12px' : '5px'} ${color}88;">
             ${inner}
           </div>
           ${tagBadge}
@@ -133,9 +157,9 @@ function createPlanIcon(plan) {
         <div style="width:5px;height:5px;background:${color};border-radius:50%;opacity:0.6;flex-shrink:0;"></div>
       </div>
     `,
-    iconSize: [48, 62],
-    iconAnchor: [24, 62],
-    popupAnchor: [0, -66],
+    iconSize: [48, isHot ? 74 : 62],
+    iconAnchor: [24, isHot ? 74 : 62],
+    popupAnchor: [0, isHot ? -78 : -66],
   });
 }
 
