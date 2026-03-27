@@ -107,59 +107,61 @@ function createPlanIcon(plan) {
     });
   }
 
-  // 🔥 Fire rings for on-fire plans, regular ripples for happening
-  const ripples = isHot
-    ? `<div class="hlm-fire-ring hlm-fire-ring"   style="width:36px;height:36px;top:0;left:0;border-color:#f97316;"></div>
-       <div class="hlm-fire-ring hlm-fire-ring-2" style="width:36px;height:36px;top:0;left:0;border-color:#ef4444;"></div>
-       <div class="hlm-fire-ring hlm-fire-ring-3" style="width:36px;height:36px;top:0;left:0;border-color:#fbbf24;"></div>`
-    : isHappening
-    ? `<div class="hlm-ripple"   style="width:36px;height:36px;top:0;left:0;color:${color};"></div>
-       <div class="hlm-ripple hlm-ripple-2" style="width:36px;height:36px;top:0;left:0;color:${color};"></div>
-       <div class="hlm-ripple hlm-ripple-3" style="width:36px;height:36px;top:0;left:0;color:${color};"></div>`
-    : '';
-
-  // 🔥 Animated flames around the icon for on-fire plans
-  const flames = isHot
-    ? `<div class="hlm-flame hlm-flame-a" style="top:-14px;left:4px;">🔥</div>
-       <div class="hlm-flame hlm-flame-b" style="top:-12px;right:4px;">🔥</div>
-       <div class="hlm-flame hlm-flame-c" style="top:-10px;left:50%;margin-left:-6px;">🔥</div>`
-    : '';
-
-  const statusBadge = isHappening
-    ? ``
-    : '';
-
-  // Tag badge (bottom-right corner of the circle)
   const firstTag = plan.tags?.[0];
   const tagEmoji = firstTag ? (TAG_EMOJI[firstTag] || '🎉') : null;
   const tagBadge = tagEmoji
-    ? `<div style="position:absolute;bottom:6px;right:-4px;width:18px;height:18px;border-radius:50%;background:#0b0b0b;border:1.5px solid ${color};display:flex;align-items:center;justify-content:center;font-size:9px;pointer-events:none;flex-shrink:0;">${tagEmoji}</div>`
+    ? '<div style="position:absolute;bottom:6px;right:-4px;width:18px;height:18px;border-radius:50%;background:#0b0b0b;border:1.5px solid ' + color + ';display:flex;align-items:center;justify-content:center;font-size:9px;pointer-events:none;flex-shrink:0;">' + tagEmoji + '</div>'
     : '';
 
-  const inner = plan.cover_image || plan.group_image
-    ? `<img src="${plan.cover_image || plan.group_image}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;" />`
-    : `<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#542b9b,${color});display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">🎉</div>`;
+  const inner = (plan.cover_image || plan.group_image)
+    ? '<img src="' + (plan.cover_image || plan.group_image) + '" style="width:36px;height:36px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;" />'
+    : '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#542b9b,' + color + ');display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">🎉</div>';
+
+  let ripples = '';
+  let flames = '';
+  let pulseClass = '';
+  let glowSize = '5px';
+  let iconH = 62;
+  let marginTop = 4;
+
+  if (isHot) {
+    ripples = '<div class="hlm-fire-ring" style="width:36px;height:36px;top:0;left:0;border-color:#f97316;"></div>'
+            + '<div class="hlm-fire-ring hlm-fire-ring-2" style="width:36px;height:36px;top:0;left:0;border-color:#ef4444;"></div>'
+            + '<div class="hlm-fire-ring hlm-fire-ring-3" style="width:36px;height:36px;top:0;left:0;border-color:#fbbf24;"></div>';
+    flames = '<div class="hlm-flame hlm-flame-a" style="position:absolute;top:-14px;left:4px;font-size:11px;pointer-events:none;">🔥</div>'
+           + '<div class="hlm-flame hlm-flame-b" style="position:absolute;top:-12px;right:4px;font-size:11px;pointer-events:none;">🔥</div>'
+           + '<div class="hlm-flame hlm-flame-c" style="position:absolute;top:-10px;left:11px;font-size:11px;pointer-events:none;">🔥</div>';
+    pulseClass = 'hlm-fire-pulse';
+    glowSize = '12px';
+    iconH = 74;
+    marginTop = 16;
+  } else if (isHappening) {
+    ripples = '<div class="hlm-ripple" style="width:36px;height:36px;top:0;left:0;color:' + color + ';"></div>'
+            + '<div class="hlm-ripple hlm-ripple-2" style="width:36px;height:36px;top:0;left:0;color:' + color + ';"></div>'
+            + '<div class="hlm-ripple hlm-ripple-3" style="width:36px;height:36px;top:0;left:0;color:' + color + ';"></div>';
+    pulseClass = 'hlm-pulse';
+    glowSize = '12px';
+  }
+
+  const html = '<div class="hlm-icon-root" style="position:relative;width:48px;height:' + iconH + 'px;display:flex;flex-direction:column;align-items:center;pointer-events:auto;cursor:pointer;">'
+    + '<div style="position:relative;margin-top:' + marginTop + 'px;flex-shrink:0;">'
+    + flames
+    + ripples
+    + '<div class="' + pulseClass + '" style="width:36px;height:36px;border-radius:50%;border:2px solid ' + color + ';overflow:hidden;box-shadow:0 0 ' + glowSize + ' ' + color + '88;">'
+    + inner
+    + '</div>'
+    + tagBadge
+    + '</div>'
+    + '<div style="width:2px;height:8px;background:' + color + ';margin-top:2px;border-radius:1px;opacity:0.8;flex-shrink:0;"></div>'
+    + '<div style="width:5px;height:5px;background:' + color + ';border-radius:50%;opacity:0.6;flex-shrink:0;"></div>'
+    + '</div>';
 
   return L.divIcon({
     className: '',
-    html: `
-      <div class="hlm-icon-root" style="position:relative;width:48px;height:${isHot ? '74' : '62'}px;display:flex;flex-direction:column;align-items:center;pointer-events:auto;cursor:pointer;">
-        ${statusBadge}
-        <div style="position:relative;margin-top:${isHot ? '16' : '4'}px;flex-shrink:0;">
-          ${flames}
-          ${ripples}
-          <div class="${isHot ? 'hlm-fire-pulse' : isHappening ? 'hlm-pulse' : ''}" style="width:36px;height:36px;border-radius:50%;border:2px solid ${color};overflow:hidden;box-shadow:0 0 ${(isHappening || isHot) ? '12px' : '5px'} ${color}88;">
-            ${inner}
-          </div>
-          ${tagBadge}
-        </div>
-        <div style="width:2px;height:8px;background:${color};margin-top:2px;border-radius:1px;opacity:0.8;flex-shrink:0;"></div>
-        <div style="width:5px;height:5px;background:${color};border-radius:50%;opacity:0.6;flex-shrink:0;"></div>
-      </div>
-    `,
-    iconSize: [48, 74],
-    iconAnchor: [24, 74],
-    popupAnchor: [0, -78],
+    html,
+    iconSize: [48, iconH],
+    iconAnchor: [24, iconH],
+    popupAnchor: [0, -(iconH + 4)],
   });
 }
 
