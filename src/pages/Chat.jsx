@@ -290,7 +290,8 @@ export default function Chat() {
                 >
                   <button
                     onClick={() => { setShowClearConfirm(true); setShowChatMenu(false); }}
-                    className="w-full flex items-center gap-3 px-4 py-3.5 text-sm text-gray-200 hover:bg-white/5 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-3.5 text-sm hover:bg-white/5 transition-colors"
+                    style={{color: 'var(--text-secondary)'}}
                   >
                     <Trash2 className="w-4 h-4" 
                       style={{color: 'var(--text-secondary)'}}
