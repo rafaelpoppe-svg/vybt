@@ -1,0 +1,100 @@
+{
+  "name": "ExperienceStory",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "plan_id": {
+      "type": "string",
+      "description": "Optional: if set, this story belongs to a plan group"
+    },
+    "media_url": {
+      "type": "string"
+    },
+    "thumbnail_url": {
+      "type": "string",
+      "description": "First frame thumbnail for video stories"
+    },
+    "media_type": {
+      "type": "string",
+      "enum": [
+        "image",
+        "video"
+      ],
+      "default": "image"
+    },
+    "has_audio": {
+      "type": "boolean",
+      "default": true,
+      "description": "For videos, whether to play audio"
+    },
+    "caption": {
+      "type": "string",
+      "description": "Story caption/description"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "friends",
+        "group_only",
+        "highlighted"
+      ],
+      "default": "friends",
+      "description": "Determines who sees the story: friends, group members, or highlighted (promoted)"
+    },
+    "is_highlighted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the story is promoted/highlighted to appear in experiences feed"
+    },
+    "moderation_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "AI moderation review status"
+    },
+    "moderation_reason": {
+      "type": "string",
+      "description": "Reason if story was rejected by moderation"
+    },
+    "target_vibes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "target_party_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "view_count": {
+      "type": "number",
+      "default": 0
+    },
+    "viewed_by": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "default": false
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "user_id",
+    "media_url"
+  ]
+}
