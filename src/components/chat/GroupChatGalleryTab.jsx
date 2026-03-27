@@ -36,6 +36,7 @@ export default function GroupChatGalleryTab({
         <h2 className="text-white font-bold text-lg">📸 Galeria</h2>
         <button
           onClick={onClose}
+          onTouchEnd={(e) => { e.preventDefault(); onClose(); }}
           className="text-gray-400 hover:text-white transition-colors"
         >
           <X className="w-5 h-5" />
