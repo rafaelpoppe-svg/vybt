@@ -140,7 +140,8 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
           initial={{ y: 60, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 60, opacity: 0 }}
-          className="relative bg-[#111] rounded-t-3xl sm:rounded-3xl w-full sm:max-w-md border border-gray-800 overflow-hidden"
+          className="relative rounded-t-3xl sm:rounded-3xl w-full sm:max-w-md border border-gray-800 overflow-hidden"
+          style={{background: 'var(--bg)'}}
         >
           {/* Close */}
           <button
