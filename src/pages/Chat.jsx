@@ -523,7 +523,7 @@ export default function Chat() {
                           <img src={plan.group_image || plan.cover_image} alt="" className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-2xl"
-                            style={{ background: `linear-gradient(135deg, ${color}60, #542b9b60)` }}>
+                            style={{ background: `linear-gradient(135deg, ${color}60, var(--bg-secondary))` }}>
                             🎉
                           </div>
                         )}
