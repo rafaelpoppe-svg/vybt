@@ -53,7 +53,10 @@ export default function MobileModal({ open, onClose, title, children, className,
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className={cn('bg-[#141414] border-gray-800 text-white', contentClassName)}>
+      <DialogContent 
+        className={cn('border-gray-800 text-white', contentClassName)}
+        style={{background: 'var(--bg-secondary)'}}
+      >
         {title && (
           <DialogHeader>
             <DialogTitle className="text-white">{title}</DialogTitle>
