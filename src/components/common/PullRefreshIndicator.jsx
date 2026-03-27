@@ -16,7 +16,10 @@ export default function PullRefreshIndicator({ pullDistance, isRefreshing, thres
       className="absolute top-0 left-0 right-0 flex justify-center pointer-events-none z-50"
       style={{ transform: `translateY(${isRefreshing ? 44 : pullDistance - 16}px)`, transition: isRefreshing ? 'transform 0.2s' : 'none' }}
     >
-      <div className="w-9 h-9 rounded-full bg-[#111] border border-white/10 shadow-lg flex items-center justify-center">
+      <div 
+        className="w-9 h-9 rounded-full border border-white/10 shadow-lg flex items-center justify-center"
+        style={{background: 'var(--bg)'}}
+      >
         {isRefreshing ? (
           <Loader2 className="w-4 h-4 text-[#00c6d2] animate-spin" />
         ) : (
