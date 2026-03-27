@@ -343,7 +343,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="absolute bottom-0 left-0 right-0 z-[999] bg-[#161616] border-t border-gray-800 rounded-t-2xl p-4 space-y-4"
+            className="absolute bottom-0 left-0 right-0 z-[999] bg-[var(--bg)] border-t border-gray-800 rounded-t-2xl p-4 space-y-4"
           >
             {/* Header */}
             <div className="flex items-start justify-between">
