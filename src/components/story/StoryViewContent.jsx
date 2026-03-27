@@ -261,6 +261,16 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
 
   useEffect(() => {
     if (initialStoryId && groupedStories.length > 0 && allStories.length > 0) {
+      // Search directly in the (possibly scope-filtered) groupedStories
+      for (let gi = 0; gi < groupedStories.length; gi++) {
+        const si = groupedStories[gi].stories.findIndex(s => s.id === initialStoryId);
+        if (si !== -1) {
+          setCurrentGroupIndex(gi);
+          setCurrentStoryInGroupIndex(si);
+          return;
+        }
+      }
+      // Fallback to global position
       const position = findStoryPosition(initialStoryId);
       if (position) {
         setCurrentGroupIndex(position.groupIndex);
