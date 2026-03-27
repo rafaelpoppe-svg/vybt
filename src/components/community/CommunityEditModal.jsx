@@ -154,7 +154,7 @@ export default function CommunityEditModal({ community, onClose, onSaved, onDele
             ].map((opt) => (
               <motion.button key={opt.key} whileTap={{ scale: 0.97 }} onClick={() => setData({ ...data, plan_creation_policy: opt.key })}
                 className="w-full p-3 rounded-xl border mb-2 text-left flex items-center gap-2 transition-all"
-                style={data.plan_creation_policy === opt.key ? { borderColor: tc, background: `${tc}18` } : { borderColor: '#374151', background: '#111827' }}>
+                style={data.plan_creation_policy === opt.key ? { borderColor: tc, background: `${tc}18` } : { borderColor: 'var(--bg-secondary)', background: 'var(--bg)' }}>
                 <span>{opt.emoji}</span>
                 <span className="text-white text-sm font-medium">{opt.title}</span>
                 {data.plan_creation_policy === opt.key && <Check className="w-4 h-4 ml-auto" style={{ color: tc }} />}
