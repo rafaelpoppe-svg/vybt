@@ -477,8 +477,8 @@ export default function Chat() {
               onClick={() => setActiveTab(key)}
               className={`flex-1 py-2.5 rounded-2xl text-sm font-semibold transition-all relative overflow-hidden ${
                 activeTab === key
-                  ? 'text-[var(--bg)]'
-                  : 'bg-gray-900/80 text-[var(--bg)] border border-gray-800'
+                  ? 'text-[var(--secondary-text)]'
+                  : 'bg-[var(--bg-secondary)] text-[var(--secondary-text)] border border-gray-800'
               }`}
               style={activeTab === key ? { background: 'linear-gradient(135deg, #00c6d2, #542b9b)' } : {}}
             >
