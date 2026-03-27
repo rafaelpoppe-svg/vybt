@@ -276,7 +276,7 @@ export default function PlanDetails() {
         </div>
 
         {/* Status Badge */}
-        <div className="absolute top-4 flex justify-center items-center gap-2">
+        <div className="absolute top-4 flex gap-2">
           <PlanCountdown plan={plan} size="sm" />
           {(isOnFire || plan.is_highlighted) && (
             <div 
