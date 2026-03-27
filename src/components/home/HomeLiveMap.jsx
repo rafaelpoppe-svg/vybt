@@ -157,9 +157,9 @@ function createPlanIcon(plan) {
         <div style="width:5px;height:5px;background:${color};border-radius:50%;opacity:0.6;flex-shrink:0;"></div>
       </div>
     `,
-    iconSize: [48, isHot ? 74 : 62],
-    iconAnchor: [24, isHot ? 74 : 62],
-    popupAnchor: [0, isHot ? -78 : -66],
+    iconSize: [48, 74],
+    iconAnchor: [24, 74],
+    popupAnchor: [0, -78],
   });
 }
 
