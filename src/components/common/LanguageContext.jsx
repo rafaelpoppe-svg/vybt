@@ -293,7 +293,7 @@ export const translations = {
     vibesCount: 'vibes',
     selected: 'selected',
     limitReached: 'Limit reached — deselect one to pick another',
-    whatPartiesDoYouLove: 'What parties do you love?',
+    whatPartiesDoYouLove: 'What plans do you love?',
     partySubtitle: 'Select {min}–{max} party types',
     searchPartyTypes: 'Search party types...',
     typesCount: 'types',
