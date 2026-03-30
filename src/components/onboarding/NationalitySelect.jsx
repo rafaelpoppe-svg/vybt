@@ -223,7 +223,9 @@ export default function NationalitySelect({ selected, onSelect }) {
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left ${
               selected === n.code
                 ? 'bg-[#00fea3]/10 border border-[#00fea3]/40'
-                : 'bg-gray-900/60 border border-transparent hover:border-gray-700'
+                : isDark
+                  ? 'bg-gray-900/60 border border-transparent hover:border-gray-700'
+                  : 'bg-white border border-gray-200 hover:border-gray-400'
             }`}
           >
             <span className="text-2xl">{n.flag}</span>
