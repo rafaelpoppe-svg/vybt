@@ -182,7 +182,7 @@ export default function NationalitySelect({ selected, onSelect }) {
   );
 
   const selectedNationality = NATIONALITIES.find(n => n.code === selected);
-
+  const isDark = !document.documentElement.classList.contains('light');
   return (
     <div className="space-y-5">
       <div>
