@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { 
   Music2, Wine, Beer, Home, Building2, Waves, Anchor, 
   Flame, Zap, Headphones, Mic2, Globe, GraduationCap, 
-  Cake, ArrowThroughHeart, Sunrise, GlassWater, Moon, Crown,
+  Cake, HeartPulse, Sunrise, GlassWater, Moon, Crown,
   Sun, Wind, Mic, UtensilsCrossed, ChefHat, Drum,
   Coffee, Umbrella, Joystick, Dumbbell
 } from 'lucide-react';
@@ -170,7 +170,7 @@ export const partyTagConfig = {
     gradient: 'from-green-500 to-yellow-500'
   },
   'Flirt Night': {
-    icon: ArrowThroughHeart,
+    icon: HeartPulse,
     color: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
     gradient: 'from-rose-500 to-pink-600'
   },
