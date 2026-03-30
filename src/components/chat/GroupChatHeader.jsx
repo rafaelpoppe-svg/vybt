@@ -12,7 +12,7 @@ export default function GroupChatHeader({
   // Only community plans can be renewed
   const canRenew = !!plan?.community_id;
   const { t } = useLanguage();
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = !document.documentElement.classList.contains('light');
   return (
     <header
       className="relative z-20 backdrop-blur-xl border-b border-gray-800/60"
