@@ -18,7 +18,7 @@ export default function GroupChatHeader({
       className="relative z-20 backdrop-blur-xl border-b border-gray-800/60"
       style={{backgroundColor: isDark
           ? `color-mix(in srgb, ${themeColor} 8%, #0b0b0b 92%)`   // escuro
-          : `color-mix(in srgb, ${themeColor} 20%, #ffffff 80%)`  // claro
+          : `color-mix(in srgb, ${themeColor} 25%, #ffffff 75%)`  // claro
       }}
     >
       {/* Main row */}
