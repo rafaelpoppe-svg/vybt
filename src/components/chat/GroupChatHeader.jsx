@@ -26,7 +26,7 @@ export default function GroupChatHeader({
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={(e) => { e.stopPropagation(); onBack(); }}
-          className="w-9 h-9 rounded-full bg-gray-900/80 flex items-center justify-center flex-shrink-0"
+          className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${isDark ? 'bg-gray-900/80' : 'bg-white/80'}`}
         >
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
