@@ -12,10 +12,14 @@ export default function GroupChatHeader({
   // Only community plans can be renewed
   const canRenew = !!plan?.community_id;
   const { t } = useLanguage();
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   return (
     <header
       className="relative z-20 backdrop-blur-xl border-b border-gray-800/60"
-      style={{ backgroundColor: `color-mix(in srgb, ${themeColor} 8%, #0b0b0b 92%)` }}
+      style={{backgroundColor: isDark
+          ? `color-mix(in srgb, ${themeColor} 8%, #0b0b0b 92%)`   // escuro
+          : `color-mix(in srgb, ${themeColor} 20%, #ffffff 80%)`  // claro
+      }}
     >
       {/* Main row */}
       <div className="flex items-center gap-3 px-4 pt-12 pb-2">
