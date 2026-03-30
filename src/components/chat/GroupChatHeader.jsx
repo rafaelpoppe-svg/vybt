@@ -67,7 +67,7 @@ export default function GroupChatHeader({
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={(e) => { e.stopPropagation(); onInfo(); }}
-            className="w-9 h-9 rounded-full bg-gray-900/80 flex items-center justify-center"
+            className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${isDark ? 'bg-gray-900/80' : 'bg-white/80'}`}
           >
             <Info className="w-4 h-4 text-white" />
           </motion.button>
@@ -75,7 +75,7 @@ export default function GroupChatHeader({
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={(e) => { e.stopPropagation(); onAdminActions(); }}
-              className="w-9 h-9 rounded-full bg-gray-900/80 flex items-center justify-center"
+              className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${isDark ? 'bg-gray-900/80' : 'bg-white/80'}`}
             >
               <MoreVertical className="w-4 h-4 text-white" />
             </motion.button>
