@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { 
   Music2, Wine, Beer, Home, Building2, Waves, Anchor, 
   Flame, Zap, Headphones, Mic2, Globe, GraduationCap, 
-  Cake, Sparkle, HeartPulse, Sunrise, GlassWater, Moon, Crown,
+  Cake, Sparkles, HeartPulse, Sunrise, GlassWater, Moon, Crown,
   Sun, Wind, Mic, UtensilsCrossed, ChefHat, Drum,
   Coffee, Umbrella, Joystick, Dumbbell
 } from 'lucide-react';
