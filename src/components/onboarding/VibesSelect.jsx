@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import VibeTag, { VIBE_GROUPS } from '../common/VibeTag';
 import { useLanguage } from '../common/LanguageContext';
 
@@ -20,14 +20,12 @@ export default function VibesSelect({ selected = [], onSelect, min = 2, max = 5 
         <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{(t.vibeSubtitle || '').replace('{min}', min).replace('{max}', max)}</p>
       </div>
 
-      {/* Counter */}
       <div className="flex items-center justify-end">
         <span className={`text-sm font-semibold ${selected.length >= min ? 'text-[#00fea3]' : ''}`} style={selected.length < min ? { color: 'var(--text-muted)' } : {}}>
           {selected.length}/{max} {t.selected}
         </span>
       </div>
 
-      {/* Grouped vibes */}
       <div className="space-y-4 max-h-[260px] overflow-y-auto pr-1 scrollbar-hide">
         {Object.entries(VIBE_GROUPS).map(([groupName, vibes]) => (
           <div key={groupName}>

@@ -6,7 +6,7 @@ import {
   AlertTriangle, Music, Waves, Building2, Star
 } from 'lucide-react';
 
-// Grouped for display purposes (used in VibesSelect if needed)
+// Grouped for display purposes
 export const VIBE_GROUPS = {
   'Energy Level': ['Late Night', 'Chill', 'Balanced', 'Hype', 'Wild', 'Intense'],
   'Your Style': ['Flirty', 'Observer', 'Explorer', 'Party Starter', 'Lowkey', 'VIP Energy', 'Chaos Mode'],
