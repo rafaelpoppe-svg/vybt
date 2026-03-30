@@ -73,7 +73,10 @@ export default function WelcomePrograms() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0b0b] flex flex-col overflow-y-auto">
+    <div 
+      className="min-h-screen flex flex-col overflow-y-auto"
+      style={{ background: 'var(--bg)'}}
+    >
       {/* Skip button */}
       <div className="flex justify-end p-5">
         <motion.button
