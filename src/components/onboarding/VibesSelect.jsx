@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
-import VibeTag, { ALL_VIBES } from '../common/VibeTag';
+import VibeTag, { VIBE_GROUPS } from '../common/VibeTag';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function VibesSelect({ selected = [], onSelect, min = 2, max = 5 }) {
   const { t } = useLanguage();
-  const [search, setSearch] = useState('');
-
-  const filtered = ALL_VIBES.filter(v => v.toLowerCase().includes(search.toLowerCase()));
 
   const toggleVibe = (vibe) => {
     if (selected.includes(vibe)) {
@@ -24,43 +20,38 @@ export default function VibesSelect({ selected = [], onSelect, min = 2, max = 5 
         <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{(t.vibeSubtitle || '').replace('{min}', min).replace('{max}', max)}</p>
       </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder={t.searchVibes}
-          className="w-full pl-9 pr-4 py-3 rounded-xl text-sm focus:outline-none focus:border-[#00fea3] border"
-          style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
-        />
-      </div>
-
       {/* Counter */}
-      <div className="flex items-center justify-between">
-        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{filtered.length} {t.vibesCount}</span>
+      <div className="flex items-center justify-end">
         <span className={`text-sm font-semibold ${selected.length >= min ? 'text-[#00fea3]' : ''}`} style={selected.length < min ? { color: 'var(--text-muted)' } : {}}>
           {selected.length}/{max} {t.selected}
         </span>
       </div>
 
-      {/* Grid */}
-      <div className="flex flex-wrap gap-2 max-h-[220px] overflow-y-auto pr-1 scrollbar-hide">
-        {filtered.map((vibe) => {
-          const isDisabled = !selected.includes(vibe) && selected.length >= max;
-          return (
-            <div key={vibe} className={isDisabled ? 'opacity-40' : ''}>
-              <VibeTag
-                vibe={vibe}
-                size="md"
-                interactive={!isDisabled}
-                selected={selected.includes(vibe)}
-                onClick={() => !isDisabled && toggleVibe(vibe)}
-              />
+      {/* Grouped vibes */}
+      <div className="space-y-4 max-h-[260px] overflow-y-auto pr-1 scrollbar-hide">
+        {Object.entries(VIBE_GROUPS).map(([groupName, vibes]) => (
+          <div key={groupName}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--text-muted)' }}>
+              {groupName}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {vibes.map((vibe) => {
+                const isDisabled = !selected.includes(vibe) && selected.length >= max;
+                return (
+                  <div key={vibe} className={isDisabled ? 'opacity-40' : ''}>
+                    <VibeTag
+                      vibe={vibe}
+                      size="md"
+                      interactive={!isDisabled}
+                      selected={selected.includes(vibe)}
+                      onClick={() => !isDisabled && toggleVibe(vibe)}
+                    />
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
 
       {selected.length >= max && (

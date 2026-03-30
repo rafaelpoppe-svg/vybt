@@ -3,25 +3,25 @@ import { motion } from 'framer-motion';
 import { 
   Music2, Wine, Beer, Home, Building2, Waves, Anchor, 
   Flame, Zap, Headphones, Mic2, Globe, GraduationCap, 
-  Users, Cake, Sparkles, Sunrise, GlassWater, Moon, Crown,
-  Sun, Wind, Mic, UtensilsCrossed, ChefHat, Radio, Drum
+  Cake, Sparkles, Sunrise, GlassWater, Moon, Crown,
+  Sun, Wind, Mic, UtensilsCrossed, ChefHat, Drum,
+  Coffee, Umbrella, Joystick, Dumbbell
 } from 'lucide-react';
 
 export const ALL_PARTY_TYPES = [
   'Nightclub',
-  'Bar Hopping',
-  'Pub Crawl',
+  'Bar Crawl',
   'House Party',
   'Rooftop Party',
   'Pool Party',
   'Boat Party',
   'Festival',
   'Rave',
-  'DJ Set',
+  'DJ Session',
+  'Silent Disco',
   'Live Music',
   'Erasmus Party',
   'Student Party',
-  'Social Mixer',
   'Birthday Party',
   'Themed Party',
   'After Party',
@@ -34,6 +34,13 @@ export const ALL_PARTY_TYPES = [
   'BBQ Party',
   'Dinner Party',
   'Baile Funk',
+  'Flirt Night',
+  'Coffee Night',
+  'Beach Camp',
+  'City Walk',
+  'Arcade Night',
+  'Pool Session',
+  'Beach Session',
 ];
 
 export const partyTagConfig = {
@@ -42,15 +49,10 @@ export const partyTagConfig = {
     color: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
     gradient: 'from-purple-500 to-indigo-600'
   },
-  'Bar Hopping': {
+  'Bar Crawl': {
     icon: Beer,
     color: 'bg-amber-400/20 text-amber-300 border-amber-400/30',
     gradient: 'from-amber-400 to-orange-500'
-  },
-  'Pub Crawl': {
-    icon: Wine,
-    color: 'bg-orange-400/20 text-orange-300 border-orange-400/30',
-    gradient: 'from-orange-400 to-red-500'
   },
   'House Party': {
     icon: Home,
@@ -82,10 +84,15 @@ export const partyTagConfig = {
     color: 'bg-lime-400/20 text-lime-300 border-lime-400/30',
     gradient: 'from-lime-400 to-green-500'
   },
-  'DJ Set': {
+  'DJ Session': {
     icon: Headphones,
     color: 'bg-violet-400/20 text-violet-300 border-violet-400/30',
     gradient: 'from-violet-400 to-purple-600'
+  },
+  'Silent Disco': {
+    icon: Headphones,
+    color: 'bg-fuchsia-400/20 text-fuchsia-300 border-fuchsia-400/30',
+    gradient: 'from-fuchsia-400 to-pink-500'
   },
   'Live Music': {
     icon: Mic2,
@@ -101,11 +108,6 @@ export const partyTagConfig = {
     icon: GraduationCap,
     color: 'bg-sky-300/20 text-sky-200 border-sky-300/30',
     gradient: 'from-sky-300 to-blue-400'
-  },
-  'Social Mixer': {
-    icon: Users,
-    color: 'bg-fuchsia-400/20 text-fuchsia-300 border-fuchsia-400/30',
-    gradient: 'from-fuchsia-400 to-pink-500'
   },
   'Birthday Party': {
     icon: Cake,
@@ -166,6 +168,62 @@ export const partyTagConfig = {
     icon: Drum,
     color: 'bg-green-500/20 text-green-300 border-green-500/30',
     gradient: 'from-green-500 to-yellow-500'
+  },
+  'Flirt Night': {
+    icon: Sparkles,
+    color: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+    gradient: 'from-rose-500 to-pink-600'
+  },
+  'Coffee Night': {
+    icon: Coffee,
+    color: 'bg-amber-600/20 text-amber-400 border-amber-600/30',
+    gradient: 'from-amber-600 to-yellow-600'
+  },
+  'Beach Camp': {
+    icon: Umbrella,
+    color: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+    gradient: 'from-sky-500 to-cyan-400'
+  },
+  'City Walk': {
+    icon: Wind,
+    color: 'bg-slate-400/20 text-slate-300 border-slate-400/30',
+    gradient: 'from-slate-400 to-gray-500'
+  },
+  'Arcade Night': {
+    icon: Joystick,
+    color: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
+    gradient: 'from-violet-500 to-indigo-500'
+  },
+  'Pool Session': {
+    icon: Dumbbell,
+    color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    gradient: 'from-cyan-500 to-blue-500'
+  },
+  'Beach Session': {
+    icon: Waves,
+    color: 'bg-teal-500/20 text-teal-300 border-teal-500/30',
+    gradient: 'from-teal-500 to-emerald-500'
+  },
+  // Legacy aliases (for existing data)
+  'Bar Hopping': {
+    icon: Beer,
+    color: 'bg-amber-400/20 text-amber-300 border-amber-400/30',
+    gradient: 'from-amber-400 to-orange-500'
+  },
+  'Pub Crawl': {
+    icon: Wine,
+    color: 'bg-orange-400/20 text-orange-300 border-orange-400/30',
+    gradient: 'from-orange-400 to-red-500'
+  },
+  'DJ Set': {
+    icon: Headphones,
+    color: 'bg-violet-400/20 text-violet-300 border-violet-400/30',
+    gradient: 'from-violet-400 to-purple-600'
+  },
+  'Social Mixer': {
+    icon: Globe,
+    color: 'bg-fuchsia-400/20 text-fuchsia-300 border-fuchsia-400/30',
+    gradient: 'from-fuchsia-400 to-pink-500'
   },
 };
 
