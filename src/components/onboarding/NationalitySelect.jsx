@@ -229,7 +229,7 @@ export default function NationalitySelect({ selected, onSelect }) {
             }`}
           >
             <span className="text-2xl">{n.flag}</span>
-            <span className={`font-medium text-sm ${selected === n.code ? 'text-[#00fea3]' : 'text-white'}`}>
+            <span className={`font-medium text-sm ${selected === n.code ? 'text-[#00fea3]' : isDark ? 'text-white' : 'text-gray-800'}`}>
               {n.name}
             </span>
           </button>
