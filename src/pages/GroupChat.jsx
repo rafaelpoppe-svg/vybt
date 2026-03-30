@@ -480,7 +480,10 @@ export default function GroupChat() {
       />
 
       {/* Stories Bar + Gallery Toggle */}
-      <div className="relative z-10 border-b border-gray-800/40 bg-black/30 backdrop-blur-sm flex-shrink-0">
+      <div 
+        className="relative z-10 border-b border-gray-800/40 backdrop-blur-sm flex-shrink-0"
+        style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 80%, transparent 20%)' }}
+      >
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex-1">
             <ChatStoryBar
