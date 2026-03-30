@@ -198,8 +198,7 @@ export default function NationalitySelect({ selected, onSelect }) {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search nationality..."
-          className="w-full border border-gray-700 rounded-2xl pl-10 pr-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#00fea3] transition-colors"
-          style={{ background: 'var(--bg-secondary)' }}
+          className={`full border border-gray-700 rounded-2xl pl-10 pr-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#00fea3] transition-colors ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'`}
         />
       </div>
 
