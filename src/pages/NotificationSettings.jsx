@@ -91,7 +91,6 @@ function prefKey(key) {
 
 export default function NotificationSettings() {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
   const [prefs, setPrefs] = useState(defaultPrefs);
   // Track whether user has made local changes — if so, don't overwrite from remote
