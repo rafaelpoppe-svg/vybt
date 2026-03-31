@@ -293,7 +293,7 @@ export default function CommunityView() {
         {/* Tab Bar */}
         <div 
           className="sticky top-0 z-30 backdrop-blur-md border-b border-white/8 px-4 py-2"
-          style={{background: 'var(--bg)'}}
+          style={{background: 'var(--btn-bg)'}}
         >
           <div 
             className="flex gap-1 rounded-2xl p-1 border border-gray-800"
