@@ -331,7 +331,7 @@ export default function Home() {
               className="w-8 h-8 rounded-xl object-contain"
               onError={(e) => e.target.style.display = 'none'}
             />
-            <h1 className="text-3xl font-black" /*style={{ color: 'var(--text-primary)' }}*/>Vybt</h1>
+            <h1 className="text-3xl font-black" style={{ color: 'var(--text-primary)' }}>Vybt</h1>
           </div>
           <div className="flex items-center gap-2">
 
