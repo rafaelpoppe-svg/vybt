@@ -12,7 +12,6 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true,
   const [likeCount, setLikeCount] = useState(message.like_count || 0);
   const [showReactions, setShowReactions] = useState(false);
   const [reaction, setReaction] = useState(message.reaction || null);
-  const isDark = !document.documentElement.classList.contains('light');
   const isSticker = message.content?.startsWith('sticker:');
   const stickerUrl = isSticker ? message.content.replace('sticker:', '') : null;
 
