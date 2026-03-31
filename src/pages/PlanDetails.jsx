@@ -7,7 +7,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { 
   ChevronLeft, MapPin, Calendar, Clock, Users, MessageCircle, 
-  Share2, Check, Plus, Camera, Loader2, Flame, Sparkles, Shield, LogOut, Flag, Pencil
+  Share2, Plus, Camera, Loader2, Flame, Sparkles, LogOut, Flag, Pencil
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import StoryCard from '../components/feed/StoryCard';
@@ -229,7 +229,6 @@ export default function PlanDetails() {
     );
   }
 
-  const participantProfiles = participants.map(p => profilesMap[p.user_id]).filter(Boolean);
   const isOnFire = plan.is_on_fire || (plan.recent_joins && plan.recent_joins >= 100);
   const pendingJoinRequest = myJoinRequests.find(r => r.plan_id === planId && r.status === 'pending');
   const declinedJoinRequest = myJoinRequests.find(r => r.plan_id === planId && r.status === 'declined');
