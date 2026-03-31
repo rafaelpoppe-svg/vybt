@@ -42,12 +42,6 @@ function LocationStep({ city, onCityChange, detectLocation, detectingCity, t }) 
         onClick={detectLocation}
         disabled={detectingCity}
         className="w-full px-4 py-3 rounded-xl text-sm placeholder-gray-500 border focus:outline-none focus:border-[#00c6d2]/60"
-        style={{ 
-          background: isDark ? 'rgba(255,255,255,0.06)' : 'white',
-          color: isDark ? 'white' : '#1a1a1a',
-          borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#e5e7eb',
-          fontSize: '16px' 
-        }}
       >
         {detectingCity ? (
           <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin flex-shrink-0" />
@@ -79,8 +73,13 @@ function LocationStep({ city, onCityChange, detectLocation, detectingCity, t }) 
         value={search}
         onChange={e => setSearch(e.target.value)}
         placeholder="🔍 Search city..."
-        className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500 border border-white/10 focus:outline-none focus:border-[#00c6d2]/60"
-        style={{ background: 'rgba(255,255,255,0.06)', fontSize: '16px' }}
+        className="w-full px-4 py-3 rounded-xl text-sm placeholder-gray-500 border focus:outline-none focus:border-[#00c6d2]/60"
+        style={{ 
+          background: isDark ? 'rgba(255,255,255,0.06)' : 'white',
+          color: isDark ? 'white' : '#1a1a1a',
+          borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#e5e7eb',
+          fontSize: '16px' 
+        }}
       />
       <div className="space-y-1.5 max-h-52 overflow-y-auto scrollbar-hide">
         {filtered.map(c => (
