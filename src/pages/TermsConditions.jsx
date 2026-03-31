@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
 import { ArrowLeft } from 'lucide-react';
 
 const sections = [
