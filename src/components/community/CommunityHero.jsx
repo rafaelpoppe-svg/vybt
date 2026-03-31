@@ -31,7 +31,7 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
         ) : (
           <div className="w-full h-full flex items-center justify-center text-8xl" style={{ background: `linear-gradient(135deg, ${tc}66, #542b9b88)` }}>⭐</div>
         )}
-        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(11,11,11,0.2) 0%, transparent 40%, var(--bg-secondary))` }} />
+        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(11,11,11,0.2) 0%, transparent 40%, var(--bg))` }} />
 
         {/* Top bar */}
         <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4" style={{ paddingTop: 'max(env(safe-area-inset-top,0px),16px)' }}>
