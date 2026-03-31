@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, Camera, Loader2, X, Navigation, MapPin, Search, Flame, AtSign, Check } from 'lucide-react';
+import { ChevronLeft, Camera, Loader2, X, Navigation, MapPin, Search, AtSign, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import VibeTag, { ALL_VIBES } from '../components/common/VibeTag';
-import PartyTag, { ALL_PARTY_TYPES, partyTagConfig } from '../components/common/PartyTag';
+import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
 import BackgroundThemeSelector from '../components/profile/BackgroundThemeSelector';
 
 function PartyTypeFilterList({ allTypes, selected, onToggle }) {
