@@ -39,7 +39,7 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
               value={filters.planDate || ''}
               onChange={e => setFilters({ ...filters, planDate: e.target.value })}
               min={new Date().toISOString().split('T')[0]}
-              className="w-full bg-white/5 border border-white/10 text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#00c6d2]"
+              className={`w-full text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#00c6d2] ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
               style={{ colorScheme: 'dark' }}
             />
             {filters.planDate && (
