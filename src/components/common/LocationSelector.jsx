@@ -198,7 +198,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
                           background: 'linear-gradient(135deg, rgba(0,198,210,0.2), rgba(124,58,237,0.2))',
                           border: '1px solid rgba(0,198,210,0.4)',
                         } : {
-                          background: 'rgba(255,255,255,0.03)',
+                          background: 'var(--city-card-bg)',
                           border: '1px solid transparent',
                         }}
                       >
