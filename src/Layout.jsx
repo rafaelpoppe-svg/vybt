@@ -239,17 +239,20 @@ function LayoutContent({ children, currentPageName, profileTheme }) {
         Uses inset:0 so it covers status bar on iOS (with viewport-fit=cover).
       */}
         <div style={{
-          position: 'fixed',        // ← ancora ao viewport
-          inset: 0,
-          paddingTop: 'env(safe-area-inset-top, 0px)',
+          position: 'fixed',
+          top: 0,
+          bottom: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
           width: '100%',
+          maxWidth: '430px',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           background: themeStyles?.background || 'var(--bg)',
           backgroundImage: themeStyles?.backgroundImage,
           backgroundSize: 'cover',
-          overflow: 'hidden',       // ← cada página controla o seu scroll
+          overflow: 'hidden',
           touchAction: 'pan-y pinch-zoom',
           overscrollBehavior: 'none',
         }}>
