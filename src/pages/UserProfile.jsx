@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { 
   ChevronLeft, MapPin, Camera, Loader2, MessageCircle, Check, 
-  UserPlus, ShieldCheck, Lock, Music2, Grid3X3, Ban, Flag, MoreVertical, PartyPopper, UserMinus
+  UserPlus, ShieldCheck, Lock, Grid3X3, Ban, Flag, MoreVertical, PartyPopper, UserMinus
 } from 'lucide-react';
 import VibeTag from '../components/common/VibeTag';
 import PartyTag from '../components/common/PartyTag';
