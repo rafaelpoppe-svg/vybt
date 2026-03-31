@@ -112,7 +112,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
               transition={{ type: 'spring', stiffness: 320, damping: 32 }}
               className="fixed bottom-0 left-0 right-0 z-[101] rounded-t-3xl overflow-hidden"
               style={{
-                background: 'linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0b0b1a 100%)',
+                background: 'var(--sheet-bg)',
                 border: '1px solid rgba(0,198,210,0.2)',
                 borderBottom: 'none',
                 maxHeight: '80dvh',
