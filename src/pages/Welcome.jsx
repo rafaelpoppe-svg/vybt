@@ -3,7 +3,6 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { useLanguage } from '@/components/common/LanguageContext';
 import { Shield, FileText, Lock, HelpCircle, MapPin, Users, Zap, Star, ArrowRight, ChevronDown } from 'lucide-react';
 
 const NAV_LINKS = [
@@ -65,7 +64,6 @@ function FloatingEmoji({ emoji, delay, x, duration }) {
 
 export default function Welcome() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [hoveredFeature, setHoveredFeature] = useState(null);
