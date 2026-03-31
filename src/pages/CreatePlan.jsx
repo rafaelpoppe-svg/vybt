@@ -108,15 +108,6 @@ export default function CreatePlan() {
   maxDate.setDate(maxDate.getDate() + 30);
   const maxDateStr = maxDate.toISOString().split('T')[0];
 
-  const getMaxEndTime = (startTime) => {
-    if (!startTime) return '';
-    const [h, m] = startTime.split(':').map(Number);
-    const totalMins = h * 60 + m + 8 * 60;
-    const endH = Math.floor((totalMins % (24 * 60)) / 60);
-    const endM = totalMins % 60;
-    return `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
-  };
-
   const isEndTimeValid = (startTime, endTime) => {
     if (!startTime || !endTime) return true;
     const toMins = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
