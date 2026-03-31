@@ -40,17 +40,17 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
           </motion.button>
           <div className="flex gap-2">
             {isMember && (
-              <motion.button whileTap={{ scale: 0.9 }} onClick={onInvite} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              <motion.button whileTap={{ scale: 0.9 }} onClick={onInvite} className="w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center" style={{ backgroundColor: 'var(--btn-bg)' }}>
                 <UserPlus className="w-5 h-5 text-white" />
               </motion.button>
             )}
             {isAdmin ? (
-              <motion.button whileTap={{ scale: 0.9 }} onClick={onEdit} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              <motion.button whileTap={{ scale: 0.9 }} onClick={onEdit} className="w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center" style={{ backgroundColor: 'var(--btn-bg)' }}>
                 <Settings className="w-5 h-5 text-white" />
               </motion.button>
             ) : (
               <div className="relative">
-                <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowReportMenu(v => !v)} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowReportMenu(v => !v)} className="w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center" style={{ backgroundColor: 'var(--btn-bg)' }}>
                   <MoreVertical className="w-5 h-5 text-white" />
                 </motion.button>
                 {showReportMenu && (
