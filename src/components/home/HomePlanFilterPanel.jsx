@@ -11,7 +11,7 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
   if (!isOpen) return null;
 
   const activeCount = (filters.partyTags?.length || 0) + (filters.startTime ? 1 : 0) + (filters.endTime ? 1 : 0) + (filters.planDate ? 1 : 0);
-
+  const isDark = !document.documentElement.classList.contains('light');
   return (
     <AnimatePresence>
       <motion.div
