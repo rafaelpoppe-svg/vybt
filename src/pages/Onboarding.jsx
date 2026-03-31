@@ -27,6 +27,7 @@ const ONBOARDING_CITIES = [
 
 function LocationStep({ city, onCityChange, detectLocation, detectingCity, t }) {
   const [search, setSearch] = React.useState('');
+  const isDark = !document.documentElement.classList.contains('light');
   const filtered = ONBOARDING_CITIES.filter(c =>
     c.toLowerCase().includes(search.toLowerCase())
   );
@@ -40,7 +41,13 @@ function LocationStep({ city, onCityChange, detectLocation, detectingCity, t }) 
         type="button"
         onClick={detectLocation}
         disabled={detectingCity}
-        className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl bg-[#00c6d2]/10 border border-[#00c6d2]/40 text-left disabled:opacity-50"
+        className="w-full px-4 py-3 rounded-xl text-sm placeholder-gray-500 border focus:outline-none focus:border-[#00c6d2]/60"
+        style={{ 
+          background: isDark ? 'rgba(255,255,255,0.06)' : 'white',
+          color: isDark ? 'white' : '#1a1a1a',
+          borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#e5e7eb',
+          fontSize: '16px' 
+        }}
       >
         {detectingCity ? (
           <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin flex-shrink-0" />
@@ -87,9 +94,9 @@ function LocationStep({ city, onCityChange, detectLocation, detectingCity, t }) 
               border: '1px solid rgba(0,198,210,0.4)',
               color: '#00c6d2',
             } : {
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid transparent',
-              color: 'var(--text-secondary)',
+              background: isDark ? 'rgba(255,255,255,0.04)' : 'white',
+              border: isDark ? '1px solid transparent' : '1px solid #e5e7eb',
+              color: isDark ? 'var(--text-secondary)' : '#374151',
             }}
           >
             <span className={city === c ? 'font-bold' : ''}>{c}</span>
