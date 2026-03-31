@@ -71,8 +71,8 @@ export default function BottomNav() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-            className="fixed flex flex-col gap-3 items-center w-max"
-            style={{ zIndex: 701, bottom: 'calc(env(safe-area-inset-bottom, 0px) + 90px)', left: '50%', transform: 'translateX(-50%)' }}
+            className="fixed flex flex-col gap-3 items-center"
+            style={{ zIndex: 701, bottom: 'calc(env(safe-area-inset-bottom, 0px) + 90px)', left: '50%', translate: '-50% 0' }}
           >
             <motion.button
               whileTap={{ scale: 0.93 }}
