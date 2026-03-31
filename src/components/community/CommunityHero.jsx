@@ -35,7 +35,7 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
 
         {/* Top bar */}
         <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4" style={{ paddingTop: 'max(env(safe-area-inset-top,0px),16px)' }}>
-          <motion.button whileTap={{ scale: 0.9 }} onClick={onBack} className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+          <motion.button whileTap={{ scale: 0.9 }} onClick={onBack} className="w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center" style={{ backgroundColor: 'var(--btn-bg)' }}>
             <ChevronLeft className="w-5 h-5 text-white" />
           </motion.button>
           <div className="flex gap-2">
