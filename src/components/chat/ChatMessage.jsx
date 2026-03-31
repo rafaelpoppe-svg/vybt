@@ -122,10 +122,9 @@ export default function ChatMessage({ message, isMe, sender, showProfile = true,
               className={`px-4 py-2.5 rounded-2xl cursor-pointer select-none ${
                 isMe
                   ? 'rounded-br-sm bg-gradient-to-br from-[#00c6d2] to-[#0096a8] text-[#0b0b0b]'
-                  : isDark
-                    ? 'rounded-bl-sm bg-gradient-to-br from-gray-800 to-gray-900 text-white border border-gray-700/40'
-                    : 'rounded-bl-sm bg-gray-100 text-gray-900 border border-gray-200'
+                  : 'rounded-bl-sm border border-gray-700/40'
               }`}
+              style={isMe ? {} : { background: 'var(--bubble-bg)' }}
             >
               <p className="text-sm leading-relaxed">{message.content}</p>
             </motion.div>
