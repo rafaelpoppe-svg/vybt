@@ -520,7 +520,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
   if (isLoading || !story) {
     return (
       <div 
-        className="fixed inset-0 flex items-center justify-center z-50 color-white"
+        className="fixed inset-0 flex items-center justify-center z-50 text-white"
       >
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
