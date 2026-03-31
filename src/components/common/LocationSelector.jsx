@@ -180,7 +180,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="🔍 Search city..."
                   className="w-full px-4 py-2.5 rounded-xl bg-white/8 text-sm text-white placeholder-gray-500 border border-white/10 focus:outline-none focus:border-[#00c6d2]/60 transition-colors"
-                  style={{ background: 'rgba(255,255,255,0.06)' }}
+                  style={{ background: 'var(--city-card-bg)' }}
                 />
               </div>
 
@@ -215,7 +215,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
                       <div
                         key={c}
                         className="w-full flex items-center justify-between px-4 py-3 rounded-xl"
-                        style={{ background: 'rgba(255,255,255,0.03)' }}
+                        style={{ background: 'var(--city-card-bg)' }}
                       >
                         <span className="text-sm text-gray-600">{c}</span>
                         <span className="text-[10px] text-gray-600 flex items-center gap-1 whitespace-nowrap">
