@@ -63,14 +63,14 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
               type="time"
               value={filters.startTime || ''}
               onChange={e => setFilters({ ...filters, startTime: e.target.value })}
-              className={`flex-1 bg-white/5 border border-white/10 text-white rounded-lg px-2 py-1.5 text-xs ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
+              className={`flex-1 bg-white/5 border border-white/10 text-white rounded-lg px-2 py-1.5 text-xs ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-400'}`}
             />
             <span className="text-gray-600 self-center text-xs">→</span>
             <input
               type="time"
               value={filters.endTime || ''}
               onChange={e => setFilters({ ...filters, endTime: e.target.value })}
-              className={`flex-1 bg-white/5 border border-white/10 text-white rounded-lg px-2 py-1.5 text-xs ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
+              className={`flex-1 bg-white/5 border border-white/10 text-white rounded-lg px-2 py-1.5 text-xs ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-400'}`}
             />
           </div>
         </div>
