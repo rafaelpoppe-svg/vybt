@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Loader2, Users, Bell } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import StoryViewOverlay from '../components/story/StoryViewOverlay';
 
 import BottomNav from '../components/common/BottomNav';
@@ -20,7 +20,6 @@ import { useRecommendations } from '../components/recommendation/useRecommendati
 import useAutoDeleteTerminated from '../components/plan/useAutoDeleteTerminated';
 import { usePushNotifications } from '../components/notifications/usePushNotifications';
 import PlatformTutorial from '../components/onboarding/PlatformTutorial';
-import { useLanguage } from '../components/common/LanguageContext';
 import { useNotifications } from '../components/notifications/NotificationProvider';
 import HomeCommunitiesBar from '../components/home/HomeCommunitiesBar';
 import MyCommunitiesDrawer from '../components/home/MyCommunitiesDrawer';
@@ -32,7 +31,6 @@ import PullRefreshIndicator from '../components/common/PullRefreshIndicator';
 export default function Home() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { t } = useLanguage();
   const { unreadCount, refreshUnreadCount } = useNotifications();
   const [city, setCity] = useState(() => localStorage.getItem('selectedCity') || '');
   const [radius, setRadius] = useState(() => Number(localStorage.getItem('selectedRadius')) || 10);
