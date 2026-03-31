@@ -8,8 +8,6 @@ import { Settings, Flame, Camera, Loader2, ChevronLeft } from 'lucide-react';
 import { useNotifications } from '../components/notifications/NotificationProvider';
 import { useLanguage } from '../components/common/LanguageContext';
 
-const { t } = useLanguage();
-
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
 function timeAgo(dateStr) {
@@ -200,6 +198,7 @@ function UpcomingPlanRow({ notification, plan, onMark }) {
 // ─── FRIEND REQUEST ROW ───────────────────────────────────────────────────────
 
 function FriendRequestRow({ notification, requesterProfile, onMark }) {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   // If notification is already read, assume it was already handled
