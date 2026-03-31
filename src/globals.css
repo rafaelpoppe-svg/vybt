@@ -56,7 +56,6 @@ body > #root {
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  max-width: 430px !important;  /* largura máxima tipo iPhone */
   margin: 0 auto !important;
   background-color: #0b0b0b !important;
   background: #0b0b0b !important;
