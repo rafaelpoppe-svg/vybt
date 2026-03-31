@@ -520,7 +520,8 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
   if (isLoading || !story) {
     return (
       <div 
-        className="fixed inset-0 flex items-center justify-center z-50 text-white"
+        className="fixed inset-0 flex items-center justify-center z-50"
+        style={{ color: 'white' }}
       >
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
@@ -542,13 +543,13 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
               {user?.photos?.[0] ? <img src={user.photos[0]} alt="" className="w-full h-full object-cover" />
-                : <div className="w-full h-full bg-[#542b9b] flex items-center justify-center text-[10px] text-white font-bold">{user?.display_name?.[0] || '?'}</div>}
+                : <div className="w-full h-full bg-[#542b9b] flex items-center justify-center text-[10px] font-bold" style={{ color: 'white' }}>{user?.display_name?.[0] || '?'}</div>}
             </div>
-            <p className="text-white text-xs font-medium truncate">{user?.display_name || ''}</p>
+            <p className="text-xs font-medium truncate" style={{ color: 'white' }}>{user?.display_name || ''}</p>
           </div>
         </div>
         <div className="absolute top-1/2 -translate-y-1/2" style={{ [isLeft ? 'left' : 'right']: 8 }}>
-          {isLeft ? <ChevronLeft className="w-6 h-6 text-white drop-shadow" /> : <ChevronRight className="w-6 h-6 text-white drop-shadow" />}
+          {isLeft ? <ChevronLeft className="w-6 h-6 drop-shadow" style={{ color: 'white' }}/> : <ChevronRight className="w-6 h-6 drop-shadow" style={{ color: 'white' }}/>}
         </div>
       </div>
     );
@@ -644,7 +645,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                       )}
                       {videoLoading && (
                         <div className="absolute inset-0 flex items-center justify-center z-10">
-                          <Loader2 className="w-8 h-8 text-white animate-spin" />
+                          <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'white' }}/>
                         </div>
                       )}
                       <video
@@ -692,10 +693,10 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800">
                       {storyUser?.photos?.[0]
                         ? <img src={storyUser.photos[0]} alt="" className="w-full h-full object-cover" />
-                        : <div className="w-full h-full flex items-center justify-center"><span className="text-white font-bold">{storyUser?.display_name?.[0] || '?'}</span></div>}
+                        : <div className="w-full h-full flex items-center justify-center"><span className="font-bold" style={{ color: 'white' }}>{storyUser?.display_name?.[0] || '?'}</span></div>}
                     </div>
                     <div>
-                      <p className="text-white font-medium">{storyUser?.display_name || 'User'}</p>
+                      <p className="font-medium" style={{ color: 'white' }}>{storyUser?.display_name || 'User'}</p>
                       <p className="text-gray-400 text-xs">{(() => {
                         const diff = Date.now() - new Date(story.created_date).getTime();
                         const mins = Math.floor(diff / 60000);
@@ -711,13 +712,13 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                   <div className="flex gap-2">
                     {story.media_type === 'video' && story.has_audio && (
                       <motion.button whileTap={{ scale: 0.9 }} onClick={() => setIsMuted(!isMuted)} className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
-                        {isMuted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white" />}
+                        {isMuted ? <VolumeX className="w-5 h-5" style={{ color: 'white' }}/> : <Volume2 className="w-5 h-5" style={{ color: 'white' }}/>}
                       </motion.button>
                     )}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <motion.button whileTap={{ scale: 0.9 }} className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
-                          <MoreVertical className="w-5 h-5 text-white" />
+                          <MoreVertical className="w-5 h-5" style={{ color: 'white' }}/>
                         </motion.button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="bg-gray-900 border-gray-800">
@@ -735,7 +736,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                     </DropdownMenu>
                     <motion.button whileTap={{ scale: 0.9 }} onClick={() => { queryClient.removeQueries(['allStories']); onClose(); }}
                       className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
-                      <X className="w-6 h-6 text-white" />
+                      <X className="w-6 h-6" style={{ color: 'white' }}/>
                     </motion.button>
                   </div>
                 </div>
@@ -758,7 +759,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                           : <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm" style={{ backgroundColor: storyPlan.theme_color || '#542b9b' }}>🎉</div>}
                       </div>
                       <div className="text-left min-w-0">
-                        <p className="text-white text-xs font-semibold truncate leading-tight">{storyPlan.title}</p>
+                        <p className="text-xs font-semibold truncate leading-tight" style={{ color: 'white' }}>{storyPlan.title}</p>
                         <p className="text-gray-300 text-[10px] truncate leading-tight">{storyPlan.city}</p>
                       </div>
                       <ChevronRight className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
@@ -769,14 +770,14 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                   {canChat && (
                     <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.03 }}
                       onClick={() => { setShowChatInput(true); isPausedRef.current = true; }}
-                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-transparent text-white font-semibold backdrop-blur-sm border border-white/60">
-                      <MessageCircle className="w-5 h-5 text-white" /><span>Reply to {storyUser?.display_name || 'user'}</span>
+                      className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-transparent font-semibold backdrop-blur-sm border border-white/60" style={{ color: 'white' }}>
+                      <MessageCircle className="w-5 h-5" style={{ color: 'white' }}/><span>Reply to {storyUser?.display_name || 'user'}</span>
                     </motion.button>
                   )}
                   <div className="relative">
                     <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.03 }}
                       onClick={() => { setShowEmojiPicker(v => !v); isPausedRef.current = !showEmojiPicker; }}
-                      className="p-3 rounded-xl bg-transparent text-white backdrop-blur-sm border border-white/60 flex items-center justify-center">
+                      className="p-3 rounded-xl bg-transparent backdrop-blur-sm border border-white/60 flex items-center justify-center" style={{ color: 'white' }}>
                       <span className="text-xl">🤍</span>
                     </motion.button>
                     {showEmojiPicker && (
