@@ -85,7 +85,7 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search..."
-              className="w-full pl-7 pr-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white text-xs placeholder-gray-600 focus:outline-none focus:border-[#00fea3]"
+              className={`w-full pl-7 pr-3 py-1.5 rounded-lg text-white text-xs placeholder-gray-600 focus:outline-none focus:border-[#00fea3] ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
             />
           </div>
           <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto">
