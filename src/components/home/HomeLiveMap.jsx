@@ -464,7 +464,7 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
                     </span>
                   )}
                 </div>
-                <p style={{ color: '#fff', fontWeight: 800, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', lineHeight: 1.2 }}>{selected.title}</p>
+                <p style={{ color: 'var(--text-primary)', fontWeight: 800, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', lineHeight: 1.2 }}>{selected.title}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                   {/* Participant count */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
