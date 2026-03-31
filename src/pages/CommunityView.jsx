@@ -199,13 +199,6 @@ export default function CommunityView() {
   const upcomingPlans = plans.filter(p => p.date && new Date(p.date) >= new Date(now.toDateString())).sort((a, b) => new Date(a.date) - new Date(b.date));
   const pastPlans = plans.filter(p => p.date && new Date(p.date) < new Date(now.toDateString())).sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // Group stories by plan
-  const storiesByPlan = stories.reduce((acc, s) => {
-    if (!acc[s.plan_id]) acc[s.plan_id] = [];
-    acc[s.plan_id].push(s);
-    return acc;
-  }, {});
-
   const canCreatePlan = () => {
     if (!isMember) return false;
     if (community?.plan_creation_policy === 'admins_only') return isAdmin;
