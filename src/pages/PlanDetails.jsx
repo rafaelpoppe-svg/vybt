@@ -262,14 +262,15 @@ export default function PlanDetails() {
 
         {/* Share + Report buttons */}
         <div className="absolute top-4 right-4 flex gap-2">
-          <motion.button whileTap={{ scale: 0.9 }} className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
+          <motion.button whileTap={{ scale: 0.9 }} className="p-2 rounded-full bg-black/50 backdrop-blur-sm" style={{ backgroundColor: 'var(--btn-bg)' }}>
             <Share2 className="w-5 h-5 text-white" />
           </motion.button>
           {currentUser && !isCreator && (
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setShowReportModal(true)}
-              className="p-2 rounded-full bg-black/50 backdrop-blur-sm"
+              className="p-2 rounded-full backdrop-blur-sm"
+              style={{ backgroundColor: 'var(--btn-bg)' }}
             >
               <Flag className="w-5 h-5 text-orange-400" />
             </motion.button>
