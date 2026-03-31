@@ -4,9 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Settings, Flame, Camera, Loader2, ChevronRight, ChevronLeft } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { enUS } from 'date-fns/locale';
+import { Settings, Flame, Camera, Loader2, ChevronLeft } from 'lucide-react';
 import { useNotifications } from '../components/notifications/NotificationProvider';
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
