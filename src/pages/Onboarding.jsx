@@ -41,7 +41,7 @@ function LocationStep({ city, onCityChange, detectLocation, detectingCity, t }) 
         type="button"
         onClick={detectLocation}
         disabled={detectingCity}
-        className="w-full px-4 py-3 rounded-xl text-sm placeholder-gray-500 border focus:outline-none focus:border-[#00c6d2]/60"
+        className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl bg-[#00c6d2]/10 border border-[#00c6d2]/40 text-left disabled:opacity-50"
       >
         {detectingCity ? (
           <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin flex-shrink-0" />
