@@ -115,6 +115,7 @@ html.light .divide-gray-800 > * + * { border-color: rgba(0,0,0,0.06) !important;
   --header-bg: rgba(11,11,11,0.95);
   --sheet-bg: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0b0b1a 100%);
   --city-card-bg: rgba(255,255,255,0.03);
+  --bubble-bg: linear-gradient(135deg, #1f2937, #111827);
 }
 
 html.light {
@@ -133,6 +134,7 @@ html.light {
   --header-bg: rgba(245,240,235,0.95);
   --sheet-bg: linear-gradient(160deg, #e8f4f8 0%, #dbeef7 50%, #f0f8ff 100%);
   --city-card-bg: rgba(0,0,0,0.05);
+  --bubble-bg: #f3f4f6;
 }
 
 /* ─── PREVENT WHITE FLASH DURING NAVIGATION ─── */
