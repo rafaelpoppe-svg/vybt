@@ -431,7 +431,7 @@ export default function HomeLiveMap({ plans = [], allParticipants = [], city = '
             style={{
               position: 'absolute', bottom: 12, left: 12, right: 12, zIndex: 600,
               borderRadius: 22, overflow: 'hidden',
-              background: 'rgba(14,14,14,0.97)',
+              background: 'var(--bg)',
               border: `1.5px solid ${accentOf(selected)}55`,
               backdropFilter: 'blur(20px)',
               boxShadow: `0 8px 32px ${accentOf(selected)}33`,
