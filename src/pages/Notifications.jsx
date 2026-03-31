@@ -6,6 +6,9 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Settings, Flame, Camera, Loader2, ChevronLeft } from 'lucide-react';
 import { useNotifications } from '../components/notifications/NotificationProvider';
+import { useLanguage } from '../components/common/LanguageContext';
+
+const { t } = useLanguage();
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
@@ -249,7 +252,7 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
       <div className="flex-1 min-w-0">
         <p className="text-white text-[13.5px] leading-snug">
           <span className="font-bold">{requesterProfile?.display_name || 'Someone'}</span>
-          <span className="text-gray-300"> sent you a friend request.</span>
+          <span className="text-gray-300"> t.friendRequest</span>
         </p>
         <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date)}</p>
       </div>
