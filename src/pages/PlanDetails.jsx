@@ -173,7 +173,7 @@ export default function PlanDetails() {
     onSuccess: () => {
       queryClient.invalidateQueries(['planParticipants', planId]);
       setIsJoined(true);
-  
+    }
   });
 
   const leaveMutation = useMutation({
