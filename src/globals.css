@@ -113,6 +113,7 @@ html.light .divide-gray-800 > * + * { border-color: rgba(0,0,0,0.06) !important;
   --input-border: #374151;
   --card-bg: #111111;
   --header-bg: rgba(11,11,11,0.95);
+  --sheet-bg: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0b0b1a 100%);
 }
 
 html.light {
@@ -129,6 +130,7 @@ html.light {
   --input-border: #d8d0c8;
   --card-bg: #ffffff;
   --header-bg: rgba(245,240,235,0.95);
+  --sheet-bg: linear-gradient(160deg, #e8f4f8 0%, #dbeef7 50%, #f0f8ff 100%);
 }
 
 /* ─── PREVENT WHITE FLASH DURING NAVIGATION ─── */
