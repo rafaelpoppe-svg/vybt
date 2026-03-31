@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const THEME_BACKGROUNDS = {
-  default: 'linear-gradient(135deg, #0b0b0b 0%, #1a1a1a 100%)',
+  default: 'var(--bg)',
   beer: 'linear-gradient(135deg, #2d1810 0%, #5c3d2e 100%)',
   dance: 'linear-gradient(135deg, #1a0a2e 0%, #16213e 100%)',
   champagne: 'linear-gradient(135deg, #3d3d2e 0%, #5c5c42 100%)',
