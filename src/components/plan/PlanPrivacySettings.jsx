@@ -139,7 +139,7 @@ export default function PlanPrivacySettings({ data, onChange }) {
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="mt-2 space-y-4 p-3 rounded-xl bg-gray-900/60 border border-gray-800">
+              <div className={`mt-2 space-y-4 p-3 rounded-xl ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
                 {/* Age Range */}
                 <div>
                   <label className="text-gray-400 text-xs mb-2 block">Age Range</label>
