@@ -67,7 +67,10 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
 
         {/* Members badge */}
         <div className="absolute bottom-4 right-4">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm border border-white/10">
+          <div 
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/10"
+            style={{ backgroundColor: 'var(--btn-bg)' }}
+          >
             <Users className="w-3.5 h-3.5 text-white" />
             <span className="text-white text-xs font-bold">{community.member_count || 0} members</span>
           </div>
