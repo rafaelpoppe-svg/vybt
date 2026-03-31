@@ -1012,6 +1012,7 @@ export const translations = {
     backBtn: '← Retour',
     planUpdated: '✏️ Plan mis à jour',
     terminatedBanner: '❌ Terminé',
+    friendRequest: "je t'ai envoyé une demande d'ami."
   },
 
   it: {
@@ -1262,6 +1263,7 @@ export const translations = {
     backBtn: '← Indietro',
     planUpdated: '✏️ Piano aggiornato',
     terminatedBanner: '❌ Terminato',
+    friendRequest: "ti ho mandato una richiesta di amicizia."
   },
 };
 
