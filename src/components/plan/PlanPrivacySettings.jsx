@@ -24,7 +24,7 @@ export default function PlanPrivacySettings({ data, onChange }) {
   const removeNationality = (code) => {
     updateRestriction('allowed_nationalities', (r.allowed_nationalities || []).filter(n => n !== code));
   };
-
+  const isDark = !document.documentElement.classList.contains('light');
   return (
     <div className="space-y-4">
       {/* Public / Private toggle */}
