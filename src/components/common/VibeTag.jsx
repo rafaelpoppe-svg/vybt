@@ -69,6 +69,7 @@ const defaultConfig = {
 export default function VibeTag({ vibe, size = 'md', interactive = false, selected = false, onClick }) {
   const config = vibeConfig[vibe] || defaultConfig;
   const Icon = config.icon;
+  const isDark = !document.documentElement.classList.contains('light');
 
   const sizes = {
     sm: 'px-2 py-0.5 text-[10px]',
@@ -85,6 +86,17 @@ export default function VibeTag({ vibe, size = 'md', interactive = false, select
   const Tag = interactive ? motion.button : 'span';
   const motionProps = interactive ? { whileHover: { scale: 1.05 }, whileTap: { scale: 0.95 } } : {};
 
+  // In light mode, unselected badges get stronger opacity + dark text
+  const unselectedClass = isDark
+    ? config.color
+    : config.color
+        .replace(/\/20/g, '/40')
+        .replace(/\/30/g, '/60')
+        .replace('text-', 'text-opacity-100 text-')
+        .split(' ')
+        .map(c => c.startsWith('text-') && !c.includes('opacity') ? 'text-gray-900' : c)
+        .join(' ');
+
   return (
     <Tag
       {...motionProps}
@@ -97,9 +109,10 @@ export default function VibeTag({ vibe, size = 'md', interactive = false, select
         border 
         transition-all duration-300
         ${selected 
-          ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-lg` 
-          : config.color
+          ? `bg-gradient-to-r ${config.gradient} border-transparent shadow-lg ${isDark ? 'text-white' : 'text-gray-900'}`
+          : isDark ? config.color : config.color.replace(/\/20/g, '/35').replace(/\/30/g, '/50')
         }
+        ${!selected && !isDark ? '!text-gray-900 font-semibold' : ''}
         ${interactive ? 'cursor-pointer hover:shadow-md' : ''}
       `}
     >

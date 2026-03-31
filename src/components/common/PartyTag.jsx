@@ -236,6 +236,7 @@ const defaultConfig = {
 export default function PartyTag({ tag, size = 'md', interactive = false, selected = false, onClick }) {
   const config = partyTagConfig[tag] || defaultConfig;
   const Icon = config.icon;
+  const isDark = !document.documentElement.classList.contains('light');
 
   const sizes = {
     sm: 'px-2 py-0.5 text-[10px]',
@@ -264,9 +265,10 @@ export default function PartyTag({ tag, size = 'md', interactive = false, select
         border 
         transition-all duration-300
         ${selected 
-          ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-lg` 
-          : config.color
+          ? `bg-gradient-to-r ${config.gradient} border-transparent shadow-lg ${isDark ? 'text-white' : 'text-gray-900'}`
+          : isDark ? config.color : config.color.replace(/\/20/g, '/35').replace(/\/30/g, '/50')
         }
+        ${!selected && !isDark ? '!text-gray-900 font-semibold' : ''}
         ${interactive ? 'cursor-pointer hover:shadow-md' : ''}
       `}
     >
