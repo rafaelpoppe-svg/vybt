@@ -173,7 +173,7 @@ export default function PlanDetails() {
     onSuccess: () => {
       queryClient.invalidateQueries(['planParticipants', planId]);
       setIsJoined(true);
-    }
+  
   });
 
   const leaveMutation = useMutation({
@@ -254,7 +254,8 @@ export default function PlanDetails() {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 p-2 rounded-full bg-black/50 backdrop-blur-sm"
+          className="absolute top-4 left-4 p-2 rounded-full backdrop-blur-sm"
+          style={{ backgroundColor: 'var(--btn-bg)' }}
         >
           <ChevronLeft className="w-6 h-6 text-white" />
         </motion.button>
