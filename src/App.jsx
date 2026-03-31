@@ -77,8 +77,17 @@ function App() {
         <QueryClientProvider client={queryClientInstance}>
           <Router>
             <TabHistoryProvider>
+            <div style={{ 
+                maxWidth: '430px', 
+                margin: '0 auto', 
+                position: 'relative',
+                height: '100dvh',
+                overflow: 'hidden'
+              }}>
               <AuthenticatedApp />
+            </div>
             </TabHistoryProvider>
+            
           </Router>
           <Toaster />
         </QueryClientProvider>
