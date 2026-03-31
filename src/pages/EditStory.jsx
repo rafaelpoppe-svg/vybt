@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  ChevronLeft, X, Loader2, AlertCircle, Sparkles, Users, Lock,
-  Save, Trash2, MoreVertical, Eye, EyeOff, Wand2
+  ChevronLeft, Loader2, Sparkles, Users, Lock,
+  Save, Trash2, MoreVertical, Eye, Wand2
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -28,7 +28,7 @@ export default function EditStory() {
   const [showAIReview, setShowAIReview] = useState(false);
   const [aiReview, setAiReview] = useState(null);
   const [reviewLoading, setReviewLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
+  const [setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
