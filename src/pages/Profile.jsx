@@ -92,8 +92,6 @@ export default function Profile() {
     myCommunityMemberships.some(m => m.community_id === c.id) && !c.is_deleted && !c.deletion_scheduled_at
   );
   const myPlans = allPlans.filter(plan => participations.some(p => p.plan_id === plan.id));
-  const activePlans = myPlans.filter(plan => ['upcoming', 'happening'].includes(plan.status));
-  const pastPlans = myPlans.filter(plan => ['ended', 'renewed', 'voting'].includes(plan.status));
 
   useEffect(() => {
     if (profile?.profile_background_theme) setProfileTheme(profile.profile_background_theme);
