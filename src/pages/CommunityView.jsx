@@ -16,7 +16,6 @@ import CommunityMembersSpotlight from '../components/community/CommunityMembersS
 import CommunityActivityFeed from '../components/community/CommunityActivityFeed';
 import CommunityNewMemberGuide from '../components/community/CommunityNewMemberGuide';
 import CommunityChallengeBanner from '../components/community/CommunityChallengeBanner';
-import CommunityCreateChallengeModal from '../components/community/CommunityCreateChallengeModal';
 import CommunityChallengeDetail from '../components/community/CommunityChallengeDetail';
 import LeaveCommunityModal from '../components/community/LeaveCommunityModal';
 
