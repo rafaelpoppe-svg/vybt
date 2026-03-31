@@ -770,7 +770,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                     <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.03 }}
                       onClick={() => { setShowChatInput(true); isPausedRef.current = true; }}
                       className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-transparent text-white font-semibold backdrop-blur-sm border border-white/60">
-                      <MessageCircle className="w-5 h-5" /><span>Reply to {storyUser?.display_name || 'user'}</span>
+                      <MessageCircle className="w-5 h-5 text-white" /><span>Reply to {storyUser?.display_name || 'user'}</span>
                     </motion.button>
                   )}
                   <div className="relative">
