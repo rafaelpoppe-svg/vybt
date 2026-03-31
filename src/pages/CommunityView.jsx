@@ -295,7 +295,10 @@ export default function CommunityView() {
           className="sticky top-0 z-30 backdrop-blur-md border-b border-white/8 px-4 py-2"
           style={{background: 'var(--bg)'}}
         >
-          <div className="flex gap-1 bg-gray-900/80 rounded-2xl p-1 border border-gray-800">
+          <div 
+            className="flex gap-1 rounded-2xl p-1 border border-gray-800"
+            style={{ backgroundColor: 'var(--btn-bg)' }}
+          >
             {TABS.map(tab => (
               <motion.button
                 key={tab.key}
