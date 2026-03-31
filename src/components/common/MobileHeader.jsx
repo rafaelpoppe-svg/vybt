@@ -51,7 +51,7 @@ export default function MobileHeader({ title, hidden, rightSlot, onBack }) {
             style={{ width: 44, height: 44 }}
             aria-label="Go back"
           >
-            <ChevronLeft className="w-6 h-6" style={{ color: 'var(--text-primary)' }} />
+            <ChevronLeft className="w-6 h-6" /*style={{ color: 'var(--text-primary)' }}*/ />
           </motion.button>
         )}
       </div>
@@ -60,7 +60,7 @@ export default function MobileHeader({ title, hidden, rightSlot, onBack }) {
       {title && (
         <h1
           className="font-bold text-base truncate max-w-[55vw] text-center"
-          style={{ color: 'var(--text-primary)' }}
+          /*style={{ color: 'var(--text-primary)' }}*/
         >
           {title}
         </h1>
