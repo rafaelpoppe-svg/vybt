@@ -198,9 +198,10 @@ function UpcomingPlanRow({ notification, plan, onMark }) {
 // ─── FRIEND REQUEST ROW ───────────────────────────────────────────────────────
 
 function FriendRequestRow({ notification, requesterProfile, onMark }) {
-  const { t } = useLanguage();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const {t} = useLanguage();
   // If notification is already read, assume it was already handled
   const [localStatus, setLocalStatus] = useState(notification.is_read ? 'accepted' : null);
 
@@ -251,7 +252,7 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
       <div className="flex-1 min-w-0">
         <p className="text-white text-[13.5px] leading-snug">
           <span className="font-bold">{requesterProfile?.display_name || 'Someone'}</span>
-          <span className="text-gray-300"> t.friendRequest</span>
+          <span className="text-gray-300"> {t('friendRequest')}</span>
         </p>
         <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date)}</p>
       </div>
