@@ -254,6 +254,7 @@ export const translations = {
     backBtn: '← Voltar',
     planUpdated: '✏️ Plano atualizado',
     terminatedBanner: '❌ Terminado',
+    friendRequest: 'te enviou um pedido de amizade.'
   },
 
   en: {
@@ -509,6 +510,7 @@ export const translations = {
     backBtn: '← Back',
     planUpdated: '✏️ Plan updated',
     terminatedBanner: '❌ Terminated',
+    friendRequest: 'sent you a friend request.'
   },
 
   es: {
@@ -759,6 +761,7 @@ export const translations = {
     backBtn: '← Volver',
     planUpdated: '✏️ Plan actualizado',
     terminatedBanner: '❌ Terminado',
+    friendRequest: 'te mandé una solicitud de amistad.'
   },
 
   fr: {
