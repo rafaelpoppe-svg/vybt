@@ -9,9 +9,6 @@ export default function CommunityMembersSpotlight({ members, profilesMap, plans,
 
   if (!members.length) return null;
 
-  // Build enriched member list with activity score
-  const planParticipationMap = {}; // userId -> count of plans in this community
-
   // Score: admins first, then by stories/activity
   const enriched = members
     .map(m => {
