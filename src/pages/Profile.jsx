@@ -6,14 +6,12 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import {
   Camera, Loader2, Bell, Settings, ShieldCheck, ShieldX,
-  PartyPopper, Users, Trophy, Star, MapPin,
-  Calendar, ChevronRight, Edit2, Images, Grid3X3
+  Users, Trophy, Star, MapPin,
+  Calendar, ChevronRight, Edit2, Grid3X3
 } from 'lucide-react';
 import BottomNav from '../components/common/BottomNav';
 import VibeTag from '../components/common/VibeTag';
-import PartyTag from '../components/common/PartyTag';
 import VerificationFlow from '../components/profile/VerificationFlow';
-import { useLanguage } from '../components/common/LanguageContext';
 import { useProfileThemeContext } from '../components/common/ProfileThemeContext';
 import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
 import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
@@ -27,7 +25,6 @@ const THEME_ACCENTS = {
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
   const { setProfileTheme } = useProfileThemeContext();
   const [showVerification, setShowVerification] = useState(false);
   const [activeTab, setActiveTab] = useState('photos');
