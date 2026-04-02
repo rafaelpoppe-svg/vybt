@@ -410,36 +410,6 @@ function StatCol({ value, label, onClick, accent }) {
   );
 }
 
-function PlanRow({ plan, accent, onClick, past = false }) {
-  let dateLabel = '';
-  try { dateLabel = plan.date ? format(new Date(plan.date), 'EEE, MMM d') : ''; } catch (_) {}
-  return (
-    <motion.button whileTap={{ scale: 0.97 }} onClick={onClick}
-      className="w-full flex items-center gap-3 p-3 rounded-2xl text-left"
-      style={{ background: past ? 'var(--surface)' : `${accent}0d`, border: `1px solid ${past ? 'var(--border)' : accent + '25'}` }}>
-      {plan.cover_image ? (
-        <img src={plan.cover_image} className={`w-12 h-12 rounded-xl object-cover flex-shrink-0 ${past ? 'opacity-50 grayscale' : ''}`} />
-      ) : (
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0 ${past ? 'opacity-40' : ''}`}
-          style={{ background: past ? 'var(--surface-2)' : `${accent}20` }}>🎉</div>
-      )}
-      <div className="min-w-0 flex-1">
-        <p className="font-bold text-sm truncate" style={{ color: past ? 'var(--text-muted)' : 'var(--text-primary)' }}>{plan.title}</p>
-        <div className="flex items-center gap-2 mt-0.5">
-          <span className="flex items-center gap-1 text-[10px]" style={{ color: 'var(--text-muted)' }}><MapPin className="w-2.5 h-2.5" />{plan.city}</span>
-          <span className="flex items-center gap-1 text-[10px]" style={{ color: 'var(--text-muted)' }}><Calendar className="w-2.5 h-2.5" />{dateLabel}</span>
-        </div>
-        {plan.status === 'happening' && (
-          <span className="text-[10px] font-bold text-green-400 flex items-center gap-1 mt-0.5">
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full inline-block animate-pulse" /> Live Now
-          </span>
-        )}
-      </div>
-      <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--text-muted)' }} />
-    </motion.button>
-  );
-}
-
 function EmptyState({ emoji, text, subtext }) {
   return (
     <div className="text-center py-16 space-y-2">
