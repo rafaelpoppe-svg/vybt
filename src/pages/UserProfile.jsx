@@ -299,10 +299,10 @@ export default function UserProfile() {
         {/* Name + details */}
         <div className="mt-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-white font-bold text-base leading-tight" style={{ color: accent }}>
+            <span className="text-white font-bold text-base leading-tight" style={{ color: 'var(--text-primary)' }}>
               {profile.display_name}
             </span>
-            {age && <span className="text-sm font-bold" style={{ color: accent }}>{age}</span>}
+            {age && <span className="text-sm font-bold" style={{ color: 'var(--text-primary)'}}>{age}</span>}
             {profile.gender && <span className="text-xs text-gray-500">{profile.gender}</span>}
             {profile.is_verified && <ShieldCheck className="w-4 h-4 text-blue-400" />}
             {isPrivate && <Lock className="w-3.5 h-3.5 text-gray-500" />}
