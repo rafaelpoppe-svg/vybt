@@ -186,17 +186,17 @@ export default function Profile() {
           <div className="flex-1 grid grid-cols-3 gap-1 text-center">
             <StatCol value={myPlans.length} label="Plans" onClick={() => navigate(createPageUrl('MyPlans'))} accent={accent} />
             <StatCol value={friendships.length} label="Friends" onClick={() => setShowFriends(true)} accent={accent} />
-            <StatCol value={myStories.length} label="Stories" />
+            <StatCol value={myStories.length} label="Stories" accent={accent} />
           </div>
         </div>
 
         {/* Name + details */}
         <div className="mt-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold text-base leading-tight" style={{ color: accent }}>
+            <span className="font-bold text-base leading-tight" style={{ color: 'var(--text-primary)' }}>
               {profile.display_name || currentUser.full_name}
             </span>
-            {age && <span className="text-sm font-bold" style={{ color: accent }}>{age}</span>}
+            {age && <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{age}</span>}
             {profile.gender && <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{profile.gender}</span>}
             {nationalityInfo && <span className="text-base leading-none">{nationalityInfo.flag}</span>}
           </div>
