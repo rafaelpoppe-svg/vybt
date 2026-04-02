@@ -77,6 +77,7 @@ export const translations = {
     profileVerified: 'Perfil Verificado ✓',
     verifyProfile: 'Verificar o Meu Perfil',
     verifyBadge: 'Obtém um crachá azul para ganhar confiança',
+    
     friends: 'Amigos',
     stories: 'Histórias',
     ambassadorProgram: 'Programa Ambassador',
