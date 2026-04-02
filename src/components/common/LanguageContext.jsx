@@ -81,7 +81,7 @@ export const translations = {
     stories: 'Histórias',
     // Edit Profile
     editProfile: 'Editar Perfil',
-    photos: 'Fotos (máx. 3)',
+    photos: 'Fotos (máximo 5) — a primeira é a foto de perfil.',
     displayName: 'Nome de Exibição',
     bio: 'Bio',
     bioPlaceholder: 'Conta algo sobre ti...',
@@ -334,7 +334,7 @@ export const translations = {
     stories: 'Stories',
     // Edit Profile
     editProfile: 'Edit Profile',
-    photos: 'Photos (max 3)',
+    photos: 'Photos (max 5) — 1st is profile picture',
     displayName: 'Display Name',
     bio: 'Bio',
     bioPlaceholder: 'Tell others about yourself...',
@@ -587,7 +587,7 @@ export const translations = {
     stories: 'Historias',
     // Edit Profile
     editProfile: 'Editar Perfil',
-    photos: 'Fotos (máx. 3)',
+    photos: 'Fotos (máximo 5) — La primera es la foto de perfil.',
     displayName: 'Nombre de usuario',
     bio: 'Bio',
     bioPlaceholder: 'Cuéntale algo a los demás...',
@@ -835,7 +835,7 @@ export const translations = {
     stories: 'Histoires',
     // Edit Profile
     editProfile: 'Modifier le Profil',
-    photos: 'Photos (max 3)',
+    photos: 'Photos (5 maximum) — La première est une photo de profil',
     displayName: "Nom d'affichage",
     bio: 'Bio',
     bioPlaceholder: 'Parle de toi aux autres...',
@@ -1083,7 +1083,7 @@ export const translations = {
     stories: 'Storie',
     // Edit Profile
     editProfile: 'Modifica Profilo',
-    photos: 'Foto (max 3)',
+    photos: 'Foto (max 5) — La prima è l\'immagine del profilo',
     displayName: 'Nome visualizzato',
     bio: 'Bio',
     bioPlaceholder: 'Racconta qualcosa di te...',
