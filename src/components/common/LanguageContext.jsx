@@ -1092,7 +1092,6 @@ export const translations = {
     tonight: 'Stasera',
     forYou: 'Per Te',
     happeningNow: 'In Corso Ora',
-    joinedPlans: 'Piani a cui partecipo',
     // Profile
     myFriends: 'I Miei Amici',
     joinedPartyPlans: 'Piani a cui ho partecipato',
