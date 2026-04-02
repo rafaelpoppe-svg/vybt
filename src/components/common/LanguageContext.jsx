@@ -828,7 +828,9 @@ export const translations = {
     letsGo: 'Allons-y ! 🎉',
     // Verification step
     verifyYourProfile: 'Vérifie ton profil',
-    verifyDescription: 'Prends un selfie en direct pour obtenir un badge bleu vérifié et inspirer confiance aux autres utilisateurs.',
+    verifyDesc1: 'Prenez un selfie pour obtenir un ',
+    verifyBadge: 'badge bleu vérifié',
+    verifyDesc2: ' et renforcer la confiance des autres utilisateurs.',
     verifyNow: 'Vérifier Maintenant',
     skipForNow: 'Passer pour le moment',
     // Navigation
@@ -1082,7 +1084,9 @@ export const translations = {
     letsGo: 'Andiamo! 🎉',
     // Verification step
     verifyYourProfile: 'Verifica il tuo profilo',
-    verifyDescription: 'Scatta un selfie dal vivo per ottenere un badge blu verificato e costruire fiducia con altri utenti.',
+    verifyDesc1: 'Scatta un selfie per ottenere un ',
+    verifyBadge: 'badge blu di verifica',
+    verifyDesc2: ' e costruire fiducia con gli altri utenti.',
     verifyNow: 'Verifica Ora',
     skipForNow: 'Salta per ora',
     // Navigation
