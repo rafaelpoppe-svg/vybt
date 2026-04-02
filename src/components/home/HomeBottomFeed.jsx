@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Users, MapPin, Calendar, Clock, Flame, Sparkles, Building2, Ticket, UserCheck, CalendarDays } from 'lucide-react';
 import { format } from 'date-fns';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const isLiveNow = (p) => {
   if (!p.date || !p.time) return false;
@@ -238,7 +239,7 @@ export default function HomeBottomFeed({
 }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('foryou');
-
+  const {t} = useLanguage();
   const forYouItems = (() => {
     const active = plans.filter(p => !['ended', 'terminated', 'voting', 'renewed'].includes(p.status) && !p.is_private);
     const highlighted = active.filter(p => p.is_highlighted);
@@ -265,7 +266,7 @@ export default function HomeBottomFeed({
   ];
 
   const TABS = [
-    { id: 'foryou', label: 'For You', emoji: '✨' },
+    { id: 'foryou', label: t.forYou, emoji: '✨' },
     { id: 'myspace', label: 'My Space', emoji: '🗓️' },
   ];
 
