@@ -193,7 +193,7 @@ export default function Profile() {
         {/* Name + details */}
         <div className="mt-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold text-base leading-tight" style={{ color: 'var(--text-primary)' }}>
+            <span className="font-bold text-base leading-tight" style={{ color: accent }}>
               {profile.display_name || currentUser.full_name}
             </span>
             {age && <span className="text-sm font-bold" style={{ color: accent }}>{age}</span>}
