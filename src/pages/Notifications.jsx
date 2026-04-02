@@ -260,7 +260,7 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
       {localStatus === 'accepted' ? (
         <span className="text-[11px] font-bold text-[#00c6d2] px-3 py-1 rounded-lg bg-[#00c6d2]/15">Friends ✓</span>
       ) : localStatus === 'declined' ? (
-        <span className="text-[11px] text-gray-600">Removed</span>
+        <span className="text-[11px] text-gray-600">{t.removed}</span>
       ) : (
         <div className="flex gap-2 flex-shrink-0">
           <motion.button whileTap={{ scale: 0.92 }}
