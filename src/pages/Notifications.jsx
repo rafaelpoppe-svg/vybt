@@ -258,7 +258,7 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
       </div>
 
       {localStatus === 'accepted' ? (
-        <span className="text-[11px] font-bold text-[#00c6d2] px-3 py-1 rounded-lg bg-[#00c6d2]/15">Friends ✓</span>
+        <span className="text-[11px] font-bold text-[#00c6d2] px-3 py-1 rounded-lg bg-[#00c6d2]/15">{t.friends} ✓</span>
       ) : localStatus === 'declined' ? (
         <span className="text-[11px] text-gray-600">{t.removed}</span>
       ) : (
