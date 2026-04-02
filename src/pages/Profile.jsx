@@ -16,7 +16,7 @@ import { useProfileThemeContext } from '../components/common/ProfileThemeContext
 import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
 import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
 import FriendsListModal from '../components/profile/FriendsListModal';
-import { format } from 'date-fns';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const THEME_ACCENTS = {
   default: '#00c6d2', beer: '#f59e0b', dance: '#8b5cf6',
@@ -25,6 +25,7 @@ const THEME_ACCENTS = {
 
 export default function Profile() {
   const navigate = useNavigate();
+  const {t} = useLanguage();
   const { setProfileTheme } = useProfileThemeContext();
   const [showVerification, setShowVerification] = useState(false);
   const [activeTab, setActiveTab] = useState('photos');
@@ -184,9 +185,9 @@ export default function Profile() {
 
           {/* Stats */}
           <div className="flex-1 grid grid-cols-3 gap-1 text-center">
-            <StatCol value={myPlans.length} label="Plans" onClick={() => navigate(createPageUrl('MyPlans'))} accent={accent} />
-            <StatCol value={friendships.length} label="Friends" onClick={() => setShowFriends(true)} accent={accent} />
-            <StatCol value={myStories.length} label="Stories" accent={accent} />
+            <StatCol value={myPlans.length} label={t.plans} onClick={() => navigate(createPageUrl('MyPlans'))} accent={accent} />
+            <StatCol value={friendships.length} label={t.friends} onClick={() => setShowFriends(true)} accent={accent} />
+            <StatCol value={myStories.length} label={t.stories} accent={accent} />
           </div>
         </div>
 
