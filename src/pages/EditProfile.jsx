@@ -222,7 +222,7 @@ export default function EditProfile() {
         >
           <ChevronLeft className="w-5 h-5" style={{ color: 'var(--text-primary)' }} />
         </motion.button>
-        <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Edit Profile</h1>
+        <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{t.editProfile}</h1>
       </header>
 
       <main className="p-4 pb-32 space-y-6">
