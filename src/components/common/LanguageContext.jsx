@@ -151,6 +151,7 @@ export const translations = {
     markAllRead: 'Marcar todas',
     noNotifications: 'Sem notificações',
     removed: 'Removido',
+    confirm: 'Confirmar',
     friendRequest: ' te enviou um pedido de amizade.',
     // MyStories
     myExperienceStoriesTitle: 'As Minhas Histórias de Experiência',
@@ -408,6 +409,7 @@ export const translations = {
     markAllRead: 'Mark all',
     noNotifications: 'No notifications',
     removed: 'Removed',
+    confirm: 'Confirm',
     friendRequest: ' sent you a friend request.',
     // MyStories
     myExperienceStoriesTitle: 'My Experience Stories',
@@ -665,6 +667,7 @@ export const translations = {
     markAllRead: 'Marcar todas',
     noNotifications: 'Sin notificaciones',
     removed: 'Eliminado',
+    confirm: 'Confirmar',
     friendRequest: ' te mandé una solicitud de amistad.',
     // MyStories
     myExperienceStoriesTitle: 'Mis Historias de Experiencia',
@@ -917,6 +920,7 @@ export const translations = {
     markAllRead: 'Tout marquer',
     noNotifications: 'Pas de notifications',
     removed: 'Supprimée',
+    confirm: 'Confirmer',
     friendRequest: " je t'ai envoyé une demande d'ami.",
     // MyStories
     myExperienceStoriesTitle: 'Mes Histoires d\'Expérience',
@@ -1169,6 +1173,7 @@ export const translations = {
     markAllRead: 'Segna tutte',
     noNotifications: 'Nessuna notifica',
     removed: 'Rimossa',
+    confirm: 'Confermare',
     friendRequest: " ti ho mandato una richiesta di amicizia.",
     // MyStories
     myExperienceStoriesTitle: 'Le Mie Storie di Esperienza',
