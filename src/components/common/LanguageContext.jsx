@@ -70,7 +70,6 @@ export const translations = {
     tonight: 'Esta Noite',
     forYou: 'Para Ti',
     happeningNow: 'A Acontecer Agora',
-    joinedPlans: 'Planos em que participo',
     // Profile
     myFriends: 'Os Meus Amigos',
     joinedPartyPlans: 'Planos que Participei',
@@ -329,7 +328,6 @@ export const translations = {
     tonight: 'Tonight',
     forYou: 'For You',
     happeningNow: 'Happening Now',
-    joinedPlans: 'Joined Plans',
     // Profile
     myFriends: 'My Friends',
     joinedPartyPlans: 'Joined Party Plans',
@@ -588,7 +586,6 @@ export const translations = {
     tonight: 'Esta Noche',
     forYou: 'Para Ti',
     happeningNow: 'Pasando Ahora',
-    joinedPlans: 'Planes en los que participo',
     // Profile
     myFriends: 'Mis Amigos',
     joinedPartyPlans: 'Planes a los que me uní',
@@ -842,7 +839,6 @@ export const translations = {
     tonight: 'Ce Soir',
     forYou: 'Pour Toi',
     happeningNow: 'En ce Moment',
-    joinedPlans: 'Plans rejoints',
     // Profile
     myFriends: 'Mes Amis',
     joinedPartyPlans: 'Plans rejoints',
