@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Sparkles, ChevronDown } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { useLanguage } from '../components/common/LanguageContext';
 
 // Fix default Leaflet icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -138,6 +139,7 @@ function FlyToCity({ coords }) {
 
 function ForYouCard({ plans, allParticipants, onPlanClick }) {
   const [minimized, setMinimized] = useState(false);
+  const {t} = useLanguage();
 
   const hot = plans.filter(p =>
     p.is_on_fire || p.recent_joins >= 100 || p.is_highlighted || p.status === 'happening'
@@ -156,7 +158,7 @@ function ForYouCard({ plans, allParticipants, onPlanClick }) {
         <div className="w-8 h-1 rounded-full bg-gray-600" />
         <div className="flex items-center gap-1.5 mt-1.5">
           <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
-          <span className="text-white font-bold text-xs">For You</span>
+          <span className="text-white font-bold text-xs">{t.forYou}</span>
           <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${minimized ? 'rotate-180' : ''}`} />
         </div>
       </div>
