@@ -252,7 +252,7 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
       <div className="flex-1 min-w-0">
         <p className="text-white text-[13.5px] leading-snug">
           <span className="font-bold">{requesterProfile?.display_name || 'Someone'}</span>
-          <span className="text-gray-300">convidou pra ser brodi</span>
+          <span className="text-gray-300">{t.friendRequest}</span>
         </p>
         <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date)}</p>
       </div>
