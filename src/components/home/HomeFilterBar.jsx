@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const PARTY_TYPES = ['All', 'Club', 'Bar', 'House Party', 'Pub Crawl', 'Festival', 'Rooftop', 'Beach', 'Erasmus'];
-const TIME_FILTERS = [
+
+
+export default function HomeFilterBar({ onFilterChange }) {
+  const {t} = useLanguage();
+  const TIME_FILTERS = [
   { label: 'All', value: 'all' },
   { label: 'Now', value: 'now' },
-  { label: 'Tonight', value: 'tonight' },
+  { label: t.tonight, value: 'tonight' },
   { label: 'Late Night', value: 'late' },
 ];
 
-export default function HomeFilterBar({ onFilterChange }) {
   const [activeTime, setActiveTime] = useState('all');
   const [activeType, setActiveType] = useState('All');
 
