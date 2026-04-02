@@ -150,6 +150,7 @@ export const translations = {
     unread: 'não lidas',
     markAllRead: 'Marcar todas',
     noNotifications: 'Sem notificações',
+    friendRequest: ' te enviou um pedido de amizade.',
     // MyStories
     myExperienceStoriesTitle: 'As Minhas Histórias de Experiência',
     noStoriesYet: 'Ainda não partilhaste nenhuma história',
@@ -254,7 +255,6 @@ export const translations = {
     backBtn: '← Voltar',
     planUpdated: '✏️ Plano atualizado',
     terminatedBanner: '❌ Terminado',
-    friendRequest: ' te enviou um pedido de amizade.',
   },
 
   en: {
@@ -406,6 +406,7 @@ export const translations = {
     unread: 'unread',
     markAllRead: 'Mark all',
     noNotifications: 'No notifications',
+    friendRequest: ' sent you a friend request.',
     // MyStories
     myExperienceStoriesTitle: 'My Experience Stories',
     noStoriesYet: "You haven't shared any stories yet",
@@ -510,7 +511,6 @@ export const translations = {
     backBtn: '← Back',
     planUpdated: '✏️ Plan updated',
     terminatedBanner: '❌ Terminated',
-    friendRequest: ' sent you a friend request.',
   },
 
   es: {
@@ -662,6 +662,7 @@ export const translations = {
     unread: 'no leídas',
     markAllRead: 'Marcar todas',
     noNotifications: 'Sin notificaciones',
+    friendRequest: ' te mandé una solicitud de amistad.',
     // MyStories
     myExperienceStoriesTitle: 'Mis Historias de Experiencia',
     noStoriesYet: 'Aún no has compartido ninguna historia',
@@ -761,7 +762,6 @@ export const translations = {
     backBtn: '← Volver',
     planUpdated: '✏️ Plan actualizado',
     terminatedBanner: '❌ Terminado',
-    friendRequest: ' te mandé una solicitud de amistad.',
   },
 
   fr: {
@@ -913,6 +913,7 @@ export const translations = {
     unread: 'non lues',
     markAllRead: 'Tout marquer',
     noNotifications: 'Pas de notifications',
+    friendRequest: " je t'ai envoyé une demande d'ami.",
     // MyStories
     myExperienceStoriesTitle: 'Mes Histoires d\'Expérience',
     noStoriesYet: "Tu n'as pas encore partagé d'histoires",
@@ -1012,7 +1013,6 @@ export const translations = {
     backBtn: '← Retour',
     planUpdated: '✏️ Plan mis à jour',
     terminatedBanner: '❌ Terminé',
-    friendRequest: " je t'ai envoyé une demande d'ami.",
   },
 
   it: {
@@ -1164,6 +1164,7 @@ export const translations = {
     unread: 'non lette',
     markAllRead: 'Segna tutte',
     noNotifications: 'Nessuna notifica',
+    friendRequest: " ti ho mandato una richiesta di amicizia.",
     // MyStories
     myExperienceStoriesTitle: 'Le Mie Storie di Esperienza',
     noStoriesYet: 'Non hai ancora condiviso nessuna storia',
@@ -1263,7 +1264,6 @@ export const translations = {
     backBtn: '← Indietro',
     planUpdated: '✏️ Piano aggiornato',
     terminatedBanner: '❌ Terminato',
-    friendRequest: " ti ho mandato una richiesta di amicizia.",
   },
 };
 
