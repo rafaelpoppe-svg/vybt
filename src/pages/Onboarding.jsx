@@ -348,7 +348,7 @@ function OnboardingInner() {
                 </div>
                 <div>
                   <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t.verifyYourProfile}</h2>
-                  <p style={{ color: 'var(--text-secondary)' }}>Take a live selfie to get a <span className="text-blue-400 font-semibold">blue verified badge</span> and build trust with other users.</p>
+                  <p style={{ color: 'var(--text-secondary)' }}>{t.verifyDesc1}<span className="text-blue-400 font-semibold">{t.verifyBadge}</span>{t.verifyDesc2}</p>
                 </div>
                 <motion.button
                   whileTap={{ scale: 0.97 }}
