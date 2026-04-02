@@ -8,7 +8,7 @@ import { useLanguage } from '../common/LanguageContext';
 export default function HomeMapControls({ activeSort, setActiveSort, onFilterClick, hasActiveFilters }) {
   const {t} = useLanguage();
   const SORT_TABS = [
-    { id: 'foryou',   label: 'For You',   emoji: '✨', activeColor: 'bg-gradient-to-r from-[#00c6d2] to-[#7c3aed]', activeText: 'text-white' },
+    { id: 'foryou',   label: t.forYou,   emoji: '✨', activeColor: 'bg-gradient-to-r from-[#00c6d2] to-[#7c3aed]', activeText: 'text-white' },
     { id: 'myplans',  label: t.myPlans,  emoji: '🗓️', activeColor: 'bg-gradient-to-r from-[#542b9b] to-[#00c6d2]', activeText: 'text-white' },
   ];
   
