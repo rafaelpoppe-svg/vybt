@@ -1293,7 +1293,7 @@ export const translations = {
     backBtn: '← Indietro',
     planUpdated: '✏️ Piano aggiornato',
     terminatedBanner: '❌ Terminato',
-     happeningNowHeader: 'Il tuo piano si sta realizzando proprio ora!'
+    happeningNowHeader: 'Il tuo piano si sta realizzando proprio ora!'
     
   },
 };
