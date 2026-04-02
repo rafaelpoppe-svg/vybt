@@ -327,7 +327,7 @@ export default function EditProfile() {
           <Textarea
             value={formData.bio}
             onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-            placeholder="Tell others about yourself..."
+            placeholder={t.bioPlaceholder}
             className="min-h-20"
             style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
             maxLength={70}
