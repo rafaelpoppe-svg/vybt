@@ -364,7 +364,7 @@ function OnboardingInner() {
                   className="w-full py-3 text-sm transition-colors"
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  Skip for now
+                  {t.skipForNow}
                 </button>
               </div>
             ) : (
