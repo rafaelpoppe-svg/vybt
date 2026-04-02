@@ -299,7 +299,7 @@ export default function UserProfile() {
         {/* Name + details */}
         <div className="mt-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-white font-bold text-base leading-tight">
+            <span className="text-white font-bold text-base leading-tight" style={{ color: accent }}>
               {profile.display_name}
             </span>
             {age && <span className="text-sm font-bold" style={{ color: accent }}>{age}</span>}
