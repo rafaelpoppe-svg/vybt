@@ -226,7 +226,7 @@ export default function Profile() {
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate(createPageUrl('EditProfile'))}
             className="flex-1 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5"
             style={{ background: 'var(--surface-2)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}>
-            <Edit2 className="w-3.5 h-3.5" /> Edit Profile
+            <Edit2 className="w-3.5 h-3.5" /> {t.editProfile}
           </motion.button>
 
           {profile.ambassador_opted_in && (
