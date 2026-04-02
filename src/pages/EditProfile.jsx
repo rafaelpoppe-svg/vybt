@@ -312,7 +312,7 @@ export default function EditProfile() {
 
         {/* Display Name */}
         <div>
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Display Name</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{t.displayName}</label>
           <Input
             value={formData.display_name}
             onChange={(e) => setFormData({ ...formData, display_name: e.target.value })}
