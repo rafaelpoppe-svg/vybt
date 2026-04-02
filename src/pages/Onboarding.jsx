@@ -347,7 +347,7 @@ function OnboardingInner() {
                   <ShieldCheck className="w-12 h-12 text-blue-400" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Verify your profile</h2>
+                  <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t.verifyYourProfile}</h2>
                   <p style={{ color: 'var(--text-secondary)' }}>Take a live selfie to get a <span className="text-blue-400 font-semibold">blue verified badge</span> and build trust with other users.</p>
                 </div>
                 <motion.button
