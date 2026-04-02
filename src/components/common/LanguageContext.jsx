@@ -84,7 +84,7 @@ export const translations = {
     photos: 'Fotos (máximo 5) — a primeira é a foto de perfil.',
     displayName: 'Nome de Exibição',
     bio: 'Bio',
-    bioPlaceholder: 'Conta algo sobre ti...',
+    bioPlaceholder: 'Conte algo sobre ti...',
     dateOfBirth: 'Data de Nascimento',
     age: 'Idade',
     yourLocation: 'A Tua Localização',
