@@ -77,12 +77,8 @@ export const translations = {
     profileVerified: 'Perfil Verificado ✓',
     verifyProfile: 'Verificar o Meu Perfil',
     verifyBadge: 'Obtém um crachá azul para ganhar confiança',
-    
     friends: 'Amigos',
     stories: 'Histórias',
-    ambassadorProgram: 'Programa Ambassador',
-    allPerksUnlocked: 'Todos os benefícios desbloqueados!',
-    friendsInvited: 'amigos convidados',
     // Edit Profile
     editProfile: 'Editar Perfil',
     photos: 'Fotos (máx. 3)',
@@ -336,9 +332,6 @@ export const translations = {
     verifyBadge: 'Get a blue badge to build trust',
     friends: 'Friends',
     stories: 'Stories',
-    ambassadorProgram: 'Ambassador Program',
-    allPerksUnlocked: 'All perks unlocked!',
-    friendsInvited: 'friends invited',
     // Edit Profile
     editProfile: 'Edit Profile',
     photos: 'Photos (max 3)',
@@ -592,9 +585,6 @@ export const translations = {
     verifyBadge: 'Obtén una insignia azul para generar confianza',
     friends: 'Amigos',
     stories: 'Historias',
-    ambassadorProgram: 'Programa Embajador',
-    allPerksUnlocked: '¡Todos los beneficios desbloqueados!',
-    friendsInvited: 'amigos invitados',
     // Edit Profile
     editProfile: 'Editar Perfil',
     photos: 'Fotos (máx. 3)',
@@ -843,9 +833,6 @@ export const translations = {
     verifyBadge: 'Obtiens un badge bleu pour inspirer confiance',
     friends: 'Amis',
     stories: 'Histoires',
-    ambassadorProgram: 'Programme Ambassadeur',
-    allPerksUnlocked: 'Tous les avantages débloqués !',
-    friendsInvited: 'amis invités',
     // Edit Profile
     editProfile: 'Modifier le Profil',
     photos: 'Photos (max 3)',
@@ -1094,9 +1081,6 @@ export const translations = {
     verifyBadge: 'Ottieni un badge blu per aumentare la fiducia',
     friends: 'Amici',
     stories: 'Storie',
-    ambassadorProgram: 'Programma Ambasciatore',
-    allPerksUnlocked: 'Tutti i vantaggi sbloccati!',
-    friendsInvited: 'amici invitati',
     // Edit Profile
     editProfile: 'Modifica Profilo',
     photos: 'Foto (max 3)',
