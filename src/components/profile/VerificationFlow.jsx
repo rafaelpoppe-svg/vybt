@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Camera, Loader2, CheckCircle2, ShieldCheck, AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function VerificationFlow({ isOpen, onClose, userProfile, onVerificationComplete }) {
   const [step, setStep] = useState(1); // 1: intro, 2: camera, 3: review, 4: processing, 5: success
@@ -12,6 +13,7 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
+  const {t} = useLanguage();
 
   const stopCamera = useCallback(() => {
     if (streamRef.current) {
@@ -157,7 +159,7 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
               <div className="w-20 h-20 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
                 <ShieldCheck className="w-10 h-10 text-blue-400" />
               </div>
-              <h2 className="text-2xl font-bold text-white mb-2">Verify Your Profile</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">{t.verifyYourProfile}</h2>
               <p className="text-gray-400 text-sm mb-6">
                 Take a live selfie to prove you are the same person as in your profile photos. 
                 This will give you a <span className="text-blue-400 font-semibold">blue verified badge</span> and build trust with other users.
