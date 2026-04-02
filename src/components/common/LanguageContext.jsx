@@ -65,7 +65,7 @@ export const translations = {
     addStory: 'Adicionar Story',
     createNewPlan: 'Criar novo Plano',
     // Home
-    myPlans: 'Os Meus Planos',
+    myPlans: 'Meus Planos',
     seeAll: 'Ver tudo',
     tonight: 'Esta Noite',
     noPlansTonight: 'Sem planos para esta noite em',
@@ -1099,7 +1099,7 @@ export const translations = {
     addStory: 'Aggiungi Story',
     createNewPlan: 'Crea nuovo Piano',
     // Home
-    myPlans: 'I Miei Piani',
+    myPlans: 'Miei Piani',
     seeAll: 'Vedi tutto',
     tonight: 'Stasera',
     noPlansTonight: 'Nessun piano per stasera a',
