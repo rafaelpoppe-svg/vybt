@@ -267,7 +267,7 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
             onClick={() => accept.mutate()} disabled={accept.isPending || decline.isPending}
             className="px-3.5 py-1.5 rounded-lg text-[12px] font-bold text-white"
             style={{ background: 'linear-gradient(135deg,#00c6d2,#542b9b)' }}>
-            {accept.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Confirm'}
+            {accept.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : t.confirm}
           </motion.button>
           <motion.button whileTap={{ scale: 0.92 }}
             onClick={() => decline.mutate()} disabled={accept.isPending || decline.isPending}
