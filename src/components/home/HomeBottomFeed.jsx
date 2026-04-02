@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Users, MapPin, Calendar, Clock, Flame, Sparkles, Building2, Ticket, UserCheck, CalendarDays } from 'lucide-react';
 import { format } from 'date-fns';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 const isLiveNow = (p) => {
   if (!p.date || !p.time) return false;
