@@ -337,7 +337,7 @@ export default function EditProfile() {
 
         {/* Date of Birth */}
         <div>
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Date of Birth</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{t.dateOfBirth}</label>
           <Input
             type="date"
             value={formData.date_of_birth}
