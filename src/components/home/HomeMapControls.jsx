@@ -3,10 +3,13 @@ import { motion } from 'framer-motion';
 import { SlidersHorizontal } from 'lucide-react';
 import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
+import { useLanguage } from '../components/common/LanguageContext';
+
+const {t} = useLanguage();
 
 const SORT_TABS = [
   { id: 'foryou',   label: 'For You',   emoji: '✨', activeColor: 'bg-gradient-to-r from-[#00c6d2] to-[#7c3aed]', activeText: 'text-white' },
-  { id: 'myplans',  label: 'My Plans',  emoji: '🗓️', activeColor: 'bg-gradient-to-r from-[#542b9b] to-[#00c6d2]', activeText: 'text-white' },
+  { id: 'myplans',  label: t.myPlans,  emoji: '🗓️', activeColor: 'bg-gradient-to-r from-[#542b9b] to-[#00c6d2]', activeText: 'text-white' },
 ];
 
 export default function HomeMapControls({ activeSort, setActiveSort, onFilterClick, hasActiveFilters }) {
