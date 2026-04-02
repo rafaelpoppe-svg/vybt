@@ -18,6 +18,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const THEME_BACKGROUNDS = {
   default: 'var(--bg)',
@@ -37,6 +38,7 @@ const THEME_ACCENTS = {
 export default function UserProfile() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const {t} = useLanguage();
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('id');
 
@@ -283,15 +285,15 @@ export default function UserProfile() {
           <div className="flex-1 grid grid-cols-3 gap-1 text-center">
             <div className="flex flex-col items-center">
               <span className="font-black text-xl leading-tight" style={{ color: accent }}>{userPlans.length}</span>
-              <span className="text-xs font-semibold" style={{ color: accent }}>Plans</span>
+              <span className="text-xs font-semibold" style={{ color: accent }}>{t.plans}</span>
             </div>
             <div className="flex flex-col items-center">
               <span className="text-white font-black text-xl leading-tight" style={{ color: accent }}>{isPrivate ? '—' : userFriendships.length}</span>
-              <span className="text-gray-500 text-xs" style={{ color: accent }}>Friends</span>
+              <span className="text-gray-500 text-xs" style={{ color: accent }}>{t.friends}</span>
             </div>
             <div className="flex flex-col items-center">
               <span className="text-white font-black text-xl leading-tight" style={{ color: accent }}>{isPrivate ? '—' : stories.length}</span>
-              <span className="text-gray-500 text-xs" style={{ color: accent }}>Stories</span>
+              <span className="text-gray-500 text-xs" style={{ color: accent }}>{t.stories}</span>
             </div>
           </div>
         </div>
