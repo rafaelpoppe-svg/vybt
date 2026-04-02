@@ -2,10 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, ChevronRight } from 'lucide-react';
 import PlanCard from './PlanCard';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function ForYouSection({ plans, participants, profilesMap, onPlanClick, onSeeAll }) {
   if (!plans || plans.length === 0) return null;
 
+  const {t} = useLanguage();
   const getParticipants = (planId) => {
     return participants
       .filter(p => p.plan_id === planId)
@@ -28,7 +30,7 @@ export default function ForYouSection({ plans, participants, profilesMap, onPlan
             onClick={onSeeAll}
             className="flex items-center gap-1 text-[#00c6d2] text-sm font-medium"
           >
-            See all
+            {t.seeAll}
             <ChevronRight className="w-4 h-4" />
           </motion.button>
         )}
