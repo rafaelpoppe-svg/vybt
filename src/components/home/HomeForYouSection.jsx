@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Users, ChevronRight, MapPin } from 'lucide-react';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function HomeForYouSection({ plans = [], allParticipants = [], onPlanClick }) {
+  const {t} = useLanguage();
   const forYou = plans
     .filter(p => p.status !== 'terminated' && p.status !== 'ended')
     .slice(0, 6);
@@ -17,7 +19,7 @@ export default function HomeForYouSection({ plans = [], allParticipants = [], on
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-yellow-400" />
-          <h2 className="text-white font-bold text-base">For You</h2>
+          <h2 className="text-white font-bold text-base">{t.forYou}</h2>
         </div>
         <ChevronRight className="w-4 h-4 text-gray-600" />
       </div>
