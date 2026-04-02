@@ -11,9 +11,11 @@ import { Button } from '@/components/ui/button';
 import VibeTag, { ALL_VIBES } from '../components/common/VibeTag';
 import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
 import BackgroundThemeSelector from '../components/profile/BackgroundThemeSelector';
+import { useLanguage } from '../components/common/LanguageContext';
 
 function PartyTypeFilterList({ allTypes, selected, onToggle }) {
   const [search, setSearch] = React.useState('');
+  const {t} = useLanguage();
   const filtered = allTypes.filter(t => t.toLowerCase().includes(search.toLowerCase()));
   return (
     <div>
@@ -228,7 +230,7 @@ export default function EditProfile() {
       <main className="p-4 pb-32 space-y-6">
         {/* Photos */}
         <div>
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Photos (max 5) — 1st is profile picture</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{t.photos}</label>
           <div className="flex gap-3 flex-wrap">
             {[0, 1, 2, 3, 4].map((i) => (
               <label key={i} className="relative" style={{ marginBottom: '1.25rem' }}>
