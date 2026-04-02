@@ -5,39 +5,8 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { ChevronLeft, Loader2, Bell, BellOff, Check } from 'lucide-react';
 import { toast } from 'sonner';
+import { useLanguage } from '../components/common/LanguageContext';
 
-const SECTIONS = [
-  {
-    title: 'Messages',
-    items: [
-      { key: 'group_message', emoji: '💬', label: 'Group & Direct messages', desc: 'Notifications for new chat messages' },
-    ]
-  },
-  {
-    title: 'Social',
-    items: [
-      { key: 'friend_request', emoji: '👋', label: 'Friend requests', desc: 'When someone sends you a friend request' },
-      { key: 'friend_story', emoji: '📸', label: 'Friends\' stories', desc: 'When a friend posts a new story' },
-      { key: 'friend_created_plan', emoji: '🎉', label: 'Friend created a plan', desc: 'When a friend creates a new plan' },
-    ]
-  },
-  {
-    title: 'Plans',
-    items: [
-      { key: 'plan_happening_now', emoji: '🔥', label: 'Happening Now', desc: 'When a plan you\'re in is live — post stories!' },
-      { key: 'plan_recommendation', emoji: '📍', label: 'Plan recommendations', desc: 'Plans nearby that match your vibe' },
-      { key: 'plan_update', emoji: '🕐', label: 'Plan updates', desc: 'Time or location changes in your plans' },
-      { key: 'voting', emoji: '🗳️', label: 'Voting & results', desc: 'Voting started or plan result' },
-    ]
-  },
-  {
-    title: 'Reminders',
-    items: [
-      { key: 'plan_reminder_1day', emoji: '⏰', label: '1 day before', desc: 'Reminder the day before the plan' },
-      { key: 'plan_reminder_1hour', emoji: '⏱️', label: '1 hour before', desc: 'Reminder 1 hour before the plan starts' },
-    ]
-  },
-];
 
 const defaultPrefs = {
   new_plan_push: true,
@@ -90,6 +59,39 @@ function prefKey(key) {
 }
 
 export default function NotificationSettings() {
+  const {t} = useLanguage();
+  const SECTIONS = [
+    {
+      title: 'Messages',
+      items: [
+        { key: 'group_message', emoji: '💬', label: 'Group & Direct messages', desc: 'Notifications for new chat messages' },
+      ]
+    },
+    {
+      title: 'Social',
+      items: [
+        { key: 'friend_request', emoji: '👋', label: 'Friend requests', desc: 'When someone sends you a friend request' },
+        { key: 'friend_story', emoji: '📸', label: 'Friends\' stories', desc: 'When a friend posts a new story' },
+        { key: 'friend_created_plan', emoji: '🎉', label: 'Friend created a plan', desc: 'When a friend creates a new plan' },
+      ]
+    },
+    {
+      title: 'Plans',
+      items: [
+        { key: 'plan_happening_now', emoji: '🔥', label: t.happeningNow, desc: 'When a plan you\'re in is live — post stories!' },
+        { key: 'plan_recommendation', emoji: '📍', label: 'Plan recommendations', desc: 'Plans nearby that match your vibe' },
+        { key: 'plan_update', emoji: '🕐', label: 'Plan updates', desc: 'Time or location changes in your plans' },
+        { key: 'voting', emoji: '🗳️', label: 'Voting & results', desc: 'Voting started or plan result' },
+      ]
+    },
+    {
+      title: 'Reminders',
+      items: [
+        { key: 'plan_reminder_1day', emoji: '⏰', label: '1 day before', desc: 'Reminder the day before the plan' },
+        { key: 'plan_reminder_1hour', emoji: '⏱️', label: '1 hour before', desc: 'Reminder 1 hour before the plan starts' },
+      ]
+    },
+  ];
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [prefs, setPrefs] = useState(defaultPrefs);
