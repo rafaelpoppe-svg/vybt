@@ -404,8 +404,8 @@ function StatCol({ value, label, onClick, accent }) {
   }
   return (
     <div className="flex flex-col items-center">
-      <span className="font-black text-xl leading-tight" style={{ color: 'var(--text-primary)' }}>{value}</span>
-      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{label}</span>
+      <span className="font-black text-xl leading-tight" style={{ color: accent }}>{value}</span>
+      <span className="text-xs" style={{ color: accent }}>{label}</span>
     </div>
   );
 }
