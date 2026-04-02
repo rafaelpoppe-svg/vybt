@@ -260,6 +260,7 @@ export const translations = {
     backBtn: '← Voltar',
     planUpdated: '✏️ Plano atualizado',
     terminatedBanner: '❌ Terminado',
+    happeningNowHeader: "Seu plano está acontecendo agora!"
   },
 
   en: {
@@ -521,6 +522,7 @@ export const translations = {
     backBtn: '← Back',
     planUpdated: '✏️ Plan updated',
     terminatedBanner: '❌ Terminated',
+    happeningNowHeader: "Your plan is happening now!"
   },
 
   es: {
@@ -777,6 +779,7 @@ export const translations = {
     backBtn: '← Volver',
     planUpdated: '✏️ Plan actualizado',
     terminatedBanner: '❌ Terminado',
+    happeningNowHeader: "Su plan esta sucediendo ahora!"
   },
 
   fr: {
@@ -1033,6 +1036,7 @@ export const translations = {
     backBtn: '← Retour',
     planUpdated: '✏️ Plan mis à jour',
     terminatedBanner: '❌ Terminé',
+    happeningNowHeader: "Votre plan est en train de se réaliser!"
   },
 
   it: {
@@ -1289,6 +1293,8 @@ export const translations = {
     backBtn: '← Indietro',
     planUpdated: '✏️ Piano aggiornato',
     terminatedBanner: '❌ Terminato',
+     happeningNowHeader: "Il tuo piano si sta realizzando proprio ora!"
+    
   },
 };
 
