@@ -50,7 +50,9 @@ export const translations = {
     letsGo: "Vamos lá! 🎉",
     // Verification step
     verifyYourProfile: 'Verifica o teu perfil',
-    verifyDescription: 'Tira um selfie ao vivo para obteres um <badge azul verificado> e ganhares confiança com outros utilizadores.',
+    verifyDesc1: 'Tire uma selfie para conseguir o ',
+    verifyBadge: 'selo azul de verificação',
+    verifyDesc2: ' e construir confiança com outros usuários.',
     verifyNow: 'Verificar Agora',
     skipForNow: 'Saltar por agora',
     // Navigation
@@ -309,7 +311,9 @@ export const translations = {
     letsGo: "Let's Go! 🎉",
     // Verification step
     verifyYourProfile: 'Verify your profile',
-    verifyDescription: 'Take a live selfie to get a blue verified badge and build trust with other users.',
+    verifyDesc1: 'Take a live selfie to get a ',
+    verifyBadge: 'blue verified badge',
+    verifyDesc2: ' and build trust with other users.',
     verifyNow: 'Verify Now',
     skipForNow: 'Skip for now',
     // Navigation
@@ -568,7 +572,9 @@ export const translations = {
     letsGo: '¡Vamos! 🎉',
     // Verification step
     verifyYourProfile: 'Verifica tu perfil',
-    verifyDescription: 'Hazte un selfie en vivo para obtener una insignia azul verificada y generar confianza con otros usuarios.',
+    verifyDesc1: 'Tómate una selfie para obtener una ',
+    verifyBadge: 'insignia azul de verificación',
+    verifyDesc2: ' y generar confianza con otros usuarios.',
     verifyNow: 'Verificar Ahora',
     skipForNow: 'Saltar por ahora',
     // Navigation
