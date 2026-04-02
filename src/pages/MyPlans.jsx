@@ -79,7 +79,7 @@ export default function MyPlans() {
         >
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
-        <h1 className="text-xl font-bold text-white">t.joinedPartyPlans</h1>
+        <h1 className="text-xl font-bold text-white">{t.joinedPartyPlans}</h1>
       </header>
 
       <main className="p-4">
