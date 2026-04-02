@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Camera, Loader2, CheckCircle2, ShieldCheck, AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function VerificationFlow({ isOpen, onClose, userProfile, onVerificationComplete }) {
   const [step, setStep] = useState(1); // 1: intro, 2: camera, 3: review, 4: processing, 5: success
