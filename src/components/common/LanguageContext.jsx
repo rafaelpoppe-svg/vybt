@@ -152,6 +152,7 @@ export const translations = {
     noNotifications: 'Sem notificações',
     removed: 'Removido',
     confirm: 'Confirmar',
+    delete: 'Deletar',
     friendRequest: ' te enviou um pedido de amizade.',
     // MyStories
     myExperienceStoriesTitle: 'As Minhas Histórias de Experiência',
@@ -410,6 +411,7 @@ export const translations = {
     noNotifications: 'No notifications',
     removed: 'Removed',
     confirm: 'Confirm',
+    delete: 'Delete',
     friendRequest: ' sent you a friend request.',
     // MyStories
     myExperienceStoriesTitle: 'My Experience Stories',
@@ -668,6 +670,7 @@ export const translations = {
     noNotifications: 'Sin notificaciones',
     removed: 'Eliminado',
     confirm: 'Confirmar',
+    delete: 'Borrar',
     friendRequest: ' te mandé una solicitud de amistad.',
     // MyStories
     myExperienceStoriesTitle: 'Mis Historias de Experiencia',
@@ -921,6 +924,7 @@ export const translations = {
     noNotifications: 'Pas de notifications',
     removed: 'Supprimée',
     confirm: 'Confirmer',
+    delete: 'Supprimer',
     friendRequest: " je t'ai envoyé une demande d'ami.",
     // MyStories
     myExperienceStoriesTitle: 'Mes Histoires d\'Expérience',
@@ -1174,6 +1178,7 @@ export const translations = {
     noNotifications: 'Nessuna notifica',
     removed: 'Rimossa',
     confirm: 'Confermare',
+    delete: 'Eliminare',
     friendRequest: " ti ho mandato una richiesta di amicizia.",
     // MyStories
     myExperienceStoriesTitle: 'Le Mie Storie di Esperienza',
