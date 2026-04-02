@@ -254,7 +254,7 @@ export const translations = {
     backBtn: '← Voltar',
     planUpdated: '✏️ Plano atualizado',
     terminatedBanner: '❌ Terminado',
-    friendRequest: 'te enviou um pedido de amizade.'
+    friendRequest: 'te enviou um pedido de amizade.',
   },
 
   en: {
@@ -510,7 +510,7 @@ export const translations = {
     backBtn: '← Back',
     planUpdated: '✏️ Plan updated',
     terminatedBanner: '❌ Terminated',
-    friendRequest: 'sent you a friend request.'
+    friendRequest: 'sent you a friend request.',
   },
 
   es: {
@@ -761,7 +761,7 @@ export const translations = {
     backBtn: '← Volver',
     planUpdated: '✏️ Plan actualizado',
     terminatedBanner: '❌ Terminado',
-    friendRequest: 'te mandé una solicitud de amistad.'
+    friendRequest: 'te mandé una solicitud de amistad.',
   },
 
   fr: {
@@ -1012,7 +1012,7 @@ export const translations = {
     backBtn: '← Retour',
     planUpdated: '✏️ Plan mis à jour',
     terminatedBanner: '❌ Terminé',
-    friendRequest: "je t'ai envoyé une demande d'ami."
+    friendRequest: "je t'ai envoyé une demande d'ami.",
   },
 
   it: {
@@ -1263,7 +1263,7 @@ export const translations = {
     backBtn: '← Indietro',
     planUpdated: '✏️ Piano aggiornato',
     terminatedBanner: '❌ Terminato',
-    friendRequest: "ti ho mandato una richiesta di amicizia."
+    friendRequest: "ti ho mandato una richiesta di amicizia.",
   },
 };
 
