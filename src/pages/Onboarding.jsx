@@ -357,7 +357,7 @@ function OnboardingInner() {
 
                 >
                   <Camera className="w-5 h-5" />
-                  Verify Now
+                  {t.verifyNow}
                 </motion.button>
                 <button
                   onClick={skipToHome}
