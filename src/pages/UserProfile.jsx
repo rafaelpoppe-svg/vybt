@@ -212,7 +212,7 @@ export default function UserProfile() {
   return (
     <div
       className="min-h-screen overflow-y-auto overflow-x-hidden pb-24 safe-top"
-      style={{ background: THEME_BACKGROUNDS[theme] || THEME_BACKGROUNDS.default, WebkitOverflowScrolling: 'touch' }}
+      style={{ background: 'var(--bg)', WebkitOverflowScrolling: 'touch' }}
     >
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3">
