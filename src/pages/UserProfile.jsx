@@ -286,12 +286,12 @@ export default function UserProfile() {
               <span className="text-xs font-semibold" style={{ color: accent }}>Plans</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-white font-black text-xl leading-tight">{isPrivate ? '—' : userFriendships.length}</span>
-              <span className="text-gray-500 text-xs">Friends</span>
+              <span className="text-white font-black text-xl leading-tight" style={{ color: accent }}>{isPrivate ? '—' : userFriendships.length}</span>
+              <span className="text-gray-500 text-xs" style={{ color: accent }}>Friends</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-white font-black text-xl leading-tight">{isPrivate ? '—' : stories.length}</span>
-              <span className="text-gray-500 text-xs">Stories</span>
+              <span className="text-white font-black text-xl leading-tight" style={{ color: accent }}>{isPrivate ? '—' : stories.length}</span>
+              <span className="text-gray-500 text-xs" style={{ color: accent }}>Stories</span>
             </div>
           </div>
         </div>
