@@ -6,9 +6,11 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, Eye, Sparkles, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function MyStories() {
   const navigate = useNavigate();
+  const {t} = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -54,7 +56,7 @@ export default function MyStories() {
         >
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
-        <h1 className="text-xl font-bold text-white">My Experience Stories</h1>
+        <h1 className="text-xl font-bold text-white">t.myExperienceStories</h1>
       </header>
 
       <main className="p-4">
