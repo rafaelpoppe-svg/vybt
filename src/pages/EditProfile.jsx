@@ -470,7 +470,7 @@ export default function EditProfile() {
           {updateMutation.isPending ? (
             <Loader2 className="w-5 h-5 animate-spin" />
           ) : (
-            'Save Changes'
+            t.saveChanges
           )}
         </Button>
       </div>
