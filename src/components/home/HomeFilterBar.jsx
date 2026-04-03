@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, ChevronDown } from 'lucide-react';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 const PARTY_TYPES = ['All', 'Club', 'Bar', 'House Party', 'Pub Crawl', 'Festival', 'Rooftop', 'Beach', 'Erasmus'];
 
