@@ -127,7 +127,6 @@ export const translations = {
     noPlansFound: 'Nenhum plano encontrado',
     noUsersFound: 'Nenhum utilizador encontrado',
     // Profile
-    myVibes: 'Os Meus Vibes',
     preferredParties: 'Planos preferidos',
     // Friends
     friendsTab: 'Amigos',
@@ -378,7 +377,6 @@ export const translations = {
     noPlansFound: 'No plans found',
     noUsersFound: 'No users found',
     // Profile
-    myVibes: 'My Vibes',
     preferredParties: 'Preferred Parties',
     // Friends
     friendsTab: 'Friends',
@@ -629,7 +627,6 @@ export const translations = {
     noPlansFound: 'No se encontraron planes',
     noUsersFound: 'No se encontraron usuarios',
     // Profile
-    myVibes: 'Mis Vibes',
     preferredParties: 'Fiestas Preferidas',
     // Friends
     friendsTab: 'Amigos',
@@ -875,7 +872,6 @@ export const translations = {
     noPlansFound: 'Aucun plan trouvé',
     noUsersFound: 'Aucun utilisateur trouvé',
     // Profile
-    myVibes: 'Mes Vibes',
     preferredParties: 'Fêtes Préférées',
     // Friends
     friendsTab: 'Amis',
@@ -1121,7 +1117,6 @@ export const translations = {
     noPlansFound: 'Nessun piano trovato',
     noUsersFound: 'Nessun utente trovato',
     // Profile
-    myVibes: 'I Miei Vibes',
     preferredParties: 'Feste Preferite',
     // Friends
     friendsTab: 'Amici',
