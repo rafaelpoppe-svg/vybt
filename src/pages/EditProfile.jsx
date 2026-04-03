@@ -458,7 +458,7 @@ export default function EditProfile() {
             onSelect={(theme) => setFormData({ ...formData, profile_background_theme: theme })}
           />
         </div>
-        </main>
+      </main>
 
       {/* Save Button */}
       <div className="fixed bottom-0 left-0 right-0 p-4" style={{ background: 'linear-gradient(to top, var(--bg) 60%, transparent)' }}>
