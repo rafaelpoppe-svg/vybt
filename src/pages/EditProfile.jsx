@@ -398,7 +398,7 @@ export default function EditProfile() {
         {/* Vibes */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm" style={{ color: 'var(--text-secondary)' }}>Your Vibes (max 5)</label>
+            <label className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t.yourVibes}</label>
             <span className={`text-xs font-medium ${formData.vibes.length >= 5 ? 'text-[#00c6d2]' : ''}`} style={formData.vibes.length < 5 ? { color: 'var(--text-muted)' } : {}}>
               {formData.vibes.length}/5
             </span>
