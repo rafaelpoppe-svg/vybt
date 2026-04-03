@@ -163,7 +163,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
                       className="text-xl"
                     >🧭</motion.span>
                   )}
-                  {detecting ? 'Detecting your location...' : 'Use my current location'}
+                  {detecting ? t.detectingLocation : t.tapToUseLocation}
                 </motion.button>
               </div>
 
