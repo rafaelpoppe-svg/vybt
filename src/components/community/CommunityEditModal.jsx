@@ -166,7 +166,7 @@ export default function CommunityEditModal({ community, onClose, onSaved, onDele
           <motion.button whileTap={{ scale: 0.97 }} onClick={handleSave} disabled={loading}
             className="w-full py-4 rounded-2xl font-black text-lg text-[#0b0b0b] flex items-center justify-center gap-2"
             style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)` }}>
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save Changes ✅'}
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : `${t.saveChanges} ✅`}
           </motion.button>
 
           {/* Delete community */}
