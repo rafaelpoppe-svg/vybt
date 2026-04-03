@@ -92,7 +92,6 @@ export const translations = {
     yourVibes: 'Os Teus Vibes (máx. 5)',
     preferredPartyTypes: 'Tipos de Festas Preferidas',
     saveChanges: 'Guardar Alterações',
-    main: 'Principal',
     // Settings
     settings: 'Definições',
     account: 'Conta',
@@ -344,7 +343,6 @@ export const translations = {
     yourVibes: 'Your Vibes (max 5)',
     preferredPartyTypes: 'Preferred Party Types',
     saveChanges: 'Save Changes',
-    main: 'Main',
     // Settings
     settings: 'Settings',
     account: 'Account',
@@ -596,7 +594,6 @@ export const translations = {
     yourVibes: 'Tus Vibes (máx. 5)',
     preferredPartyTypes: 'Tipos de Fiestas Preferidas',
     saveChanges: 'Guardar Cambios',
-    main: 'Principal',
     // Settings
     settings: 'Ajustes',
     account: 'Cuenta',
@@ -843,7 +840,6 @@ export const translations = {
     yourVibes: 'Tes Vibes (max 5)',
     preferredPartyTypes: 'Types de Fêtes Préférés',
     saveChanges: 'Enregistrer les Modifications',
-    main: 'Principale',
     // Settings
     settings: 'Paramètres',
     account: 'Compte',
@@ -1090,7 +1086,6 @@ export const translations = {
     yourVibes: 'I Tuoi Vibes (max 5)',
     preferredPartyTypes: 'Tipi di Feste Preferiti',
     saveChanges: 'Salva Modifiche',
-    main: 'Principale',
     // Settings
     settings: 'Impostazioni',
     account: 'Account',
