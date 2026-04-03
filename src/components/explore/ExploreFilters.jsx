@@ -140,6 +140,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
   const [vibeSearch, setVibeSearch] = useState('');
   if (!isOpen) return null;
 
+  const {t} = useLanguage();
   const ageRanges = ['18-25', '25-30', '25-35'];
   const genders = ['female', 'male', 'other'];
 
