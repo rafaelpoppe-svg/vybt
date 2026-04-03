@@ -461,8 +461,8 @@ export default function Explore() {
         {activeView === 'users' && (
           <div className="flex gap-2 pb-3">
             {[
-              { key: 'discover', label: t.matchesVibes || 'Matches My Vibes', emoji: '❤️' },
-              { key: 'requests', label: 'Requests', emoji: '👋', badge: receivedFriendRequests.length },
+              { key: 'discover', label: t.matchesVibes, emoji: '❤️' },
+              { key: 'requests', label: t.requests, emoji: '👋', badge: receivedFriendRequests.length },
             ].map(({ key, label, emoji, badge }) => (
               <motion.button
                 key={key}
