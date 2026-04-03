@@ -123,7 +123,7 @@ export const translations = {
     allTag: 'Todos',
     onFire: 'Em Destaque',
     mostMembers: 'Mais Membros',
-    matchesVibes: 'Combina com os Meus Vibes',
+    matchesVibes: 'Combina com as Minhas Vibes',
     noPlansFound: 'Nenhum plano encontrado',
     noUsersFound: 'Nenhum utilizador encontrado',
     vibesMatch: 'vibes em comum',
