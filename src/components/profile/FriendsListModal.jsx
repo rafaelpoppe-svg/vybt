@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Users, X, ShieldCheck, MapPin } from 'lucide-react';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function FriendsListModal({ isOpen, onClose, friendProfiles, accent = '#00c6d2' }) {
   const navigate = useNavigate();
-
+  const {t} = useLanguage();
   return (
     <AnimatePresence>
       {isOpen && (
@@ -45,7 +46,7 @@ export default function FriendsListModal({ isOpen, onClose, friendProfiles, acce
               {friendProfiles.length === 0 ? (
                 <div className="text-center py-16 space-y-2">
                   <p className="text-4xl">👥</p>
-                  <p className="text-gray-400 font-semibold">No friends yet</p>
+                  <p className="text-gray-400 font-semibold">{t.noFriendsYet}</p>
                   <p className="text-gray-600 text-sm">Connect with people at plans</p>
                 </div>
               ) : (
