@@ -483,7 +483,7 @@ export default function Notifications() {
               className="p-2 rounded-full bg-gray-900">
               <ChevronLeft className="w-5 h-5 text-white" />
             </motion.button>
-            <h1 className="text-[22px] font-black text-white tracking-tight">Notifications</h1>
+            <h1 className="text-[22px] font-black text-white tracking-tight">{t.notifications}</h1>
           </div>
           <div className="flex items-center gap-3">
             {unreadCount > 0 && (
