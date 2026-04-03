@@ -130,8 +130,7 @@ export default function Profile() {
       {/* ── Top bar ── */}
       <div
         className="relative flex-shrink-0 flex items-center justify-between px-4 py-3 z-40 backdrop-blur-md border-b border-black/5"
-        style={{ background: 'var(--header-bg)' }}
-        style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}
+        style={{ background: 'var(--header-bg)', paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}
       >
         <div className="w-10" />
         <div className="absolute left-0 right-0 flex flex-col items-center justify-center pointer-events-none">
