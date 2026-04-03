@@ -76,7 +76,6 @@ export const translations = {
     myExperienceStories: 'As Minhas Histórias',
     profileVerified: 'Perfil Verificado ✓',
     verifyProfile: 'Verificar o Meu Perfil',
-    verifyBadge: 'Obtém um crachá azul para ganhar confiança',
     friends: 'Amigos',
     stories: 'Histórias',
     // Edit Profile
@@ -329,7 +328,6 @@ export const translations = {
     myExperienceStories: 'My Experience Stories',
     profileVerified: 'Profile Verified ✓',
     verifyProfile: 'Verify Your Profile',
-    verifyBadge: 'Get a blue badge to build trust',
     friends: 'Friends',
     stories: 'Stories',
     // Edit Profile
@@ -582,7 +580,6 @@ export const translations = {
     myExperienceStories: 'Mis Historias',
     profileVerified: 'Perfil Verificado ✓',
     verifyProfile: 'Verificar mi Perfil',
-    verifyBadge: 'Obtén una insignia azul para generar confianza',
     friends: 'Amigos',
     stories: 'Historias',
     // Edit Profile
@@ -830,7 +827,6 @@ export const translations = {
     myExperienceStories: 'Mes Histoires',
     profileVerified: 'Profil Vérifié ✓',
     verifyProfile: 'Vérifier mon Profil',
-    verifyBadge: 'Obtiens un badge bleu pour inspirer confiance',
     friends: 'Amis',
     stories: 'Histoires',
     // Edit Profile
@@ -1078,7 +1074,6 @@ export const translations = {
     myExperienceStories: 'Le Mie Storie',
     profileVerified: 'Profilo Verificato ✓',
     verifyProfile: 'Verifica il Mio Profilo',
-    verifyBadge: 'Ottieni un badge blu per aumentare la fiducia',
     friends: 'Amici',
     stories: 'Storie',
     // Edit Profile
