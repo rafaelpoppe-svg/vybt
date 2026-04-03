@@ -436,7 +436,7 @@ export default function EditProfile() {
         {/* Party Types */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm" style={{ color: 'var(--text-secondary)' }}>Preferred Party Types</label>
+            <label className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t.preferredPartyTypes}</label>
             <span className={`text-xs font-medium ${formData.party_types.length >= 5 ? 'text-[#00c6d2]' : ''}`} style={formData.party_types.length < 5 ? { color: 'var(--text-muted)' } : {}}>
               {formData.party_types.length}/5
             </span>
