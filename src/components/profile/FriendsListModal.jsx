@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Users, X, ShieldCheck, MapPin } from 'lucide-react';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function FriendsListModal({ isOpen, onClose, friendProfiles, accent = '#00c6d2' }) {
   const navigate = useNavigate();
