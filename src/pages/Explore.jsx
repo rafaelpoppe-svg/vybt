@@ -351,7 +351,7 @@ export default function Explore() {
           </button>
           <button onClick={() => setActiveView('communities')}
             className={`relative flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ${activeView === 'communities' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}>
-            ⭐ Groups
+            ⭐ {t.groups}
           </button>
           <button onClick={() => setActiveView('users')}
             className={`relative flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ${activeView === 'users' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}>
