@@ -15,13 +15,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import AIReviewModal from '../components/story/AIReviewModal.jsx';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function EditStory() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const urlParams = new URLSearchParams(window.location.search);
   const storyId = urlParams.get('id');
-
+  const {t} = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
   const [caption, setCaption] = useState('');
   const [visibility, setVisibility] = useState('friends');
@@ -302,7 +303,7 @@ export default function EditStory() {
             ) : (
               <>
                 <Save className="w-5 h-5" />
-                Save Changes
+                {t.saveChanges}
               </>
             )}
           </motion.button>
