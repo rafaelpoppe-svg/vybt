@@ -15,7 +15,6 @@ import { useLanguage } from '../components/common/LanguageContext';
 
 function PartyTypeFilterList({ allTypes, selected, onToggle }) {
   const [search, setSearch] = React.useState('');
-  const {t} = useLanguage();
   const filtered = allTypes.filter(t => t.toLowerCase().includes(search.toLowerCase()));
   return (
     <div>
@@ -49,6 +48,7 @@ function PartyTypeFilterList({ allTypes, selected, onToggle }) {
 
 
 export default function EditProfile() {
+  const {t} = useLanguage();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
