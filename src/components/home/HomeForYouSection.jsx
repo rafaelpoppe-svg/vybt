@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Users, ChevronRight, MapPin } from 'lucide-react';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function HomeForYouSection({ plans = [], allParticipants = [], onPlanClick }) {
   const {t} = useLanguage();
