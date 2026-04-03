@@ -250,7 +250,8 @@ export const translations = {
     backBtn: '← Voltar',
     planUpdated: '✏️ Plano atualizado',
     terminatedBanner: '❌ Terminado',
-    happeningNowHeader: 'Seu plano está acontecendo agora!'
+    happeningNowHeader: 'Seu plano está acontecendo agora!',
+    messagesRead: 'Tudo lido ✓',
   },
 
   en: {
@@ -502,7 +503,8 @@ export const translations = {
     backBtn: '← Back',
     planUpdated: '✏️ Plan updated',
     terminatedBanner: '❌ Terminated',
-    happeningNowHeader: 'Your plan is happening now!'
+    happeningNowHeader: 'Your plan is happening now!',
+    messagesRead: 'All read ✓',
   },
 
   es: {
@@ -749,7 +751,8 @@ export const translations = {
     backBtn: '← Volver',
     planUpdated: '✏️ Plan actualizado',
     terminatedBanner: '❌ Terminado',
-    happeningNowHeader: 'Su plan esta sucediendo ahora!'
+    happeningNowHeader: 'Su plan esta sucediendo ahora!',
+     messagesRead: 'Todo leído ✓',
   },
 
   fr: {
@@ -996,7 +999,8 @@ export const translations = {
     backBtn: '← Retour',
     planUpdated: '✏️ Plan mis à jour',
     terminatedBanner: '❌ Terminé',
-    happeningNowHeader: 'Votre plan est en train de se réaliser!'
+    happeningNowHeader: 'Votre plan est en train de se réaliser!',
+    messagesRead: 'Tout lu ✓',
   },
 
   it: {
@@ -1243,7 +1247,8 @@ export const translations = {
     backBtn: '← Indietro',
     planUpdated: '✏️ Piano aggiornato',
     terminatedBanner: '❌ Terminato',
-    happeningNowHeader: 'Il tuo piano si sta realizzando proprio ora!'
+    happeningNowHeader: 'Il tuo piano si sta realizzando proprio ora!',
+    messagesRead: 'Tutto letto ✓',
     
   },
 };
