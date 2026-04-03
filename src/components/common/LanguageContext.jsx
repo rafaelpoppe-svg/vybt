@@ -127,7 +127,6 @@ export const translations = {
     noPlansFound: 'Nenhum plano encontrado',
     noUsersFound: 'Nenhum utilizador encontrado',
     // Friends
-    friendsTab: 'Amigos',
     requests: 'Pedidos',
     noFriendsYet: 'Sem amigos ainda',
     noPendingRequests: 'Sem pedidos pendentes',
@@ -375,7 +374,6 @@ export const translations = {
     noPlansFound: 'No plans found',
     noUsersFound: 'No users found',
     // Friends
-    friendsTab: 'Friends',
     requests: 'Requests',
     noFriendsYet: 'No friends yet',
     noPendingRequests: 'No pending requests',
@@ -623,7 +621,6 @@ export const translations = {
     noPlansFound: 'No se encontraron planes',
     noUsersFound: 'No se encontraron usuarios',
     // Friends
-    friendsTab: 'Amigos',
     requests: 'Solicitudes',
     noFriendsYet: 'Sin amigos aún',
     noPendingRequests: 'Sin solicitudes pendientes',
@@ -866,7 +863,6 @@ export const translations = {
     noPlansFound: 'Aucun plan trouvé',
     noUsersFound: 'Aucun utilisateur trouvé',
     // Friends
-    friendsTab: 'Amis',
     requests: 'Demandes',
     noFriendsYet: 'Pas encore d\'amis',
     noPendingRequests: 'Pas de demandes en attente',
@@ -1109,7 +1105,6 @@ export const translations = {
     noPlansFound: 'Nessun piano trovato',
     noUsersFound: 'Nessun utente trovato',
     // Friends
-    friendsTab: 'Amici',
     requests: 'Richieste',
     noFriendsYet: 'Ancora nessun amico',
     noPendingRequests: 'Nessuna richiesta in attesa',
