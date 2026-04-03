@@ -366,7 +366,13 @@ export default function Explore() {
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={activeView === 'plans' ? t.searchPlans : 'Search by @username or name...'}
+            placeholder={
+              activeView === 'plans'
+                ? t.searchPlans
+                : activeView === 'groups'
+                ? t.searchGroups
+                : t.searchPeople
+            }
             className="pl-9 rounded-xl h-10"
             style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
           />
