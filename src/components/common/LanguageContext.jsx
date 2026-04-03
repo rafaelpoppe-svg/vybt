@@ -89,7 +89,7 @@ export const translations = {
     detectingLocation: 'A detetar a tua localização...',
     tapToUseLocation: 'Toca para usar a localização atual',
     searchRadius: 'Raio de Pesquisa',
-    yourVibes: 'Os Teus Vibes (máx. 5)',
+    yourVibes: 'As Suas Vibes (máx. 5)',
     preferredPartyTypes: 'Tipos de Festas Preferidas',
     saveChanges: 'Guardar Alterações',
     // Settings
