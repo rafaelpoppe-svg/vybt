@@ -375,7 +375,7 @@ export default function EditProfile() {
                 </div>
               ) : (
                 <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                  {detectingLocation ? 'Detecting your location...' : 'Tap to use current location'}
+                  {detectingLocation ? t.detectingLocation : t.tapToUseLocation}
                 </span>
               )}
             </div>
