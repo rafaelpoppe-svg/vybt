@@ -354,7 +354,7 @@ export default function EditProfile() {
 
         {/* City / Location */}
         <div>
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Your Location</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{t.yourLocation}</label>
           <button
             type="button"
             onClick={detectLocation}
