@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { X, Image as ImageIcon, Loader2, Check, Lock, Unlock, Trash2, Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 const THEME_COLORS = [
   '#00c6d2','#542b9b','#ff6b6b','#f8b500','#ff69b4',
