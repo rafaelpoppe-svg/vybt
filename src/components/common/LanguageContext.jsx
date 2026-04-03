@@ -124,6 +124,7 @@ export const translations = {
     onFire: 'Em Destaque',
     mostMembers: 'Mais Membros',
     matchesVibes: 'Combina com as Minhas Vibes',
+    requests: 'Solicitações',
     noPlansFound: 'Nenhum plano encontrado',
     noUsersFound: 'Nenhum utilizador encontrado',
     vibesMatch: 'vibes em comum',
