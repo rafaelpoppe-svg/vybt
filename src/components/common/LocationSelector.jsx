@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Loader2, Lock, X } from 'lucide-react';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const popularCities = [
   'Amsterdam', 'Athens', 'Belgrade', 'Berlin', 'Bern', 'Braga', 'Bratislava', 'Brussels',
@@ -23,6 +24,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [detecting, setDetecting] = useState(false);
+  const {t} = useLanguage();
 
   const detectLocation = () => {
     if (!navigator.geolocation) return;
@@ -126,7 +128,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
               {/* Header */}
               <div className="flex items-center justify-between px-5 py-3">
                 <div>
-                  <h3 className="text-white font-bold text-base">📍 Your Location</h3>
+                  <h3 className="text-white font-bold text-base">📍 {t.yourLocation}</h3>
                   <p className="text-gray-400 text-xs mt-0.5">Choose your city to see nearby plans</p>
                 </div>
                 <motion.button
