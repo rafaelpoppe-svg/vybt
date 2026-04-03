@@ -114,6 +114,7 @@ export const translations = {
     moderationSub: 'Rever denúncias de conteúdo',
     // Explore
     plans: 'Planos',
+    groups: 'Grupos',
     people: 'Pessoas',
     map: 'Mapa',
     searchPlans: 'Pesquisar planos...',
@@ -365,6 +366,7 @@ export const translations = {
     moderationSub: 'Review content reports',
     // Explore
     plans: 'Plans',
+    groups: 'Groups',
     people: 'People',
     map: 'Map',
     searchPlans: 'Search plans...',
@@ -616,6 +618,7 @@ export const translations = {
     moderationSub: 'Revisar informes de contenido',
     // Explore
     plans: 'Planes',
+    groups: 'Grupos',
     people: 'Personas',
     map: 'Mapa',
     searchPlans: 'Buscar planes...',
@@ -862,6 +865,7 @@ export const translations = {
     moderationSub: 'Examiner les signalements de contenu',
     // Explore
     plans: 'Plans',
+    groups: 'Groupes',
     people: 'Personnes',
     map: 'Carte',
     searchPlans: 'Rechercher des plans...',
@@ -1108,6 +1112,7 @@ export const translations = {
     moderationSub: 'Esamina le segnalazioni di contenuto',
     // Explore
     plans: 'Piani',
+    groups: 'Gruppi',
     people: 'Persone',
     map: 'Mappa',
     searchPlans: 'Cerca piani...',
