@@ -4,9 +4,11 @@ import { X, Clock, MapPin, Flame, Users, Heart, Music, Search, Lock, Sparkles } 
 import { Slider } from '@/components/ui/slider';
 import VibeTag, { ALL_VIBES } from '../common/VibeTag';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
+import { useLanguage } from '../common/LanguageContext';
 
 export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
   const [partySearch, setPartySearch] = useState('');
+  const {t} = useLanguage();
   if (!isOpen) return null;
 
   return (
@@ -170,7 +172,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
               }`}
             >
               <Heart className="w-3.5 h-3.5" />
-              Matches my vibes
+              {t.matchesVibes}
             </motion.button>
           </div>
         </div>
