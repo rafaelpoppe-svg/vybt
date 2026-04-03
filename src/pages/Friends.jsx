@@ -5,12 +5,12 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChevronLeft, UserPlus, Check, X, MessageCircle, Loader2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { notifyFriendRequest } from '../components/notifications/NotificationTriggers';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function Friends() {
   const navigate = useNavigate();
+  const {t} = useLanguage();
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('friends');
@@ -178,7 +178,7 @@ export default function Friends() {
               );
             })
           ) : (
-            <p className="text-gray-500 text-center py-8">No friends yet</p>
+            <p className="text-gray-500 text-center py-8">{t.noFriendsYet}</p>
           )
         ) : (
           pendingRequests.length > 0 ? (
