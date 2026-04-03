@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Loader2, Lock, X } from 'lucide-react';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from 'LanguageContext';
 
 const popularCities = [
   'Amsterdam', 'Athens', 'Belgrade', 'Berlin', 'Bern', 'Braga', 'Bratislava', 'Brussels',
