@@ -234,7 +234,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
               <div className="px-5 py-4 border-t border-white/8" style={{ background: 'rgba(0,0,0,0.3)' }}>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs text-[#00c6d2] font-semibold flex items-center gap-1">
-                    📡 Search radius
+                    📡 {t.searchRadius}
                   </label>
                   <span className="text-white font-bold text-sm">{radius} km</span>
                 </div>
