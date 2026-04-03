@@ -384,7 +384,7 @@ export default function EditProfile() {
 
         {/* Radius */}
         <div>
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Search Radius: {formData.radius_km}km</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{t.searchRadius}: {formData.radius_km}km</label>
           <input
             type="range"
             min="5"
