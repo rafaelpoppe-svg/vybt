@@ -350,6 +350,7 @@ export default function Notifications() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { markAllAsRead } = useNotifications();
+  const { t } = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => { base44.auth.me().then(setCurrentUser).catch(() => {}); }, []);
