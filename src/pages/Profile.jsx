@@ -297,7 +297,7 @@ export default function Profile() {
         {activeTab === 'stories' && (
           <motion.div key="stories" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {myStories.length === 0 ? (
-              <EmptyState emoji="📸" text="No stories yet" subtext="Share moments from your plans!" />
+              <EmptyState emoji="📸" text={t.noStoriesYet} subtext="Share moments from your plans!" />
             ) : (
               <ProfileStoryGrid
                 stories={myStories}
