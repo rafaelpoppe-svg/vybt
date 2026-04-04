@@ -223,7 +223,7 @@ export default function Friends() {
               );
             })
           ) : (
-            <p className="text-gray-500 text-center py-8">No pending requests</p>
+            <p className="text-gray-500 text-center py-8">{t.noPendingRequests}</p>
           )
         )}
       </main>
