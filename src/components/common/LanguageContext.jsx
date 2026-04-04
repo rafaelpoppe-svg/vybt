@@ -625,7 +625,6 @@ export const translations = {
     noLocation: 'Sin ubicación',
     // Notifications
     markAllRead: 'Marcar todas',
-    noNotifications: 'Sin notificaciones',
     removed: 'Eliminado',
     confirm: 'Confirmar',
     delete: 'Borrar',
@@ -866,7 +865,6 @@ export const translations = {
     noLocation: 'Pas de localisation',
     // Notifications
     markAllRead: 'Tout marquer',
-    noNotifications: 'Pas de notifications',
     removed: 'Supprimée',
     confirm: 'Confirmer',
     delete: 'Supprimer',
@@ -1107,7 +1105,6 @@ export const translations = {
     noLocation: 'Nessuna posizione',
     // Notifications
     markAllRead: 'Segna tutte',
-    noNotifications: 'Nessuna notifica',
     removed: 'Rimossa',
     confirm: 'Confermare',
     delete: 'Eliminare',
