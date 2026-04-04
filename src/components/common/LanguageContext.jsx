@@ -117,7 +117,7 @@ export const translations = {
     groups: 'Grupos',
     people: 'Pessoas',
     searchPlans: 'Pesquisar planos...',
-    searchGroups: 'Pesquisar Grupos...',
+    searchGroups: 'Pesquisar grupos...',
     searchPeople: 'Pesquisar pessoas...',
     filters: 'Filtros',
     allTag: 'Todos',
