@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import ChallengeRankingTop3 from './ChallengeRankingTop3';
 import { useCalculateChallengeScores } from './useCalculateChallengeScores';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 const typeStyles = {
   night: { gradient: 'linear-gradient(135deg, #1a0a3e, #2d1b69)', accent: '#a78bfa', label: '🌙 Night Challenge' },
