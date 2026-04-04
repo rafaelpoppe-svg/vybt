@@ -9,6 +9,7 @@ import PartyTag from '../common/PartyTag';
 import LocationSelector from '../common/LocationSelector';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { useLanguage } from '../common/LanguageContext';
 
 const CITIES = [
   // Europe - Capitals
@@ -170,7 +171,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
   const [flyCoords, setFlyCoords] = useState(null);
   const [mapCity, setMapCity] = useState(initialCity || localStorage.getItem('selectedCity') || '');
   const [mapRadius, setMapRadius] = useState(initialRadius || Number(localStorage.getItem('selectedRadius')) || 10);
-
+  const {t} = useLanguage();
   // Fly to city whenever mapCity changes (from LocationSelector or parent)
   React.useEffect(() => {
     const cityToFly = initialCity || mapCity;
@@ -325,7 +326,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-white font-bold text-sm truncate">{plan.title}</p>
-                    <p className="text-gray-500 text-xs">{plan.time}{plan.date ? ` · ${format(new Date(plan.date), 'MMM d')}` : ''} · {getParticipantCount(plan.id)} going</p>
+                    <p className="text-gray-500 text-xs">{plan.time}{plan.date ? ` · ${format(new Date(plan.date), 'MMM d')}` : ''} · {getParticipantCount(plan.id)} {t.going}</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
                 </motion.button>
