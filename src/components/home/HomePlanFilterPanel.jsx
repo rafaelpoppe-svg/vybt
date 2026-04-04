@@ -22,7 +22,7 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
         style={{ background: 'var(--bg)', border: '1px solid rgba(255,255,255,0.1)' }}
       >
         <div className="flex justify-between items-center mb-3">
-          <h3 className="text-white font-bold text-sm">Filter Plans</h3>
+          <h3 className="text-white font-bold text-sm">{t.filterPlans}</h3>
           <button onClick={onClose}>
             <X className="w-4 h-4 text-gray-400" />
           </button>
