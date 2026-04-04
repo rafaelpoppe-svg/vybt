@@ -2,9 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Check, HelpCircle } from 'lucide-react';
+import { useLanguage } from '../components/common/LanguageContext';
 
 function Avatar({ profile, size = 'md', onClick }) {
   const s = size === 'sm' ? 'w-9 h-9 text-xs' : 'w-11 h-11 text-sm';
+
   return (
     <button onClick={onClick} className="flex flex-col items-center gap-1 flex-shrink-0">
       <div className={`${s} rounded-full overflow-hidden border-2 border-gray-800 bg-gray-700`}>
@@ -26,7 +28,7 @@ export default function AttendingAvatars({ participants, profilesMap, themeColor
 
   const going = participants.filter(p => p.status === 'going' || !p.status);
   const maybe = participants.filter(p => p.status === 'maybe');
-
+    const {t} = useLanguage();
   if (participants.length === 0) return null;
 
   return (
@@ -38,7 +40,7 @@ export default function AttendingAvatars({ participants, profilesMap, themeColor
             <div className="flex items-center justify-center w-5 h-5 rounded-full" style={{ background: themeColor }}>
               <Check className="w-3 h-3 text-[#0b0b0b]" />
             </div>
-            <span className="text-white font-semibold text-sm">{going.length} Going</span>
+            <span className="text-white font-semibold text-sm">{going.length} {t.going}</span>
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1">
             {going.map(p => (
