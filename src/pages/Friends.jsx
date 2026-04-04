@@ -198,7 +198,7 @@ export default function Friends() {
                   </div>
                   <div className="flex-1">
                     <p className="text-white font-medium">{requester?.display_name || 'User'}</p>
-                    <p className="text-gray-500 text-sm">Wants to be your friend</p>
+                    <p className="text-gray-500 text-sm">{t.wantsToBeYourFriend}</p>
                   </div>
                   <div className="flex gap-2">
                     <Button
