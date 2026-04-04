@@ -254,7 +254,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
           {challengeStories.length === 0 && (
             <div className="text-center py-12">
               <p className="text-4xl mb-3">📸</p>
-              <p className="text-gray-400 font-bold">No stories yet</p>
+              <p className="text-gray-400 font-bold">{t.noStoriesYet}</p>
               <p className="text-gray-600 text-xs mt-1">Be the first to participate!</p>
             </div>
           )}
