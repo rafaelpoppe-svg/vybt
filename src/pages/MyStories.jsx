@@ -90,7 +90,7 @@ export default function MyStories() {
 
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     <p className="text-white font-medium text-sm truncate">
-                      {plan?.title || 'Unknown Plan'}
+                      {plan?.title || t.unknownPlan}
                     </p>
                     <div className="flex items-center justify-between mt-1">
                       <span className="text-gray-400 text-xs">
