@@ -134,7 +134,6 @@ export const translations = {
     wantsToBeYourFriend: 'Quer ser teu amigo',
     noLocation: 'Sem localização',
     // Notifications
-    unread: 'não lidas',
     markAllRead: 'Marcar todas',
     noNotifications: 'Sem notificações',
     removed: 'Removido',
@@ -381,7 +380,6 @@ export const translations = {
     wantsToBeYourFriend: 'Wants to be your friend',
     noLocation: 'No location',
     // Notifications
-    unread: 'unread',
     markAllRead: 'Mark all',
     noNotifications: 'No notifications',
     removed: 'Removed',
@@ -628,7 +626,6 @@ export const translations = {
     wantsToBeYourFriend: 'Quiere ser tu amigo',
     noLocation: 'Sin ubicación',
     // Notifications
-    unread: 'no leídas',
     markAllRead: 'Marcar todas',
     noNotifications: 'Sin notificaciones',
     removed: 'Eliminado',
@@ -870,7 +867,6 @@ export const translations = {
     wantsToBeYourFriend: 'Veut être ton ami',
     noLocation: 'Pas de localisation',
     // Notifications
-    unread: 'non lues',
     markAllRead: 'Tout marquer',
     noNotifications: 'Pas de notifications',
     removed: 'Supprimée',
@@ -1112,7 +1108,6 @@ export const translations = {
     wantsToBeYourFriend: 'Vuole essere tuo amico',
     noLocation: 'Nessuna posizione',
     // Notifications
-    unread: 'non lette',
     markAllRead: 'Segna tutte',
     noNotifications: 'Nessuna notifica',
     removed: 'Rimossa',
