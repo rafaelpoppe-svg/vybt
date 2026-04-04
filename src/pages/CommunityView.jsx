@@ -18,6 +18,7 @@ import CommunityNewMemberGuide from '../components/community/CommunityNewMemberG
 import CommunityChallengeBanner from '../components/community/CommunityChallengeBanner';
 import CommunityChallengeDetail from '../components/community/CommunityChallengeDetail';
 import LeaveCommunityModal from '../components/community/LeaveCommunityModal';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const TABS = [
   { key: 'plans', label: 'Plans', icon: <CalendarDays className="w-4 h-4" /> },
@@ -31,7 +32,7 @@ export default function CommunityView() {
   const queryClient = useQueryClient();
   const urlParams = new URLSearchParams(window.location.search);
   const communityId = urlParams.get('id');
-
+  const {t} = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('plans');
   const [showEditModal, setShowEditModal] = useState(false);
@@ -422,7 +423,7 @@ export default function CommunityView() {
                 {stories.length === 0 && (
                   <div className="text-center py-20">
                     <div className="text-5xl mb-3">📸</div>
-                    <p className="text-gray-400 font-semibold">No stories yet</p>
+                    <p className="text-gray-400 font-semibold">{t.noStoriesYet}t</p>
                     <p className="text-gray-600 text-sm mt-1">Members post stories from their plans</p>
                   </div>
                 )}
