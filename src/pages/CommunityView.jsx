@@ -280,7 +280,7 @@ export default function CommunityView() {
               const planData = plans.find(p => p.id === req.plan_id);
               return (
                 <div key={req.id} className="flex items-center justify-between py-2 border-t border-white/5">
-                  <p className="text-gray-300 text-sm truncate flex-1">{planData?.title || 'Unknown plan'}</p>
+                  <p className="text-gray-300 text-sm truncate flex-1">{planData?.title || t.unknownPlan}</p>
                   <div className="flex gap-2 ml-2">
                     <motion.button whileTap={{ scale: 0.9 }} onClick={() => approveRequest.mutate(req)} className="p-1.5 rounded-lg bg-green-500/20 text-green-400"><Check className="w-4 h-4" /></motion.button>
                     <motion.button whileTap={{ scale: 0.9 }} onClick={() => rejectRequest.mutate(req)} className="p-1.5 rounded-lg bg-red-500/20 text-red-400"><X className="w-4 h-4" /></motion.button>
