@@ -140,7 +140,7 @@ export const translations = {
     delete: 'Deletar',
     friendRequest: ' te enviou um pedido de amizade.',
     // MyStories
-    noStoriesYet: 'Ainda não nenhuma história compartilhada',
+    noStoriesYet: 'Ainda não tem nenhuma história compartilhada',
     addFirstStory: 'Adiciona a Tua Primeira História',
     unknownPlan: 'Plano Desconhecido',
     // Plan Details
