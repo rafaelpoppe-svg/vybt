@@ -164,7 +164,7 @@ export default function Friends() {
                     {friend?.username && (
                       <p className="text-[#00c6d2] text-xs">@{friend.username}</p>
                     )}
-                    <p className="text-gray-500 text-sm">{friend?.city || 'No location'}</p>
+                    <p className="text-gray-500 text-sm">{friend?.city || t.noLocation}</p>
                   </div>
                   <Button
                     size="sm"
