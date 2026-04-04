@@ -477,7 +477,7 @@ export default function UserProfile() {
                 {stories.length === 0 ? (
                   <div className="text-center py-16 space-y-2">
                     <p className="text-5xl">📸</p>
-                    <p className="text-gray-400 font-semibold">No stories</p>
+                    <p className="text-gray-400 font-semibold">{t.noStoriesYet}</p>
                   </div>
                 ) : (
                   <ProfileStoryGrid
