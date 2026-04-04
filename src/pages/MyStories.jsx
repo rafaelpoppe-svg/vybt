@@ -114,7 +114,7 @@ export default function MyStories() {
               onClick={() => navigate(createPageUrl('AddStory'))}
               className="px-6 py-2 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-medium"
             >
-              Add Your First Story
+              {t.addFirstStory}
             </motion.button>
           </div>
         )}
