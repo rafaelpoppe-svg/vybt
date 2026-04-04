@@ -20,7 +20,7 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
         className="absolute top-full left-0 right-0 z-50 bg-gray-900 border border-gray-800 rounded-xl p-4 mt-2 max-h-[60vh] overflow-y-auto"
       >
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-white font-bold">Filter Plans</h3>
+          <h3 className="text-white font-bold">{t.filterPlans}</h3>
           <button onClick={onClose} className="p-1 rounded-full hover:bg-gray-800">
             <X className="w-5 h-5 text-gray-400" />
           </button>
@@ -153,7 +153,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
         className="absolute top-full left-0 right-0 z-50 bg-gray-900 border border-gray-800 rounded-xl p-4 mt-2 max-h-[60vh] overflow-y-auto"
       >
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-white font-bold">Filter People</h3>
+          <h3 className="text-white font-bold">{t.filterPeople}</h3>
           <button onClick={onClose} className="p-1 rounded-full hover:bg-gray-800">
             <X className="w-5 h-5 text-gray-400" />
           </button>
