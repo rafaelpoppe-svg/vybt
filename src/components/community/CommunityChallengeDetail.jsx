@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import ChallengeRankingTop3 from './ChallengeRankingTop3';
 import { useCalculateChallengeScores } from './useCalculateChallengeScores';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const typeStyles = {
   night: { gradient: 'linear-gradient(135deg, #1a0a3e, #2d1b69)', accent: '#a78bfa', label: '🌙 Night Challenge' },
@@ -20,7 +21,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [selectingWinner, setSelectingWinner] = useState(false);
-
+  const {t} = useLanguage();
   const s = typeStyles[challenge.type] || typeStyles.custom;
   const ended = challenge.ends_at ? isPast(new Date(challenge.ends_at)) : false;
   const timeLeft = !ended && challenge.ends_at ? formatDistanceToNow(new Date(challenge.ends_at), { addSuffix: false }) : null;
