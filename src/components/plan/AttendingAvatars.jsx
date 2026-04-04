@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Check, HelpCircle } from 'lucide-react';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 function Avatar({ profile, size = 'md', onClick }) {
   const s = size === 'sm' ? 'w-9 h-9 text-xs' : 'w-11 h-11 text-sm';
