@@ -375,7 +375,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
               </div>
               <div className="flex items-center gap-2 text-gray-400 text-sm">
                 <Users className="w-4 h-4 text-[#00fea3]" />
-                <span>{getParticipantCount(selectedPlan.id)} going</span>
+                <span>{getParticipantCount(selectedPlan.id)} {t.going}</span>
                 {isJoined(selectedPlan.id) && (
                   <span className="px-2 py-0.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-xs font-medium">Joined</span>
                 )}
