@@ -140,7 +140,7 @@ export const translations = {
     delete: 'Deletar',
     friendRequest: ' te enviou um pedido de amizade.',
     // MyStories
-    noStoriesYet: 'Ainda não partilhaste nenhuma história',
+    noStoriesYet: 'Ainda não nenhuma história compartilhada',
     addFirstStory: 'Adiciona a Tua Primeira História',
     unknownPlan: 'Plano Desconhecido',
     // Plan Details
@@ -385,7 +385,7 @@ export const translations = {
     delete: 'Delete',
     friendRequest: ' sent you a friend request.',
     // MyStories
-    noStoriesYet: "You haven't shared any stories yet",
+    noStoriesYet: "Haven't shared any stories yet",
     addFirstStory: 'Add Your First Story',
     unknownPlan: 'Unknown Plan',
     // Plan Details
@@ -630,7 +630,7 @@ export const translations = {
     delete: 'Borrar',
     friendRequest: ' te mandé una solicitud de amistad.',
     // MyStories
-    noStoriesYet: 'Aún no has compartido ninguna historia',
+    noStoriesYet: 'Aún no he compartido ninguna historia',
     addFirstStory: 'Añade tu Primera Historia',
     unknownPlan: 'Plan Desconocido',
     // Plan Details
@@ -870,7 +870,7 @@ export const translations = {
     delete: 'Supprimer',
     friendRequest: " je t'ai envoyé une demande d'ami.",
     // MyStories
-    noStoriesYet: "Tu n'as pas encore partagé d'histoires",
+    noStoriesYet: "N'ont encore partagé aucune histoire",
     addFirstStory: 'Ajoute ta Première Histoire',
     unknownPlan: 'Plan Inconnu',
     // Plan Details
@@ -1110,7 +1110,7 @@ export const translations = {
     delete: 'Eliminare',
     friendRequest: " ti ho mandato una richiesta di amicizia.",
     // MyStories
-    noStoriesYet: 'Non hai ancora condiviso nessuna storia',
+    noStoriesYet: 'Non ho ancora condiviso nessuna storia',
     addFirstStory: 'Aggiungi la Tua Prima Storia',
     unknownPlan: 'Piano Sconosciuto',
     // Plan Details
