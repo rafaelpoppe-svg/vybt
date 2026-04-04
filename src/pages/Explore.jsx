@@ -641,7 +641,7 @@ export default function Explore() {
               ) : (
                 <div className="text-center py-16 space-y-3">
                   <div className="text-5xl">👥</div>
-                  <p className="text-gray-500 text-sm">No pending friend requests</p>
+                  <p className="text-gray-500 text-sm">{t.noPendingRequests}</p>
                 </div>
               )
             ) : (
