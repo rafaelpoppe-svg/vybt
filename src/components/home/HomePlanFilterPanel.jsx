@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Clock, Search, CalendarDays } from 'lucide-react';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
-
+import { useLanguage } from '../common/LanguageContext';
 
 
 export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilters }) {
   const [search, setSearch] = useState('');
-
+  const {t} = useLanguage();
   if (!isOpen) return null;
 
   const activeCount = (filters.partyTags?.length || 0) + (filters.startTime ? 1 : 0) + (filters.endTime ? 1 : 0) + (filters.planDate ? 1 : 0);
