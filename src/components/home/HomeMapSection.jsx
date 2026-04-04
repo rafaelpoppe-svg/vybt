@@ -194,7 +194,7 @@ function ForYouCard({ plans, allParticipants, onPlanClick }) {
                       <p className="text-white font-bold text-[11px] truncate">{plan.title}</p>
                       <div className="flex items-center gap-1 mt-0.5">
                         <Users className="w-2.5 h-2.5 text-gray-500" />
-                        <span className="text-gray-400 text-[9px]">{count(plan.id)} going</span>
+                        <span className="text-gray-400 text-[9px]">{count(plan.id)} {t.going}</span>
                       </div>
                     </div>
                   </button>
