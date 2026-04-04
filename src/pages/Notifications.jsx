@@ -490,7 +490,7 @@ export default function Notifications() {
             {unreadCount > 0 && (
               <motion.button whileTap={{ scale: 0.95 }} onClick={markAllAsRead}
                 className="text-[13px] text-[#00c6d2] font-semibold">
-                Mark all read
+                {t.markAllRead}
               </motion.button>
             )}
             <motion.button whileTap={{ scale: 0.9 }}
