@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, Users, Sparkles, Calendar, Heart, Music, Flame, Zap } from 'lucide-react';
 import { format } from 'date-fns';
+import { useLanguage } from '../common/LanguageContext';
 
 function useLiveCountdown(plan) {
   const [state, setState] = useState({ isLive: false, timeLeft: null });
@@ -51,7 +52,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
   const { isLive, timeLeft } = useLiveCountdown(plan);
   const isHappening = isLive;
   const isMyPlan = currentUserId && plan.creator_id === currentUserId;
-  
+  const {t} = useLanguage();
   const getHexWithAlpha = (hex, alpha) => {
     if (!hex || hex.length < 7) return `rgba(84,43,155,${alpha})`;
     const r = parseInt(hex.slice(1, 3), 16);
@@ -259,7 +260,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
               ))}
             </div>
             <span className="text-xs font-medium text-[#00c6d2]/80">
-              {participants.length} going
+              {participants.length} {t.going}
             </span>
           </div>
           
