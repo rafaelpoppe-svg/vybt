@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Check, HelpCircle, Loader2 } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function AttendingToggle({ participation, planId, themeColor = '#00c6d2' }) {
   const queryClient = useQueryClient();
