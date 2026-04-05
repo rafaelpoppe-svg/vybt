@@ -160,8 +160,6 @@ export const translations = {
     highlightPlan: 'Destacar este plano - €2.99',
     // Create Plan
     createNewPlanTitle: 'Criar Novo Plano',
-    // Add Story
-    addStoryTitle: 'Adicionar Story',
     whichPlanIsThisFor: 'Para que plano é esta story?',
     noActivePlans: 'Sem planos ativos ainda.\nEntra num plano e espera que comece.',
     shareStory: 'Partilhar Story',
@@ -405,8 +403,6 @@ export const translations = {
     highlightPlan: 'Highlight this plan - €2.99',
     // Create Plan
     createNewPlanTitle: 'Create New Plan',
-    // Add Story
-    addStoryTitle: 'Add Story',
     whichPlanIsThisFor: 'Which plan is this for?',
     noActivePlans: 'No active plans yet.\nJoin a plan and wait for it to start.',
     shareStory: 'Share Story',
@@ -650,8 +646,6 @@ export const translations = {
     highlightPlan: 'Destacar este plan - €2.99',
     // Create Plan
     createNewPlanTitle: 'Crear Nuevo Plan',
-    // Add Story
-    addStoryTitle: 'Añadir Story',
     whichPlanIsThisFor: '¿Para qué plan es esto?',
     noActivePlans: 'Sin planes activos aún.\nÚnete a un plan y espera a que comience.',
     shareStory: 'Compartir Story',
@@ -890,8 +884,6 @@ export const translations = {
     highlightPlan: 'Mettre en avant ce plan - €2.99',
     // Create Plan
     createNewPlanTitle: 'Créer un Nouveau Plan',
-    // Add Story
-    addStoryTitle: 'Ajouter une Story',
     whichPlanIsThisFor: 'Pour quel plan est-ce ?',
     noActivePlans: 'Pas encore de plans actifs.\nRejoins un plan et attends qu\'il commence.',
     shareStory: 'Partager la Story',
@@ -1130,8 +1122,6 @@ export const translations = {
     highlightPlan: 'Metti in evidenza questo piano - €2.99',
     // Create Plan
     createNewPlanTitle: 'Crea Nuovo Piano',
-    // Add Story
-    addStoryTitle: 'Aggiungi Story',
     whichPlanIsThisFor: 'Per quale piano è questa?',
     noActivePlans: 'Nessun piano attivo ancora.\nUnisciti a un piano e aspetta che inizi.',
     shareStory: 'Condividi Story',
