@@ -74,7 +74,7 @@ export default function PlanInviteCard({ planId }) {
           className="w-full py-1.5 rounded-xl text-center text-xs font-bold"
           style={{ background: `${accentColor}25`, color: accentColor, border: `1px solid ${accentColor}44` }}
         >
-          View Plan →
+          {t.viewGroup}
         </div>
       </div>
     </motion.button>
