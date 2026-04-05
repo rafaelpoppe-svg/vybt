@@ -213,8 +213,6 @@ export const translations = {
     // Plan renewed chat message
     planRenewed: '🔄 O plano foi renovado! Let\'s gooo 😎',
     planTerminatedMsg: '❌ O administrador encerrou este plano. O grupo será removido em 24 horas.',
-    // Ambassador CTA
-    becomeAmbassador: 'Tornar-me Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Aparência',
     switchToLight: 'Mudar para tema claro',
@@ -446,8 +444,6 @@ export const translations = {
     // Plan renewed chat message
     planRenewed: "🔄 The plan has been renewed! Let's gooo 😎",
     planTerminatedMsg: '❌ The admin has closed this plan. The group will be removed in 24 hours.',
-    // Ambassador CTA
-    becomeAmbassador: 'Become an Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Appearance',
     switchToLight: 'Switch to light theme',
@@ -674,8 +670,6 @@ export const translations = {
     terminatePlanConfirm: 'Cerrar Plan',
     planRenewed: "🔄 ¡El plan ha sido renovado! Let's gooo 😎",
     planTerminatedMsg: '❌ El administrador ha cerrado este plan. El grupo será eliminado en 24 horas.',
-    // Ambassador CTA
-    becomeAmbassador: 'Convertirme en Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Apariencia',
     switchToLight: 'Cambiar a tema claro',
@@ -902,8 +896,6 @@ export const translations = {
     terminatePlanConfirm: 'Fermer le Plan',
     planRenewed: "🔄 Le plan a été renouvelé ! Let's gooo 😎",
     planTerminatedMsg: '❌ L\'administrateur a fermé ce plan. Le groupe sera supprimé dans 24 heures.',
-    // Ambassador CTA
-    becomeAmbassador: 'Devenir Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Apparence',
     switchToLight: 'Passer au thème clair',
@@ -1130,8 +1122,6 @@ export const translations = {
     terminatePlanConfirm: 'Chiudi Piano',
     planRenewed: "🔄 Il piano è stato rinnovato! Let's gooo 😎",
     planTerminatedMsg: '❌ L\'amministratore ha chiuso questo piano. Il gruppo verrà rimosso in 24 ore.',
-    // Ambassador CTA
-    becomeAmbassador: 'Diventare Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Aspetto',
     switchToLight: 'Passa al tema chiaro',
