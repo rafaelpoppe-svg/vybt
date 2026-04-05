@@ -228,6 +228,7 @@ export const translations = {
     backBtn: '← Voltar',
     planUpdated: '✏️ Plano atualizado',
     terminatedBanner: '❌ Terminado',
+    live: 'Ao Vivo',
   },
 
 en: {
@@ -457,6 +458,7 @@ en: {
     backBtn: '← Back',
     planUpdated: '✏️ Plan updated',
     terminatedBanner: '❌ Terminated',
+    live: 'Live',
   },
 
   es: {
@@ -686,6 +688,7 @@ en: {
     backBtn: '← Volver',
     planUpdated: '✏️ Plan actualizado',
     terminatedBanner: '❌ Terminado',
+    live: 'En Vivo',
   },
 
   fr: {
@@ -915,6 +918,7 @@ en: {
     backBtn: '← Retour',
     planUpdated: '✏️ Plan mis à jour',
     terminatedBanner: '❌ Terminé',
+    live: 'En Direct',
   },
 
   it: {
@@ -1144,6 +1148,7 @@ en: {
     backBtn: '← Indietro',
     planUpdated: '✏️ Piano aggiornato',
     terminatedBanner: '❌ Terminato',
+    live: 'In Diretta',
   },
 };
 
