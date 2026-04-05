@@ -427,7 +427,7 @@ export default function GroupChat() {
           className="px-8 py-3 rounded-2xl font-bold text-[#0b0b0b] text-base"
           style={{ background: `linear-gradient(135deg, ${plan?.theme_color || '#00c6d2'}, #542b9b)` }}
         >
-          Join Plan
+          {t.joinPlan}
         </button>
         <button
           onClick={() => navigate(createPageUrl('Chat'))}
