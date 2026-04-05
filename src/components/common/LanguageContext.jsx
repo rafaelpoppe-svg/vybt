@@ -232,6 +232,8 @@ export const translations = {
     add: 'Adicionar',
     you: 'Você',
     user: 'Usuário',
+    members: 'Membros',
+    viewCommunity: 'Ver Grupo',
   },
 
 en: {
