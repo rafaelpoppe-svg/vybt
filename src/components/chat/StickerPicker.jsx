@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sticker, Plus, X, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function StickerPicker({ isOpen, onClose, onSelect, userId }) {
   const queryClient = useQueryClient();
