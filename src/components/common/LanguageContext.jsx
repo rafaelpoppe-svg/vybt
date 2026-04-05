@@ -243,6 +243,10 @@ export const translations = {
     sent: 'Enviado',
     invite: 'Convidar',
     admin: 'Administrador',
+    gallery: '📸 Galeria',
+    noSharedMemories: 'Nenhuma Memória Compartilhada Ainda',
+    downloading: 'Baixando...',
+    download: 'Baixar',
   },
 
 en: {
@@ -487,6 +491,10 @@ en: {
     sent: 'Sent',
     invite: 'Invite',
     admin: 'Admin',
+    gallery: '📸 Gallery',
+    noSharedMemories: 'No Shared Memories Yet',
+    downloading: 'Downloading...',
+    download: 'Download',
   },
 
   es: {
@@ -731,6 +739,10 @@ en: {
     sent: 'Enviado',
     invite: 'Invitar',
     admin: 'Administrador',
+    gallery: '📸 Galería',
+    noSharedMemories: 'Ningún Recuerdo Compartido Aún',
+    downloading: 'Descargando...',
+    download: 'Descargar',
   },
 
   fr: {
@@ -975,6 +987,10 @@ en: {
     sent: 'Envoyé',
     invite: 'Inviter',
     admin: 'Administrateur',
+    gallery: '📸 Galerie',
+    noSharedMemories: 'Aucun Souvenir Partagé Pour l’Instant',
+    downloading: 'Téléchargement...',
+    download: 'Télécharger',
   },
 
   it: {
@@ -1219,6 +1235,10 @@ en: {
     sent: 'Inviato',
     invite: 'Invita',
     admin: 'Amministratore',
+    gallery: '📸 Galleria',
+    noSharedMemories: 'Nessun Ricordo Condiviso Ancora',
+    downloading: 'Scaricamento...',
+    download: 'Scarica',
   },
 };
 
