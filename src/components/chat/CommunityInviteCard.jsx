@@ -5,10 +5,12 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Users, ChevronRight, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function CommunityInviteCard({ communityId }) {
   const navigate = useNavigate();
-
+  const {t} = useLanguage();
+  
   const { data: community, isLoading } = useQuery({
     queryKey: ['community', communityId],
     queryFn: () => base44.entities.Community.filter({ id: communityId }).then(r => r[0]),
@@ -61,7 +63,7 @@ export default function CommunityInviteCard({ communityId }) {
           <p className="text-white font-bold text-sm truncate">{community.name}</p>
           <div className="flex items-center gap-1 mt-0.5">
             <Users className="w-3 h-3" style={{ color: accentColor }} />
-            <span className="text-xs" style={{ color: accentColor }}>{members.length} members</span>
+            <span className="text-xs" style={{ color: accentColor }}>`${members.length} ${t.members}`</span>
           </div>
         </div>
         <ChevronRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
@@ -73,7 +75,7 @@ export default function CommunityInviteCard({ communityId }) {
           className="w-full py-1.5 rounded-xl text-center text-xs font-bold"
           style={{ background: `${accentColor}25`, color: accentColor, border: `1px solid ${accentColor}44` }}
         >
-          View Community →
+          {t.viewGroup}
         </div>
       </div>
     </motion.button>
