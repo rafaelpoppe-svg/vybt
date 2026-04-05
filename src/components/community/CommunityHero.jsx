@@ -1,12 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Settings, UserPlus, MoreVertical, Flag, Loader2, Users } from 'lucide-react';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function CommunityHero({ community, isMember, isAdmin, tc, joinMutation, leaveMutation, onBack, onEdit, onInvite, onLeave, onReport }) {
   const [scrollY, setScrollY] = useState(0);
   const [showReportMenu, setShowReportMenu] = useState(false);
   const containerRef = useRef(null);
-
+  const {t} = useLanguage();
+  
   useEffect(() => {
     const el = containerRef.current?.closest('[data-scroll-root]');
     if (!el) return;
@@ -95,7 +97,7 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
             ) : !isAdmin ? (
               <motion.button whileTap={{ scale: 0.95 }} onClick={onLeave}
                 className="px-4 py-2 rounded-xl text-sm text-gray-400 border border-gray-700 shrink-0">
-                Leave
+                {t.leave}
               </motion.button>
             ) : null}
           </div>
