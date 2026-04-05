@@ -209,7 +209,6 @@ export const translations = {
     // Delete plan modal
     terminatePlanQuestion: 'Encerrar Plano?',
     terminatePlanVisibleDesc: 'O plano será marcado como Encerrado e ficará visível para todos os membros por 24 horas, depois será removido automaticamente.',
-    terminated: 'Encerrado',
     terminatePlanConfirm: 'Encerrar Plano',
     // Plan renewed chat message
     planRenewed: '🔄 O plano foi renovado! Let\'s gooo 😎',
@@ -445,7 +444,6 @@ export const translations = {
     // Delete plan modal
     terminatePlanQuestion: 'Terminate Plan?',
     terminatePlanVisibleDesc: 'The plan will be marked as Closed and visible to all members for 24 hours, then automatically removed.',
-    terminated: 'Closed',
     terminatePlanConfirm: 'Terminate Plan',
     // Plan renewed chat message
     planRenewed: "🔄 The plan has been renewed! Let's gooo 😎",
@@ -677,7 +675,6 @@ export const translations = {
     confirmRenewal: 'Confirmar Renovación',
     terminatePlanQuestion: '¿Cerrar Plan?',
     terminatePlanVisibleDesc: 'El plan se marcará como Cerrado y será visible para todos los miembros durante 24 horas, luego se eliminará automáticamente.',
-    terminated: 'Cerrado',
     terminatePlanConfirm: 'Cerrar Plan',
     planRenewed: "🔄 ¡El plan ha sido renovado! Let's gooo 😎",
     planTerminatedMsg: '❌ El administrador ha cerrado este plan. El grupo será eliminado en 24 horas.',
@@ -908,7 +905,6 @@ export const translations = {
     confirmRenewal: 'Confirmer le Renouvellement',
     terminatePlanQuestion: 'Fermer le Plan ?',
     terminatePlanVisibleDesc: 'Le plan sera marqué comme Fermé et visible pour tous les membres pendant 24 heures, puis supprimé automatiquement.',
-    terminated: 'Fermé',
     terminatePlanConfirm: 'Fermer le Plan',
     planRenewed: "🔄 Le plan a été renouvelé ! Let's gooo 😎",
     planTerminatedMsg: '❌ L\'administrateur a fermé ce plan. Le groupe sera supprimé dans 24 heures.',
@@ -1139,7 +1135,6 @@ export const translations = {
     confirmRenewal: 'Conferma Rinnovo',
     terminatePlanQuestion: 'Chiudere il Piano?',
     terminatePlanVisibleDesc: 'Il piano sarà contrassegnato come Chiuso e visibile a tutti i membri per 24 ore, poi rimosso automaticamente.',
-    terminated: 'Chiuso',
     terminatePlanConfirm: 'Chiudi Piano',
     planRenewed: "🔄 Il piano è stato rinnovato! Let's gooo 😎",
     planTerminatedMsg: '❌ L\'amministratore ha chiuso questo piano. Il gruppo verrà rimosso in 24 ore.',
