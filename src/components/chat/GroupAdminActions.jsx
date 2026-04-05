@@ -225,7 +225,7 @@ export default function GroupAdminActions({
                               }`}
                             >
                               {status === 'sending' ? <Loader2 className="w-3 h-3 animate-spin" />
-                                : status === 'sent' ? <><Check className="w-3 h-3" /> Sent</>
+                                : status === 'sent' ? <><Check className="w-3 h-3" /> {t.sent}</>
                                 : <><Send className="w-3 h-3" /> Invite</>}
                             </button>
                           </div>
