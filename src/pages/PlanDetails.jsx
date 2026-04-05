@@ -507,7 +507,7 @@ export default function PlanDetails() {
         {/* Terminated Notice */}
         {plan.status === 'terminated' && (
           <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-center">
-            <p className="text-red-400 font-bold text-lg mb-1">❌ Plan Terminated</p>
+            <p className="text-red-400 font-bold text-lg mb-1">{t.planTerminated}</p>
             <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
               This plan was terminated by the admin and will be deleted in 24 hours
             </p>
