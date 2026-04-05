@@ -231,6 +231,7 @@ export const translations = {
     live: 'Ao Vivo',
     add: 'Adicionar',
     you: 'Você',
+    user: 'Usuário',
   },
 
 en: {
@@ -463,6 +464,7 @@ en: {
     live: 'Live',
     add: 'Add',
     you: 'You',
+    user: 'User',
   },
 
   es: {
@@ -695,6 +697,7 @@ en: {
     live: 'En Vivo',
     add: 'Añadir',
     you: 'Tú',
+    user: 'Usuario',
   },
 
   fr: {
@@ -927,6 +930,7 @@ en: {
     live: 'En Direct',
     add: 'Ajouter',
     you: 'Tu',
+    user: 'Utilisateur',
   },
 
   it: {
@@ -1159,6 +1163,7 @@ en: {
     live: 'In Diretta',
     add: 'Aggiungi',
     you: 'Tu',
+    user: 'Utente',
   },
 };
 
