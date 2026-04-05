@@ -98,7 +98,7 @@ export default function StickerPicker({ isOpen, onClose, onSelect, userId }) {
 
           {stickers.length === 0 && !uploading && (
             <p className="text-gray-500 text-sm text-center py-4">
-              No stickers yet. Add your first one!
+              {t.noStickersYet}
             </p>
           )}
         </motion.div>
