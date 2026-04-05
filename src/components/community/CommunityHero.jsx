@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Settings, UserPlus, MoreVertical, Flag, Loader2, Users } from 'lucide-react';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function CommunityHero({ community, isMember, isAdmin, tc, joinMutation, leaveMutation, onBack, onEdit, onInvite, onLeave, onReport }) {
   const [scrollY, setScrollY] = useState(0);
