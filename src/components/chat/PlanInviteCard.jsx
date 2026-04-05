@@ -62,7 +62,7 @@ export default function PlanInviteCard({ planId }) {
           <div className="flex items-center gap-1 mt-0.5">
             <MapPin className="w-3 h-3" style={{ color: accentColor }} />
             <span className="text-xs truncate" style={{ color: accentColor }}>{plan.city}</span>
-            <span className="text-xs text-gray-500">· {participants.length} going</span>
+            <span className="text-xs text-gray-500">· {participants.length} {t.going}</span>
           </div>
         </div>
         <ChevronRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
