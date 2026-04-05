@@ -237,7 +237,7 @@ export default function GroupAdminActions({
 
                 {/* Members List */}
                 <div className="space-y-2">
-                  <p className="text-gray-400 text-sm font-medium">Members ({participants.length})</p>
+                  <p className="text-gray-400 text-sm font-medium">{t.members} ({participants.length})</p>
                   {participants.map(p => {
                     const user = profilesMap[p.user_id];
                     const isCreator = p.is_admin;
