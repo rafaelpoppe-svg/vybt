@@ -230,6 +230,7 @@ export const translations = {
     terminatedBanner: '❌ Terminado',
     live: 'Ao Vivo',
     add: 'Adicionar',
+    you: 'Você',
   },
 
 en: {
@@ -461,6 +462,7 @@ en: {
     terminatedBanner: '❌ Terminated',
     live: 'Live',
     add: 'Add',
+    you: 'You',
   },
 
   es: {
@@ -692,6 +694,7 @@ en: {
     terminatedBanner: '❌ Terminado',
     live: 'En Vivo',
     add: 'Añadir',
+    you: 'Tú',
   },
 
   fr: {
@@ -923,6 +926,7 @@ en: {
     terminatedBanner: '❌ Terminé',
     live: 'En Direct',
     add: 'Ajouter',
+    you: 'Tu',
   },
 
   it: {
@@ -1154,6 +1158,7 @@ en: {
     terminatedBanner: '❌ Terminato',
     live: 'In Diretta',
     add: 'Aggiungi',
+    you: 'Tu',
   },
 };
 
