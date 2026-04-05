@@ -161,7 +161,6 @@ export const translations = {
     // Story visibility
     friendsVisibility: 'Amigos',
     groupOnly: 'Grupo',
-    highlight: 'Destaque',
     // Welcome page
     welcomeHero: 'Ei, amigo!',
     welcomeSubtitle: 'Junta-te a nós: vamos conectar e criar os melhores planos\nna tua zona!!!',
@@ -398,7 +397,6 @@ export const translations = {
     // Story visibility
     friendsVisibility: 'Friends',
     groupOnly: 'Group',
-    highlight: 'Highlight',
     // Welcome page
     welcomeHero: 'Hey, mate!',
     welcomeSubtitle: "Join us: let's connect and create the best plans\nin your area!!!",
@@ -635,7 +633,6 @@ export const translations = {
     // Story visibility
     friendsVisibility: 'Amigos',
     groupOnly: 'Grupo',
-    highlight: 'Destacar',
     // Welcome page
     welcomeHero: '¡Hola, amigo!',
     welcomeSubtitle: 'Únete a nosotros: conectemos y creemos los mejores planes\n¡en tu zona!!!',
@@ -867,7 +864,6 @@ export const translations = {
     // Story visibility
     friendsVisibility: 'Amis',
     groupOnly: 'Groupe',
-    highlight: 'Mettre en avant',
     // Welcome page
     welcomeHero: 'Hé, l\'ami !',
     welcomeSubtitle: 'Rejoins-nous : connectons-nous et créons les meilleurs plans\ndans ta région !!!',
@@ -1099,7 +1095,6 @@ export const translations = {
     // Story visibility
     friendsVisibility: 'Amici',
     groupOnly: 'Gruppo',
-    highlight: 'Evidenzia',
     // Welcome page
     welcomeHero: 'Ehi, amico!',
     welcomeSubtitle: 'Unisciti a noi: connettiamoci e creiamo i migliori piani\nnella tua zona!!!',
