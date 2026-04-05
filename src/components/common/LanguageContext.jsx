@@ -229,6 +229,7 @@ export const translations = {
     planUpdated: '✏️ Plano atualizado',
     terminatedBanner: '❌ Terminado',
     live: 'Ao Vivo',
+    add: 'Adicionar',
   },
 
 en: {
@@ -459,6 +460,7 @@ en: {
     planUpdated: '✏️ Plan updated',
     terminatedBanner: '❌ Terminated',
     live: 'Live',
+    add: 'Add',
   },
 
   es: {
@@ -689,6 +691,7 @@ en: {
     planUpdated: '✏️ Plan actualizado',
     terminatedBanner: '❌ Terminado',
     live: 'En Vivo',
+    add: 'Añadir',
   },
 
   fr: {
@@ -919,6 +922,7 @@ en: {
     planUpdated: '✏️ Plan mis à jour',
     terminatedBanner: '❌ Terminé',
     live: 'En Direct',
+    add: 'Ajouter',
   },
 
   it: {
@@ -1149,6 +1153,7 @@ en: {
     planUpdated: '✏️ Piano aggiornato',
     terminatedBanner: '❌ Terminato',
     live: 'In Diretta',
+    add: 'Aggiungi',
   },
 };
 
