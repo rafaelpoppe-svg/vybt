@@ -93,7 +93,7 @@ export default function GroupMessageBubble({ message, isMe, sender, isFirstInGro
       <div className="max-w-[72%]">
         {isFirstInGroup && (
           <p className="text-xs font-semibold mb-1 ml-1" style={{ color: themeColor }}>
-            {sender?.display_name || 'User'}
+            {sender?.display_name || t.user}
           </p>
         )}
         {isSticker ? (
