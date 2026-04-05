@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Users, ChevronRight, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useLanguage } from '../components/common/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function CommunityInviteCard({ communityId }) {
   const navigate = useNavigate();
