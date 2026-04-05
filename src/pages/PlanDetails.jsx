@@ -486,7 +486,7 @@ export default function PlanDetails() {
         {isJoined && isVoting && (
           <div className="w-full py-3 rounded-xl border flex items-center justify-center gap-2 cursor-not-allowed" style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
             <Camera className="w-5 h-5" />
-            Stories unavailable during voting
+            {t.storiesUnavailableVoting}
           </div>
         )}
 
