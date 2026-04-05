@@ -158,8 +158,6 @@ export const translations = {
     planTerminated: '❌ Plano Terminado',
     planTerminatedDesc: 'Este plano foi terminado pelo administrador e será eliminado em 24 horas',
     highlightPlan: 'Destacar este plano - €2.99',
-    noActivePlans: 'Sem planos ativos ainda.\nEntra num plano e espera que comece.',
-    shareStory: 'Partilhar Story',
     processingChecking: 'A processar e verificar conteúdo...',
     // Story visibility
     friendsVisibility: 'Amigos',
@@ -398,8 +396,6 @@ export const translations = {
     planTerminated: '❌ Plan Terminated',
     planTerminatedDesc: 'This plan was terminated by the admin and will be deleted in 24 hours',
     highlightPlan: 'Highlight this plan - €2.99',
-    noActivePlans: 'No active plans yet.\nJoin a plan and wait for it to start.',
-    shareStory: 'Share Story',
     processingChecking: 'Processing & checking content...',
     // Story visibility
     friendsVisibility: 'Friends',
@@ -638,8 +634,6 @@ export const translations = {
     planTerminated: '❌ Plan Terminado',
     planTerminatedDesc: 'Este plan fue terminado por el administrador y se eliminará en 24 horas',
     highlightPlan: 'Destacar este plan - €2.99',
-    noActivePlans: 'Sin planes activos aún.\nÚnete a un plan y espera a que comience.',
-    shareStory: 'Compartir Story',
     processingChecking: 'Procesando y verificando contenido...',
     // Story visibility
     friendsVisibility: 'Amigos',
@@ -873,8 +867,6 @@ export const translations = {
     planTerminated: '❌ Plan Terminé',
     planTerminatedDesc: 'Ce plan a été terminé par l\'administrateur et sera supprimé dans 24 heures',
     highlightPlan: 'Mettre en avant ce plan - €2.99',
-    noActivePlans: 'Pas encore de plans actifs.\nRejoins un plan et attends qu\'il commence.',
-    shareStory: 'Partager la Story',
     processingChecking: 'Traitement et vérification du contenu...',
     // Story visibility
     friendsVisibility: 'Amis',
@@ -1108,8 +1100,6 @@ export const translations = {
     planTerminated: '❌ Piano Terminato',
     planTerminatedDesc: 'Questo piano è stato terminato dall\'amministratore e verrà eliminato in 24 ore',
     highlightPlan: 'Metti in evidenza questo piano - €2.99',
-    noActivePlans: 'Nessun piano attivo ancora.\nUnisciti a un piano e aspetta che inizi.',
-    shareStory: 'Condividi Story',
     processingChecking: 'Elaborazione e verifica del contenuto...',
     // Story visibility
     friendsVisibility: 'Amici',
