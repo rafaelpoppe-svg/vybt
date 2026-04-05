@@ -5,10 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Users, ChevronRight, Loader2, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function PlanInviteCard({ planId }) {
   const navigate = useNavigate();
-
+  const {t} = useLanguage();
   const { data: plan, isLoading } = useQuery({
     queryKey: ['plan', planId],
     queryFn: () => base44.entities.PartyPlan.filter({ id: planId }).then(r => r[0]),
