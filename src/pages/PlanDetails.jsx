@@ -480,7 +480,7 @@ export default function PlanDetails() {
           style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-muted)' }}
           >
             <Camera className="w-5 h-5" />
-            Share your experience
+            {t.shareYourExperience}
           </motion.button>
         )}
         {isJoined && isVoting && (
