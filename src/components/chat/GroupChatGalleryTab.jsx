@@ -88,7 +88,7 @@ export default function GroupChatGalleryTab({
                 {/* User Info */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
                   <p className="text-white text-xs truncate font-medium">
-                    {profilesMap[story.user_id]?.display_name || 'Utilizador'}
+                    {profilesMap[story.user_id]?.display_name || t.user}
                   </p>
                   <p className="text-gray-400 text-[10px]">
                     {new Date(story.created_date).toLocaleDateString('pt-PT')}
@@ -177,7 +177,7 @@ export default function GroupChatGalleryTab({
               )}
               <div className="text-center">
                 <p className="text-white font-semibold">
-                  {profilesMap[selectedMedia.user_id]?.display_name || 'Utilizador'}
+                  {profilesMap[selectedMedia.user_id]?.display_name || t.user}
                 </p>
                 <p className="text-gray-400 text-sm">
                   {new Date(selectedMedia.created_date).toLocaleDateString('pt-PT', {
