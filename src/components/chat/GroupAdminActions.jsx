@@ -199,7 +199,7 @@ export default function GroupAdminActions({
                     {t.inviteFriends}
                   </div>
                   {eligibleFriends.length === 0 ? (
-                    <p className="text-gray-500 text-xs text-center py-2">No friends to invite</p>
+                    <p className="text-gray-500 text-xs text-center py-2">{t.noFriendsToInvite}</p>
                   ) : (
                     <div className="space-y-2 max-h-48 overflow-y-auto">
                       {eligibleFriends.map(friend => {
