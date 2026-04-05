@@ -141,7 +141,7 @@ export default function GroupAdminActions({
                         <div className="flex-1">
                           <p className="text-white text-sm font-medium">{user?.display_name || t.user}</p>
                           <p className="text-gray-500 text-xs">
-                            {isPinned ? '📌 Pinned' : 'Not pinned'}
+                            {isPinned ? t.pinned : t.notPinned}
                           </p>
                         </div>
                         <Button
