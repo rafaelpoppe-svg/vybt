@@ -480,6 +480,13 @@ en: {
     viewGroup: 'View Group →',
     pinned: '📌 Pinned',
     notPinned: 'Not Pinned',
+    noStoriesToPin: 'No Stories to Pin',
+    noMessagesToPin: 'No Messages to Pin',
+    inviteFriends: 'Invite Friends',
+    noFriendsToInvite: 'No Friends to Invite',
+    sent: 'Sent',
+    invite: 'Invite',
+    admin: 'Admin',
   },
 
   es: {
@@ -717,6 +724,13 @@ en: {
     viewGroup: 'Ver Grupo →',
     pinned: '📌 Fijado',
     notPinned: 'No Fijado',
+    noStoriesToPin: 'Sin Stories para Fijar',
+    noMessagesToPin: 'Sin Mensajes para Fijar',
+    inviteFriends: 'Invitar Amigos',
+    noFriendsToInvite: 'Sin Amigos para Invitar',
+    sent: 'Enviado',
+    invite: 'Invitar',
+    admin: 'Administrador',
   },
 
   fr: {
@@ -954,6 +968,13 @@ en: {
     viewGroup: 'Voir le Groupe →',
     pinned: '📌 Épinglé',
     notPinned: 'Non Épinglé',
+    noStoriesToPin: 'Aucune Story à Épingler',
+    noMessagesToPin: 'Aucun Message à Épingler',
+    inviteFriends: 'Inviter des Amis',
+    noFriendsToInvite: 'Aucun Ami à Inviter',
+    sent: 'Envoyé',
+    invite: 'Inviter',
+    admin: 'Administrateur',
   },
 
   it: {
@@ -1191,6 +1212,13 @@ en: {
     viewGroup: 'Visualizza Gruppo →',
     pinned: '📌 Fissato',
     notPinned: 'Non Fissato',
+    noStoriesToPin: 'Nessuna Story da Fissare',
+    noMessagesToPin: 'Nessun Messaggio da Fissare',
+    inviteFriends: 'Invita Amici',
+    noFriendsToInvite: 'Nessun Amico da Invitare',
+    sent: 'Inviato',
+    invite: 'Invita',
+    admin: 'Amministratore',
   },
 };
 
