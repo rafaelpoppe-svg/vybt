@@ -11,6 +11,7 @@ import { Search } from 'lucide-react';
 import AddressAutocomplete from '../components/common/AddressAutocomplete';
 import HighlightPlanModal from '../components/plan/HighlightPlanModal';
 import PlanPrivacySettings from '../components/plan/PlanPrivacySettings';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const themeColors = [
   '#00c6d2', // teal branding
@@ -53,7 +54,7 @@ export default function CreatePlan() {
   const [selectedCommunityId, setSelectedCommunityId] = useState(communityIdFromUrl);
   const [myCommunities, setMyCommunities] = useState([]);
   const [loadingCommunities, setLoadingCommunities] = useState(true);
-
+  const {t} = useLanguage();
   useEffect(() => {
     const load = async () => {
       try {
@@ -360,7 +361,7 @@ export default function CreatePlan() {
                 onClick={() => setShowHighlightModal(true)}
                 className="w-full py-4 rounded-2xl bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/40 text-orange-400 font-bold text-lg flex items-center justify-center gap-2"
               >
-                🔥 Highlight Plan — €2.99
+                {t.highlightPlan}
               </motion.button>
             )}
             <motion.button
