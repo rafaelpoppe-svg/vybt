@@ -128,7 +128,7 @@ export default function GroupAdminActions({
             {activeTab === 'stories' && (
               <div className="space-y-2">
                 {stories.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">No stories to pin</p>
+                  <p className="text-gray-500 text-center py-8">{t.noStoriesToPin}</p>
                 ) : (
                   stories.map(story => {
                     const user = profilesMap[story.user_id];
@@ -163,7 +163,7 @@ export default function GroupAdminActions({
             {activeTab === 'messages' && (
               <div className="space-y-2">
                 {messages.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">No messages to pin</p>
+                  <p className="text-gray-500 text-center py-8">{t.noMessagesToPin}</p>
                 ) : (
                   messages.slice(-20).map(msg => {
                     const user = profilesMap[msg.sender_id];
