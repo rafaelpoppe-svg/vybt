@@ -21,13 +21,14 @@ import AttendingAvatars from '../components/plan/AttendingAvatars';
 import AdminEditModal from '../components/plan/AdminEditModal';
 import InviteToPlanModal from '../components/plan/InviteToPlanModal';
 import { notifyNewGroupMember } from '../components/notifications/NotificationTriggers';
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function PlanDetails() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const urlParams = new URLSearchParams(window.location.search);
   const planId = urlParams.get('id');
-  
+  const {t} = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
   const [isJoined, setIsJoined] = useState(false);
   const [showHighlightModal, setShowHighlightModal] = useState(false);
@@ -525,7 +526,7 @@ export default function PlanDetails() {
                 className="flex-1 py-6 rounded-full border" style={{ background: 'var(--surface-2)', color: 'var(--text-primary)', borderColor: 'var(--border)' }}
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
-                Group Chat
+                {t.groupChat}
               </Button>
             )}
             
