@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Play, Sparkles, Video } from 'lucide-react';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const STORY_BORDER_COLORS = [
   ['#f43f5e', '#fb7185'],
@@ -24,7 +25,7 @@ function getColorForUser(userId) {
 
 function CircleStory({ story, user, isOwn, isAdd, onClick, isHappening }) {
   const colors = isOwn ? ['#00c6d2', '#542b9b'] : getColorForUser(story?.user_id);
-
+  const {t} = useLanguage();
   if (isAdd) {
     return (
       <motion.button
@@ -54,7 +55,7 @@ function CircleStory({ story, user, isOwn, isAdd, onClick, isHappening }) {
           </div>
         </div>
         <span className="text-[10px] text-gray-400 max-w-[64px] text-center leading-tight truncate">
-          {isHappening ? '🔵 Live' : 'Add'}
+          {isHappening ? t.live : t.add}
         </span>
       </motion.button>
     );
@@ -112,7 +113,7 @@ function CircleStory({ story, user, isOwn, isAdd, onClick, isHappening }) {
       <div className="flex items-center gap-0.5 max-w-[64px]">
         {story?.is_highlighted && <Sparkles className="w-2.5 h-2.5 text-yellow-400 flex-shrink-0" />}
         <span className="text-[10px] text-gray-300 truncate leading-tight">
-          {isOwn ? 'You' : (user?.display_name || 'User')}
+          {isOwn ? t.you : (user?.display_name || t.user)}
         </span>
       </div>
     </motion.button>
