@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, MessageCircle, ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const faqs = [
   {
@@ -53,7 +54,7 @@ function FAQItem({ q, a }) {
 export default function Support() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [sent, setSent] = useState(false);
-
+  const {t} = useLanguage();
   const handleSubmit = (e) => {
     e.preventDefault();
     const mailto = `mailto:support@vybtapp.com?subject=${encodeURIComponent(formData.subject || 'Support Request')}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)}`;
@@ -166,7 +167,7 @@ export default function Support() {
           )}
         </div>
 
-        <p className="text-center text-gray-600 text-xs pb-6">© {new Date().getFullYear()} Vybt. All rights reserved.</p>
+        <p className="text-center text-gray-600 text-xs pb-6">© {new Date().getFullYear()} Vybt. {t.allRightsReserved}</p>
       </div>
     </div>
   );
