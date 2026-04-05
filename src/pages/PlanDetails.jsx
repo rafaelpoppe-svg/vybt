@@ -500,7 +500,7 @@ export default function PlanDetails() {
         {/* Voting Period Notice */}
         {isVoting && (
           <div className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 text-sm text-center">
-            🗳️ Voting period active - Cannot join or leave during voting (6 hours)
+            {t.votingActiveNotice}
           </div>
         )}
 
