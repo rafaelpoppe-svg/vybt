@@ -196,7 +196,7 @@ export default function GroupAdminActions({
                 <div className="p-4 rounded-xl bg-gray-800 space-y-3">
                   <div className="flex items-center gap-2 text-white font-medium">
                     <UserPlus className="w-4 h-4 text-[#00c6d2]" />
-                    Invite Friends
+                    {t.inviteFriends}
                   </div>
                   {eligibleFriends.length === 0 ? (
                     <p className="text-gray-500 text-xs text-center py-2">No friends to invite</p>
