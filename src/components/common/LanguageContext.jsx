@@ -234,7 +234,7 @@ export const translations = {
     user: 'Usuário',
     members: 'Membros',
     viewGroup: 'Ver Grupo →',
-    pinned: 'Fixado',
+    pinned: '📌 Fixado',
     notPinned: 'Não Fixado',
   },
 
@@ -471,7 +471,7 @@ en: {
     user: 'User',
     members: 'Members',
     viewGroup: 'View Group →',
-    pinned: 'Pinned',
+    pinned: '📌 Pinned',
     notPinned: 'Not Pinned',
   },
 
@@ -708,7 +708,7 @@ en: {
     user: 'Usuario',
     members: 'Miembros',
     viewGroup: 'Ver Grupo →',
-    pinned: 'Fijado',
+    pinned: '📌 Fijado',
     notPinned: 'No Fijado',
   },
 
@@ -945,7 +945,7 @@ en: {
     user: 'Utilisateur',
     members: 'Membres',
     viewGroup: 'Voir le Groupe →',
-    pinned: 'Épinglé',
+    pinned: '📌 Épinglé',
     notPinned: 'Non Épinglé',
   },
 
@@ -1182,7 +1182,7 @@ en: {
     user: 'Utente',
     members: 'Membri',
     viewGroup: 'Visualizza Gruppo →',
-    pinned: 'Fissato',
+    pinned: '📌 Fissato',
     notPinned: 'Non Fissato',
   },
 };
