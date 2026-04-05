@@ -33,7 +33,7 @@ export default function GroupChatGalleryTab({
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800/40 flex-shrink-0">
-        <h2 className="text-white font-bold text-lg">📸 Galeria</h2>
+        <h2 className="text-white font-bold text-lg">{t.gallery}</h2>
         <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={onClose}
@@ -49,7 +49,7 @@ export default function GroupChatGalleryTab({
         {stories.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
             <span className="text-4xl">📷</span>
-            <p className="text-gray-500 text-sm">Nenhuma memória compartilhada ainda</p>
+            <p className="text-gray-500 text-sm">{t.noSharedMemories}</p>
           </div>
         ) : (
           <motion.div
@@ -145,12 +145,12 @@ export default function GroupChatGalleryTab({
                 {downloadingId === selectedMedia.id ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Baixando...
+                    {t.downloading}
                   </>
                 ) : (
                   <>
                     <Download className="w-4 h-4" />
-                    Baixar
+                    {t.download}
                   </>
                 )}
               </button>
