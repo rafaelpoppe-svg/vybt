@@ -454,7 +454,7 @@ export default function PlanDetails() {
           <div>
             <h3 className="font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
               <Camera className="w-5 h-5 text-[#542b9b]" />
-              Experience Stories
+              {t.experienceStories}
             </h3>
             <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
               {planStories.map((story, i) => (
