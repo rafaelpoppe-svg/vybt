@@ -255,7 +255,7 @@ export default function GroupAdminActions({
                         </div>
                         <div className="flex-1">
                           <p className="text-white text-sm font-medium">{user?.display_name || t.user}</p>
-                          {isCreator && <p className="text-[#00c6d2] text-xs">Admin</p>}
+                          {isCreator && <p className="text-[#00c6d2] text-xs">{t.admin}</p>}
                         </div>
                         {!isCreator && !isSelf && (
                           <Button
