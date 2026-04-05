@@ -247,6 +247,7 @@ export const translations = {
     noSharedMemories: 'Nenhuma Memória Compartilhada Ainda',
     downloading: 'Baixando...',
     download: 'Baixar',
+    noStickersYet: 'Ainda não há stickers. Adicione o seu primeiro!',
   },
 
 en: {
@@ -495,6 +496,7 @@ en: {
     noSharedMemories: 'No Shared Memories Yet',
     downloading: 'Downloading...',
     download: 'Download',
+    noStickersYet: "No stickers yet. Add your first one!",
   },
 
   es: {
@@ -743,6 +745,7 @@ en: {
     noSharedMemories: 'Ningún Recuerdo Compartido Aún',
     downloading: 'Descargando...',
     download: 'Descargar',
+    noStickersYet: "Aún no hay stickers. ¡Agrega el primero!",
   },
 
   fr: {
@@ -991,6 +994,7 @@ en: {
     noSharedMemories: 'Aucun Souvenir Partagé Pour l’Instant',
     downloading: 'Téléchargement...',
     download: 'Télécharger',
+    noStickersYet: "Pas encore d'autocollants. Ajoutez le premier !",
   },
 
   it: {
@@ -1239,6 +1243,7 @@ en: {
     noSharedMemories: 'Nessun Ricordo Condiviso Ancora',
     downloading: 'Scaricamento...',
     download: 'Scarica',
+    noStickersYet: "Nessuno sticker ancora. Aggiungi il tuo primo!",
   },
 };
 
