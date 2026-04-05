@@ -214,8 +214,6 @@ export const translations = {
     planRenewed: '🔄 O plano foi renovado! Let\'s gooo 😎',
     planTerminatedMsg: '❌ O administrador encerrou este plano. O grupo será removido em 24 horas.',
     // Ambassador CTA
-    ambassadorCtaTitle: 'Sê o primeiro na tua cidade!',
-    ambassadorCtaDesc: 'Não há planos em {city} ainda. Torna-te um Vybt Ambassador e traz o vibe para a tua área!',
     becomeAmbassador: 'Tornar-me Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Aparência',
@@ -449,8 +447,6 @@ export const translations = {
     planRenewed: "🔄 The plan has been renewed! Let's gooo 😎",
     planTerminatedMsg: '❌ The admin has closed this plan. The group will be removed in 24 hours.',
     // Ambassador CTA
-    ambassadorCtaTitle: 'Be the first in your city!',
-    ambassadorCtaDesc: 'There are no plans in {city} yet. Become a Vybt Ambassador and help bring the vibe to your area!',
     becomeAmbassador: 'Become an Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Appearance',
@@ -679,8 +675,6 @@ export const translations = {
     planRenewed: "🔄 ¡El plan ha sido renovado! Let's gooo 😎",
     planTerminatedMsg: '❌ El administrador ha cerrado este plan. El grupo será eliminado en 24 horas.',
     // Ambassador CTA
-    ambassadorCtaTitle: '¡Sé el primero en tu ciudad!',
-    ambassadorCtaDesc: 'No hay planes en {city} todavía. ¡Conviértete en Vybt Ambassador y trae el vibe a tu área!',
     becomeAmbassador: 'Convertirme en Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Apariencia',
@@ -909,8 +903,6 @@ export const translations = {
     planRenewed: "🔄 Le plan a été renouvelé ! Let's gooo 😎",
     planTerminatedMsg: '❌ L\'administrateur a fermé ce plan. Le groupe sera supprimé dans 24 heures.',
     // Ambassador CTA
-    ambassadorCtaTitle: 'Sois le premier dans ta ville !',
-    ambassadorCtaDesc: 'Il n\'y a pas encore de plans à {city}. Deviens Vybt Ambassador et apporte le vibe dans ta région !',
     becomeAmbassador: 'Devenir Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Apparence',
@@ -1139,8 +1131,6 @@ export const translations = {
     planRenewed: "🔄 Il piano è stato rinnovato! Let's gooo 😎",
     planTerminatedMsg: '❌ L\'amministratore ha chiuso questo piano. Il gruppo verrà rimosso in 24 ore.',
     // Ambassador CTA
-    ambassadorCtaTitle: 'Sii il primo nella tua città!',
-    ambassadorCtaDesc: 'Non ci sono ancora piani a {city}. Diventa Vybt Ambassador e porta il vibe nella tua area!',
     becomeAmbassador: 'Diventare Ambassador',
     // Settings - Appearance & Privacy
     appearance: 'Aspetto',
