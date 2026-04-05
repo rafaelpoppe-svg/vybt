@@ -158,7 +158,6 @@ export const translations = {
     planTerminated: '❌ Plano Terminado',
     planTerminatedDesc: 'Este plano foi terminado pelo administrador e será eliminado em 24 horas',
     highlightPlan: 'Destacar este plano - €2.99',
-    processingChecking: 'A processar e verificar conteúdo...',
     // Story visibility
     friendsVisibility: 'Amigos',
     groupOnly: 'Grupo',
@@ -396,7 +395,6 @@ export const translations = {
     planTerminated: '❌ Plan Terminated',
     planTerminatedDesc: 'This plan was terminated by the admin and will be deleted in 24 hours',
     highlightPlan: 'Highlight this plan - €2.99',
-    processingChecking: 'Processing & checking content...',
     // Story visibility
     friendsVisibility: 'Friends',
     groupOnly: 'Group',
@@ -634,7 +632,6 @@ export const translations = {
     planTerminated: '❌ Plan Terminado',
     planTerminatedDesc: 'Este plan fue terminado por el administrador y se eliminará en 24 horas',
     highlightPlan: 'Destacar este plan - €2.99',
-    processingChecking: 'Procesando y verificando contenido...',
     // Story visibility
     friendsVisibility: 'Amigos',
     groupOnly: 'Grupo',
@@ -867,7 +864,6 @@ export const translations = {
     planTerminated: '❌ Plan Terminé',
     planTerminatedDesc: 'Ce plan a été terminé par l\'administrateur et sera supprimé dans 24 heures',
     highlightPlan: 'Mettre en avant ce plan - €2.99',
-    processingChecking: 'Traitement et vérification du contenu...',
     // Story visibility
     friendsVisibility: 'Amis',
     groupOnly: 'Groupe',
@@ -1100,7 +1096,6 @@ export const translations = {
     planTerminated: '❌ Piano Terminato',
     planTerminatedDesc: 'Questo piano è stato terminato dall\'amministratore e verrà eliminato in 24 ore',
     highlightPlan: 'Metti in evidenza questo piano - €2.99',
-    processingChecking: 'Elaborazione e verifica del contenuto...',
     // Story visibility
     friendsVisibility: 'Amici',
     groupOnly: 'Gruppo',
