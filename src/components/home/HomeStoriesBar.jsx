@@ -272,7 +272,7 @@ export default function HomeStoriesBar({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between px-4">
-        <h2 className="text-white font-bold text-base tracking-wide">✨ Experiences</h2>
+        <h2 className="text-white font-bold text-base tracking-wide">✨ {t.experienceStories}</h2>
         <span className="text-gray-500 text-xs">{totalCount} stories</span>
       </div>
 
