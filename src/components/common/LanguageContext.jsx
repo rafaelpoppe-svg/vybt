@@ -233,7 +233,7 @@ export const translations = {
     you: 'Você',
     user: 'Usuário',
     members: 'Membros',
-    viewCommunity: 'Ver Grupo',
+    viewGroup: 'Ver Grupo →',
   },
 
 en: {
@@ -467,6 +467,8 @@ en: {
     add: 'Add',
     you: 'You',
     user: 'User',
+    members: 'Members',
+    viewGroup: 'View Group →',
   },
 
   es: {
@@ -700,6 +702,8 @@ en: {
     add: 'Añadir',
     you: 'Tú',
     user: 'Usuario',
+    members: 'Miembros',
+    viewGroup: 'Ver Grupo →',
   },
 
   fr: {
@@ -933,6 +937,8 @@ en: {
     add: 'Ajouter',
     you: 'Tu',
     user: 'Utilisateur',
+    members: 'Membres',
+    viewGroup: 'Voir le Groupe →',
   },
 
   it: {
@@ -1166,6 +1172,8 @@ en: {
     add: 'Aggiungi',
     you: 'Tu',
     user: 'Utente',
+    members: 'Membri',
+    viewGroup: 'Visualizza Gruppo →',
   },
 };
 
