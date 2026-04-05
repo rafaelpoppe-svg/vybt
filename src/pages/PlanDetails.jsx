@@ -364,7 +364,7 @@ export default function PlanDetails() {
         {/* Description */}
         {plan.description && (
           <div>
-            <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>About</h3>
+            <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>{t.about}</h3>
             <p style={{ color: 'var(--text-secondary)' }}>{plan.description}</p>
           </div>
         )}
