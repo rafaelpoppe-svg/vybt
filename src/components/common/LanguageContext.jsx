@@ -228,7 +228,6 @@ export const translations = {
     backBtn: '← Voltar',
     planUpdated: '✏️ Plano atualizado',
     terminatedBanner: '❌ Terminado',
-    messagesRead: 'Tudo lido ✓',
   },
 
   en: {
@@ -458,7 +457,6 @@ export const translations = {
     backBtn: '← Back',
     planUpdated: '✏️ Plan updated',
     terminatedBanner: '❌ Terminated',
-    messagesRead: 'All read ✓',
   },
 
   es: {
@@ -683,7 +681,6 @@ export const translations = {
     backBtn: '← Volver',
     planUpdated: '✏️ Plan actualizado',
     terminatedBanner: '❌ Terminado',
-     messagesRead: 'Todo leído ✓',
   },
 
   fr: {
@@ -908,7 +905,6 @@ export const translations = {
     backBtn: '← Retour',
     planUpdated: '✏️ Plan mis à jour',
     terminatedBanner: '❌ Terminé',
-    messagesRead: 'Tout lu ✓',
   },
 
   it: {
@@ -1133,7 +1129,6 @@ export const translations = {
     backBtn: '← Indietro',
     planUpdated: '✏️ Piano aggiornato',
     terminatedBanner: '❌ Terminato',
-    messagesRead: 'Tutto letto ✓',
     
   },
 };
