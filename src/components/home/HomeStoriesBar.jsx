@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Video } from 'lucide-react';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const STORY_BORDER_COLORS = [
   ['#f43f5e', '#fb7185'],
@@ -171,7 +172,6 @@ function UserCircle({ story, user, isOwn, onClick }) {
 }
 
 export default function HomeStoriesBar({
-  // REMOVER stories = [],
   ownStories = [],
   friendStories = [],
   planStories = [],
@@ -183,33 +183,7 @@ export default function HomeStoriesBar({
   currentUserId,
   happeningPlan = null,
 }) {
-  // Agrupar stories por plano REMOVER SE DER CERTO
-  /*const planGroups = useMemo(() => {
-    const byPlan = {};
-    stories.forEach(s => {
-      if (!s.plan_id) return;
-      if (!byPlan[s.plan_id]) byPlan[s.plan_id] = [];
-      byPlan[s.plan_id].push(s);
-    });
-
-    return Object.entries(byPlan)
-      .map(([planId, planStories]) => {
-        const plan = plans.find(p => p.id === planId);
-        if (!plan) return null;
-        const preview = planStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))[0];
-        return { plan, stories: planStories, preview };
-      })
-      .filter(Boolean)
-      .sort((a, b) => {
-        // Live now primeiro
-        const aLive = isPlanLiveNow(a.plan);
-        const bLive = isPlanLiveNow(b.plan);
-        if (aLive && !bLive) return -1;
-        if (bLive && !aLive) return 1;
-        return b.stories.length - a.stories.length;
-      });
-  }, [stories, plans]);*/
-
+  const {t} = useLanguage();
   const planGroups = useMemo(() => {
     const byPlan = {};
     planStories.forEach(s => {
@@ -231,27 +205,6 @@ export default function HomeStoriesBar({
       });
   }, [planStories, plans]);
 
-  // Stories próprios agrupados num único círculo (mais recente como preview) REMOVER SE DER CERTO
-  /*const ownStories = stories
-    .filter(s => s.user_id === currentUserId)
-    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));*/
-
-  // Stories de amigos agrupados por utilizador (1 círculo por amigo)REMOVER SE DER CERTO
-  /*const friendStoryGroups = useMemo(() => {
-    const byUser = {};
-    stories.forEach(s => {
-      if (s.user_id === currentUserId) return; // próprios já tratados
-      if (!friendUserIds || !friendUserIds.includes(s.user_id)) return; // só amigos
-      if (!byUser[s.user_id]) byUser[s.user_id] = [];
-      byUser[s.user_id].push(s);
-    });
-    return Object.entries(byUser).map(([userId, userStories]) => ({
-      userId,
-      stories: userStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
-    }));
-  }, [stories, currentUserId, friendUserIds]);*/
-
-  // Só stories de amigos SEM plan_id — os que têm plan_id já aparecem no PlanCircle
   const friendStoryGroups = useMemo(() => {
     const byUser = {};
     friendStories.forEach(s => {
@@ -265,8 +218,6 @@ export default function HomeStoriesBar({
     }));
   }, [friendStories]);
 
-  // Total de stories para o contador REMOVER SE DER CERTO
-  //const totalCount = planGroups.reduce((sum, g) => sum + g.stories.length, ownStories.length);
   const totalCount = ownStories.length + friendStories.length + planStories.length;
   
   return (
