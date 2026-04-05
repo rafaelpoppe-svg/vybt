@@ -236,6 +236,13 @@ export const translations = {
     viewGroup: 'Ver Grupo →',
     pinned: '📌 Fixado',
     notPinned: 'Não Fixado',
+    noStoriesToPin: 'Sem Stories para Fixar',
+    noMessagesToPin: 'Sem Mensagens para Fixar',
+    inviteFriends: 'Convidar Amigos',
+    noFriendsToInvite: 'Sem Amigos para Convidar',
+    sent: 'Enviado',
+    invite: 'Convidar',
+    admin: 'Administrador',
   },
 
 en: {
