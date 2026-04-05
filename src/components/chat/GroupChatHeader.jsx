@@ -60,7 +60,7 @@ export default function GroupChatHeader({
               whileTap={{ scale: 0.9 }}
               onClick={(e) => { e.stopPropagation(); onHighlight(); }}
               className="w-9 h-9 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center"
-              title="Highlight Plan"
+              title={t.highlightPlan}
             >
               <Flame className="w-4 h-4 text-orange-400" />
             </motion.button>
