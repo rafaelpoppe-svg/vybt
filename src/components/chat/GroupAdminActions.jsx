@@ -104,9 +104,9 @@ export default function GroupAdminActions({
           <div className="flex border-b border-gray-800 overflow-x-auto scrollbar-hide">
             {[
               { id: 'stories', label: 'Stories', icon: Camera },
-              { id: 'messages', label: 'Messages', icon: MessageSquare },
-              { id: 'members', label: 'Members', icon: UserMinus },
-              ...(isPrivate ? [{ id: 'requests', label: `Requests${joinRequests.length > 0 ? ` (${joinRequests.length})` : ''}`, icon: UserPlus }] : []),
+              { id: 'messages', label: t.messages, icon: MessageSquare },
+              { id: 'members', label: t.members, icon: UserMinus },
+              ...(isPrivate ? [{ id: 'requests', label: `${t.requests}${joinRequests.length > 0 ? ` (${joinRequests.length})` : ''}`, icon: UserPlus }] : []),
             ].map(tab => (
               <button
                 key={tab.id}
@@ -139,7 +139,7 @@ export default function GroupAdminActions({
                           <img src={story.media_url} alt="" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-white text-sm font-medium">{user?.display_name || 'User'}</p>
+                          <p className="text-white text-sm font-medium">{user?.display_name || t.user}</p>
                           <p className="text-gray-500 text-xs">
                             {isPinned ? '📌 Pinned' : 'Not pinned'}
                           </p>
@@ -171,7 +171,7 @@ export default function GroupAdminActions({
                     return (
                       <div key={msg.id} className="flex items-center gap-3 p-3 rounded-xl bg-gray-800">
                         <div className="flex-1 min-w-0">
-                          <p className="text-gray-400 text-xs">{user?.display_name || 'User'}</p>
+                          <p className="text-gray-400 text-xs">{user?.display_name || t.user}</p>
                           <p className="text-white text-sm truncate">{msg.content}</p>
                         </div>
                         <Button
@@ -254,7 +254,7 @@ export default function GroupAdminActions({
                           )}
                         </div>
                         <div className="flex-1">
-                          <p className="text-white text-sm font-medium">{user?.display_name || 'User'}</p>
+                          <p className="text-white text-sm font-medium">{user?.display_name || t.user}</p>
                           {isCreator && <p className="text-[#00c6d2] text-xs">Admin</p>}
                         </div>
                         {!isCreator && !isSelf && (
