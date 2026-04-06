@@ -276,7 +276,13 @@ export const translations = {
     liveActivity: 'Atividade em Direto',
     noActivityYet: 'Sem atividade ainda',
     noActivityDesc: 'A atividade vai aparecer aqui à medida que os membros entram e participam',
-
+    challengeNight: '🌙 Desafio Noturno',
+    challengeDay: '☀️ Desafio Diurno',
+    challengeWeekend: '🎉 Desafio de Fim de Semana',
+    challengeCustom: '⚡ Desafio',
+    challengeTimeLeft: 'restantes',
+    challengeEnded: 'Desafio encerrado',
+    challengeTapToParticipate: '📸 Toca para ver e participar →',
   },
 
 en: {
@@ -554,6 +560,13 @@ en: {
     liveActivity: 'Live Activity',
     noActivityYet: 'No activity yet',
     noActivityDesc: 'Activity will appear here as members join and participate',
+    challengeNight: '🌙 Night Challenge',
+    challengeDay: '☀️ Day Challenge',
+    challengeWeekend: '🎉 Weekend Challenge',
+    challengeCustom: '⚡ Challenge',
+    challengeTimeLeft: 'left',
+    challengeEnded: 'Challenge ended',
+    challengeTapToParticipate: '📸 Tap to see & participate →',
   },
 
   es: {
@@ -831,7 +844,13 @@ en: {
     liveActivity: 'Actividad en Vivo',
     noActivityYet: 'Sin actividad aún',
     noActivityDesc: 'La actividad aparecerá aquí a medida que los miembros se unan y participen',
-
+    challengeNight: '🌙 Reto Nocturno',
+    challengeDay: '☀️ Reto Diurno',
+    challengeWeekend: '🎉 Reto de Fin de Semana',
+    challengeCustom: '⚡ Reto',
+    challengeTimeLeft: 'restantes',
+    challengeEnded: 'Reto finalizado',
+    challengeTapToParticipate: '📸 Toca para ver y participar →',
   },
 
   fr: {
@@ -1109,6 +1128,13 @@ en: {
     liveActivity: 'Activité en Direct',
     noActivityYet: 'Pas encore d\'activité',
     noActivityDesc: 'L\'activité apparaîtra ici au fur et à mesure que les membres rejoignent et participent',
+    challengeNight: '🌙 Défi Nocturne',
+    challengeDay: '☀️ Défi Journée',
+    challengeWeekend: '🎉 Défi Week-end',
+    challengeCustom: '⚡ Défi',
+    challengeTimeLeft: 'restants',
+    challengeEnded: 'Défi terminé',
+    challengeTapToParticipate: '📸 Appuie pour voir et participer →',
 
   },
 
@@ -1387,6 +1413,13 @@ en: {
     liveActivity: 'Attività in Diretta',
     noActivityYet: 'Nessuna attività ancora',
     noActivityDesc: 'L\'attività apparirà qui man mano che i membri si uniscono e partecipano',
+    challengeNight: '🌙 Sfida Notturna',
+    challengeDay: '☀️ Sfida Diurna',
+    challengeWeekend: '🎉 Sfida Weekend',
+    challengeCustom: '⚡ Sfida',
+    challengeTimeLeft: 'rimanenti',
+    challengeEnded: 'Sfida terminata',
+    challengeTapToParticipate: '📸 Tocca per vedere e partecipare →',
   },
 };
 
