@@ -84,10 +84,10 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
         >📍</motion.span>
         <div className="flex flex-col items-start leading-none">
           <span className={`text-[11px] font-bold truncate max-w-[70px] ${isOpen ? 'text-white' : 'text-[#00c6d2]'}`}>
-            {city || 'Set city'}
+            {city || t.setcity}
           </span>
           <span className={`text-[9px] font-medium ${isOpen ? 'text-white/80' : 'text-gray-400'}`}>
-            {radius}km radius
+            {radius}{t.kmradius}
           </span>
         </div>
         <ChevronDown className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180 text-white' : 'text-[#00c6d2]'}`} />
@@ -129,7 +129,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
               <div className="flex items-center justify-between px-5 py-3">
                 <div>
                   <h3 className="text-white font-bold text-base">📍 {t.yourLocation}</h3>
-                  <p className="text-gray-400 text-xs mt-0.5">Choose your city to see nearby plans</p>
+                  <p className="text-gray-400 text-xs mt-0.5">{t.chooseCityDescription}</p>
                 </div>
                 <motion.button
                   whileTap={{ scale: 0.9 }}
@@ -170,7 +170,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
               {/* Divider */}
               <div className="flex items-center gap-3 px-5 mb-3">
                 <div className="flex-1 h-px bg-white/10" />
-                <span className="text-gray-500 text-xs">or choose a city</span>
+                <span className="text-gray-500 text-xs">{t.chooseYourCity}</span>
                 <div className="flex-1 h-px bg-white/10" />
               </div>
 
@@ -180,7 +180,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="🔍 Search city..."
+                  placeholder={t.searchCity}
                   className="w-full px-4 py-2.5 rounded-xl bg-white/8 text-sm text-white placeholder-gray-500 border border-white/10 focus:outline-none focus:border-[#00c6d2]/60 transition-colors"
                   style={{ background: 'var(--city-card-bg)' }}
                 />
