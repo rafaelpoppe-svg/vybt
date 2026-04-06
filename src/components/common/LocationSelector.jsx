@@ -84,7 +84,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
         >📍</motion.span>
         <div className="flex flex-col items-start leading-none">
           <span className={`text-[11px] font-bold truncate max-w-[70px] ${isOpen ? 'text-white' : 'text-[#00c6d2]'}`}>
-            {city || t.setcity}
+            {city || t.setCity}
           </span>
           <span className={`text-[9px] font-medium ${isOpen ? 'text-white/80' : 'text-gray-400'}`}>
             {radius}{t.kmradius}
