@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, Loader2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-//import { useLanguage } from '../LanguageContext';
+import { useLanguage } from '../LanguageContext';
 
 
 export default function AddressAutocomplete({ value, onChange, onSelect, placeholder, className = '', userCity = '' }) {
