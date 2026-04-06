@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Users, CalendarDays, BarChart2, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { useLanguage } from '../community/LanguageContext';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function CommunityAbout({ community, members, plans, profilesMap, tc, currentUser }) {
   const [expanded, setExpanded] = useState(false);
