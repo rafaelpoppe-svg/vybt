@@ -248,6 +248,7 @@ export const translations = {
     downloading: 'Baixando...',
     download: 'Baixar',
     noStickersYet: 'Ainda não há stickers. Adicione o seu primeiro!',
+    searchAddress: 'Procurar endereço...'
   },
 
 en: {
@@ -497,6 +498,7 @@ en: {
     downloading: 'Downloading...',
     download: 'Download',
     noStickersYet: "No stickers yet. Add your first one!",
+    searchAddress: 'Search address...',
   },
 
   es: {
@@ -746,6 +748,7 @@ en: {
     downloading: 'Descargando...',
     download: 'Descargar',
     noStickersYet: "Aún no hay stickers. ¡Agrega el primero!",
+    searchAddress: 'Buscar dirección...',
   },
 
   fr: {
@@ -995,6 +998,7 @@ en: {
     downloading: 'Téléchargement...',
     download: 'Télécharger',
     noStickersYet: "Pas encore d'autocollants. Ajoutez le premier !",
+    searchAddress: 'Rechercher une adresse...',
   },
 
   it: {
@@ -1244,6 +1248,7 @@ en: {
     downloading: 'Scaricamento...',
     download: 'Scarica',
     noStickersYet: "Nessuno sticker ancora. Aggiungi il tuo primo!",
+    searchAddress: 'Cerca indirizzo...',
   },
 };
 
