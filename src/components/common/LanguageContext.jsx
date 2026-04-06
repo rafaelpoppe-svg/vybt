@@ -256,7 +256,11 @@ export const translations = {
     searchCity: '🔍 Procurar cidade...',
     select: 'Selecione...',
     member: 'Membro',
-
+    aboutCommunity: 'Sobre esta Comunidade',
+    active: 'Ativo',
+    adminsCreatePlans: 'Admins criam planos',
+    plansApproval: 'Planos precisam de aprovação',
+    anyoneCreatePlans: 'Qualquer um pode criar planos',
   },
 
 en: {
@@ -514,6 +518,11 @@ en: {
     searchCity: '🔍 Search city...',
     select: 'Select...',
     member: 'Member',
+    aboutCommunity: 'About this Community',
+    active: 'Active',
+    adminsCreatePlans: 'Admins create plans',
+    plansApproval: 'Plans require approval',
+    anyoneCreatePlans: 'Anyone can create plans',
   },
 
   es: {
@@ -771,6 +780,11 @@ en: {
     searchCity: '🔍 Buscar ciudad...',
     select: 'Seleccionar...',
     member: 'Miembro',
+    aboutCommunity: 'Acerca de esta Comunidad',
+    active: 'Activo',
+    adminsCreatePlans: 'Los administradores crean planes',
+    plansApproval: 'Los planes requieren aprobación',
+    anyoneCreatePlans: 'Cualquiera puede crear planes',
   },
 
   fr: {
@@ -1028,6 +1042,11 @@ en: {
     searchCity: '🔍 Rechercher une ville...',
     select: 'Sélectionner...',
     member: 'Membre',
+    aboutCommunity: 'À propos de cette Communauté',
+    active: 'Actif',
+    adminsCreatePlans: 'Les admins créent des plans',
+    plansApproval: 'Les plans nécessitent une approbation',
+    anyoneCreatePlans: 'Tout le monde peut créer des plans',
   },
 
   it: {
@@ -1285,6 +1304,11 @@ en: {
     searchCity: '🔍 Cerca città...',
     select: 'Selezionare...',
     member: 'Membro',
+    aboutCommunity: 'Informazioni su questa Comunità',
+    active: 'Attivo',
+    adminsCreatePlans: 'Gli admin creano piani',
+    plansApproval: 'I piani richiedono approvazione',
+    anyoneCreatePlans: 'Chiunque può creare piani',
   },
 };
 
