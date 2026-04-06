@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTabHistory } from '@/lib/TabHistoryContext';
+import { useLanguage } from './LanguageContext';
 
 /**
  * MobileHeader — shows a back button when inside a tab sub-stack,
@@ -13,7 +14,7 @@ export default function MobileHeader({ title, hidden, rightSlot, onBack }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { getStack, getActiveTab, pop } = useTabHistory();
-
+  const { t } = useLanguage();
   if (hidden) return null;
 
   const tab = getActiveTab(location.pathname);
@@ -49,7 +50,7 @@ export default function MobileHeader({ title, hidden, rightSlot, onBack }) {
             onClick={handleBack}
             className="flex items-center justify-center rounded-full"
             style={{ width: 44, height: 44 }}
-            aria-label="Go back"
+            aria-label={t.back}
           >
             <ChevronLeft className="w-6 h-6" style={{ color: 'var(--text-primary)' }} />
           </motion.button>
