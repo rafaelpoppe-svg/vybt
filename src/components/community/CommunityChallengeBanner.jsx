@@ -2,8 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Clock, Trophy, Flame, Users, ChevronRight } from 'lucide-react';
 import { formatDistanceToNow, isPast } from 'date-fns';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function CommunityChallengeBanner({ challenge, tc, onTap }) {
+  const { t } = useLanguage();
   if (!challenge) return null;
 
   const ended = challenge.ends_at ? isPast(new Date(challenge.ends_at)) : false;
@@ -16,25 +18,25 @@ export default function CommunityChallengeBanner({ challenge, tc, onTap }) {
       gradient: 'linear-gradient(135deg, #1a0a3e 0%, #2d1b69 50%, #0f0a1e 100%)',
       border: 'rgba(139,92,246,0.5)',
       accent: '#a78bfa',
-      label: '🌙 Night Challenge',
+      label: t.challengeNight,
     },
     day: {
       gradient: 'linear-gradient(135deg, #3d1a00 0%, #7c3d00 50%, #1a0d00 100%)',
       border: 'rgba(251,146,60,0.5)',
       accent: '#fb923c',
-      label: '☀️ Day Challenge',
+      label: t.challengeDay,
     },
     weekend: {
       gradient: 'linear-gradient(135deg, #3d0a2e 0%, #7c1a5c 50%, #1a0414 100%)',
       border: 'rgba(236,72,153,0.5)',
       accent: '#f472b6',
-      label: '🎉 Weekend Challenge',
+      label: t.challengeWeekend,
     },
     custom: {
       gradient: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
       border: 'rgba(148,163,184,0.3)',
       accent: tc,
-      label: '⚡ Challenge',
+      label: t.challengeCustom,
     },
   };
 
@@ -47,10 +49,8 @@ export default function CommunityChallengeBanner({ challenge, tc, onTap }) {
       className="w-full rounded-2xl overflow-hidden text-left relative"
       style={{ background: s.gradient, border: `1.5px solid ${s.border}` }}
     >
-      {/* Shimmer bar */}
       <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: `linear-gradient(90deg, transparent, ${s.accent}, transparent)` }} />
 
-      {/* Live pulse */}
       {!ended && (
         <span className="absolute top-3.5 right-12 flex h-2 w-2">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: s.accent }} />
@@ -59,7 +59,6 @@ export default function CommunityChallengeBanner({ challenge, tc, onTap }) {
       )}
 
       <div className="p-4 flex items-center gap-3">
-        {/* Emoji badge */}
         <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
           style={{ background: 'rgba(255,255,255,0.08)' }}>
           {challenge.emoji || '🔥'}
@@ -76,13 +75,13 @@ export default function CommunityChallengeBanner({ challenge, tc, onTap }) {
           <div className="flex items-center gap-3 mt-1.5 flex-wrap">
             {timeLeft && (
               <span className="flex items-center gap-1 text-[10px] font-bold text-yellow-400">
-                <Clock className="w-3 h-3" />{timeLeft} left
+                <Clock className="w-3 h-3" />{timeLeft} {t.challengeTimeLeft}
               </span>
             )}
-            {ended && <span className="text-[10px] font-bold text-gray-500">Challenge ended</span>}
+            {ended && <span className="text-[10px] font-bold text-gray-500">{t.challengeEnded}</span>}
             {challenge.submissions_count > 0 && (
               <span className="flex items-center gap-1 text-[10px] text-white/40">
-                <Flame className="w-3 h-3 text-orange-400" />{challenge.submissions_count} stories
+                <Flame className="w-3 h-3 text-orange-400" />{challenge.submissions_count} {t.stories}
               </span>
             )}
             {challenge.prize_description && (
@@ -96,12 +95,11 @@ export default function CommunityChallengeBanner({ challenge, tc, onTap }) {
         <ChevronRight className="w-4 h-4 text-white/30 flex-shrink-0" />
       </div>
 
-      {/* Tap to participate hint */}
       {!ended && (
         <div className="px-4 pb-3">
           <div className="w-full py-2 rounded-xl text-center text-[11px] font-bold"
             style={{ background: `${s.accent}20`, color: s.accent }}>
-            📸 Tap to see & participate →
+            {t.challengeTapToParticipate}
           </div>
         </div>
       )}
