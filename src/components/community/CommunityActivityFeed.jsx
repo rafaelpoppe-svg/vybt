@@ -6,15 +6,15 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { CalendarDays, Camera, UserPlus, BarChart2, Flame, Users, Trophy } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function CommunityActivityFeed({ community, members, plans, stories, profilesMap, tc, isAdmin, currentUser }) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
-  // Build activity feed from real data
   const activities = useMemo(() => {
     const items = [];
 
-    // New members joined
     members.forEach(m => {
       if (m.joined_at) {
         const profile = profilesMap[m.user_id];
@@ -29,7 +29,6 @@ export default function CommunityActivityFeed({ community, members, plans, stori
       }
     });
 
-    // New plans created
     plans.forEach(p => {
       items.push({
         id: `plan-${p.id}`,
@@ -39,7 +38,6 @@ export default function CommunityActivityFeed({ community, members, plans, stori
       });
     });
 
-    // New stories posted
     stories.forEach(s => {
       const profile = profilesMap[s.user_id];
       items.push({
@@ -55,7 +53,6 @@ export default function CommunityActivityFeed({ community, members, plans, stori
     return items.sort((a, b) => b.date - a.date).slice(0, 30);
   }, [members, plans, stories, profilesMap]);
 
-  // Admin stats
   const stats = useMemo(() => {
     const now = new Date();
     const last7d = new Date(now - 7 * 24 * 3600 * 1000);
@@ -83,15 +80,15 @@ export default function CommunityActivityFeed({ community, members, plans, stori
 
   const activityText = (item) => {
     if (item.type === 'member_join') {
-      const name = item.profile?.display_name || 'Someone';
-      return { main: name, sub: item.isAdmin ? 'joined as Admin' : 'joined the community' };
+      const name = item.profile?.display_name || t.someone;
+      return { main: name, sub: item.isAdmin ? t.joinedAsAdmin : t.joinedCommunity };
     }
     if (item.type === 'plan_created') {
-      return { main: item.plan?.title || 'New plan', sub: 'plan created' };
+      return { main: item.plan?.title || t.newPlan, sub: t.planCreated };
     }
     if (item.type === 'story_posted') {
-      const name = item.profile?.display_name || 'Someone';
-      return { main: name, sub: 'posted a story' };
+      const name = item.profile?.display_name || t.someone;
+      return { main: name, sub: t.postedStory };
     }
   };
 
@@ -102,21 +99,21 @@ export default function CommunityActivityFeed({ community, members, plans, stori
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
             <BarChart2 className="w-4 h-4" style={{ color: tc }} />
-            <span className="text-white font-bold text-sm">Community Stats</span>
-            <span className="text-xs px-2 py-0.5 rounded-full font-bold text-white" style={{ background: `${tc}30` }}>Admin</span>
+            <span className="text-white font-bold text-sm">{t.communityStats}</span>
+            <span className="text-xs px-2 py-0.5 rounded-full font-bold text-white" style={{ background: `${tc}30` }}>{t.admin}</span>
           </div>
           <div className="grid grid-cols-3 gap-2 mb-2">
             <div className="p-3 rounded-2xl border text-center" style={{ background: `${tc}10`, borderColor: `${tc}30` }}>
               <p className="text-xl font-black text-white">{stats.newMembersWeek}</p>
-              <p className="text-[10px] text-gray-500 leading-tight mt-0.5">New Members<br />this week</p>
+              <p className="text-[10px] text-gray-500 leading-tight mt-0.5">{t.newMembersWeek}</p>
             </div>
             <div className="p-3 rounded-2xl border text-center" style={{ background: `${tc}10`, borderColor: `${tc}30` }}>
               <p className="text-xl font-black text-white">{stats.storiesWeek}</p>
-              <p className="text-[10px] text-gray-500 leading-tight mt-0.5">Stories<br />this week</p>
+              <p className="text-[10px] text-gray-500 leading-tight mt-0.5">{t.storiesWeek}</p>
             </div>
             <div className="p-3 rounded-2xl border text-center" style={{ background: `${tc}10`, borderColor: `${tc}30` }}>
               <p className="text-xl font-black text-white">{stats.upcomingPlans}</p>
-              <p className="text-[10px] text-gray-500 leading-tight mt-0.5">Upcoming<br />Plans</p>
+              <p className="text-[10px] text-gray-500 leading-tight mt-0.5">{t.upcomingPlans}</p>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2">
@@ -124,14 +121,14 @@ export default function CommunityActivityFeed({ community, members, plans, stori
               <Users className="w-4 h-4 text-gray-400" />
               <div>
                 <p className="text-white font-bold text-sm">{members.length}</p>
-                <p className="text-[10px] text-gray-500">Total Members</p>
+                <p className="text-[10px] text-gray-500">{t.totalMembers}</p>
               </div>
             </div>
             <div className="p-3 rounded-2xl border flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
               <Flame className="w-4 h-4 text-orange-400" />
               <div>
                 <p className="text-white font-bold text-sm">{stats.newMembersMonth}</p>
-                <p className="text-[10px] text-gray-500">Joined last 30d</p>
+                <p className="text-[10px] text-gray-500">{t.joinedLast30d}</p>
               </div>
             </div>
           </div>
@@ -141,7 +138,7 @@ export default function CommunityActivityFeed({ community, members, plans, stori
       {/* Activity Feed Header */}
       <div className="flex items-center gap-2 mb-3">
         <Flame className="w-4 h-4" style={{ color: tc }} />
-        <span className="text-white font-bold text-sm">Live Activity</span>
+        <span className="text-white font-bold text-sm">{t.liveActivity}</span>
         {activities.length > 0 && (
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
         )}
@@ -151,8 +148,8 @@ export default function CommunityActivityFeed({ community, members, plans, stori
       {activities.length === 0 ? (
         <div className="text-center py-16">
           <div className="text-4xl mb-3">⚡</div>
-          <p className="text-gray-400 font-semibold">No activity yet</p>
-          <p className="text-gray-600 text-sm mt-1">Activity will appear here as members join and participate</p>
+          <p className="text-gray-400 font-semibold">{t.noActivityYet}</p>
+          <p className="text-gray-600 text-sm mt-1">{t.noActivityDesc}</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -175,7 +172,6 @@ export default function CommunityActivityFeed({ community, members, plans, stori
                 }}
                 className={`flex items-center gap-3 p-3 rounded-2xl border ${activityColor(item.type)} ${isClickable || isPlanClickable ? 'cursor-pointer active:scale-98' : ''}`}
               >
-                {/* Avatar or icon */}
                 <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center border border-white/10"
                   style={{ background: 'rgba(255,255,255,0.06)' }}>
                   {(item.type === 'member_join' || item.type === 'story_posted') && item.profile?.photos?.[0]
@@ -187,13 +183,11 @@ export default function CommunityActivityFeed({ community, members, plans, stori
                         </div>}
                 </div>
 
-                {/* Text */}
                 <div className="flex-1 min-w-0">
                   <p className="text-white text-xs font-bold truncate">{text.main}</p>
                   <p className="text-gray-500 text-[10px] truncate">{text.sub}</p>
                 </div>
 
-                {/* Icon + Time */}
                 <div className="flex flex-col items-end gap-1 flex-shrink-0">
                   <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.06)' }}>
                     {activityIcon(item.type)}
