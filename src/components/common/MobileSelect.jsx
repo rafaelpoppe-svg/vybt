@@ -1,23 +1,3 @@
-/**
- * MobileSelect — on mobile uses a Drawer (bottom sheet), on desktop uses the standard Radix Select.
- *
- * Drop-in replacement for:
- *   <Select value={...} onValueChange={...}>
- *     <SelectTrigger>...</SelectTrigger>
- *     <SelectContent>
- *       <SelectItem value="a">A</SelectItem>
- *     </SelectContent>
- *   </Select>
- *
- * Usage:
- *   <MobileSelect
- *     value={value}
- *     onValueChange={setValue}
- *     placeholder="Pick one"
- *     triggerClassName="..."
- *     options={[{ value: 'a', label: 'A' }]}
- *   />
- */
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -34,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useLanguage } from './LanguageContext';
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
@@ -49,7 +30,7 @@ function useIsMobile() {
 export default function MobileSelect({
   value,
   onValueChange,
-  placeholder = 'Select…',
+  placeholder,
   options = [],          // [{ value, label, disabled? }]
   triggerClassName,
   title,                 // optional drawer title
@@ -57,14 +38,15 @@ export default function MobileSelect({
 }) {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
-
+  const { t } = useLanguage();
   const selectedLabel = options.find(o => o.value === value)?.label ?? placeholder;
+  const resolvedPlaceholder = placeholder ?? t.searchAddress;
 
   if (!isMobile) {
     return (
       <Select value={value} onValueChange={onValueChange} disabled={disabled}>
         <SelectTrigger className={triggerClassName}>
-          <SelectValue placeholder={placeholder} />
+          <SelectValue placeholder={resolvedPlaceholder} />
         </SelectTrigger>
         <SelectContent>
           {options.map(o => (
