@@ -3,15 +3,17 @@ import { MapPin, Loader2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../LanguageContext';
 
-const { t } = useLanguage();
-export default function AddressAutocomplete({ value, onChange, onSelect, placeholder = t.searchAddress, className = '', userCity = '' }) {
+
+export default function AddressAutocomplete({ value, onChange, onSelect, placeholder, className = '', userCity = '' }) {
   const [query, setQuery] = useState(value || '');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const debounceRef = useRef(null);
   const containerRef = useRef(null);
+  const { t } = useLanguage();
 
+  const resolvedPlaceholder = placeholder ?? t.searchAddress;
   // Sync external value changes
   useEffect(() => {
     setQuery(value || '');
@@ -104,7 +106,7 @@ export default function AddressAutocomplete({ value, onChange, onSelect, placeho
           value={query}
           onChange={handleChange}
           onFocus={() => results.length > 0 && setOpen(true)}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           className="w-full pl-9 pr-10 py-3 bg-gray-900 border border-gray-800 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2] transition-colors"
         />
         {loading && (
