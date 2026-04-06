@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, Loader2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLanguage } from '../LanguageContext';
+//import { useLanguage } from '../LanguageContext';
 
 
 export default function AddressAutocomplete({ value, onChange, onSelect, placeholder, className = '', userCity = '' }) {
@@ -11,9 +11,9 @@ export default function AddressAutocomplete({ value, onChange, onSelect, placeho
   const [open, setOpen] = useState(false);
   const debounceRef = useRef(null);
   const containerRef = useRef(null);
-  const { t } = useLanguage();
+  //const { t } = useLanguage();
 
-  const resolvedPlaceholder = placeholder ?? t.searchAddress;
+  const resolvedPlaceholder = placeholder ?? /*t.searchAddress*/;
   // Sync external value changes
   useEffect(() => {
     setQuery(value || '');
