@@ -13,7 +13,7 @@ export default function AddressAutocomplete({ value, onChange, onSelect, placeho
   const containerRef = useRef(null);
   //const { t } = useLanguage();
 
-  const resolvedPlaceholder = placeholder ?? /*t.searchAddress*/;
+  const resolvedPlaceholder = placeholder ?? ''/*t.searchAddress*/;
   // Sync external value changes
   useEffect(() => {
     setQuery(value || '');
