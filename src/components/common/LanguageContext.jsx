@@ -248,7 +248,10 @@ export const translations = {
     downloading: 'Baixando...',
     download: 'Baixar',
     noStickersYet: 'Ainda não há stickers. Adicione o seu primeiro!',
-    searchAddress: 'Procurar endereço...'
+    searchAddress: 'Procurar endereço...',
+    setCity: 'Definir Cidade',
+    kmradius: '(km) raio',
+    chooseCityDescription: 'Escolha a cidade para ver planos perto de você'
   },
 
 en: {
