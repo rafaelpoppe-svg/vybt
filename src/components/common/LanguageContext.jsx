@@ -254,6 +254,7 @@ export const translations = {
     chooseCityDescription: 'Escolha a cidade para ver planos perto de você',
     chooseYourCity: 'ou escolha sua cidade',
     searchCity: '🔍 Procurar cidade...',
+    select: 'Selecione...',
 
   },
 
@@ -510,6 +511,7 @@ en: {
     chooseCityDescription: 'Choose a city to see plans near you',
     chooseYourCity: 'or choose your city',
     searchCity: '🔍 Search city...',
+    select: 'Select...',
   },
 
   es: {
@@ -765,6 +767,7 @@ en: {
     chooseCityDescription: 'Elige una ciudad para ver planes cerca de ti',
     chooseYourCity: 'o elige tu ciudad',
     searchCity: '🔍 Buscar ciudad...',
+    select: 'Seleccionar...',
   },
 
   fr: {
@@ -1020,6 +1023,7 @@ en: {
     chooseCityDescription: 'Choisissez une ville pour voir des plans près de vous',
     chooseYourCity: 'ou choisissez votre ville',
     searchCity: '🔍 Rechercher une ville...',
+    select: 'Sélectionner...',
   },
 
   it: {
@@ -1275,6 +1279,7 @@ en: {
     chooseCityDescription: 'Scegli una città per vedere piani vicino a te',
     chooseYourCity: 'o scegli la tua città',
     searchCity: '🔍 Cerca città...',
+    select: 'Selezionare...'
   },
 };
 
