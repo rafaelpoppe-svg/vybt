@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Crown, Zap } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function ChallengeRankingTop3({ scores, profilesMap, tc }) {
   if (!scores || scores.length === 0) return null;
-
+  const { t } = useLanguage();
   const top3 = scores.slice(0, 3);
   const positions = [
     { position: 1, emoji: '🥇', color: 'from-yellow-600 to-yellow-700', light: 'rgba(250,204,21,0.15)', accent: '#faca15' },
@@ -49,7 +50,7 @@ export default function ChallengeRankingTop3({ scores, profilesMap, tc }) {
               </div>
 
               {/* Name */}
-              <p className="font-black text-white text-xs truncate">{profile?.display_name || 'Member'}</p>
+              <p className="font-black text-white text-xs truncate">{profile?.display_name || t.member}</p>
 
               {/* Points with icon */}
               <motion.div
