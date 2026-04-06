@@ -253,7 +253,7 @@ export const translations = {
     kmradius: 'km raio',
     chooseCityDescription: 'Escolha a cidade para ver planos perto de você',
     chooseYourCity: 'ou escolha sua cidade',
-    searchCity: 'Procurar cidade...',
+    searchCity: '🔍 Procurar cidade...',
 
   },
 
@@ -509,7 +509,7 @@ en: {
     kmradius: 'km radius',
     chooseCityDescription: 'Choose a city to see plans near you',
     chooseYourCity: 'or choose your city',
-    searchCity: 'Search city...',
+    searchCity: '🔍 Search city...',
   },
 
   es: {
@@ -764,7 +764,7 @@ en: {
     kmradius: 'km radio',
     chooseCityDescription: 'Elige una ciudad para ver planes cerca de ti',
     chooseYourCity: 'o elige tu ciudad',
-    searchCity: 'Buscar ciudad...',
+    searchCity: '🔍 Buscar ciudad...',
   },
 
   fr: {
@@ -1019,7 +1019,7 @@ en: {
     kmradius: 'rayon km',
     chooseCityDescription: 'Choisissez une ville pour voir des plans près de vous',
     chooseYourCity: 'ou choisissez votre ville',
-    searchCity: 'Rechercher une ville...',
+    searchCity: '🔍 Rechercher une ville...',
   },
 
   it: {
@@ -1274,7 +1274,7 @@ en: {
     kmradius: 'raggio km',
     chooseCityDescription: 'Scegli una città per vedere piani vicino a te',
     chooseYourCity: 'o scegli la tua città',
-    searchCity: 'Cerca città...',
+    searchCity: '🔍 Cerca città...',
   },
 };
 
