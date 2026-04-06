@@ -255,6 +255,7 @@ export const translations = {
     chooseYourCity: 'ou escolha sua cidade',
     searchCity: '🔍 Procurar cidade...',
     select: 'Selecione...',
+    member: 'Membro',
 
   },
 
@@ -512,6 +513,7 @@ en: {
     chooseYourCity: 'or choose your city',
     searchCity: '🔍 Search city...',
     select: 'Select...',
+    member: 'Member',
   },
 
   es: {
@@ -768,6 +770,7 @@ en: {
     chooseYourCity: 'o elige tu ciudad',
     searchCity: '🔍 Buscar ciudad...',
     select: 'Seleccionar...',
+    member: 'Miembro',
   },
 
   fr: {
@@ -1024,6 +1027,7 @@ en: {
     chooseYourCity: 'ou choisissez votre ville',
     searchCity: '🔍 Rechercher une ville...',
     select: 'Sélectionner...',
+    member: 'Membre',
   },
 
   it: {
@@ -1279,7 +1283,8 @@ en: {
     chooseCityDescription: 'Scegli una città per vedere piani vicino a te',
     chooseYourCity: 'o scegli la tua città',
     searchCity: '🔍 Cerca città...',
-    select: 'Selezionare...'
+    select: 'Selezionare...',
+    member: 'Membro',
   },
 };
 
