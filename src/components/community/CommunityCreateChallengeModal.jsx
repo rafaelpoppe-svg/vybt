@@ -3,25 +3,28 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Loader2, Trophy, Clock } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-const TYPES = [
-  { key: 'night', label: '🌙 Night', desc: 'Best night out story' },
-  { key: 'day', label: '☀️ Day', desc: 'Best daytime story' },
-  { key: 'weekend', label: '🎉 Weekend', desc: 'Weekend vibes' },
-  { key: 'custom', label: '⚡ Custom', desc: 'Your own theme' },
-];
-
-const DURATIONS = [
-  { label: '12h', hours: 12 },
-  { label: '24h', hours: 24 },
-  { label: '48h', hours: 48 },
-  { label: '1 week', hours: 168 },
-];
-
-const EMOJIS = ['🔥', '🏆', '📸', '🎉', '🌙', '☀️', '💃', '🕺', '🎶', '🍾'];
+import { useLanguage } from '../common/LanguageContext';
 
 export default function CommunityCreateChallengeModal({ communityId, plans, onClose, tc }) {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
+
+  const TYPES = [
+    { key: 'night', label: '🌙 ' + t.challengeTypeNight, desc: t.challengeTypeNightDesc },
+    { key: 'day', label: '☀️ ' + t.challengeTypeDay, desc: t.challengeTypeDayDesc },
+    { key: 'weekend', label: '🎉 ' + t.challengeTypeWeekend, desc: t.challengeTypeWeekendDesc },
+    { key: 'custom', label: '⚡ ' + t.challengeTypeCustom, desc: t.challengeTypeCustomDesc },
+  ];
+
+  const DURATIONS = [
+    { label: '12h', hours: 12 },
+    { label: '24h', hours: 24 },
+    { label: '48h', hours: 48 },
+    { label: t.challengeDurationWeek, hours: 168 },
+  ];
+
+  const EMOJIS = ['🔥', '🏆', '📸', '🎉', '🌙', '☀️', '💃', '🕺', '🎶', '🍾'];
+
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -49,14 +52,13 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
         plan_id: form.plan_id || undefined,
         submissions_count: 0,
       });
-      // Notify all community members
       const members = await base44.entities.CommunityMember.filter({ community_id: communityId });
       await Promise.all(members.map(m =>
         base44.entities.Notification.create({
           user_id: m.user_id,
           type: 'plan_highlighted',
-          title: `${form.emoji} New Challenge: ${form.title}`,
-          message: form.description || `A new ${form.type} challenge just launched! Post your story to participate.`,
+          title: `${form.emoji} ${t.challengeNewNotifTitle}: ${form.title}`,
+          message: form.description || t.challengeNewNotifMessage.replace('{type}', form.type),
         })
       ));
     },
@@ -88,8 +90,8 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
         {/* Header */}
         <div className="flex items-center justify-between p-5 pb-3 sticky top-0 bg-gray-950 z-10">
           <div>
-            <h3 className="text-white font-black text-lg">Create Challenge</h3>
-            <p className="text-gray-500 text-xs">Announce a story challenge to the community</p>
+            <h3 className="text-white font-black text-lg">{t.createChallenge}</h3>
+            <p className="text-gray-500 text-xs">{t.createChallengeSubtitle}</p>
           </div>
           <button onClick={onClose} className="p-2 rounded-full bg-white/10 text-gray-400">
             <X className="w-4 h-4" />
@@ -99,7 +101,7 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
         <div className="px-5 space-y-5 pb-2">
           {/* Emoji picker */}
           <div>
-            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">Pick an emoji</p>
+            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">{t.challengePickEmoji}</p>
             <div className="flex gap-2 flex-wrap">
               {EMOJIS.map(e => (
                 <motion.button
@@ -118,19 +120,19 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
 
           {/* Type */}
           <div>
-            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">Type</p>
+            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">{t.challengeType}</p>
             <div className="grid grid-cols-2 gap-2">
-              {TYPES.map(t => (
+              {TYPES.map(type => (
                 <motion.button
-                  key={t.key} whileTap={{ scale: 0.97 }}
-                  onClick={() => setForm(f => ({ ...f, type: t.key }))}
+                  key={type.key} whileTap={{ scale: 0.97 }}
+                  onClick={() => setForm(f => ({ ...f, type: type.key }))}
                   className="p-3 rounded-2xl border text-left transition-all"
-                  style={form.type === t.key
+                  style={form.type === type.key
                     ? { background: `${tc}20`, borderColor: `${tc}60` }
                     : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}
                 >
-                  <p className="text-sm font-bold text-white">{t.label}</p>
-                  <p className="text-[10px] text-gray-500">{t.desc}</p>
+                  <p className="text-sm font-bold text-white">{type.label}</p>
+                  <p className="text-[10px] text-gray-500">{type.desc}</p>
                 </motion.button>
               ))}
             </div>
@@ -138,22 +140,24 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
 
           {/* Title */}
           <div>
-            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">Title</p>
+            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">{t.challengeTitle}</p>
             <input
               value={form.title}
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-              placeholder="e.g. Best Sunset Shot Tonight 🌅"
+              placeholder={t.challengeTitlePlaceholder}
               className="w-full bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm placeholder-gray-600 outline-none focus:border-gray-600"
             />
           </div>
 
           {/* Description */}
           <div>
-            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">Description <span className="text-gray-700 normal-case font-normal">(optional)</span></p>
+            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">
+              {t.challengeDescription} <span className="text-gray-700 normal-case font-normal">({t.optional})</span>
+            </p>
             <textarea
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              placeholder="Tell members what kind of stories you want to see..."
+              placeholder={t.challengeDescriptionPlaceholder}
               rows={2}
               className="w-full bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm placeholder-gray-600 outline-none focus:border-gray-600 resize-none"
             />
@@ -161,7 +165,7 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
 
           {/* Duration */}
           <div>
-            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">Duration</p>
+            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">{t.challengeDuration}</p>
             <div className="flex gap-2">
               {DURATIONS.map(d => (
                 <motion.button
@@ -180,11 +184,13 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
 
           {/* Prize */}
           <div>
-            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">Prize / Reward <span className="text-gray-700 normal-case font-normal">(optional)</span></p>
+            <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">
+              {t.challengePrize} <span className="text-gray-700 normal-case font-normal">({t.optional})</span>
+            </p>
             <input
               value={form.prize_description}
               onChange={e => setForm(f => ({ ...f, prize_description: e.target.value }))}
-              placeholder="e.g. Featured on the community page 🏆"
+              placeholder={t.challengePrizePlaceholder}
               className="w-full bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm placeholder-gray-600 outline-none focus:border-gray-600"
             />
           </div>
@@ -192,13 +198,15 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
           {/* Link to plan */}
           {plans.length > 0 && (
             <div>
-              <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">Link to Plan <span className="text-gray-700 normal-case font-normal">(optional)</span></p>
+              <p className="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wider">
+                {t.challengeLinkPlan} <span className="text-gray-700 normal-case font-normal">({t.optional})</span>
+              </p>
               <select
                 value={form.plan_id}
                 onChange={e => setForm(f => ({ ...f, plan_id: e.target.value }))}
                 className="w-full bg-gray-900 border border-gray-800 rounded-2xl px-4 py-3 text-white text-sm outline-none"
               >
-                <option value="">No specific plan</option>
+                <option value="">{t.challengeNoSpecificPlan}</option>
                 {plans.map(p => (
                   <option key={p.id} value={p.id}>{p.title}</option>
                 ))}
@@ -216,7 +224,7 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
             className="w-full py-4 rounded-2xl font-black text-base disabled:opacity-40 flex items-center justify-center gap-2 text-black"
             style={{ background: canSubmit ? `linear-gradient(135deg, ${tc}, #542b9b)` : '#374151', color: 'white' }}
           >
-            {createMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <>🚀 Launch Challenge</>}
+            {createMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <>🚀 {t.challengeLaunch}</>}
           </motion.button>
         </div>
       </motion.div>
