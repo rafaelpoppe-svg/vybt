@@ -21,12 +21,11 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [selectingWinner, setSelectingWinner] = useState(false);
-  const {t} = useLanguage();
+  const { t } = useLanguage();
   const s = typeStyles[challenge.type] || typeStyles.custom;
   const ended = challenge.ends_at ? isPast(new Date(challenge.ends_at)) : false;
   const timeLeft = !ended && challenge.ends_at ? formatDistanceToNow(new Date(challenge.ends_at), { addSuffix: false }) : null;
 
-  // Fetch stories for the linked plan or all community plans
   const { data: challengeStories = [] } = useQuery({
     queryKey: ['challengeStories', challenge.id],
     queryFn: async () => {
@@ -39,7 +38,6 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
       }
       if (!planIds.length) return [];
       const all = await base44.entities.ExperienceStory.list('-created_date', 200);
-      // Filter stories posted after challenge started
       const challengeStart = challenge.starts_at ? new Date(challenge.starts_at) : new Date(0);
       return all.filter(s =>
         planIds.includes(s.plan_id) &&
@@ -74,12 +72,10 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
     if (challenge.plan_id) {
       navigate(createPageUrl('AddStory') + `?planId=${challenge.plan_id}&challengeId=${challenge.id}`);
     } else {
-      // Navigate to plans tab to pick a plan
       onClose();
     }
   };
 
-  // Group stories by user and sort by view count for leaderboard
   const userStories = Object.values(
     challengeStories.reduce((acc, story) => {
       if (!acc[story.user_id]) acc[story.user_id] = { user_id: story.user_id, stories: [], totalViews: 0 };
@@ -131,12 +127,12 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
           <div className="flex items-center gap-4 flex-wrap">
             {timeLeft && (
               <span className="flex items-center gap-1.5 text-xs font-bold text-yellow-400">
-                <Clock className="w-3.5 h-3.5" />{timeLeft} remaining
+                <Clock className="w-3.5 h-3.5" />{timeLeft} {t.challengeTimeLeft}
               </span>
             )}
-            {ended && <span className="text-xs font-bold text-gray-400">Challenge ended</span>}
+            {ended && <span className="text-xs font-bold text-gray-400">{t.challengeEnded}</span>}
             <span className="flex items-center gap-1.5 text-xs text-white/50">
-              <Flame className="w-3.5 h-3.5 text-orange-400" />{challengeStories.length} stories submitted
+              <Flame className="w-3.5 h-3.5 text-orange-400" />{challengeStories.length} {t.storiesSubmitted}
             </span>
             {challenge.prize_description && (
               <span className="flex items-center gap-1.5 text-xs font-bold text-yellow-300">
@@ -147,7 +143,6 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
         </div>
 
         <div className="px-4 pt-4 space-y-5">
-          {/* Top 3 Ranking */}
           <ChallengeRankingTop3 scores={scores} profilesMap={profilesMap} tc={tc} />
 
           {/* Winner announcement */}
@@ -159,17 +154,17 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
               style={{ background: 'rgba(250,204,21,0.08)', borderColor: 'rgba(250,204,21,0.3)' }}
             >
               <Crown className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
-              <p className="text-yellow-400 text-xs font-black uppercase tracking-wider mb-1">🏆 Winner</p>
+              <p className="text-yellow-400 text-xs font-black uppercase tracking-wider mb-1">🏆 {t.challengeWinner}</p>
               <div className="flex items-center justify-center gap-2">
                 {winner.photos?.[0]
                   ? <img src={winner.photos[0]} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-yellow-400" />
                   : <div className="w-10 h-10 rounded-full bg-yellow-400/20 flex items-center justify-center text-yellow-400 font-black">{winner.display_name?.[0] || '?'}</div>}
-                <p className="text-white font-black text-base">{winner.display_name || 'Unknown'}</p>
+                <p className="text-white font-black text-base">{winner.display_name || t.someone}</p>
               </div>
             </motion.div>
           )}
 
-          {/* Participate button (if not ended) */}
+          {/* Participate button */}
           {!ended && !winner && (
             <motion.button
               whileTap={{ scale: 0.97 }}
@@ -178,7 +173,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
               style={{ background: `linear-gradient(135deg, ${s.accent}, ${tc})` }}
             >
               <Camera className="w-5 h-5" />
-              Post Your Story to Participate
+              {t.challengePostToParticipate}
             </motion.button>
           )}
 
@@ -186,7 +181,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
           {userStories.length > 0 && (
             <div>
               <p className="text-xs font-black uppercase tracking-wider text-gray-500 mb-3">
-                {ended ? '🏅 Final Leaderboard' : '📊 Live Leaderboard'}
+                {ended ? t.challengeFinalLeaderboard : t.challengeLiveLeaderboard}
               </p>
               <div className="space-y-2">
                 {userStories.slice(0, 10).map((entry, idx) => {
@@ -206,12 +201,10 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
                         ? { background: 'rgba(250,204,21,0.08)', borderColor: 'rgba(250,204,21,0.3)' }
                         : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.06)' }}
                     >
-                      {/* Rank */}
                       <span className="text-lg w-7 text-center flex-shrink-0">
                         {isWinner ? '👑' : medals[idx] || `#${idx + 1}`}
                       </span>
 
-                      {/* Story thumbnail */}
                       {topStory && (
                         <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0">
                           {topStory.media_type === 'video'
@@ -220,7 +213,6 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
                         </div>
                       )}
 
-                      {/* Profile */}
                       {profile?.photos?.[0]
                         ? <img src={profile.photos[0]} alt="" className="w-9 h-9 rounded-full object-cover flex-shrink-0" />
                         : <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0"
@@ -229,11 +221,12 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
                           </div>}
 
                       <div className="flex-1 min-w-0">
-                        <p className="text-white text-sm font-bold truncate">{profile?.display_name || 'Member'}</p>
-                        <p className="text-gray-500 text-[10px]">{entry.stories.length} {entry.stories.length === 1 ? 'story' : 'stories'} · {entry.totalViews} views</p>
+                        <p className="text-white text-sm font-bold truncate">{profile?.display_name || t.member}</p>
+                        <p className="text-gray-500 text-[10px]">
+                          {entry.stories.length} {entry.stories.length === 1 ? t.storySingular : t.storiesPlural} · {entry.totalViews} {t.views}
+                        </p>
                       </div>
 
-                      {/* Admin: select winner */}
                       {isAdmin && ended && !challenge.winner_user_id && (
                         <motion.button
                           whileTap={{ scale: 0.93 }}
@@ -241,7 +234,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
                           className="px-3 py-1.5 rounded-xl text-[10px] font-black text-black flex-shrink-0"
                           style={{ background: 'rgba(250,204,21,0.9)' }}
                         >
-                          Pick Winner
+                          {t.challengePickWinner}
                         </motion.button>
                       )}
                     </motion.div>
@@ -256,7 +249,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
             <div className="text-center py-12">
               <p className="text-4xl mb-3">📸</p>
               <p className="text-gray-400 font-bold">{t.noStoriesYet}</p>
-              <p className="text-gray-600 text-xs mt-1">Be the first to participate!</p>
+              <p className="text-gray-600 text-xs mt-1">{t.challengeBeFirst}</p>
             </div>
           )}
         </div>
