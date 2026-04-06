@@ -3,19 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Users, CalendarDays, BarChart2, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useLanguage } from '../Community/LanguageContext';
 
 export default function CommunityAbout({ community, members, plans, profilesMap, tc, currentUser }) {
   const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate();
-
+  const { t } = useLanguage();
   const totalPlans = plans.length;
   const adminMembers = members.filter(m => m.role === 'admin');
   const recentMembers = [...members].sort((a, b) => new Date(b.joined_at || 0) - new Date(a.joined_at || 0)).slice(0, 8);
 
   const stats = [
-    { icon: CalendarDays, label: 'Plans', value: totalPlans },
-    { icon: Users, label: 'Members', value: community.member_count || members.length },
-    { icon: BarChart2, label: 'Active', value: plans.filter(p => p.status === 'happening' || p.status === 'upcoming').length },
+    { icon: CalendarDays, label: t.plans, value: totalPlans },
+    { icon: Users, label: t.members, value: community.member_count || members.length },
+    { icon: BarChart2, label: t.active, value: plans.filter(p => p.status === 'happening' || p.status === 'upcoming').length },
   ];
 
   return (
@@ -26,7 +27,7 @@ export default function CommunityAbout({ community, members, plans, profilesMap,
         className="w-full flex items-center justify-between px-4 py-3 rounded-2xl border border-white/8"
         style={{ background: `${tc}10` }}
       >
-        <span className="text-white font-bold text-sm">About this community</span>
+        <span className="text-white font-bold text-sm">{t.aboutCommunity}</span>
         {expanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
       </motion.button>
 
@@ -61,13 +62,13 @@ export default function CommunityAbout({ community, members, plans, profilesMap,
                 <MapPin className="w-3.5 h-3.5" style={{ color: tc }} />
                 <span>{community.city}</span>
                 <span className="mx-1">•</span>
-                <span>{community.plan_creation_policy === 'admins_only' ? '🔒 Admins create plans' : community.plan_creation_policy === 'approval_required' ? '⏳ Plans need approval' : '✅ Anyone can create plans'}</span>
+                <span>{community.plan_creation_policy === 'admins_only' ? t.adminsCreatePlans : community.plan_creation_policy === 'approval_required' ? t.plansApproval : t.anyoneCreatePlans}</span>
               </div>
 
               {/* Members preview */}
               {recentMembers.length > 0 && (
                 <div>
-                  <p className="text-gray-400 text-xs mb-2 font-semibold">MEMBERS</p>
+                  <p className="text-gray-400 text-xs mb-2 font-semibold">{t.members}</p>
                   <div className="flex flex-wrap gap-2">
                     {recentMembers.map(m => {
                       const profile = profilesMap[m.user_id];
@@ -84,9 +85,9 @@ export default function CommunityAbout({ community, members, plans, profilesMap,
                               ? <img src={profile.photos[0]} alt="" className="w-full h-full object-cover" />
                               : <div className="w-full h-full flex items-center justify-center text-[8px] font-bold text-white" style={{ background: tc }}>{profile.display_name?.[0] || '?'}</div>}
                           </div>
-                          <span className="text-white text-xs font-medium">{profile.display_name || 'User'}</span>
+                          <span className="text-white text-xs font-medium">{profile.display_name || t.user}</span>
                           {adminMembers.find(a => a.user_id === m.user_id) && (
-                            <span className="text-[9px] px-1 rounded" style={{ background: `${tc}30`, color: tc }}>admin</span>
+                            <span className="text-[9px] px-1 rounded" style={{ background: `${tc}30`, color: tc }}>{t.admin}</span>
                           )}
                         </motion.button>
                       );
