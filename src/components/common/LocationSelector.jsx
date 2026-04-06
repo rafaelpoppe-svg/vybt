@@ -207,7 +207,7 @@ export default function LocationSelector({ city, radius, onCityChange, onRadiusC
                         <span className={city === c ? 'text-[#00c6d2] font-bold' : 'text-gray-300'}>
                           {c}
                         </span>
-                        {city === c && <span className="text-[#00c6d2] text-xs font-bold">✓ Selected</span>}
+                        {city === c && <span className="text-[#00c6d2] text-xs font-bold">✓ {t.selected}</span>}
                       </motion.button>
                     ))}
                   </div>
