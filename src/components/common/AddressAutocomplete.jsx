@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, Loader2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../LanguageContext';
 
-export default function AddressAutocomplete({ value, onChange, onSelect, placeholder = 'Search address...', className = '', userCity = '' }) {
+const { t } = useLanguage();
+export default function AddressAutocomplete({ value, onChange, onSelect, placeholder = t.searchAddress, className = '', userCity = '' }) {
   const [query, setQuery] = useState(value || '');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
