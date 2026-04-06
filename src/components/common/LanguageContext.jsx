@@ -250,8 +250,11 @@ export const translations = {
     noStickersYet: 'Ainda não há stickers. Adicione o seu primeiro!',
     searchAddress: 'Procurar endereço...',
     setCity: 'Definir Cidade',
-    kmradius: '(km) raio',
-    chooseCityDescription: 'Escolha a cidade para ver planos perto de você'
+    kmradius: 'km raio',
+    chooseCityDescription: 'Escolha a cidade para ver planos perto de você',
+    chooseYourCity: 'ou escolha sua cidade',
+    searchCity: 'Procurar cidade...',
+
   },
 
 en: {
@@ -502,6 +505,11 @@ en: {
     download: 'Download',
     noStickersYet: "No stickers yet. Add your first one!",
     searchAddress: 'Search address...',
+    setCity: 'Set City',
+    kmradius: 'km radius',
+    chooseCityDescription: 'Choose a city to see plans near you',
+    chooseYourCity: 'or choose your city',
+    searchCity: 'Search city...',
   },
 
   es: {
@@ -752,6 +760,11 @@ en: {
     download: 'Descargar',
     noStickersYet: "Aún no hay stickers. ¡Agrega el primero!",
     searchAddress: 'Buscar dirección...',
+    setCity: 'Set City',
+    kmradius: 'km radius',
+    chooseCityDescription: 'Choose a city to see plans near you',
+    chooseYourCity: 'or choose your city',
+    searchCity: 'Search city...',
   },
 
   fr: {
@@ -1002,6 +1015,11 @@ en: {
     download: 'Télécharger',
     noStickersYet: "Pas encore d'autocollants. Ajoutez le premier !",
     searchAddress: 'Rechercher une adresse...',
+    setCity: 'Set City',
+    kmradius: 'km radius',
+    chooseCityDescription: 'Choose a city to see plans near you',
+    chooseYourCity: 'or choose your city',
+    searchCity: 'Search city...',
   },
 
   it: {
@@ -1252,6 +1270,11 @@ en: {
     download: 'Scarica',
     noStickersYet: "Nessuno sticker ancora. Aggiungi il tuo primo!",
     searchAddress: 'Cerca indirizzo...',
+    setCity: 'Set City',
+    kmradius: 'km radius',
+    chooseCityDescription: 'Choose a city to see plans near you',
+    chooseYourCity: 'or choose your city',
+    searchCity: 'Search city...',
   },
 };
 
