@@ -354,6 +354,8 @@ export const translations = {
     guideNext: 'Próximo',
     guideLetsGo: "Vamos lá! 🚀",
     guideBack: 'Voltar',
+    eventStories: 'Stories do Evento',
+    moreStories: 'mais stories',
   },
 
 en: {
@@ -709,6 +711,8 @@ en: {
     guideNext: 'Next',
     guideLetsGo: "Let's go! 🚀",
     guideBack: 'Back',
+    eventStories: 'Event Stories',
+    moreStories: 'more stories',
   },
 
   es: {
@@ -1064,6 +1068,8 @@ en: {
     guideNext: 'Siguiente',
     guideLetsGo: '¡Vamos! 🚀',
     guideBack: 'Volver',
+    eventStories: 'Stories del Evento',
+    moreStories: 'más stories',
 
 
 
@@ -1422,6 +1428,8 @@ en: {
     guideNext: 'Suivant',
     guideLetsGo: "C'est parti ! 🚀",
     guideBack: 'Retour',
+    eventStories: 'Stories de l\'Événement',
+    moreStories: 'stories de plus',
   },
 
   it: {
@@ -1777,6 +1785,8 @@ en: {
     guideNext: 'Avanti',
     guideLetsGo: 'Andiamo! 🚀',
     guideBack: 'Indietro',
+    eventStories: 'Stories dell\'Evento',
+    moreStories: 'altre stories',
   },
 };
 
