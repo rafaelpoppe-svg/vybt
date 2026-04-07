@@ -78,7 +78,6 @@ const CITIES = [
   { name: 'Charlotte', lat: 35.2271, lng: -80.8431 },
 ];
 
-// Fix default marker icon issue with webpack/vite
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -86,7 +85,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-// Custom colored marker
 function createCustomIcon(color, isHighlighted, isOnFire) {
   const bgColor = isOnFire ? '#f97316' : isHighlighted ? '#542b9b' : color || '#00fea3';
   return L.divIcon({
@@ -120,7 +118,6 @@ function FlyToCity({ coords }) {
   return null;
 }
 
-// Group plans by location (same lat/lng within small tolerance)
 function groupPlansByLocation(plans) {
   const TOLERANCE = 0.0001;
   const groups = [];
@@ -171,17 +168,15 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
   const [flyCoords, setFlyCoords] = useState(null);
   const [mapCity, setMapCity] = useState(initialCity || localStorage.getItem('selectedCity') || '');
   const [mapRadius, setMapRadius] = useState(initialRadius || Number(localStorage.getItem('selectedRadius')) || 10);
-  const {t} = useLanguage();
-  // Fly to city whenever mapCity changes (from LocationSelector or parent)
+  const { t } = useLanguage();
+
   React.useEffect(() => {
     const cityToFly = initialCity || mapCity;
     if (cityToFly) {
-      // First try static list
       const match = CITIES.find(c => c.name.toLowerCase() === cityToFly.toLowerCase());
       if (match) {
         setFlyCoords({ lat: match.lat, lng: match.lng });
       } else {
-        // Geocode via Nominatim for cities not in static list (e.g. Braga)
         fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityToFly)}&format=json&limit=1`, {
           headers: { 'Accept-Language': 'en' }
         })
@@ -211,18 +206,18 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
     if (p.show_in_map === false || p.is_private) return false;
     return true;
   });
+
   const center = flyCoords
     ? [flyCoords.lat, flyCoords.lng]
     : validPlans.length > 0
       ? [validPlans[0].latitude, validPlans[0].longitude]
-      : [38.7169, -9.1399]; // Lisboa default
+      : [38.7169, -9.1399];
 
   const getParticipantCount = (planId) => allParticipants.filter(p => p.plan_id === planId).length;
   const isJoined = (planId) => myParticipations.some(p => p.plan_id === planId);
 
   return (
     <div className="relative w-full h-full">
-      {/* Map styles override for dark theme */}
       <style>{`
         .leaflet-container { background: var(--bg) !important; }
         .leaflet-tile { filter: brightness(0.75) saturate(0.8) hue-rotate(180deg) invert(1); }
@@ -275,12 +270,12 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
         <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-[999]">
           <div className="text-center px-6">
             <MapPin className="w-10 h-10 text-gray-500 mx-auto mb-3" />
-            <p className="text-gray-400 text-sm">No plans with location data available.</p>
+            <p className="text-gray-400 text-sm">{t.mapNoPlans}</p>
           </div>
         </div>
       )}
 
-      {/* Location Selector - same as Home */}
+      {/* Location Selector */}
       <div className="absolute top-3 left-3 z-[999]">
         <LocationSelector
           city={mapCity}
@@ -292,7 +287,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
 
       {/* Plans count badge */}
       <div className="absolute top-3 right-3 z-[999] px-3 py-2 rounded-xl bg-black/80 backdrop-blur-md border border-gray-700 text-gray-400 text-xs">
-        {validPlans.length} plans
+        {validPlans.length} {t.plans}
       </div>
 
       {/* Cluster bottom sheet */}
@@ -306,7 +301,7 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
             className="absolute bottom-0 left-0 right-0 z-[999] bg-[var(--bg)] border-t border-gray-800 rounded-t-2xl p-4"
           >
             <div className="flex items-center justify-between mb-3">
-              <p className="text-gray-400 text-sm font-semibold">📍 {selectedCluster.length} planos neste local</p>
+              <p className="text-gray-400 text-sm font-semibold">📍 {selectedCluster.length} {t.mapPlansAtLocation}</p>
               <button onClick={() => setSelectedCluster(null)} className="p-1.5 rounded-full bg-gray-800">
                 <X className="w-4 h-4 text-gray-400" />
               </button>
@@ -346,12 +341,11 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="absolute bottom-0 left-0 right-0 z-[999] bg-[var(--bg)] border-t border-gray-800 rounded-t-2xl p-4 space-y-4"
           >
-            {/* Header */}
             <div className="flex items-start justify-between">
               <div className="flex-1 pr-4">
                 <div className="flex items-center gap-2 mb-1">
-                  {selectedPlan.is_highlighted && <span className="text-xs text-[#00fea3]">✨ Highlighted</span>}
-                  {(selectedPlan.is_on_fire || selectedPlan.recent_joins >= 100) && <span className="text-xs text-orange-400">🔥 On Fire</span>}
+                  {selectedPlan.is_highlighted && <span className="text-xs text-[#00fea3]">✨ {t.mapHighlighted}</span>}
+                  {(selectedPlan.is_on_fire || selectedPlan.recent_joins >= 100) && <span className="text-xs text-orange-400">🔥 {t.onFire}</span>}
                 </div>
                 <h3 className="text-white font-bold text-lg leading-tight">{selectedPlan.title}</h3>
               </div>
@@ -363,7 +357,6 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
               </button>
             </div>
 
-            {/* Details */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-gray-400 text-sm">
                 <Clock className="w-4 h-4 text-[#00fea3]" />
@@ -377,12 +370,11 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
                 <Users className="w-4 h-4 text-[#00fea3]" />
                 <span>{getParticipantCount(selectedPlan.id)} {t.going}</span>
                 {isJoined(selectedPlan.id) && (
-                  <span className="px-2 py-0.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-xs font-medium">Joined</span>
+                  <span className="px-2 py-0.5 rounded-full bg-[#00fea3]/20 text-[#00fea3] text-xs font-medium">{t.mapJoined}</span>
                 )}
               </div>
             </div>
 
-            {/* Tags */}
             {selectedPlan.tags?.length > 0 && (
               <div className="flex gap-2 flex-wrap">
                 {selectedPlan.tags.map((tag, i) => (
@@ -391,14 +383,13 @@ export default function PlanMap({ plans, allParticipants, profilesMap, myPartici
               </div>
             )}
 
-            {/* CTA */}
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${selectedPlan.id}`)}
               className="w-full py-3.5 rounded-full font-bold text-[#0b0b0b] flex items-center justify-center gap-2"
               style={{ backgroundColor: selectedPlan.theme_color || '#00fea3' }}
             >
-              View Plan
+              {t.mapViewPlan}
               <ChevronRight className="w-4 h-4" />
             </motion.button>
           </motion.div>
