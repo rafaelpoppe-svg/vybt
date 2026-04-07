@@ -7,8 +7,8 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
   const [scrollY, setScrollY] = useState(0);
   const [showReportMenu, setShowReportMenu] = useState(false);
   const containerRef = useRef(null);
-  const {t} = useLanguage();
-  
+  const { t } = useLanguage();
+
   useEffect(() => {
     const el = containerRef.current?.closest('[data-scroll-root]');
     if (!el) return;
@@ -21,7 +21,6 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
 
   return (
     <div ref={containerRef} className="relative">
-      {/* Cover image with parallax */}
       <div className="relative h-72 overflow-hidden">
         {community.cover_image ? (
           <img
@@ -58,7 +57,7 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
                 {showReportMenu && (
                   <div className="absolute right-0 top-12 bg-gray-900 border border-gray-700 rounded-xl shadow-xl z-50 min-w-[160px]">
                     <button onClick={() => { setShowReportMenu(false); onReport(); }} className="w-full px-4 py-3 text-left text-sm text-red-400 flex items-center gap-2 hover:bg-gray-800 rounded-xl">
-                      <Flag className="w-4 h-4" /> Report Community
+                      <Flag className="w-4 h-4" /> {t.reportCommunity}
                     </button>
                   </div>
                 )}
@@ -69,12 +68,12 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
 
         {/* Members badge */}
         <div className="absolute bottom-4 right-4">
-          <div 
+          <div
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/10"
             style={{ backgroundColor: 'var(--btn-bg)' }}
           >
             <Users className="w-3.5 h-3.5 text-white" />
-            <span className="text-white text-xs font-bold">{community.member_count || 0} members</span>
+            <span className="text-white text-xs font-bold">{community.member_count || 0} {t.membersCount}</span>
           </div>
         </div>
       </div>
@@ -92,7 +91,7 @@ export default function CommunityHero({ community, isMember, isAdmin, tc, joinMu
                 disabled={joinMutation.isPending}
                 className="px-5 py-2.5 rounded-xl font-bold text-sm text-[#0b0b0b] shrink-0"
                 style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)` }}>
-                {joinMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Join 🚀'}
+                {joinMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : t.join}
               </motion.button>
             ) : !isAdmin ? (
               <motion.button whileTap={{ scale: 0.95 }} onClick={onLeave}
