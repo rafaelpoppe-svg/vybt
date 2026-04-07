@@ -8,7 +8,7 @@ import { useLanguage } from '../common/LanguageContext';
 
 export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
   const [partySearch, setPartySearch] = useState('');
-  const {t} = useLanguage();
+  const { t } = useLanguage();
   if (!isOpen) return null;
 
   return (
@@ -28,12 +28,12 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
 
         {/* Sort By */}
         <div className="mb-4">
-          <label className="text-gray-400 text-sm mb-2 block">Sort by</label>
+          <label className="text-gray-400 text-sm mb-2 block">{t.sortBy}</label>
           <div className="flex flex-wrap gap-2">
             {[
-              { id: 'foryou', label: 'For You', icon: Heart },
-              { id: 'onfire', label: 'On Fire', icon: Flame },
-              { id: 'popular', label: 'Most Members', icon: Users }
+              { id: 'foryou', label: t.forYou, icon: Heart },
+              { id: 'onfire', label: t.onFire, icon: Flame },
+              { id: 'popular', label: t.mostMembers, icon: Users }
             ].map(opt => (
               <motion.button
                 key={opt.id}
@@ -56,7 +56,7 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
         <div className="mb-4">
           <label className="text-gray-400 text-sm mb-2 flex items-center gap-1.5">
             <Clock className="w-4 h-4" />
-            Start Time
+            {t.startTime}
           </label>
           <div className="flex gap-2">
             <input
@@ -78,7 +78,7 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
         <div className="mb-4">
           <label className="text-gray-400 text-sm mb-2 flex items-center gap-1.5">
             <MapPin className="w-4 h-4" />
-            Radius: {filters.radius || 10} km
+            {t.radius}: {filters.radius || 10} km
           </label>
           <Slider
             value={[filters.radius || 10]}
@@ -92,19 +92,19 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
 
         {/* Party Tags */}
         <div>
-          <label className="text-gray-400 text-sm mb-2 block">Party Type</label>
+          <label className="text-gray-400 text-sm mb-2 block">{t.partyType}</label>
           <div className="relative mb-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
             <input
               type="text"
               value={partySearch}
               onChange={(e) => setPartySearch(e.target.value)}
-              placeholder="Search..."
+              placeholder={t.search}
               className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
             />
           </div>
           <div className="flex flex-wrap gap-2">
-            {ALL_PARTY_TYPES.filter(t => t.toLowerCase().includes(partySearch.toLowerCase())).map(tag => (
+            {ALL_PARTY_TYPES.filter(tg => tg.toLowerCase().includes(partySearch.toLowerCase())).map(tag => (
               <PartyTag
                 key={tag}
                 tag={tag}
@@ -129,7 +129,7 @@ export function PlanFilters({ isOpen, onClose, filters, setFilters }) {
           onClick={() => setFilters({ sortBy: 'foryou' })}
           className="w-full mt-4 py-2 text-sm text-gray-400 hover:text-white"
         >
-          Clear all filters
+          {t.clearFilters}
         </button>
       </motion.div>
     </AnimatePresence>
@@ -140,7 +140,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
   const [vibeSearch, setVibeSearch] = useState('');
   if (!isOpen) return null;
 
-  const {t} = useLanguage();
+  const { t } = useLanguage();
   const ageRanges = ['18-25', '25-30', '25-35'];
   const genders = ['female', 'male', 'other'];
 
@@ -159,9 +159,9 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
           </button>
         </div>
 
-        {/* Sort By */}
+        {/* Sort */}
         <div className="mb-4">
-          <label className="text-gray-400 text-sm mb-2 block">Show me</label>
+          <label className="text-gray-400 text-sm mb-2 block">{t.showMe}</label>
           <div className="flex flex-wrap gap-2">
             <motion.button
               whileTap={{ scale: 0.95 }}
@@ -178,9 +178,9 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
           </div>
         </div>
 
-        {/* Age Range */}
+        {/* Age */}
         <div className="mb-4">
-          <label className="text-gray-400 text-sm mb-2 block">Age Range</label>
+          <label className="text-gray-400 text-sm mb-2 block">{t.ageRange}</label>
           <div className="flex flex-wrap gap-2">
             {ageRanges.map(age => (
               <motion.button
@@ -201,7 +201,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
 
         {/* Gender */}
         <div className="mb-4">
-          <label className="text-gray-400 text-sm mb-2 block">Gender</label>
+          <label className="text-gray-400 text-sm mb-2 block">{t.gender}</label>
           <div className="flex flex-wrap gap-2">
             {genders.map(gender => (
               <motion.button
@@ -214,23 +214,23 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
                     : 'bg-gray-800 text-gray-400'
                 }`}
               >
-                {gender}
+                {t[gender]}
               </motion.button>
             ))}
           </div>
         </div>
 
-        {/* City — Vybt Plus only */}
+        {/* City */}
         <div className="mb-4">
           <label className="text-gray-400 text-sm mb-2 flex items-center gap-1.5">
             <MapPin className="w-4 h-4" />
-            City
+            {t.city}
           </label>
           <div className="relative">
             <input
               type="text"
               disabled
-              placeholder="Search by city..."
+              placeholder={t.searchCityPlaceholder}
               className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-gray-600 text-sm placeholder-gray-600 cursor-not-allowed"
             />
             <div className="absolute inset-0 flex items-center justify-end pr-3 pointer-events-none">
@@ -242,7 +242,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
           </div>
           <p className="text-xs text-gray-600 mt-1.5 flex items-center gap-1">
             <Sparkles className="w-3 h-3 text-yellow-500/60" />
-            Explore users from any city with Vybt Plus
+            {t.vybtPlusCity}
           </p>
         </div>
 
@@ -250,7 +250,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
         <div>
           <label className="text-gray-400 text-sm mb-2 flex items-center gap-1.5">
             <Music className="w-4 h-4" />
-            Similar Vibes
+            {t.similarVibes}
           </label>
           <div className="relative mb-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
@@ -258,7 +258,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
               type="text"
               value={vibeSearch}
               onChange={(e) => setVibeSearch(e.target.value)}
-              placeholder="Search vibes..."
+              placeholder={t.searchVibes}
               className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#00c6d2]"
             />
           </div>
@@ -288,7 +288,7 @@ export function UserFilters({ isOpen, onClose, filters, setFilters }) {
           onClick={() => setFilters({ sortBy: 'foryou' })}
           className="w-full mt-4 py-2 text-sm text-gray-400 hover:text-white"
         >
-          Clear all filters
+          {t.clearFilters}
         </button>
       </motion.div>
     </AnimatePresence>
