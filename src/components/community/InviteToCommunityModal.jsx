@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Check, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function InviteToCommunityModal({ community, friends, profilesMap, currentUser, onClose }) {
-  const [sent, setSent] = useState({}); // { userId: true }
+  const { t } = useLanguage();
+  const [sent, setSent] = useState({});
   const [sending, setSending] = useState({});
 
   const handleSend = async (friendId) => {
     setSending(prev => ({ ...prev, [friendId]: true }));
-    // Structured invite format parsed by ChatMessage to render a card
     const msg = `community_invite:${community.id}`;
     await base44.entities.ChatMessage.create({
       sender_id: currentUser.id,
@@ -31,7 +32,7 @@ export default function InviteToCommunityModal({ community, friends, profilesMap
       >
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-gray-800">
-          <h2 className="text-lg font-black text-white">Invite Friends 🏘️</h2>
+          <h2 className="text-lg font-black text-white">{t.inviteFriendsCommunity} 🏘️</h2>
           <motion.button whileTap={{ scale: 0.9 }} onClick={onClose}
             className="w-9 h-9 rounded-full bg-gray-800 flex items-center justify-center">
             <X className="w-5 h-5 text-white" />
@@ -41,7 +42,7 @@ export default function InviteToCommunityModal({ community, friends, profilesMap
         {/* Friends list */}
         <div className="overflow-y-auto flex-1 p-4 space-y-2">
           {friends.length === 0 && (
-            <div className="text-center py-12 text-gray-500 text-sm">No friends to invite yet</div>
+            <div className="text-center py-12 text-gray-500 text-sm">{t.noFriendsToInvite}</div>
           )}
           {friends.map(friendId => {
             const profile = profilesMap[friendId];
@@ -73,8 +74,8 @@ export default function InviteToCommunityModal({ community, friends, profilesMap
                   }
                 >
                   {isSending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> :
-                   isSent ? <><Check className="w-3.5 h-3.5" /> Sent</> :
-                   <><Send className="w-3.5 h-3.5" /> Send</>}
+                   isSent ? <><Check className="w-3.5 h-3.5" /> {t.sent}</> :
+                   <><Send className="w-3.5 h-3.5" /> {t.invite}</>}
                 </motion.button>
               </div>
             );
