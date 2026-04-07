@@ -3,14 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function CommunityStoriesGallery({ stories, plans, profilesMap, tc, onStoryClick }) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [selectedPlanId, setSelectedPlanId] = useState(null);
 
   if (!stories.length) return null;
 
-  // Group stories by plan (include all, not just last 24h — past events gallery)
   const storiesByPlan = stories.reduce((acc, s) => {
     if (!acc[s.plan_id]) acc[s.plan_id] = [];
     acc[s.plan_id].push(s);
@@ -28,7 +29,7 @@ export default function CommunityStoriesGallery({ stories, plans, profilesMap, t
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Camera className="w-4 h-4" style={{ color: tc }} />
-          <span className="text-white font-bold text-sm">Event Stories</span>
+          <span className="text-white font-bold text-sm">{t.eventStories}</span>
           <span className="text-gray-600 text-xs">({stories.length})</span>
         </div>
       </div>
@@ -44,7 +45,7 @@ export default function CommunityStoriesGallery({ stories, plans, profilesMap, t
               ? { background: `${tc}30`, color: tc, borderColor: `${tc}60` }
               : { background: 'transparent', color: '#6b7280', borderColor: '#374151' }}
           >
-            All
+            {t.allTag}
           </motion.button>
           {planEntries.map(([planId, planStories]) => {
             const plan = plans.find(p => p.id === planId);
@@ -95,10 +96,8 @@ export default function CommunityStoriesGallery({ stories, plans, profilesMap, t
                   ? <video src={story.media_url} className="w-full h-full object-cover" muted playsInline />
                   : <img src={story.media_url} alt="" className="w-full h-full object-cover" />}
 
-                {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                {/* Author */}
                 <div className="absolute bottom-1.5 left-1.5 flex items-center gap-1">
                   <div className="w-5 h-5 rounded-full overflow-hidden border border-white/40 flex-shrink-0">
                     {profile?.photos?.[0]
@@ -107,12 +106,10 @@ export default function CommunityStoriesGallery({ stories, plans, profilesMap, t
                   </div>
                 </div>
 
-                {/* Plan badge on hover or highlighted */}
                 {story.is_highlighted && (
                   <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full text-[8px] font-bold text-white" style={{ background: tc }}>⭐</div>
                 )}
 
-                {/* Video indicator */}
                 {story.media_type === 'video' && (
                   <div className="absolute top-1.5 left-1.5 w-4 h-4 rounded-full bg-black/50 flex items-center justify-center">
                     <div className="w-0 h-0 border-t-[4px] border-b-[4px] border-l-[6px] border-transparent border-l-white ml-0.5" />
@@ -130,7 +127,7 @@ export default function CommunityStoriesGallery({ stories, plans, profilesMap, t
           whileTap={{ scale: 0.97 }}
           className="w-full mt-3 py-2.5 rounded-xl text-xs font-bold border border-white/10 text-gray-400"
         >
-          +{selectedStories.length - 12} more stories
+          +{selectedStories.length - 12} {t.moreStories}
         </motion.button>
       )}
     </div>
