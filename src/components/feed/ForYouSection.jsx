@@ -7,7 +7,8 @@ import { useLanguage } from '../common/LanguageContext';
 export default function ForYouSection({ plans, participants, profilesMap, onPlanClick, onSeeAll }) {
   if (!plans || plans.length === 0) return null;
 
-  const {t} = useLanguage();
+  const { t } = useLanguage();
+
   const getParticipants = (planId) => {
     return participants
       .filter(p => p.plan_id === planId)
@@ -22,7 +23,7 @@ export default function ForYouSection({ plans, participants, profilesMap, onPlan
           <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#00c6d2]/20 to-[#542b9b]/20">
             <Sparkles className="w-5 h-5 text-[#00c6d2]" />
           </div>
-          <h2 className="text-white font-bold text-lg">For You</h2>
+          <h2 className="text-white font-bold text-lg">{t.forYou}</h2>
         </div>
         {onSeeAll && (
           <motion.button
