@@ -15,7 +15,7 @@ export const translations = {
     chooseLanguage: 'Escolha o teu idioma 🌍',
     languageSubtitle: 'Selecione o idioma que quer usar.',
     whatsYourName: 'Qual seu nome? 👋',
-    nameSubtitle: 'É assim que outros utilizadores vão te ver na Vybt.',
+    nameSubtitle: 'É assim que outros usuários vão te ver na Vybt.',
     yourNamePlaceholder: 'O seu nome...',
     whatsYourGender: 'Qual seu género?',
     genderSubtitle: 'Nos ajude a personalizar a sua experiência',
@@ -126,7 +126,7 @@ export const translations = {
     mostMembers: 'Mais Membros',
     matchesVibes: 'Combina com as Minhas Vibes',
     noPlansFound: 'Nenhum plano encontrado',
-    noUsersFound: 'Nenhum utilizador encontrado',
+    noUsersFound: 'Nenhum usuário encontrado',
     // Friends
     requests: 'Pedidos',
     noFriendsYet: 'Sem amigos ainda',
@@ -368,21 +368,25 @@ export const translations = {
     ageRange: 'Faixa etária',
     city: 'Cidade',
     searchCityPlaceholder: 'Pesquisar por cidade...',
-    vybtPlusCity: 'Explore utilizadores de qualquer cidade com Vybt Plus',
+    vybtPlusCity: 'Explore usuários de qualquer cidade com Vybt Plus',
     similarVibes: 'Vibes semelhantes',
     noPlansMap: 'Nenhum plano com localização disponível',
     plansHere: 'planos neste local',
     highlighted: '✨ Destacado',
     joined: 'Entrou',
     viewPlan: 'Ver Plano',
-    planHappeningNow: 'O teu plano está a acontecer agora!',
-    myPlan: 'O Meu Plano',
+    planHappeningNow: 'O seu plano está acontecendo agora!',
+    myPlan: 'Meu Plano',
     liveNow: 'AO VIVO',
     highlighted: 'Destacado',
-    reasonVibes: 'Combina com as tuas vibes',
-    reasonPartyType: 'O teu estilo',
+    reasonVibes: 'Combina com a sua vibe',
+    reasonPartyType: 'O seu estilo',
     reasonFriends: 'Amigos vão',
-    reasonLocation: 'Perto de ti',
+    reasonLocation: 'Perto de você',
+    happeningNowStory: '🔵 Um plano está acontecendo agora! Poste o seu Experience Story!',
+    filterAllStories: 'Todos os stories',
+    filterOnlyFriends: 'Só amigos',
+    filterHighlighted: 'Destacados',
   },
 
 en: {
@@ -767,6 +771,10 @@ en: {
     reasonPartyType: 'Your style',
     reasonFriends: 'Friends going',
     reasonLocation: 'Near you',
+    happeningNowStory: '🔵 A plan is happening now! Post your Experience Story!',
+    filterAllStories: 'All stories',
+    filterOnlyFriends: 'Only friends',
+    filterHighlighted: 'Highlighted',
   },
 
   es: {
@@ -1151,6 +1159,10 @@ en: {
     reasonPartyType: 'Tu estilo',
     reasonFriends: 'Amigos van',
     reasonLocation: 'Cerca de ti',
+    happeningNowStory: '🔵 ¡Hay un plan en curso ahora! ¡Publica tu Experience Story!',
+    filterAllStories: 'Todos los stories',
+    filterOnlyFriends: 'Solo amigos',
+    filterHighlighted: 'Destacados',
   },
 
   fr: {
@@ -1535,6 +1547,10 @@ en: {
     reasonPartyType: 'Ton style',
     reasonFriends: 'Amis qui y vont',
     reasonLocation: 'Près de toi',
+    happeningNowStory: '🔵 Un plan est en cours maintenant ! Poste ton Experience Story !',
+    filterAllStories: 'Tous les stories',
+    filterOnlyFriends: 'Amis seulement',
+    filterHighlighted: 'En vedette',
   },
 
   it: {
@@ -1919,6 +1935,10 @@ en: {
     reasonPartyType: 'Il tuo stile',
     reasonFriends: 'Amici che vanno',
     reasonLocation: 'Vicino a te',
+    happeningNowStory: '🔵 C\'è un piano in corso ora! Pubblica il tuo Experience Story!',
+    filterAllStories: 'Tutti gli stories',
+    filterOnlyFriends: 'Solo amici',
+    filterHighlighted: 'In evidenza',
   },
 };
 
