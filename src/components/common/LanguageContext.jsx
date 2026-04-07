@@ -337,7 +337,10 @@ export const translations = {
     policyApproval: 'Precisa de Aprovação',
     policyAdminsOnly: 'Só Admins',
     deleteCommunity: 'Deletar Comunidade',
-
+    leave: 'Sair',
+    reportCommunity: 'Denunciar Comunidade',
+    join: 'Entrar 🚀',
+    membersCount: 'membros',
   },
 
 en: {
@@ -676,6 +679,10 @@ en: {
     policyApproval: 'Needs Approval',
     policyAdminsOnly: 'Admins Only',
     deleteCommunity: 'Delete Community',
+    leave: 'Leave',
+    reportCommunity: 'Report Community',
+    join: 'Join 🚀',
+    membersCount: 'members',
   },
 
   es: {
@@ -1014,6 +1021,13 @@ en: {
     policyApproval: 'Necesita Aprobación',
     policyAdminsOnly: 'Solo Admins',
     deleteCommunity: 'Eliminar Comunidad',
+    leave: 'Salir',
+    reportCommunity: 'Denunciar Comunidad',
+    join: 'Unirse 🚀',
+    membersCount: 'miembros',
+
+
+
   },
 
   fr: {
@@ -1352,6 +1366,10 @@ en: {
     policyApproval: 'Approbation requise',
     policyAdminsOnly: 'Admins uniquement',
     deleteCommunity: 'Supprimer la Communauté',
+    leave: 'Quitter',
+    reportCommunity: 'Signaler la Communauté',
+    join: 'Rejoindre 🚀',
+    membersCount: 'membres',
   },
 
   it: {
@@ -1690,6 +1708,10 @@ en: {
     policyApproval: 'Richiede Approvazione',
     policyAdminsOnly: 'Solo Admin',
     deleteCommunity: 'Elimina Comunità',
+    leave: 'Esci',
+    reportCommunity: 'Segnala Comunità',
+    join: 'Unisciti 🚀',
+    membersCount: 'membri',
   },
 };
 
