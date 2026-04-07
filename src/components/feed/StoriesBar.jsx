@@ -2,8 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import StoryCard from './StoryCard';
 import { Camera } from 'lucide-react';
-
-const filters = ['All stories', 'Only friends', 'Highlighted'];
+import { useLanguage } from '../common/LanguageContext';
 
 export default function StoriesBar({ 
   stories = [], 
@@ -15,11 +14,12 @@ export default function StoriesBar({
   currentUserId,
   happeningPlan = null
 }) {
-  // Separate own stories and others
+  const { t } = useLanguage();
+
+  const filters = [t.filterAllStories, t.filterOnlyFriends, t.filterHighlighted];
+
   const ownStories = stories.filter(s => s.user_id === currentUserId);
   const otherStories = stories.filter(s => s.user_id !== currentUserId);
-  
-  // Shuffle other stories for random order
   const shuffledOthers = [...otherStories].sort(() => Math.random() - 0.5);
 
   return (
@@ -46,14 +46,14 @@ export default function StoriesBar({
         ))}
       </div>
 
-      {/* Stories - Vertical rectangle cards */}
+      {/* Stories */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ staggerChildren: 0.05 }}
         className="flex gap-3 px-4 overflow-x-auto scrollbar-hide pb-2"
       >
-        {/* Add Story — neon blue when a plan is happening */}
+        {/* Add Story */}
         <div className="relative flex-shrink-0">
           <StoryCard isAdd onClick={onAddStory} happeningPlan={happeningPlan} />
           <AnimatePresence>
@@ -66,15 +66,15 @@ export default function StoriesBar({
                 style={{ bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)', width: '160px' }}
               >
                 <div className="bg-[#00d4ff] text-[#0b0b0b] text-[10px] font-bold rounded-xl px-2.5 py-2 text-center leading-tight shadow-lg shadow-[#00d4ff]/40">
-                  🔵 Um plano está a acontecer agora! Poste o teu Experience Story!
+                  {t.happeningNowStory}
                 </div>
                 <div className="w-3 h-3 bg-[#00d4ff] rotate-45 mx-auto -mt-1.5 rounded-sm" />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
-        
-        {/* Own stories first with special color */}
+
+        {/* Own stories */}
         {ownStories.map((story) => (
           <StoryCard
             key={story.id}
@@ -85,8 +85,8 @@ export default function StoriesBar({
             onClick={() => onStoryClick(story)}
           />
         ))}
-        
-        {/* Other stories with random colors */}
+
+        {/* Other stories */}
         {shuffledOthers.map((story, index) => (
           <motion.div
             key={story.id}
