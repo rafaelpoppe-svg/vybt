@@ -40,19 +40,20 @@ const reasonIcons = {
   location: MapPin
 };
 
-const reasonLabels = {
-  vibes: 'Matches your vibes',
-  party_type: 'Your style',
-  friends: 'Friends going',
-  location: 'Near you'
-};
-
 export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false, currentUserId, community }) {
   const themeColor = plan.theme_color || '#542b9b';
   const { isLive, timeLeft } = useLiveCountdown(plan);
   const isHappening = isLive;
   const isMyPlan = currentUserId && plan.creator_id === currentUserId;
-  const {t} = useLanguage();
+  const { t } = useLanguage();
+
+  const reasonLabels = {
+    vibes: t.reasonVibes,
+    party_type: t.reasonPartyType,
+    friends: t.reasonFriends,
+    location: t.reasonLocation,
+  };
+
   const getHexWithAlpha = (hex, alpha) => {
     if (!hex || hex.length < 7) return `rgba(84,43,155,${alpha})`;
     const r = parseInt(hex.slice(1, 3), 16);
@@ -101,7 +102,6 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           </div>
         )}
         
-        {/* Happening Now pulsing overlay */}
         {isHappening && (
           <motion.div
             animate={{ opacity: [0.15, 0.3, 0.15] }}
@@ -111,42 +111,41 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           />
         )}
 
-        {/* Badges - can show multiple */}
         <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
           {isMyPlan && (
             <div className="px-3 py-1.5 rounded-full bg-[#00c6d2]/90 backdrop-blur-sm flex items-center gap-1">
               <span className="text-xs">👤</span>
-              <span className="text-xs text-[#0b0b0b] font-bold">My Plan</span>
+              <span className="text-xs text-[#0b0b0b] font-bold">{t.myPlan}</span>
             </div>
           )}
           {plan.status === 'terminated' && (
             <div className="px-3 py-1.5 rounded-full bg-red-600/90 backdrop-blur-sm flex items-center gap-1">
               <span className="text-xs">❌</span>
-              <span className="text-xs text-white font-bold">Terminated</span>
+              <span className="text-xs text-white font-bold">{t.terminatedBanner}</span>
             </div>
           )}
           {plan.status !== 'terminated' && (
             <>
               {isHappening && (
-                 <motion.div
-                   animate={{ scale: [1, 1.06, 1] }}
-                   transition={{ repeat: Infinity, duration: 1.5 }}
-                   className="px-2.5 py-1 rounded-full backdrop-blur-sm flex items-center gap-1.5"
-                   style={{ background: 'rgba(249,115,22,0.9)' }}
-                 >
-                   <motion.span
-                     animate={{ opacity: [1, 0.3, 1] }}
-                     transition={{ repeat: Infinity, duration: 1 }}
-                     className="text-xs"
-                   >⚡</motion.span>
-                   <span className="text-[10px] text-white font-bold tracking-wide">LIVE NOW</span>
-                   {timeLeft && <span className="text-[10px] text-white/75">· {timeLeft}</span>}
-                 </motion.div>
-               )}
+                <motion.div
+                  animate={{ scale: [1, 1.06, 1] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                  className="px-2.5 py-1 rounded-full backdrop-blur-sm flex items-center gap-1.5"
+                  style={{ background: 'rgba(249,115,22,0.9)' }}
+                >
+                  <motion.span
+                    animate={{ opacity: [1, 0.3, 1] }}
+                    transition={{ repeat: Infinity, duration: 1 }}
+                    className="text-xs"
+                  >⚡</motion.span>
+                  <span className="text-[10px] text-white font-bold tracking-wide">{t.liveNow}</span>
+                  {timeLeft && <span className="text-[10px] text-white/75">· {timeLeft}</span>}
+                </motion.div>
+              )}
               {plan.is_highlighted && (
                 <div className="px-2 py-1 rounded-full bg-gradient-to-r from-[#00c6d2]/80 to-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-white" />
-                  <span className="text-[10px] text-white font-medium">Highlighted</span>
+                  <span className="text-[10px] text-white font-medium">{t.highlighted}</span>
                 </div>
               )}
               {isOnFire && !isHappening && (
@@ -160,7 +159,7 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
                     transition={{ repeat: Infinity, duration: 0.6 }}
                     className="text-xs"
                   >🔥</motion.span>
-                  <span className="text-[10px] text-white font-bold">On Fire</span>
+                  <span className="text-[10px] text-white font-bold">{t.onFire}</span>
                 </motion.div>
               )}
               {matchScore && matchScore > 30 && !plan.is_highlighted && !isOnFire && !isHappening && (
@@ -173,7 +172,6 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
           )}
         </div>
         
-        {/* Community badge */}
         {community && plan.community_id && (
           <div className="absolute top-3 left-3">
             <div
