@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, LogOut } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function LeaveCommunityModal({ isOpen, onClose, onConfirm, communityName, isLoading }) {
+  const { t } = useLanguage();
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -20,9 +23,9 @@ export default function LeaveCommunityModal({ isOpen, onClose, onConfirm, commun
           >
             <div className="text-center mb-6">
               <div className="text-4xl mb-3">👋</div>
-              <h3 className="text-xl font-black text-white">Sair da Community?</h3>
+              <h3 className="text-xl font-black text-white">{t.leaveCommunityTitle}</h3>
               <p className="text-gray-400 text-sm mt-2">
-                Tem a certeza que quer sair de <span className="text-orange-400 font-bold">{communityName}</span>?
+                {t.leaveCommunityConfirm} <span className="text-orange-400 font-bold">{communityName}</span>?
               </p>
             </div>
 
@@ -32,7 +35,7 @@ export default function LeaveCommunityModal({ isOpen, onClose, onConfirm, commun
                 onClick={onClose}
                 className="flex-1 py-4 rounded-2xl bg-gray-800 text-white font-bold"
               >
-                Cancelar
+                {t.cancel}
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.97 }}
@@ -45,7 +48,7 @@ export default function LeaveCommunityModal({ isOpen, onClose, onConfirm, commun
                 ) : (
                   <>
                     <LogOut className="w-5 h-5" />
-                    Sair
+                    {t.leave}
                   </>
                 )}
               </motion.button>
