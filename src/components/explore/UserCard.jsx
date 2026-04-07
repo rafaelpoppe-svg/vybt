@@ -6,12 +6,12 @@ import { Plus, Check, MapPin, ShieldCheck } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notifyFriendRequest } from '../notifications/NotificationTriggers';
+import { useLanguage } from '../common/LanguageContext';
 
-// mode: 'discover' | 'request'
-// For 'request': pass friendshipId + onAccept callback
 export default function UserCard({ profile, myProfile, currentUser, isFriend, isPendingSent, mode = 'discover', friendshipId, onAccept }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
   const [localSent, setLocalSent] = useState(isPendingSent);
   const [localAccepted, setLocalAccepted] = useState(false);
 
@@ -21,7 +21,6 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
   const totalMine = (myProfile?.vibes?.length || 0) + (myProfile?.party_types?.length || 0);
   const matchPct = totalMine > 0 ? Math.round((totalCompatible / totalMine) * 100) : 0;
 
-  // All matching tags to show
   const allMatchTags = [
     ...matchingVibes.map(v => ({ label: v, color: '#00c6d2' })),
     ...matchingPartyTypes.map(pt => ({ label: pt, color: '#a855f7' })),
@@ -34,8 +33,7 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
         friend_id: profile.user_id,
         status: 'pending'
       });
-      // Criar notificação para o destinatário
-      const myName = currentUser.full_name || 'Alguém';
+      const myName = currentUser.full_name || t.someone;
       await notifyFriendRequest(profile.user_id, currentUser.id, myName);
     },
     onSuccess: () => {
@@ -93,7 +91,6 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
         </div>
       )}
 
-      {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
 
       {/* Match badge top-left */}
@@ -123,7 +120,7 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
       <div className="absolute bottom-0 left-0 right-0 p-3">
         <div className="flex items-end justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <p className="text-white font-semibold text-sm truncate leading-tight">{profile.display_name || 'User'}</p>
+            <p className="text-white font-semibold text-sm truncate leading-tight">{profile.display_name || t.user}</p>
             {profile.username && (
               <p className="text-[#00c6d2] text-[10px] font-medium truncate leading-tight">@{profile.username}</p>
             )}
@@ -134,7 +131,6 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
               </p>
             )}
 
-            {/* Matching vibe/party tags */}
             {allMatchTags.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-1.5">
                 {allMatchTags.slice(0, 3).map((tag, i) => (
@@ -157,7 +153,6 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
             )}
           </div>
 
-          {/* Action button */}
           {showButton && (
             <motion.button
               whileTap={{ scale: 0.8 }}
