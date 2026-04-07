@@ -375,6 +375,7 @@ export const translations = {
     highlighted: '✨ Destacado',
     joined: 'Entrou',
     viewPlan: 'Ver Plano',
+    planHappeningNow: 'O teu plano está a acontecer agora!',
   },
 
 en: {
@@ -751,7 +752,7 @@ en: {
     highlighted: '✨ Highlighted',
     joined: 'Joined',
     viewPlan: 'View Plan',
-
+    planHappeningNow: 'Your plan is happening now!',
   },
 
   es: {
@@ -1128,7 +1129,7 @@ en: {
     highlighted: '✨ Destacado',
     joined: 'Unido',
     viewPlan: 'Ver Plan',
-
+    planHappeningNow: '¡Tu plan está pasando ahora!',
 
   },
 
@@ -1506,6 +1507,7 @@ en: {
     highlighted: '✨ Mis en avant',
     joined: 'Rejoint',
     viewPlan: 'Voir le plan',
+    planHappeningNow: 'Ton plan se passe maintenant !',
   },
 
   it: {
@@ -1882,6 +1884,7 @@ en: {
     highlighted: '✨ In evidenza',
     joined: 'Partecipi',
     viewPlan: 'Vedi piano',
+    planHappeningNow: 'Il tuo piano sta succedendo adesso!',
   },
 };
 
