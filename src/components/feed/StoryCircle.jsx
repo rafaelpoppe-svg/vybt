@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Sparkles } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function StoryCircle({ 
   user, 
@@ -9,6 +10,8 @@ export default function StoryCircle({
   onClick,
   size = 'md'
 }) {
+  const { t } = useLanguage();
+
   const sizes = {
     sm: 'w-14 h-14',
     md: 'w-16 h-16',
@@ -25,7 +28,7 @@ export default function StoryCircle({
         <div className={`${sizes[size]} rounded-full bg-gray-900 border-2 border-dashed border-[#00fea3] flex items-center justify-center`}>
           <Plus className="w-6 h-6 text-[#00fea3]" />
         </div>
-        <span className="text-xs text-gray-400">Add</span>
+        <span className="text-xs text-gray-400">{t.add}</span>
       </motion.button>
     );
   }
@@ -63,7 +66,7 @@ export default function StoryCircle({
       <div className="flex items-center gap-1">
         {isHighlighted && <Sparkles className="w-3 h-3 text-[#542b9b]" />}
         <span className="text-xs text-gray-400 max-w-14 truncate">
-          {user?.display_name || 'User'}
+          {user?.display_name || t.user}
         </span>
       </div>
     </motion.button>
