@@ -1,33 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CalendarDays, Camera, Users, MessageSquare, ChevronRight } from 'lucide-react';
-
-const STEPS = [
-  {
-    icon: '🎉',
-    title: 'Welcome to the Community!',
-    desc: 'You\'re now part of this community. Here\'s a quick guide to get started.',
-  },
-  {
-    icon: <CalendarDays className="w-8 h-8 text-blue-400" />,
-    title: 'Join & Create Plans',
-    desc: 'Browse upcoming plans in the Plans tab. Join events or create your own!',
-  },
-  {
-    icon: <Camera className="w-8 h-8 text-purple-400" />,
-    title: 'Share Stories',
-    desc: 'After attending a plan, post stories to share the vibe with the community.',
-  },
-  {
-    icon: <Users className="w-8 h-8 text-green-400" />,
-    title: 'Meet the Members',
-    desc: 'Check the Members tab to see who\'s active and discover top contributors.',
-  },
-];
+import { X, CalendarDays, Camera, Users, ChevronRight } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function CommunityNewMemberGuide({ communityId, onClose }) {
   const [step, setStep] = useState(0);
+  const { t } = useLanguage();
   const storageKey = `community_guide_${communityId}`;
+
+  const STEPS = [
+    {
+      icon: '🎉',
+      title: t.guideStep1Title,
+      desc: t.guideStep1Desc,
+    },
+    {
+      icon: <CalendarDays className="w-8 h-8 text-blue-400" />,
+      title: t.guideStep2Title,
+      desc: t.guideStep2Desc,
+    },
+    {
+      icon: <Camera className="w-8 h-8 text-purple-400" />,
+      title: t.guideStep3Title,
+      desc: t.guideStep3Desc,
+    },
+    {
+      icon: <Users className="w-8 h-8 text-green-400" />,
+      title: t.guideStep4Title,
+      desc: t.guideStep4Desc,
+    },
+  ];
 
   const handleClose = () => {
     localStorage.setItem(storageKey, 'done');
@@ -85,7 +87,7 @@ export default function CommunityNewMemberGuide({ communityId, onClose }) {
             className="text-center mb-8"
           >
             <div className="text-5xl mb-4 flex items-center justify-center">
-              {typeof current.icon === 'string' ? current.icon : current.icon}
+              {current.icon}
             </div>
             <h3 className="text-xl font-black text-white mb-2">{current.title}</h3>
             <p className="text-gray-400 text-sm leading-relaxed">{current.desc}</p>
@@ -97,7 +99,7 @@ export default function CommunityNewMemberGuide({ communityId, onClose }) {
           {step > 0 && (
             <button onClick={() => setStep(step - 1)}
               className="px-5 py-3.5 rounded-2xl bg-gray-800 text-gray-300 font-bold text-sm">
-              Back
+              {t.guideBack}
             </button>
           )}
           <motion.button
@@ -107,9 +109,9 @@ export default function CommunityNewMemberGuide({ communityId, onClose }) {
             style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}
           >
             {step < STEPS.length - 1 ? (
-              <>Next <ChevronRight className="w-4 h-4" /></>
+              <>{t.guideNext} <ChevronRight className="w-4 h-4" /></>
             ) : (
-              "Let's go! 🚀"
+              t.guideLetsGo
             )}
           </motion.button>
         </div>
