@@ -356,6 +356,8 @@ export const translations = {
     guideBack: 'Voltar',
     eventStories: 'Stories do Evento',
     moreStories: 'mais stories',
+    leaveCommunityTitle: 'Sair da Comunidade?',
+    leaveCommunityConfirm: 'Tem a certeza que quer sair de',
   },
 
 en: {
@@ -713,6 +715,9 @@ en: {
     guideBack: 'Back',
     eventStories: 'Event Stories',
     moreStories: 'more stories',
+    leaveCommunityTitle: 'Leave the Community?',
+    leaveCommunityConfirm: 'Are you sure you want to leave',
+
   },
 
   es: {
@@ -1070,6 +1075,8 @@ en: {
     guideBack: 'Volver',
     eventStories: 'Stories del Evento',
     moreStories: 'más stories',
+    leaveCommunityTitle: '¿Salir de la Comunidad?',
+    leaveCommunityConfirm: '¿Seguro que quieres salir de',
 
 
 
@@ -1430,6 +1437,8 @@ en: {
     guideBack: 'Retour',
     eventStories: 'Stories de l\'Événement',
     moreStories: 'stories de plus',
+    leaveCommunityTitle: 'Quitter la Communauté ?',
+    leaveCommunityConfirm: 'T\'es sûr de vouloir quitter',
   },
 
   it: {
@@ -1787,6 +1796,8 @@ en: {
     guideBack: 'Indietro',
     eventStories: 'Stories dell\'Evento',
     moreStories: 'altre stories',
+    leaveCommunityTitle: 'Lasciare la Comunità?',
+    leaveCommunityConfirm: 'Sei sicuro di voler lasciare',
   },
 };
 
