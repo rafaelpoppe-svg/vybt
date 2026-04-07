@@ -387,6 +387,8 @@ export const translations = {
     filterAllStories: 'Todos os stories',
     filterOnlyFriends: 'Só amigos',
     filterHighlighted: 'Destacados',
+    livePlan: '🔵 Plano ao vivo!',
+    yourStory: 'Seu Story',
   },
 
 en: {
@@ -775,6 +777,8 @@ en: {
     filterAllStories: 'All stories',
     filterOnlyFriends: 'Only friends',
     filterHighlighted: 'Highlighted',
+    livePlan: '🔵 Live plan!',
+    yourStory: 'Your Story',
   },
 
   es: {
@@ -1163,6 +1167,8 @@ en: {
     filterAllStories: 'Todos los stories',
     filterOnlyFriends: 'Solo amigos',
     filterHighlighted: 'Destacados',
+    livePlan: '🔵 ¡Plan en directo!',
+    yourStory: 'Tu Story',
   },
 
   fr: {
@@ -1551,6 +1557,8 @@ en: {
     filterAllStories: 'Tous les stories',
     filterOnlyFriends: 'Amis seulement',
     filterHighlighted: 'En vedette',
+    livePlan: '🔵 Plan en direct !',
+    yourStory: 'Ton Story',
   },
 
   it: {
@@ -1939,6 +1947,8 @@ en: {
     filterAllStories: 'Tutti gli stories',
     filterOnlyFriends: 'Solo amici',
     filterHighlighted: 'In evidenza',
+    livePlan: '🔵 Piano in diretta!',
+  yourStory: 'Il tuo Story',
   },
 };
 
