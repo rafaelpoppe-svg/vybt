@@ -370,6 +370,11 @@ export const translations = {
     searchCityPlaceholder: 'Pesquisar por cidade...',
     vybtPlusCity: 'Explore utilizadores de qualquer cidade com Vybt Plus',
     similarVibes: 'Vibes semelhantes',
+    noPlansMap: 'Nenhum plano com localização disponível',
+    plansHere: 'planos neste local',
+    highlighted: '✨ Destacado',
+    joined: 'Entrou',
+    viewPlan: 'Ver Plano',
   },
 
 en: {
@@ -741,6 +746,11 @@ en: {
     searchCityPlaceholder: 'Search by city...',
     vybtPlusCity: 'Explore users from any city with Vybt Plus',
     similarVibes: 'Similar vibes',
+    noPlansMap: 'No plans with location data available',
+    plansHere: 'plans at this location',
+    highlighted: '✨ Highlighted',
+    joined: 'Joined',
+    viewPlan: 'View Plan',
 
   },
 
@@ -1113,6 +1123,11 @@ en: {
     searchCityPlaceholder: 'Buscar por ciudad...',
     vybtPlusCity: 'Explora usuarios de cualquier ciudad con Vybt Plus',
     similarVibes: 'Vibes similares',
+    noPlansMap: 'No hay planes con ubicación disponible',
+    plansHere: 'planes en esta ubicación',
+    highlighted: '✨ Destacado',
+    joined: 'Unido',
+    viewPlan: 'Ver Plan',
 
 
   },
@@ -1486,6 +1501,11 @@ en: {
     searchCityPlaceholder: 'Rechercher par ville...',
     vybtPlusCity: 'Explore des utilisateurs de n’importe quelle ville avec Vybt Plus',
     similarVibes: 'Vibes similaires',
+    noPlansMap: 'Aucun plan avec localisation disponible',
+    plansHere: 'plans à cet endroit',
+    highlighted: '✨ Mis en avant',
+    joined: 'Rejoint',
+    viewPlan: 'Voir le plan',
   },
 
   it: {
@@ -1857,6 +1877,11 @@ en: {
     searchCityPlaceholder: 'Cerca per città...',
     vybtPlusCity: 'Esplora utenti di qualsiasi città con Vybt Plus',
     similarVibes: 'Vibes simili',
+    noPlansMap: 'Nessun piano con posizione disponibile',
+    plansHere: 'piani in questa posizione',
+    highlighted: '✨ In evidenza',
+    joined: 'Partecipi',
+    viewPlan: 'Vedi piano',
   },
 };
 
