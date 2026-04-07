@@ -341,6 +341,8 @@ export const translations = {
     reportCommunity: 'Denunciar Comunidade',
     join: 'Entrar 🚀',
     membersCount: 'membros',
+    topMembers: 'Top Membros',
+    total: 'total',
   },
 
 en: {
@@ -683,6 +685,8 @@ en: {
     reportCommunity: 'Report Community',
     join: 'Join 🚀',
     membersCount: 'members',
+    topMembers: 'Top Members',
+    total: 'total',
   },
 
   es: {
@@ -1025,6 +1029,8 @@ en: {
     reportCommunity: 'Denunciar Comunidad',
     join: 'Unirse 🚀',
     membersCount: 'miembros',
+    topMembers: 'Top Miembros',
+    total: 'total',
 
 
 
@@ -1370,6 +1376,8 @@ en: {
     reportCommunity: 'Signaler la Communauté',
     join: 'Rejoindre 🚀',
     membersCount: 'membres',
+    topMembers: 'Top Membres',
+    total: 'total',
   },
 
   it: {
@@ -1712,6 +1720,8 @@ en: {
     reportCommunity: 'Segnala Comunità',
     join: 'Unisciti 🚀',
     membersCount: 'membri',
+    topMembers: 'Top Membri',
+    total: 'totale',
   },
 };
 
