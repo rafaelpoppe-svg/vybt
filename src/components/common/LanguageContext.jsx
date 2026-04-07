@@ -376,6 +376,13 @@ export const translations = {
     joined: 'Entrou',
     viewPlan: 'Ver Plano',
     planHappeningNow: 'O teu plano está a acontecer agora!',
+    myPlan: 'O Meu Plano',
+    liveNow: 'AO VIVO',
+    highlighted: 'Destacado',
+    reasonVibes: 'Combina com as tuas vibes',
+    reasonPartyType: 'O teu estilo',
+    reasonFriends: 'Amigos vão',
+    reasonLocation: 'Perto de ti',
   },
 
 en: {
@@ -753,6 +760,13 @@ en: {
     joined: 'Joined',
     viewPlan: 'View Plan',
     planHappeningNow: 'Your plan is happening now!',
+    myPlan: 'My Plan',
+    liveNow: 'LIVE NOW',
+    highlighted: 'Highlighted',
+    reasonVibes: 'Matches your vibes',
+    reasonPartyType: 'Your style',
+    reasonFriends: 'Friends going',
+    reasonLocation: 'Near you',
   },
 
   es: {
@@ -1130,7 +1144,13 @@ en: {
     joined: 'Unido',
     viewPlan: 'Ver Plan',
     planHappeningNow: '¡Tu plan está pasando ahora!',
-
+    myPlan: 'Mi Plan',
+    liveNow: 'EN VIVO',
+    highlighted: 'Destacado',
+    reasonVibes: 'Coincide con tus vibes',
+    reasonPartyType: 'Tu estilo',
+    reasonFriends: 'Amigos van',
+    reasonLocation: 'Cerca de ti',
   },
 
   fr: {
@@ -1508,6 +1528,13 @@ en: {
     joined: 'Rejoint',
     viewPlan: 'Voir le plan',
     planHappeningNow: 'Ton plan se passe maintenant !',
+    myPlan: 'Mon Plan',
+    liveNow: 'EN DIRECT',
+    highlighted: 'Mis en avant',
+    reasonVibes: 'Correspond à tes vibes',
+    reasonPartyType: 'Ton style',
+    reasonFriends: 'Amis qui y vont',
+    reasonLocation: 'Près de toi',
   },
 
   it: {
@@ -1885,6 +1912,13 @@ en: {
     joined: 'Partecipi',
     viewPlan: 'Vedi piano',
     planHappeningNow: 'Il tuo piano sta succedendo adesso!',
+    myPlan: 'Il Mio Piano',
+    liveNow: 'IN DIRETTA',
+    highlighted: 'In evidenza',
+    reasonVibes: 'In linea con i tuoi vibes',
+    reasonPartyType: 'Il tuo stile',
+    reasonFriends: 'Amici che vanno',
+    reasonLocation: 'Vicino a te',
   },
 };
 
