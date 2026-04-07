@@ -3,9 +3,11 @@ import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function HappeningNowBanner({ plan }) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   if (!plan) return null;
 
@@ -27,13 +29,13 @@ export default function HappeningNowBanner({ plan }) {
         <span className="text-2xl flex-shrink-0 animate-pulse">🔥</span>
         <div className="flex-1 min-w-0">
           <p className="text-orange-300 font-bold text-sm leading-tight">
-            Seu plano está acontecendo agora!
+            {t.planHappeningNow}
           </p>
           <p className="text-gray-400 text-xs truncate mt-0.5">{plan.title}</p>
         </div>
         <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-orange-500/20 flex-shrink-0">
           <Flame className="w-3 h-3 text-orange-400" />
-          <span className="text-orange-400 text-xs font-semibold">Live</span>
+          <span className="text-orange-400 text-xs font-semibold">{t.live}</span>
         </div>
       </motion.button>
     </motion.div>
