@@ -3,13 +3,14 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { ShieldCheck, Crown, Flame } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function CommunityMembersSpotlight({ members, profilesMap, plans, tc, currentUser }) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   if (!members.length) return null;
 
-  // Score: admins first, then by stories/activity
   const enriched = members
     .map(m => {
       const profile = profilesMap[m.user_id];
@@ -25,7 +26,6 @@ export default function CommunityMembersSpotlight({ members, profilesMap, plans,
 
   if (!enriched.length) return null;
 
-  // Top 3 get special treatment
   const topThree = enriched.slice(0, 3);
   const rest = enriched.slice(3);
 
@@ -34,8 +34,8 @@ export default function CommunityMembersSpotlight({ members, profilesMap, plans,
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
         <Crown className="w-4 h-4" style={{ color: tc }} />
-        <span className="text-white font-bold text-sm">Top Members</span>
-        <span className="text-gray-600 text-xs">({members.length} total)</span>
+        <span className="text-white font-bold text-sm">{t.topMembers}</span>
+        <span className="text-gray-600 text-xs">({members.length} {t.total})</span>
       </div>
 
       {/* Top 3 podium-style */}
@@ -70,13 +70,13 @@ export default function CommunityMembersSpotlight({ members, profilesMap, plans,
             </div>
 
             {/* Name */}
-            <span className="text-white text-xs font-bold truncate w-full text-center">{profile.display_name || 'User'}</span>
+            <span className="text-white text-xs font-bold truncate w-full text-center">{profile.display_name || t.user}</span>
 
             {/* Badges */}
             <div className="flex items-center gap-1">
               {isAdmin && (
                 <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full" style={{ background: `${tc}25`, color: tc }}>
-                  ADMIN
+                  {t.admin.toUpperCase()}
                 </span>
               )}
               {profile.is_verified && <ShieldCheck className="w-3 h-3 text-blue-400" />}
@@ -106,7 +106,7 @@ export default function CommunityMembersSpotlight({ members, profilesMap, plans,
                   ? <img src={profile.photos[0]} alt="" className="w-full h-full object-cover" />
                   : <div className="w-full h-full flex items-center justify-center text-[8px] font-bold text-white" style={{ background: tc }}>{profile.display_name?.[0] || '?'}</div>}
               </div>
-              <span className="text-white text-xs">{profile.display_name || 'User'}</span>
+              <span className="text-white text-xs">{profile.display_name || t.user}</span>
               {isAdmin && <span className="text-[8px] font-bold" style={{ color: tc }}>★</span>}
               {profile.is_verified && <ShieldCheck className="w-2.5 h-2.5 text-blue-400" />}
             </motion.button>
