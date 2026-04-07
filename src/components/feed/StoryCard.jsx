@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Sparkles, Play, Video } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
-// Random border colors for stories
 const storyColors = [
   'from-purple-500 to-purple-600',
   'from-red-500 to-red-600',
@@ -14,10 +14,7 @@ const storyColors = [
   'from-indigo-600 to-indigo-700'
 ];
 
-// User's own story color
 const ownStoryColor = 'from-[#00fea3] to-[#542b9b]';
-
-// New/unviewed story color (light blue)
 const newStoryColor = 'from-sky-300 to-sky-400';
 
 export default function StoryCard({ 
@@ -33,6 +30,8 @@ export default function StoryCard({
   currentUserId,
   happeningPlan = null
 }) {
+  const { t } = useLanguage();
+
   const sizes = {
     sm: { width: 'w-16', height: 'h-24', text: 'text-[9px]' },
     md: { width: 'w-20', height: 'h-28', text: 'text-[10px]' },
@@ -41,7 +40,6 @@ export default function StoryCard({
 
   const currentSize = sizes[size];
   
-  // Check if story is new (unviewed by current user)
   const isUnviewed = story && currentUserId && !story.viewed_by?.includes(currentUserId);
   const borderColor = isOwn ? ownStoryColor : (isUnviewed || isNew) ? newStoryColor : storyColors[colorIndex % storyColors.length];
 
@@ -55,7 +53,6 @@ export default function StoryCard({
         className="flex flex-col items-center gap-1.5"
       >
         <div className="relative">
-          {/* Pulsing neon ring when happening */}
           {isHappening && (
             <>
               <motion.div
@@ -86,7 +83,7 @@ export default function StoryCard({
         <span className={`${currentSize.text} max-w-[80px] text-center leading-tight ${
           isHappening ? 'text-[#00d4ff] font-semibold' : 'text-gray-400'
         }`}>
-          {isHappening ? '🔵 Plano ao vivo!' : 'Add'}
+          {isHappening ? t.livePlan : t.add}
         </span>
       </motion.button>
     );
@@ -146,7 +143,7 @@ export default function StoryCard({
           >NEW</motion.span>
         )}
         <span className={`${currentSize.text} ${isOwn ? 'text-[#00fea3] font-semibold' : 'text-gray-400'} max-w-16 truncate`}>
-          {isOwn ? 'Your Story' : (user?.display_name || 'User')}
+          {isOwn ? t.yourStory : (user?.display_name || t.user)}
         </span>
       </div>
     </motion.button>
