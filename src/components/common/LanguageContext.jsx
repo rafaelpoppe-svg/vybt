@@ -421,6 +421,7 @@ export const translations = {
     plansAtThisLocation: 'planos neste local',
     close: 'fechar',
     viewArrow: 'Ver →',
+    findGroups: 'Encontrar grupos',
   },
 
 en: {
@@ -843,6 +844,7 @@ en: {
     plansAtThisLocation: 'plans at this location',
     close: 'close',
     viewArrow: 'View →',
+    findGroups: 'Find groups',
   },
 
   es: {
@@ -1265,6 +1267,7 @@ en: {
     plansAtThisLocation: 'planes en este lugar',
     close: 'cerrar',
     viewArrow: 'Ver →',
+    findGroups: 'Encontrar grupos',
   },
 
   fr: {
@@ -1687,6 +1690,7 @@ en: {
     plansAtThisLocation: 'plans à cet endroit',
     close: 'fermer',
     viewArrow: 'Voir →',
+    findGroups: 'Trouver des groupes',
   },
 
   it: {
@@ -2109,6 +2113,7 @@ en: {
     plansAtThisLocation: 'piani in questo posto',
     close: 'chiudi',
     viewArrow: 'Vedi →',
+    findGroups: 'Trova gruppi',
   },
 };
 
