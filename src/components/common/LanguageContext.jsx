@@ -424,6 +424,7 @@ export const translations = {
     findGroups: 'Encontrar grupos',
     date: 'Data',
     timeRange: 'Intervalo de horas',
+    hotPlansTonight: 'Planos em Alta Esta Noite',
   },
 
 en: {
@@ -849,6 +850,7 @@ en: {
     findGroups: 'Find groups',
     date: 'Date',
     timeRange: 'Time range',
+    hotPlansTonight: 'Hot Plans Tonight',
   },
 
   es: {
@@ -1274,6 +1276,7 @@ en: {
     findGroups: 'Encontrar grupos',
     date: 'Fecha',
     timeRange: 'Rango horario',
+    hotPlansTonight: 'Planes en Tendencia Esta Noche',
   },
 
   fr: {
@@ -1699,6 +1702,7 @@ en: {
     findGroups: 'Trouver des groupes',
     date: 'Date',
     timeRange: 'Plage horaire',
+    hotPlansTonight: 'Plans Populaires Ce Soir',
   },
 
   it: {
@@ -2124,6 +2128,7 @@ en: {
     findGroups: 'Trova gruppi',
     date: 'Data',
     timeRange: 'Fascia oraria',
+    hotPlansTonight: 'Piani di Tendenza Stasera',
   },
 };
 
