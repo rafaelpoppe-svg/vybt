@@ -3,22 +3,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, AlertTriangle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-
-const reportReasons = [
-  'Conteúdo inapropriado ou ofensivo',
-  'Spam ou publicidade enganosa',
-  'Informações falsas ou enganosas',
-  'Conteúdo violento ou perturbador',
-  'Assédio ou bullying',
-  'Nudez ou conteúdo sexual',
-  'Outro'
-];
+import { useLanguage } from '../common/LanguageContext';
 
 export default function ReportContentModal({ isOpen, onClose, onReport, contentType = 'plan', contentTitle, isLoading }) {
   const [selectedReason, setSelectedReason] = useState('');
   const [details, setDetails] = useState('');
+  const { t } = useLanguage();
 
   if (!isOpen) return null;
+
+  const reportReasons = [
+    t.reportReasonInappropriate,
+    t.reportReasonSpam,
+    t.reportReasonFalse,
+    t.reportReasonViolent,
+    t.reportReasonHarassment,
+    t.reportReasonNudity,
+    t.reportReasonOther,
+  ];
 
   const handleSubmit = () => {
     if (selectedReason) {
@@ -28,7 +30,7 @@ export default function ReportContentModal({ isOpen, onClose, onReport, contentT
     }
   };
 
-  const label = contentType === 'story' ? 'história' : 'plano';
+  const label = contentType === 'story' ? t.reportStory : t.reportPlan;
 
   return (
     <AnimatePresence>
@@ -50,7 +52,7 @@ export default function ReportContentModal({ isOpen, onClose, onReport, contentT
             <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
               <AlertTriangle className="w-6 h-6 text-red-500" />
             </div>
-            <h2 className="text-xl font-bold text-white mb-1">Denunciar {label}</h2>
+            <h2 className="text-xl font-bold text-white mb-1">{label}</h2>
             {contentTitle && <p className="text-gray-500 text-sm truncate">"{contentTitle}"</p>}
           </div>
 
@@ -71,25 +73,25 @@ export default function ReportContentModal({ isOpen, onClose, onReport, contentT
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-400 text-sm mb-2">Detalhes adicionais (opcional)</label>
+            <label className="block text-gray-400 text-sm mb-2">{t.reportAdditionalDetails}</label>
             <Textarea
               value={details}
               onChange={(e) => setDetails(e.target.value)}
-              placeholder="Descreva o problema com mais detalhes..."
+              placeholder={t.reportDescribeProblem}
               className="bg-gray-800 border-gray-700 text-white min-h-20"
             />
           </div>
 
           <div className="flex gap-3">
             <Button variant="outline" onClick={onClose} className="flex-1 bg-gray-800 border-gray-700 text-white hover:bg-gray-700">
-              Cancelar
+              {t.cancel}
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={!selectedReason || isLoading}
               className="flex-1 bg-red-600 hover:bg-red-700 text-white"
             >
-              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Denunciar'}
+              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : t.report}
             </Button>
           </div>
         </motion.div>
