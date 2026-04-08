@@ -405,6 +405,8 @@ export const translations = {
     lastPlan: 'Último',
     plansForYou: 'Planos Para Você',
     myGroups: 'Os Meus Grupos',
+    filterNow: 'Agora',
+    filterLateNight: 'Madrugada',
   },
 
 en: {
@@ -811,6 +813,8 @@ en: {
     lastPlan: 'Last',
     plansForYou: 'Plans For You',
     myGroups: 'My Groups',
+    filterNow: 'Now',
+    filterLateNight: 'Late Night',
   },
 
   es: {
@@ -1217,6 +1221,8 @@ en: {
     lastPlan: 'Último',
     plansForYou: 'Planes Para Ti',
     myGroups: 'Mis Grupos',
+    filterNow: 'Ahora',
+    filterLateNight: 'Madrugada',
   },
 
   fr: {
@@ -1623,6 +1629,8 @@ en: {
     lastPlan: 'Dernier',
     plansForYou: 'Plans Pour Toi',
     myGroups: 'Mes Groupes',
+    filterNow: 'Maintenant',
+    filterLateNight: 'Nuit Tardive',
   },
 
   it: {
@@ -2029,6 +2037,8 @@ en: {
   lastPlan: 'Ultimo',
   plansForYou: 'Piani Per Te',
   myGroups: 'I Miei Gruppi',
+  filterNow: 'Adesso',
+  filterLateNight: 'Notte Fonda',
   },
 };
 
