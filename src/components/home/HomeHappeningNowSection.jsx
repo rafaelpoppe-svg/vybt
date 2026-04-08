@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Users } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function HomeHappeningNowSection({ plans = [], allParticipants = [], onPlanClick }) {
+  const { t } = useLanguage();
+
   const now = new Date();
   const happeningPlans = plans.filter(p => {
     if (!p.date || !p.time) return false;
@@ -12,7 +15,6 @@ export default function HomeHappeningNowSection({ plans = [], allParticipants = 
       ? new Date(`${p.date}T${p.end_time}:00`)
       : new Date(startDateTime.getTime() + 8 * 60 * 60 * 1000);
     if (!(now >= startDateTime && now <= endDateTime)) return false;
-    // Require ≥ 3 confirmed participants to appear in Live Now
     const goingCount = allParticipants.filter(pp => pp.plan_id === p.id).length;
     return goingCount >= 3;
   });
@@ -29,9 +31,9 @@ export default function HomeHappeningNowSection({ plans = [], allParticipants = 
           transition={{ repeat: Infinity, duration: 1.2 }}
           className="w-2.5 h-2.5 rounded-full bg-orange-500"
         />
-        <h2 className="text-white font-bold text-sm">Live Now</h2>
+        <h2 className="text-white font-bold text-sm">{t.liveNow}</h2>
         <span className="text-[10px] font-semibold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full">
-          {happeningPlans.length} {happeningPlans.length === 1 ? 'evento' : 'eventos'}
+          {happeningPlans.length} {happeningPlans.length === 1 ? t.eventSingular : t.eventsPlural}
         </span>
       </div>
 
@@ -80,7 +82,7 @@ export default function HomeHappeningNowSection({ plans = [], allParticipants = 
                 <div className="flex items-center gap-3 mt-1.5">
                   <div className="flex items-center gap-1">
                     <Users className="w-3 h-3 text-orange-400" />
-                    <span className="text-orange-400 text-xs font-semibold">{count} a participar</span>
+                    <span className="text-orange-400 text-xs font-semibold">{count} {t.participating}</span>
                   </div>
                   {plan.tags?.[0] && (
                     <span className="text-[10px] text-gray-500">{plan.tags[0]}</span>
