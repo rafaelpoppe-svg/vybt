@@ -115,6 +115,7 @@ export const translations = {
     // Explore
     plans: 'Planos',
     groups: 'Grupos',
+    group: 'Grupo',
     people: 'Pessoas',
     searchPlans: 'Pesquisar planos...',
     searchGroups: 'Pesquisar grupos...',
@@ -519,6 +520,7 @@ en: {
     // Explore
     plans: 'Plans',
     groups: 'Groups',
+    group: 'Group',
     people: 'People',
     searchPlans: 'Search plans...',
     searchGroups: 'Search groups...',
@@ -923,6 +925,7 @@ en: {
     // Explore
     plans: 'Planes',
     groups: 'Grupos',
+    group: 'Grupo',
     people: 'Personas',
     searchPlans: 'Buscar planes...',
     searchGroups: 'Buscar grupos...',
@@ -1327,6 +1330,7 @@ en: {
     // Explore
     plans: 'Plans',
     groups: 'Groupes',
+    group: 'Groupe',
     people: 'Personnes',
     searchPlans: 'Chercher des plans...',
     searchGroups: 'Chercher des groupes...',
@@ -1731,6 +1735,7 @@ en: {
     // Explore
     plans: 'Piani',
     groups: 'Gruppi',
+    group: 'Gruppo',
     people: 'Persone',
     searchPlans: 'Cerca piani...',
     searchGroups: 'Cerca gruppi...',
