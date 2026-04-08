@@ -404,6 +404,7 @@ export const translations = {
     friendsHerePlural: '{count} amigos aqui',
     lastPlan: 'Último',
     plansForYou: 'Planos Para Você',
+    myGroups: 'Os Meus Grupos',
   },
 
 en: {
@@ -809,6 +810,7 @@ en: {
     friendsHerePlural: '{count} friends here',
     lastPlan: 'Last',
     plansForYou: 'Plans For You',
+    myGroups: 'My Groups',
   },
 
   es: {
@@ -1214,6 +1216,7 @@ en: {
     friendsHerePlural: '{count} amigos aquí',
     lastPlan: 'Último',
     plansForYou: 'Planes Para Ti',
+    myGroups: 'Mis Grupos',
   },
 
   fr: {
@@ -1619,6 +1622,7 @@ en: {
     friendsHerePlural: '{count} amis ici',
     lastPlan: 'Dernier',
     plansForYou: 'Plans Pour Toi',
+    myGroups: 'Mes Groupes',
   },
 
   it: {
@@ -2024,6 +2028,7 @@ en: {
   friendsHerePlural: '{count} amici qui',
   lastPlan: 'Ultimo',
   plansForYou: 'Piani Per Te',
+  myGroups: 'I Miei Gruppi',
   },
 };
 
