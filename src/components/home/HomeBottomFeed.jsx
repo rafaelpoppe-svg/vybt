@@ -30,6 +30,7 @@ function InfoPill({ icon: Icon, label, accent }) {
 }
 
 function PlanFeedCard({ plan, participantCount, communityName, communityColor, communityImage, onClick }) {
+  const { t } = useLanguage();
   const accent = accentOf(plan);
   const isHappening = isLiveNow(plan);
   const isCommunityPlan = !!plan.community_id;
@@ -37,10 +38,10 @@ function PlanFeedCard({ plan, participantCount, communityName, communityColor, c
   let dateLabel = '';
   try { dateLabel = plan.date ? format(new Date(plan.date), 'EEE, MMM d') : ''; } catch (_) {}
 
-  const badgeLabel = isCommunityPlan ? communityName : 'Individual';
+  const badgeLabel = isCommunityPlan ? communityName : t.individual;
 
   const priceLabel = plan.price != null
-    ? plan.price === 0 ? 'Free' : `€${plan.price}`
+    ? plan.price === 0 ? t.free : `€${plan.price}`
     : null;
 
   return (
@@ -62,34 +63,34 @@ function PlanFeedCard({ plan, participantCount, communityName, communityColor, c
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/20 to-transparent" />
 
-        {/* Type badge — top left */}
-         <div
-           className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
-           style={isCommunityPlan ? {
-             background: `${communityColor || '#542b9b'}cc`,
-             border: `1px solid ${communityColor || '#542b9b'}88`,
-             color: '#fff',
-           } : {
-             background: 'rgba(0,0,0,0.65)',
-             border: '1px solid rgba(255,255,255,0.15)',
-             color: '#ccc',
-           }}
-         >
-           {isCommunityPlan && badgeLabel ? (
-             <>
-               {communityImage ? (
-                 <img src={communityImage} alt="" className="w-4 h-4 rounded object-cover" />
-               ) : (
-                 <Building2 className="w-2.5 h-2.5" />
-               )}
-               {badgeLabel}
-             </>
-           ) : (
-             <>🎯 Individual</>
-           )}
-         </div>
+        {/* Type badge */}
+        <div
+          className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
+          style={isCommunityPlan ? {
+            background: `${communityColor || '#542b9b'}cc`,
+            border: `1px solid ${communityColor || '#542b9b'}88`,
+            color: '#fff',
+          } : {
+            background: 'rgba(0,0,0,0.65)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            color: '#ccc',
+          }}
+        >
+          {isCommunityPlan && badgeLabel ? (
+            <>
+              {communityImage ? (
+                <img src={communityImage} alt="" className="w-4 h-4 rounded object-cover" />
+              ) : (
+                <Building2 className="w-2.5 h-2.5" />
+              )}
+              {badgeLabel}
+            </>
+          ) : (
+            <>🎯 {t.individual}</>
+          )}
+        </div>
 
-        {/* Status badges — top right */}
+        {/* Status badges */}
         <div className="absolute top-3 right-3 flex flex-col items-end gap-1">
           {isHappening && (
             <motion.div animate={{ opacity: [1, 0.5, 1] }} transition={{ repeat: Infinity, duration: 1 }}
@@ -99,17 +100,17 @@ function PlanFeedCard({ plan, participantCount, communityName, communityColor, c
           )}
           {plan.is_highlighted && (
             <div className="flex items-center gap-1 bg-purple-600/80 text-white text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur">
-              <Sparkles className="w-2.5 h-2.5" /> Featured
+              <Sparkles className="w-2.5 h-2.5" /> {t.featured}
             </div>
           )}
           {plan.is_on_fire && !plan.is_highlighted && (
             <div className="flex items-center gap-1 bg-red-500/80 text-white text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur">
-              <Flame className="w-2.5 h-2.5" /> Hot
+              <Flame className="w-2.5 h-2.5" /> {t.hot}
             </div>
           )}
         </div>
 
-        {/* Price pill — bottom right of image */}
+        {/* Price pill */}
         {priceLabel && (
           <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full backdrop-blur-md text-xs font-bold"
             style={{ background: plan.price === 0 ? 'rgba(34,197,94,0.85)' : `${accent}cc`, color: '#fff' }}>
@@ -119,8 +120,8 @@ function PlanFeedCard({ plan, participantCount, communityName, communityColor, c
       </div>
 
       {/* Content */}
-       <div className="px-4 pt-3 pb-4">
-         <h3 className="text-white font-bold text-xl leading-tight mb-3">{plan.title}</h3>
+      <div className="px-4 pt-3 pb-4">
+        <h3 className="text-white font-bold text-xl leading-tight mb-3">{plan.title}</h3>
 
         {plan.description && (
           <p className="text-gray-400 text-xs mb-3 line-clamp-2">{plan.description}</p>
@@ -134,9 +135,9 @@ function PlanFeedCard({ plan, participantCount, communityName, communityColor, c
           {plan.time && (
             <InfoPill icon={Clock} label={`${plan.time}${plan.end_time ? ` — ${plan.end_time}` : ''}`} accent={accent} />
           )}
-          <InfoPill icon={Users} label={`${participantCount} going`} accent={accent} />
+          <InfoPill icon={Users} label={t.goingCount.replace('{count}', participantCount)} accent={accent} />
           {plan.min_age != null && (
-            <InfoPill icon={UserCheck} label={`${plan.min_age}+ years`} accent={accent} />
+            <InfoPill icon={UserCheck} label={t.minAge.replace('{age}', plan.min_age)} accent={accent} />
           )}
         </div>
 
@@ -154,12 +155,17 @@ function PlanFeedCard({ plan, participantCount, communityName, communityColor, c
 }
 
 function CommunityFeedCard({ community, memberCount, friendsInCommunity, lastPlan, onClick }) {
+  const { t } = useLanguage();
   const accent = community.theme_color || '#00c6d2';
 
   let lastPlanLabel = '';
   try {
     if (lastPlan?.date) lastPlanLabel = format(new Date(lastPlan.date), 'EEE, MMM d');
   } catch (_) {}
+
+  const friendsLabel = friendsInCommunity === 1
+    ? t.friendsHere.replace('{count}', friendsInCommunity)
+    : t.friendsHerePlural.replace('{count}', friendsInCommunity);
 
   return (
     <motion.button
@@ -181,7 +187,7 @@ function CommunityFeedCard({ community, memberCount, friendsInCommunity, lastPla
         {/* Community badge */}
         <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
           style={{ background: 'rgba(84,43,155,0.8)', border: '1px solid #542b9b88', color: '#e0c9ff' }}>
-          <Building2 className="w-2.5 h-2.5" /> Community
+          <Building2 className="w-2.5 h-2.5" /> {t.community}
         </div>
 
         {/* Member count pill */}
@@ -200,14 +206,14 @@ function CommunityFeedCard({ community, memberCount, friendsInCommunity, lastPla
 
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-3">
           {community.city && <InfoPill icon={MapPin} label={community.city} accent={accent} />}
-          <InfoPill icon={Users} label={`${memberCount} members`} accent={accent} />
+          <InfoPill icon={Users} label={t.membersCount2.replace('{count}', memberCount)} accent={accent} />
           {friendsInCommunity > 0 && (
-            <InfoPill icon={UserCheck} label={`${friendsInCommunity} friend${friendsInCommunity > 1 ? 's' : ''} here`} accent={accent} />
+            <InfoPill icon={UserCheck} label={friendsLabel} accent={accent} />
           )}
           {lastPlan && (
             <InfoPill
               icon={CalendarDays}
-              label={`Last: ${lastPlan.title?.slice(0, 16)}${lastPlan.title?.length > 16 ? '…' : ''} · ${lastPlanLabel}`}
+              label={`${t.lastPlan}: ${lastPlan.title?.slice(0, 16)}${lastPlan.title?.length > 16 ? '…' : ''} · ${lastPlanLabel}`}
               accent={accent}
             />
           )}
@@ -239,7 +245,8 @@ export default function HomeBottomFeed({
 }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('foryou');
-  const {t} = useLanguage();
+  const { t } = useLanguage();
+
   const forYouItems = (() => {
     const active = plans.filter(p => !['ended', 'terminated', 'voting', 'renewed'].includes(p.status) && !p.is_private);
     const highlighted = active.filter(p => p.is_highlighted);
@@ -267,7 +274,7 @@ export default function HomeBottomFeed({
 
   const TABS = [
     { id: 'foryou', label: t.forYou, emoji: '✨' },
-    { id: 'myspace', label: 'My Space', emoji: '🗓️' },
+    { id: 'myspace', label: t.mySpace, emoji: '🗓️' },
   ];
 
   const items = activeTab === 'foryou' ? forYouItems : mySpaceItems;
@@ -277,7 +284,6 @@ export default function HomeBottomFeed({
     return acc;
   }, {});
 
-  // Friends per community
   const friendsPerCommunity = communityMembers.reduce((acc, m) => {
     if (friendIds.includes(m.user_id)) {
       acc[m.community_id] = (acc[m.community_id] || 0) + 1;
@@ -285,7 +291,6 @@ export default function HomeBottomFeed({
     return acc;
   }, {});
 
-  // Last plan per community
   const lastPlanByCommunity = plans.reduce((acc, p) => {
     if (!p.community_id) return acc;
     if (!acc[p.community_id] || p.date > acc[p.community_id].date) {
@@ -325,10 +330,9 @@ export default function HomeBottomFeed({
         >
           {items.length === 0 ? (
             <div className="text-center py-10 text-gray-600 text-sm">
-              {activeTab === 'myspace' ? "You haven't joined any plans or communities yet" : 'Nothing to show yet'}
+              {activeTab === 'myspace' ? t.notJoinedYet : t.nothingToShow}
             </div>
           ) : (
-            /* Vertical stacked feed — full width, one card per view */
             <div className="flex flex-col gap-4">
               {items.map((item) => (
                 <div key={`${item.type}-${item.data.id}`}>
