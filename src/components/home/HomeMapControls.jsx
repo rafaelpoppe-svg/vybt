@@ -2,22 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { SlidersHorizontal } from 'lucide-react';
 import { format } from 'date-fns';
-import { pt } from 'date-fns/locale';
+import { pt, enUS, es, fr, it } from 'date-fns/locale';
 import { useLanguage } from '../common/LanguageContext';
 
+const DATE_FNS_LOCALES = { pt, en: enUS, es, fr, it };
+
 export default function HomeMapControls({ activeSort, setActiveSort, onFilterClick, hasActiveFilters }) {
-  const {t} = useLanguage();
+  const { t, language } = useLanguage();
+
   const SORT_TABS = [
-    { id: 'foryou',   label: t.forYou,   emoji: '✨', activeColor: 'bg-gradient-to-r from-[#00c6d2] to-[#7c3aed]', activeText: 'text-white' },
-    { id: 'myplans',  label: t.myPlans,  emoji: '🗓️', activeColor: 'bg-gradient-to-r from-[#542b9b] to-[#00c6d2]', activeText: 'text-white' },
+    { id: 'foryou',  label: t.forYou,  emoji: '✨', activeColor: 'bg-gradient-to-r from-[#00c6d2] to-[#7c3aed]', activeText: 'text-white' },
+    { id: 'myplans', label: t.myPlans, emoji: '🗓️', activeColor: 'bg-gradient-to-r from-[#542b9b] to-[#00c6d2]', activeText: 'text-white' },
   ];
-  
+
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
+
+  const dateLocale = DATE_FNS_LOCALES[language] || DATE_FNS_LOCALES.en;
 
   return (
     <div className="flex items-center justify-between mb-3 px-4">
@@ -44,7 +49,7 @@ export default function HomeMapControls({ activeSort, setActiveSort, onFilterCli
       <div className="flex items-center gap-2">
         <div className="text-right">
           <p className="text-white font-black text-sm leading-none">{format(now, 'HH:mm')}</p>
-          <p className="text-gray-500 text-[10px] leading-none mt-0.5">{format(now, 'dd MMM', { locale: pt })}</p>
+          <p className="text-gray-500 text-[10px] leading-none mt-0.5">{format(now, 'dd MMM', { locale: dateLocale })}</p>
         </div>
         <motion.button
           whileTap={{ scale: 0.9 }}
