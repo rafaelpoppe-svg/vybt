@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AtSign, Check, X, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function UsernameSelect({ value, onChange, onAvailabilityChange }) {
   const [checking, setChecking] = useState(false);
-  const [available, setAvailable] = useState(null); // null | true | false
+  const [available, setAvailable] = useState(null);
+  const { t } = useLanguage();
 
   const sanitize = (v) => v.toLowerCase().replace(/[^a-z0-9_.]/g, '').slice(0, 24);
 
@@ -43,8 +45,8 @@ export default function UsernameSelect({ value, onChange, onAvailabilityChange }
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-white mb-2">Choose your @username</h2>
-        <p className="text-gray-400">This is how people will find you. It must be unique.</p>
+        <h2 className="text-3xl font-bold text-white mb-2">{t.chooseUsername}</h2>
+        <p className="text-gray-400">{t.usernameSubtitle}</p>
       </div>
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative">
@@ -53,7 +55,7 @@ export default function UsernameSelect({ value, onChange, onAvailabilityChange }
           type="text"
           value={value}
           onChange={(e) => handleChange(e.target.value)}
-          placeholder="yourname"
+          placeholder={t.usernamePlaceholder}
           maxLength={24}
           autoCapitalize="none"
           autoCorrect="off"
@@ -69,16 +71,16 @@ export default function UsernameSelect({ value, onChange, onAvailabilityChange }
 
       <div className="space-y-1.5 text-sm">
         {value.length > 0 && !isValid && (
-          <p className="text-red-400 text-xs">3–24 characters, only letters, numbers, _ and .</p>
+          <p className="text-red-400 text-xs">{t.usernameInvalid}</p>
         )}
         {available === false && (
-          <p className="text-red-400 text-xs">@{value} is already taken. Try another.</p>
+          <p className="text-red-400 text-xs">{t.usernameTaken.replace('{username}', value)}</p>
         )}
         {available === true && (
-          <p className="text-green-400 text-xs">@{value} is available! ✨</p>
+          <p className="text-green-400 text-xs">{t.usernameAvailable.replace('{username}', value)}</p>
         )}
         {value.length === 0 && (
-          <p className="text-gray-600 text-xs">e.g. @johndoe, @party_girl, @dj.mix</p>
+          <p className="text-gray-600 text-xs">{t.usernameExample}</p>
         )}
       </div>
     </div>
