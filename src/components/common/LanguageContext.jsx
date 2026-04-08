@@ -422,6 +422,8 @@ export const translations = {
     close: 'fechar',
     viewArrow: 'Ver →',
     findGroups: 'Encontrar grupos',
+    date: 'Data',
+    timeRange: 'Intervalo de horas',
   },
 
 en: {
@@ -845,6 +847,8 @@ en: {
     close: 'close',
     viewArrow: 'View →',
     findGroups: 'Find groups',
+    date: 'Date',
+    timeRange: 'Time range',
   },
 
   es: {
@@ -1268,6 +1272,8 @@ en: {
     close: 'cerrar',
     viewArrow: 'Ver →',
     findGroups: 'Encontrar grupos',
+    date: 'Fecha',
+    timeRange: 'Rango horario',
   },
 
   fr: {
@@ -1691,6 +1697,8 @@ en: {
     close: 'fermer',
     viewArrow: 'Voir →',
     findGroups: 'Trouver des groupes',
+    date: 'Date',
+    timeRange: 'Plage horaire',
   },
 
   it: {
@@ -2114,6 +2122,8 @@ en: {
     close: 'chiudi',
     viewArrow: 'Vedi →',
     findGroups: 'Trova gruppi',
+    date: 'Data',
+    timeRange: 'Fascia oraria',
   },
 };
 
