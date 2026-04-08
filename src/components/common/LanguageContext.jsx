@@ -418,6 +418,9 @@ export const translations = {
     activityVoting: 'votação terminando',
     liveActivities: 'Atividade ao Vivo',
     last24h: 'Últimas 24h',
+    plansAtThisLocation: 'planos neste local',
+    close: 'fechar',
+    viewArrow: 'Ver →',
   },
 
 en: {
@@ -837,6 +840,9 @@ en: {
     activityVoting: 'voting ending soon',
     liveActivities: 'Live Activities',
     last24h: 'Last 24h',
+    plansAtThisLocation: 'plans at this location',
+    close: 'close',
+    viewArrow: 'View →',
   },
 
   es: {
@@ -1256,6 +1262,9 @@ en: {
     activityVoting: 'votación terminando',
     liveActivities: 'Actividad en Vivo',
     last24h: 'Últimas 24h',
+    plansAtThisLocation: 'planes en este lugar',
+    close: 'cerrar',
+    viewArrow: 'Ver →',
   },
 
   fr: {
@@ -1675,6 +1684,9 @@ en: {
     activityVoting: 'vote bientôt terminé',
     liveActivities: 'Activité en Direct',
     last24h: 'Dernières 24h',
+    plansAtThisLocation: 'plans à cet endroit',
+    close: 'fermer',
+    viewArrow: 'Voir →',
   },
 
   it: {
@@ -2094,6 +2106,9 @@ en: {
     activityVoting: 'votazione in scadenza',
     liveActivities: 'Attività in Diretta',
     last24h: 'Ultime 24h',
+    plansAtThisLocation: 'piani in questo posto',
+    close: 'chiudi',
+    viewArrow: 'Vedi →',
   },
 };
 
