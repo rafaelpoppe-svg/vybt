@@ -425,6 +425,9 @@ export const translations = {
     date: 'Data',
     timeRange: 'Intervalo de horas',
     hotPlansTonight: 'Planos em Alta Esta Noite',
+    notJoinedAnyGroup: 'Você ainda não entrou em nenhum grupo',
+    exploreGroups: 'Explorar Grupos',
+    findMoreGroups: 'Encontrar mais grupos',
   },
 
 en: {
@@ -851,6 +854,10 @@ en: {
     date: 'Date',
     timeRange: 'Time range',
     hotPlansTonight: 'Hot Plans Tonight',
+    notJoinedAnyGroup: "You haven't joined any group yet",
+    exploreGroups: 'Explore Groups',
+    findMoreGroups: 'Find more groups',
+    
   },
 
   es: {
@@ -1277,6 +1284,9 @@ en: {
     date: 'Fecha',
     timeRange: 'Rango horario',
     hotPlansTonight: 'Planes en Tendencia Esta Noche',
+    notJoinedAnyGroup: 'Aún no te has unido a ningún grupo',
+    exploreGroups: 'Explorar Grupos',
+    findMoreGroups: 'Encontrar más grupos',
   },
 
   fr: {
@@ -1703,6 +1713,9 @@ en: {
     date: 'Date',
     timeRange: 'Plage horaire',
     hotPlansTonight: 'Plans Populaires Ce Soir',
+    notJoinedAnyGroup: "T'as pas encore rejoint de groupe",
+    exploreGroups: 'Explorer les Groupes',
+    findMoreGroups: 'Trouver plus de groupes',
   },
 
   it: {
@@ -2129,6 +2142,9 @@ en: {
     date: 'Data',
     timeRange: 'Fascia oraria',
     hotPlansTonight: 'Piani di Tendenza Stasera',
+    notJoinedAnyGroup: 'Non hai ancora aderito a nessun gruppo',
+    exploreGroups: 'Esplora Gruppi',
+    findMoreGroups: 'Trova altri gruppi',
   },
 };
 
