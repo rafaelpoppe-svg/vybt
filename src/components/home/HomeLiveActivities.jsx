@@ -2,87 +2,49 @@ import React, { useMemo } from 'react';
 import { Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
-import { pt } from 'date-fns/locale';
+import { pt, en, es, fr, it } from 'date-fns/locale';
+import { useLanguage } from '../common/LanguageContext';
 
-const ACTIVITY_CONFIG = {
-  join:      { emoji: '🎉', color: '#00c6d2', label: 'entrou em' },
-  story:     { emoji: '📸', color: '#a855f7', label: 'publicou uma story em' },
-  created:   { emoji: '✨', color: '#f59e0b', label: 'criou o plano' },
-  hot:       { emoji: '🔥', color: '#ef4444', label: 'plano a bombar perto de ti' },
-  happening: { emoji: '⚡', color: '#f97316', label: 'live agora' },
-  voting:    { emoji: '🗳️', color: '#3b82f6', label: 'votação a terminar' },
-};
+const DATE_FNS_LOCALES = { pt, en, es, fr, it };
 
-export default function HomeLiveActivities({ friendIds = [], allParticipants = [], friendStories = []/*,APAGAR stories = []*/, profilesMap = {}, plans = [], onPlanClick, onStoryClick }) {
+export default function HomeLiveActivities({ friendIds = [], allParticipants = [], friendStories = [], profilesMap = {}, plans = [], onPlanClick, onStoryClick }) {
+  const { t, language } = useLanguage();
+
+  const ACTIVITY_CONFIG = {
+    join:      { emoji: '🎉', color: '#00c6d2', label: t.activityJoin },
+    story:     { emoji: '📸', color: '#a855f7', label: t.activityStory },
+    created:   { emoji: '✨', color: '#f59e0b', label: t.activityCreated },
+    hot:       { emoji: '🔥', color: '#ef4444', label: t.activityHot },
+    happening: { emoji: '⚡', color: '#f97316', label: t.activityHappening },
+    voting:    { emoji: '🗳️', color: '#3b82f6', label: t.activityVoting },
+  };
+
   const activities = useMemo(() => {
     const result = [];
     const now = Date.now();
     const DAY = 24 * 60 * 60 * 1000;
 
-    // Friend joined a plan (last 24h)
     allParticipants.forEach(p => {
       if (!friendIds.includes(p.user_id)) return;
       if (!p.joined_at) return;
       if (now - new Date(p.joined_at).getTime() > DAY) return;
       const plan = plans.find(pl => pl.id === p.plan_id);
       if (!plan) return;
-      result.push({
-        id: `join-${p.id}`,
-        type: 'join',
-        profile: profilesMap[p.user_id],
-        planName: plan.title,
-        time: p.joined_at,
-        plan,
-        story: null,
-      });
+      result.push({ id: `join-${p.id}`, type: 'join', profile: profilesMap[p.user_id], planName: plan.title, time: p.joined_at, plan, story: null });
     });
 
-    // Friend posted a story (last 24h) REMOVER SE DER CERTO
-    /*stories.forEach(s => {
-      if (!friendIds.includes(s.user_id)) return;
+    friendStories.forEach(s => {
       if (now - new Date(s.created_date).getTime() > DAY) return;
       const plan = plans.find(pl => pl.id === s.plan_id);
-      result.push({
-        id: `story-${s.id}`,
-        type: 'story',
-        profile: profilesMap[s.user_id],
-        planName: plan?.title || '',
-        time: s.created_date,
-        plan: plan || null,
-        story: s,
-      });
-    })*/
+      result.push({ id: `story-${s.id}`, type: 'story', profile: profilesMap[s.user_id], planName: plan?.title || '', time: s.created_date, plan: plan || null, story: s });
+    });
 
-      friendStories.forEach(s => {
-        if (now - new Date(s.created_date).getTime() > DAY) return;
-        const plan = plans.find(pl => pl.id === s.plan_id);
-        result.push({
-          id: `story-${s.id}`,
-          type: 'story',
-          profile: profilesMap[s.user_id],
-          planName: plan?.title || '',
-          time: s.created_date,
-          plan: plan || null,
-          story: s,
-        });
-      });
-      
-    // Friend created a plan (last 24h)
     plans.forEach(plan => {
       if (!friendIds.includes(plan.creator_id)) return;
       if (now - new Date(plan.created_date).getTime() > DAY) return;
-      result.push({
-        id: `created-${plan.id}`,
-        type: 'created',
-        profile: profilesMap[plan.creator_id],
-        planName: plan.title,
-        time: plan.created_date,
-        plan,
-        story: null,
-      });
+      result.push({ id: `created-${plan.id}`, type: 'created', profile: profilesMap[plan.creator_id], planName: plan.title, time: plan.created_date, plan, story: null });
     });
 
-    // Helper: purely temporal — is this plan happening right now?
     const isActuallyLive = (plan) => {
       if (['ended', 'terminated', 'voting'].includes(plan.status)) return false;
       if (!plan.date || !plan.time) return false;
@@ -93,57 +55,29 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
       return Date.now() >= start.getTime() && Date.now() <= end.getTime();
     };
 
-    // Area activities — Hot plans
     plans.forEach(plan => {
       if (plan.is_on_fire || (plan.recent_joins >= 50)) {
         const validStatus = plan.status === 'upcoming' || isActuallyLive(plan);
         if (validStatus) {
-          result.push({
-            id: `hot-${plan.id}`,
-            type: 'hot',
-            profile: null,
-            planName: plan.title,
-            time: plan.updated_date || plan.created_date,
-            plan,
-            story: null,
-          });
+          result.push({ id: `hot-${plan.id}`, type: 'hot', profile: null, planName: plan.title, time: plan.updated_date || plan.created_date, plan, story: null });
         }
       }
     });
 
-    // Area activities — Happening now (only if still within end time and ≥ 3 participants)
     plans.forEach(plan => {
       if (isActuallyLive(plan)) {
         const goingCount = allParticipants.filter(p => p.plan_id === plan.id).length;
         if (goingCount < 3) return;
-        result.push({
-          id: `happening-${plan.id}`,
-          type: 'happening',
-          profile: null,
-          planName: plan.title,
-          time: plan.updated_date || plan.created_date,
-          plan,
-          story: null,
-        });
+        result.push({ id: `happening-${plan.id}`, type: 'happening', profile: null, planName: plan.title, time: plan.updated_date || plan.created_date, plan, story: null });
       }
     });
 
-    // Area activities — Voting ending soon
     plans.forEach(plan => {
       if (plan.status === 'voting') {
-        result.push({
-          id: `voting-${plan.id}`,
-          type: 'voting',
-          profile: null,
-          planName: plan.title,
-          time: plan.voting_ends_at || plan.updated_date || plan.created_date,
-          plan,
-          story: null,
-        });
+        result.push({ id: `voting-${plan.id}`, type: 'voting', profile: null, planName: plan.title, time: plan.voting_ends_at || plan.updated_date || plan.created_date, plan, story: null });
       }
     });
 
-    // Sort by time desc, deduplicate plan IDs for area events, limit to 10
     const seen = new Set();
     return result
       .sort((a, b) => new Date(b.time) - new Date(a.time))
@@ -168,22 +102,16 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
     }
   };
 
+  const dateLocale = DATE_FNS_LOCALES[language] || DATE_FNS_LOCALES.en;
+
   return (
     <section className="px-4 mb-6">
-      {/* Container */}
-      <div
-        style={{
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: 20,
-          overflow: 'hidden',
-        }}
-      >
+      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden' }}>
         {/* Header */}
         <div className="flex items-center gap-2 px-4 pt-4 pb-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <Zap className="w-4 h-4 text-[#00c6d2]" fill="#00c6d2" />
-          <h2 className="text-white font-bold text-sm tracking-wide">Live Activities</h2>
-          <span className="ml-auto text-[10px] text-gray-500 font-medium">Últimas 24h</span>
+          <h2 className="text-white font-bold text-sm tracking-wide">{t.liveActivities}</h2>
+          <span className="ml-auto text-[10px] text-gray-500 font-medium">{t.last24h}</span>
         </div>
 
         {/* Activities */}
@@ -203,20 +131,15 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
                 className="flex items-center gap-3 px-4 py-3"
                 style={{ cursor: isClickable ? 'pointer' : 'default' }}
               >
-                {/* Avatar or emoji icon */}
                 {isAreaEvent ? (
-                  <div
-                    className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-base"
-                    style={{ background: `${cfg.color}18`, border: `1.5px solid ${cfg.color}44` }}
-                  >
+                  <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-base"
+                    style={{ background: `${cfg.color}18`, border: `1.5px solid ${cfg.color}44` }}>
                     {cfg.emoji}
                   </div>
                 ) : (
                   <div className="relative flex-shrink-0">
-                    <div
-                      className="w-8 h-8 rounded-full overflow-hidden bg-white/10 flex items-center justify-center"
-                      style={{ border: `1.5px solid ${cfg.color}66` }}
-                    >
+                    <div className="w-8 h-8 rounded-full overflow-hidden bg-white/10 flex items-center justify-center"
+                      style={{ border: `1.5px solid ${cfg.color}66` }}>
                       {act.profile?.photos?.[0] ? (
                         <img src={act.profile.photos[0]} className="w-full h-full object-cover" alt="" />
                       ) : (
@@ -227,11 +150,10 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
                   </div>
                 )}
 
-                {/* Text */}
                 <div className="flex-1 min-w-0">
                   <p className="text-white text-xs leading-tight truncate">
                     {!isAreaEvent && (
-                      <span className="font-bold">{act.profile?.display_name || 'Alguém'} </span>
+                      <span className="font-bold">{act.profile?.display_name || t.someone} </span>
                     )}
                     <span className="text-gray-400">{cfg.label} </span>
                     {act.planName && (
@@ -239,11 +161,10 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
                     )}
                   </p>
                   <p className="text-gray-600 text-[10px] mt-0.5">
-                    {formatDistanceToNow(new Date(act.time), { addSuffix: true, locale: pt })}
+                    {formatDistanceToNow(new Date(act.time), { addSuffix: true, locale: dateLocale })}
                   </p>
                 </div>
 
-                {/* Arrow if clickable */}
                 {isClickable && (
                   <span className="text-gray-600 text-xs flex-shrink-0">›</span>
                 )}
