@@ -4,7 +4,8 @@ import { Sparkles, Users, ChevronRight, MapPin } from 'lucide-react';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function HomeForYouSection({ plans = [], allParticipants = [], onPlanClick }) {
-  const {t} = useLanguage();
+  const { t } = useLanguage();
+
   const forYou = plans
     .filter(p => p.status !== 'terminated' && p.status !== 'ended')
     .slice(0, 6);
@@ -47,7 +48,6 @@ export default function HomeForYouSection({ plans = [], allParticipants = [], on
                   : <div className="w-full h-full flex items-center justify-center text-3xl"
                       style={{ background: `linear-gradient(135deg,#1a1a2e,${color}66)` }}>🎉</div>
                 }
-                {/* Glow circle overlay */}
                 <div style={{
                   position: 'absolute', bottom: 6, right: 6,
                   width: 28, height: 28, borderRadius: '50%',
@@ -58,7 +58,7 @@ export default function HomeForYouSection({ plans = [], allParticipants = [], on
                 }}>🎉</div>
 
                 {isHappening && (
-                  <motion.div animate={{ opacity: [1,0.4,1] }} transition={{ repeat: Infinity, duration: 1 }}
+                  <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ repeat: Infinity, duration: 1 }}
                     className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full bg-orange-500 text-white">● LIVE</motion.div>
                 )}
               </div>
