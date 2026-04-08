@@ -440,6 +440,7 @@ export const translations = {
     reportReasonHarassment: 'Assédio ou bullying',
     reportReasonNudity: 'Nudez ou conteúdo sexual',
     reportReasonOther: 'Outro',
+    photoNotAllowed: 'Esta foto não é permitida. Por favor usa uma foto real tua.',
   },
 
 en: {
@@ -881,6 +882,7 @@ en: {
     reportReasonHarassment: 'Harassment or bullying',
     reportReasonNudity: 'Nudity or sexual content',
     reportReasonOther: 'Other',
+    photoNotAllowed: 'This photo is not allowed. Please use a real photo of yourself.',
     
   },
 
@@ -1323,6 +1325,7 @@ en: {
     reportReasonHarassment: 'Acoso o bullying',
     reportReasonNudity: 'Desnudez o contenido sexual',
     reportReasonOther: 'Otro',
+    photoNotAllowed: 'Esta foto no está permitida. Por favor usa una foto real tuya.',
   },
 
   fr: {
@@ -1764,6 +1767,7 @@ en: {
     reportReasonHarassment: 'Harcèlement ou intimidation',
     reportReasonNudity: 'Nudité ou contenu sexuel',
     reportReasonOther: 'Autre',
+    photoNotAllowed: 'Cette photo n\'est pas autorisée. Utilise une vraie photo de toi.',
   },
 
   it: {
@@ -2205,6 +2209,7 @@ en: {
     reportReasonHarassment: 'Molestie o bullismo',
     reportReasonNudity: 'Nudità o contenuto sessuale',
     reportReasonOther: 'Altro',
+    photoNotAllowed: 'Questa foto non è consentita. Usa una foto reale di te stesso.',
   },
 };
 
