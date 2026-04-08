@@ -402,7 +402,6 @@ export const translations = {
     friendsHere: '{count} amigo aqui',
     friendsHerePlural: '{count} amigos aqui',
     lastPlan: 'Último',
-    community: 'Comunidade',
     plansForYou: 'Planos Para Você',
   },
 
@@ -807,7 +806,6 @@ en: {
     friendsHere: '{count} friend here',
     friendsHerePlural: '{count} friends here',
     lastPlan: 'Last',
-    community: 'Community',
     plansForYou: 'Plans For You',
   },
 
@@ -1212,7 +1210,6 @@ en: {
     friendsHere: '{count} amigo aquí',
     friendsHerePlural: '{count} amigos aquí',
     lastPlan: 'Último',
-    community: 'Comunidad',
     plansForYou: 'Planes Para Ti',
   },
 
@@ -1617,7 +1614,6 @@ en: {
     friendsHere: '{count} ami ici',
     friendsHerePlural: '{count} amis ici',
     lastPlan: 'Dernier',
-    community: 'Communauté',
     plansForYou: 'Plans Pour Toi',
   },
 
@@ -2022,7 +2018,6 @@ en: {
   friendsHere: '{count} amico qui',
   friendsHerePlural: '{count} amici qui',
   lastPlan: 'Ultimo',
-  community: 'Comunità',
   plansForYou: 'Piani Per Te',
   },
 };
