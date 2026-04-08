@@ -5,15 +5,15 @@ import { useLanguage } from '../common/LanguageContext';
 
 const PARTY_TYPES = ['All', 'Club', 'Bar', 'House Party', 'Pub Crawl', 'Festival', 'Rooftop', 'Beach', 'Erasmus'];
 
-
 export default function HomeFilterBar({ onFilterChange }) {
-  const {t} = useLanguage();
+  const { t } = useLanguage();
+
   const TIME_FILTERS = [
-  { label: 'All', value: 'all' },
-  { label: 'Now', value: 'now' },
-  { label: t.tonight, value: 'tonight' },
-  { label: 'Late Night', value: 'late' },
-];
+    { label: t.allTag, value: 'all' },
+    { label: t.filterNow, value: 'now' },
+    { label: t.tonight, value: 'tonight' },
+    { label: t.filterLateNight, value: 'late' },
+  ];
 
   const [activeTime, setActiveTime] = useState('all');
   const [activeType, setActiveType] = useState('All');
@@ -43,7 +43,7 @@ export default function HomeFilterBar({ onFilterChange }) {
               border: activeTime === f.value ? 'none' : '1px solid rgba(255,255,255,0.1)',
             }}
           >
-            {f.value === 'now' && <motion.div animate={{ opacity: [1,0.3,1] }} transition={{ repeat: Infinity, duration: 1 }} className="w-1.5 h-1.5 rounded-full bg-red-500" />}
+            {f.value === 'now' && <motion.div animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 1 }} className="w-1.5 h-1.5 rounded-full bg-red-500" />}
             {f.value === 'tonight' && <Clock className="w-3 h-3" />}
             {f.label}
           </motion.button>
