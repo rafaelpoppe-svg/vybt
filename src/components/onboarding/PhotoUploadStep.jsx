@@ -31,7 +31,7 @@ export default function PhotoUploadStep({ photos, onChange }) {
           context: 'profile_photo'
         });
         if (result.data && result.data.approved === false) {
-          setModerationError(result.data.reason || 'This photo is not allowed. Please use a real photo of yourself.');
+          setModerationError(result.data.reason || t.photoNotAllowed);
           setPreviews(prev => { const n = { ...prev }; delete n[index]; return n; });
           setUploadingIndex(null);
           return;
