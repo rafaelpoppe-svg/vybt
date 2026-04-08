@@ -187,7 +187,7 @@ function CommunityFeedCard({ community, memberCount, friendsInCommunity, lastPla
         {/* Community badge */}
         <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold"
           style={{ background: 'rgba(84,43,155,0.8)', border: '1px solid #542b9b88', color: '#e0c9ff' }}>
-          <Building2 className="w-2.5 h-2.5" /> {t.community}
+          <Building2 className="w-2.5 h-2.5" /> {t.group}
         </div>
 
         {/* Member count pill */}
