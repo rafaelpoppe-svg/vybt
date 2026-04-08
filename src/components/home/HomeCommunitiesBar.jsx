@@ -4,17 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Flame } from 'lucide-react';
 import { format } from 'date-fns';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function HomeCommunitiesBar({ plans = [] }) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const today = format(new Date(), 'yyyy-MM-dd');
-
   const now = new Date();
 
   const happeningPlans = plans.filter(p => {
     if (p.status !== 'happening') return false;
-    // If the plan has an end_time today and it has already passed, exclude it
     if (p.end_time && p.date) {
       const endDateTime = new Date(`${p.date}T${p.end_time}`);
       if (endDateTime < now) return false;
@@ -31,7 +31,7 @@ export default function HomeCommunitiesBar({ plans = [] }) {
     <div className="mb-4">
       <div className="flex items-center px-4 mb-2 gap-1.5">
         <span className="text-sm">🗓️</span>
-        <h3 className="text-white font-bold text-sm">Plans For You</h3>
+        <h3 className="text-white font-bold text-sm">{t.plansForYou}</h3>
       </div>
 
       <div className="overflow-x-auto scrollbar-hide px-4" data-hscroll="1">
@@ -51,7 +51,6 @@ export default function HomeCommunitiesBar({ plans = [] }) {
                 className="relative flex-shrink-0 rounded-2xl overflow-hidden"
                 style={{ width: 130, height: 90 }}
               >
-                {/* Live pulsing border */}
                 {isLive && (
                   <motion.div
                     animate={{ opacity: [1, 0.3, 1] }}
@@ -61,7 +60,6 @@ export default function HomeCommunitiesBar({ plans = [] }) {
                   />
                 )}
 
-                {/* Non-live border */}
                 {!isLive && (
                   <div
                     className="absolute inset-0 rounded-2xl pointer-events-none z-10"
@@ -69,7 +67,6 @@ export default function HomeCommunitiesBar({ plans = [] }) {
                   />
                 )}
 
-                {/* Background */}
                 {plan.cover_image ? (
                   <img src={plan.cover_image} alt="" className="absolute inset-0 w-full h-full object-cover" />
                 ) : (
@@ -79,10 +76,8 @@ export default function HomeCommunitiesBar({ plans = [] }) {
                   />
                 )}
 
-                {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-                {/* Live badge */}
                 {isLive && (
                   <div className="absolute top-2 left-2 z-20 flex items-center gap-1 bg-orange-500 rounded-full px-2 py-0.5">
                     <motion.div
@@ -94,13 +89,11 @@ export default function HomeCommunitiesBar({ plans = [] }) {
                   </div>
                 )}
 
-                {/* Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-2 z-20">
                   <p className="text-white font-bold text-[11px] leading-tight line-clamp-2">{plan.title}</p>
                   <p className="text-gray-300 text-[9px] mt-0.5">{plan.time}</p>
                 </div>
 
-                {/* Theme color accent bottom bar */}
                 <div
                   className="absolute bottom-0 left-0 right-0 h-0.5 z-20"
                   style={{ background: isLive ? '#f97316' : color }}
