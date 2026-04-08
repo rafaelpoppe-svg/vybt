@@ -409,7 +409,15 @@ export const translations = {
     filterLateNight: 'Madrugada',
     eventSingular: 'evento',
     eventsPlural: 'eventos',
-    participating: 'a participar',
+    participating: 'participando',
+    activityJoin: 'entrou em',
+    activityStory: 'publicou um story em',
+    activityCreated: 'criou o plano',
+    activityHot: 'plano bombando perto de ti',
+    activityHappening: 'live agora',
+    activityVoting: 'votação terminando',
+    liveActivities: 'Atividade ao Vivo',
+    last24h: 'Últimas 24h',
   },
 
 en: {
@@ -821,6 +829,14 @@ en: {
     eventSingular: 'event',
     eventsPlural: 'events',
     participating: 'participating',
+    activityJoin: 'joined',
+    activityStory: 'posted a story in',
+    activityCreated: 'created the plan',
+    activityHot: 'hot plan near you',
+    activityHappening: 'live now',
+    activityVoting: 'voting ending soon',
+    liveActivities: 'Live Activities',
+    last24h: 'Last 24h',
   },
 
   es: {
@@ -1232,6 +1248,14 @@ en: {
     eventSingular: 'evento',
     eventsPlural: 'eventos',
     participating: 'participando',
+    activityJoin: 'se unió a',
+    activityStory: 'publicó un story en',
+    activityCreated: 'creó el plan',
+    activityHot: 'plan popular cerca de ti',
+    activityHappening: 'en vivo ahora',
+    activityVoting: 'votación terminando',
+    liveActivities: 'Actividad en Vivo',
+    last24h: 'Últimas 24h',
   },
 
   fr: {
@@ -1643,6 +1667,14 @@ en: {
     eventSingular: 'événement',
     eventsPlural: 'événements',
     participating: 'participent',
+    activityJoin: 'a rejoint',
+    activityStory: 'a posté un story dans',
+    activityCreated: 'a créé le plan',
+    activityHot: 'plan populaire près de toi',
+    activityHappening: 'en direct maintenant',
+    activityVoting: 'vote bientôt terminé',
+    liveActivities: 'Activité en Direct',
+    last24h: 'Dernières 24h',
   },
 
   it: {
@@ -2054,6 +2086,14 @@ en: {
     eventSingular: 'evento',
     eventsPlural: 'eventi',
     participating: 'partecipano',
+    activityJoin: 'si è unito a',
+    activityStory: 'ha pubblicato uno story in',
+    activityCreated: 'ha creato il piano',
+    activityHot: 'piano popolare vicino a te',
+    activityHappening: 'in diretta ora',
+    activityVoting: 'votazione in scadenza',
+    liveActivities: 'Attività in Diretta',
+    last24h: 'Ultime 24h',
   },
 };
 
