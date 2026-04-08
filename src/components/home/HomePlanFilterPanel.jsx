@@ -4,14 +4,15 @@ import { X, Clock, Search, CalendarDays } from 'lucide-react';
 import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
 import { useLanguage } from '../common/LanguageContext';
 
-
 export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilters }) {
   const [search, setSearch] = useState('');
-  const {t} = useLanguage();
+  const { t } = useLanguage();
+
   if (!isOpen) return null;
 
   const activeCount = (filters.partyTags?.length || 0) + (filters.startTime ? 1 : 0) + (filters.endTime ? 1 : 0) + (filters.planDate ? 1 : 0);
   const isDark = !document.documentElement.classList.contains('light');
+
   return (
     <AnimatePresence>
       <motion.div
@@ -31,7 +32,7 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
         {/* Date filter */}
         <div className="mb-3">
           <label className="text-gray-400 text-xs mb-2 flex items-center gap-1">
-            <CalendarDays className="w-3 h-3" /> Date
+            <CalendarDays className="w-3 h-3" /> {t.date}
           </label>
           <div className="relative">
             <input
@@ -56,7 +57,7 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
         {/* Time range */}
         <div className="mb-3">
           <label className="text-gray-400 text-xs mb-2 flex items-center gap-1">
-            <Clock className="w-3 h-3" /> Time range
+            <Clock className="w-3 h-3" /> {t.timeRange}
           </label>
           <div className="flex gap-2">
             <input
@@ -77,19 +78,19 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
 
         {/* Party tags */}
         <div>
-          <label className="text-gray-400 text-xs mb-2 block">Party Type</label>
+          <label className="text-gray-400 text-xs mb-2 block">{t.partyType}</label>
           <div className="relative mb-2">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-500" />
             <input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search..."
+              placeholder={t.search}
               className={`w-full pl-7 pr-3 py-1.5 rounded-lg text-white text-xs placeholder-gray-600 focus:outline-none focus:border-[#00fea3] ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
             />
           </div>
           <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto">
-            {ALL_PARTY_TYPES.filter(t => t.toLowerCase().includes(search.toLowerCase())).map(tag => (
+            {ALL_PARTY_TYPES.filter(tag => tag.toLowerCase().includes(search.toLowerCase())).map(tag => (
               <PartyTag
                 key={tag}
                 tag={tag}
@@ -110,7 +111,7 @@ export default function HomePlanFilterPanel({ isOpen, onClose, filters, setFilte
             onClick={() => setFilters({ partyTags: [], startTime: '', endTime: '', planDate: '' })}
             className="w-full mt-3 py-1.5 text-xs text-gray-400 hover:text-white"
           >
-            Clear all filters
+            {t.clearFilters}
           </button>
         )}
       </motion.div>
