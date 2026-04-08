@@ -11,12 +11,12 @@ export default function HomeLiveActivities({ friendIds = [], allParticipants = [
   const { t, language } = useLanguage();
 
   const ACTIVITY_CONFIG = {
-    join:      { emoji: '🎉', color: '#00c6d2', label: 'entrou em' },
-    story:     { emoji: '📸', color: '#a855f7', label: 'publicou uma story em' },
-    created:   { emoji: '✨', color: '#f59e0b', label: 'criou o plano' },
-    hot:       { emoji: '🔥', color: '#ef4444', label: 'plano a bombar perto de ti' },
-    happening: { emoji: '⚡', color: '#f97316', label: 'live agora' },
-    voting:    { emoji: '🗳️', color: '#3b82f6', label: 'votação a terminar' },
+    join:      { emoji: '🎉', color: '#00c6d2', label: t.activityJoin },
+    story:     { emoji: '📸', color: '#a855f7', label: t.activityStory },
+    created:   { emoji: '✨', color: '#f59e0b', label: t.activityCreated },
+    hot:       { emoji: '🔥', color: '#ef4444', label: t.activityHot },
+    happening: { emoji: '⚡', color: '#f97316', label: t.activityHappening },
+    voting:    { emoji: '🗳️', color: '#3b82f6', label: t.activityVoting },
   };
 
   const activities = useMemo(() => {
