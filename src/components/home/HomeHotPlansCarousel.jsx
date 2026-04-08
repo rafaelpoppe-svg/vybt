@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Users, ChevronRight, Flame } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useLanguage } from '../common/LanguageContext';
 
 const isLiveNow = (p) => {
   if (!p.date || !p.time) return false;
@@ -20,6 +21,7 @@ const accentOf = (p) =>
 
 export default function HomeHotPlansCarousel({ plans = [], allParticipants = [], onPlanClick }) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const hotPlans = plans
     .filter(p => {
@@ -39,13 +41,13 @@ export default function HomeHotPlansCarousel({ plans = [], allParticipants = [],
       <div className="flex items-center justify-between px-4 mb-3">
         <div className="flex items-center gap-2">
           <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} className="text-base">🔥</motion.span>
-          <h2 className="text-white font-bold text-sm">Hot Plans</h2>
+          <h2 className="text-white font-bold text-sm">{t.hotPlans}</h2>
         </div>
         <button
           onClick={() => navigate(createPageUrl('Explore'))}
           className="flex items-center gap-0.5 text-[#00c6d2] text-xs font-semibold"
         >
-          View all <ChevronRight className="w-3.5 h-3.5" />
+          {t.viewAll} <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
