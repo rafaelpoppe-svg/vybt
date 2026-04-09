@@ -32,7 +32,7 @@ export default function FriendsListModal({ isOpen, onClose, friendProfiles, acce
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4" style={{ color: accent }} />
                 <span className="font-bold text-white text-base">
-                  Friends <span className="text-gray-500 font-normal text-sm">({friendProfiles.length})</span>
+                  {t.friends} <span className="text-gray-500 font-normal text-sm">({friendProfiles.length})</span>
                 </span>
               </div>
               <motion.button whileTap={{ scale: 0.9 }} onClick={onClose}
@@ -47,7 +47,7 @@ export default function FriendsListModal({ isOpen, onClose, friendProfiles, acce
                 <div className="text-center py-16 space-y-2">
                   <p className="text-4xl">👥</p>
                   <p className="text-gray-400 font-semibold">{t.noFriendsYet}</p>
-                  <p className="text-gray-600 text-sm">Connect with people at plans</p>
+                  <p className="text-gray-600 text-sm">{t.connectAtPlans}</p>
                 </div>
               ) : (
                 <div className="p-4 space-y-2 pb-20">
@@ -67,7 +67,7 @@ export default function FriendsListModal({ isOpen, onClose, friendProfiles, acce
                       )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5">
-                          <p className="font-bold text-white text-sm truncate">{fp.display_name || 'User'}</p>
+                          <p className="font-bold text-white text-sm truncate">{fp.display_name || t.user}</p>
                           {fp.is_verified && <ShieldCheck className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />}
                         </div>
                         {fp.city && (
