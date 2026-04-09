@@ -20,19 +20,20 @@ import CommunityChallengeDetail from '../components/community/CommunityChallenge
 import LeaveCommunityModal from '../components/community/LeaveCommunityModal';
 import { useLanguage } from '../components/common/LanguageContext';
 
-const TABS = [
-  { key: 'plans', label: 'Plans', icon: <CalendarDays className="w-4 h-4" /> },
-  { key: 'stories', label: 'Stories', icon: <Camera className="w-4 h-4" /> },
-  { key: 'members', label: 'Members', icon: <Users className="w-4 h-4" /> },
-  { key: 'activity', label: 'Activity', icon: <Zap className="w-4 h-4" /> },
-];
-
 export default function CommunityView() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const urlParams = new URLSearchParams(window.location.search);
   const communityId = urlParams.get('id');
-  const {t} = useLanguage();
+  const { t } = useLanguage();
+
+  const TABS = [
+    { key: 'plans', label: t.tabPlans, icon: <CalendarDays className="w-4 h-4" /> },
+    { key: 'stories', label: t.tabStories, icon: <Camera className="w-4 h-4" /> },
+    { key: 'members', label: t.tabMembers, icon: <Users className="w-4 h-4" /> },
+    { key: 'activity', label: t.tabActivity, icon: <Zap className="w-4 h-4" /> },
+  ];
+
   const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('plans');
   const [showEditModal, setShowEditModal] = useState(false);
@@ -51,13 +52,12 @@ export default function CommunityView() {
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
 
-  // Swipe gesture between tabs
   const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e) => {
     if (touchStartX.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     if (Math.abs(dx) < 50) return;
-    const idx = TABS.findIndex(t => t.key === activeTab);
+    const idx = TABS.findIndex(tab => tab.key === activeTab);
     if (dx < 0 && idx < TABS.length - 1) setActiveTab(TABS[idx + 1].key);
     if (dx > 0 && idx > 0) setActiveTab(TABS[idx - 1].key);
     touchStartX.current = null;
@@ -97,7 +97,6 @@ export default function CommunityView() {
     enabled: !!communityId,
   });
 
-  // Live stories (last 24h) for the Stories tab active badge
   const liveStories = stories.filter(s => {
     const now = new Date();
     return s.expires_at ? new Date(s.expires_at) > now : (now - new Date(s.created_date)) < 24 * 3600 * 1000;
@@ -122,7 +121,7 @@ export default function CommunityView() {
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
     enabled: !!currentUser?.id,
   });
-  // Also fetch friendships where I am the friend_id
+
   const { data: friendshipsReceived = [] } = useQuery({
     queryKey: ['friendshipsReceived', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id, status: 'accepted' }),
@@ -137,7 +136,6 @@ export default function CommunityView() {
 
   const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
 
-  // All friend IDs (both directions), excluding already-members
   const memberIds = new Set(members.map(m => m.user_id));
   const friendIds = [
     ...myFriendships.map(f => f.friend_id),
@@ -155,7 +153,6 @@ export default function CommunityView() {
       base44.entities.Community.update(communityId, { member_count: (community?.member_count || 0) + 1 });
       queryClient.invalidateQueries(['communityMembers', communityId]);
       queryClient.invalidateQueries(['community', communityId]);
-      // Show guide to new members
       const storageKey = `community_guide_${communityId}`;
       if (!localStorage.getItem(storageKey)) setShowNewMemberGuide(true);
     },
@@ -210,10 +207,7 @@ export default function CommunityView() {
 
   if (loadingCommunity) {
     return (
-      <div 
-        className="min-h-screen flex items-center justify-center"
-        style={{background: 'var(--bg)'}}
-      >
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#00c6d2' }} />
       </div>
     );
@@ -221,13 +215,10 @@ export default function CommunityView() {
 
   if (!community) {
     return (
-      <div 
-        className="min-h-screen flex flex-col items-center justify-center gap-4"
-        style={{background: 'var(--bg)'}}
-      >
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: 'var(--bg)' }}>
         <div className="text-5xl">😕</div>
-        <p className="text-gray-400">Community not found</p>
-        <button onClick={() => navigate(-1)} className="px-6 py-3 rounded-xl bg-gray-900 text-white">Go Back</button>
+        <p className="text-gray-400">{t.communityNotFound}</p>
+        <button onClick={() => navigate(-1)} className="px-6 py-3 rounded-xl bg-gray-900 text-white">{t.goBack}</button>
       </div>
     );
   }
@@ -237,17 +228,15 @@ export default function CommunityView() {
       ref={scrollRef}
       data-scroll-root
       className="min-h-screen overflow-y-auto overflow-x-hidden relative"
-      style={{background: 'var(--bg)', paddingBottom: 'max(env(safe-area-inset-bottom,0px), 24px)' }}
+      style={{ background: 'var(--bg)', paddingBottom: 'max(env(safe-area-inset-bottom,0px), 24px)' }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Background texture */}
       {community.background_image && (
         <div className="fixed inset-0 z-0 pointer-events-none" style={{ backgroundImage: `url(${community.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.06 }} />
       )}
 
       <div className="relative z-10">
-        {/* Hero */}
         <CommunityHero
           community={community}
           isMember={isMember}
@@ -262,7 +251,6 @@ export default function CommunityView() {
           onReport={() => {}}
         />
 
-        {/* About (collapsible) */}
         <CommunityAbout
           community={community}
           members={members}
@@ -275,7 +263,7 @@ export default function CommunityView() {
         {/* Admin: pending plan requests */}
         {isAdmin && pendingRequests.length > 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl p-4 mx-4 mb-3 border" style={{ borderColor: `${tc}50`, background: `${tc}12` }}>
-            <p className="font-bold text-white mb-3">⏳ Plan Requests ({pendingRequests.length})</p>
+            <p className="font-bold text-white mb-3">⏳ {t.planRequests} ({pendingRequests.length})</p>
             {pendingRequests.map(req => {
               const planData = plans.find(p => p.id === req.plan_id);
               return (
@@ -292,14 +280,8 @@ export default function CommunityView() {
         )}
 
         {/* Tab Bar */}
-        <div 
-          className="sticky top-0 z-30 backdrop-blur-md border-b border-white/8 px-4 py-2"
-          style={{background: 'var(--btn-bg)'}}
-        >
-          <div 
-            className="flex gap-1 rounded-2xl p-1 border border-gray-800"
-            style={{ backgroundColor: 'var(--btn-bg)' }}
-          >
+        <div className="sticky top-0 z-30 backdrop-blur-md border-b border-white/8 px-4 py-2" style={{ background: 'var(--btn-bg)' }}>
+          <div className="flex gap-1 rounded-2xl p-1 border border-gray-800" style={{ backgroundColor: 'var(--btn-bg)' }}>
             {TABS.map(tab => (
               <motion.button
                 key={tab.key}
@@ -325,23 +307,22 @@ export default function CommunityView() {
             {/* Plans Tab */}
             {activeTab === 'plans' && (
               <motion.div key="plans" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }} className="space-y-4">
-                {/* Active Challenge Banner */}
                 {activeChallenge && (
                   <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setShowChallengeDetail(true)} />
                 )}
                 {upcomingPlans.length === 0 && pastPlans.length === 0 ? (
                   <div className="text-center py-20">
                     <div className="text-5xl mb-3">🎉</div>
-                    <p className="text-gray-400 font-semibold">No plans yet</p>
+                    <p className="text-gray-400 font-semibold">{t.noPlansYet}</p>
                     <p className="text-gray-600 text-sm mt-1">
-                      {canCreatePlan() ? 'Create the first plan for this community!' : 'Plans will appear here once created.'}
+                      {canCreatePlan() ? t.noPlansYetCreate : t.noPlansYetWait}
                     </p>
                   </div>
                 ) : (
                   <>
                     {upcomingPlans.length > 0 && (
                       <>
-                        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Upcoming & Today</p>
+                        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">{t.upcomingToday}</p>
                         <div className="space-y-3">
                           {upcomingPlans.map(plan => (
                             <PlanCard key={plan.id} plan={plan}
@@ -355,7 +336,7 @@ export default function CommunityView() {
                     )}
                     {pastPlans.length > 0 && (
                       <>
-                        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mt-2">Past Plans</p>
+                        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mt-2">{t.pastPlans}</p>
                         <div className="space-y-3 opacity-60">
                           {pastPlans.slice(0, 5).map(plan => (
                             <PlanCard key={plan.id} plan={plan}
@@ -375,18 +356,16 @@ export default function CommunityView() {
             {/* Stories Tab */}
             {activeTab === 'stories' && (
               <motion.div key="stories" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
-                {/* Active Challenge Banner */}
                 {activeChallenge && (
                   <div className="mb-4">
                     <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setShowChallengeDetail(true)} />
                   </div>
                 )}
-                {/* Live stories section */}
                 {liveStories.length > 0 && (
                   <div className="mb-4">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                      <span className="text-green-400 text-xs font-bold uppercase tracking-wider">Live Now</span>
+                      <span className="text-green-400 text-xs font-bold uppercase tracking-wider">{t.liveNowLabel}</span>
                     </div>
                     <div className="grid grid-cols-3 gap-1">
                       {liveStories.map(story => (
@@ -410,8 +389,6 @@ export default function CommunityView() {
                     </div>
                   </div>
                 )}
-
-                {/* All stories gallery */}
                 <CommunityStoriesGallery
                   stories={stories}
                   plans={plans}
@@ -419,12 +396,11 @@ export default function CommunityView() {
                   tc={tc}
                   onStoryClick={setOverlayStoryId}
                 />
-
                 {stories.length === 0 && (
                   <div className="text-center py-20">
                     <div className="text-5xl mb-3">📸</div>
-                    <p className="text-gray-400 font-semibold">{t.noStoriesYet}t</p>
-                    <p className="text-gray-600 text-sm mt-1">Members post stories from their plans</p>
+                    <p className="text-gray-400 font-semibold">{t.noStoriesYet}</p>
+                    <p className="text-gray-600 text-sm mt-1">{t.storiesFromPlans}</p>
                   </div>
                 )}
               </motion.div>
@@ -446,14 +422,13 @@ export default function CommunityView() {
             {/* Activity Tab */}
             {activeTab === 'activity' && (
               <motion.div key="activity" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
-                {/* Active challenge or create button for admins */}
                 {activeChallenge ? (
                   <div className="mb-4">
                     <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setShowChallengeDetail(true)} />
                     {isAdmin && (
                       <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCreateChallenge(true)}
                         className="w-full mt-2 py-2.5 rounded-xl text-xs font-bold border border-white/10 text-gray-400">
-                        Replace with new challenge
+                        {t.replaceChallenge}
                       </motion.button>
                     )}
                   </div>
@@ -464,7 +439,7 @@ export default function CommunityView() {
                     className="w-full mb-4 py-3.5 rounded-2xl flex items-center justify-center gap-2 font-bold text-sm border"
                     style={{ background: `${tc}15`, borderColor: `${tc}40`, color: tc }}
                   >
-                    🏆 Launch a Story Challenge
+                    {t.launchChallenge}
                   </motion.button>
                 )}
                 <CommunityActivityFeed
@@ -507,14 +482,16 @@ export default function CommunityView() {
             <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} className="w-full max-w-lg bg-gray-900 rounded-t-3xl p-6 border-t border-red-500/30">
               <div className="text-center mb-6">
                 <div className="text-4xl mb-3">⚠️</div>
-                <h3 className="text-xl font-black text-white">Delete Community?</h3>
-                <p className="text-gray-400 text-sm mt-2">All members will be notified. The community will be deleted in <span className="text-red-400 font-bold">24 hours</span>.</p>
+                <h3 className="text-xl font-black text-white">{t.deleteCommunityTitle}</h3>
+                <p className="text-gray-400 text-sm mt-2">
+                  {t.deleteCommunityDesc} <span className="text-red-400 font-bold">{t.deleteCommunityHours}</span>.
+                </p>
               </div>
               <div className="flex gap-3">
-                <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowDeleteConfirm(false)} className="flex-1 py-4 rounded-2xl bg-gray-800 text-white font-bold">Cancel</motion.button>
+                <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowDeleteConfirm(false)} className="flex-1 py-4 rounded-2xl bg-gray-800 text-white font-bold">{t.cancel}</motion.button>
                 <motion.button whileTap={{ scale: 0.97 }} onClick={() => deleteMutation.mutate()} disabled={deleteMutation.isPending}
                   className="flex-1 py-4 rounded-2xl bg-red-500 text-white font-bold flex items-center justify-center gap-2">
-                  {deleteMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Trash2 className="w-5 h-5" />Delete</>}
+                  {deleteMutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Trash2 className="w-5 h-5" />{t.delete}</>}
                 </motion.button>
               </div>
             </motion.div>
