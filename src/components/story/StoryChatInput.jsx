@@ -2,14 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Send, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function StoryChatInput({ story, storyUser, onMessageSent, onClose }) {
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
   const [keyboardOffset, setKeyboardOffset] = useState(0);
   const inputRef = useRef(null);
+  const { t } = useLanguage();
 
-  // Rise above keyboard using visualViewport API
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
@@ -29,7 +30,6 @@ export default function StoryChatInput({ story, storyUser, onMessageSent, onClos
     };
   }, []);
 
-  // Auto-focus after mount
   useEffect(() => {
     const t = setTimeout(() => inputRef.current?.focus(), 100);
     return () => clearTimeout(t);
@@ -41,7 +41,6 @@ export default function StoryChatInput({ story, storyUser, onMessageSent, onClos
     try {
       const me = await base44.auth.me();
 
-      // Build content with story reply prefix so Chat can render it
       const storyRef = story?.media_url
         ? `story_reply:${story.id}:${story.media_url}:${story.media_type || 'image'}`
         : null;
@@ -71,14 +70,13 @@ export default function StoryChatInput({ story, storyUser, onMessageSent, onClos
       className="fixed left-0 right-0 z-[100] px-4 pb-3"
       style={{ bottom: keyboardOffset }}
     >
-      {/* Story preview thumbnail */}
       {story?.media_url && (
         <div className="mb-2 flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-xl px-3 py-2 border border-white/10">
           {story.media_type === 'video'
             ? <video src={story.media_url} className="w-10 h-14 object-cover rounded-lg flex-shrink-0" muted playsInline />
             : <img src={story.media_url} alt="" className="w-10 h-14 object-cover rounded-lg flex-shrink-0" />}
           <div className="min-w-0">
-            <p className="text-gray-400 text-xs">Replying to story</p>
+            <p className="text-gray-400 text-xs">{t.storyReplyingTo}</p>
             <p className="text-white text-xs font-medium truncate">{storyUser?.display_name}</p>
           </div>
           <button onClick={onClose} className="ml-auto text-gray-500 hover:text-white flex-shrink-0">
@@ -97,7 +95,7 @@ export default function StoryChatInput({ story, storyUser, onMessageSent, onClos
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && !sending && handleSendChat()}
-          placeholder={`Message ${storyUser?.display_name || ''}...`}
+          placeholder={t.storyMessagePlaceholder.replace('{name}', storyUser?.display_name || '')}
           maxLength={200}
           style={{ fontSize: '16px' }}
           className="flex-1 bg-transparent text-white placeholder-gray-500 px-3 py-2 outline-none"
