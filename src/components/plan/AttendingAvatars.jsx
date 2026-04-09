@@ -61,7 +61,7 @@ export default function AttendingAvatars({ participants, profilesMap, themeColor
             <div className="flex items-center justify-center w-5 h-5 rounded-full bg-yellow-500/20">
               <HelpCircle className="w-3 h-3 text-yellow-400" />
             </div>
-            <span className="text-gray-400 font-semibold text-sm">{maybe.length} Maybe</span>
+            <span className="text-gray-400 font-semibold text-sm">{maybe.length} {t.maybe}</span>
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1">
             {maybe.map(p => (
