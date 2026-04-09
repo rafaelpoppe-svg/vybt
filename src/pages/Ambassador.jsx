@@ -8,7 +8,7 @@ import {
   Share2, CheckCircle2, Lock, ExternalLink, Zap
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useLanguage } from '../common/LanguageContext';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const DISCORD_LINK = 'https://discord.gg/nekE48rn';
 
