@@ -601,6 +601,12 @@ export const translations = {
     timeAgoMins: 'há {n}min',
     timeAgoNow: 'agora mesmo',
     storyReplyBtn: 'Responder a {name}',
+    accessRestricted: 'Acesso Restrito',
+    accessRestrictedDesc: 'Você não está registrado para usar este aplicativo. Entre em contato com o administrador para solicitar acesso.',
+    accessRestrictedHelp: 'Se achar que isso é um erro, você pode:',
+    accessRestrictedItem1: 'Verificar se está logado com a conta correta',
+    accessRestrictedItem2: 'Entrar em contato com o administrador do app',
+    accessRestrictedItem3: 'Tentar sair e entrar novamente',
 
   },
 
@@ -1204,6 +1210,12 @@ en: {
     timeAgoMins: '{n}min ago',
     timeAgoNow: 'just now',
     storyReplyBtn: 'Reply to {name}',
+    accessRestricted: 'Access Restricted',
+    accessRestrictedDesc: 'You are not registered to use this application. Please contact the app administrator to request access.',
+    accessRestrictedHelp: 'If you believe this is an error, you can:',
+    accessRestrictedItem1: 'Verify you are logged in with the correct account',
+    accessRestrictedItem2: 'Contact the app administrator for access',
+    accessRestrictedItem3: 'Try logging out and back in again',
   },
 
   es: {
@@ -1806,6 +1818,12 @@ en: {
     timeAgoMins: 'hace {n}min',
     timeAgoNow: 'ahora mismo',
     storyReplyBtn: 'Responder a {name}',
+    accessRestricted: 'Acceso Restringido',
+    accessRestrictedDesc: 'No estás registrado para usar esta aplicación. Contacta al administrador para solicitar acceso.',
+    accessRestrictedHelp: 'Si crees que es un error, puedes:',
+    accessRestrictedItem1: 'Verificar que estás conectado con la cuenta correcta',
+    accessRestrictedItem2: 'Contactar al administrador de la app',
+    accessRestrictedItem3: 'Intentar cerrar sesión y volver a entrar',
   },
 
   fr: {
@@ -2408,6 +2426,12 @@ en: {
     timeAgoMins: 'il y a {n}min',
     timeAgoNow: 'à l\'instant',
     storyReplyBtn: 'Répondre à {name}',
+    accessRestricted: 'Accès Restreint',
+    accessRestrictedDesc: 'Tu n\'es pas enregistré pour utiliser cette application. Contacte l\'administrateur pour demander l\'accès.',
+    accessRestrictedHelp: 'Si tu penses que c\'est une erreur, tu peux :',
+    accessRestrictedItem1: 'Vérifier que tu es connecté avec le bon compte',
+    accessRestrictedItem2: 'Contacter l\'administrateur de l\'app',
+    accessRestrictedItem3: 'Essayer de te déconnecter et de te reconnecter',
   },
 
   it: {
@@ -3010,6 +3034,12 @@ en: {
     timeAgoMins: '{n}min fa',
     timeAgoNow: 'proprio ora',
     storyReplyBtn: 'Rispondi a {name}',
+    accessRestricted: 'Accesso Limitato',
+    accessRestrictedDesc: 'Non sei registrato per usare questa applicazione. Contatta l\'amministratore per richiedere l\'accesso.',
+    accessRestrictedHelp: 'Se pensi che sia un errore, puoi:',
+    accessRestrictedItem1: 'Verificare di essere connesso con l\'account corretto',
+    accessRestrictedItem2: 'Contattare l\'amministratore dell\'app',
+    accessRestrictedItem3: 'Provare a disconnetterti e riconnetterti',
   },
 };
 
