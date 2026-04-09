@@ -579,6 +579,8 @@ export const translations = {
     cameraRec: 'REC',
     cameraHintRecording: 'Soltar para parar • máx 30s',
     cameraHintIdle: 'Toque para foto • Segure para vídeo',
+    editStoryCaption: 'Editar Legenda do Story',
+    editStoryCaptionPlaceholder: 'Adicione uma legenda ao seu story...',
 
   },
 
@@ -1160,6 +1162,8 @@ en: {
     cameraRec: 'REC',
     cameraHintRecording: 'Release to stop • max 30s',
     cameraHintIdle: 'Tap for photo • Hold for video',
+    editStoryCaption: 'Edit Story Caption',
+    editStoryCaptionPlaceholder: 'Add a caption to your story...',
   },
 
   es: {
@@ -1740,6 +1744,8 @@ en: {
     cameraRec: 'REC',
     cameraHintRecording: 'Suelta para parar • máx 30s',
     cameraHintIdle: 'Toca para foto • Mantén para vídeo',
+    editStoryCaption: 'Editar Texto del Story',
+    editStoryCaptionPlaceholder: 'Añade un texto a tu story...',
   },
 
   fr: {
@@ -2320,6 +2326,8 @@ en: {
     cameraRec: 'REC',
     cameraHintRecording: 'Relâche pour arrêter • max 30s',
     cameraHintIdle: 'Appuie pour photo • Maintiens pour vidéo',
+    editStoryCaption: 'Modifier la Légende du Story',
+    editStoryCaptionPlaceholder: 'Ajoute une légende à ton story...',
   },
 
   it: {
@@ -2900,6 +2908,8 @@ en: {
     cameraRec: 'REC',
     cameraHintRecording: 'Rilascia per fermare • max 30s',
     cameraHintIdle: 'Tocca per foto • Tieni premuto per video',
+    editStoryCaption: 'Modifica Didascalia dello Story',
+    editStoryCaptionPlaceholder: 'Aggiungi una didascalia al tuo story...',
   },
 };
 
