@@ -1,13 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function ProfileStoryGrid({ stories, onStoryClick }) {
+  const { t } = useLanguage();
+
   if (stories.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 gap-3">
         <span className="text-4xl">📸</span>
-        <p className="text-gray-400 text-sm">Nenhuma história ainda</p>
+        <p className="text-gray-400 text-sm">{t.noStoriesYet}</p>
       </div>
     );
   }
