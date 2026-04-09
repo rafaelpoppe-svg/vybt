@@ -2,14 +2,26 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar, Users } from 'lucide-react';
 import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { ptBR, enUS, fr, es, it } from 'date-fns/locale';
+import { useLanguage } from '../common/LanguageContext';
+
+const DATE_LOCALES = {
+  pt: ptBR,
+  en: enUS,
+  fr: fr,
+  es: es,
+  it: it,
+};
 
 export default function ProfilePlansCarousel({ plans, onPlanClick }) {
+  const { t, language } = useLanguage();
+  const dateLocale = DATE_LOCALES[language] || enUS;
+
   if (plans.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 gap-3">
         <span className="text-4xl">🎉</span>
-        <p className="text-gray-400 text-sm">Nenhum plano ainda</p>
+        <p className="text-gray-400 text-sm">{t.noPlansYet}</p>
       </div>
     );
   }
@@ -41,7 +53,7 @@ export default function ProfilePlansCarousel({ plans, onPlanClick }) {
               <div className="flex items-center gap-2">
                 <Calendar className="w-3 h-3" />
                 <span>
-                  {format(new Date(`${plan.date}T${plan.time}`), 'd MMM', { locale: ptBR })}
+                  {format(new Date(`${plan.date}T${plan.time}`), 'd MMM', { locale: dateLocale })}
                 </span>
               </div>
               <div className="flex items-center gap-2">
