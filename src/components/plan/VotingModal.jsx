@@ -64,7 +64,7 @@ export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoad
                   className="w-full py-6 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold text-lg"
                 >
                   <ThumbsUp className="w-6 h-6 mr-3" />
-                  Great Plan! 🎉
+                  {t.voteGreat}
                 </Button>
 
                 <Button
@@ -73,7 +73,7 @@ export default function VotingModal({ isOpen, onClose, onVote, planTitle, isLoad
                   className="w-full py-6 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-semibold text-lg"
                 >
                   <ThumbsDown className="w-6 h-6 mr-3" />
-                  Bad Plan 😔
+                  {t.voteBad}
                 </Button>
               </div>
 
