@@ -530,7 +530,7 @@ export const translations = {
     nationalityPlaceholder: 'ex: PT',
     voteGreat: 'Plano Incrível! 🎉',
     voteBad: 'Plano Horrível 😔',
-
+    BackgroundTheme: 'Tema de Fundo do Perfil',
 
   },
 
@@ -1063,6 +1063,7 @@ en: {
     nationalityPlaceholder: 'e.g. PT',
     voteGreat: 'Great Plan! 🎉',
     voteBad: 'Bad Plan 😔',
+    backgroundTheme: 'Profile Background Theme',
   },
 
   es: {
@@ -1594,6 +1595,7 @@ en: {
     nationalityPlaceholder: 'ej: PT',
     voteGreat: '¡Qué planazo! 🎉',
     voteBad: 'Mal plan 😔',
+    backgroundTheme: 'Tema de fondo del perfil',
   },
 
   fr: {
@@ -2125,6 +2127,7 @@ en: {
     nationalityPlaceholder: 'ex: PT',
     voteGreat: 'Super soirée ! 🎉',
     voteBad: 'Soirée nulle 😔',
+    backgroundTheme: 'Thème de fond du profil',
   },
 
   it: {
@@ -2656,6 +2659,7 @@ en: {
     nationalityPlaceholder: 'es: PT',
     voteGreat: 'Piano top! 🎉',
     voteBad: 'Piano pessimo 😔',
+    backgroundTheme: 'Tema sfondo profilo',
 
   },
 };
