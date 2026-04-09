@@ -40,7 +40,7 @@ export default function DeletePlanModal({ isOpen, onClose, onConfirm, planTitle,
             <p className="text-gray-400 text-sm">"{planTitle}"</p>
             {isLive ? (
               <p className="text-orange-400 text-sm mt-3 font-medium">
-                ⚠️ Your plan is happening now, if you delete the plan will be terminated.
+                {t.deleteLiveWarning}
               </p>
             ) : (
               <p className="text-gray-500 text-xs mt-3">
