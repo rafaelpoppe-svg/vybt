@@ -545,6 +545,8 @@ export const translations = {
     myVibes: 'Minhas Vibes',
     partyTypes: 'Tipos de Festa',
     noPlansYet: 'Nenhum plano ainda',
+    verified: 'Verificado',
+    notVerified: 'Não Verificado',
   },
 
 en: {
@@ -1091,6 +1093,8 @@ en: {
     myVibes: 'My Vibes',
     partyTypes: 'Party Types',
     noPlansYet: 'No plans yet',
+    verified: 'Verified',
+    notVerified: 'Not Verified',
   },
 
   es: {
@@ -1637,6 +1641,8 @@ en: {
     myVibes: 'Mis Vibes',
     partyTypes: 'Tipos de fiesta',
     noPlansYet: 'Ningún plan todavía',
+    verified: 'Verificado',
+    notVerified: 'No verificado',
   },
 
   fr: {
@@ -2183,6 +2189,8 @@ en: {
     myVibes: 'Mes Vibes',
     partyTypes: 'Types de soirée',
     noPlansYet: 'Aucun plan pour l\'instant',
+    verified: 'Vérifié',
+    notVerified: 'Non vérifié',
   },
 
   it: {
@@ -2729,7 +2737,8 @@ en: {
     myVibes: 'I Miei Vibes',
     partyTypes: 'Tipi di festa',
     noPlansYet: 'Nessun piano ancora',
-
+    verified: 'Verificato',
+    notVerified: 'Non verificato',
   },
 };
 
