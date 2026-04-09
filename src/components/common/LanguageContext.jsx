@@ -484,6 +484,7 @@ export const translations = {
     deleteGroup: 'Deletar Grupo',
     maybe: 'Talvez',
     youAre: 'Você:',
+    deleteLiveWarning: '⚠️ O seu plano está acontecendo agora, se você eliminar ele agora o seu plano ele será terminado.',
 
   },
 
@@ -970,6 +971,7 @@ en: {
     deleteGroup: 'Delete Group',
     maybe: 'Maybe',
     youAre: 'You\'re:',
+    deleteLiveWarning: '⚠️ Your plan is happening now, if you delete the plan will be terminated.',
   },
 
   es: {
@@ -1455,6 +1457,7 @@ en: {
     deleteGroup: 'Eliminar Grupo',
     maybe: 'Quizás',
     youAre: 'Tú:',
+    deleteLiveWarning: '⚠️ Tu plan está ocurriendo ahora, si lo eliminas el plan será terminado.',
   },
 
   fr: {
@@ -1940,6 +1943,7 @@ en: {
     deleteGroup: 'Supprimer le Groupe',
     maybe: 'Peut-être',
     youAre: 'Tu es :',
+    deleteLiveWarning: '⚠️ Ton plan est en cours, si tu le supprimes le plan sera terminé.',
   },
 
   it: {
@@ -2425,6 +2429,7 @@ en: {
     deleteGroup: 'Elimina Gruppo',
     maybe: 'Forse',
     youAre: 'Tu sei:',
+    deleteLiveWarning: '⚠️ Il tuo piano è in corso, se lo elimini il piano verrà terminato.',
   },
 };
 
