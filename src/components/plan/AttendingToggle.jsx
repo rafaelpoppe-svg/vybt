@@ -18,7 +18,7 @@ export default function AttendingToggle({ participation, planId, themeColor = '#
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-gray-400 text-sm font-medium mr-1">You're:</span>
+      <span className="text-gray-400 text-sm font-medium mr-1">{t.youAre}</span>
       <div className="flex rounded-full overflow-hidden border border-gray-700 bg-gray-900">
         <motion.button
           whileTap={{ scale: 0.95 }}
@@ -53,7 +53,7 @@ export default function AttendingToggle({ participation, planId, themeColor = '#
           ) : (
             <HelpCircle className="w-3.5 h-3.5" />
           )}
-          Maybe
+          {t.maybe}
         </motion.button>
       </div>
     </div>
