@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export const BACKGROUND_THEMES = {
   default:   { name: 'Default',    color: '#111118', accent: '#222233' },
@@ -13,9 +14,11 @@ export const BACKGROUND_THEMES = {
 };
 
 export default function BackgroundThemeSelector({ selectedTheme, onSelect }) {
+  const { t } = useLanguage();
+
   return (
     <div>
-      <label className="block text-gray-400 text-sm mb-4">Profile Background Theme</label>
+      <label className="block text-gray-400 text-sm mb-4">{t.backgroundTheme}</label>
       <div className="flex flex-wrap gap-3">
         {Object.entries(BACKGROUND_THEMES).map(([key, theme]) => (
           <motion.button
