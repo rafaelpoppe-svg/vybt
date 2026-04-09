@@ -22,7 +22,7 @@ export default function EditStory() {
   const queryClient = useQueryClient();
   const urlParams = new URLSearchParams(window.location.search);
   const storyId = urlParams.get('id');
-  const {t} = useLanguage();
+  const { t } = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
   const [caption, setCaption] = useState('');
   const [visibility, setVisibility] = useState('friends');
@@ -52,14 +52,12 @@ export default function EditStory() {
     enabled: !!story?.plan_id
   });
 
-  // Check ownership
   useEffect(() => {
     if (story && currentUser && story.user_id !== currentUser.id) {
       navigate(-1);
     }
   }, [story, currentUser]);
 
-  // Initialize from story
   useEffect(() => {
     if (story) {
       setCaption(story.caption || '');
@@ -70,13 +68,11 @@ export default function EditStory() {
   const handleAIReview = async () => {
     if (!caption.trim()) return;
     setReviewLoading(true);
-    
     try {
       const result = await base44.functions.invoke('reviewStoryCaption', {
         caption: caption,
         context: `Story for plan: ${plan?.title || 'Unknown'}`
       });
-      
       setAiReview(result.data);
       setShowAIReview(true);
     } catch (error) {
@@ -110,19 +106,16 @@ export default function EditStory() {
 
   if (isLoading || !story) {
     return (
-      <div 
-        className="min-h-screen flex items-center justify-center"
-        style={{background: 'var(--bg)'}}
-      >
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
   }
 
   const visibilityOptions = [
-    { id: 'friends', icon: Users, label: 'Friends Only' },
-    { id: 'group_only', icon: Lock, label: 'Group Only' },
-    { id: 'highlighted', icon: Sparkles, label: 'Highlighted' },
+    { id: 'friends', icon: Users, label: t.friendsVisibility },
+    { id: 'group_only', icon: Lock, label: t.groupOnly },
+    { id: 'highlighted', icon: Sparkles, label: t.highlighted },
   ];
 
   return (
@@ -136,7 +129,7 @@ export default function EditStory() {
         >
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
-        <h1 className="text-lg font-bold text-white">Edit Story</h1>
+        <h1 className="text-lg font-bold text-white">{t.editStoryCaption}</h1>
         <div className="w-10" />
       </header>
 
@@ -146,21 +139,13 @@ export default function EditStory() {
         <div className="rounded-2xl overflow-hidden bg-gray-900 border border-gray-800">
           <div className="aspect-video bg-gray-800 relative">
             {story.media_type === 'video' ? (
-              <video
-                src={story.media_url}
-                className="w-full h-full object-cover"
-                controls
-              />
+              <video src={story.media_url} className="w-full h-full object-cover" controls />
             ) : (
-              <img
-                src={story.media_url}
-                alt="Story"
-                className="w-full h-full object-cover"
-              />
+              <img src={story.media_url} alt="Story" className="w-full h-full object-cover" />
             )}
             {story.thumbnail_url && (
               <div className="absolute top-2 right-2 px-2 py-1 rounded bg-black/50 text-xs text-white">
-                {story.media_type === 'video' ? '🎬 Video' : '📷 Image'}
+                {story.media_type === 'video' ? `🎬 ${t.videoMode}` : `📷 ${t.photoMode}`}
               </div>
             )}
           </div>
@@ -169,7 +154,7 @@ export default function EditStory() {
         {/* Plan Info */}
         {plan && (
           <div className="p-4 rounded-xl bg-gradient-to-r from-[#542b9b]/20 to-[#00c6d2]/20 border border-[#542b9b]/30">
-            <p className="text-xs text-gray-400 mb-1">Associated Plan</p>
+            <p className="text-xs text-gray-400 mb-1">{t.storyAssociatedPlan}</p>
             <p className="text-white font-semibold">{plan.title}</p>
             <p className="text-xs text-gray-500 mt-1">{plan.city}</p>
           </div>
@@ -177,11 +162,11 @@ export default function EditStory() {
 
         {/* Caption */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Caption</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">{t.editStoryCaption}</label>
           <textarea
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            placeholder="Add a caption to your story..."
+            placeholder={t.editStoryCaptionPlaceholder}
             maxLength={500}
             className="w-full bg-gray-900 border border-gray-800 rounded-xl p-4 text-white placeholder-gray-600 focus:border-[#00c6d2] focus:outline-none resize-none h-24"
           />
@@ -199,7 +184,7 @@ export default function EditStory() {
                 ) : (
                   <Wand2 className="w-4 h-4" />
                 )}
-                AI Review
+                {t.aiReview}
               </motion.button>
             )}
           </div>
@@ -207,7 +192,7 @@ export default function EditStory() {
 
         {/* Visibility Settings */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-3">Visibility</label>
+          <label className="block text-sm font-medium text-gray-300 mb-3">{t.storyVisibilityLabel}</label>
           <div className="space-y-2">
             {visibilityOptions.map((opt) => {
               const Icon = opt.icon;
@@ -237,21 +222,21 @@ export default function EditStory() {
 
         {/* Story Status */}
         <div className="p-4 rounded-xl bg-gray-900/50 border border-gray-800">
-          <p className="text-xs text-gray-500 mb-2">Status</p>
+          <p className="text-xs text-gray-500 mb-2">{t.storyStatus}</p>
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-400">Views</span>
+              <span className="text-gray-400">{t.views}</span>
               <span className="text-white font-medium">{story.view_count || 0}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-400">Posted</span>
+              <span className="text-gray-400">{t.storyPosted}</span>
               <span className="text-white font-medium">
                 {new Date(story.created_date).toLocaleDateString('pt-PT')}
               </span>
             </div>
             {story.expires_at && (
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-400">Expires</span>
+                <span className="text-gray-400">{t.storyExpires}</span>
                 <span className="text-white font-medium">
                   {new Date(story.expires_at).toLocaleDateString('pt-PT')}
                 </span>
@@ -276,7 +261,7 @@ export default function EditStory() {
             <DropdownMenuContent className="bg-gray-900 border-gray-800">
               <DropdownMenuItem
                 onClick={() => {
-                  if (confirm('Are you sure you want to delete this story?')) {
+                  if (confirm(t.deleteStoryConfirm)) {
                     setDeleting(true);
                     deleteMutation.mutate();
                   }
@@ -284,7 +269,7 @@ export default function EditStory() {
                 className="text-red-400 hover:text-red-300 cursor-pointer"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
-                Delete Story
+                {t.deleteStory}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -310,7 +295,6 @@ export default function EditStory() {
         </div>
       </div>
 
-      {/* AI Review Modal */}
       <AIReviewModal
         isOpen={showAIReview}
         onClose={() => setShowAIReview(false)}
