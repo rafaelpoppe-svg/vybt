@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, Zap, ZapOff, X, Video } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 const MAX_VIDEO_SECONDS = 30;
 
@@ -16,19 +17,18 @@ export default function CameraView({ onCapture, onClose }) {
   const [flashOn, setFlashOn] = useState(false);
   const [capturing, setCapturing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [recordingProgress, setRecordingProgress] = useState(0); // 0-100
+  const [recordingProgress, setRecordingProgress] = useState(0);
   const [cameraError, setCameraError] = useState(null);
   const [ready, setReady] = useState(false);
-  const [mode, setMode] = useState('photo'); // 'photo' | 'video' — hint label
+  const [mode, setMode] = useState('photo');
+  const { t } = useLanguage();
 
-  // Forcefully block PiP on the video element
   const blockPiP = useCallback((el) => {
     if (!el) return;
     el.disablePictureInPicture = true;
     el.setAttribute('disablepictureinpicture', '');
     el.setAttribute('x-webkit-airplay', 'deny');
     el.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
-    // iOS fires this event before entering PiP — cancel it immediately
     el.addEventListener('enterpictureinpicture', (e) => {
       e.preventDefault();
       e.stopImmediatePropagation();
@@ -57,9 +57,9 @@ export default function CameraView({ onCapture, onClose }) {
         videoRef.current.srcObject = stream;
       }
     } catch (err) {
-      setCameraError('Camera access denied. Please allow camera permissions in Settings.');
+      setCameraError(t.verifyCameraError);
     }
-  }, [blockPiP]);
+  }, [blockPiP, t]);
 
   useEffect(() => {
     startCamera(facingMode);
@@ -76,7 +76,6 @@ export default function CameraView({ onCapture, onClose }) {
 
   const flipCamera = () => setFacingMode(f => f === 'environment' ? 'user' : 'environment');
 
-  // ── Photo ─────────────────────────────────────────────────────────────────
   const takePhoto = () => {
     if (!videoRef.current || capturing || !ready) return;
     setCapturing(true);
@@ -95,7 +94,6 @@ export default function CameraView({ onCapture, onClose }) {
     }, 'image/jpeg', 0.92);
   };
 
-  // ── Video ─────────────────────────────────────────────────────────────────
   const startRecording = () => {
     if (!streamRef.current || !ready || isRecording) return;
     chunksRef.current = [];
@@ -117,7 +115,6 @@ export default function CameraView({ onCapture, onClose }) {
     setIsRecording(true);
     setMode('video');
 
-    // Progress bar
     let elapsed = 0;
     recordingTimerRef.current = setInterval(() => {
       elapsed += 100;
@@ -140,11 +137,9 @@ export default function CameraView({ onCapture, onClose }) {
     setRecordingProgress(0);
   };
 
-  // ── Press handlers ────────────────────────────────────────────────────────
   const handlePressStart = (e) => {
     e.preventDefault();
     if (!ready) return;
-    // Long press threshold: 200ms → start recording
     pressTimerRef.current = setTimeout(() => {
       setMode('video');
       startRecording();
@@ -163,7 +158,6 @@ export default function CameraView({ onCapture, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black z-50 flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-      {/* Viewfinder */}
       <div className="relative flex-1 overflow-hidden bg-black">
         {cameraError ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-8">
@@ -172,7 +166,7 @@ export default function CameraView({ onCapture, onClose }) {
             </div>
             <p className="text-gray-400 text-center text-sm leading-relaxed">{cameraError}</p>
             <button onClick={() => startCamera(facingMode)} className="px-6 py-3 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold text-sm">
-              Try Again
+              {t.cameraRetry}
             </button>
           </div>
         ) : (
@@ -190,7 +184,6 @@ export default function CameraView({ onCapture, onClose }) {
           />
         )}
 
-        {/* Flash */}
         <AnimatePresence>
           {capturing && (
             <motion.div key="flash" initial={{ opacity: 0.6 }} animate={{ opacity: 0 }} transition={{ duration: 0.25 }}
@@ -198,15 +191,13 @@ export default function CameraView({ onCapture, onClose }) {
           )}
         </AnimatePresence>
 
-        {/* Recording indicator */}
         {isRecording && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-4 py-2">
             <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-white text-sm font-semibold">REC</span>
+            <span className="text-white text-sm font-semibold">{t.cameraRec}</span>
           </div>
         )}
 
-        {/* Top bar */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
           <motion.button whileTap={{ scale: 0.85 }} onClick={onClose}
             className="w-11 h-11 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
@@ -219,25 +210,20 @@ export default function CameraView({ onCapture, onClose }) {
         </div>
       </div>
 
-      {/* Bottom bar */}
       <div className="flex-shrink-0 bg-black flex flex-col items-center gap-3 px-10 pt-4"
         style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 28px)' }}>
 
-        {/* Progress bar (visible during recording) */}
         <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden" style={{ opacity: isRecording ? 1 : 0 }}>
           <motion.div className="h-full bg-red-500 rounded-full" style={{ width: `${recordingProgress}%` }} />
         </div>
 
-        {/* Hint */}
         <p className="text-gray-400 text-xs">
-          {isRecording ? 'Soltar para parar • máx 30s' : 'Toque para foto • Pressione para vídeo'}
+          {isRecording ? t.cameraHintRecording : t.cameraHintIdle}
         </p>
 
         <div className="flex items-center justify-between w-full">
-          {/* Spacer */}
           <div className="w-14 h-14" />
 
-          {/* Shutter button */}
           <motion.button
             onTouchStart={handlePressStart}
             onTouchEnd={handlePressEnd}
@@ -248,13 +234,10 @@ export default function CameraView({ onCapture, onClose }) {
             transition={{ type: 'spring', stiffness: 300 }}
             className="relative w-20 h-20 flex items-center justify-center disabled:opacity-50 select-none"
           >
-            {/* Outer ring */}
             <div className={`absolute inset-0 rounded-full border-4 transition-colors ${isRecording ? 'border-red-500' : 'border-white'}`} />
-            {/* Inner */}
             <div className={`rounded-full transition-all duration-200 ${isRecording ? 'w-8 h-8 bg-red-500 rounded-lg' : 'w-14 h-14 bg-white rounded-full'}`} />
           </motion.button>
 
-          {/* Flip */}
           <motion.button whileTap={{ scale: 0.9 }} onClick={flipCamera}
             className="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
             <RotateCcw className="w-6 h-6 text-white" />
