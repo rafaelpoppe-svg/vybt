@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLanguage } from '../common/LanguageContext';
+import { useLanguage } from './common/LanguageContext';
 
 const UserNotRegisteredError = () => {
   const { t } = useLanguage();
