@@ -5,6 +5,7 @@ import VibeTag, { vibeConfig } from '../common/VibeTag';
 import PartyTag, { partyTagConfig } from '../common/PartyTag';
 import StripeCheckout from '../payment/StripeCheckout';
 import { toast } from 'sonner';
+import { useLanguage } from '../common/LanguageContext';
 
 const vibeOptions = Object.keys(vibeConfig);
 const partyTagOptions = Object.keys(partyTagConfig);
@@ -18,6 +19,7 @@ export default function HighlightStoryModal({
 }) {
   const [selectedVibes, setSelectedVibes] = useState([]);
   const [selectedPartyTypes, setSelectedPartyTypes] = useState([]);
+  const { t } = useLanguage();
 
   const toggleVibe = (vibe) => {
     if (selectedVibes.includes(vibe)) {
@@ -40,11 +42,11 @@ export default function HighlightStoryModal({
       targetVibes: selectedVibes,
       targetPartyTypes: selectedPartyTypes
     });
-    toast.success('Pagamento bem-sucedido! Story em destaque ✨');
+    toast.success(t.highlightStorySuccess);
   };
 
   const handleError = (msg) => {
-    toast.error(msg || 'Erro no pagamento');
+    toast.error(msg || t.highlightError);
   };
 
   return (
@@ -68,7 +70,7 @@ export default function HighlightStoryModal({
             <div className="sticky top-0 bg-gray-900 p-4 border-b border-gray-800 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-[#00c6d2]" />
-                <h2 className="text-lg font-bold text-white">Highlight Story</h2>
+                <h2 className="text-lg font-bold text-white">{t.highlightStoryTitle}</h2>
               </div>
               <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-800">
                 <X className="w-5 h-5 text-gray-400" />
@@ -80,24 +82,24 @@ export default function HighlightStoryModal({
               <div className="p-3 rounded-xl bg-[#542b9b]/20 border border-[#542b9b]/30 flex items-start gap-3">
                 <Info className="w-5 h-5 text-[#542b9b] flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-gray-300">
-                  <p className="font-medium text-white mb-1">How highlighting works</p>
-                  <p>Your story will be visible to all users in <span className="text-[#00c6d2] font-medium">{planCity}</span> who match your selected filters.</p>
+                  <p className="font-medium text-white mb-1">{t.highlightStoryHowTitle}</p>
+                  <p>{t.highlightStoryHowDesc.replace('{city}', planCity)}</p>
                 </div>
               </div>
 
               {/* Location Info */}
               <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800">
                 <MapPin className="w-4 h-4 text-[#00c6d2]" />
-                <span className="text-sm text-gray-300">Targeting users in: <span className="text-white font-medium">{planCity}</span></span>
+                <span className="text-sm text-gray-300">{t.highlightStoryTargeting} <span className="text-white font-medium">{planCity}</span></span>
               </div>
 
               {/* Target Vibes */}
               <div>
                 <label className="text-gray-400 text-sm mb-2 flex items-center gap-1.5">
                   <Music className="w-4 h-4" />
-                  Target by Vibes (optional)
+                  {t.highlightStoryTargetVibes}
                 </label>
-                <p className="text-xs text-gray-500 mb-3">Select vibes to show this story to users who like these music styles</p>
+                <p className="text-xs text-gray-500 mb-3">{t.highlightStoryTargetVibesDesc}</p>
                 <div className="flex flex-wrap gap-2">
                   {vibeOptions.slice(0, -1).map(vibe => (
                     <VibeTag
@@ -116,9 +118,9 @@ export default function HighlightStoryModal({
               <div>
                 <label className="text-gray-400 text-sm mb-2 flex items-center gap-1.5">
                   <PartyPopper className="w-4 h-4" />
-                  Target by Party Preference (optional)
+                  {t.highlightStoryTargetParty}
                 </label>
-                <p className="text-xs text-gray-500 mb-3">Select party types to show this story to users who prefer these events</p>
+                <p className="text-xs text-gray-500 mb-3">{t.highlightStoryTargetPartyDesc}</p>
                 <div className="flex flex-wrap gap-2">
                   {partyTagOptions.map(tag => (
                     <PartyTag
@@ -137,8 +139,8 @@ export default function HighlightStoryModal({
               <div className="p-4 rounded-xl bg-gradient-to-r from-[#00c6d2]/10 to-[#542b9b]/10 border border-[#00c6d2]/30">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-white font-medium">Highlight Cost</p>
-                    <p className="text-xs text-gray-400">One-time payment</p>
+                    <p className="text-white font-medium">{t.highlightCost}</p>
+                    <p className="text-xs text-gray-400">{t.highlightOneTime}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-2xl font-bold text-[#00c6d2]">€1.59</p>
@@ -146,16 +148,15 @@ export default function HighlightStoryModal({
                 </div>
               </div>
 
-              {/* Stripe Checkout */}
               <StripeCheckout
                 type="highlight_story"
-                buttonLabel="Pay €1.59 & Highlight Story"
+                buttonLabel={t.highlightStoryPayBtn}
                 onSuccess={handleSuccess}
                 onError={handleError}
               />
 
               <p className="text-xs text-gray-500 text-center">
-                By highlighting, you agree to our terms of service
+                {t.highlightTerms}
               </p>
             </div>
           </motion.div>
