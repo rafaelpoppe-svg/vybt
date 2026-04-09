@@ -483,6 +483,8 @@ export const translations = {
     save: 'Salvar',
     deleteGroup: 'Deletar Grupo',
     maybe: 'Talvez',
+    youAre: 'Você:',
+
   },
 
 en: {
@@ -967,6 +969,7 @@ en: {
     save: 'Save',
     deleteGroup: 'Delete Group',
     maybe: 'Maybe',
+    youAre: 'You\'re:',
   },
 
   es: {
@@ -1451,6 +1454,7 @@ en: {
     save: 'Guardar',
     deleteGroup: 'Eliminar Grupo',
     maybe: 'Quizás',
+    youAre: 'Tú:',
   },
 
   fr: {
@@ -1935,6 +1939,7 @@ en: {
     save: 'Enregistrer',
     deleteGroup: 'Supprimer le Groupe',
     maybe: 'Peut-être',
+    youAre: 'Tu es :',
   },
 
   it: {
@@ -2419,6 +2424,7 @@ en: {
     save: 'Salva',
     deleteGroup: 'Elimina Gruppo',
     maybe: 'Forse',
+    youAre: 'Tu sei:',
   },
 };
 
