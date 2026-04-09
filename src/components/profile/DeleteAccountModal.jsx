@@ -4,10 +4,12 @@ import { AlertTriangle, Loader2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function DeleteAccountModal({ isOpen, onClose, userId, profile }) {
   const [confirmation, setConfirmation] = useState('');
   const [loading, setLoading] = useState(false);
+  const { t } = useLanguage();
 
   const CONFIRM_WORD = 'DELETE';
   const canDelete = confirmation === CONFIRM_WORD;
@@ -16,7 +18,6 @@ export default function DeleteAccountModal({ isOpen, onClose, userId, profile })
     if (!canDelete) return;
     setLoading(true);
     try {
-      // Delete user profile and related data
       if (profile?.id) {
         await base44.entities.UserProfile.delete(profile.id);
       }
@@ -51,8 +52,8 @@ export default function DeleteAccountModal({ isOpen, onClose, userId, profile })
                   <AlertTriangle className="w-5 h-5 text-red-400" />
                 </div>
                 <div>
-                  <h2 className="text-white font-bold text-lg">Delete Account</h2>
-                  <p className="text-gray-500 text-xs">This action is permanent</p>
+                  <h2 className="text-white font-bold text-lg">{t.deleteAccountTitle}</h2>
+                  <p className="text-gray-500 text-xs">{t.deleteAccountPermanent}</p>
                 </div>
               </div>
               <button onClick={onClose} className="p-1 text-gray-600 hover:text-gray-400">
@@ -62,23 +63,23 @@ export default function DeleteAccountModal({ isOpen, onClose, userId, profile })
 
             {/* Warning */}
             <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 space-y-2">
-              <p className="text-red-300 text-sm font-medium">Your account will be permanently deleted:</p>
+              <p className="text-red-300 text-sm font-medium">{t.deleteAccountWarning}</p>
               <ul className="text-gray-400 text-sm space-y-1 list-disc list-inside">
-                <li>Profile and photos</li>
-                <li>All stories and plan history</li>
-                <li>Friendships and messages</li>
+                <li>{t.deleteAccountItem1}</li>
+                <li>{t.deleteAccountItem2}</li>
+                <li>{t.deleteAccountItem3}</li>
               </ul>
             </div>
 
             {/* Confirmation */}
             <div className="space-y-2">
               <p className="text-gray-400 text-sm">
-                Type <span className="text-red-400 font-mono font-bold">{CONFIRM_WORD}</span> to confirm:
+                {t.deleteAccountTypePrompt} <span className="text-red-400 font-mono font-bold">{CONFIRM_WORD}</span> {t.deleteAccountTypePrompt2}
               </p>
               <Input
                 value={confirmation}
                 onChange={(e) => setConfirmation(e.target.value.toUpperCase())}
-                placeholder="Type DELETE"
+                placeholder={t.deleteAccountPlaceholder}
                 className="bg-gray-900 border-gray-700 text-white font-mono tracking-widest"
                 autoCapitalize="characters"
               />
@@ -91,14 +92,14 @@ export default function DeleteAccountModal({ isOpen, onClose, userId, profile })
                 variant="outline"
                 className="flex-1 border-gray-700 text-gray-300 bg-transparent"
               >
-                Cancel
+                {t.cancel}
               </Button>
               <Button
                 onClick={handleDelete}
                 disabled={!canDelete || loading}
                 className="flex-1 bg-red-600 hover:bg-red-700 text-white disabled:opacity-40"
               >
-                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Delete Forever'}
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : t.deleteForever}
               </Button>
             </div>
           </motion.div>
