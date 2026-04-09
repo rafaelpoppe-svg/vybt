@@ -1,9 +1,11 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, Image as ImageIcon, Video } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function GalleryUpload({ onFileSelect, isLoading }) {
   const fileInputRef = useRef(null);
+  const { t } = useLanguage();
 
   const handleFileSelect = (e) => {
     const file = e.target.files?.[0];
@@ -19,7 +21,7 @@ export default function GalleryUpload({ onFileSelect, isLoading }) {
 
   return (
     <div className="px-4 pt-4 pb-2">
-      <p className="text-gray-400 text-sm mb-4">Select media from gallery</p>
+      <p className="text-gray-400 text-sm mb-4">{t.gallerySelectMedia}</p>
       
       <motion.button
         whileTap={{ scale: 0.97 }}
@@ -29,8 +31,8 @@ export default function GalleryUpload({ onFileSelect, isLoading }) {
       >
         <Upload className="w-8 h-8 text-gray-500" />
         <div className="text-center">
-          <p className="text-white font-medium text-sm">Tap to select media</p>
-          <p className="text-gray-500 text-xs mt-1">Image or video</p>
+          <p className="text-white font-medium text-sm">{t.galleryTapToSelect}</p>
+          <p className="text-gray-500 text-xs mt-1">{t.galleryImageOrVideo}</p>
         </div>
       </motion.button>
 
