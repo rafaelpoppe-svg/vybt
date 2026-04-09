@@ -581,6 +581,9 @@ export const translations = {
     cameraHintIdle: 'Toque para foto • Segure para vídeo',
     editStoryCaption: 'Editar Legenda do Story',
     editStoryCaptionPlaceholder: 'Adicione uma legenda ao seu story...',
+    gallerySelectMedia: 'Selecione uma mídia da galeria',
+    galleryTapToSelect: 'Toque para selecionar',
+    galleryImageOrVideo: 'Imagem ou vídeo',
 
   },
 
@@ -1164,6 +1167,9 @@ en: {
     cameraHintIdle: 'Tap for photo • Hold for video',
     editStoryCaption: 'Edit Story Caption',
     editStoryCaptionPlaceholder: 'Add a caption to your story...',
+    gallerySelectMedia: 'Select media from gallery',
+    galleryTapToSelect: 'Tap to select media',
+    galleryImageOrVideo: 'Image or video',
   },
 
   es: {
@@ -1746,6 +1752,9 @@ en: {
     cameraHintIdle: 'Toca para foto • Mantén para vídeo',
     editStoryCaption: 'Editar Texto del Story',
     editStoryCaptionPlaceholder: 'Añade un texto a tu story...',
+    gallerySelectMedia: 'Selecciona un archivo de la galería',
+    galleryTapToSelect: 'Toca para seleccionar',
+    galleryImageOrVideo: 'Imagen o vídeo',
   },
 
   fr: {
@@ -2328,6 +2337,9 @@ en: {
     cameraHintIdle: 'Appuie pour photo • Maintiens pour vidéo',
     editStoryCaption: 'Modifier la Légende du Story',
     editStoryCaptionPlaceholder: 'Ajoute une légende à ton story...',
+    gallerySelectMedia: 'Sélectionne un fichier depuis la galerie',
+    galleryTapToSelect: 'Appuie pour sélectionner',
+    galleryImageOrVideo: 'Image ou vidéo',
   },
 
   it: {
@@ -2910,6 +2922,9 @@ en: {
     cameraHintIdle: 'Tocca per foto • Tieni premuto per video',
     editStoryCaption: 'Modifica Didascalia dello Story',
     editStoryCaptionPlaceholder: 'Aggiungi una didascalia al tuo story...',
+    gallerySelectMedia: 'Seleziona un file dalla galleria',
+    galleryTapToSelect: 'Tocca per selezionare',
+    galleryImageOrVideo: 'Immagine o video',
   },
 };
 
