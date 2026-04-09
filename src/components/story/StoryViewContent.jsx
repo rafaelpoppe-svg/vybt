@@ -13,6 +13,9 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { notifyStoryReaction } from '../notifications/NotificationTriggers';
+import { useLanguage } from '../common/LanguageContext';
+
+// ... (all helper functions unchanged: getCubeWrapperStyle, etc.)
 
 function getCubeWrapperStyle(progress, direction) {
   const p = Math.abs(progress);
@@ -25,19 +28,10 @@ function getCubeWrapperStyle(progress, direction) {
   };
 }
 
-/**
- * Core StoryView logic — usable both as a page and as an overlay.
- * Props:
- *   initialStoryId: string  — which story to open first
- *   onClose: () => void     — called when user closes (X button or last story)
- *   scope: { type: 'friend', userId } | { type: 'plan', planId } | null
- *     - 'friend': only shows stories from that specific user (swipe to close)
- *     - 'plan': shows all stories from that plan (swipe between users of that plan)
- *     - null: shows all grouped stories (global feed)
- */
 export default function StoryViewContent({ initialStoryId, onClose, scope = null }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   const [currentUser, setCurrentUser] = useState(null);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
@@ -112,29 +106,26 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
     allStories, userProfiles, plans, currentUser, friendships
   );
 
-  // Filter groups based on scope
   const groupedStories = useMemo(() => {
     if (!scope) return allGroupedStories;
     if (scope.type === 'friend') {
-      // Build a single group with all stories from this specific user
       const userStories = allStories.filter(s => s.user_id === scope.userId);
       if (userStories.length === 0) return allGroupedStories;
       const profile = userProfiles.find(p => p.user_id === scope.userId);
       return [{
         type: 'friend',
         user_id: scope.userId,
-        userName: profile?.display_name || 'User',
+        userName: profile?.display_name || t.user,
         userPhoto: profile?.photos?.[0],
         stories: userStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)),
       }];
     }
     if (scope.type === 'plan') {
-      // Only show the group for this plan
       const found = allGroupedStories.filter(g => g.type === 'plan' && g.plan_id === scope.planId);
       return found.length > 0 ? found : allGroupedStories;
     }
     return allGroupedStories;
-  }, [allGroupedStories, scope, allStories, userProfiles]);
+  }, [allGroupedStories, scope, allStories, userProfiles, t]);
 
   const currentGroup = groupedStories[currentGroupIndex];
   const currentGroupStory = currentGroup?.stories?.[currentStoryInGroupIndex];
@@ -261,7 +252,6 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
 
   useEffect(() => {
     if (initialStoryId && groupedStories.length > 0 && allStories.length > 0) {
-      // Search directly in the (possibly scope-filtered) groupedStories
       for (let gi = 0; gi < groupedStories.length; gi++) {
         const si = groupedStories[gi].stories.findIndex(s => s.id === initialStoryId);
         if (si !== -1) {
@@ -270,7 +260,6 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
           return;
         }
       }
-      // Fallback to global position
       const position = findStoryPosition(initialStoryId);
       if (position) {
         setCurrentGroupIndex(position.groupIndex);
@@ -310,9 +299,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
   const progressTimerRef = useRef(null);
   const handleNextRef = useRef(null);
   const progressRafRef = useRef(null);
-  const videoProgressStartRef = useRef(null);
 
-  // For images: fixed 5s progress animation
   const startImageProgress = useCallback((duration = 5000) => {
     clearTimeout(progressTimerRef.current);
     cancelAnimationFrame(progressRafRef.current);
@@ -330,7 +317,6 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
     }, duration);
   }, []);
 
-  // For videos: sync progress bar with actual video currentTime
   const startVideoProgress = useCallback(() => {
     clearTimeout(progressTimerRef.current);
     cancelAnimationFrame(progressRafRef.current);
@@ -361,25 +347,22 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
     clearTimeout(progressTimerRef.current);
     if (story.media_type === 'video') {
       setVideoLoading(true);
-      // progress will start once video can play (onCanPlay)
     } else {
       setVideoLoading(false);
-      const t = setTimeout(() => startImageProgress(), groupKey > 0 ? 50 : 0);
-      return () => { clearTimeout(t); clearTimeout(progressTimerRef.current); cancelAnimationFrame(progressRafRef.current); };
+      const timer = setTimeout(() => startImageProgress(), groupKey > 0 ? 50 : 0);
+      return () => { clearTimeout(timer); clearTimeout(progressTimerRef.current); cancelAnimationFrame(progressRafRef.current); };
     }
     return () => { clearTimeout(progressTimerRef.current); cancelAnimationFrame(progressRafRef.current); };
   }, [currentStoryInGroupIndex, currentGroupIndex, groupKey]);
 
   useEffect(() => { handleNextRef.current = handleNext; });
 
-  // When mute state changes while video is playing, sync muted attribute
   useEffect(() => {
     if (videoRef.current && story?.media_type === 'video') {
       videoRef.current.muted = isMuted || !story.has_audio;
     }
   }, [isMuted]);
 
-  // Prefetch next 2 stories aggressively
   useEffect(() => {
     const getNext = (gi, si, offset) => {
       let g = gi, s = si + offset;
@@ -393,7 +376,6 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
         img.fetchPriority = 'high';
         img.src = next.media_url;
       } else {
-        // Hidden video element forces browser to buffer next video
         const vid = document.createElement('video');
         vid.src = next.media_url;
         vid.preload = 'auto';
@@ -489,19 +471,17 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
           await base44.entities.StoryReaction.delete(existingReaction.id);
         } else {
           await base44.entities.StoryReaction.update(existingReaction.id, { emoji });
-          // notify owner about the new emoji
           if (story.user_id !== currentUser.id) {
             const myProfiles = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
-            const myName = myProfiles[0]?.display_name || currentUser.full_name || 'Alguém';
+            const myName = myProfiles[0]?.display_name || currentUser.full_name || t.someone;
             await notifyStoryReaction(story.user_id, currentUser.id, myName, emoji, targetStoryId);
           }
         }
       } else {
         await base44.entities.StoryReaction.create({ story_id: targetStoryId, user_id: currentUser.id, emoji });
-        // notify story owner
         if (story.user_id !== currentUser.id) {
           const myProfiles = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
-          const myName = myProfiles[0]?.display_name || currentUser.full_name || 'Alguém';
+          const myName = myProfiles[0]?.display_name || currentUser.full_name || t.someone;
           await notifyStoryReaction(story.user_id, currentUser.id, myName, emoji, targetStoryId);
         }
       }
@@ -517,12 +497,20 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
     isPausedRef.current = false;
   };
 
+  const getTimeAgo = (dateStr) => {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    const hours = Math.floor(mins / 60);
+    const days = Math.floor(hours / 24);
+    if (days > 0) return t.timeAgoDays.replace('{n}', days);
+    if (hours > 0) return t.timeAgoHours.replace('{n}', hours);
+    if (mins > 0) return t.timeAgoMins.replace('{n}', mins);
+    return t.timeAgoNow;
+  };
+
   if (isLoading || !story) {
     return (
-      <div 
-        className="fixed inset-0 flex items-center justify-center z-50"
-        style={{ color: 'white' }}
-      >
+      <div className="fixed inset-0 flex items-center justify-center z-50" style={{ color: 'white' }}>
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
@@ -585,7 +573,6 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
         <div className="relative w-full md:w-[400px] h-full md:h-[90vh] md:rounded-2xl overflow-hidden"
           style={{ perspective: '1000px', perspectiveOrigin: '50% 50%' }}>
 
-          {/* Progress bars */}
           <div className="absolute top-0 left-0 right-0 z-40 flex gap-1 px-2 pt-2">
             {(currentGroup?.stories || []).map((_, index) => (
               <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
@@ -598,11 +585,9 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
             ))}
           </div>
 
-          {/* 3D cube wrapper */}
           <div className="absolute inset-0"
             style={showCube ? getCubeWrapperStyle(dragProgress, dragDir) : { position: 'absolute', inset: 0, transformStyle: 'preserve-3d' }}>
 
-            {/* Adjacent face */}
             {showCube && adjacentStory && (() => {
               const cubeR = `${window.innerWidth <= 768 ? window.innerWidth : 400}px`;
               const adjAngle = dragDir >= 0 ? 90 : -90;
@@ -617,7 +602,6 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
               );
             })()}
 
-            {/* Current face */}
             <div style={{
               position: 'absolute', inset: 0, backfaceVisibility: 'hidden',
               transform: showCube ? `translateZ(calc(${window.innerWidth <= 768 ? window.innerWidth : 400}px / 2))` : 'none',
@@ -630,18 +614,11 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                 onTouchEnd={() => { isPausedRef.current = false; }}
                 onClick={() => { isPausedRef.current = !isPausedRef.current; }} />
 
-              {/* Media */}
               <div className="absolute inset-0 bg-black">
                 {story.media_type === 'video'
                   ? <>
-                      {/* Thumbnail placeholder shown instantly while video loads */}
                       {videoLoading && story.thumbnail_url && (
-                        <img
-                          src={story.thumbnail_url}
-                          alt=""
-                          className="absolute inset-0 w-full h-full object-cover z-0"
-                          style={{ filter: 'blur(2px)', transform: 'scale(1.04)' }}
-                        />
+                        <img src={story.thumbnail_url} alt="" className="absolute inset-0 w-full h-full object-cover z-0" style={{ filter: 'blur(2px)', transform: 'scale(1.04)' }} />
                       )}
                       {videoLoading && (
                         <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -649,26 +626,23 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                         </div>
                       )}
                       <video
-                       key={story.id}
-                       ref={videoRef}
-                       src={story.media_url}
-                       className="h-full w-full object-cover"
-                       style={{ opacity: videoLoading ? 0 : 1, transition: 'opacity 0.2s' }}
-                       muted={isMuted || !story.has_audio}
-                       playsInline
-                       preload="auto"
-                       disablePictureInPicture
-                       x-webkit-airplay="deny"
-                       controlsList="nodownload nofullscreen noremoteplayback"
+                        key={story.id}
+                        ref={videoRef}
+                        src={story.media_url}
+                        className="h-full w-full object-cover"
+                        style={{ opacity: videoLoading ? 0 : 1, transition: 'opacity 0.2s' }}
+                        muted={isMuted || !story.has_audio}
+                        playsInline
+                        preload="auto"
+                        disablePictureInPicture
+                        x-webkit-airplay="deny"
+                        controlsList="nodownload nofullscreen noremoteplayback"
                         onLoadStart={() => setVideoLoading(true)}
                         onCanPlay={(e) => {
                           setVideoLoading(false);
                           const vid = e.target;
                           vid.muted = isMuted || !story.has_audio;
-                          vid.play().catch(() => {
-                            vid.muted = true;
-                            vid.play().catch(() => {});
-                          });
+                          vid.play().catch(() => { vid.muted = true; vid.play().catch(() => {}); });
                           startVideoProgress();
                         }}
                         onError={() => setVideoLoading(false)}
@@ -696,17 +670,8 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                         : <div className="w-full h-full flex items-center justify-center"><span className="font-bold" style={{ color: 'white' }}>{storyUser?.display_name?.[0] || '?'}</span></div>}
                     </div>
                     <div>
-                      <p className="font-medium" style={{ color: 'white' }}>{storyUser?.display_name || 'User'}</p>
-                      <p className="text-gray-400 text-xs">{(() => {
-                        const diff = Date.now() - new Date(story.created_date).getTime();
-                        const mins = Math.floor(diff / 60000);
-                        const hours = Math.floor(mins / 60);
-                        const days = Math.floor(hours / 24);
-                        if (days > 0) return `há ${days}d`;
-                        if (hours > 0) return `há ${hours}h`;
-                        if (mins > 0) return `há ${mins}min`;
-                        return 'agora mesmo';
-                      })()}</p>
+                      <p className="font-medium" style={{ color: 'white' }}>{storyUser?.display_name || t.user}</p>
+                      <p className="text-gray-400 text-xs">{getTimeAgo(story.created_date)}</p>
                     </div>
                   </div>
                   <div className="flex gap-2">
@@ -724,12 +689,12 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                       <DropdownMenuContent className="bg-gray-900 border-gray-800">
                         {canDelete && (
                           <DropdownMenuItem onClick={() => deleteMutation.mutate()} className="text-red-400 hover:text-red-300">
-                            <Trash2 className="w-4 h-4 mr-2" />Deletar Story
+                            <Trash2 className="w-4 h-4 mr-2" />{t.delete} Story
                           </DropdownMenuItem>
                         )}
                         {!canDelete && currentUser && (
                           <DropdownMenuItem onClick={() => setShowReportModal(true)} className="text-orange-400 hover:text-orange-300">
-                            <Flag className="w-4 h-4 mr-2" />Denunciar
+                            <Flag className="w-4 h-4 mr-2" />{t.report}
                           </DropdownMenuItem>
                         )}
                       </DropdownMenuContent>
@@ -771,7 +736,8 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                     <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.03 }}
                       onClick={() => { setShowChatInput(true); isPausedRef.current = true; }}
                       className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-transparent font-semibold backdrop-blur-sm border border-white/60" style={{ color: 'white' }}>
-                      <MessageCircle className="w-5 h-5" style={{ color: 'white' }}/><span>Reply to {storyUser?.display_name || 'user'}</span>
+                      <MessageCircle className="w-5 h-5" style={{ color: 'white' }}/>
+                      <span>{t.storyReplyBtn.replace('{name}', storyUser?.display_name || t.user)}</span>
                     </motion.button>
                   )}
                   <div className="relative">
