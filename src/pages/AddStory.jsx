@@ -5,7 +5,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { X, Send, ChevronLeft, RotateCcw, MapPin, Loader2, Zap, ZapOff } from 'lucide-react';
 import { toast } from 'sonner';
-import { useLanguage } from '../common/LanguageContext';
+import { useLanguage } from '../components/common/LanguageContext';
 
 function PlanSelectorSheet({ plans, selectedPlanId, onSelect, onClose }) {
   const { t } = useLanguage();
