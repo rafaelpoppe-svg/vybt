@@ -594,6 +594,8 @@ export const translations = {
     highlightStoryTargetParty: 'Direcionar por Tipo de Festa (opcional)',
     highlightStoryTargetPartyDesc: 'Selecione tipos de festa pra mostrar este story pra usuários que preferem esses eventos',
     highlightStoryPayBtn: 'Pagar €1.59 & Destacar Story',
+    storyReplyingTo: 'Respondendo ao story',
+    storyMessagePlaceholder: 'Mensagem para {name}...',
 
   },
 
@@ -1190,6 +1192,8 @@ en: {
     highlightStoryTargetParty: 'Target by Party Preference (optional)',
     highlightStoryTargetPartyDesc: 'Select party types to show this story to users who prefer these events',
     highlightStoryPayBtn: 'Pay €1.59 & Highlight Story',
+    storyReplyingTo: 'Replying to story',
+    storyMessagePlaceholder: 'Message {name}...',
   },
 
   es: {
@@ -1785,6 +1789,8 @@ en: {
     highlightStoryTargetParty: 'Dirigir por Tipo de Fiesta (opcional)',
     highlightStoryTargetPartyDesc: 'Selecciona tipos de fiesta para mostrar este story a usuarios que prefieren estos eventos',
     highlightStoryPayBtn: 'Pagar €1.59 & Destacar Story',
+    storyReplyingTo: 'Respondiendo al story',
+    storyMessagePlaceholder: 'Mensaje para {name}...',
   },
 
   fr: {
@@ -2380,6 +2386,8 @@ en: {
     highlightStoryTargetParty: 'Cibler par Préférence de Soirée (optionnel)',
     highlightStoryTargetPartyDesc: 'Sélectionne des types de soirée pour montrer ce story aux utilisateurs qui préfèrent ces événements',
     highlightStoryPayBtn: 'Payer €1.59 & Mettre en Avant',
+    storyReplyingTo: 'Répondre au story',
+    storyMessagePlaceholder: 'Message à {name}...',
   },
 
   it: {
@@ -2975,6 +2983,8 @@ en: {
     highlightStoryTargetParty: 'Filtra per Tipo di Festa (opzionale)',
     highlightStoryTargetPartyDesc: 'Seleziona tipi di festa per mostrare questo story agli utenti che preferiscono questi eventi',
     highlightStoryPayBtn: 'Paga €1.59 & Metti in Evidenza',
+    storyReplyingTo: 'Rispondendo allo story',
+    storyMessagePlaceholder: 'Messaggio a {name}...',
   },
 };
 
