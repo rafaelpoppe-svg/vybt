@@ -500,6 +500,7 @@ export const translations = {
     highlightTerms: 'Ao destacar, concorda com os nossos termos de serviço',
     highlightSuccess: 'Pagamento bem-sucedido! Plano em destaque 🔥',
     highlightError: 'Erro no pagamento',
+    allFriendsInPlan: 'Todos os amigos já estão neste plano',
   },
 
 en: {
@@ -1001,6 +1002,7 @@ en: {
     highlightTerms: 'By highlighting, you agree to our terms of service',
     highlightSuccess: 'Payment successful! Plan highlighted 🔥',
     highlightError: 'Payment error',
+    allFriendsInPlan: 'All friends are already in this plan',
   },
 
   es: {
@@ -1502,6 +1504,7 @@ en: {
     highlightTerms: 'Al destacar, aceptas nuestros términos de servicio',
     highlightSuccess: '¡Pago exitoso! Plan destacado 🔥',
     highlightError: 'Error en el pago',
+    allFriendsInPlan: 'Todos los amigos ya están en este plan',
   },
 
   fr: {
@@ -2003,6 +2006,7 @@ en: {
     highlightTerms: 'En mettant en avant, tu acceptes nos conditions d\'utilisation',
     highlightSuccess: 'Paiement réussi ! Plan mis en avant 🔥',
     highlightError: 'Erreur de paiement',
+    allFriendsInPlan: 'Tous tes amis sont déjà dans ce plan',
   },
 
   it: {
@@ -2504,6 +2508,7 @@ en: {
     highlightTerms: 'Mettendo in evidenza, accetti i nostri termini di servizio',
     highlightSuccess: 'Pagamento riuscito! Piano in evidenza 🔥',
     highlightError: 'Errore nel pagamento',
+    allFriendsInPlan: 'Tutti gli amici sono già in questo piano',
   },
 };
 
