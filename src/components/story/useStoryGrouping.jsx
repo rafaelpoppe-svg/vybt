@@ -107,19 +107,6 @@ export function useStoryGrouping(allStories, userProfiles, plans, currentUser, f
     return groups;
   }, [allStories, userProfiles, plans, currentUser, friendships]);
 
-  /**
-   * Encontra o índice do grupo e da história dentro do grupo baseado num story ID
-   */
-  /* rREMOVER SE DER CERTOconst findStoryPosition = (storyId) => {
-    for (let groupIdx = 0; groupIdx < groupedStories.length; groupIdx++) {
-      const group = groupedStories[groupIdx];
-      const storyIdx = group.stories.findIndex(s => s.id === storyId);
-      if (storyIdx !== -1) {
-        return { groupIndex: groupIdx, storyIndex: storyIdx, group };
-      }
-    }
-    return null;
-  };*/
   const findStoryPosition = (storyId) => {
     for (let groupIdx = 0; groupIdx < groupedStories.length; groupIdx++) {
       const group = groupedStories[groupIdx];
