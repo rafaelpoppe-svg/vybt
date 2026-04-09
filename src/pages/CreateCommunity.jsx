@@ -7,18 +7,12 @@ import { ChevronLeft, Image as ImageIcon, Loader2, Check, ArrowRight, Palette, L
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import PartyTag, { ALL_PARTY_TYPES } from '../components/common/PartyTag';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const THEME_COLORS = [
   '#00c6d2','#542b9b','#ff6b6b','#f8b500','#ff69b4',
   '#22c55e','#f97316','#3b82f6','#e879f9','#84cc16',
   '#ef4444','#a78bfa','#06b6d4','#fb923c','#ec4899',
-];
-
-const STEPS = [
-  { id: 1, label: 'Identity', emoji: '✨' },
-  { id: 2, label: 'Location', emoji: '📍' },
-  { id: 3, label: 'Vibe', emoji: '🎉' },
-  { id: 4, label: 'Settings', emoji: '⚙️' },
 ];
 
 const POPULAR_CITIES = [
@@ -38,6 +32,7 @@ const slideVariants = {
 function CityStep({ data, setData, isAdmin }) {
   const [detecting, setDetecting] = useState(false);
   const [search, setSearch] = useState('');
+  const { t } = useLanguage();
 
   const detectCity = () => {
     if (!navigator.geolocation) return;
@@ -71,11 +66,10 @@ function CityStep({ data, setData, isAdmin }) {
     <div className="space-y-6">
       <div className="text-center">
         <div className="text-5xl mb-3">📍</div>
-        <h2 className="text-2xl font-black text-white">Where is your community?</h2>
-        <p className="text-gray-400 mt-1">Detect your city or choose one below</p>
+        <h2 className="text-2xl font-black text-white">{t.whereIsYourCommunity}</h2>
+        <p className="text-gray-400 mt-1">{t.detectOrChooseCity}</p>
       </div>
 
-      {/* Detect button */}
       <motion.button
         whileTap={{ scale: 0.97 }}
         onClick={detectCity}
@@ -84,10 +78,9 @@ function CityStep({ data, setData, isAdmin }) {
         style={{ background: `linear-gradient(135deg, ${tc}33, #542b9b33)`, border: `1.5px solid ${tc}55`, color: tc }}
       >
         {detecting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Navigation className="w-5 h-5" />}
-        {detecting ? 'Detecting...' : 'Use My Current Location'}
+        {detecting ? t.detecting : t.useMyLocation}
       </motion.button>
 
-      {/* Current selection */}
       {data.city && (
         <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
           className="rounded-2xl p-3 flex items-center gap-3 border"
@@ -95,32 +88,29 @@ function CityStep({ data, setData, isAdmin }) {
           <span className="text-2xl">📍</span>
           <div className="flex-1">
             <p className="text-white font-black text-lg">{data.city}</p>
-            <p className="text-xs" style={{ color: tc }}>Selected ✅</p>
+            <p className="text-xs" style={{ color: tc }}>{t.selectedCheck}</p>
           </div>
           <motion.button whileTap={{ scale: 0.9 }} onClick={() => setData(prev => ({ ...prev, city: '' }))}
-            className="text-gray-500 text-xs px-2 py-1 rounded-lg bg-gray-800">Clear</motion.button>
+            className="text-gray-500 text-xs px-2 py-1 rounded-lg bg-gray-800">{t.clearCity}</motion.button>
         </motion.div>
       )}
 
-      {/* Divider */}
       <div className="flex items-center gap-3">
         <div className="flex-1 h-px bg-gray-800" />
-        <span className="text-gray-600 text-xs">or choose a city</span>
+        <span className="text-gray-600 text-xs">{t.orChooseCity}</span>
         <div className="flex-1 h-px bg-gray-800" />
       </div>
 
-      {/* Search (admin only) */}
       {isAdmin && (
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search city..."
+          placeholder={t.searchCityInput}
           className="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-gray-600"
         />
       )}
 
-      {/* City list */}
       <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-hide">
         {filteredCities.map((c) => {
           const selected = data.city === c;
@@ -140,12 +130,11 @@ function CityStep({ data, setData, isAdmin }) {
               </motion.button>
             );
           }
-          // Non-admin: locked cities
           return (
             <div key={c} className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-800/50 cursor-not-allowed">
               <span className="text-sm text-gray-600">{c}</span>
               <span className="text-[10px] text-gray-600 flex items-center gap-1">
-                <Lock className="w-2.5 h-2.5" /> Vybt Plus
+                <Lock className="w-2.5 h-2.5" /> {t.vybtPlusLocked}
               </span>
             </div>
           );
@@ -157,6 +146,7 @@ function CityStep({ data, setData, isAdmin }) {
 
 export default function CreateCommunity() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -170,6 +160,13 @@ export default function CreateCommunity() {
     cover_image: '', background_image: '', party_types: [], vibes: [],
     plan_creation_policy: 'anyone',
   });
+
+  const STEPS = [
+    { id: 1, label: t.stepIdentity, emoji: '✨' },
+    { id: 2, label: t.stepLocation, emoji: '📍' },
+    { id: 3, label: t.stepVibe, emoji: '🎉' },
+    { id: 4, label: t.stepSettings, emoji: '⚙️' },
+  ];
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => navigate(createPageUrl('Home')));
@@ -219,13 +216,11 @@ export default function CreateCommunity() {
     setDone(true);
   };
 
-  // ── SUCCESS SCREEN ─────────────────────────────────────────────────────────
   if (done && createdCommunity) {
     const tc = createdCommunity.theme_color || '#00c6d2';
     const lightnings = ['⚡','⚡','⚡','⚡','⚡','⚡'];
     return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden" style={{background: 'var(--bg)', paddingTop: 'env(safe-area-inset-top,0px)' }}>
-        {/* Blue lightning rays */}
+      <div className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden" style={{ background: 'var(--bg)', paddingTop: 'env(safe-area-inset-top,0px)' }}>
         {lightnings.map((_, i) => (
           <motion.div key={i}
             initial={{ opacity: 0, scale: 0, rotate: (i * 60), x: 0, y: 0 }}
@@ -235,8 +230,6 @@ export default function CreateCommunity() {
             style={{ filter: 'drop-shadow(0 0 20px #00c6d2)' }}
           >⚡</motion.div>
         ))}
-
-        {/* Confetti emojis */}
         {['🎉','🔥','🎊','✨','💫','🥂','🕺','💃','🎶','🌟'].map((emoji, i) => (
           <motion.div key={`e${i}`}
             initial={{ y: '100vh', x: `${(i * 11) % 90}vw`, opacity: 0, rotate: 0 }}
@@ -246,14 +239,12 @@ export default function CreateCommunity() {
             style={{ left: `${(i * 11) % 90}%` }}
           >{emoji}</motion.div>
         ))}
-
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', bounce: 0.5, delay: 0.4 }}
           className="relative z-10 w-full max-w-sm px-6 text-center"
         >
-          {/* Community preview card */}
           <motion.div
             animate={{ y: [0, -8, 0] }}
             transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
@@ -268,24 +259,22 @@ export default function CreateCommunity() {
               <p className="text-gray-400 text-sm mt-1">{createdCommunity.city}</p>
             </div>
           </motion.div>
-
           <motion.h1 initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }}
-            className="text-4xl font-black text-white mb-3">Let's fire this!! 🔥</motion.h1>
+            className="text-4xl font-black text-white mb-3">{t.letsFire}</motion.h1>
           <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.8 }}
             className="text-lg font-bold mb-8" style={{ color: tc }}>
-            Your community is live! ⚡
+            {t.communityLive}
           </motion.p>
-
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1 }} className="space-y-3">
             <motion.button whileTap={{ scale: 0.97 }}
               onClick={() => navigate(createPageUrl('CommunityView') + `?id=${createdCommunity.id}`)}
               className="w-full py-4 rounded-2xl font-black text-lg text-[#0b0b0b]"
               style={{ background: `linear-gradient(135deg, ${tc}, #542b9b)` }}>
-              Go to my Community 🚀
+              {t.goToCommunity}
             </motion.button>
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate(createPageUrl('Home'))}
               className="w-full py-4 rounded-2xl bg-gray-900 text-white font-bold border border-gray-800">
-              Go to Home 🏠
+              {t.goToHome}
             </motion.button>
           </motion.div>
         </motion.div>
@@ -298,22 +287,21 @@ export default function CreateCommunity() {
       <div className="space-y-6">
         <div className="text-center">
           <div className="text-5xl mb-3">⭐</div>
-          <h2 className="text-2xl font-black text-white">Name your Community</h2>
-          <p className="text-gray-400 mt-1">Give it a vibe! 🔥</p>
+          <h2 className="text-2xl font-black text-white">{t.nameCommunity}</h2>
+          <p className="text-gray-400 mt-1">{t.giveItAVibe}</p>
         </div>
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Community Name *</label>
+          <label className="block text-gray-400 text-sm mb-2">{t.communityNameLabel}</label>
           <Input value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })}
-            placeholder="e.g. Erasmus Braga 🎓" className="bg-gray-900 border-gray-800 text-white text-lg py-6" autoFocus />
+            placeholder={t.communityNamePlaceholder} className="bg-gray-900 border-gray-800 text-white text-lg py-6" autoFocus />
         </div>
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Description <span className="text-gray-600">(optional)</span></label>
+          <label className="block text-gray-400 text-sm mb-2">{t.descriptionOptional} <span className="text-gray-600">({t.optional})</span></label>
           <Textarea value={data.description} onChange={(e) => setData({ ...data, description: e.target.value })}
-            placeholder="What is this community about? 🎉" className="bg-gray-900 border-gray-800 text-white min-h-20" />
+            placeholder={t.communityDescPlaceholder} className="bg-gray-900 border-gray-800 text-white min-h-20" />
         </div>
-        {/* Theme Color */}
         <div>
-          <label className="block text-gray-400 text-sm mb-3 flex items-center gap-1.5"><Palette className="w-4 h-4" />Theme Color</label>
+          <label className="block text-gray-400 text-sm mb-3 flex items-center gap-1.5"><Palette className="w-4 h-4" />{t.themeColor}</label>
           <div className="flex gap-2 flex-wrap">
             {THEME_COLORS.map((color) => (
               <motion.button key={color} whileTap={{ scale: 0.85 }} onClick={() => setData({ ...data, theme_color: color })}
@@ -326,39 +314,36 @@ export default function CreateCommunity() {
               </motion.button>
             ))}
           </div>
-          {/* Live preview dot */}
           <div className="mt-3 h-1.5 w-full rounded-full" style={{ background: `linear-gradient(90deg, ${data.theme_color}, #542b9b)` }} />
         </div>
-        {/* Cover Image */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Cover Image <span className="text-red-500">*</span></label>
+          <label className="block text-gray-400 text-sm mb-2">{t.coverImageLabel} <span className="text-red-500">*</span></label>
           <label className="block cursor-pointer">
             {data.cover_image
               ? <div className="relative h-40 rounded-2xl overflow-hidden">
                   <img src={data.cover_image} alt="" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                    <span className="text-white text-sm font-medium">Change 📸</span>
+                    <span className="text-white text-sm font-medium">{t.changeCoverPhoto}</span>
                   </div>
                 </div>
               : <div className="h-40 rounded-2xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center gap-2 hover:border-gray-500 transition-colors">
-                  {uploadingCover ? <Loader2 className="w-6 h-6 animate-spin" style={{ color: data.theme_color }} /> : <><ImageIcon className="w-8 h-8 text-gray-600" /><span className="text-gray-500 text-sm">Add cover photo 🌆</span></>}
+                  {uploadingCover ? <Loader2 className="w-6 h-6 animate-spin" style={{ color: data.theme_color }} /> : <><ImageIcon className="w-8 h-8 text-gray-600" /><span className="text-gray-500 text-sm">{t.addCoverPhoto}</span></>}
                 </div>}
             <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'cover_image')} className="hidden" />
           </label>
         </div>
-        {/* Background Image */}
         <div>
-          <label className="block text-gray-400 text-sm mb-2">Background Image <span className="text-gray-600">(optional)</span></label>
+          <label className="block text-gray-400 text-sm mb-2">{t.backgroundImageLabel} <span className="text-gray-600">({t.optional})</span></label>
           <label className="block cursor-pointer">
             {data.background_image
               ? <div className="relative h-24 rounded-2xl overflow-hidden">
                   <img src={data.background_image} alt="" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                    <span className="text-white text-sm font-medium">Change</span>
+                    <span className="text-white text-sm font-medium">{t.changeBackground}</span>
                   </div>
                 </div>
               : <div className="h-24 rounded-2xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center gap-2 hover:border-gray-500 transition-colors">
-                  {uploadingBg ? <Loader2 className="w-5 h-5 animate-spin" style={{ color: data.theme_color }} /> : <><ImageIcon className="w-6 h-6 text-gray-600" /><span className="text-gray-500 text-xs">Background (fullscreen texture)</span></>}
+                  {uploadingBg ? <Loader2 className="w-5 h-5 animate-spin" style={{ color: data.theme_color }} /> : <><ImageIcon className="w-6 h-6 text-gray-600" /><span className="text-gray-500 text-xs">{t.backgroundTexture}</span></>}
                 </div>}
             <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'background_image')} className="hidden" />
           </label>
@@ -374,16 +359,16 @@ export default function CreateCommunity() {
       <div className="space-y-6">
         <div className="text-center">
           <div className="text-5xl mb-3">🎉</div>
-          <h2 className="text-2xl font-black text-white">Community Vibe</h2>
-          <p className="text-gray-400 mt-1">Choose up to 3 party types</p>
+          <h2 className="text-2xl font-black text-white">{t.communityVibeTitle}</h2>
+          <p className="text-gray-400 mt-1">{t.chooseUpTo3}</p>
         </div>
         <div>
-          <p className="text-gray-400 text-sm mb-2">Party Types * <span className="text-gray-600">({data.party_types.length}/3)</span></p>
+          <p className="text-gray-400 text-sm mb-2">{t.partyTypesLabel} <span className="text-gray-600">({data.party_types.length}/3)</span></p>
           <div className="flex flex-wrap gap-2 max-h-72 overflow-y-auto">
             {ALL_PARTY_TYPES.map((tag) => (
               <PartyTag key={tag} tag={tag} size="md" interactive selected={data.party_types.includes(tag)}
                 onClick={() => {
-                  if (data.party_types.includes(tag)) setData({ ...data, party_types: data.party_types.filter(t => t !== tag) });
+                  if (data.party_types.includes(tag)) setData({ ...data, party_types: data.party_types.filter(tp => tp !== tag) });
                   else if (data.party_types.length < 3) setData({ ...data, party_types: [...data.party_types, tag] });
                 }} />
             ))}
@@ -396,17 +381,17 @@ export default function CreateCommunity() {
       <div className="space-y-6">
         <div className="text-center">
           <div className="text-5xl mb-3">⚙️</div>
-          <h2 className="text-2xl font-black text-white">Plan Settings</h2>
-          <p className="text-gray-400 mt-1">Who can create plans in your community?</p>
+          <h2 className="text-2xl font-black text-white">{t.planSettingsTitle}</h2>
+          <p className="text-gray-400 mt-1">{t.whoCanCreate}</p>
         </div>
         {[
-          { key: 'anyone', emoji: '🌍', title: 'Anyone', desc: 'All members can create plans freely' },
-          { key: 'approval_required', emoji: '✅', title: 'Needs Approval', desc: 'Members create, admins approve' },
-          { key: 'admins_only', emoji: '👑', title: 'Admins Only', desc: 'Only community admins can create plans' },
+          { key: 'anyone', emoji: '🌍', title: t.policyAnyoneTitle, desc: t.policyAnyoneDesc },
+          { key: 'approval_required', emoji: '✅', title: t.policyApprovalTitle, desc: t.policyApprovalDesc },
+          { key: 'admins_only', emoji: '👑', title: t.policyAdminsTitle, desc: t.policyAdminsDesc },
         ].map((opt) => (
           <motion.button key={opt.key} whileTap={{ scale: 0.97 }}
             onClick={() => setData({ ...data, plan_creation_policy: opt.key })}
-            className={`w-full p-4 rounded-2xl border-2 text-left flex items-start gap-3 transition-all`}
+            className="w-full p-4 rounded-2xl border-2 text-left flex items-start gap-3 transition-all"
             style={data.plan_creation_policy === opt.key
               ? { borderColor: data.theme_color, background: `${data.theme_color}18` }
               : { borderColor: 'var(--bg-secondary)', background: 'var(--bg)' }}>
@@ -423,11 +408,8 @@ export default function CreateCommunity() {
   };
 
   return (
-    <div 
-      className="min-h-screen flex flex-col"
-      style={{background: 'var(--bg)'}}
-    >
-      <header className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4" style={{background: 'var(--bg)', opacity: 0.95, paddingTop: 'max(env(safe-area-inset-top,0px),16px)' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
+      <header className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4" style={{ background: 'var(--bg)', opacity: 0.95, paddingTop: 'max(env(safe-area-inset-top,0px),16px)' }}>
         <motion.button whileTap={{ scale: 0.9 }} onClick={goBack} className="p-2 rounded-full bg-gray-900">
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
@@ -448,12 +430,14 @@ export default function CreateCommunity() {
         </AnimatePresence>
       </div>
 
-      <div className="flex-shrink-0 p-6 border-t border-gray-900" style={{background: 'var(--bg)', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+      <div className="flex-shrink-0 p-6 border-t border-gray-900" style={{ background: 'var(--bg)', paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
         <motion.button whileTap={{ scale: 0.97 }} onClick={step < 4 ? goNext : handleSubmit}
           disabled={!canProceed() || loading}
           className="w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all text-[#0b0b0b] disabled:opacity-40"
           style={{ background: canProceed() && !loading ? `linear-gradient(135deg, ${data.theme_color}, #542b9b)` : '#374151', color: canProceed() ? '#0b0b0b' : '#6b7280' }}>
-          {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : step < 4 ? <><span>Next</span><ArrowRight className="w-5 h-5" /></> : <>Create Community 🚀</>}
+          {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : step < 4
+            ? <><span>{t.nextBtn}</span><ArrowRight className="w-5 h-5" /></>
+            : <>{t.createCommunityBtn}</>}
         </motion.button>
       </div>
     </div>
