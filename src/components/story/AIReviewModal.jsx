@@ -2,9 +2,11 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function AIReviewModal({ isOpen, onClose, review, caption, onApply }) {
   const [copied, setCopied] = useState(false);
+  const { t } = useLanguage();
 
   if (!review) return null;
 
@@ -36,7 +38,7 @@ export default function AIReviewModal({ isOpen, onClose, review, caption, onAppl
             <div className="sticky top-0 bg-gray-900 border-b border-gray-800 flex items-center justify-between p-4 z-10">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-[#542b9b]" />
-                <h2 className="text-lg font-bold text-white">AI Review</h2>
+                <h2 className="text-lg font-bold text-white">{t.aiReview}</h2>
               </div>
               <motion.button
                 whileTap={{ scale: 0.9 }}
@@ -52,7 +54,7 @@ export default function AIReviewModal({ isOpen, onClose, review, caption, onAppl
               {/* Tone Analysis */}
               {review.tone && (
                 <div className="p-4 rounded-xl bg-gray-800/50 border border-gray-700">
-                  <p className="text-sm font-medium text-gray-300 mb-2">Tone</p>
+                  <p className="text-sm font-medium text-gray-300 mb-2">{t.aiTone}</p>
                   <p className="text-white">{review.tone}</p>
                 </div>
               )}
@@ -61,7 +63,7 @@ export default function AIReviewModal({ isOpen, onClose, review, caption, onAppl
               {review.engagement_score !== undefined && (
                 <div className="p-4 rounded-xl bg-gray-800/50 border border-gray-700">
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm font-medium text-gray-300">Engagement Score</p>
+                    <p className="text-sm font-medium text-gray-300">{t.aiEngagementScore}</p>
                     <span className="text-lg font-bold text-[#00c6d2]">{review.engagement_score}%</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-2">
@@ -76,7 +78,7 @@ export default function AIReviewModal({ isOpen, onClose, review, caption, onAppl
               {/* Feedback */}
               {review.feedback && (
                 <div className="p-4 rounded-xl bg-gray-800/50 border border-gray-700">
-                  <p className="text-sm font-medium text-gray-300 mb-2">Feedback</p>
+                  <p className="text-sm font-medium text-gray-300 mb-2">{t.aiFeedback}</p>
                   <p className="text-white text-sm leading-relaxed">{review.feedback}</p>
                 </div>
               )}
@@ -84,7 +86,7 @@ export default function AIReviewModal({ isOpen, onClose, review, caption, onAppl
               {/* Suggested Caption */}
               {review.suggested_caption && (
                 <div className="p-4 rounded-xl bg-[#542b9b]/20 border border-[#542b9b]/50">
-                  <p className="text-sm font-medium text-[#542b9b] mb-2">Suggested Caption</p>
+                  <p className="text-sm font-medium text-[#542b9b] mb-2">{t.aiSuggestedCaption}</p>
                   <p className="text-white text-sm leading-relaxed mb-3">{review.suggested_caption}</p>
                   <div className="flex gap-2">
                     <motion.button
@@ -95,12 +97,12 @@ export default function AIReviewModal({ isOpen, onClose, review, caption, onAppl
                       {copied ? (
                         <>
                           <Check className="w-4 h-4" />
-                          Copied
+                          {t.aiCopied}
                         </>
                       ) : (
                         <>
                           <Copy className="w-4 h-4" />
-                          Copy
+                          {t.aiCopy}
                         </>
                       )}
                     </motion.button>
@@ -109,7 +111,7 @@ export default function AIReviewModal({ isOpen, onClose, review, caption, onAppl
                       onClick={() => onApply(review.suggested_caption)}
                       className="flex-1 py-2 rounded-lg bg-[#00c6d2] text-[#0b0b0b] font-semibold hover:bg-[#00c6d2]/90 transition-colors"
                     >
-                      Apply
+                      {t.aiApply}
                     </motion.button>
                   </div>
                 </div>
