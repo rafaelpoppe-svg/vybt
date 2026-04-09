@@ -504,6 +504,9 @@ export const translations = {
     leavePlanTitle: 'Sair do Plano?',
     leavePlanRejoin: 'Você pode entrar novamente mais tarde se o plano ainda estiver disponível.',
     stay: 'Ficar',
+    voting: 'Votação',
+    startsIn: 'Começa em {time}',
+
   },
 
 en: {
@@ -1009,6 +1012,8 @@ en: {
     leavePlanTitle: 'Leave Plan?',
     leavePlanRejoin: 'You can rejoin later if the plan is still available.',
     stay: 'Stay',
+    voting: 'Voting',
+    startsIn: 'Starts in {time}',
   },
 
   es: {
@@ -1514,6 +1519,8 @@ en: {
     leavePlanTitle: '¿Salir del Plan?',
     leavePlanRejoin: 'Puedes volver a unirte más tarde si el plan sigue disponible.',
     stay: 'Quedarme',
+    voting: 'Votación',
+    startsIn: 'Empieza en {time}',
   },
 
   fr: {
@@ -2019,6 +2026,8 @@ en: {
     leavePlanTitle: 'Quitter le Plan ?',
     leavePlanRejoin: 'Tu pourras rejoindre plus tard si le plan est encore disponible.',
     stay: 'Rester',
+    voting: 'Vote',
+    startsIn: 'Commence dans {time}',
   },
 
   it: {
@@ -2524,6 +2533,9 @@ en: {
     leavePlanTitle: 'Lasciare il Piano?',
     leavePlanRejoin: 'Puoi riunirti più tardi se il piano è ancora disponibile.',
     stay: 'Restare',
+    voting: 'Votazione',
+    startsIn: 'Inizia tra {time}',
+
   },
 };
 
