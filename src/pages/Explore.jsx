@@ -5,7 +5,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PullToRefresh from '../components/common/PullToRefresh';
-import { Search, Flame, Users, Loader2, LayoutGrid, User, Check, X, UserPlus } from 'lucide-react';
+import { Search, Loader2, LayoutGrid, User } from 'lucide-react';
 import UserCard from '../components/explore/UserCard';
 import { useMutation } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,7 @@ export default function Explore() {
   const { t } = useLanguage();
   const urlParams = new URLSearchParams(window.location.search);
   const initialTab = urlParams.get('tab');
-  
+
   const [search, setSearch] = useState('');
   const [selectedTag, setSelectedTag] = useState('All');
   const [activeView, setActiveView] = useState(initialTab === 'communities' ? 'communities' : 'plans');
@@ -33,8 +33,6 @@ export default function Explore() {
   const [planFilters, setPlanFilters] = useState({ sortBy: 'foryou' });
   const [userFilters, setUserFilters] = useState({ sortBy: 'foryou' });
   const [currentUser, setCurrentUser] = useState(null);
-
-  // Pre-load city from localStorage so we don't wait for currentUser/profile
   const [cachedCity] = useState(() => localStorage.getItem('selectedCity') || '');
 
   useEffect(() => {
@@ -103,11 +101,8 @@ export default function Explore() {
 
   const friendIds = friendships.map(f => f.friend_id);
   const pastPlanIds = myParticipations.map(p => p.plan_id);
-
-  // Use profile city or cached city
   const userCity = (myProfile?.city || cachedCity)?.trim()?.toLowerCase() || null;
 
-  // Get personalized recommendations
   const recommendedPlans = useRecommendations({
     plans,
     userProfile: myProfile,
@@ -117,22 +112,10 @@ export default function Explore() {
     allPlans: plans
   });
 
-  const getParticipantCount = (planId) => {
-    return allParticipants.filter(p => p.plan_id === planId).length;
-  };
+  const getParticipantCount = (planId) => allParticipants.filter(p => p.plan_id === planId).length;
+  const getGoingCount = (planId) => allParticipants.filter(p => p.plan_id === planId && p.status === 'going').length;
+  const getParticipants = (planId) => allParticipants.filter(p => p.plan_id === planId).map(p => profilesMap[p.user_id]).filter(Boolean);
 
-  const getGoingCount = (planId) => {
-    return allParticipants.filter(p => p.plan_id === planId && p.status === 'going').length;
-  };
-
-  const getParticipants = (planId) => {
-    return allParticipants
-      .filter(p => p.plan_id === planId)
-      .map(p => profilesMap[p.user_id])
-      .filter(Boolean);
-  };
-
-  // Base filter: remove invalid/expired plans, apply city + tag + search
   const baseFilter = (plan) => {
     if (plan.status === 'voting' || plan.status === 'terminated') return false;
     if (plan.date && plan.time) {
@@ -145,50 +128,39 @@ export default function Explore() {
     if (plan.show_in_explore === false) return false;
     if (!userCity) return false;
     if (plan.city?.toLowerCase() !== userCity) return false;
-
     const matchesSearch = plan.title.toLowerCase().includes(search.toLowerCase()) ||
       plan.location_address?.toLowerCase().includes(search.toLowerCase());
-    const matchesTag = selectedTag === 'All' || plan.tags?.some(t =>
-      t.toLowerCase().includes(selectedTag.toLowerCase())
+    const matchesTag = selectedTag === 'All' || plan.tags?.some(tg =>
+      tg.toLowerCase().includes(selectedTag.toLowerCase())
     );
     let matchesFilters = true;
-    if (planFilters.vibes?.length > 0) {
-      matchesFilters = plan.tags?.some(t => planFilters.vibes.includes(t));
-    }
-    if (planFilters.partyTags?.length > 0) {
-      matchesFilters = matchesFilters && plan.tags?.some(t => planFilters.partyTags.includes(t));
-    }
+    if (planFilters.vibes?.length > 0) matchesFilters = plan.tags?.some(tg => planFilters.vibes.includes(tg));
+    if (planFilters.partyTags?.length > 0) matchesFilters = matchesFilters && plan.tags?.some(tg => planFilters.partyTags.includes(tg));
     return matchesSearch && matchesTag && matchesFilters;
   };
 
-  // ── LIVE NOW plans (status = happening) ──
   const liveNowPlans = plans
     .filter(p => p.status === 'happening' && baseFilter(p))
     .sort((a, b) => getGoingCount(b.id) - getGoingCount(a.id));
 
-  // ── FOR YOU plans — sorted by matchScore, only upcoming/happening, no community plans ──
   const forYouPlans = recommendedPlans
     .filter(p => baseFilter(p) && !p.community_id && (p.status === 'upcoming' || p.status === 'happening'))
     .sort((a, b) => {
-      // Highlighted first
       if (a.is_highlighted && !b.is_highlighted) return -1;
       if (!a.is_highlighted && b.is_highlighted) return 1;
       return (b.matchScore || 0) - (a.matchScore || 0);
     });
 
-  // ── ON FIRE plans — most going + view_count + members, only upcoming/happening ──
   const onFirePlans = plans
     .filter(p => baseFilter(p) && (p.status === 'upcoming' || p.status === 'happening'))
     .sort((a, b) => {
       if (a.is_highlighted && !b.is_highlighted) return -1;
       if (!a.is_highlighted && b.is_highlighted) return 1;
-      // Score = going*3 + total_members*2 + views
       const scoreA = getGoingCount(a.id) * 3 + getParticipantCount(a.id) * 2 + (a.view_count || 0);
       const scoreB = getGoingCount(b.id) * 3 + getParticipantCount(b.id) * 2 + (b.view_count || 0);
       return scoreB - scoreA;
     });
 
-  // ── MOST MEMBERS plans — only upcoming/happening ──
   const mostMembersPlans = plans
     .filter(p => baseFilter(p) && (p.status === 'upcoming' || p.status === 'happening'))
     .sort((a, b) => {
@@ -197,40 +169,27 @@ export default function Explore() {
       return getParticipantCount(b.id) - getParticipantCount(a.id);
     });
 
-  // Select which list to show
   let filteredPlans;
   if (planFilters.sortBy === 'livenow') filteredPlans = liveNowPlans;
   else if (planFilters.sortBy === 'foryou') filteredPlans = forYouPlans;
   else if (planFilters.sortBy === 'onfire') filteredPlans = onFirePlans;
   else filteredPlans = mostMembersPlans;
 
-  // Filter users
-  // When searching: global search (all users, any city)
-  // When not searching: only users in same city (area)
   const isSearchingUsers = activeView === 'users' && search.trim().length > 0;
   const searchTerm = search.replace(/^@/, '').toLowerCase().trim();
 
   let filteredUsers = userProfiles.filter(profile => {
     if (profile.user_id === currentUser?.id) return false;
     if (friendIds.includes(profile.user_id)) return false;
-
     if (isSearchingUsers) {
-      // Global search by username or display name
       return profile.display_name?.toLowerCase().includes(searchTerm) ||
         (profile.username && profile.username.toLowerCase().includes(searchTerm));
     }
-
-    // No search: restrict to user's area
     if (!userCity) return false;
     if (profile.city?.toLowerCase() !== userCity) return false;
-
     let matchesFilters = true;
-    if (userFilters.gender) {
-      matchesFilters = profile.gender === userFilters.gender;
-    }
-    if (userFilters.vibes?.length > 0) {
-      matchesFilters = matchesFilters && profile.vibes?.some(v => userFilters.vibes.includes(v));
-    }
+    if (userFilters.gender) matchesFilters = profile.gender === userFilters.gender;
+    if (userFilters.vibes?.length > 0) matchesFilters = matchesFilters && profile.vibes?.some(v => userFilters.vibes.includes(v));
     return matchesFilters;
   });
 
@@ -242,9 +201,7 @@ export default function Explore() {
     });
   }
 
-  const handleRefresh = async () => {
-    await queryClient.invalidateQueries();
-  };
+  const handleRefresh = async () => { await queryClient.invalidateQueries(); };
 
   const acceptMutation = useMutation({
     mutationFn: (friendshipId) => base44.entities.Friendship.update(friendshipId, { status: 'accepted' }),
@@ -256,15 +213,13 @@ export default function Explore() {
 
   const declineMutation = useMutation({
     mutationFn: (friendshipId) => base44.entities.Friendship.update(friendshipId, { status: 'declined' }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['receivedFriendRequestsExplore', currentUser?.id]);
-    }
+    onSuccess: () => queryClient.invalidateQueries(['receivedFriendRequestsExplore', currentUser?.id])
   });
 
   const sortChips = [
     {
       key: 'livenow',
-      label: 'Live Now',
+      label: t.liveNow,
       emoji: '🔴',
       activeClass: 'bg-red-500/20 text-red-400 border-red-500/30',
       badge: liveNowPlans.length > 0 ? liveNowPlans.length : null,
@@ -290,13 +245,9 @@ export default function Explore() {
   ];
 
   return (
-    <div
-      className="overflow-hidden flex flex-col"
-      style={{ position: 'fixed', inset: 0, background: 'var(--bg)' }}
-    >
+    <div className="overflow-hidden flex flex-col" style={{ position: 'fixed', inset: 0, background: 'var(--bg)' }}>
       {/* Header */}
       <header className="flex-shrink-0 z-40 backdrop-blur-lg border-b px-4 pt-3 pb-0" style={{ background: 'var(--header-bg)', borderColor: 'var(--border)' }}>
-        {/* Title row */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <motion.span
@@ -321,20 +272,17 @@ export default function Explore() {
               whileTap={{ scale: 0.9 }}
               onClick={() => setShowFilters(!showFilters)}
               className={`relative p-2.5 rounded-xl transition-all ${showFilters ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'border'}`}
-          style={showFilters ? {} : { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' }}
+              style={showFilters ? {} : { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' }}
             >
               <SlidersHorizontal className="w-4 h-4" />
               {showFilters && (
-                <motion.span
-                  layoutId="filter-dot"
-                  className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-orange-500"
-                />
+                <motion.span layoutId="filter-dot" className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-orange-500" />
               )}
             </motion.button>
           )}
         </div>
 
-        {/* View Toggle — pill style */}
+        {/* View Toggle */}
         <div className="relative flex rounded-2xl p-1 mb-3" style={{ background: 'var(--surface)' }}>
           <motion.div
             className="absolute top-1 bottom-1 rounded-xl"
@@ -356,7 +304,11 @@ export default function Explore() {
           <button onClick={() => setActiveView('users')}
             className={`relative flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ${activeView === 'users' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}>
             <User className="w-3 h-3" />{t.people}
-            {receivedFriendRequests.length > 0 && <span className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold">{receivedFriendRequests.length}</span>}
+            {receivedFriendRequests.length > 0 && (
+              <span className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold">
+                {receivedFriendRequests.length}
+              </span>
+            )}
           </button>
         </div>
 
@@ -367,11 +319,9 @@ export default function Explore() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={
-              activeView === 'plans'
-                ? t.searchPlans
-                : activeView === 'groups'
-                ? t.searchGroups
-                : t.searchPeople
+              activeView === 'plans' ? t.searchPlans
+              : activeView === 'communities' ? t.searchGroups
+              : t.searchPeople
             }
             className="pl-9 rounded-xl h-10"
             style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
@@ -389,23 +339,13 @@ export default function Explore() {
         {/* Filters Panel */}
         <div className="relative">
           {activeView === 'plans' ? (
-            <PlanFilters 
-              isOpen={showFilters} 
-              onClose={() => setShowFilters(false)}
-              filters={planFilters}
-              setFilters={setPlanFilters}
-            />
+            <PlanFilters isOpen={showFilters} onClose={() => setShowFilters(false)} filters={planFilters} setFilters={setPlanFilters} />
           ) : (
-            <UserFilters
-              isOpen={showFilters}
-              onClose={() => setShowFilters(false)}
-              filters={userFilters}
-              setFilters={setUserFilters}
-            />
+            <UserFilters isOpen={showFilters} onClose={() => setShowFilters(false)} filters={userFilters} setFilters={setUserFilters} />
           )}
         </div>
 
-        {/* Sort chips + Tag filter — only for plans */}
+        {/* Sort chips + Tag filter */}
         {activeView === 'plans' && (
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3" data-hscroll="1">
             {sortChips.map(({ key, label, emoji, activeClass, badge }) => (
@@ -419,11 +359,7 @@ export default function Explore() {
                 style={planFilters.sortBy !== key ? { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' } : {}}
               >
                 {key === 'livenow' && planFilters.sortBy === key && (
-                  <motion.span
-                    animate={{ opacity: [1, 0.3, 1] }}
-                    transition={{ repeat: Infinity, duration: 1 }}
-                    className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"
-                  />
+                  <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 1 }} className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block" />
                 )}
                 {key !== 'livenow' && <span>{emoji}</span>}
                 {key === 'livenow' && planFilters.sortBy !== key && <span>{emoji}</span>}
@@ -438,14 +374,13 @@ export default function Explore() {
 
             <div className="w-px h-5 bg-gray-800 self-center mx-1 flex-shrink-0" />
 
-            {/* Tag filter */}
             <motion.button
               whileTap={{ scale: 0.92 }}
               onClick={() => setSelectedTag('All')}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border flex-shrink-0 transition-all ${
                 selectedTag === 'All' ? 'bg-[#00c6d2] text-[#0b0b0b] border-[#00c6d2]' : ''
               }`}
-            style={selectedTag !== 'All' ? { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' } : {}}
+              style={selectedTag !== 'All' ? { background: 'var(--surface)', color: 'var(--text-muted)', borderColor: 'var(--border)' } : {}}
             >
               {t.allTag}
             </motion.button>
@@ -477,11 +412,10 @@ export default function Explore() {
               >
                 <span>{emoji}</span> {label}
                 {badge > 0 && (
-                  <motion.span
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                    className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold"
-                  >{badge}</motion.span>
+                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1.5 }}
+                    className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold">
+                    {badge}
+                  </motion.span>
                 )}
               </motion.button>
             ))}
@@ -489,7 +423,7 @@ export default function Explore() {
         )}
       </header>
 
-      {/* Content — scrollable area */}
+      {/* Content */}
       <div className="flex-1 overflow-y-auto scrollbar-hide">
         <PullToRefresh onRefresh={handleRefresh}>
           <main className="p-4 pb-36 space-y-5">
@@ -499,24 +433,35 @@ export default function Explore() {
               ) : (
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <p className="text-gray-400 text-sm">{communities.filter(c => !c.is_deleted && !c.is_private && userCity && c.city?.toLowerCase() === userCity).length} communities</p>
+                    <p className="text-gray-400 text-sm">
+                      {communities.filter(c => !c.is_deleted && !c.is_private && userCity && c.city?.toLowerCase() === userCity).length} {t.groups.toLowerCase()}
+                    </p>
                     <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(createPageUrl('CreateCommunity'))}
                       className="px-4 py-2 rounded-xl text-sm font-bold text-[#0b0b0b] flex items-center gap-1.5"
                       style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}>
-                      + Create
+                      + {t.create}
                     </motion.button>
                   </div>
                   {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && userCity && c.city?.toLowerCase() === userCity).length === 0
-                    ? <div className="text-center py-16 space-y-3"><div className="text-5xl">⭐</div><p className="text-gray-500 text-sm">No communities here yet</p><p className="text-gray-600 text-xs">Be the first to create one! 🚀</p></div>
-                    : <div className="grid grid-cols-2 gap-3">
-                        {communities.filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && userCity && c.city?.toLowerCase() === userCity)
+                    ? (
+                      <div className="text-center py-16 space-y-3">
+                        <div className="text-5xl">⭐</div>
+                        <p className="text-gray-500 text-sm">{t.noCommunitiesHere}</p>
+                        <p className="text-gray-600 text-xs">{t.beFirstCommunity} 🚀</p>
+                      </div>
+                    )
+                    : (
+                      <div className="grid grid-cols-2 gap-3">
+                        {communities
+                          .filter(c => !c.is_deleted && !c.deletion_scheduled_at && !c.is_private && userCity && c.city?.toLowerCase() === userCity)
                           .map((community, i) => (
                             <motion.div key={community.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                               <CommunityCard community={community} myProfile={myProfile}
                                 onClick={() => navigate(createPageUrl('CommunityView') + `?id=${community.id}`)} />
                             </motion.div>
                           ))}
-                      </div>}
+                      </div>
+                    )}
                 </div>
               )
             ) : isLoading ? (
@@ -526,21 +471,20 @@ export default function Explore() {
             ) : !userCity ? (
               <div className="text-center py-20 space-y-4 px-6">
                 <div className="text-5xl">📍</div>
-                <p className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>Set your city first</p>
-                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>To see plans, people and communities near you, add your city to your profile.</p>
+                <p className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>{t.setCityFirst}</p>
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t.setCityDesc}</p>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate(createPageUrl('EditProfile'))}
                   className="mt-2 px-6 py-3 rounded-full font-bold text-[#0b0b0b] text-sm"
                   style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}
                 >
-                  Go to Profile Settings
+                  {t.goToProfileSettings}
                 </motion.button>
               </div>
             ) : activeView === 'plans' ? (
               filteredPlans.length > 0 ? (
                 <>
-                  {/* Live Now banner */}
                   {planFilters.sortBy === 'livenow' && (
                     <motion.div
                       initial={{ opacity: 0, y: -8 }}
@@ -548,19 +492,14 @@ export default function Explore() {
                       className="rounded-2xl p-3 flex items-center gap-3 overflow-hidden relative"
                       style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(220,38,38,0.1))', border: '1px solid rgba(239,68,68,0.4)' }}
                     >
-                      <motion.span
-                        animate={{ opacity: [1, 0.3, 1] }}
-                        transition={{ repeat: Infinity, duration: 1 }}
-                        className="w-3 h-3 rounded-full bg-red-500 flex-shrink-0"
-                      />
+                      <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 1 }} className="w-3 h-3 rounded-full bg-red-500 flex-shrink-0" />
                       <div>
-                        <p className="text-red-400 font-bold text-sm">Happening Right Now 🎉</p>
-                        <p className="text-red-300/70 text-xs">These plans are live in your city!</p>
+                        <p className="text-red-400 font-bold text-sm">{t.happeningRightNow} 🎉</p>
+                        <p className="text-red-300/70 text-xs">{t.happeningRightNowDesc}</p>
                       </div>
                     </motion.div>
                   )}
 
-                  {/* On Fire banner */}
                   {planFilters.sortBy === 'onfire' && filteredPlans.some(p => p.is_on_fire || p.recent_joins >= 100) && (
                     <motion.div
                       initial={{ opacity: 0, y: -8 }}
@@ -568,14 +507,10 @@ export default function Explore() {
                       className="rounded-2xl p-3 flex items-center gap-3 overflow-hidden relative"
                       style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.18), rgba(249,115,22,0.1))', border: '1px solid rgba(239,68,68,0.3)' }}
                     >
-                      <motion.span
-                        animate={{ scale: [1, 1.25, 1] }}
-                        transition={{ repeat: Infinity, duration: 0.8 }}
-                        className="text-2xl flex-shrink-0"
-                      >🔥</motion.span>
+                      <motion.span animate={{ scale: [1, 1.25, 1] }} transition={{ repeat: Infinity, duration: 0.8 }} className="text-2xl flex-shrink-0">🔥</motion.span>
                       <div>
-                        <p className="text-red-400 font-bold text-sm">On Fire Plans 🌶️</p>
-                        <p className="text-red-300/70 text-xs">These are blowing up right now!</p>
+                        <p className="text-red-400 font-bold text-sm">{t.onFireBannerTitle} 🌶️</p>
+                        <p className="text-red-300/70 text-xs">{t.onFireBannerDesc}</p>
                       </div>
                     </motion.div>
                   )}
@@ -584,12 +519,7 @@ export default function Explore() {
                     {filteredPlans.map((plan, idx) => {
                       const isOnFire = plan.is_on_fire || (plan.recent_joins >= 100);
                       return (
-                        <motion.div
-                          key={plan.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: idx * 0.04, type: 'spring', stiffness: 260, damping: 22 }}
-                        >
+                        <motion.div key={plan.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.04, type: 'spring', stiffness: 260, damping: 22 }}>
                           <PlanCard
                             plan={plan}
                             participants={getParticipants(plan.id)}
@@ -608,14 +538,14 @@ export default function Explore() {
               ) : planFilters.sortBy === 'livenow' ? (
                 <div className="text-center py-16 space-y-3">
                   <div className="text-5xl">🎙️</div>
-                  <p className="text-gray-500 text-sm">No live plans right now</p>
-                  <p className="text-gray-600 text-xs">Check back later or explore upcoming plans 🎭</p>
+                  <p className="text-gray-500 text-sm">{t.noLivePlans}</p>
+                  <p className="text-gray-600 text-xs">{t.noLivePlansDesc} 🎭</p>
                 </div>
               ) : (
                 <div className="text-center py-16 space-y-3">
                   <div className="text-5xl">🎭</div>
                   <p className="text-gray-500 text-sm">{t.noPlansFound}</p>
-                  <p className="text-gray-600 text-xs">Try changing filters or city 🌍</p>
+                  <p className="text-gray-600 text-xs">{t.tryChangingFilters} 🌍</p>
                 </div>
               )
             ) : userSubTab === 'requests' ? (
@@ -647,36 +577,33 @@ export default function Explore() {
             ) : (
               filteredUsers.length > 0 ? (
                 <div>
-                  {/* Contextual label */}
                   <p className="text-xs text-gray-500 mb-3 px-1">
                     {isSearchingUsers
-                      ? `🔍 Search results for "${search}"`
-                      : `📍 Users in your area${userCity ? ` · ${userCity}` : ''}`}
+                      ? `🔍 ${t.searchResultsFor} "${search}"`
+                      : `📍 ${t.usersInYourArea}${userCity ? ` · ${userCity}` : ''}`}
                   </p>
-                <div className="grid grid-cols-2 gap-3">
-                  {filteredUsers.map((profile) => {
-                    const isFriend = friendIds.includes(profile.user_id);
-                    const isPendingSent = sentFriendRequests.some(
-                      r => r.friend_id === profile.user_id && r.status === 'pending'
-                    );
-                    return (
-                      <UserCard
-                        key={profile.id}
-                        profile={profile}
-                        myProfile={myProfile}
-                        currentUser={currentUser}
-                        isFriend={isFriend}
-                        isPendingSent={isPendingSent}
-                      />
-                    );
-                  })}
-                </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {filteredUsers.map((profile) => {
+                      const isFriend = friendIds.includes(profile.user_id);
+                      const isPendingSent = sentFriendRequests.some(r => r.friend_id === profile.user_id && r.status === 'pending');
+                      return (
+                        <UserCard
+                          key={profile.id}
+                          profile={profile}
+                          myProfile={myProfile}
+                          currentUser={currentUser}
+                          isFriend={isFriend}
+                          isPendingSent={isPendingSent}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
               ) : (
                 <div className="text-center py-16 space-y-3">
                   <div className="text-5xl">🕺</div>
                   <p className="text-gray-500 text-sm">{t.noUsersFound}</p>
-                  <p className="text-gray-600 text-xs">No one found with those filters 🎭</p>
+                  <p className="text-gray-600 text-xs">{t.noUsersFoundDesc} 🎭</p>
                 </div>
               )
             )}
