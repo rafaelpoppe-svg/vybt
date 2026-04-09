@@ -361,7 +361,6 @@ export default function Home() {
 
         <div className="pb-3 pt-1">
           <HomeStoriesBar
-            /* REMOVER stories={visibleStories}*/
             ownStories={ownStories}
             friendStories={friendStories}
             planStories={planStories}
