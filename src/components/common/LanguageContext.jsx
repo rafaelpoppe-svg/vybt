@@ -528,6 +528,8 @@ export const translations = {
     genderOther: '⚧️ Outro',
     nationalityLabel: 'Nacionalidade (código ISO, ex: PT, BR, US)',
     nationalityPlaceholder: 'ex: PT',
+    voteGreat: 'Plano Incrível! 🎉',
+    voteBad: 'Plano Horrível 😔',
 
 
   },
@@ -1059,6 +1061,8 @@ en: {
     genderOther: '⚧️ Other',
     nationalityLabel: 'Nationality (ISO code, e.g. PT, BR, US)',
     nationalityPlaceholder: 'e.g. PT',
+    voteGreat: 'Great Plan! 🎉',
+    voteBad: 'Bad Plan 😔',
   },
 
   es: {
@@ -1588,6 +1592,8 @@ en: {
     genderOther: '⚧️ Otro',
     nationalityLabel: 'Nacionalidad (código ISO, ej: PT, BR, US)',
     nationalityPlaceholder: 'ej: PT',
+    voteGreat: '¡Qué planazo! 🎉',
+    voteBad: 'Mal plan 😔',
   },
 
   fr: {
@@ -2117,6 +2123,8 @@ en: {
     genderOther: '⚧️ Autre',
     nationalityLabel: 'Nationalité (code ISO, ex: PT, BR, US)',
     nationalityPlaceholder: 'ex: PT',
+    voteGreat: 'Super soirée ! 🎉',
+    voteBad: 'Soirée nulle 😔',
   },
 
   it: {
@@ -2646,6 +2654,8 @@ en: {
     genderOther: '⚧️ Altro',
     nationalityLabel: 'Nazionalità (codice ISO, es: PT, BR, US)',
     nationalityPlaceholder: 'es: PT',
+    voteGreat: 'Piano top! 🎉',
+    voteBad: 'Piano pessimo 😔',
 
   },
 };
