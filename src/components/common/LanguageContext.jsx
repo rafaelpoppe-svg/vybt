@@ -567,6 +567,15 @@ export const translations = {
     verifyComparingPhotos: 'A comparar a tua selfie com as fotos do perfil',
     verifySuccess: 'Verificado! 🎉',
     verifySuccessDesc: 'O teu perfil agora tem um',
+    aiReview: 'Revisão com IA',
+    aiTone: 'Tom',
+    aiEngagementScore: 'Score de Engajamento',
+    aiFeedback: 'Feedback',
+    aiSuggestedCaption: 'Legenda Sugerida',
+    aiCopied: 'Copiado',
+    aiCopy: 'Copiar',
+    aiApply: 'Aplicar',
+
   },
 
 en: {
@@ -1135,6 +1144,14 @@ en: {
     verifyComparingPhotos: 'Comparing your selfie with profile photos',
     verifySuccess: 'Verified! 🎉',
     verifySuccessDesc: 'Your profile now has a',
+    aiReview: 'AI Review',
+    aiTone: 'Tone',
+    aiEngagementScore: 'Engagement Score',
+    aiFeedback: 'Feedback',
+    aiSuggestedCaption: 'Suggested Caption',
+    aiCopied: 'Copied',
+    aiCopy: 'Copy',
+    aiApply: 'Apply',
   },
 
   es: {
@@ -1703,6 +1720,14 @@ en: {
     verifyComparingPhotos: 'Comparando tu selfie con las fotos del perfil',
     verifySuccess: '¡Verificado! 🎉',
     verifySuccessDesc: 'Tu perfil ahora tiene una',
+    aiReview: 'Revisión con IA',
+    aiTone: 'Tono',
+    aiEngagementScore: 'Score de Engagement',
+    aiFeedback: 'Feedback',
+    aiSuggestedCaption: 'Texto Sugerido',
+    aiCopied: 'Copiado',
+    aiCopy: 'Copiar',
+    aiApply: 'Aplicar',
   },
 
   fr: {
@@ -2271,6 +2296,14 @@ en: {
     verifyComparingPhotos: 'Comparaison de ton selfie avec les photos du profil',
     verifySuccess: 'Vérifié ! 🎉',
     verifySuccessDesc: 'Ton profil a maintenant un',
+    aiReview: 'Avis IA',
+    aiTone: 'Ton',
+    aiEngagementScore: 'Score d\'Engagement',
+    aiFeedback: 'Feedback',
+    aiSuggestedCaption: 'Légende Suggérée',
+    aiCopied: 'Copié',
+    aiCopy: 'Copier',
+    aiApply: 'Appliquer',
   },
 
   it: {
@@ -2839,6 +2872,14 @@ en: {
     verifyComparingPhotos: 'Confronto del selfie con le foto del profilo',
     verifySuccess: 'Verificato! 🎉',
     verifySuccessDesc: 'Il tuo profilo ora ha un',
+    aiReview: 'Revisione IA',
+    aiTone: 'Tono',
+    aiEngagementScore: 'Score di Engagement',
+    aiFeedback: 'Feedback',
+    aiSuggestedCaption: 'Didascalia Suggerita',
+    aiCopied: 'Copiato',
+    aiCopy: 'Copia',
+    aiApply: 'Applica',
   },
 };
 
