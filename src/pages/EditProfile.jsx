@@ -15,7 +15,8 @@ import { useLanguage } from '../components/common/LanguageContext';
 
 function PartyTypeFilterList({ allTypes, selected, onToggle }) {
   const [search, setSearch] = React.useState('');
-  const filtered = allTypes.filter(t => t.toLowerCase().includes(search.toLowerCase()));
+  const { t } = useLanguage();
+  const filtered = allTypes.filter(type => type.toLowerCase().includes(search.toLowerCase()));
   return (
     <div>
       <div className="relative mb-3">
@@ -24,7 +25,7 @@ function PartyTypeFilterList({ allTypes, selected, onToggle }) {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search party types..."
+          placeholder={t.searchPartyTypes}
           className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-[#00c6d2] border"
           style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
         />
@@ -45,10 +46,8 @@ function PartyTypeFilterList({ allTypes, selected, onToggle }) {
   );
 }
 
-
-
 export default function EditProfile() {
-  const {t} = useLanguage();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
@@ -133,7 +132,6 @@ export default function EditProfile() {
     }
   }, [profile]);
 
-  // Check username availability (debounced)
   useEffect(() => {
     const username = formData.username.trim();
     if (!username || username === profile?.username) { setUsernameAvailable(null); return; }
@@ -151,7 +149,6 @@ export default function EditProfile() {
 
   const updateMutation = useMutation({
     mutationFn: async () => {
-      // If photos changed and profile was verified, remove verification
       const photosChanged = JSON.stringify(formData.photos) !== JSON.stringify(profile.photos || []);
       const updateData = { ...formData };
       if (photosChanged && profile.is_verified) {
@@ -198,7 +195,7 @@ export default function EditProfile() {
 
   const togglePartyType = (type) => {
     if (formData.party_types.includes(type)) {
-      setFormData({ ...formData, party_types: formData.party_types.filter(t => t !== type) });
+      setFormData({ ...formData, party_types: formData.party_types.filter(pt => pt !== type) });
     } else if (formData.party_types.length < 5) {
       setFormData({ ...formData, party_types: [...formData.party_types, type] });
     }
@@ -239,17 +236,10 @@ export default function EditProfile() {
                 }`}>
                   {formData.photos[i] ? (
                     <>
-                      <img 
-                        src={formData.photos[i]} 
-                        alt="" 
-                        className="w-full h-full object-cover"
-                      />
+                      <img src={formData.photos[i]} alt="" className="w-full h-full object-cover" />
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          removePhoto(i);
-                        }}
+                        onClick={(e) => { e.preventDefault(); removePhoto(i); }}
                         className="absolute top-1 right-1 p-1 rounded-full bg-black/70"
                       >
                         <X className="w-3 h-3 text-white" />
@@ -265,14 +255,9 @@ export default function EditProfile() {
                     </div>
                   )}
                 </div>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={(e) => handlePhotoUpload(e, i)} 
-                  className="hidden" 
-                />
+                <input type="file" accept="image/*" onChange={(e) => handlePhotoUpload(e, i)} className="hidden" />
                 <span className="text-[10px] absolute -bottom-4 left-0 right-0 text-center" style={{ color: 'var(--text-muted)' }}>
-                  {i === 0 ? '📸 Main' : `Photo ${i + 1}`}
+                  {i === 0 ? `📸 ${t.mainPhoto}` : `${t.photo} ${i + 1}`}
                 </span>
               </label>
             ))}
@@ -291,7 +276,7 @@ export default function EditProfile() {
                 setFormData({ ...formData, username: v });
                 setUsernameAvailable(null);
               }}
-              placeholder="yourname"
+              placeholder={t.usernamePlaceholder}
               autoCapitalize="none"
               autoCorrect="off"
               className="pl-9 pr-9"
@@ -304,10 +289,14 @@ export default function EditProfile() {
             </div>
           </div>
           {formData.username && !/^[a-z0-9_.]{3,24}$/.test(formData.username) && (
-            <p className="text-xs text-red-400 mt-1">3–24 chars, only letters, numbers, _ and .</p>
+            <p className="text-xs text-red-400 mt-1">{t.usernameInvalid}</p>
           )}
-          {usernameAvailable === false && <p className="text-xs text-red-400 mt-1">@{formData.username} is already taken.</p>}
-          {usernameAvailable === true && <p className="text-xs text-green-400 mt-1">@{formData.username} is available!</p>}
+          {usernameAvailable === false && (
+            <p className="text-xs text-red-400 mt-1">{t.usernameTaken.replace('{username}', formData.username)}</p>
+          )}
+          {usernameAvailable === true && (
+            <p className="text-xs text-green-400 mt-1">{t.usernameAvailable.replace('{username}', formData.username)}</p>
+          )}
         </div>
 
         {/* Display Name */}
@@ -316,14 +305,14 @@ export default function EditProfile() {
           <Input
             value={formData.display_name}
             onChange={(e) => setFormData({ ...formData, display_name: e.target.value })}
-            placeholder="Your name"
+            placeholder={t.yourNamePlaceholder}
             style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
           />
         </div>
 
         {/* Bio */}
         <div>
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Bio</label>
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{t.bio}</label>
           <Textarea
             value={formData.bio}
             onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
@@ -347,7 +336,7 @@ export default function EditProfile() {
           />
           {formData.date_of_birth && (
             <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
-              Age: {Math.floor((new Date() - new Date(formData.date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000))} years old
+              {t.ageLabel}: {Math.floor((new Date() - new Date(formData.date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000))} {t.yearsOld}
             </p>
           )}
         </div>
@@ -407,17 +396,14 @@ export default function EditProfile() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
             <input
               type="text"
-              placeholder="Search vibes..."
-              onChange={(e) => {
-                const val = e.target.value.toLowerCase();
-                setVibeSearch(val);
-              }}
+              placeholder={t.searchVibes}
+              onChange={(e) => setVibeSearch(e.target.value.toLowerCase())}
               className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-[#00c6d2] border"
               style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
             />
           </div>
           {formData.vibes.length >= 5 && (
-            <p className="text-xs text-[#00c6d2]/70 mb-2">Limit reached — deselect one to pick another.</p>
+            <p className="text-xs text-[#00c6d2]/70 mb-2">{t.limitReached}</p>
           )}
           <div className="flex flex-wrap gap-2">
             {ALL_VIBES.filter(v => v.toLowerCase().includes(vibeSearch || '')).map((vibe) => (
@@ -442,7 +428,7 @@ export default function EditProfile() {
             </span>
           </div>
           {formData.party_types.length >= 5 && (
-            <p className="text-xs text-[#00c6d2]/70 mb-2">Limit reached — deselect one to pick another.</p>
+            <p className="text-xs text-[#00c6d2]/70 mb-2">{t.limitReached}</p>
           )}
           <PartyTypeFilterList
             allTypes={ALL_PARTY_TYPES}
