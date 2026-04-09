@@ -482,7 +482,7 @@ export const translations = {
     privacyVisibility: '🔒 Privacidade & Visibilidade',
     save: 'Salvar',
     deleteGroup: 'Deletar Grupo',
-
+    maybe: 'Talvez',
   },
 
 en: {
@@ -966,7 +966,7 @@ en: {
     privacyVisibility: '🔒 Privacy & Visibility',
     save: 'Save',
     deleteGroup: 'Delete Group',
-    
+    maybe: 'Maybe',
   },
 
   es: {
@@ -1450,6 +1450,7 @@ en: {
     privacyVisibility: '🔒 Privacidad & Visibilidad',
     save: 'Guardar',
     deleteGroup: 'Eliminar Grupo',
+    maybe: 'Quizás',
   },
 
   fr: {
@@ -1933,6 +1934,7 @@ en: {
     privacyVisibility: '🔒 Confidentialité & Visibilité',
     save: 'Enregistrer',
     deleteGroup: 'Supprimer le Groupe',
+    maybe: 'Peut-être',
   },
 
   it: {
@@ -2416,6 +2418,7 @@ en: {
     privacyVisibility: '🔒 Privacy & Visibilità',
     save: 'Salva',
     deleteGroup: 'Elimina Gruppo',
+    maybe: 'Forse',
   },
 };
 
