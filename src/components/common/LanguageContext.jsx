@@ -501,6 +501,9 @@ export const translations = {
     highlightSuccess: 'Pagamento bem-sucedido! Plano em destaque 🔥',
     highlightError: 'Erro no pagamento',
     allFriendsInPlan: 'Todos os amigos já estão neste plano',
+    leavePlanTitle: 'Sair do Plano?',
+    leavePlanRejoin: 'Você pode entrar novamente mais tarde se o plano ainda estiver disponível.',
+    stay: 'Ficar',
   },
 
 en: {
@@ -1003,6 +1006,9 @@ en: {
     highlightSuccess: 'Payment successful! Plan highlighted 🔥',
     highlightError: 'Payment error',
     allFriendsInPlan: 'All friends are already in this plan',
+    leavePlanTitle: 'Leave Plan?',
+    leavePlanRejoin: 'You can rejoin later if the plan is still available.',
+    stay: 'Stay',
   },
 
   es: {
@@ -1505,6 +1511,9 @@ en: {
     highlightSuccess: '¡Pago exitoso! Plan destacado 🔥',
     highlightError: 'Error en el pago',
     allFriendsInPlan: 'Todos los amigos ya están en este plan',
+    leavePlanTitle: '¿Salir del Plan?',
+    leavePlanRejoin: 'Puedes volver a unirte más tarde si el plan sigue disponible.',
+    stay: 'Quedarme',
   },
 
   fr: {
@@ -2007,6 +2016,9 @@ en: {
     highlightSuccess: 'Paiement réussi ! Plan mis en avant 🔥',
     highlightError: 'Erreur de paiement',
     allFriendsInPlan: 'Tous tes amis sont déjà dans ce plan',
+    leavePlanTitle: 'Quitter le Plan ?',
+    leavePlanRejoin: 'Tu pourras rejoindre plus tard si le plan est encore disponible.',
+    stay: 'Rester',
   },
 
   it: {
@@ -2509,6 +2521,9 @@ en: {
     highlightSuccess: 'Pagamento riuscito! Piano in evidenza 🔥',
     highlightError: 'Errore nel pagamento',
     allFriendsInPlan: 'Tutti gli amici sono già in questo piano',
+    leavePlanTitle: 'Lasciare il Piano?',
+    leavePlanRejoin: 'Puoi riunirti più tardi se il piano è ancora disponibile.',
+    stay: 'Restare',
   },
 };
 
