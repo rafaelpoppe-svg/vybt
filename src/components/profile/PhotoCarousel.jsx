@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function PhotoCarousel({ isOpen, photos, initialIndex = 0, onClose }) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const { t } = useLanguage();
 
   if (!isOpen || !photos || photos.length === 0) return null;
 
@@ -60,11 +62,11 @@ export default function PhotoCarousel({ isOpen, photos, initialIndex = 0, onClos
             transition={{ type: 'spring', stiffness: 350, damping: 30 }}
             className="relative w-full h-full flex items-center justify-center p-4"
           >
-            <img
-              src={photos[currentIndex]}
-              alt={`Photo ${currentIndex + 1}`}
-              className="max-w-full max-h-full object-contain rounded-xl"
-            />
+              <img
+                src={photos[currentIndex]}
+                alt={`${t.photo} ${currentIndex + 1}`}
+                className="max-w-full max-h-full object-contain rounded-xl"
+              />
           </motion.div>
 
           {photos.length > 1 && (
