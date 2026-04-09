@@ -182,7 +182,7 @@ export default function CommunityEditModal({ community, onClose, onSaved, onDele
           {onDelete && (
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => { onClose(); onDelete(); }}
               className="w-full py-3 rounded-2xl font-bold text-sm text-red-400 flex items-center justify-center gap-2 border border-red-500/20 bg-red-500/5">
-              <Trash2 className="w-4 h-4" /> {t.deleteCommunity}
+              <Trash2 className="w-4 h-4" /> {t.deleteGroup}
             </motion.button>
           )}
         </div>
