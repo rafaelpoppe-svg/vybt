@@ -3,8 +3,11 @@ import { motion } from 'framer-motion';
 import { Music2, Sparkles } from 'lucide-react';
 import VibeTag from '../common/VibeTag';
 import PartyTag from '../common/PartyTag';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function ProfileAboutSection({ profile }) {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-6">
       {/* Bio */}
@@ -27,7 +30,7 @@ export default function ProfileAboutSection({ profile }) {
         >
           <div className="flex items-center gap-2 mb-3">
             <Music2 className="w-4 h-4 text-[#00fea3]" />
-            <h3 className="text-white font-semibold text-sm uppercase tracking-widest">Meus Vibes</h3>
+            <h3 className="text-white font-semibold text-sm uppercase tracking-widest">{t.myVibes}</h3>
           </div>
           <div className="flex flex-wrap gap-2">
             {profile.vibes.map((vibe, i) => (
@@ -53,7 +56,7 @@ export default function ProfileAboutSection({ profile }) {
         >
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-4 h-4 text-[#542b9b]" />
-            <h3 className="text-white font-semibold text-sm uppercase tracking-widest">Tipos de Festa</h3>
+            <h3 className="text-white font-semibold text-sm uppercase tracking-widest">{t.partyTypes}</h3>
           </div>
           <div className="flex flex-wrap gap-2">
             {profile.party_types.map((type, i) => (
