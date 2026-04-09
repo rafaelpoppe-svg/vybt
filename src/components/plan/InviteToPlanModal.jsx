@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Send, Check, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function InviteToPlanModal({ plan, friends, profilesMap, currentUser, participantIds, onClose }) {
+  const { t } = useLanguage();
   const [sent, setSent] = useState({});
   const [sending, setSending] = useState({});
 
@@ -41,7 +43,7 @@ export default function InviteToPlanModal({ plan, friends, profilesMap, currentU
         {/* Header */}
         <div className="flex items-center justify-between px-5 pb-4 border-b border-gray-800">
           <div>
-            <h2 className="text-lg font-black text-white">Invite Friends 🎉</h2>
+            <h2 className="text-lg font-black text-white">{t.inviteFriends} 🎉</h2>
             <p className="text-gray-400 text-xs mt-0.5 truncate max-w-[220px]">{plan?.title}</p>
           </div>
           <motion.button whileTap={{ scale: 0.9 }} onClick={onClose}
@@ -54,7 +56,7 @@ export default function InviteToPlanModal({ plan, friends, profilesMap, currentU
         <div className="overflow-y-auto flex-1 p-4 space-y-2">
           {eligibleFriends.length === 0 && (
             <div className="text-center py-12 text-gray-500 text-sm">
-              {friends.length === 0 ? 'No friends to invite yet' : 'All friends are already in this plan'}
+              {friends.length === 0 ? t.noFriendsToInvite : t.allFriendsInPlan}
             </div>
           )}
           {eligibleFriends.map(friendId => {
@@ -87,8 +89,8 @@ export default function InviteToPlanModal({ plan, friends, profilesMap, currentU
                   }
                 >
                   {isSending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> :
-                   isSent ? <><Check className="w-3.5 h-3.5" /> Sent</> :
-                   <><Send className="w-3.5 h-3.5" /> Invite</>}
+                   isSent ? <><Check className="w-3.5 h-3.5" /> {t.sent}</> :
+                   <><Send className="w-3.5 h-3.5" /> {t.invite}</>}
                 </motion.button>
               </div>
             );
