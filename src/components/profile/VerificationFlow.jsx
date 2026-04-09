@@ -6,14 +6,14 @@ import { base44 } from '@/api/base44Client';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function VerificationFlow({ isOpen, onClose, userProfile, onVerificationComplete }) {
-  const [step, setStep] = useState(1); // 1: intro, 2: camera, 3: review, 4: processing, 5: success
+  const [step, setStep] = useState(1);
   const [capturedImage, setCapturedImage] = useState(null);
   const [capturedBlob, setCapturedBlob] = useState(null);
   const [error, setError] = useState('');
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
-  const {t} = useLanguage();
+  const { t } = useLanguage();
 
   const stopCamera = useCallback(() => {
     if (streamRef.current) {
@@ -33,9 +33,9 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
         videoRef.current.srcObject = stream;
       }
     } catch (err) {
-      setError('Could not access camera. Please allow camera permissions.');
+      setError(t.verifyCameraError);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (step === 2) startCamera();
@@ -78,7 +78,6 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
       const file = new File([capturedBlob], 'verification_selfie.jpg', { type: 'image/jpeg' });
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
 
-      // Use LLM to compare selfie with profile photos
       const profilePhotos = userProfile.photos?.filter(Boolean) || [];
       let isMatch = false;
 
@@ -100,12 +99,10 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
         });
         isMatch = result.is_same_person && result.confidence !== 'low';
       } else {
-        // No profile photos — accept selfie as baseline
         isMatch = true;
       }
 
       if (isMatch) {
-        // Mark profile as verified
         await base44.entities.UserProfile.update(userProfile.id, {
           is_verified: true,
           verification_selfie_url: file_url
@@ -116,11 +113,11 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
           onClose();
         }, 2500);
       } else {
-        setError('We could not confirm that the selfie matches your profile photos. Make sure you are the same person as in your photos and try again.');
+        setError(t.verifyNoMatch);
         setStep(3);
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError(t.verifyGenericError);
       setStep(3);
     }
   };
@@ -145,7 +142,6 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
           className="relative rounded-t-3xl sm:rounded-3xl w-full sm:max-w-md border border-gray-800 overflow-hidden"
           style={{background: 'var(--bg)'}}
         >
-          {/* Close */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 p-2 rounded-full bg-gray-900 z-10"
@@ -161,8 +157,7 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">{t.verifyYourProfile}</h2>
               <p className="text-gray-400 text-sm mb-6">
-                Take a live selfie to prove you are the same person as in your profile photos. 
-                This will give you a <span className="text-blue-400 font-semibold">blue verified badge</span> and build trust with other users.
+                {t.verifyIntroDesc} <span className="text-blue-400 font-semibold">{t.verifyBlueBadge}</span> {t.verifyIntroDesc2}
               </p>
 
               {userProfile.photos?.filter(Boolean).length > 0 && (
@@ -174,10 +169,8 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
               )}
 
               <div className="p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20 mb-6 text-left">
-                <p className="text-yellow-400 text-xs font-medium mb-1">⚠️ Important</p>
-                <p className="text-gray-400 text-xs">
-                  You must take a live photo — gallery uploads are not allowed. If you change your profile photos later, your verification will be removed.
-                </p>
+                <p className="text-yellow-400 text-xs font-medium mb-1">⚠️ {t.verifyImportant}</p>
+                <p className="text-gray-400 text-xs">{t.verifyImportantDesc}</p>
               </div>
 
               <Button
@@ -185,7 +178,7 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
                 className="w-full py-6 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-bold"
               >
                 <Camera className="w-5 h-5 mr-2" />
-                Start Verification
+                {t.verifyStartBtn}
               </Button>
             </div>
           )}
@@ -193,8 +186,8 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
           {/* Step 2 — Live Camera */}
           {step === 2 && (
             <div className="p-4 text-center">
-              <h2 className="text-xl font-bold text-white mb-3">Take Your Selfie</h2>
-              <p className="text-gray-400 text-sm mb-4">Make sure your face is well-lit and clearly visible</p>
+              <h2 className="text-xl font-bold text-white mb-3">{t.verifyTakeSelfie}</h2>
+              <p className="text-gray-400 text-sm mb-4">{t.verifyFaceVisible}</p>
 
               <div className="relative rounded-2xl overflow-hidden bg-gray-900 mb-4" style={{ aspectRatio: '1' }}>
                 <video
@@ -204,23 +197,20 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
                   muted
                   className="w-full h-full object-cover scale-x-[-1]"
                 />
-                {/* Face guide */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="w-48 h-56 rounded-full border-2 border-white/30 border-dashed" />
                 </div>
               </div>
               <canvas ref={canvasRef} className="hidden" />
 
-              {error && (
-                <p className="text-red-400 text-sm mb-3">{error}</p>
-              )}
+              {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
 
               <Button
                 onClick={capturePhoto}
                 className="w-full py-6 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-bold"
               >
                 <Camera className="w-5 h-5 mr-2" />
-                Capture
+                {t.verifyCapture}
               </Button>
             </div>
           )}
@@ -228,7 +218,7 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
           {/* Step 3 — Review */}
           {step === 3 && (
             <div className="p-6 text-center">
-              <h2 className="text-xl font-bold text-white mb-4">Review Your Selfie</h2>
+              <h2 className="text-xl font-bold text-white mb-4">{t.verifyReview}</h2>
 
               {capturedImage && (
                 <div className="relative mb-4">
@@ -254,13 +244,13 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
                   className="flex-1 border-gray-700 text-gray-300"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Retake
+                  {t.verifyRetake}
                 </Button>
                 <Button
                   onClick={handleSubmit}
                   className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
                 >
-                  Submit
+                  {t.verifySubmit}
                 </Button>
               </div>
             </div>
@@ -272,8 +262,8 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
               <div className="w-20 h-20 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
                 <Loader2 className="w-10 h-10 text-blue-400 animate-spin" />
               </div>
-              <h2 className="text-xl font-bold text-white mb-2">Verifying...</h2>
-              <p className="text-gray-400 text-sm">Comparing your selfie with profile photos</p>
+              <h2 className="text-xl font-bold text-white mb-2">{t.verifyProcessing}</h2>
+              <p className="text-gray-400 text-sm">{t.verifyComparingPhotos}</p>
             </div>
           )}
 
@@ -288,9 +278,9 @@ export default function VerificationFlow({ isOpen, onClose, userProfile, onVerif
               >
                 <CheckCircle2 className="w-10 h-10 text-blue-400" />
               </motion.div>
-              <h2 className="text-2xl font-bold text-white mb-2">Verified! 🎉</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">{t.verifySuccess}</h2>
               <p className="text-gray-400">
-                Your profile now has a <span className="text-blue-400 font-semibold">blue verified badge</span>.
+                {t.verifySuccessDesc} <span className="text-blue-400 font-semibold">{t.verifyBlueBadge}</span>.
               </p>
             </div>
           )}
