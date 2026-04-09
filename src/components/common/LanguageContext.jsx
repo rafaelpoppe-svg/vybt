@@ -607,6 +607,9 @@ export const translations = {
     accessRestrictedItem1: 'Verificar se está logado com a conta correta',
     accessRestrictedItem2: 'Entrar em contato com o administrador do app',
     accessRestrictedItem3: 'Tentar sair e entrar novamente',
+    blockUserTitle: 'Bloquear {name}?',
+    blockUserDesc: 'Você não verá posts ou mensagens deste usuário, e ele não poderá ver os seus.',
+    blockUser: 'Bloquear',
 
   },
 
@@ -1216,6 +1219,9 @@ en: {
     accessRestrictedItem1: 'Verify you are logged in with the correct account',
     accessRestrictedItem2: 'Contact the app administrator for access',
     accessRestrictedItem3: 'Try logging out and back in again',
+    blockUserTitle: 'Block {name}?',
+    blockUserDesc: "You won't see posts or messages from this user, and they won't be able to see yours.",
+    blockUser: 'Block',
   },
 
   es: {
@@ -1824,6 +1830,9 @@ en: {
     accessRestrictedItem1: 'Verificar que estás conectado con la cuenta correcta',
     accessRestrictedItem2: 'Contactar al administrador de la app',
     accessRestrictedItem3: 'Intentar cerrar sesión y volver a entrar',
+    blockUserTitle: '¿Bloquear a {name}?',
+    blockUserDesc: 'No verás publicaciones ni mensajes de este usuario, y él no podrá ver los tuyos.',
+    blockUser: 'Bloquear',
   },
 
   fr: {
@@ -2432,6 +2441,9 @@ en: {
     accessRestrictedItem1: 'Vérifier que tu es connecté avec le bon compte',
     accessRestrictedItem2: 'Contacter l\'administrateur de l\'app',
     accessRestrictedItem3: 'Essayer de te déconnecter et de te reconnecter',
+    blockUserTitle: 'Bloquer {name} ?',
+    blockUserDesc: 'Tu ne verras plus les posts ou messages de cet utilisateur, et il ne pourra pas voir les tiens.',
+    blockUser: 'Bloquer',
   },
 
   it: {
@@ -3040,6 +3052,9 @@ en: {
     accessRestrictedItem1: 'Verificare di essere connesso con l\'account corretto',
     accessRestrictedItem2: 'Contattare l\'amministratore dell\'app',
     accessRestrictedItem3: 'Provare a disconnetterti e riconnetterti',
+    blockUserTitle: 'Bloccare {name}?',
+    blockUserDesc: 'Non vedrai post o messaggi di questo utente, e lui non potrà vedere i tuoi.',
+    blockUser: 'Blocca',
   },
 };
 
