@@ -575,6 +575,10 @@ export const translations = {
     aiCopied: 'Copiado',
     aiCopy: 'Copiar',
     aiApply: 'Aplicar',
+    cameraRetry: 'Tentar de Novo',
+    cameraRec: 'REC',
+    cameraHintRecording: 'Soltar para parar • máx 30s',
+    cameraHintIdle: 'Toque para foto • Segure para vídeo',
 
   },
 
@@ -1152,6 +1156,10 @@ en: {
     aiCopied: 'Copied',
     aiCopy: 'Copy',
     aiApply: 'Apply',
+    cameraRetry: 'Try Again',
+    cameraRec: 'REC',
+    cameraHintRecording: 'Release to stop • max 30s',
+    cameraHintIdle: 'Tap for photo • Hold for video',
   },
 
   es: {
@@ -1728,6 +1736,10 @@ en: {
     aiCopied: 'Copiado',
     aiCopy: 'Copiar',
     aiApply: 'Aplicar',
+    cameraRetry: 'Intentar de Nuevo',
+    cameraRec: 'REC',
+    cameraHintRecording: 'Suelta para parar • máx 30s',
+    cameraHintIdle: 'Toca para foto • Mantén para vídeo',
   },
 
   fr: {
@@ -2304,6 +2316,10 @@ en: {
     aiCopied: 'Copié',
     aiCopy: 'Copier',
     aiApply: 'Appliquer',
+    cameraRetry: 'Réessayer',
+    cameraRec: 'REC',
+    cameraHintRecording: 'Relâche pour arrêter • max 30s',
+    cameraHintIdle: 'Appuie pour photo • Maintiens pour vidéo',
   },
 
   it: {
@@ -2880,6 +2896,10 @@ en: {
     aiCopied: 'Copiato',
     aiCopy: 'Copia',
     aiApply: 'Applica',
+    cameraRetry: 'Riprova',
+    cameraRec: 'REC',
+    cameraHintRecording: 'Rilascia per fermare • max 30s',
+    cameraHintIdle: 'Tocca per foto • Tieni premuto per video',
   },
 };
 
