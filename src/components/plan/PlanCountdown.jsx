@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, Flame } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function PlanCountdown({ plan, size = 'md' }) {
   const [timeLeft, setTimeLeft] = useState(null);
-  const [status, setStatus] = useState('upcoming'); // upcoming, happening, voting, ended
+  const [status, setStatus] = useState('upcoming');
+  const { t } = useLanguage();
 
   useEffect(() => {
     const calculateStatus = () => {
       const now = new Date();
       const startTime = new Date(`${plan.date}T${plan.time}`);
-      const endTime = plan.end_time 
+      const endTime = plan.end_time
         ? new Date(`${plan.date}T${plan.end_time}`)
-        : new Date(startTime.getTime() + 6 * 60 * 60 * 1000); // Default 6h
-      
-      // Handle end time crossing midnight
+        : new Date(startTime.getTime() + 6 * 60 * 60 * 1000);
+
       if (endTime < startTime) {
         endTime.setDate(endTime.getDate() + 1);
       }
@@ -48,7 +49,7 @@ export default function PlanCountdown({ plan, size = 'md' }) {
     const hours = Math.floor(ms / (1000 * 60 * 60));
     const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((ms % (1000 * 60)) / 1000);
-    
+
     if (hours > 24) {
       const days = Math.floor(hours / 24);
       return `${days}d ${hours % 24}h`;
@@ -72,7 +73,7 @@ export default function PlanCountdown({ plan, size = 'md' }) {
         className={`${sizes[size]} rounded-full bg-orange-500 text-white font-medium flex items-center gap-1.5`}
       >
         <Flame className="w-4 h-4 animate-pulse" />
-        <span>Live Now</span>
+        <span>{t.liveNow}</span>
         {timeLeft && <span className="opacity-75">• {timeLeft}</span>}
       </motion.div>
     );
@@ -86,7 +87,7 @@ export default function PlanCountdown({ plan, size = 'md' }) {
         className={`${sizes[size]} rounded-full bg-orange-500 text-white font-medium flex items-center gap-1.5`}
       >
         <Clock className="w-4 h-4" />
-        <span>Votação</span>
+        <span>{t.voting}</span>
         {timeLeft && <span className="opacity-75">• {timeLeft}</span>}
       </motion.div>
     );
@@ -96,7 +97,7 @@ export default function PlanCountdown({ plan, size = 'md' }) {
     return (
       <div className={`${sizes[size]} rounded-full bg-gray-800 text-gray-300 font-medium flex items-center gap-1.5`}>
         <Clock className="w-4 h-4" />
-        <span>Starts in {timeLeft}</span>
+        <span>{t.startsIn.replace('{time}', timeLeft)}</span>
       </div>
     );
   }
