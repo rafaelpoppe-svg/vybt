@@ -777,7 +777,7 @@ export const translations = {
     stepPrivacyTitle: 'Privacidade & Acesso',
     stepPrivacyDesc: 'Controla quem pode ver e entrar no teu plano',
     createPlanBtn: 'Criar Plano',
-
+    ageLabel: 'Idade',
   },
 
 en: {
@@ -1556,6 +1556,7 @@ en: {
     stepPrivacyTitle: 'Privacy & Access',
     stepPrivacyDesc: 'Control who can see and join your plan',
     createPlanBtn: 'Create Plan',
+    ageLabel: 'Age',
   },
 
   es: {
@@ -2334,6 +2335,7 @@ en: {
     stepPrivacyTitle: 'Privacidad & Acceso',
     stepPrivacyDesc: 'Controla quién puede ver y unirse a tu plan',
     createPlanBtn: 'Crear Plan',
+    ageLabel: 'Edad',
   },
 
   fr: {
@@ -3112,6 +3114,7 @@ en: {
     stepPrivacyTitle: 'Confidentialité & Accès',
     stepPrivacyDesc: 'Contrôle qui peut voir et rejoindre ton plan',
     createPlanBtn: 'Créer le Plan',
+    ageLabel: 'Âge',
   },
 
   it: {
@@ -3890,6 +3893,7 @@ en: {
     stepPrivacyTitle: 'Privacy & Accesso',
     stepPrivacyDesc: 'Controlla chi può vedere e unirsi al tuo piano',
     createPlanBtn: 'Crea Piano',
+    ageLabel: 'Età',
   },
 };
 
