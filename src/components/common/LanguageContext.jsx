@@ -544,7 +544,7 @@ export const translations = {
     connectAtPlans: 'Conecta com pessoas nos planos',
     myVibes: 'Minhas Vibes',
     partyTypes: 'Tipos de Festa',
-
+    noPlansYet: 'Nenhum plano ainda',
   },
 
 en: {
@@ -1090,6 +1090,7 @@ en: {
     connectAtPlans: 'Connect with people at plans',
     myVibes: 'My Vibes',
     partyTypes: 'Party Types',
+    noPlansYet: 'No plans yet',
   },
 
   es: {
@@ -1635,6 +1636,7 @@ en: {
     connectAtPlans: 'Conéctate con gente en los planes',
     myVibes: 'Mis Vibes',
     partyTypes: 'Tipos de fiesta',
+    noPlansYet: 'Ningún plan todavía',
   },
 
   fr: {
@@ -2180,6 +2182,7 @@ en: {
     connectAtPlans: 'Connecte-toi avec des gens dans les plans',
     myVibes: 'Mes Vibes',
     partyTypes: 'Types de soirée',
+    noPlansYet: 'Aucun plan pour l\'instant',
   },
 
   it: {
@@ -2725,6 +2728,7 @@ en: {
     connectAtPlans: 'Connettiti con le persone nei piani',
     myVibes: 'I Miei Vibes',
     partyTypes: 'Tipi di festa',
+    noPlansYet: 'Nessun piano ancora',
 
   },
 };
