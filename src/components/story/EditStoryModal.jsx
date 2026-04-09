@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Loader2 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function EditStoryModal({ isOpen, onClose, story, onSave, isLoading }) {
   const [caption, setCaption] = useState(story?.caption || '');
+  const { t } = useLanguage();
 
   if (!isOpen) return null;
 
@@ -34,13 +36,13 @@ export default function EditStoryModal({ isOpen, onClose, story, onSave, isLoadi
             <X className="w-5 h-5 text-gray-400" />
           </button>
 
-          <h2 className="text-xl font-bold text-white mb-6">Edit Story Caption</h2>
+          <h2 className="text-xl font-bold text-white mb-6">{t.editStoryCaption}</h2>
 
           <div className="space-y-4">
             <Textarea
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              placeholder="Add a caption to your story..."
+              placeholder={t.editStoryCaptionPlaceholder}
               className="bg-gray-900 border-gray-800 text-white min-h-32"
               maxLength={200}
             />
@@ -52,7 +54,7 @@ export default function EditStoryModal({ isOpen, onClose, story, onSave, isLoadi
                 variant="outline"
                 className="flex-1 border-gray-800 text-gray-400"
               >
-                Cancel
+                {t.cancel}
               </Button>
               <Button
                 onClick={() => onSave(caption)}
@@ -62,7 +64,7 @@ export default function EditStoryModal({ isOpen, onClose, story, onSave, isLoadi
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  'Save'
+                  t.save
                 )}
               </Button>
             </div>
