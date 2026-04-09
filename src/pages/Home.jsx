@@ -452,7 +452,6 @@ export default function Home() {
         <HomeLiveActivities
           friendIds={friendIds}
           allParticipants={allParticipants}
-          /* REMOVER stories={visibleStories}*/
           friendStories={friendStories}
           profilesMap={profilesMap}
           plans={visiblePlans}
