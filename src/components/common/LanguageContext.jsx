@@ -541,6 +541,7 @@ export const translations = {
     deleteAccountTypePrompt2: 'para confirmar:',
     deleteAccountPlaceholder: 'Escreve DELETE',
     deleteForever: 'Eliminar Para Sempre',
+    connectAtPlans: 'Conecta com pessoas nos planos',
 
   },
 
@@ -1084,6 +1085,7 @@ en: {
     deleteAccountTypePrompt2: 'to confirm:',
     deleteAccountPlaceholder: 'Type DELETE',
     deleteForever: 'Delete Forever',
+    connectAtPlans: 'Connect with people at plans',
   },
 
   es: {
@@ -1626,6 +1628,7 @@ en: {
     deleteAccountTypePrompt2: 'para confirmar:',
     deleteAccountPlaceholder: 'Escribe DELETE',
     deleteForever: 'Eliminar para siempre',
+    connectAtPlans: 'Conéctate con gente en los planes',
   },
 
   fr: {
@@ -2168,6 +2171,7 @@ en: {
     deleteAccountTypePrompt2: 'pour confirmer :',
     deleteAccountPlaceholder: 'Écris DELETE',
     deleteForever: 'Supprimer définitivement',
+    connectAtPlans: 'Connecte-toi avec des gens dans les plans',
   },
 
   it: {
@@ -2710,6 +2714,7 @@ en: {
     deleteAccountTypePrompt2: 'per confermare:',
     deleteAccountPlaceholder: 'Scrivi DELETE',
     deleteForever: 'Elimina per sempre',
+    connectAtPlans: 'Connettiti con le persone nei piani',
 
   },
 };
