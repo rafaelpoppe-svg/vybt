@@ -2,8 +2,10 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, LogOut, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function LeavePlanModal({ isOpen, onClose, onConfirm, planTitle, isLoading }) {
+  const { t } = useLanguage();
   if (!isOpen) return null;
 
   return (
@@ -16,7 +18,7 @@ export default function LeavePlanModal({ isOpen, onClose, onConfirm, planTitle, 
           className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           onClick={onClose}
         />
-        
+
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -34,11 +36,9 @@ export default function LeavePlanModal({ isOpen, onClose, onConfirm, planTitle, 
             <div className="w-16 h-16 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-4">
               <LogOut className="w-8 h-8 text-orange-500" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-2">Sair do Plano?</h2>
+            <h2 className="text-2xl font-bold text-white mb-2">{t.leavePlanTitle}</h2>
             <p className="text-gray-400 text-sm">"{planTitle}"</p>
-            <p className="text-gray-500 text-xs mt-3">
-              Você pode entrar novamente mais tarde se o plano ainda estiver disponível.
-            </p>
+            <p className="text-gray-500 text-xs mt-3">{t.leavePlanRejoin}</p>
           </div>
 
           <div className="flex gap-3">
@@ -47,7 +47,7 @@ export default function LeavePlanModal({ isOpen, onClose, onConfirm, planTitle, 
               onClick={onClose}
               className="flex-1 bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
             >
-              Ficar
+              {t.stay}
             </Button>
             <Button
               onClick={onConfirm}
@@ -57,7 +57,7 @@ export default function LeavePlanModal({ isOpen, onClose, onConfirm, planTitle, 
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                'Sair'
+                t.leavePlan
               )}
             </Button>
           </div>
