@@ -596,6 +596,11 @@ export const translations = {
     highlightStoryPayBtn: 'Pagar €1.59 & Destacar Story',
     storyReplyingTo: 'Respondendo ao story',
     storyMessagePlaceholder: 'Mensagem para {name}...',
+    timeAgoDays: 'há {n}d',
+    timeAgoHours: 'há {n}h',
+    timeAgoMins: 'há {n}min',
+    timeAgoNow: 'agora mesmo',
+    storyReplyBtn: 'Responder a {name}',
 
   },
 
@@ -1194,6 +1199,11 @@ en: {
     highlightStoryPayBtn: 'Pay €1.59 & Highlight Story',
     storyReplyingTo: 'Replying to story',
     storyMessagePlaceholder: 'Message {name}...',
+    timeAgoDays: '{n}d ago',
+    timeAgoHours: '{n}h ago',
+    timeAgoMins: '{n}min ago',
+    timeAgoNow: 'just now',
+    storyReplyBtn: 'Reply to {name}',
   },
 
   es: {
@@ -1791,6 +1801,11 @@ en: {
     highlightStoryPayBtn: 'Pagar €1.59 & Destacar Story',
     storyReplyingTo: 'Respondiendo al story',
     storyMessagePlaceholder: 'Mensaje para {name}...',
+    timeAgoDays: 'hace {n}d',
+    timeAgoHours: 'hace {n}h',
+    timeAgoMins: 'hace {n}min',
+    timeAgoNow: 'ahora mismo',
+    storyReplyBtn: 'Responder a {name}',
   },
 
   fr: {
@@ -2388,6 +2403,11 @@ en: {
     highlightStoryPayBtn: 'Payer €1.59 & Mettre en Avant',
     storyReplyingTo: 'Répondre au story',
     storyMessagePlaceholder: 'Message à {name}...',
+    timeAgoDays: 'il y a {n}j',
+    timeAgoHours: 'il y a {n}h',
+    timeAgoMins: 'il y a {n}min',
+    timeAgoNow: 'à l\'instant',
+    storyReplyBtn: 'Répondre à {name}',
   },
 
   it: {
@@ -2985,6 +3005,11 @@ en: {
     highlightStoryPayBtn: 'Paga €1.59 & Metti in Evidenza',
     storyReplyingTo: 'Rispondendo allo story',
     storyMessagePlaceholder: 'Messaggio a {name}...',
+    timeAgoDays: '{n}g fa',
+    timeAgoHours: '{n}h fa',
+    timeAgoMins: '{n}min fa',
+    timeAgoNow: 'proprio ora',
+    storyReplyBtn: 'Rispondi a {name}',
   },
 };
 
