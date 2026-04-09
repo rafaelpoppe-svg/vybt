@@ -778,6 +778,13 @@ export const translations = {
     stepPrivacyDesc: 'Controla quem pode ver e entrar no teu plano',
     createPlanBtn: 'Criar Plano',
     ageLabel: 'Idade',
+    storyAssociatedPlan: 'Plano Associado',
+    storyVisibilityLabel: 'Visibilidade',
+    storyStatus: 'Estado',
+    storyPosted: 'Publicado',
+    storyExpires: 'Expira',
+    deleteStory: 'Eliminar Story',
+    deleteStoryConfirm: 'Tem certeza que quer eliminar este story?',
   },
 
 en: {
@@ -1557,6 +1564,13 @@ en: {
     stepPrivacyDesc: 'Control who can see and join your plan',
     createPlanBtn: 'Create Plan',
     ageLabel: 'Age',
+    storyAssociatedPlan: 'Associated Plan',
+    storyVisibilityLabel: 'Visibility',
+    storyStatus: 'Status',
+    storyPosted: 'Posted',
+    storyExpires: 'Expires',
+    deleteStory: 'Delete Story',
+    deleteStoryConfirm: 'Are you sure you want to delete this story?',
   },
 
   es: {
@@ -2336,6 +2350,13 @@ en: {
     stepPrivacyDesc: 'Controla quién puede ver y unirse a tu plan',
     createPlanBtn: 'Crear Plan',
     ageLabel: 'Edad',
+    storyAssociatedPlan: 'Plan Asociado',
+    storyVisibilityLabel: 'Visibilidad',
+    storyStatus: 'Estado',
+    storyPosted: 'Publicado',
+    storyExpires: 'Expira',
+    deleteStory: 'Eliminar Story',
+    deleteStoryConfirm: '¿Seguro que quieres eliminar este story?',
   },
 
   fr: {
@@ -3115,6 +3136,13 @@ en: {
     stepPrivacyDesc: 'Contrôle qui peut voir et rejoindre ton plan',
     createPlanBtn: 'Créer le Plan',
     ageLabel: 'Âge',
+    storyAssociatedPlan: 'Plan Associé',
+    storyVisibilityLabel: 'Visibilité',
+    storyStatus: 'Statut',
+    storyPosted: 'Publié',
+    storyExpires: 'Expire',
+    deleteStory: 'Supprimer le Story',
+    deleteStoryConfirm: 'Tu es sûr(e) de vouloir supprimer ce story ?',
   },
 
   it: {
@@ -3894,6 +3922,13 @@ en: {
     stepPrivacyDesc: 'Controlla chi può vedere e unirsi al tuo piano',
     createPlanBtn: 'Crea Piano',
     ageLabel: 'Età',
+    storyAssociatedPlan: 'Piano Associato',
+    storyVisibilityLabel: 'Visibilità',
+    storyStatus: 'Stato',
+    storyPosted: 'Pubblicato',
+    storyExpires: 'Scade',
+    deleteStory: 'Elimina Story',
+    deleteStoryConfirm: 'Sei sicuro/a di voler eliminare questo story?',
   },
 };
 
