@@ -542,6 +542,8 @@ export const translations = {
     deleteAccountPlaceholder: 'Escreve DELETE',
     deleteForever: 'Eliminar Para Sempre',
     connectAtPlans: 'Conecta com pessoas nos planos',
+    myVibes: 'Minhas Vibes',
+    partyTypes: 'Tipos de Festa',
 
   },
 
@@ -1086,6 +1088,8 @@ en: {
     deleteAccountPlaceholder: 'Type DELETE',
     deleteForever: 'Delete Forever',
     connectAtPlans: 'Connect with people at plans',
+    myVibes: 'My Vibes',
+    partyTypes: 'Party Types',
   },
 
   es: {
@@ -1629,6 +1633,8 @@ en: {
     deleteAccountPlaceholder: 'Escribe DELETE',
     deleteForever: 'Eliminar para siempre',
     connectAtPlans: 'Conéctate con gente en los planes',
+    myVibes: 'Mis Vibes',
+    partyTypes: 'Tipos de fiesta',
   },
 
   fr: {
@@ -2172,6 +2178,8 @@ en: {
     deleteAccountPlaceholder: 'Écris DELETE',
     deleteForever: 'Supprimer définitivement',
     connectAtPlans: 'Connecte-toi avec des gens dans les plans',
+    myVibes: 'Mes Vibes',
+    partyTypes: 'Types de soirée',
   },
 
   it: {
@@ -2715,6 +2723,8 @@ en: {
     deleteAccountPlaceholder: 'Scrivi DELETE',
     deleteForever: 'Elimina per sempre',
     connectAtPlans: 'Connettiti con le persone nei piani',
+    myVibes: 'I Miei Vibes',
+    partyTypes: 'Tipi di festa',
 
   },
 };
