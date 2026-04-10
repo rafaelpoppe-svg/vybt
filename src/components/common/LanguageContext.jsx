@@ -852,6 +852,8 @@ export const translations = {
     modRemove: 'Remover',
     modMarkResolved: 'Marcar como Resolvida',
     modRemoveContent: 'Remover Conteúdo',
+    noPlansJoined: 'Você ainda não entrou em nenhum plano',
+    explorePlans: 'Explorar Planos',
   },
 
 en: {
@@ -1705,6 +1707,8 @@ en: {
     modRemove: 'Remove',
     modMarkResolved: 'Mark as Resolved',
     modRemoveContent: 'Remove Content',
+    noPlansJoined: "You haven't joined any plans yet",
+    explorePlans: 'Explore Plans',
   },
 
   es: {
@@ -2558,6 +2562,8 @@ en: {
     modRemove: 'Eliminar',
     modMarkResolved: 'Marcar como Resuelta',
     modRemoveContent: 'Eliminar Contenido',
+    noPlansJoined: 'Aún no te has unido a ningún plan',
+    explorePlans: 'Explorar Planes',
   },
 
   fr: {
@@ -3411,6 +3417,8 @@ en: {
     modRemove: 'Supprimer',
     modMarkResolved: 'Marquer comme Résolu',
     modRemoveContent: 'Supprimer le Contenu',
+    noPlansJoined: "T'as pas encore rejoint de plan",
+    explorePlans: 'Explorer les Plans',
   },
 
   it: {
@@ -4264,6 +4272,8 @@ en: {
     modRemove: 'Rimuovi',
     modMarkResolved: 'Segna come Risolta',
     modRemoveContent: 'Rimuovi Contenuto',
+    noPlansJoined: 'Non hai ancora partecipato a nessun piano',
+    explorePlans: 'Esplora Piani',
   },
 };
 
