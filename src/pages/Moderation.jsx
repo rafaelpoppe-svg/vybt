@@ -8,6 +8,7 @@ import { ChevronLeft, Shield, AlertTriangle, Check, X, Loader2, Trash2, User, Fl
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { useLanguage } from '../common/LanguageContext';
 
 const STATUS_COLORS = {
   pending: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
@@ -15,18 +16,25 @@ const STATUS_COLORS = {
   resolved: 'bg-green-500/20 text-green-400 border-green-500/30',
 };
 
-const TYPE_LABELS = {
-  user: 'Utilizador',
-  plan: 'Plano',
-  story: 'História',
-};
-
 export default function Moderation() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('pending');
   const [selectedReport, setSelectedReport] = useState(null);
+
+  const TYPE_LABELS = {
+    user: t.user,
+    plan: t.modTypePlan,
+    story: t.storySingular,
+  };
+
+  const TAB_LABELS = {
+    pending: t.modPending,
+    reviewed: t.modReviewed,
+    resolved: t.modResolved,
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -67,7 +75,7 @@ export default function Moderation() {
     onSuccess: () => {
       queryClient.invalidateQueries(['reports']);
       setSelectedReport(null);
-      toast.success('Denúncia atualizada');
+      toast.success(t.modReportUpdated);
     }
   });
 
@@ -76,7 +84,6 @@ export default function Moderation() {
       if (report.type === 'plan' && report.reported_plan_id) {
         await base44.entities.PartyPlan.delete(report.reported_plan_id);
       } else if (report.type === 'story' && report.reported_plan_id) {
-        // reported_plan_id used as story_id for stories
         await base44.entities.ExperienceStory.delete(report.reported_plan_id);
       }
       await base44.entities.Report.update(report.id, { status: 'resolved' });
@@ -85,42 +92,35 @@ export default function Moderation() {
       queryClient.invalidateQueries(['reports']);
       queryClient.invalidateQueries(['allPlans']);
       setSelectedReport(null);
-      toast.success('Conteúdo removido e denúncia resolvida');
+      toast.success(t.modContentRemoved);
     }
   });
 
   const blockUserMutation = useMutation({
     mutationFn: async (report) => {
-      // Block the reported user from the platform (admin action: mark as resolved + note)
       await base44.entities.Report.update(report.id, { status: 'resolved' });
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['reports']);
       setSelectedReport(null);
-      toast.success('Ação aplicada');
+      toast.success(t.modActionApplied);
     }
   });
 
   if (!currentUser || currentUser.role !== 'admin') {
     return (
-      <div 
-        className="min-h-screen flex items-center justify-center"
-        style={{background: 'var(--bg)'}}
-      >
+      <div className="min-h-screen flex items-center justify-center" style={{background: 'var(--bg)'}}>
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div 
-      className="min-h-screen pb-10"
-      style={{background: 'var(--bg)'}}
-    >
+    <div className="min-h-screen pb-10" style={{background: 'var(--bg)'}}>
       {/* Header */}
-      <header 
+      <header
         className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 px-4 py-4"
-        style={{background: 'var(--bg)', opacity: 0.95}}  
+        style={{background: 'var(--bg)', opacity: 0.95}}
       >
         <div className="flex items-center gap-3 mb-4">
           <button onClick={() => navigate(-1)} className="p-2 rounded-full bg-gray-900">
@@ -128,11 +128,11 @@ export default function Moderation() {
           </button>
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-[#00c6d2]" />
-            <h1 className="text-xl font-bold text-white">Moderação</h1>
+            <h1 className="text-xl font-bold text-white">{t.moderationPanel}</h1>
           </div>
           {pendingCount > 0 && (
             <span className="ml-auto px-2.5 py-1 rounded-full bg-red-500/20 text-red-400 text-xs font-bold border border-red-500/30">
-              {pendingCount} pendentes
+              {pendingCount} {t.modPendingCount}
             </span>
           )}
         </div>
@@ -147,7 +147,7 @@ export default function Moderation() {
                 activeTab === tab ? 'bg-[#00c6d2] text-[#0b0b0b]' : 'bg-gray-900 text-gray-400'
               }`}
             >
-              {tab === 'pending' ? 'Pendentes' : tab === 'reviewed' ? 'Em análise' : 'Resolvidas'}
+              {TAB_LABELS[tab]}
               {tab === 'pending' && pendingCount > 0 && ` (${pendingCount})`}
             </button>
           ))}
@@ -163,7 +163,7 @@ export default function Moderation() {
         ) : filteredReports.length === 0 ? (
           <div className="text-center py-16">
             <Flag className="w-10 h-10 text-gray-700 mx-auto mb-3" />
-            <p className="text-gray-500">Nenhuma denúncia {activeTab === 'pending' ? 'pendente' : activeTab === 'reviewed' ? 'em análise' : 'resolvida'}</p>
+            <p className="text-gray-500">{t.modNoReports[activeTab]}</p>
           </div>
         ) : (
           filteredReports.map((report) => {
@@ -188,7 +188,7 @@ export default function Moderation() {
                     {TYPE_LABELS[report.type] || report.type}
                   </span>
                   <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${STATUS_COLORS[report.status]}`}>
-                    {report.status === 'pending' ? 'Pendente' : report.status === 'reviewed' ? 'Em análise' : 'Resolvida'}
+                    {TAB_LABELS[report.status]}
                   </span>
                 </div>
 
@@ -212,7 +212,7 @@ export default function Moderation() {
                       onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${reportedPlan.id}`)}
                       className="ml-auto text-[#00c6d2] text-xs"
                     >
-                      Ver
+                      {t.viewArrow}
                     </button>
                   </div>
                 )}
@@ -221,10 +221,10 @@ export default function Moderation() {
                 <div className="flex items-center justify-between text-xs text-gray-500">
                   <div className="flex items-center gap-1">
                     <User className="w-3 h-3" />
-                    <span>Por: <span className="text-gray-300">{reporter?.display_name || 'Desconhecido'}</span></span>
+                    <span>{t.modBy}: <span className="text-gray-300">{reporter?.display_name || t.modUnknown}</span></span>
                   </div>
                   {reported && (
-                    <span>Sobre: <span className="text-gray-300">{reported.display_name}</span></span>
+                    <span>{t.modAbout}: <span className="text-gray-300">{reported.display_name}</span></span>
                   )}
                   <span>{format(new Date(report.created_date), 'dd/MM HH:mm')}</span>
                 </div>
@@ -239,7 +239,7 @@ export default function Moderation() {
                       className="flex-1 bg-blue-600/20 hover:bg-blue-600/40 text-blue-400 border border-blue-600/30"
                       variant="outline"
                     >
-                      Analisar
+                      {t.modReview}
                     </Button>
                     <Button
                       onClick={() => updateStatusMutation.mutate({ id: report.id, status: 'resolved' })}
@@ -249,7 +249,7 @@ export default function Moderation() {
                       variant="outline"
                     >
                       <Check className="w-3 h-3 mr-1" />
-                      Dispensar
+                      {t.modDismiss}
                     </Button>
                     {(report.type === 'plan' || report.type === 'story') && report.reported_plan_id && (
                       <Button
@@ -260,7 +260,7 @@ export default function Moderation() {
                         variant="outline"
                       >
                         <Trash2 className="w-3 h-3 mr-1" />
-                        Remover
+                        {t.modRemove}
                       </Button>
                     )}
                   </div>
@@ -276,7 +276,7 @@ export default function Moderation() {
                       variant="outline"
                     >
                       <Check className="w-3 h-3 mr-1" />
-                      Marcar como Resolvida
+                      {t.modMarkResolved}
                     </Button>
                     {(report.type === 'plan' || report.type === 'story') && report.reported_plan_id && (
                       <Button
@@ -287,7 +287,7 @@ export default function Moderation() {
                         variant="outline"
                       >
                         <Trash2 className="w-3 h-3 mr-1" />
-                        Remover Conteúdo
+                        {t.modRemoveContent}
                       </Button>
                     )}
                   </div>
