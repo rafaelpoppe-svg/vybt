@@ -8,7 +8,7 @@ import { ChevronLeft, Shield, AlertTriangle, Check, X, Loader2, Trash2, User, Fl
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
-import { useLanguage } from '../common/LanguageContext';
+import { useLanguage } from '../components/common/LanguageContext';
 
 const STATUS_COLORS = {
   pending: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
