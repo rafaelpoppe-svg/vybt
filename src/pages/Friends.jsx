@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, UserPlus, Check, X, MessageCircle, Loader2 } from 'lucide-react';
+import { ChevronLeft, Check, X, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '../components/common/LanguageContext';
 
 export default function Friends() {
   const navigate = useNavigate();
-  const {t} = useLanguage();
+  const { t } = useLanguage();
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('friends');
@@ -25,14 +25,12 @@ export default function Friends() {
     getUser();
   }, []);
 
-  // My friendships (I sent)
   const { data: sentFriendships = [] } = useQuery({
     queryKey: ['sentFriendships', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id }),
     enabled: !!currentUser?.id
   });
 
-  // Received friend requests
   const { data: receivedFriendships = [] } = useQuery({
     queryKey: ['receivedFriendships', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id }),
@@ -58,9 +56,7 @@ export default function Friends() {
 
   const acceptMutation = useMutation({
     mutationFn: async ({ friendshipId, requesterId }) => {
-      // Actualiza o pedido original para accepted
       await base44.entities.Friendship.update(friendshipId, { status: 'accepted' });
-      // Cria a amizade simétrica para que o aceitador também apareça como amigo
       const existing = sentFriendships.find(f => f.friend_id === requesterId && f.status === 'accepted');
       if (!existing) {
         await base44.entities.Friendship.create({
@@ -86,15 +82,9 @@ export default function Friends() {
   });
 
   return (
-    <div 
-      className="min-h-screen"
-      style={{background: 'var(--bg)'}}
-    >
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       {/* Header */}
-      <header 
-        className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800"
-        style={{background: 'var(--bg)', opacity: 0.95}}  
-      >
+      <header className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800" style={{ background: 'var(--bg)', opacity: 0.95 }}>
         <div className="p-4 flex items-center gap-4">
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -103,7 +93,7 @@ export default function Friends() {
           >
             <ChevronLeft className="w-5 h-5 text-white" />
           </motion.button>
-          <h1 className="text-xl font-bold text-white">Friends</h1>
+          <h1 className="text-xl font-bold text-white">{t.myFriends}</h1>
         </div>
 
         {/* Tabs */}
@@ -117,7 +107,7 @@ export default function Friends() {
                 : 'bg-gray-900 text-gray-400 border border-gray-800'
             }`}
           >
-            Friends ({acceptedFriends.length})
+            {t.friends} ({acceptedFriends.length})
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.95 }}
@@ -128,7 +118,7 @@ export default function Friends() {
                 : 'bg-gray-900 text-gray-400 border border-gray-800'
             }`}
           >
-            Requests
+            {t.requests}
             {pendingRequests.length > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
                 {pendingRequests.length}
@@ -149,7 +139,7 @@ export default function Friends() {
                   whileTap={{ scale: 0.98 }}
                   className="p-4 rounded-xl bg-gray-900 border border-gray-800 flex items-center gap-3"
                 >
-                  <div 
+                  <div
                     onClick={() => navigate(createPageUrl('UserProfile') + `?id=${friendship.friendUserId}`)}
                     className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden cursor-pointer"
                   >
@@ -160,7 +150,7 @@ export default function Friends() {
                     )}
                   </div>
                   <div className="flex-1">
-                    <p className="text-white font-medium">{friend?.display_name || 'User'}</p>
+                    <p className="text-white font-medium">{friend?.display_name || t.user}</p>
                     {friend?.username && (
                       <p className="text-[#00c6d2] text-xs">@{friend.username}</p>
                     )}
@@ -197,14 +187,14 @@ export default function Friends() {
                     )}
                   </div>
                   <div className="flex-1">
-                    <p className="text-white font-medium">{requester?.display_name || 'User'}</p>
+                    <p className="text-white font-medium">{requester?.display_name || t.user}</p>
                     <p className="text-gray-500 text-sm">{t.wantsToBeYourFriend}</p>
                   </div>
                   <div className="flex gap-2">
                     <Button
-                    size="sm"
-                    onClick={() => acceptMutation.mutate({ friendshipId: request.id, requesterId: request.user_id })}
-                    disabled={acceptMutation.isPending}
+                      size="sm"
+                      onClick={() => acceptMutation.mutate({ friendshipId: request.id, requesterId: request.user_id })}
+                      disabled={acceptMutation.isPending}
                       className="bg-[#00c6d2] text-[#0b0b0b] hover:bg-[#00c6d2]/90"
                     >
                       <Check className="w-4 h-4" />
