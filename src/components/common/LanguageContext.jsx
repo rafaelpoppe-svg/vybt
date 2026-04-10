@@ -854,6 +854,14 @@ export const translations = {
     modRemoveContent: 'Remover Conteúdo',
     noPlansJoined: 'Você ainda não entrou em nenhum plano',
     explorePlans: 'Explorar Planos',
+    notifHappeningNearYou: 'está acontecendo perto de você',
+    notifNoActivity: 'Sem atividade ainda',
+    notifNoActivityDesc: 'Interações de amigos vão aparecer aqui',
+    notifSectionLive: '🔥 Acontecendo Agora',
+    notifSectionToday: 'Hoje',
+    notifSectionWeek: 'Esta Semana',
+    notifSectionMonth: 'Este Mês',
+    notifSectionOlder: 'Mais Antigos',
   },
 
 en: {
@@ -1709,6 +1717,14 @@ en: {
     modRemoveContent: 'Remove Content',
     noPlansJoined: "You haven't joined any plans yet",
     explorePlans: 'Explore Plans',
+    notifHappeningNearYou: 'is happening near you',
+    notifNoActivity: 'No activity yet',
+    notifNoActivityDesc: 'Interactions from friends will appear here',
+    notifSectionLive: '🔥 Happening Now',
+    notifSectionToday: 'Today',
+    notifSectionWeek: 'This Week',
+    notifSectionMonth: 'This Month',
+    notifSectionOlder: 'Older',
   },
 
   es: {
@@ -2564,6 +2580,14 @@ en: {
     modRemoveContent: 'Eliminar Contenido',
     noPlansJoined: 'Aún no te has unido a ningún plan',
     explorePlans: 'Explorar Planes',
+    notifHappeningNearYou: 'está pasando cerca de ti',
+    notifNoActivity: 'Sin actividad todavía',
+    notifNoActivityDesc: 'Las interacciones de tus amigos aparecerán aquí',
+    notifSectionLive: '🔥 Pasando ahora',
+    notifSectionToday: 'Hoy',
+    notifSectionWeek: 'Esta semana',
+    notifSectionMonth: 'Este mes',
+    notifSectionOlder: 'Más antiguos',
   },
 
   fr: {
@@ -3419,6 +3443,14 @@ en: {
     modRemoveContent: 'Supprimer le Contenu',
     noPlansJoined: "T'as pas encore rejoint de plan",
     explorePlans: 'Explorer les Plans',
+    notifHappeningNearYou: 'se passe près de toi',
+    notifNoActivity: 'Pas encore d\'activité',
+    notifNoActivityDesc: 'Les interactions de tes amis apparaîtront ici',
+    notifSectionLive: '🔥 En ce moment',
+    notifSectionToday: 'Aujourd\'hui',
+    notifSectionWeek: 'Cette semaine',
+    notifSectionMonth: 'Ce mois-ci',
+    notifSectionOlder: 'Plus anciens',
   },
 
   it: {
@@ -4274,6 +4306,14 @@ en: {
     modRemoveContent: 'Rimuovi Contenuto',
     noPlansJoined: 'Non hai ancora partecipato a nessun piano',
     explorePlans: 'Esplora Piani',
+    notifHappeningNearYou: 'sta succedendo vicino a te',
+    notifNoActivity: 'Nessuna attività ancora',
+    notifNoActivityDesc: 'Le interazioni degli amici appariranno qui',
+    notifSectionLive: '🔥 Sta succedendo ora',
+    notifSectionToday: 'Oggi',
+    notifSectionWeek: 'Questa settimana',
+    notifSectionMonth: 'Questo mese',
+    notifSectionOlder: 'Più vecchi',
   },
 };
 
