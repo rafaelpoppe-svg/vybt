@@ -101,13 +101,13 @@ export default function MyPlans() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-4">You haven't joined any plans yet</p>
+            <p className="text-gray-500 mb-4">{t.noPlansJoined}</p>
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(createPageUrl('Explore'))}
               className="px-6 py-2 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-medium"
             >
-              Explore Plans
+              {t.explorePlans}
             </motion.button>
           </div>
         )}
