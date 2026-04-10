@@ -10,7 +10,7 @@ import { useLanguage } from '../components/common/LanguageContext';
 
 export default function MyStories() {
   const navigate = useNavigate();
-  const {t} = useLanguage();
+  const { t } = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -40,12 +40,9 @@ export default function MyStories() {
   }, {});
 
   return (
-    <div 
-      className="min-h-screen"
-      style={{background: 'var(--bg)'}}
-    >
+    <div className="min-h-screen" style={{background: 'var(--bg)'}}>
       {/* Header */}
-      <header 
+      <header
         className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 p-4 flex items-center gap-4"
         style={{background: 'var(--bg)', opacity: 0.95}}
       >
@@ -56,7 +53,7 @@ export default function MyStories() {
         >
           <ChevronLeft className="w-5 h-5 text-white" />
         </motion.button>
-        <h1 className="text-xl font-bold text-white">t.myExperienceStories</h1>
+        <h1 className="text-xl font-bold text-white">{t.myExperienceStories}</h1>
       </header>
 
       <main className="p-4">
@@ -75,13 +72,13 @@ export default function MyStories() {
                   onClick={() => navigate(createPageUrl('StoryView') + `?id=${story.id}`)}
                   className="relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer"
                 >
-                  <img 
-                    src={story.media_url} 
-                    alt="" 
+                  <img
+                    src={story.media_url}
+                    alt=""
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  
+
                   {story.is_highlighted && (
                     <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-[#542b9b]/80 backdrop-blur-sm flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-[#00c6d2]" />
@@ -108,7 +105,7 @@ export default function MyStories() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-4">You haven't shared any stories yet</p>
+            <p className="text-gray-500 mb-4">{t.noStoriesYet}</p>
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(createPageUrl('AddStory'))}
