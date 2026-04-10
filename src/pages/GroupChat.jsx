@@ -15,7 +15,7 @@ import VotingModal from '../components/plan/VotingModal';
 import RenewPlanModal from '../components/plan/RenewPlanModal';
 import DeletePlanModal from '../components/plan/DeletePlanModal';
 import AdminEditModal from '../components/plan/AdminEditModal';
-import { 
+import {
   notifyNewGroupMessage,
   notifyPlanRenewed,
   notifyPlanSuccessful,
@@ -41,7 +41,6 @@ export default function GroupChat() {
   const [showGallery, setShowGallery] = useState(false);
   const messagesEndRef = useRef(null);
 
-
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -54,13 +53,11 @@ export default function GroupChat() {
     getUser();
   }, []);
 
-  // ── Data Fetching ──────────────────────────────────────────────────────────
   const { data: plans = [] } = useQuery({
     queryKey: ['allPlans'],
     queryFn: async () => {
       const urlPlanId = new URLSearchParams(window.location.search).get('planId');
       if (urlPlanId) {
-        // Always include the current plan + recent ones
         const [specific, recent] = await Promise.all([
           base44.entities.PartyPlan.filter({ id: urlPlanId }),
           base44.entities.PartyPlan.list('-created_date', 100),
@@ -106,14 +103,12 @@ export default function GroupChat() {
   });
   const friendProfiles = myFriendships.map(f => profilesMap[f.friend_id]).filter(Boolean);
 
-  // ── Real-time Subscription — inject directly into cache (no refetch delay) ──
   useEffect(() => {
     if (!planId || !currentUser?.id) return;
     const unsubscribe = base44.entities.ChatMessage.subscribe((event) => {
       if (event.type === 'create' && event.data?.plan_id === planId) {
         const { id } = event.data;
         queryClient.setQueryData(['groupMessages', planId], (old = []) => {
-          // Remove optimistic placeholders and avoid duplicates
           const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
           if (withoutOptimistic.some(m => m.id === id)) return old;
           return [...withoutOptimistic, event.data];
@@ -123,29 +118,22 @@ export default function GroupChat() {
     return () => unsubscribe();
   }, [planId, currentUser?.id, queryClient]);
 
-  // ── Mark group messages as read when viewing ──────────────────────────────
   useEffect(() => {
     if (!currentUser?.id || messages.length === 0) return;
-    const unread = messages.filter(
-      m => m.sender_id !== currentUser.id && !m.is_read
-    );
+    const unread = messages.filter(m => m.sender_id !== currentUser.id && !m.is_read);
     if (unread.length === 0) return;
     unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }));
-    // Invalidate the global group messages cache so Chat list updates
     queryClient.invalidateQueries(['allGroupMessages', currentUser.id]);
   }, [messages, currentUser?.id, queryClient]);
 
-  // ── Sorted Messages ────────────────────────────────────────────────────────
   const sortedMessages = [...messages].sort(
     (a, b) => new Date(a.created_date) - new Date(b.created_date)
   );
 
-  // Auto-scroll when new messages arrive
   useEffect(() => {
     setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
   }, [sortedMessages.length]);
 
-  // ── Plan Status ────────────────────────────────────────────────────────────
   const myParticipation = participants.find(p => p.user_id === currentUser?.id);
   const isAdmin = myParticipation?.is_admin || plan?.creator_id === currentUser?.id;
 
@@ -169,17 +157,14 @@ export default function GroupChat() {
   };
 
   const planStatus = getPlanStatus();
-  // Chat is locked during voting AND after voting ends while admin hasn't acted yet
   const isAwaitingAdmin = planStatus === 'ended' && plan?.status !== 'terminated' && plan?.status !== 'renewed';
   const isChatLocked = planStatus === 'voting' || isAwaitingAdmin;
   const hasVoted = plan?.voted_users?.includes(currentUser?.id);
   const themeColor = plan?.theme_color || '#00c6d2';
 
-  // ── Mutations ──────────────────────────────────────────────────────────────
   const sendMutation = useMutation({
     mutationFn: async (content) => {
       if (!currentUser?.id || !planId) return;
-      // Fire notification in background — don't await it
       const msgPromise = base44.entities.ChatMessage.create({
         sender_id: currentUser.id,
         plan_id: planId,
@@ -189,16 +174,13 @@ export default function GroupChat() {
       });
       notifyNewGroupMessage(
         planId, currentUser.id,
-        myProfile?.display_name || currentUser.full_name || 'Someone'
-      ); // intentionally not awaited
+        myProfile?.display_name || currentUser.full_name || t.someone
+      );
       return msgPromise;
     },
     onMutate: async (content) => {
-      // Cancel any in-flight refetches
       await queryClient.cancelQueries(['groupMessages', planId]);
-      // Snapshot current messages
       const previous = queryClient.getQueryData(['groupMessages', planId]);
-      // Optimistically add the new message
       const optimisticMsg = {
         id: `optimistic-${Date.now()}`,
         sender_id: currentUser?.id,
@@ -212,13 +194,11 @@ export default function GroupChat() {
       return { previous };
     },
     onError: (_err, _content, context) => {
-      // Rollback on error
       if (context?.previous) {
         queryClient.setQueryData(['groupMessages', planId], context.previous);
       }
     },
     onSuccess: (realMsg) => {
-      // Replace optimistic message with the real one from the server
       if (realMsg) {
         queryClient.setQueryData(['groupMessages', planId], (old = []) => {
           const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
@@ -243,7 +223,6 @@ export default function GroupChat() {
         const totalGreat = (vote === 'great' ? (plan.great_votes || 0) : (plan.great_votes || 0)) + (vote === 'great' ? 1 : 0);
         const totalBad = (vote === 'bad' ? (plan.bad_votes || 0) : (plan.bad_votes || 0)) + (vote === 'bad' ? 1 : 0);
         updateData.status = 'ended';
-        // Notify all participants of the result
         const isSuccess = totalGreat >= totalBad;
         participants.forEach(p => {
           if (isSuccess) notifyPlanSuccessful(p.user_id, plan);
@@ -284,7 +263,6 @@ export default function GroupChat() {
       queryClient.invalidateQueries(['allPlans']);
       queryClient.invalidateQueries(['groupMessages', planId]);
       setShowRenewModal(false);
-      // Notify all participants about renewal
       participants.forEach(p => {
         if (p.user_id !== currentUser?.id) notifyPlanRenewed(p.user_id, plan);
       });
@@ -300,7 +278,6 @@ export default function GroupChat() {
         status: 'terminated',
         terminated_at: terminatedAt,
       };
-      // If live, also hide from all feeds
       if (isLive) {
         updateData.show_in_explore = false;
         updateData.show_in_map = false;
@@ -337,7 +314,6 @@ export default function GroupChat() {
 
   const adminEditMutation = useMutation({
     mutationFn: async (data) => {
-      // Build change summary before saving
       const changes = [];
       if (plan && data.title && data.title !== plan.title)
         changes.push(`Renamed from "${plan.title}" to "${data.title}"`);
@@ -369,7 +345,6 @@ export default function GroupChat() {
     },
   });
 
-  // ── Admin Handlers ─────────────────────────────────────────────────────────
   const handlePinMessage = async (msgId) => {
     const pinned = plan.pinned_messages || [];
     await base44.entities.PartyPlan.update(planId, { pinned_messages: [...pinned, msgId] });
@@ -405,13 +380,12 @@ export default function GroupChat() {
     return null;
   }
 
-  // ── Non-member gate ────────────────────────────────────────────────────────
   const isMember = !!myParticipation;
   const participantsLoaded = participants !== undefined;
 
   if (currentUser && participantsLoaded && !isMember) {
     return (
-      <div className="flex flex-col items-center justify-center text-center px-6 gap-6" style={{background: 'var(--bg)', height: '100dvh' }}>
+      <div className="flex flex-col items-center justify-center text-center px-6 gap-6" style={{ background: 'var(--bg)', height: '100dvh' }}>
         <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0"
           style={{ background: `linear-gradient(135deg, ${plan?.theme_color || '#00c6d2'}60, #542b9b60)` }}>
           {plan?.cover_image
@@ -439,16 +413,10 @@ export default function GroupChat() {
     );
   }
 
-  // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col overflow-hidden" 
-      style={{ position: 'fixed', inset: 0, background: 'var(--bg)' }}
-    >
-
-      {/* Chat background theme (emojis) */}
+    <div className="flex flex-col overflow-hidden" style={{ position: 'fixed', inset: 0, background: 'var(--bg)' }}>
       <GroupChatBackground theme={plan?.chat_background_theme} />
 
-      {/* Background blur from group image */}
       {plan?.group_image && (
         <div
           className="fixed inset-0 z-0 pointer-events-none"
@@ -462,7 +430,6 @@ export default function GroupChat() {
         />
       )}
 
-      {/* Header */}
       <GroupChatHeader
         plan={plan}
         planStatus={planStatus}
@@ -479,8 +446,7 @@ export default function GroupChat() {
         onHighlight={() => setShowHighlightModal(true)}
       />
 
-      {/* Stories Bar + Gallery Toggle */}
-      <div 
+      <div
         className="relative z-10 border-b border-gray-800/40 backdrop-blur-sm flex-shrink-0"
         style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 80%, transparent 20%)' }}
       >
@@ -505,7 +471,6 @@ export default function GroupChat() {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto relative z-10 px-4 py-4 pb-24" style={{ overscrollBehavior: 'contain' }}>
         {messagesLoading ? (
           <div className="flex justify-center items-center h-full">
@@ -543,7 +508,6 @@ export default function GroupChat() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input — flutuante */}
       <div className="absolute bottom-0 left-0 right-0 z-20">
         <GroupChatInput
           isChatLocked={isChatLocked}
@@ -554,7 +518,6 @@ export default function GroupChat() {
         />
       </div>
 
-      {/* ── Modals ── */}
       <GroupAdminActions
         isOpen={showAdminActions}
         onClose={() => setShowAdminActions(false)}
@@ -632,12 +595,8 @@ export default function GroupChat() {
         }}
       />
 
-      {/* Gallery Modal */}
       {showGallery && (
-        <div 
-          className="fixed inset-0 z-50 overflow-hidden"
-          style={{background: 'var(--bg)'}}
-        >
+        <div className="fixed inset-0 z-50 overflow-hidden" style={{ background: 'var(--bg)' }}>
           <GroupChatGalleryTab
             stories={stories}
             profilesMap={profilesMap}
