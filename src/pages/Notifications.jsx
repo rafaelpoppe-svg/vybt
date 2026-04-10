@@ -10,14 +10,14 @@ import { useLanguage } from '../components/common/LanguageContext';
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
-function timeAgo(dateStr) {
+function timeAgo(dateStr, t) {
   try {
     const diff = (Date.now() - new Date(dateStr)) / 1000;
-    if (diff < 60) return 'now';
-    if (diff < 3600) return `${Math.floor(diff / 60)}m`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
-    if (diff < 604800) return `${Math.floor(diff / 86400)}d`;
-    return `${Math.floor(diff / 604800)}w`;
+    if (diff < 60) return t.timeAgoNow;
+    if (diff < 3600) return t.timeAgoMins.replace('{n}', Math.floor(diff / 60));
+    if (diff < 86400) return t.timeAgoHours.replace('{n}', Math.floor(diff / 3600));
+    if (diff < 604800) return t.timeAgoDays.replace('{n}', Math.floor(diff / 86400));
+    return t.timeAgoDays.replace('{n}', Math.floor(diff / 604800) + 'w');
   } catch { return ''; }
 }
 
@@ -42,10 +42,7 @@ function Avatar({ profile, size = 44, ringColor, badge }) {
     <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
       <div
         className="rounded-full overflow-hidden w-full h-full"
-        style={ringColor ? {
-          padding: 2,
-          background: ringColor,
-        } : {}}
+        style={ringColor ? { padding: 2, background: ringColor } : {}}
       >
         <div className="rounded-full overflow-hidden w-full h-full"
           style={ringColor ? { border: '2px solid #0b0b0b' } : {}}>
@@ -90,7 +87,7 @@ function SectionLabel({ label }) {
 
 // ─── LIVE PLAN CARD ───────────────────────────────────────────────────────────
 
-function LivePlanCard({ notification, plan, onMark }) {
+function LivePlanCard({ notification, plan, onMark, t }) {
   const navigate = useNavigate();
   const handleClick = () => {
     onMark(notification.id);
@@ -109,14 +106,12 @@ function LivePlanCard({ notification, plan, onMark }) {
       }}
     >
       <div className="flex items-center gap-3 p-3.5">
-        {/* Plan thumbnail */}
         <div className="relative w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
           {plan?.cover_image
             ? <img src={plan.cover_image} alt="" className="w-full h-full object-cover" />
             : <div className="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
                 <Flame className="w-6 h-6 text-white" />
               </div>}
-          {/* live pulse overlay */}
           <div className="absolute inset-0 bg-black/30 flex items-end justify-end p-1">
             <motion.div
               animate={{ opacity: [1, 0.3, 1] }}
@@ -128,7 +123,7 @@ function LivePlanCard({ notification, plan, onMark }) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 mb-0.5">
-            <span className="text-orange-400 text-[10px] font-black uppercase tracking-widest">● Live</span>
+            <span className="text-orange-400 text-[10px] font-black uppercase tracking-widest">● {t.liveNow}</span>
           </div>
           <p className="text-white font-semibold text-[13px] leading-tight truncate">
             {plan?.title || notification.title}
@@ -142,16 +137,16 @@ function LivePlanCard({ notification, plan, onMark }) {
           style={{ background: 'rgba(249,115,22,0.25)', border: '1px solid rgba(249,115,22,0.4)' }}
         >
           <Camera className="w-3 h-3 text-orange-300" />
-          <span className="text-orange-300 text-[11px] font-bold">Story</span>
+          <span className="text-orange-300 text-[11px] font-bold">{t.yourStory}</span>
         </motion.div>
       </div>
     </motion.div>
   );
 }
 
-// ─── UPCOMING PLAN ROW (plan_recommendation — nearby, not live) ──────────────
+// ─── UPCOMING PLAN ROW ────────────────────────────────────────────────────────
 
-function UpcomingPlanRow({ notification, plan, onMark }) {
+function UpcomingPlanRow({ notification, plan, onMark, t }) {
   const navigate = useNavigate();
   const handleClick = () => {
     onMark(notification.id);
@@ -164,7 +159,6 @@ function UpcomingPlanRow({ notification, plan, onMark }) {
       onClick={handleClick}
       className={`w-full flex items-center gap-3 px-4 py-2.5 text-left ${!notification.is_read ? 'bg-[#00c6d2]/5' : ''}`}
     >
-      {/* Plan thumbnail with calendar badge */}
       <div className="relative flex-shrink-0 w-11 h-11 rounded-xl overflow-hidden"
         style={{ border: '1.5px solid rgba(0,198,210,0.35)' }}>
         {plan?.cover_image
@@ -179,14 +173,14 @@ function UpcomingPlanRow({ notification, plan, onMark }) {
       <div className="flex-1 min-w-0">
         <p className="text-white text-[13.5px] leading-snug">
           <span className="font-bold">{plan?.title || notification.title} </span>
-          <span className="text-gray-300">is happening near you</span>
+          <span className="text-gray-300">{t.notifHappeningNearYou}</span>
         </p>
         <div className="flex items-center gap-1.5 mt-0.5">
           {plan?.date && (
             <span className="text-[#00c6d2] text-[11px] font-semibold">{plan.date}</span>
           )}
           {plan?.date && <span className="text-gray-600 text-[10px]">·</span>}
-          <span className="text-gray-500 text-[11px]">{timeAgo(notification.created_date)}</span>
+          <span className="text-gray-500 text-[11px]">{timeAgo(notification.created_date, t)}</span>
         </div>
       </div>
 
@@ -200,16 +194,13 @@ function UpcomingPlanRow({ notification, plan, onMark }) {
 function FriendRequestRow({ notification, requesterProfile, onMark }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const {t} = useLanguage();
-  // If notification is already read, assume it was already handled
+  const { t } = useLanguage();
   const [localStatus, setLocalStatus] = useState(notification.is_read ? 'accepted' : null);
 
   const accept = useMutation({
     mutationFn: async () => {
       const reqs = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id, status: 'pending' });
       if (reqs[0]) await base44.entities.Friendship.update(reqs[0].id, { status: 'accepted' });
-      // Criar amizade simétrica para o recetor (utilizador atual)
       await base44.entities.Friendship.create({
         user_id: notification.user_id,
         friend_id: notification.related_user_id,
@@ -251,10 +242,10 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
 
       <div className="flex-1 min-w-0">
         <p className="text-white text-[13.5px] leading-snug">
-          <span className="font-bold">{requesterProfile?.display_name || 'Someone'}</span>
+          <span className="font-bold">{requesterProfile?.display_name || t.someone}</span>
           <span className="text-gray-300">{t.friendRequest}</span>
         </p>
-        <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date)}</p>
+        <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date, t)}</p>
       </div>
 
       {localStatus === 'accepted' ? (
@@ -298,7 +289,7 @@ const typeConfig = {
   story_reaction:        { emoji: '❤️', ring: 'linear-gradient(135deg,#ec4899,#f97316)', badge: '#ec4899' },
 };
 
-function NotifRow({ notification, plan, relatedProfile, onMark }) {
+function NotifRow({ notification, plan, relatedProfile, onMark, t }) {
   const navigate = useNavigate();
   const cfg = typeConfig[notification.type] || { emoji: '🔔', ring: 'linear-gradient(135deg,#6b7280,#374151)', badge: '#6b7280' };
 
@@ -331,10 +322,9 @@ function NotifRow({ notification, plan, relatedProfile, onMark }) {
           {relatedProfile && <span className="font-bold text-white">{relatedProfile.display_name} </span>}
           <span>{notification.message}</span>
         </p>
-        <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date)}</p>
+        <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date, t)}</p>
       </div>
 
-      {/* Thumbnail */}
       {plan?.cover_image
         ? <Thumb src={plan.cover_image} size={44} />
         : !notification.is_read
@@ -380,7 +370,6 @@ export default function Notifications() {
     enabled: planIds.length > 0,
   });
 
-  // Fetch user's participations to know which plans they're actually in
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myParticipationsNotif', currentUser?.id],
     queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
@@ -413,16 +402,13 @@ export default function Notifications() {
 
   const HIDDEN = ['new_group_message', 'new_direct_message'];
 
-  // Helper: check if a plan is truly still live (happening and end time not passed)
   const isPlanTrulyLive = (plan) => {
     if (!plan) return false;
     if (['ended', 'terminated', 'voting'].includes(plan.status)) return false;
-    // If end_time exists, check if it has passed
     if (plan.date && plan.end_time) {
       const end = new Date(`${plan.date}T${plan.end_time}:00`);
       if (new Date() > end) return false;
     }
-    // If no end_time, assume 8h after start
     if (plan.date && plan.time) {
       const start = new Date(`${plan.date}T${plan.time}:00`);
       const end = new Date(start.getTime() + 8 * 60 * 60 * 1000);
@@ -432,26 +418,20 @@ export default function Notifications() {
   };
 
   const filtered = useMemo(() => {
-    const seenPlanNotifType = new Set(); // deduplicate same plan+type combos
-
+    const seenPlanNotifType = new Set();
     return notifications
       .sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
       .filter(n => {
         if (HIDDEN.includes(n.type)) return false;
-
-        // Deduplicate: keep only the most recent notification per plan+type
         if (n.plan_id) {
           const key = `${n.plan_id}::${n.type}`;
           if (seenPlanNotifType.has(key)) return false;
           seenPlanNotifType.add(key);
         }
-
-        // plan_happening_now: only show if user is participant AND plan is truly still live
         if (n.type === 'plan_happening_now') {
           if (!n.plan_id || !myPlanIds.has(n.plan_id)) return false;
           if (!isPlanTrulyLive(plansMap[n.plan_id])) return false;
         }
-
         return true;
       });
   }, [notifications, myPlanIds, plansMap]);
@@ -461,12 +441,12 @@ export default function Notifications() {
 
   const renderNotif = (n) => {
     if (n.type === 'plan_happening_now')
-      return <LivePlanCard key={n.id} notification={n} plan={plansMap[n.plan_id]} onMark={handleMark} />;
+      return <LivePlanCard key={n.id} notification={n} plan={plansMap[n.plan_id]} onMark={handleMark} t={t} />;
     if (n.type === 'plan_recommendation')
-      return <UpcomingPlanRow key={n.id} notification={n} plan={plansMap[n.plan_id]} onMark={handleMark} />;
+      return <UpcomingPlanRow key={n.id} notification={n} plan={plansMap[n.plan_id]} onMark={handleMark} t={t} />;
     if (n.type === 'friend_request')
       return <FriendRequestRow key={n.id} notification={n} requesterProfile={profilesMap[n.related_user_id]} onMark={handleMark} />;
-    return <NotifRow key={n.id} notification={n} plan={plansMap[n.plan_id]} relatedProfile={profilesMap[n.related_user_id]} onMark={handleMark} />;
+    return <NotifRow key={n.id} notification={n} plan={plansMap[n.plan_id]} relatedProfile={profilesMap[n.related_user_id]} onMark={handleMark} t={t} />;
   };
 
   return (
@@ -474,7 +454,6 @@ export default function Notifications() {
       className="overflow-hidden flex flex-col"
       style={{ background: 'var(--bg)', position: 'fixed', inset: 0 }}
     >
-
       {/* ── Header ── */}
       <header className="flex-shrink-0 px-4 pb-2"
         style={{ background: 'var(--bg)', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
@@ -509,51 +488,44 @@ export default function Notifications() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-24 space-y-2">
             <div className="text-5xl">🔔</div>
-            <p className="text-gray-400 font-semibold">No activity yet</p>
-            <p className="text-gray-600 text-sm">Interactions from friends will appear here</p>
+            <p className="text-gray-400 font-semibold">{t.notifNoActivity}</p>
+            <p className="text-gray-600 text-sm">{t.notifNoActivityDesc}</p>
           </div>
         ) : (
           <div className="pb-8">
-
-            {/* LIVE — top priority */}
             {groups.live.length > 0 && (
               <div>
-                <SectionLabel label="🔥 Happening Now" />
+                <SectionLabel label={t.notifSectionLive} />
                 <div className="space-y-2 mb-2">{groups.live.map(renderNotif)}</div>
               </div>
             )}
-
             {groups.today.length > 0 && (
               <div>
-                <SectionLabel label="Today" />
+                <SectionLabel label={t.notifSectionToday} />
                 <div className="divide-y divide-gray-800/50">{groups.today.map(renderNotif)}</div>
               </div>
             )}
-
             {groups.week.length > 0 && (
               <div>
-                <SectionLabel label="This Week" />
+                <SectionLabel label={t.notifSectionWeek} />
                 <div className="divide-y divide-gray-800/50">{groups.week.map(renderNotif)}</div>
               </div>
             )}
-
             {groups.month.length > 0 && (
               <div>
-                <SectionLabel label="This Month" />
+                <SectionLabel label={t.notifSectionMonth} />
                 <div className="divide-y divide-gray-800/50">{groups.month.map(renderNotif)}</div>
               </div>
             )}
-
             {groups.older.length > 0 && (
               <div>
-                <SectionLabel label="Older" />
+                <SectionLabel label={t.notifSectionOlder} />
                 <div className="divide-y divide-gray-800/50">{groups.older.map(renderNotif)}</div>
               </div>
             )}
           </div>
         )}
       </div>
-
     </div>
   );
 }
