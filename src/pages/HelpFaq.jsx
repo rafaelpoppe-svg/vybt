@@ -1,95 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
 import { ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
-
-const faqs = [
-  {
-    number: '1.',
-    question: 'What is Vybt?',
-    answer: `Vybt is a social planning platform that helps people discover, create, and join real-life social plans based on shared vibes and location.\n\nIt's designed to connect the right people to the right experiences.\n\nBest Vibes Finds You.`,
-  },
-  {
-    number: '2.',
-    question: 'How does Vybt work?',
-    answer: `1. Create your profile\n2. Select your Vibe Tags\n3. Discover plans near you\n4. Join a group or create your own plan\n5. Connect and go out\n\nVybt connects people before the night begins.`,
-  },
-  {
-    number: '3.',
-    question: 'Is Vybt free?',
-    answer: `Yes. Vybt is free to download and use.\n\nSome premium features may be introduced in the future, but the core experience is free.`,
-  },
-  {
-    number: '4.',
-    question: 'How do I create a plan?',
-    answer: `To create a plan:\n- Tap "Create Plan"\n- Choose a Party Type\n- Select Vibe Tags\n- Add date, time, and location\n- Publish\n\nOther users nearby will be able to discover and join your plan.`,
-  },
-  {
-    number: '5.',
-    question: 'How do I join a plan?',
-    answer: `Simply browse available plans near you and tap "Join".\n\nOnce accepted (if approval is required), you will gain access to the group chat and participants list.`,
-  },
-  {
-    number: '6.',
-    question: 'How does location work?',
-    answer: `Vybt uses your location to:\n- Show nearby plans\n- Match users within your selected area\n\nYou can disable location permissions at any time in your device settings, but some features may be limited.`,
-  },
-  {
-    number: '7.',
-    question: 'Is Vybt safe?',
-    answer: `Vybt promotes safe social experiences.\n\nHowever:\n- We do not supervise offline meetings\n- We do not conduct background checks\n\nWe recommend:\n- Meeting in public places\n- Informing friends about your plans\n- Trusting your instincts\n\nIf something feels wrong, leave immediately.`,
-  },
-  {
-    number: '8.',
-    question: 'How do I report a user or plan?',
-    answer: `If someone violates our Community Guidelines:\n- Go to the user profile or plan\n- Tap "Report"\n- Select the reason\n\nOur moderation team will review the case.`,
-  },
-  {
-    number: '9.',
-    question: 'Can I block someone?',
-    answer: `Yes.\n\nYou can block any user from their profile page.\n\nBlocked users will no longer be able to contact or interact with you.`,
-  },
-  {
-    number: '10.',
-    question: 'How do I delete my account?',
-    answer: `To delete your account:\n- Go to Profile\n- Open Settings\n- Select "Delete Account"\n\nThis action is permanent.`,
-  },
-  {
-    number: '11.',
-    question: 'I forgot my password. What should I do?',
-    answer: `Use the "Forgot Password" option on the login screen and follow the instructions sent to your email.`,
-  },
-  {
-    number: '12.',
-    question: 'Can businesses promote events on Vybt?',
-    answer: `Vybt is designed primarily for social plans between individuals.\n\nCommercial promotion is not allowed without authorization.\n\nIf you are interested in partnerships, contact:\n📧 partners@vybtapp.com`,
-  },
-  {
-    number: '13.',
-    question: "Why can't I see plans near me?",
-    answer: `Possible reasons:\n- Location permissions disabled\n- Low activity in your area\n- App needs updating\n\nMake sure your location access is enabled and your app is updated.`,
-  },
-  {
-    number: '14.',
-    question: 'Does Vybt organize events?',
-    answer: `No.\n\nVybt is a platform that enables users to create and join plans.\n\nVybt does not host or manage physical events.`,
-  },
-  {
-    number: '15.',
-    question: 'Who can use Vybt?',
-    answer: `Vybt is strictly for users aged 18 and above.`,
-  },
-  {
-    number: '16.',
-    question: 'How do I contact support?',
-    answer: `If you need assistance:\n\n📧 support@vybtapp.com\n🌐 www.vybtapp.com\n\nWe aim to respond as quickly as possible.`,
-  },
-  {
-    number: '17.',
-    question: 'How can I stay updated?',
-    answer: `Follow us on Instagram and TikTok for updates, new features, and announcements.`,
-  },
-];
+import { useLanguage } from '../components/common/LanguageContext';
 
 function FaqItem({ item }) {
   const [open, setOpen] = useState(false);
@@ -123,16 +35,37 @@ function FaqItem({ item }) {
 
 export default function HelpFaq() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+
+  const faqs = [
+    { number: '1.',  question: t.faqQ1,  answer: t.faqA1  },
+    { number: '2.',  question: t.faqQ2,  answer: t.faqA2  },
+    { number: '3.',  question: t.faqQ3,  answer: t.faqA3  },
+    { number: '4.',  question: t.faqQ4,  answer: t.faqA4  },
+    { number: '5.',  question: t.faqQ5,  answer: t.faqA5  },
+    { number: '6.',  question: t.faqQ6,  answer: t.faqA6  },
+    { number: '7.',  question: t.faqQ7,  answer: t.faqA7  },
+    { number: '8.',  question: t.faqQ8,  answer: t.faqA8  },
+    { number: '9.',  question: t.faqQ9,  answer: t.faqA9  },
+    { number: '10.', question: t.faqQ10, answer: t.faqA10 },
+    { number: '11.', question: t.faqQ11, answer: t.faqA11 },
+    { number: '12.', question: t.faqQ12, answer: t.faqA12 },
+    { number: '13.', question: t.faqQ13, answer: t.faqA13 },
+    { number: '14.', question: t.faqQ14, answer: t.faqA14 },
+    { number: '15.', question: t.faqQ15, answer: t.faqA15 },
+    { number: '16.', question: t.faqQ16, answer: t.faqA16 },
+    { number: '17.', question: t.faqQ17, answer: t.faqA17 },
+  ];
 
   return (
-    <div 
+    <div
       className="min-h-screen text-white"
-      style={{background: 'var(--bg)'}}
+      style={{ background: 'var(--bg)' }}
     >
       {/* Header */}
       <div
         className="sticky top-0 z-10 backdrop-blur-xl border-b border-white/5 px-4 py-3 flex items-center gap-3"
-        style={{background: 'var(--bg)', opacity: 0.9, paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}
+        style={{ background: 'var(--bg)', opacity: 0.9, paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}
       >
         <button
           onClick={() => navigate(-1)}
@@ -140,7 +73,7 @@ export default function HelpFaq() {
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
-        <h1 className="text-lg font-bold text-white">Help & FAQ</h1>
+        <h1 className="text-lg font-bold text-white">{t.helpFaq}</h1>
       </div>
 
       <div className="max-w-2xl mx-auto px-5 py-6 pb-20">
@@ -149,8 +82,8 @@ export default function HelpFaq() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 mb-4">
             <span className="text-yellow-400 text-xs font-semibold tracking-wide uppercase">Vybt</span>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-1">Help & FAQ</h2>
-          <p className="text-gray-500 text-sm">Tap a question to expand the answer.</p>
+          <h2 className="text-2xl font-bold text-white mb-1">{t.helpFaq}</h2>
+          <p className="text-gray-500 text-sm">{t.faqSubtitle}</p>
         </div>
 
         <div className="space-y-3">
