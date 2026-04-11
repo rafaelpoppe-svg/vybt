@@ -115,7 +115,7 @@ export default function EditStory() {
   const visibilityOptions = [
     { id: 'friends', icon: Users, label: t.friendsVisibility },
     { id: 'group_only', icon: Lock, label: t.groupOnly },
-    { id: 'highlighted', icon: Sparkles, label: t.highlighted },
+    { id: 'highlighted', icon: Sparkles, label: t.highlightedNoSpark },
   ];
 
   return (
