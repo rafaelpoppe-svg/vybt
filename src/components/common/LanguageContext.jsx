@@ -889,7 +889,10 @@ export const translations = {
     notifReminder1Hour: '1 hora antes',
     notifReminder1HourDesc: 'Lembrete 1 hora antes do plano começar',
     notifPermissionNote: 'As notificações push requerem permissão do dispositivo. Cada notificação aparece apenas uma vez — mesmo quando estás ativo na app. Desativa qualquer categoria acima para parar de receber esse tipo.',
-
+    highlightUnlocks: 'Destaque disponível com 7 membros ({current}/7)',
+    requestPending: 'Pedido Pendente...',
+    requestDeclined: '❌ Pedido Recusado',
+    requestToJoin: 'Pedir para Entrar',
   },
 
 en: {
@@ -1780,7 +1783,10 @@ en: {
     notifReminder1Hour: '1 hour before',
     notifReminder1HourDesc: 'Reminder 1 hour before the plan starts',
     notifPermissionNote: 'Push notifications require device permission. Each notification appears only once — even when you\'re active in the app. Disable any category above to stop receiving that type.',
-
+    highlightUnlocks: 'Highlight unlocks at 7 members ({current}/7)',
+    requestPending: 'Request Pending...',
+    requestDeclined: '❌ Request Declined',
+    requestToJoin: 'Request to Join',
   },
 
   es: {
@@ -2671,7 +2677,10 @@ en: {
     notifReminder1Hour: '1 hora antes',
     notifReminder1HourDesc: 'Recordatorio 1 hora antes de que empiece el plan',
     notifPermissionNote: 'Las notificaciones push requieren permiso del dispositivo. Cada notificación aparece solo una vez — incluso cuando estás activo en la app. Desactiva cualquier categoría para dejar de recibir ese tipo.',
-
+    highlightUnlocks: 'Destacar disponible con 7 miembros ({current}/7)',
+    requestPending: 'Solicitud pendiente...',
+    requestDeclined: '❌ Solicitud rechazada',
+    requestToJoin: 'Solicitar unirse',
   },
 
   fr: {
@@ -3562,7 +3571,10 @@ en: {
     notifReminder1Hour: '1 heure avant',
     notifReminder1HourDesc: 'Rappel 1 heure avant le début du plan',
     notifPermissionNote: 'Les notifications push nécessitent l\'autorisation de l\'appareil. Chaque notification n\'apparaît qu\'une seule fois — même quand tu es actif dans l\'app. Désactive une catégorie ci-dessus pour arrêter de recevoir ce type.',
-
+    highlightUnlocks: 'Mise en avant disponible avec 7 membres ({current}/7)',
+    requestPending: 'Demande en attente...',
+    requestDeclined: '❌ Demande refusée',
+    requestToJoin: 'Demander à rejoindre',
   },
 
   it: {
@@ -4453,6 +4465,11 @@ en: {
     notifReminder1Hour: '1 ora prima',
     notifReminder1HourDesc: 'Promemoria 1 ora prima dell\'inizio del piano',
     notifPermissionNote: 'Le notifiche push richiedono il permesso del dispositivo. Ogni notifica appare solo una volta — anche quando sei attivo nell\'app. Disattiva qualsiasi categoria per smettere di ricevere quel tipo.',
+    highlightUnlocks: 'Evidenzia disponibile con 7 membri ({current}/7)',
+    requestPending: 'Richiesta in attesa...',
+    requestDeclined: '❌ Richiesta rifiutata',
+    requestToJoin: 'Richiedi di unirsi',
+  
   },
 };
 
