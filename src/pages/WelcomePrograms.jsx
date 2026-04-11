@@ -4,38 +4,40 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { ChevronRight, X, ExternalLink, Star, Users, Zap, Trophy } from 'lucide-react';
-
-const witnessPerks = [
-  '🔄 Updates and features ideas',
-  '💡 Ideas and suggestions',
-  '💬 Feedbacks',
-  '🎮 Discord Community',
-  '🎬 Behind the scenes creation',
-  '📊 Financial Reports transparency',
-  '🧠 Build social think',
-  '🗣️ Debate ideas',
-  '📱 New Apps tendencies',
-  '🔮 Vybt Insights',
-  '🏅 Contributor Badge',
-  '🗳️ Ideas debates and features votes',
-];
-
-const ambassadorPerks = [
-  '🎮 Exclusive Discord Community',
-  '🎬 Behind the scenes creation',
-  '📱 New Apps tendencies',
-  '🔮 Vybt Insights',
-  '💸 Earn Money with Vybt',
-  '✨ Free Plan & Story Highlights unlimited',
-  '🏆 Ambassador Badge',
-  '🧠 Build Social Think',
-  '💬 Feedbacks',
-  '📣 Access to marketing features & strategy',
-];
+import { useLanguage } from '../components/common/LanguageContext';
 
 export default function WelcomePrograms() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [profile, setProfile] = useState(null);
+
+  const witnessPerks = [
+    t.witnessPerk1,
+    t.witnessPerk2,
+    t.witnessPerk3,
+    t.witnessPerk4,
+    t.witnessPerk5,
+    t.witnessPerk6,
+    t.witnessPerk7,
+    t.witnessPerk8,
+    t.witnessPerk9,
+    t.witnessPerk10,
+    t.witnessPerk11,
+    t.witnessPerk12,
+  ];
+
+  const ambassadorPerks = [
+    t.ambassadorPerk1,
+    t.ambassadorPerk2,
+    t.ambassadorPerk3,
+    t.ambassadorPerk4,
+    t.ambassadorPerk5,
+    t.ambassadorPerk6,
+    t.ambassadorPerk7,
+    t.ambassadorPerk8,
+    t.ambassadorPerk9,
+    t.ambassadorPerk10,
+  ];
 
   useEffect(() => {
     const load = async () => {
@@ -61,21 +63,20 @@ export default function WelcomePrograms() {
 
   const handleAmbassador = async () => {
     if (profile?.id) {
-      // Generate referral code if not exists
       const code = profile.referral_code || `VYBT${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
       await base44.entities.UserProfile.update(profile.id, {
         programs_shown: true,
         ambassador_opted_in: true,
-        referral_code: code
+        referral_code: code,
       });
     }
     navigate(createPageUrl('Ambassador'));
   };
 
   return (
-    <div 
+    <div
       className="min-h-screen flex flex-col overflow-y-auto"
-      style={{ background: 'var(--bg)'}}
+      style={{ background: 'var(--bg)' }}
     >
       {/* Skip button */}
       <div className="flex justify-end p-5">
@@ -103,9 +104,9 @@ export default function WelcomePrograms() {
           transition={{ delay: 0.1 }}
           className="text-2xl font-bold text-white mb-2"
         >
-          Welcome to the community 🎉
+          {t.welcomePrograms}
         </motion.h1>
-        <p className="text-gray-400 text-sm">Choose how you want to be part of Vybt's growth</p>
+        <p className="text-gray-400 text-sm">{t.welcomeProgramsSubtitle}</p>
       </div>
 
       <div className="px-5 pb-10 space-y-5">
@@ -123,8 +124,8 @@ export default function WelcomePrograms() {
                 <Star className="w-5 h-5 text-[#00c6d2]" />
               </div>
               <div>
-                <h2 className="text-white font-bold text-lg">Vybt Witnesses Program</h2>
-                <p className="text-[#00c6d2] text-xs font-medium">Support & Shape Vybt</p>
+                <h2 className="text-white font-bold text-lg">{t.witnessTitle}</h2>
+                <p className="text-[#00c6d2] text-xs font-medium">{t.witnessSubtitle}</p>
               </div>
             </div>
 
@@ -148,7 +149,7 @@ export default function WelcomePrograms() {
               className="w-full py-3.5 rounded-2xl bg-[#00c6d2] text-[#0b0b0b] font-bold flex items-center justify-center gap-2"
             >
               <ExternalLink className="w-4 h-4" />
-              Join Witnesses Program
+              {t.witnessJoinBtn}
             </motion.button>
           </div>
         </motion.div>
@@ -166,8 +167,8 @@ export default function WelcomePrograms() {
                 <Trophy className="w-5 h-5 text-purple-400" />
               </div>
               <div>
-                <h2 className="text-white font-bold text-lg">Vybt Ambassador</h2>
-                <p className="text-purple-400 text-xs font-medium">Invite 10+ friends & earn rewards</p>
+                <h2 className="text-white font-bold text-lg">{t.ambassadorTitle}</h2>
+                <p className="text-purple-400 text-xs font-medium">{t.ambassadorProgramSubtitle}</p>
               </div>
             </div>
 
@@ -199,7 +200,7 @@ export default function WelcomePrograms() {
               className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#542b9b] to-purple-500 text-white font-bold flex items-center justify-center gap-2"
             >
               <Zap className="w-4 h-4" />
-              Become an Ambassador
+              {t.ambassadorJoinBtn}
               <ChevronRight className="w-4 h-4" />
             </motion.button>
           </div>
@@ -213,7 +214,7 @@ export default function WelcomePrograms() {
           onClick={handleSkip}
           className="w-full py-3 text-gray-500 text-sm"
         >
-          Skip for now
+          {t.skipForNow}
         </motion.button>
       </div>
     </div>
