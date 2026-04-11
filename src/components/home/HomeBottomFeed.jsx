@@ -137,7 +137,7 @@ function PlanFeedCard({ plan, participantCount, communityName, communityColor, c
           )}
           <InfoPill icon={Users} label={t.goingCount.replace('{count}', participantCount)} accent={accent} />
           {plan.min_age != null && (
-            <InfoPill icon={UserCheck} label={t.minAge.replace('{age}', plan.min_age)} accent={accent} />
+            <InfoPill icon={UserCheck} label={t.minAgeVariable.replace('{age}', plan.min_age)} accent={accent} />
           )}
         </div>
 
