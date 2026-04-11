@@ -4,15 +4,6 @@ import { createPageUrl } from '@/utils';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../components/common/LanguageContext';
 
-const faqs = [
-  { q: t.supportFaqQ1, a: t.supportFaqA1 },
-  { q: t.supportFaqQ2, a: t.supportFaqA2 },
-  { q: t.supportFaqQ3, a: t.supportFaqA3 },
-  { q: t.supportFaqQ4, a: t.supportFaqA4 },
-  { q: t.supportFaqQ5, a: t.supportFaqA5 },
-  { q: t.supportFaqQ6, a: t.supportFaqA6 },
-];
-
 function FAQItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
@@ -34,9 +25,19 @@ function FAQItem({ q, a }) {
 }
 
 export default function Support() {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [sent, setSent] = useState(false);
-  const {t} = useLanguage();
+
+  const faqs = [
+    { q: t.supportFaqQ1, a: t.supportFaqA1 },
+    { q: t.supportFaqQ2, a: t.supportFaqA2 },
+    { q: t.supportFaqQ3, a: t.supportFaqA3 },
+    { q: t.supportFaqQ4, a: t.supportFaqA4 },
+    { q: t.supportFaqQ5, a: t.supportFaqA5 },
+    { q: t.supportFaqQ6, a: t.supportFaqA6 },
+  ];
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const mailto = `mailto:support@vybtapp.com?subject=${encodeURIComponent(formData.subject || 'Support Request')}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)}`;
@@ -45,14 +46,14 @@ export default function Support() {
   };
 
   return (
-    <div 
+    <div
       className="min-h-screen text-white"
-      style={{background: 'var(--bg)'}}
+      style={{ background: 'var(--bg)' }}
     >
       {/* Header */}
-      <div 
+      <div
         className="sticky top-0 z-10 backdrop-blur-md border-b border-white/10 px-4 py-4 flex items-center gap-3"
-        style={{background: 'var(--bg)', opacity: 0.9}}
+        style={{ background: 'var(--bg)', opacity: 0.9 }}
       >
         <Link to={createPageUrl('Welcome')} className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft className="w-5 h-5 text-gray-300" />
@@ -113,7 +114,7 @@ export default function Support() {
                 type="text"
                 placeholder={t.supportNamePlaceholder}
                 value={formData.name}
-                onChange={e => setFormData({...formData, name: e.target.value})}
+                onChange={e => setFormData({ ...formData, name: e.target.value })}
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-[#00fea3]/50 transition-colors"
               />
               <input
@@ -121,22 +122,22 @@ export default function Support() {
                 type="email"
                 placeholder={t.supportEmailPlaceholder}
                 value={formData.email}
-                onChange={e => setFormData({...formData, email: e.target.value})}
+                onChange={e => setFormData({ ...formData, email: e.target.value })}
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-[#00fea3]/50 transition-colors"
               />
               <input
                 type="text"
                 placeholder={t.supportSubjectPlaceholder}
                 value={formData.subject}
-                onChange={e => setFormData({...formData, subject: e.target.value})}
+                onChange={e => setFormData({ ...formData, subject: e.target.value })}
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-[#00fea3]/50 transition-colors"
               />
               <textarea
                 required
                 rows={5}
-                placeholder="Describe your issue or question..."
+                placeholder={t.supportMessagePlaceholder}
                 value={formData.message}
-                onChange={e => setFormData({...formData, message: e.target.value})}
+                onChange={e => setFormData({ ...formData, message: e.target.value })}
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-[#00fea3]/50 transition-colors resize-none"
               />
               <button
