@@ -158,7 +158,7 @@ export default function Settings() {
 
         {/* Privacy */}
         {profile && (
-          <Section title="Privacy">
+          <Section title={t.privacy}>
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => togglePrivacyMutation.mutate()}
@@ -265,7 +265,7 @@ export default function Settings() {
           <Row
             icon={Mail}
             iconColor="text-[#00c6d2]"
-            label="Support"
+            label={t.support}
             sublabel="support@vybtapp.com"
             onClick={() => navigate(createPageUrl('Support'))}
           />
