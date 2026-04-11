@@ -896,6 +896,7 @@ export const translations = {
     noPhotosYet: 'Sem fotos ainda',
     noPhotosYetSub: 'Adicione fotos em Editar Perfil',
     shareMomentsFromPlans: 'Compartilhe momentos dos teus planos!',
+    privacy: 'Privacidade',
   },
 
 en: {
@@ -1793,6 +1794,7 @@ en: {
     noPhotosYet: 'No photos yet',
     noPhotosYetSub: 'Add photos in Edit Profile',
     shareMomentsFromPlans: 'Share moments from your plans!',
+    privacy: 'Privacy',
   },
 
   es: {
@@ -2690,6 +2692,7 @@ en: {
     noPhotosYet: 'Sin fotos todavía',
     noPhotosYetSub: 'Añade fotos en Editar perfil',
     shareMomentsFromPlans: '¡Comparte momentos de tus planes!',
+    privacy: 'Privacidad',
   },
 
   fr: {
@@ -3587,6 +3590,7 @@ en: {
     noPhotosYet: 'Pas encore de photos',
     noPhotosYetSub: 'Ajoute des photos dans Modifier le profil',
     shareMomentsFromPlans: 'Partage des moments de tes plans !',
+    privacy: 'Confidentialité',
   },
 
   it: {
@@ -4484,6 +4488,7 @@ en: {
     noPhotosYet: 'Nessuna foto ancora',
     noPhotosYetSub: 'Aggiungi foto in Modifica profilo',
     shareMomentsFromPlans: 'Condividi momenti dai tuoi piani!',
+    privacy: 'Privacy',
   
   },
 };
