@@ -65,14 +65,14 @@ function LocationStep({ city, onCityChange, detectLocation, detectingCity, t }) 
       )}
       <div className="flex items-center gap-3">
         <div className="flex-1 h-px bg-white/10" />
-        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>or search city</span>
+        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.orSearchCity}</span>
         <div className="flex-1 h-px bg-white/10" />
       </div>
       <input
         type="text"
         value={search}
         onChange={e => setSearch(e.target.value)}
-        placeholder="🔍 Search city..."
+        placeholder={t.searchCityInput}
         className="w-full px-4 py-3 rounded-xl text-sm placeholder-gray-500 border focus:outline-none focus:border-[#00c6d2]/60"
         style={{ 
           background: isDark ? 'rgba(255,255,255,0.06)' : 'white',
