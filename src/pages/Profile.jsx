@@ -232,7 +232,7 @@ export default function Profile() {
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate(createPageUrl('Ambassador'))}
               className="flex-1 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5"
               style={{ background: 'linear-gradient(135deg, #f59e0b, #ef4444)', color: '#fff' }}>
-              <Trophy className="w-3.5 h-3.5" /> Ambassador
+              <Trophy className="w-3.5 h-3.5" /> {t.ambassadorTitle}
             </motion.button>
           )}
 
@@ -279,7 +279,7 @@ export default function Profile() {
         {activeTab === 'photos' && (
           <motion.div key="photos" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {photos.length === 0 ? (
-              <EmptyState emoji="🖼️" text="No photos yet" subtext="Add photos in Edit Profile" />
+              <EmptyState emoji="🖼️" text={t.noPhotosYet} subtext={t.noPhotosYetSub} />
             ) : (
               <div className="grid grid-cols-3 gap-[1px]">
                 {photos.map((photo, i) => (
@@ -297,7 +297,7 @@ export default function Profile() {
         {activeTab === 'stories' && (
           <motion.div key="stories" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {myStories.length === 0 ? (
-              <EmptyState emoji="📸" text={t.noStoriesYet} subtext="Share moments from your plans!" />
+              <EmptyState emoji="📸" text={t.noStoriesYet} subtext={t.shareMomentsFromPlans} />
             ) : (
               <ProfileStoryGrid
                 stories={myStories}
@@ -313,12 +313,12 @@ export default function Profile() {
             {myCommunities.length === 0 ? (
               <div className="text-center py-10 space-y-3">
                 <p className="text-4xl">⭐</p>
-                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No communities yet</p>
+                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{t.notJoinedAnyGroup}</p>
                 <motion.button whileTap={{ scale: 0.97 }}
                   onClick={() => navigate(createPageUrl('Explore') + '?tab=communities')}
                   className="px-5 py-2.5 rounded-xl text-sm font-bold"
                   style={{ background: `linear-gradient(135deg, ${accent}, #542b9b)`, color: '#fff' }}>
-                  Explore Communities
+                  {t.exploreGroups}
                 </motion.button>
               </div>
             ) : (
