@@ -5,30 +5,12 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../components/common/LanguageContext';
 
 const faqs = [
-  {
-    q: "How do I create a plan?",
-    a: "Tap the '+' button at the bottom navigation, select 'Create new Plan', fill in the details and publish it."
-  },
-  {
-    q: "How does profile verification work?",
-    a: "Go to your Profile page and tap 'Verify Your Profile'. You'll take a live selfie which will be compared to your profile photo to earn a blue verified badge."
-  },
-  {
-    q: "Can I delete my account?",
-    a: "Yes. Go to Settings → Delete Account. This action is permanent and removes all your data from Vybt."
-  },
-  {
-    q: "How do I report a user or content?",
-    a: "On any plan or user profile, tap the three-dot menu and select 'Report'. Our moderation team will review it promptly."
-  },
-  {
-    q: "Why was my story removed?",
-    a: "Stories are automatically checked for inappropriate content. If your story was removed, it may have violated our Community Guidelines."
-  },
-  {
-    q: "How does the Ambassador Program work?",
-    a: "Invite friends using your referral code. The more friends you bring to Vybt, the more perks you unlock as an Ambassador."
-  },
+  { q: t.supportFaqQ1, a: t.supportFaqA1 },
+  { q: t.supportFaqQ2, a: t.supportFaqA2 },
+  { q: t.supportFaqQ3, a: t.supportFaqA3 },
+  { q: t.supportFaqQ4, a: t.supportFaqA4 },
+  { q: t.supportFaqQ5, a: t.supportFaqA5 },
+  { q: t.supportFaqQ6, a: t.supportFaqA6 },
 ];
 
 function FAQItem({ q, a }) {
@@ -75,7 +57,7 @@ export default function Support() {
         <Link to={createPageUrl('Welcome')} className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <ArrowLeft className="w-5 h-5 text-gray-300" />
         </Link>
-        <span className="text-white font-bold text-lg">Support</span>
+        <span className="text-white font-bold text-lg">{t.support}</span>
       </div>
 
       <div className="max-w-lg mx-auto px-4 py-8 space-y-10">
@@ -85,9 +67,9 @@ export default function Support() {
           <div className="w-16 h-16 rounded-2xl bg-[#00fea3]/10 border border-[#00fea3]/30 flex items-center justify-center mx-auto">
             <MessageCircle className="w-8 h-8 text-[#00fea3]" />
           </div>
-          <h1 className="text-2xl font-bold">How can we help?</h1>
+          <h1 className="text-2xl font-bold">{t.supportHowCanWeHelp}</h1>
           <p className="text-gray-400 text-sm leading-relaxed">
-            Browse the FAQs below or send us a message — we typically respond within 24 hours.
+            {t.supportHeroDesc}
           </p>
         </div>
 
@@ -97,7 +79,7 @@ export default function Support() {
             <Mail className="w-5 h-5 text-[#00fea3]" />
           </div>
           <div>
-            <p className="text-gray-400 text-xs">Email us directly</p>
+            <p className="text-gray-400 text-xs">{t.supportEmailUs}</p>
             <a
               href="mailto:support@vybtapp.com"
               className="text-[#00fea3] font-semibold text-sm hover:underline"
@@ -109,27 +91,27 @@ export default function Support() {
 
         {/* FAQ */}
         <div className="space-y-3">
-          <h2 className="text-white font-bold text-base">Frequently Asked Questions</h2>
+          <h2 className="text-white font-bold text-base">{t.helpFaq}</h2>
           {faqs.map((faq, i) => <FAQItem key={i} q={faq.q} a={faq.a} />)}
         </div>
 
         {/* Contact Form */}
         <div className="space-y-4">
-          <h2 className="text-white font-bold text-base">Send us a message</h2>
+          <h2 className="text-white font-bold text-base">{t.supportSendMessage}</h2>
 
           {sent ? (
             <div className="p-6 rounded-2xl bg-[#00fea3]/10 border border-[#00fea3]/30 text-center space-y-2">
               <div className="text-3xl">✉️</div>
-              <p className="text-[#00fea3] font-semibold">Message opened in your email app!</p>
-              <p className="text-gray-400 text-sm">You can also email us directly at <span className="text-[#00fea3]">support@vybtapp.com</span></p>
-              <button onClick={() => setSent(false)} className="text-gray-500 text-xs underline mt-2">Send another</button>
+              <p className="text-[#00fea3] font-semibold">{t.supportSentTitle}</p>
+              <p className="text-gray-400 text-sm">{t.supportSentDesc} <span className="text-[#00fea3]">support@vybtapp.com</span></p>
+              <button onClick={() => setSent(false)} className="text-gray-500 text-xs underline mt-2">{t.supportSendAnother}</button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
               <input
                 required
                 type="text"
-                placeholder="Your name"
+                placeholder={t.supportNamePlaceholder}
                 value={formData.name}
                 onChange={e => setFormData({...formData, name: e.target.value})}
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-[#00fea3]/50 transition-colors"
@@ -137,14 +119,14 @@ export default function Support() {
               <input
                 required
                 type="email"
-                placeholder="Your email"
+                placeholder={t.supportEmailPlaceholder}
                 value={formData.email}
                 onChange={e => setFormData({...formData, email: e.target.value})}
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-[#00fea3]/50 transition-colors"
               />
               <input
                 type="text"
-                placeholder="Subject"
+                placeholder={t.supportSubjectPlaceholder}
                 value={formData.subject}
                 onChange={e => setFormData({...formData, subject: e.target.value})}
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-[#00fea3]/50 transition-colors"
@@ -161,7 +143,7 @@ export default function Support() {
                 type="submit"
                 className="w-full py-3.5 rounded-xl bg-[#00fea3] text-[#0b0b0b] font-bold text-sm hover:bg-[#00fea3]/90 transition-colors"
               >
-                Send Message
+                {t.supportSendBtn}
               </button>
             </form>
           )}
