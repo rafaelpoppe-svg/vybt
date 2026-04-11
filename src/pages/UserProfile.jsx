@@ -122,9 +122,9 @@ export default function UserProfile() {
         style={{background: 'var(--bg)'}}  
       >
         <p className="text-5xl">👤</p>
-        <p className="text-white font-semibold">Profile not found</p>
+        <p className="text-white font-semibold">{t.profileNotFound}</p>
         <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="text-[#00c6d2] text-sm font-medium">
-          Go back
+          {t.goBack}
         </motion.button>
       </div>
     );
@@ -246,10 +246,10 @@ export default function UserProfile() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-gray-900 border-gray-800">
                 <DropdownMenuItem className="text-orange-400 hover:text-orange-300">
-                  <Flag className="w-4 h-4 mr-2" /> Denunciar
+                  <Flag className="w-4 h-4 mr-2" /> {t.report}
                 </DropdownMenuItem>
                 <DropdownMenuItem className="text-red-400 hover:text-red-300">
-                  <Ban className="w-4 h-4 mr-2" /> Bloquear
+                  <Ban className="w-4 h-4 mr-2" /> {t.blockUser}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -340,7 +340,7 @@ export default function UserProfile() {
                   className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-green-500/20 border border-green-500/40 text-green-400 text-sm font-semibold"
                 >
                   <Check className="w-4 h-4" />
-                  Friends
+                  {t.friends}
                 </motion.button>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
@@ -348,12 +348,12 @@ export default function UserProfile() {
                   className="flex-1 py-2.5 bg-[#7c3aed] rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-1.5"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  Message
+                  {t.messagesTitle}
                 </motion.button>
               </>
             ) : isPending ? (
               <div className="flex-1 flex items-center justify-center py-2.5 rounded-xl bg-gray-800 text-gray-400 text-sm font-medium border border-gray-700">
-                ⏳ Request Sent
+                ⏳ {t.requestPending}
               </div>
             ) : incomingRequest ? (
               // Esta pessoa enviou-nos um pedido — mostrar Aceitar/Recusar
@@ -365,7 +365,7 @@ export default function UserProfile() {
                   className="flex-1 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-1.5 disabled:opacity-60 text-white"
                   style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}
                 >
-                  {friendshipLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Check className="w-4 h-4" /> Accept</>}
+                  {friendshipLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Check className="w-4 h-4" /> {t.confirm}</>}
                 </motion.button>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
@@ -373,7 +373,7 @@ export default function UserProfile() {
                   disabled={friendshipLoading}
                   className="flex-1 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-gray-400 text-sm font-semibold flex items-center justify-center gap-1.5 disabled:opacity-60"
                 >
-                  Decline
+                  {t.delete}
                 </motion.button>
               </div>
             ) : (
@@ -383,7 +383,7 @@ export default function UserProfile() {
                 disabled={friendshipLoading}
                 className="flex-1 py-2.5 bg-[#00c6d2]/20 border border-[#00c6d2]/50 rounded-xl text-[#00c6d2] text-sm font-semibold flex items-center justify-center gap-1.5 disabled:opacity-60"
               >
-                {friendshipLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><UserPlus className="w-4 h-4" /> Add Friend</>}
+                {friendshipLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><UserPlus className="w-4 h-4" /> {t.addFriend}</>}
               </motion.button>
             )}
           </div>
@@ -409,7 +409,7 @@ export default function UserProfile() {
         {profile.party_types?.length > 0 && (
           <div className="mt-4">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-sm font-semibold text-white">Party Types</span>
+              <span className="text-sm font-semibold text-white">{t.partyTypes}</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {profile.party_types.map(type => <PartyTag key={type} tag={type} size="sm" />)}
@@ -422,8 +422,8 @@ export default function UserProfile() {
       {isPrivate ? (
         <div className="mx-4 mt-4 py-12 flex flex-col items-center gap-3 bg-gray-900/50 border border-gray-800 rounded-2xl">
           <Lock className="w-8 h-8 text-gray-500" />
-          <p className="text-white font-semibold text-sm">Perfil Privado</p>
-          <p className="text-gray-500 text-xs text-center px-6">Adiciona este utilizador como amigo para ver os seus stories, planos e amigos.</p>
+          <p className="text-white font-semibold text-sm">{t.privateProfile}</p>
+          <p className="text-gray-500 text-xs text-center px-6">{t.privateProfileGateDesc}</p>
         </div>
       ) : (
         <>
@@ -457,7 +457,7 @@ export default function UserProfile() {
                 {photos.length === 0 ? (
                   <div className="text-center py-16 space-y-2">
                     <p className="text-5xl">🖼️</p>
-                    <p className="text-gray-400 font-semibold">No photos</p>
+                    <p className="text-gray-400 font-semibold">{t.noPhotosYet}</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-3 gap-[1px]">
@@ -493,7 +493,7 @@ export default function UserProfile() {
                 {userPlans.length === 0 ? (
                   <div className="text-center py-16 space-y-2">
                     <p className="text-5xl">🎉</p>
-                    <p className="text-gray-400 font-semibold">No plans</p>
+                    <p className="text-gray-400 font-semibold">{t.noPlansYet}</p>
                   </div>
                 ) : (
                   userPlans.map(plan => (
@@ -547,9 +547,9 @@ export default function UserProfile() {
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-2">💔</div>
-                <h3 className="text-white font-bold text-lg">Remove Friend?</h3>
+                <h3 className="text-white font-bold text-lg">{t.unfriendTitle}</h3>
                 <p className="text-gray-400 text-sm mt-1">
-                  Are you sure you want to remove <span className="text-white font-semibold">{profile?.display_name}</span> from your friends?
+                 {t.unfriendDesc} <span className="text-white font-semibold">{profile?.display_name}</span> {t.unfriendDesc2}
                 </p>
               </div>
               <div className="flex gap-3 pt-2">
@@ -558,7 +558,7 @@ export default function UserProfile() {
                   onClick={() => setShowUnfriendModal(false)}
                   className="flex-1 py-3 rounded-2xl bg-gray-800 text-gray-300 font-semibold text-sm border border-gray-700"
                 >
-                  Cancel
+                  {t.cancel}
                 </motion.button>
                 <motion.button
                   whileTap={{ scale: 0.96 }}
@@ -566,7 +566,7 @@ export default function UserProfile() {
                   disabled={friendshipLoading}
                   className="flex-1 py-3 rounded-2xl bg-red-500/20 border border-red-500/40 text-red-400 font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
                 >
-                  {friendshipLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><UserMinus className="w-4 h-4" /> Remove</>}
+                  {friendshipLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><UserMinus className="w-4 h-4" /> {t.unfriendBtn}</>}
                 </motion.button>
               </div>
             </motion.div>
