@@ -877,9 +877,9 @@ export const translations = {
     notifFriendStoryDesc: 'Quando um amigo publica um novo story',
     notifFriendCreatedPlan: 'Amigo criou um plano',
     notifFriendCreatedPlanDesc: 'Quando um amigo cria um novo plano',
-    notifPlanHappeningDesc: 'Quando um plano em que estás é ao vivo — publica stories!',
+    notifPlanHappeningDesc: 'Se um plano que você participa está ao vivo — publique stories!',
     notifPlanRecommendation: 'Recomendações de planos',
-    notifPlanRecommendationDesc: 'Planos perto de ti que combinam com a tua vibe',
+    notifPlanRecommendationDesc: 'Planos perto de você que combinam com a sua vibe',
     notifPlanUpdate: 'Atualizações de planos',
     notifPlanUpdateDesc: 'Mudanças de hora ou local nos teus planos',
     notifVoting: 'Votação e resultados',
@@ -888,11 +888,14 @@ export const translations = {
     notifReminder1DayDesc: 'Lembrete no dia anterior ao plano',
     notifReminder1Hour: '1 hora antes',
     notifReminder1HourDesc: 'Lembrete 1 hora antes do plano começar',
-    notifPermissionNote: 'As notificações push requerem permissão do dispositivo. Cada notificação aparece apenas uma vez — mesmo quando estás ativo na app. Desativa qualquer categoria acima para parar de receber esse tipo.',
+    notifPermissionNote: 'As notificações push requerem permissão do dispositivo. Cada notificação aparece apenas uma vez — mesmo quando você está ativo na app. Desative qualquer categoria acima para parar de receber esse tipo.',
     highlightUnlocks: 'Destaque disponível com 7 membros ({current}/7)',
     requestPending: 'Pedido Pendente...',
     requestDeclined: '❌ Pedido Recusado',
     requestToJoin: 'Pedir para Entrar',
+    noPhotosYet: 'Sem fotos ainda',
+    noPhotosYetSub: 'Adicione fotos em Editar Perfil',
+    shareMomentsFromPlans: 'Compartilhe momentos dos teus planos!',
   },
 
 en: {
@@ -1787,6 +1790,9 @@ en: {
     requestPending: 'Request Pending...',
     requestDeclined: '❌ Request Declined',
     requestToJoin: 'Request to Join',
+    noPhotosYet: 'No photos yet',
+    noPhotosYetSub: 'Add photos in Edit Profile',
+    shareMomentsFromPlans: 'Share moments from your plans!',
   },
 
   es: {
@@ -2681,6 +2687,9 @@ en: {
     requestPending: 'Solicitud pendiente...',
     requestDeclined: '❌ Solicitud rechazada',
     requestToJoin: 'Solicitar unirse',
+    noPhotosYet: 'Sin fotos todavía',
+    noPhotosYetSub: 'Añade fotos en Editar perfil',
+    shareMomentsFromPlans: '¡Comparte momentos de tus planes!',
   },
 
   fr: {
@@ -3575,6 +3584,9 @@ en: {
     requestPending: 'Demande en attente...',
     requestDeclined: '❌ Demande refusée',
     requestToJoin: 'Demander à rejoindre',
+    noPhotosYet: 'Pas encore de photos',
+    noPhotosYetSub: 'Ajoute des photos dans Modifier le profil',
+    shareMomentsFromPlans: 'Partage des moments de tes plans !',
   },
 
   it: {
@@ -4469,6 +4481,9 @@ en: {
     requestPending: 'Richiesta in attesa...',
     requestDeclined: '❌ Richiesta rifiutata',
     requestToJoin: 'Richiedi di unirsi',
+    noPhotosYet: 'Nessuna foto ancora',
+    noPhotosYetSub: 'Aggiungi foto in Modifica profilo',
+    shareMomentsFromPlans: 'Condividi momenti dai tuoi piani!',
   
   },
 };
