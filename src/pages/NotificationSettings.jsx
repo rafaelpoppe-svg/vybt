@@ -7,7 +7,6 @@ import { ChevronLeft, Loader2, Bell, BellOff, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLanguage } from '../components/common/LanguageContext';
 
-
 const defaultPrefs = {
   new_plan_push: true,
   friend_story_push: true,
@@ -41,7 +40,6 @@ function Toggle({ enabled, onToggle, disabled }) {
   );
 }
 
-// Map our simplified keys to actual prefs keys
 function prefKey(key) {
   const map = {
     group_message: 'group_message_push',
@@ -59,43 +57,44 @@ function prefKey(key) {
 }
 
 export default function NotificationSettings() {
-  const {t} = useLanguage();
+  const { t } = useLanguage();
+
   const SECTIONS = [
     {
-      title: 'Messages',
+      title: t.notifSectionMessages,
       items: [
-        { key: 'group_message', emoji: '💬', label: 'Group & Direct messages', desc: 'Notifications for new chat messages' },
+        { key: 'group_message', emoji: '💬', label: t.notifGroupMessages, desc: t.notifGroupMessagesDesc },
       ]
     },
     {
-      title: 'Social',
+      title: t.notifSectionSocial,
       items: [
-        { key: 'friend_request', emoji: '👋', label: 'Friend requests', desc: 'When someone sends you a friend request' },
-        { key: 'friend_story', emoji: '📸', label: 'Friends\' stories', desc: 'When a friend posts a new story' },
-        { key: 'friend_created_plan', emoji: '🎉', label: 'Friend created a plan', desc: 'When a friend creates a new plan' },
+        { key: 'friend_request', emoji: '👋', label: t.notifFriendRequest, desc: t.notifFriendRequestDesc },
+        { key: 'friend_story', emoji: '📸', label: t.notifFriendStory, desc: t.notifFriendStoryDesc },
+        { key: 'friend_created_plan', emoji: '🎉', label: t.notifFriendCreatedPlan, desc: t.notifFriendCreatedPlanDesc },
       ]
     },
     {
-      title: 'Plans',
+      title: t.plans,
       items: [
-        { key: 'plan_happening_now', emoji: '🔥', label: t.happeningNow, desc: 'When a plan you\'re in is live — post stories!' },
-        { key: 'plan_recommendation', emoji: '📍', label: 'Plan recommendations', desc: 'Plans nearby that match your vibe' },
-        { key: 'plan_update', emoji: '🕐', label: 'Plan updates', desc: 'Time or location changes in your plans' },
-        { key: 'voting', emoji: '🗳️', label: 'Voting & results', desc: 'Voting started or plan result' },
+        { key: 'plan_happening_now', emoji: '🔥', label: t.happeningNow, desc: t.notifPlanHappeningDesc },
+        { key: 'plan_recommendation', emoji: '📍', label: t.notifPlanRecommendation, desc: t.notifPlanRecommendationDesc },
+        { key: 'plan_update', emoji: '🕐', label: t.notifPlanUpdate, desc: t.notifPlanUpdateDesc },
+        { key: 'voting', emoji: '🗳️', label: t.notifVoting, desc: t.notifVotingDesc },
       ]
     },
     {
-      title: 'Reminders',
+      title: t.notifSectionReminders,
       items: [
-        { key: 'plan_reminder_1day', emoji: '⏰', label: '1 day before', desc: 'Reminder the day before the plan' },
-        { key: 'plan_reminder_1hour', emoji: '⏱️', label: '1 hour before', desc: 'Reminder 1 hour before the plan starts' },
+        { key: 'plan_reminder_1day', emoji: '⏰', label: t.notifReminder1Day, desc: t.notifReminder1DayDesc },
+        { key: 'plan_reminder_1hour', emoji: '⏱️', label: t.notifReminder1Hour, desc: t.notifReminder1HourDesc },
       ]
     },
   ];
+
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [prefs, setPrefs] = useState(defaultPrefs);
-  // Track whether user has made local changes — if so, don't overwrite from remote
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
@@ -109,7 +108,6 @@ export default function NotificationSettings() {
     enabled: !!currentUser?.id,
   });
 
-  // Only sync from remote on first load, never after that
   useEffect(() => {
     if (profile?.notification_prefs && !initialized) {
       setPrefs({ ...defaultPrefs, ...profile.notification_prefs });
@@ -120,7 +118,7 @@ export default function NotificationSettings() {
   const saveMutation = useMutation({
     mutationFn: () => base44.entities.UserProfile.update(profile.id, { notification_prefs: prefs }),
     onSuccess: () => {
-      toast.success('Preferences saved');
+      toast.success(t.notifPrefsSaved);
     }
   });
 
@@ -128,10 +126,7 @@ export default function NotificationSettings() {
   const muteAll = prefs.mute_all;
 
   return (
-    <div 
-      className="min-h-screen"
-      style={{ background: 'var(--bg)' }}
-    >
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       <header
         className="sticky top-0 z-40 backdrop-blur-lg border-b border-gray-800 flex items-center justify-between px-4 py-4"
         style={{ background: 'var(--bg)', opacity: 0.95, paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
@@ -140,7 +135,7 @@ export default function NotificationSettings() {
           <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="p-2 rounded-full bg-gray-900">
             <ChevronLeft className="w-5 h-5 text-white" />
           </motion.button>
-          <h1 className="text-xl font-bold text-white">Notification Settings</h1>
+          <h1 className="text-xl font-bold text-white">{t.notifSettingsTitle}</h1>
         </div>
         <motion.button
           whileTap={{ scale: 0.95 }}
@@ -148,7 +143,9 @@ export default function NotificationSettings() {
           disabled={saveMutation.isPending || !profile}
           className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#00c6d2] text-[#0b0b0b] font-bold text-sm disabled:opacity-50"
         >
-          {saveMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Check className="w-4 h-4" /> Save</>}
+          {saveMutation.isPending
+            ? <Loader2 className="w-4 h-4 animate-spin" />
+            : <><Check className="w-4 h-4" /> {t.save}</>}
         </motion.button>
       </header>
 
@@ -159,7 +156,7 @@ export default function NotificationSettings() {
       ) : (
         <div className="px-4 py-6 pb-16 space-y-5">
 
-          {/* Mute ALL toggle — big prominent card */}
+          {/* Mute ALL */}
           <motion.div
             whileTap={{ scale: 0.99 }}
             className="rounded-2xl px-5 py-4 flex items-center justify-between"
@@ -175,8 +172,8 @@ export default function NotificationSettings() {
                 ? <BellOff className="w-5 h-5 text-red-400" />
                 : <Bell className="w-5 h-5 text-[#00c6d2]" />}
               <div>
-                <p className="text-white font-bold text-sm">Mute all notifications</p>
-                <p className="text-gray-400 text-xs mt-0.5">You won't receive any notifications</p>
+                <p className="text-white font-bold text-sm">{t.notifMuteAll}</p>
+                <p className="text-gray-400 text-xs mt-0.5">{t.notifMuteAllDesc}</p>
               </div>
             </div>
             <Toggle enabled={muteAll} onToggle={() => toggle('mute_all')} />
@@ -208,14 +205,12 @@ export default function NotificationSettings() {
             </div>
           ))}
 
-          <div 
+          <div
             className="flex items-start gap-3 p-3 rounded-xl border border-gray-800"
             style={{ background: 'var(--bg)', opacity: 0.5 }}
           >
             <Bell className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-gray-500">
-              Push notifications require device permission. Each notification appears only once — even when you're active in the app. Disable any category above to stop receiving that type.
-            </p>
+            <p className="text-xs text-gray-500">{t.notifPermissionNote}</p>
           </div>
         </div>
       )}
