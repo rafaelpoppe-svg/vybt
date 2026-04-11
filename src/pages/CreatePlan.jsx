@@ -494,7 +494,7 @@ export default function CreatePlan() {
               <div className="h-40 rounded-2xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center gap-2 hover:border-gray-500 transition-colors">
                 {uploadingCover ? <Loader2 className="w-6 h-6 text-[#00c6d2] animate-spin" /> : <>
                   <ImageIcon className="w-8 h-8 text-gray-600" />
-                  <span className="text-gray-500 text-sm">{t.addCoverPhoto} 🌆</span>
+                  <span className="text-gray-500 text-sm">{t.addCoverPhoto}</span>
                 </>}
               </div>
             )}
