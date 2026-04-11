@@ -921,7 +921,13 @@ export const translations = {
     supportFaqA5: 'Os stories são verificados automaticamente por conteúdo inapropriado. Se o teu story foi removido, pode ter violado as nossas Diretrizes da Comunidade.',
     supportFaqQ6: 'Como funciona o Programa Ambassador?',
     supportFaqA6: 'Convide amigos usando o teu código de referral. Quanto mais amigos levar para a Vybt, mais benefícios consegue como Ambassador.',
-
+    addFriend: 'Adicionar Amigo',
+    privateProfileGateDesc: 'Adiciona este utilizador como amigo para ver os seus stories, planos e amigos.',
+    profileNotFound: 'Perfil não encontrado',
+    unfriendTitle: 'Remover Amigo?',
+    unfriendDesc: 'Tens a certeza que queres remover',
+    unfriendDesc2: 'dos teus amigos?',
+    unfriendBtn: 'Remover',
   },
 
 en: {
@@ -1844,7 +1850,13 @@ en: {
     supportFaqA5: 'Stories are automatically checked for inappropriate content. If your story was removed, it may have violated our Community Guidelines.',
     supportFaqQ6: 'How does the Ambassador Program work?',
     supportFaqA6: 'Invite friends using your referral code. The more friends you bring to Vybt, the more perks you unlock as an Ambassador.',
-
+    addFriend: 'Add Friend',
+    privateProfileGateDesc: 'Add this user as a friend to see their stories, plans and friends.',
+    profileNotFound: 'Profile not found',
+    unfriendTitle: 'Remove Friend?',
+    unfriendDesc: 'Are you sure you want to remove',
+    unfriendDesc2: 'from your friends?',
+    unfriendBtn: 'Remove',
   },
 
   es: {
@@ -2767,6 +2779,13 @@ en: {
     supportFaqA5: 'Los stories se comprueban automáticamente por contenido inapropiado. Si tu story fue eliminado, puede haber infringido nuestras Directrices de la comunidad.',
     supportFaqQ6: '¿Cómo funciona el Programa Ambassador?',
     supportFaqA6: 'Invita amigos con tu código de referido. Cuantos más amigos traigas a Vybt, más ventajas desbloqueas como Ambassador.',
+    addFriend: 'Añadir amigo',
+    privateProfileGateDesc: 'Añade a este usuario como amigo para ver sus stories, planes y amigos.',
+    profileNotFound: 'Perfil no encontrado',
+    unfriendTitle: '¿Eliminar amigo?',
+    unfriendDesc: '¿Seguro que quieres eliminar a',
+    unfriendDesc2: 'de tus amigos?',
+    unfriendBtn: 'Eliminar',
 
   },
 
@@ -3690,7 +3709,13 @@ en: {
     supportFaqA5: 'Les stories sont automatiquement vérifiés pour détecter du contenu inapproprié. Si ton story a été supprimé, il a peut-être enfreint nos Règles de la communauté.',
     supportFaqQ6: 'Comment fonctionne le programme Ambassador ?',
     supportFaqA6: 'Invite des amis avec ton code de parrainage. Plus tu amènes d\'amis sur Vybt, plus tu débloque d\'avantages en tant qu\'Ambassador.',
-
+    addFriend: 'Ajouter en ami',
+    privateProfileGateDesc: 'Ajoute cet utilisateur en ami pour voir ses stories, plans et amis.',
+    profileNotFound: 'Profil introuvable',
+    unfriendTitle: 'Retirer de mes amis ?',
+    unfriendDesc: 'Tu es sûr de vouloir retirer',
+    unfriendDesc2: 'de tes amis ?',
+    unfriendBtn: 'Retirer',
   },
 
   it: {
@@ -4613,7 +4638,13 @@ en: {
     supportFaqA5: 'Gli stories vengono controllati automaticamente per contenuti inappropriati. Se il tuo story è stato rimosso, potrebbe aver violato le nostre Linee guida della community.',
     supportFaqQ6: 'Come funziona il Programma Ambassador?',
     supportFaqA6: 'Invita amici usando il tuo codice referral. Più amici porti su Vybt, più vantaggi sblocchi come Ambassador.',
-      
+    addFriend: 'Aggiungi amico',
+    privateProfileGateDesc: 'Aggiungi questo utente come amico per vedere i suoi stories, piani e amici.',
+    profileNotFound: 'Profilo non trovato',
+    unfriendTitle: 'Rimuovi amico?',
+    unfriendDesc: 'Sei sicuro di voler rimuovere',
+    unfriendDesc2: 'dai tuoi amici?',
+    unfriendBtn: 'Rimuovi',
   },
 };
 
