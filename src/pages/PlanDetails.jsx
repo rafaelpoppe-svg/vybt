@@ -289,12 +289,12 @@ export default function PlanDetails() {
               {isOnFire ? (
                 <>
                   <span className="text-sm">🔥</span>
-                  <span className="text-xs text-white font-medium">On Fire</span>
+                  <span className="text-xs text-white font-medium">{t.onFire}</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 text-[#00c6d2]" />
-                  <span className="text-xs text-white font-medium">Highlighted</span>
+                  <span className="text-xs text-white font-medium">{t.highlighted}</span>
                 </>
               )}
             </div>
@@ -327,7 +327,7 @@ export default function PlanDetails() {
             <span className="text-xs font-bold" style={{ color: planCommunity.theme_color || '#00c6d2' }}>
               {planCommunity.name}
             </span>
-            <span className="text-gray-500 text-[10px]">Community →</span>
+            <span className="text-gray-500 text-[10px]">{t.group} →</span>
           </motion.button>
         )}
 
@@ -382,7 +382,7 @@ export default function PlanDetails() {
             }}
           >
             <Users className="w-5 h-5" />
-            Invite Friends
+            {t.inviteFriends}
           </motion.button>
         )}
 
@@ -399,7 +399,7 @@ export default function PlanDetails() {
             }}
           >
             <Pencil className="w-5 h-5" />
-            Edit Plan
+            {t.editPlan}
           </motion.button>
         )}
 
@@ -412,16 +412,15 @@ export default function PlanDetails() {
               className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 flex items-center justify-center gap-2 text-orange-400"
             >
               <Flame className="w-5 h-5" />
-              Highlight this plan - €2.99
+              {t.highlightPlan}
             </motion.button>
           ) : (
             <div className="w-full py-3 rounded-xl border flex items-center justify-center gap-2 text-sm" style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
               <Flame className="w-4 h-4" />
-              Highlight unlocks at 7 members ({participants.length}/7)
+              {t.highlightUnlocks.replace('{current}', participants.length)}
             </div>
           )
         )}
-
         {/* Attending toggle (only for joined users, not during voting) */}
         {isJoined && canJoinOrLeave && (() => {
           const myParticipation = participants.find(p => p.user_id === currentUser?.id);
@@ -440,7 +439,7 @@ export default function PlanDetails() {
         <div>
           <h3 className="font-semibold flex items-center gap-2 mb-3" style={{ color: 'var(--text-primary)' }}>
             <Users className="w-5 h-5" style={{ color: themeColor }} />
-            {participants.length} Attending
+            {participants.length} {t.going}
           </h3>
           <AttendingAvatars
             participants={participants}
@@ -542,7 +541,7 @@ export default function PlanDetails() {
                   ) : (
                     <>
                       <LogOut className="w-5 h-5 mr-2" />
-                      Sair
+                      {t.leavePlan}
                     </>
                   )}
                 </Button>
@@ -554,11 +553,11 @@ export default function PlanDetails() {
                     className="flex-1 py-6 rounded-full cursor-not-allowed" style={{ background: 'var(--surface-2)', color: 'var(--text-muted)' }}
                   >
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Request Pending...
+                    {t.requestPending}
                   </Button>
                 ) : declinedJoinRequest ? (
                   <Button disabled className="flex-1 py-6 rounded-full text-red-400 border border-red-500/30 cursor-not-allowed" style={{ background: 'var(--surface)' }}>
-                    ❌ Request Declined
+                    {t.requestDeclined}
                   </Button>
                 ) : (
                   <Button
@@ -570,7 +569,7 @@ export default function PlanDetails() {
                     {requestJoinMutation.isPending ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      <>🔒 Request to Join</>
+                      <>🔒 {t.requestToJoin}</>
                     )}
                   </Button>
                 )
