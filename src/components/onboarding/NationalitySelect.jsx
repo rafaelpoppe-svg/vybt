@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
+import { useLanguage } from '../common/LanguageContext';
 
 const NATIONALITIES = [
   { code: 'AF', flag: '🇦🇫', name: 'Afghan' },
@@ -176,7 +177,7 @@ export { NATIONALITIES };
 
 export default function NationalitySelect({ selected, onSelect }) {
   const [search, setSearch] = useState('');
-
+  const { t } = useLanguage();
   const filtered = NATIONALITIES.filter(n =>
     n.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -186,7 +187,7 @@ export default function NationalitySelect({ selected, onSelect }) {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-3xl font-bold text-white mb-2">What's your nationality? 🌍</h2>
+        <h2 className="text-3xl font-bold text-white mb-2">{t.whatsYourNationality} 🌍</h2>
         <p className="text-gray-400">Optional — helps you connect with people from similar backgrounds.</p>
       </div>
 
