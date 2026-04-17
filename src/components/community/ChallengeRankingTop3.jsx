@@ -4,8 +4,8 @@ import { Crown, Zap } from 'lucide-react';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function ChallengeRankingTop3({ scores, profilesMap, tc }) {
-  if (!scores || scores.length === 0) return null;
   const { t } = useLanguage();
+  if (!scores || scores.length === 0) return null;
   const top3 = scores.slice(0, 3);
   const positions = [
     { position: 1, emoji: '🥇', color: 'from-yellow-600 to-yellow-700', light: 'rgba(250,204,21,0.15)', accent: '#faca15' },

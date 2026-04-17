@@ -5,9 +5,8 @@ import PlanCard from './PlanCard';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function ForYouSection({ plans, participants, profilesMap, onPlanClick, onSeeAll }) {
-  if (!plans || plans.length === 0) return null;
-
   const { t } = useLanguage();
+  if (!plans || plans.length === 0) return null;
 
   const getParticipants = (planId) => {
     return participants

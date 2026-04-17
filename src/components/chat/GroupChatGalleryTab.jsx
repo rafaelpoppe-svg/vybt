@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../common/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Play, Loader2, X } from 'lucide-react';
 
@@ -9,6 +10,7 @@ export default function GroupChatGalleryTab({
 }) {
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [downloadingId, setDownloadingId] = useState(null);
+  const { t } = useLanguage();
 
   const handleDownload = async (story) => {
     try {
