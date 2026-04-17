@@ -40,7 +40,7 @@ const reasonIcons = {
   location: MapPin
 };
 
-export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false, currentUserId, community }) {
+export default function PlanCard({ plan, participants = [], onClick, featured = false, matchScore, matchReasons, isOnFire = false, currentUserId, community, plansInCityCount }) {
   const themeColor = plan.theme_color || '#542b9b';
   const { isLive, timeLeft } = useLiveCountdown(plan);
   const isHappening = isLive;
@@ -221,7 +221,15 @@ export default function PlanCard({ plan, participants = [], onClick, featured = 
 
       {/* Content */}
       <div className="p-4 space-y-3">
-        <h3 className="font-bold text-lg line-clamp-1 tracking-tight" style={{ color: 'var(--text-primary)' }}>{plan.title}</h3>
+        <div className="flex items-center gap-2">
+          <h3 className="font-bold text-lg line-clamp-1 tracking-tight flex-1" style={{ color: 'var(--text-primary)' }}>{plan.title}</h3>
+          {plansInCityCount > 1 && (
+            <span className="flex items-center gap-1 flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold" style={{ background: 'var(--surface-2)', color: 'var(--text-muted)' }}>
+              <MapPin className="w-2.5 h-2.5 text-[#00c6d2]" />
+              {plansInCityCount}
+            </span>
+          )}
+        </div>
         
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">

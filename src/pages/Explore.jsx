@@ -112,6 +112,12 @@ export default function Explore() {
     allPlans: plans
   });
 
+  const planCountsByCity = plans.reduce((acc, p) => {
+    const key = p.city?.toLowerCase();
+    if (key) acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+
   const getParticipantCount = (planId) => allParticipants.filter(p => p.plan_id === planId).length;
   const getGoingCount = (planId) => allParticipants.filter(p => p.plan_id === planId && p.status === 'going').length;
   const getParticipants = (planId) => allParticipants.filter(p => p.plan_id === planId).map(p => profilesMap[p.user_id]).filter(Boolean);
@@ -255,7 +261,9 @@ export default function Explore() {
               transition={{ repeat: Infinity, repeatDelay: 4, duration: 0.6 }}
               className="text-xl"
             >🔍</motion.span>
-            <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{t.explore}</h1>
+            <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
+              {t.explore}{cachedCity ? <span className="text-[#00c6d2]"> in {cachedCity}</span> : ''}
+            </h1>
             {activeView === 'plans' && filteredPlans.length > 0 && (
               <motion.span
                 key={filteredPlans.length}
@@ -529,6 +537,7 @@ export default function Explore() {
                             isOnFire={isOnFire}
                             onClick={() => navigate(createPageUrl('PlanDetails') + `?id=${plan.id}`)}
                             currentUserId={currentUser?.id}
+                            plansInCityCount={planCountsByCity[plan.city?.toLowerCase()] || 0}
                           />
                         </motion.div>
                       );
