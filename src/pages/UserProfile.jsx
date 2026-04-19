@@ -75,7 +75,7 @@ export default function UserProfile() {
     queryKey: ['allPlans'],
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 100),
     enabled: !!userId,
-    staleTime: 60000,
+    staleTime: 5 * 60 * 1000,
   });
 
   const { data: userFriendships = [] } = useQuery({
@@ -102,6 +102,19 @@ export default function UserProfile() {
 
 
 
+
+  // If no userId in URL, bail early
+  if (!userId) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3" style={{background: 'var(--bg)'}}>
+        <p className="text-5xl">👤</p>
+        <p className="text-white font-semibold">{t.profileNotFound}</p>
+        <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="text-[#00c6d2] text-sm font-medium">
+          {t.goBack}
+        </motion.button>
+      </div>
+    );
+  }
 
   // Only block on profile — currentUser loads async but isn't needed to show the profile
   if (profileLoading) {
@@ -231,13 +244,7 @@ export default function UserProfile() {
           )}
         </div>
         <div className="flex items-center gap-2 relative z-10">
-          {nationalityInfo && (
-            <div className="flex items-center gap-1 bg-gray-800/70 rounded-full px-2 py-0.5">
-              <span className="text-sm leading-none">{nationalityInfo.flag}</span>
-              <span className="text-[11px] text-gray-300 font-medium">{nationalityInfo.name}</span>
-            </div>
-          )}
-          {currentUser && currentUser.id !== userId && (
+            {currentUser && currentUser.id !== userId && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <motion.button whileTap={{ scale: 0.9 }} className="relative z-10 p-2 rounded-full bg-black/40 backdrop-blur-md">
@@ -306,6 +313,7 @@ export default function UserProfile() {
             </span>
             {age && <span className="text-sm font-bold" style={{ color: 'var(--text-primary)'}}>{age}</span>}
             {profile.gender && <span className="text-xs text-gray-500">{profile.gender}</span>}
+            {nationalityInfo && <span className="text-base leading-none">{nationalityInfo.flag}</span>}
             {profile.is_verified && <ShieldCheck className="w-4 h-4 text-blue-400" />}
             {isPrivate && <Lock className="w-3.5 h-3.5 text-gray-500" />}
           </div>

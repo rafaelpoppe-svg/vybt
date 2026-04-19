@@ -195,7 +195,7 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { t } = useLanguage();
-  const [localStatus, setLocalStatus] = useState(notification.is_read ? 'accepted' : null);
+  const [localStatus, setLocalStatus] = useState(null);
 
   const accept = useMutation({
     mutationFn: async () => {
