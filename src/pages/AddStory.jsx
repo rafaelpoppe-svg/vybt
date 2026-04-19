@@ -61,7 +61,7 @@ export default function AddStory() {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  const [phase, setPhase] = useState('camera');
+  const [phase, setPhase] = useState('plan_select');
   const [mode, setMode] = useState('photo');
   const [facingMode, setFacingMode] = useState('user');
   const [capturedMedia, setCapturedMedia] = useState(null);
@@ -135,6 +135,9 @@ export default function AddStory() {
 
   useEffect(() => {
     if (phase === 'camera') startCamera();
+    else if (phase !== 'camera' && streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+    }
     return () => { if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop()); };
   }, [phase, facingMode, mode]);
 
@@ -234,6 +237,66 @@ export default function AddStory() {
     <div className="fixed inset-0 bg-black z-50 flex flex-col">
       <canvas ref={canvasRef} className="hidden" />
 
+      {/* PLAN SELECT PHASE */}
+      {phase === 'plan_select' && (
+        <div className="flex flex-col h-full" style={{ background: 'var(--bg)', paddingTop: 'calc(env(safe-area-inset-top,0px) + 16px)' }}>
+          <div className="flex items-center justify-between px-4 pb-4 border-b border-gray-800">
+            <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)}
+              className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center">
+              <X className="w-5 h-5 text-white" />
+            </motion.button>
+            <h1 className="text-white font-bold text-base">{t.postToPlan}</h1>
+            <div className="w-10" />
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+            {(!currentUser || happeningParticipations.length === 0) ? (
+              <div className="flex flex-col items-center justify-center h-full gap-4 text-center py-16">
+                <p className="text-5xl">🎉</p>
+                <p className="text-white font-semibold text-base">{t.noHappeningPlans}</p>
+                <p className="text-gray-500 text-sm px-6">{t.joinPlanToPostStory || 'Junta-te a um plano em curso para partilhar stories.'}</p>
+                <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(-1)}
+                  className="px-6 py-2.5 rounded-2xl bg-gray-800 text-gray-300 text-sm font-semibold mt-2">
+                  {t.goBack}
+                </motion.button>
+              </div>
+            ) : happeningPlans.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full gap-4 text-center py-16">
+                <p className="text-5xl">⏳</p>
+                <p className="text-white font-semibold text-base">{t.noHappeningPlans}</p>
+                <p className="text-gray-500 text-sm px-6">{t.joinPlanToPostStory || 'Nenhum plano está em curso de momento.'}</p>
+                <motion.button whileTap={{ scale: 0.95 }} onClick={() => navigate(-1)}
+                  className="px-6 py-2.5 rounded-2xl bg-gray-800 text-gray-300 text-sm font-semibold mt-2">
+                  {t.goBack}
+                </motion.button>
+              </div>
+            ) : (
+              happeningPlans.map(plan => (
+                <motion.button
+                  key={plan.id} whileTap={{ scale: 0.97 }}
+                  onClick={() => { setSelectedPlan(plan); setPhase('camera'); }}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl border border-gray-800 bg-gray-900/60 text-left"
+                >
+                  {plan.cover_image
+                    ? <img src={plan.cover_image} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" alt="" />
+                    : <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#00c6d2]/30 to-[#542b9b]/30 flex items-center justify-center text-2xl flex-shrink-0">🎉</div>
+                  }
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-semibold text-sm truncate">{plan.title}</p>
+                    <p className="text-gray-400 text-xs flex items-center gap-1 mt-0.5">
+                      <MapPin className="w-3 h-3" />{plan.location_address}
+                    </p>
+                    <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 text-[10px] font-semibold">
+                      ● LIVE
+                    </span>
+                  </div>
+                </motion.button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
       {/* CAMERA PHASE */}
       {phase === 'camera' && (
         <>
@@ -274,22 +337,24 @@ export default function AddStory() {
 
           <div className="absolute left-0 right-0 flex justify-center items-center z-10"
             style={{ bottom: 'calc(env(safe-area-inset-bottom,0px) + 30px)' }}>
-            {mode === 'video' && isRecording && (
-              <svg className="absolute w-24 h-24 -rotate-90" viewBox="0 0 96 96">
-                <circle cx="48" cy="48" r="44" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="4" />
-                <circle cx="48" cy="48" r="44" fill="none" stroke="#ff4444" strokeWidth="4"
-                  strokeDasharray={`${2 * Math.PI * 44 * recordProgress} ${2 * Math.PI * 44 * (1 - recordProgress)}`} />
-              </svg>
-            )}
-            <motion.button whileTap={{ scale: 0.9 }} onClick={handleCameraPress}
-              className={`w-20 h-20 rounded-full border-4 border-white flex items-center justify-center transition-all ${isRecording ? 'bg-red-500' : 'bg-white/20 backdrop-blur-sm'}`}>
-              {mode === 'photo'
-                ? <div className="w-14 h-14 rounded-full bg-white" />
-                : isRecording
-                  ? <div className="w-7 h-7 rounded bg-white" />
-                  : <div className="w-14 h-14 rounded-full bg-white" />
-              }
-            </motion.button>
+            <div className="relative w-24 h-24 flex items-center justify-center">
+              {mode === 'video' && isRecording && (
+                <svg className="absolute inset-0 w-24 h-24 -rotate-90 pointer-events-none" viewBox="0 0 96 96">
+                  <circle cx="48" cy="48" r="44" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="4" />
+                  <circle cx="48" cy="48" r="44" fill="none" stroke="#ff4444" strokeWidth="4"
+                    strokeDasharray={`${2 * Math.PI * 44 * recordProgress} ${2 * Math.PI * 44 * (1 - recordProgress)}`} />
+                </svg>
+              )}
+              <motion.button whileTap={{ scale: 0.9 }} onClick={handleCameraPress}
+                className={`w-20 h-20 rounded-full border-4 border-white flex items-center justify-center transition-all relative z-10 ${isRecording ? 'bg-red-500' : 'bg-white/20 backdrop-blur-sm'}`}>
+                {mode === 'photo'
+                  ? <div className="w-14 h-14 rounded-full bg-white" />
+                  : isRecording
+                    ? <div className="w-7 h-7 rounded bg-white" />
+                    : <div className="w-14 h-14 rounded-full bg-white" />
+                }
+              </motion.button>
+            </div>
           </div>
         </>
       )}
