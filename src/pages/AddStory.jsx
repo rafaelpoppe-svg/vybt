@@ -61,7 +61,10 @@ export default function AddStory() {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  const [phase, setPhase] = useState('plan_select');
+  const urlParams = new URLSearchParams(window.location.search);
+  const planIdFromUrl = urlParams.get('planId');
+
+  const [phase, setPhase] = useState(planIdFromUrl ? 'camera' : 'plan_select');
   const [mode, setMode] = useState('photo');
   const [facingMode, setFacingMode] = useState('user');
   const [capturedMedia, setCapturedMedia] = useState(null);
@@ -114,6 +117,14 @@ export default function AddStory() {
   const happeningPlans = allPlans.filter(p =>
     happeningParticipations.some(pp => pp.plan_id === p.id)
   );
+
+  // Pre-select plan from URL param as soon as plans are loaded
+  useEffect(() => {
+    if (planIdFromUrl && happeningPlans.length > 0 && !selectedPlan) {
+      const plan = happeningPlans.find(p => p.id === planIdFromUrl);
+      if (plan) setSelectedPlan(plan);
+    }
+  }, [happeningPlans, planIdFromUrl]);
 
   const startCamera = useCallback(async () => {
     try {
@@ -198,9 +209,9 @@ export default function AddStory() {
 
   const retake = () => {
     setCapturedMedia(null);
-    setSelectedPlan(null);
+    if (!planIdFromUrl) setSelectedPlan(null);
     setCaption('');
-    setPhase('camera');
+    setPhase(planIdFromUrl ? 'camera' : 'plan_select');
   };
 
   const postStory = async () => {
