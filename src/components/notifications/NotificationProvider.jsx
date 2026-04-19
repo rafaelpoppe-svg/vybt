@@ -168,9 +168,7 @@ export function NotificationProvider({ children }) {
       user_id: currentUser.id,
       is_read: false
     });
-    for (const n of notifications) {
-      await base44.entities.Notification.update(n.id, { is_read: true });
-    }
+    await Promise.all(notifications.map(n => base44.entities.Notification.update(n.id, { is_read: true })));
     setUnreadCount(0);
     queryClient.invalidateQueries(['notifications', currentUser.id]);
   };

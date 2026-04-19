@@ -345,7 +345,7 @@ export default function Notifications() {
     queryKey: ['notifications', currentUser?.id],
     queryFn: () => base44.entities.Notification.filter({ user_id: currentUser?.id }),
     enabled: !!currentUser?.id,
-    staleTime: 0,
+    staleTime: 30000,
   });
 
   useEffect(() => {
@@ -362,8 +362,9 @@ export default function Notifications() {
 
   const { data: plans = [] } = useQuery({
     queryKey: ['notif-plans', planIds.join(',')],
-    queryFn: () => Promise.all(planIds.map(id => base44.entities.PartyPlan.filter({ id }).then(r => r[0]))),
+    queryFn: () => base44.entities.PartyPlan.list('-created_date', 200),
     enabled: planIds.length > 0,
+    staleTime: 60000,
   });
 
   const { data: myParticipations = [] } = useQuery({
@@ -374,9 +375,10 @@ export default function Notifications() {
   const myPlanIds = useMemo(() => new Set(myParticipations.map(p => p.plan_id)), [myParticipations]);
 
   const { data: relatedProfiles = [] } = useQuery({
-    queryKey: ['notif-profiles', userIds.join(',')],
-    queryFn: () => Promise.all(userIds.map(uid => base44.entities.UserProfile.filter({ user_id: uid }).then(r => r[0]))),
+    queryKey: ['notif-profiles'],
+    queryFn: () => base44.entities.UserProfile.list('-created_date', 200),
     enabled: userIds.length > 0,
+    staleTime: 60000,
   });
 
   const plansMap = useMemo(() => { const m = {}; plans.forEach(p => p && (m[p.id] = p)); return m; }, [plans]);
