@@ -199,22 +199,17 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
 
   const accept = useMutation({
     mutationFn: async () => {
-      const reqs = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id, status: 'pending' });
-      if (reqs[0]) await base44.entities.Friendship.update(reqs[0].id, { status: 'accepted' });
-      await base44.entities.Friendship.create({
-        user_id: notification.user_id,
-        friend_id: notification.related_user_id,
-        status: 'accepted',
-      });
+      // Find the pending friendship: requester → current user
+      const reqs = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
+      const pending = reqs.find(r => r.status === 'pending');
+      if (pending) await base44.entities.Friendship.update(pending.id, { status: 'accepted' });
       await base44.entities.Notification.update(notification.id, { is_read: true });
     },
     onSuccess: () => {
       setLocalStatus('accepted');
       queryClient.invalidateQueries(['myFriendships']);
-      queryClient.invalidateQueries(['sentFriendships']);
-      queryClient.invalidateQueries(['receivedFriendships']);
       queryClient.invalidateQueries(['myFriendshipsExplore']);
-      queryClient.invalidateQueries(['receivedFriendRequestsExplore']);
+      queryClient.invalidateQueries(['receivedFriendRequestsExplore', notification.user_id]);
       queryClient.invalidateQueries(['sentFriendRequests']);
       onMark(notification.id);
     }
@@ -222,8 +217,9 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
 
   const decline = useMutation({
     mutationFn: async () => {
-      const reqs = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, status: 'pending' });
-      if (reqs[0]) await base44.entities.Friendship.update(reqs[0].id, { status: 'declined' });
+      const reqs = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
+      const pending = reqs.find(r => r.status === 'pending');
+      if (pending) await base44.entities.Friendship.update(pending.id, { status: 'declined' });
       await base44.entities.Notification.update(notification.id, { is_read: true });
     },
     onSuccess: () => { setLocalStatus('declined'); onMark(notification.id); }
