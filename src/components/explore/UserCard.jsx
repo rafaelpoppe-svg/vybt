@@ -5,7 +5,7 @@ import { createPageUrl } from '@/utils';
 import { Plus, Check, MapPin, ShieldCheck } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { notifyFriendRequest } from '../notifications/NotificationTriggers';
+import { notifyFriendRequest, createNotification } from '../notifications/NotificationTriggers';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function UserCard({ profile, myProfile, currentUser, isFriend, isPendingSent, mode = 'discover', friendshipId, onAccept }) {
@@ -43,11 +43,33 @@ export default function UserCard({ profile, myProfile, currentUser, isFriend, is
   });
 
   const acceptRequest = useMutation({
-    mutationFn: () => base44.entities.Friendship.update(friendshipId, { status: 'accepted' }),
+    mutationFn: async () => {
+      // 1. Accept the incoming request
+      await base44.entities.Friendship.update(friendshipId, { status: 'accepted' });
+      // 2. Create symmetric friendship (Bob → Alice)
+      const existing = await base44.entities.Friendship.filter({ user_id: currentUser.id, friend_id: profile.user_id });
+      if (existing.length === 0) {
+        await base44.entities.Friendship.create({
+          user_id: currentUser.id,
+          friend_id: profile.user_id,
+          status: 'accepted',
+        });
+      }
+      // 3. Notify the requester (Alice) that Bob accepted
+      const myName = currentUser.full_name || t.someone;
+      await createNotification(
+        profile.user_id,
+        'friend_request',
+        `${myName} aceitou o teu pedido de amizade! 🎉`,
+        { relatedUserId: currentUser.id }
+      );
+    },
     onSuccess: () => {
       setLocalAccepted(true);
       queryClient.invalidateQueries(['receivedFriendRequestsExplore', currentUser?.id]);
       queryClient.invalidateQueries(['myFriendshipsExplore', currentUser?.id]);
+      queryClient.invalidateQueries(['myFriendshipsSent', currentUser?.id]);
+      queryClient.invalidateQueries(['myFriendshipsReceived', currentUser?.id]);
       if (onAccept) onAccept();
     }
   });

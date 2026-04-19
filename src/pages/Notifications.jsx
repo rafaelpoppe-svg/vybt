@@ -199,18 +199,44 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
 
   const accept = useMutation({
     mutationFn: async () => {
-      // Find the pending friendship: requester → current user
+      // 1. Find the pending friendship: Alice → Bob (requester → current user)
       const reqs = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
       const pending = reqs.find(r => r.status === 'pending');
       if (pending) await base44.entities.Friendship.update(pending.id, { status: 'accepted' });
+
+      // 2. Create the symmetric friendship: Bob → Alice (so Bob appears in Alice's friend list too)
+      const existing = await base44.entities.Friendship.filter({ user_id: notification.user_id, friend_id: notification.related_user_id });
+      if (existing.length === 0) {
+        await base44.entities.Friendship.create({
+          user_id: notification.user_id,
+          friend_id: notification.related_user_id,
+          status: 'accepted',
+        });
+      }
+
+      // 3. Mark this notification as read
       await base44.entities.Notification.update(notification.id, { is_read: true });
+
+      // 4. Notify Alice that Bob accepted her request
+      const { createNotification } = await import('../components/notifications/NotificationTriggers');
+      const bobProfile = await base44.entities.UserProfile.filter({ user_id: notification.user_id }).then(r => r[0]);
+      const bobName = bobProfile?.display_name || 'Alguém';
+      await createNotification(
+        notification.related_user_id,
+        'friend_request',
+        `${bobName} aceitou o teu pedido de amizade! 🎉`,
+        { relatedUserId: notification.user_id }
+      );
     },
     onSuccess: () => {
       setLocalStatus('accepted');
       queryClient.invalidateQueries(['myFriendships']);
+      queryClient.invalidateQueries(['myFriendships', notification.user_id]);
+      queryClient.invalidateQueries(['userFriendships', notification.related_user_id]);
       queryClient.invalidateQueries(['myFriendshipsExplore']);
       queryClient.invalidateQueries(['receivedFriendRequestsExplore', notification.user_id]);
       queryClient.invalidateQueries(['sentFriendRequests']);
+      queryClient.invalidateQueries(['notifications', notification.user_id]);
       onMark(notification.id);
     }
   });
@@ -345,7 +371,7 @@ export default function Notifications() {
     queryKey: ['notifications', currentUser?.id],
     queryFn: () => base44.entities.Notification.filter({ user_id: currentUser?.id }),
     enabled: !!currentUser?.id,
-    staleTime: 30000,
+    staleTime: 0,
   });
 
   useEffect(() => {

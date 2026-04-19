@@ -84,11 +84,21 @@ export default function UserProfile() {
     enabled: !!userId,
   });
 
-  const { data: myFriendships = [] } = useQuery({
-    queryKey: ['myFriendships', currentUser?.id],
+  // Friendships where I am the sender
+  const { data: myFriendshipsSent = [] } = useQuery({
+    queryKey: ['myFriendshipsSent', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id }),
     enabled: !!currentUser?.id,
   });
+
+  // Friendships where I am the receiver (the other person sent to me)
+  const { data: myFriendshipsReceived = [] } = useQuery({
+    queryKey: ['myFriendshipsReceived', currentUser?.id],
+    queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id }),
+    enabled: !!currentUser?.id,
+  });
+
+  const myFriendships = [...myFriendshipsSent, ...myFriendshipsReceived];
 
   // Pedidos que RECEBI desta pessoa (ela enviou para mim)
   const { data: receivedFromUser = [] } = useQuery({
@@ -167,30 +177,42 @@ export default function UserProfile() {
       friend_id: userId,
       status: 'pending',
     });
-    // Notificar a outra pessoa
     const { notifyFriendRequest } = await import('../components/notifications/NotificationTriggers');
     await notifyFriendRequest(userId, currentUser.id, myProfile?.display_name || currentUser.full_name || 'Alguém');
-    await queryClient.invalidateQueries(['myFriendships', currentUser?.id]);
+    await queryClient.invalidateQueries(['myFriendshipsSent', currentUser?.id]);
+    await queryClient.invalidateQueries(['myFriendshipsReceived', currentUser?.id]);
     setFriendshipLoading(false);
   };
 
   const handleAcceptRequest = async () => {
     if (!incomingRequest) return;
     setFriendshipLoading(true);
-    // Aceitar o pedido da outra pessoa
+    // 1. Accept the incoming request (Alice → Bob)
     await base44.entities.Friendship.update(incomingRequest.id, { status: 'accepted' });
-    // Criar amizade simétrica para o utilizador atual (se não existir)
-    const existing = myFriendships.find(f => f.friend_id === userId && f.status === 'accepted');
-    if (!existing) {
+    // 2. Create symmetric friendship (Bob → Alice) if not exists
+    const existingSymmetric = await base44.entities.Friendship.filter({ user_id: currentUser.id, friend_id: userId });
+    if (existingSymmetric.length === 0) {
       await base44.entities.Friendship.create({
         user_id: currentUser.id,
         friend_id: userId,
         status: 'accepted',
       });
     }
-    await queryClient.invalidateQueries(['myFriendships', currentUser?.id]);
+    // 3. Notify Alice that Bob accepted
+    const myProfile = await base44.entities.UserProfile.filter({ user_id: currentUser.id }).then(r => r[0]);
+    const myName = myProfile?.display_name || currentUser.full_name || 'Alguém';
+    const { createNotification } = await import('../components/notifications/NotificationTriggers');
+    await createNotification(
+      userId,
+      'friend_request',
+      `${myName} aceitou o teu pedido de amizade! 🎉`,
+      { relatedUserId: currentUser.id }
+    );
+    await queryClient.invalidateQueries(['myFriendshipsSent', currentUser?.id]);
+    await queryClient.invalidateQueries(['myFriendshipsReceived', currentUser?.id]);
     await queryClient.invalidateQueries(['receivedFromUser', currentUser?.id, userId]);
     await queryClient.invalidateQueries(['userFriendships', userId]);
+    await queryClient.invalidateQueries(['userFriendships', currentUser?.id]);
     setFriendshipLoading(false);
   };
 
@@ -207,12 +229,13 @@ export default function UserProfile() {
     if (existingFriendship) {
       await base44.entities.Friendship.delete(existingFriendship.id);
     }
-    // Apagar também o lado inverso
+    // Delete both directions
     const inverseFriendships = await base44.entities.Friendship.filter({ user_id: userId, friend_id: currentUser.id });
     for (const f of inverseFriendships) {
       await base44.entities.Friendship.delete(f.id);
     }
-    await queryClient.invalidateQueries(['myFriendships', currentUser?.id]);
+    await queryClient.invalidateQueries(['myFriendshipsSent', currentUser?.id]);
+    await queryClient.invalidateQueries(['myFriendshipsReceived', currentUser?.id]);
     await queryClient.invalidateQueries(['userFriendships', userId]);
     setFriendshipLoading(false);
     setShowUnfriendModal(false);
