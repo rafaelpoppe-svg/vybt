@@ -355,7 +355,7 @@ export default function Notifications() {
   useEffect(() => {
     if (!currentUser?.id) return;
     const unsub = base44.entities.Notification.subscribe((event) => {
-      if (event.type === 'create' && event.data?.user_id === currentUser.id)
+      if ((event.type === 'create' || event.type === 'update') && event.data?.user_id === currentUser.id)
         queryClient.invalidateQueries(['notifications', currentUser.id]);
     });
     return () => unsub();
