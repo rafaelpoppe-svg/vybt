@@ -31,7 +31,7 @@ import PullRefreshIndicator from '../components/common/PullRefreshIndicator';
 export default function Home() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { unreadCount, refreshUnreadCount } = useNotifications();
+  const { unreadCount } = useNotifications();
   const [city, setCity] = useState(() => localStorage.getItem('selectedCity') || '');
   const [radius, setRadius] = useState(() => Number(localStorage.getItem('selectedRadius')) || 10);
   const [currentUser, setCurrentUser] = useState(null);
@@ -302,7 +302,7 @@ export default function Home() {
             />
             <motion.button
               whileTap={{ scale: 0.85 }}
-              onClick={() => { refreshUnreadCount(); navigate(createPageUrl('Notifications')); }}
+              onClick={() => navigate(createPageUrl('Notifications'))}
               className="relative p-2 rounded-full bg-white/5 border border-white/10"
             >
               <Bell className="w-5 h-5 text-white" />
