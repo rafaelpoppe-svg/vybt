@@ -94,28 +94,39 @@ export function NotificationProvider({ children }) {
   useEffect(() => {
     if (!currentUser?.id) return;
 
-    const unsubscribe = base44.entities.Notification.subscribe(async (event) => {
+    // Debounce the re-fetch to avoid rate limit when many events arrive at once
+    let debounceTimer = null;
+    const debouncedRefetch = () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(async () => {
+        try {
+          const unread = await base44.entities.Notification.filter({
+            user_id: currentUser.id,
+            is_read: false,
+          });
+          setUnreadCount(unread.length);
+          queryClient.invalidateQueries(['notifications', currentUser.id]);
+        } catch (e) {}
+      }, 2000); // wait 2s after last event before fetching
+    };
+
+    const unsubscribe = base44.entities.Notification.subscribe((event) => {
       const notification = event.data;
       if (!notification || notification.user_id !== currentUser.id) return;
 
-      // Em qualquer create ou update, re-sincronizar o count com a BD
       if (event.type === 'create' || event.type === 'update') {
-        // Re-fetch o count real da BD em vez de incrementar/decrementar
-        const unread = await base44.entities.Notification.filter({
-          user_id: currentUser.id,
-          is_read: false,
-        });
-        setUnreadCount(unread.length);
-        queryClient.invalidateQueries(['notifications', currentUser.id]);
+        debouncedRefetch();
       }
 
       if (event.type !== 'create') return;
-
       if (shownIds.current.has(notification.id)) return;
       shownIds.current.add(notification.id);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      if (debounceTimer) clearTimeout(debounceTimer);
+    };
   }, [currentUser?.id, queryClient, userPrefs]);
 
   // Real-time DM unread count
