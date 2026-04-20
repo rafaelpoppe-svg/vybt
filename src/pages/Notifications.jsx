@@ -199,11 +199,14 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
 
   // Fetch the real friendship status to handle page re-enters correctly
   const { data: existingFriendship } = useQuery({
-    queryKey: ['friendship', notification.related_user_id, notification.user_id],
-    queryFn: () => base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id }),
+    queryKey: ['friendship', notification.user_id, notification.related_user_id],
+    queryFn: () => base44.entities.Friendship.filter({ 
+      user_id: notification.user_id, 
+      friend_id: notification.related_user_id 
+    }),
     select: (data) => data?.[0] || null,
-    staleTime: 30000,
   });
+
 
   // Derive the display status: localStatus takes priority (optimistic), then real DB value
   const derivedStatus = localStatus || (
