@@ -17,6 +17,7 @@ import CommunityActivityFeed from '../components/community/CommunityActivityFeed
 import CommunityNewMemberGuide from '../components/community/CommunityNewMemberGuide';
 import CommunityChallengeBanner from '../components/community/CommunityChallengeBanner';
 import CommunityChallengeDetail from '../components/community/CommunityChallengeDetail';
+import CommunityCreateChallengeModal from '../components/community/CommunityCreateChallengeModal';
 import LeaveCommunityModal from '../components/community/LeaveCommunityModal';
 import { useLanguage } from '../components/common/LanguageContext';
 
@@ -556,6 +557,17 @@ export default function CommunityView() {
             profilesMap={profilesMap}
             currentUser={currentUser}
             onClose={() => setShowInviteModal(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showCreateChallenge && (
+          <CommunityCreateChallengeModal
+            communityId={communityId}
+            plans={plans}
+            tc={tc}
+            onClose={() => setShowCreateChallenge(false)}
           />
         )}
       </AnimatePresence>
