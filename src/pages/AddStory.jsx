@@ -59,7 +59,15 @@ function PlanSelectorSheet({ plans, selectedPlanId, onSelect, onClose }) {
 
 export default function AddStory() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  const challengeTexts = {
+    pt: { active: 'Desafio ativo', postingFor: 'A postar para o desafio' },
+    en: { active: 'Active challenge', postingFor: 'Posting for the challenge' },
+    es: { active: 'Reto activo', postingFor: 'Publicando para el reto' },
+    fr: { active: 'Défi actif', postingFor: 'En train de poster pour le défi' },
+  };
+  const ct = challengeTexts[language] || challengeTexts.en;
 
   const urlParams = new URLSearchParams(window.location.search);
   const planIdFromUrl = urlParams.get('planId');
@@ -357,7 +365,7 @@ export default function AddStory() {
               style={{ top: 'calc(env(safe-area-inset-top,0px) + 60px)' }}>
               <div className="px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center gap-2">
                 <span className="text-base">🔥</span>
-                <span className="text-white text-xs font-bold">{t.challengePostingFor || 'A postar para o desafio'}</span>
+                <span className="text-white text-xs font-bold">{ct.postingFor}</span>
               </div>
             </div>
           )}
@@ -381,7 +389,7 @@ export default function AddStory() {
               >
                 <span className="text-lg flex-shrink-0">{activeChallenge.emoji || '🏆'}</span>
                 <div className="flex-1 text-left min-w-0">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400">{t.challengeActive || 'Desafio ativo'}</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400">{ct.active}</p>
                   <p className="text-white text-xs font-bold truncate">{activeChallenge.title}</p>
                 </div>
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
