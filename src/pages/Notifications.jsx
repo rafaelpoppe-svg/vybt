@@ -236,77 +236,63 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
   });
 
   const accept = useMutation({
+    onMutate: () => {
+      console.log('[DEBUG] onMutate: Definindo localStatus como accepted');
+      setLocalStatus('accepted');
+    },
     mutationFn: async () => {
       console.log('[DEBUG] Iniciando Accept Mutation');
       
-      // 1. Check both directions for any pending request
-      const reqsA = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
-      const reqsB = await base44.entities.Friendship.filter({ user_id: notification.user_id, friend_id: notification.related_user_id });
+      // 1. Find all related friendship records
+      const [reqsA, reqsB] = await Promise.all([
+        base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id }),
+        base44.entities.Friendship.filter({ user_id: notification.user_id, friend_id: notification.related_user_id })
+      ]);
       
       const allReqs = [...(reqsA || []), ...(reqsB || [])];
-      console.log('[DEBUG] Todos os registros de amizade encontrados:', allReqs);
+      console.log('[DEBUG] Todos os registros encontrados:', allReqs);
       
-      const pendingItems = allReqs.filter(r => r.status === 'pending');
-      
-      if (pendingItems.length > 0) {
-        for (const item of pendingItems) {
-          console.log('[DEBUG] Atualizando registro para accepted:', item.id);
-          await base44.entities.Friendship.update(item.id, { status: 'accepted' });
+      // 2. Update all to accepted
+      const updates = allReqs.map(item => {
+        if (item.status !== 'accepted') {
+          console.log('[DEBUG] Atualizando para accepted:', item.id);
+          return base44.entities.Friendship.update(item.id, { status: 'accepted' });
         }
+        return null;
+      }).filter(Boolean);
+      
+      await Promise.all(updates);
+
+      // 3. Ensure both directions exist
+      if (!allReqs.some(r => r.user_id === notification.user_id && r.friend_id === notification.related_user_id)) {
+        console.log('[DEBUG] Criando direção A->B');
+        await base44.entities.Friendship.create({ user_id: notification.user_id, friend_id: notification.related_user_id, status: 'accepted' });
+      }
+      if (!allReqs.some(r => r.user_id === notification.related_user_id && r.friend_id === notification.user_id)) {
+        console.log('[DEBUG] Criando direção B->A');
+        await base44.entities.Friendship.create({ user_id: notification.related_user_id, friend_id: notification.user_id, status: 'accepted' });
       }
 
-      // 2. Ensure symmetric friendship exists and is accepted
-      const existingA = allReqs.find(r => r.user_id === notification.user_id && r.friend_id === notification.related_user_id);
-      if (!existingA) {
-        console.log('[DEBUG] Criando amizade simétrica (A)');
-        await base44.entities.Friendship.create({
-          user_id: notification.user_id,
-          friend_id: notification.related_user_id,
-          status: 'accepted',
-        });
-      } else if (existingA.status !== 'accepted') {
-        console.log('[DEBUG] Atualizando amizade simétrica existente para accepted (A)');
-        await base44.entities.Friendship.update(existingA.id, { status: 'accepted' });
-      }
-
-      const existingB = allReqs.find(r => r.user_id === notification.related_user_id && r.friend_id === notification.user_id);
-      if (!existingB) {
-        console.log('[DEBUG] Criando amizade simétrica (B)');
-        await base44.entities.Friendship.create({
-          user_id: notification.related_user_id,
-          friend_id: notification.user_id,
-          status: 'accepted',
-        });
-      } else if (existingB.status !== 'accepted') {
-        console.log('[DEBUG] Atualizando amizade simétrica existente para accepted (B)');
-        await base44.entities.Friendship.update(existingB.id, { status: 'accepted' });
-      }
-
-      // 3. Mark this notification as read
+      // 4. Notification and trigger
       await base44.entities.Notification.update(notification.id, { is_read: true });
-
-      // 4. Notify Alice that Bob accepted her request
-      const { createNotification } = await import('../components/notifications/NotificationTriggers');
-      const bobProfile = await base44.entities.UserProfile.filter({ user_id: notification.user_id }).then(r => r[0]);
-      const bobName = bobProfile?.display_name || 'Alguém';
-      await createNotification(
-        notification.related_user_id,
-        'friend_request',
-        `${bobName} aceitou o teu pedido de amizade! 🎉`,
-        { relatedUserId: notification.user_id }
-      );
+      try {
+        const { createNotification } = await import('../components/notifications/NotificationTriggers');
+        const bobProfile = await base44.entities.UserProfile.filter({ user_id: notification.user_id }).then(r => r[0]);
+        await createNotification(notification.related_user_id, 'friend_request', 
+          `${bobProfile?.display_name || 'Alguém'} aceitou seu pedido de amizade!`, 
+          { related_user_id: notification.user_id }
+        );
+      } catch (e) { console.error('Erro ao disparar notificação:', e); }
     },
     onSuccess: () => {
-      setLocalStatus('accepted');
-      queryClient.invalidateQueries(['myFriendships']);
-      queryClient.invalidateQueries(['myFriendships', notification.user_id]);
-      queryClient.invalidateQueries(['userFriendships', notification.related_user_id]);
-      queryClient.invalidateQueries(['friendship', notification.user_id, notification.related_user_id]);
-      queryClient.invalidateQueries(['myFriendshipsExplore']);
-      queryClient.invalidateQueries(['receivedFriendRequestsExplore', notification.user_id]);
-      queryClient.invalidateQueries(['sentFriendRequests']);
-      queryClient.invalidateQueries(['notifications', notification.user_id]);
+      console.log('[DEBUG] Mutation Success');
+      queryClient.invalidateQueries({ queryKey: ['friendship', notification.user_id, notification.related_user_id] });
+      queryClient.invalidateQueries({ queryKey: ['notifications', notification.user_id] });
       onMark(notification.id);
+    },
+    onError: (err) => {
+      console.error('[DEBUG] Mutation Error:', err);
+      setLocalStatus(null);
     }
   });
 
