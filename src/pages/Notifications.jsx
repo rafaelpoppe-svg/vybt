@@ -222,11 +222,11 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
   // Derive the display status: 
   // 1. localStatus (optimistic update)
   // 2. existingFriendship (real-time DB status)
-  // 3. notification.is_read (fallback for old notifications where friendship might have been removed)
+  // 3. notification.is_read (fallback: if read but no friendship found, it was removed)
   const derivedStatus = localStatus || (
     existingFriendship?.status === 'accepted' ? 'accepted' :
     existingFriendship?.status === 'declined' ? 'declined' :
-    (notification.is_read ? 'accepted' : null)
+    (notification.is_read ? 'removed' : null)
   );
 
   console.log('[DEBUG] FriendRequestRow Render:', {
@@ -321,6 +321,23 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
     }
   });
 
+  const addFriend = useMutation({
+    onMutate: () => setLocalStatus('pending'),
+    mutationFn: async () => {
+      const myProfile = await base44.entities.UserProfile.filter({ user_id: notification.user_id }).then(r => r[0]);
+      await base44.entities.Friendship.create({
+        user_id: notification.user_id,
+        friend_id: notification.related_user_id,
+        status: 'pending',
+      });
+      const { notifyFriendRequest } = await import('../components/notifications/NotificationTriggers');
+      await notifyFriendRequest(notification.related_user_id, notification.user_id, myProfile?.display_name || 'Alguém');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['friendship', notification.user_id, notification.related_user_id]);
+    }
+  });
+
   return (
     <div className={`flex items-center gap-3 px-4 py-2.5 ${!notification.is_read ? 'bg-[#00c6d2]/5' : ''}`}>
       <div className="cursor-pointer" onClick={() => navigate(createPageUrl('UserProfile') + `?id=${notification.related_user_id}`)}>
@@ -344,6 +361,14 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
         <span className="text-[11px] font-bold text-[#00c6d2] px-3 py-1 rounded-lg bg-[#00c6d2]/15">{t.friends} ✓</span>
       ) : derivedStatus === 'declined' ? (
         <span className="text-[11px] text-gray-600">{t.removed}</span>
+      ) : derivedStatus === 'removed' ? (
+        <motion.button whileTap={{ scale: 0.92 }}
+          onClick={() => addFriend.mutate()} disabled={addFriend.isPending}
+          className="px-3.5 py-1.5 rounded-lg text-[12px] font-bold text-white bg-[#00c6d2]">
+          {addFriend.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : "Adicionar"}
+        </motion.button>
+      ) : derivedStatus === 'pending' ? (
+        <span className="text-[11px] text-gray-500 italic">Pendente...</span>
       ) : (
         <div className="flex gap-2 flex-shrink-0">
           <motion.button whileTap={{ scale: 0.92 }}
