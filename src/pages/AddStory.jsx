@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { X, Send, ChevronLeft, RotateCcw, MapPin, Loader2, Zap, ZapOff } from 'lucide-react';
+import { X, Send, ChevronLeft, RotateCcw, MapPin, Loader2, Zap, ZapOff, Trophy } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLanguage } from '../components/common/LanguageContext';
 
@@ -76,6 +76,7 @@ export default function AddStory() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [isPosting, setIsPosting] = useState(false);
   const [caption, setCaption] = useState('');
+  const [selectedChallenge, setSelectedChallenge] = useState(challengeIdFromUrl || null);
 
   const videoRef = useRef(null);
   const streamRef = useRef(null);
@@ -114,6 +115,34 @@ export default function AddStory() {
     queryFn: () => base44.entities.PartyPlan.filter({ status: 'happening' }),
     enabled: happeningParticipations.length > 0,
   });
+
+  // Fetch active challenge for the selected plan's community
+  const { data: activeChallenges = [] } = useQuery({
+    queryKey: ['planChallenges', selectedPlan?.id],
+    queryFn: async () => {
+      if (!selectedPlan?.community_id) return [];
+      const now = new Date().toISOString();
+      const challenges = await base44.entities.CommunityChallenge.filter({
+        community_id: selectedPlan.community_id,
+        status: 'active',
+      });
+      return challenges.filter(c => !c.ends_at || c.ends_at > now);
+    },
+    enabled: !!selectedPlan?.community_id,
+  });
+
+  // Check if user already posted a challenge story for the active challenge
+  const { data: myChallengStories = [] } = useQuery({
+    queryKey: ['myChallengeStories', currentUser?.id, activeChallenges[0]?.id],
+    queryFn: () => base44.entities.ExperienceStory.filter({
+      user_id: currentUser.id,
+      challenge_id: activeChallenges[0].id,
+    }),
+    enabled: !!currentUser?.id && activeChallenges.length > 0,
+  });
+
+  const activeChallenge = activeChallenges[0] || null;
+  const alreadyPostedChallenge = myChallengStories.length > 0;
 
   const happeningPlans = allPlans.filter(p =>
     happeningParticipations.some(pp => pp.plan_id === p.id)
@@ -224,7 +253,7 @@ export default function AddStory() {
       await base44.entities.ExperienceStory.create({
         user_id: currentUser.id,
         plan_id: selectedPlan.id,
-        challenge_id: challengeIdFromUrl || undefined,
+        challenge_id: selectedChallenge || undefined,
         media_url: file_url,
         media_type: capturedMedia.type,
         caption: caption.trim() || undefined,
@@ -233,10 +262,10 @@ export default function AddStory() {
         expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       });
       // Increment challenge submissions count
-      if (challengeIdFromUrl) {
-        const challenges = await base44.entities.CommunityChallenge.filter({ id: challengeIdFromUrl });
+      if (selectedChallenge) {
+        const challenges = await base44.entities.CommunityChallenge.filter({ id: selectedChallenge });
         if (challenges[0]) {
-          await base44.entities.CommunityChallenge.update(challengeIdFromUrl, {
+          await base44.entities.CommunityChallenge.update(selectedChallenge, {
             submissions_count: (challenges[0].submissions_count || 0) + 1,
           });
         }
@@ -322,7 +351,7 @@ export default function AddStory() {
       {/* CAMERA PHASE */}
       {phase === 'camera' && (
         <>
-          {/* Challenge badge */}
+          {/* Challenge badge — when posting from URL param */}
           {challengeIdFromUrl && (
             <div className="absolute top-0 left-0 right-0 z-20 flex justify-center pointer-events-none"
               style={{ top: 'calc(env(safe-area-inset-top,0px) + 60px)' }}>
@@ -331,6 +360,39 @@ export default function AddStory() {
                 <span className="text-white text-xs font-bold">{t.challengePostingFor || 'A postar para o desafio'}</span>
               </div>
             </div>
+          )}
+
+          {/* Active challenge banner — only if plan is selected, has a challenge, user hasn't posted yet, and no challenge from URL */}
+          {!challengeIdFromUrl && activeChallenge && !alreadyPostedChallenge && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute left-4 right-4 z-20"
+              style={{ top: 'calc(env(safe-area-inset-top,0px) + 60px)' }}
+            >
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setSelectedChallenge(c => c === activeChallenge.id ? null : activeChallenge.id)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl border backdrop-blur-md transition-all"
+                style={selectedChallenge === activeChallenge.id
+                  ? { background: 'rgba(245,158,11,0.25)', borderColor: 'rgba(245,158,11,0.6)' }
+                  : { background: 'rgba(0,0,0,0.55)', borderColor: 'rgba(255,255,255,0.15)' }
+                }
+              >
+                <span className="text-lg flex-shrink-0">{activeChallenge.emoji || '🏆'}</span>
+                <div className="flex-1 text-left min-w-0">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400">{t.challengeActive || 'Desafio ativo'}</p>
+                  <p className="text-white text-xs font-bold truncate">{activeChallenge.title}</p>
+                </div>
+                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                  selectedChallenge === activeChallenge.id
+                    ? 'bg-yellow-400 border-yellow-400'
+                    : 'border-white/40'
+                }`}>
+                  {selectedChallenge === activeChallenge.id && <div className="w-2 h-2 rounded-full bg-black" />}
+                </div>
+              </motion.button>
+            </motion.div>
           )}
           <video
             ref={videoRef} autoPlay playsInline muted disablePictureInPicture

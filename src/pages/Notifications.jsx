@@ -414,6 +414,7 @@ const typeConfig = {
   plan_location_changed: { emoji: '📍', ring: 'linear-gradient(135deg,#f59e0b,#f97316)', badge: '#f59e0b' },
   new_story_in_plan:     { emoji: '📸', ring: 'linear-gradient(135deg,#a855f7,#ec4899)', badge: '#a855f7' },
   story_reaction:        { emoji: '❤️', ring: 'linear-gradient(135deg,#ec4899,#f97316)', badge: '#ec4899' },
+  challenge_launched:    { emoji: '🏆', ring: 'linear-gradient(135deg,#f59e0b,#f97316)', badge: '#f59e0b' },
 };
 
 function NotifRow({ notification, plan, relatedProfile, onMark, t }) {
@@ -424,6 +425,9 @@ function NotifRow({ notification, plan, relatedProfile, onMark, t }) {
     onMark(notification.id);
     if (notification.type === 'story_reaction' && notification.plan_id) {
       navigate(createPageUrl('StoryView') + `?id=${notification.plan_id}`);
+    } else if (notification.type === 'challenge_launched' && notification.plan_id) {
+      // plan_id is reused to store community_id for challenge notifications
+      navigate(createPageUrl('CommunityView') + `?id=${notification.plan_id}&tab=activity`);
     } else if (notification.plan_id) {
       navigate(createPageUrl('PlanDetails') + `?id=${notification.plan_id}`);
     } else if (notification.related_user_id) {

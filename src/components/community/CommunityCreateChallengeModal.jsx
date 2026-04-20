@@ -56,9 +56,10 @@ export default function CommunityCreateChallengeModal({ communityId, plans, onCl
       await Promise.all(members.map(m =>
         base44.entities.Notification.create({
           user_id: m.user_id,
-          type: 'plan_highlighted',
+          type: 'challenge_launched',
           title: `${form.emoji} ${t.challengeNewNotifTitle}: ${form.title}`,
-          message: form.description || t.challengeNewNotifMessage.replace('{type}', form.type),
+          message: form.description || t.challengeNewNotifMessage,
+          plan_id: communityId, // reuse plan_id to carry community_id for navigation
         })
       ));
     },

@@ -1,0 +1,71 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "new_group_message",
+        "new_group_member",
+        "new_direct_message",
+        "voting_started",
+        "plan_happening_now",
+        "new_story_in_plan",
+        "plan_highlighted",
+        "story_highlighted",
+        "friend_posted_story",
+        "plan_recommendation",
+        "plan_renewed",
+        "plan_unsuccessful",
+        "plan_successful",
+        "friend_created_plan",
+        "friend_request",
+        "plan_time_changed",
+        "plan_location_changed",
+        "story_reaction",
+        "challenge_launched",
+        "friend_accepted"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "related_user_id": {
+      "type": "string"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "user_id",
+    "type",
+    "message"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "data.user_id": "{{user.id}}"
+    },
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.user_id": "{{user.id}}"
+    }
+  }
+}
