@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef} from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -364,6 +364,7 @@ export default function Notifications() {
   const { markAllAsRead } = useNotifications();
   const { t } = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
+  const hasMarkedRead = useRef(false);
 
   useEffect(() => { base44.auth.me().then(setCurrentUser).catch(() => {}); }, []);
 
@@ -382,6 +383,21 @@ export default function Notifications() {
     });
     return () => unsub();
   }, [currentUser?.id]);
+
+  useEffect(() => {
+    if (!currentUser?.id || notifications.length === 0 || hasMarkedRead.current) return;
+    hasMarkedRead.current = true;
+
+    const unreadIds = notifications.filter(n => !n.is_read).map(n => n.id);
+    if (unreadIds.length === 0) return;
+
+    Promise.all(
+      unreadIds.map(id => base44.entities.Notification.update(id, { is_read: true }))
+    ).then(() => {
+      queryClient.invalidateQueries(['notifications', currentUser?.id]);
+      markAllAsRead();
+    });
+  }, [currentUser?.id, notifications]);
 
   const planIds = useMemo(() => [...new Set(notifications.filter(n => n.plan_id).map(n => n.plan_id))], [notifications]);
   const userIds = useMemo(() => [...new Set(notifications.filter(n => n.related_user_id).map(n => n.related_user_id))], [notifications]);
