@@ -1,28 +1,53 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { ShieldCheck, Crown, Flame } from 'lucide-react';
+import { ShieldCheck, Crown, Flame, Trophy } from 'lucide-react';
 import { useLanguage } from '../common/LanguageContext';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 
-export default function CommunityMembersSpotlight({ members, profilesMap, plans, tc, currentUser }) {
+export default function CommunityMembersSpotlight({ members, profilesMap, plans, stories, tc, currentUser, communityId }) {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  if (!members.length) return null;
+  // Fetch challenge stories to count challenge completions per user
+  const { data: challengeScores = [] } = useQuery({
+    queryKey: ['challengeScores', communityId],
+    queryFn: () => base44.entities.ChallengeScore.filter({ community_id: communityId }),
+    enabled: !!communityId,
+  });
 
-  const enriched = members
+  // Build score per user: admin (500) + stories in community (10 each) + challenge completions (50 each) + plan participations (20 each) + challenge score points (1 each)
+  const planIds = useMemo(() => new Set((plans || []).map(p => p.id)), [plans]);
+
+  const enriched = useMemo(() => members
     .map(m => {
       const profile = profilesMap[m.user_id];
       if (!profile) return null;
       const isAdmin = m.role === 'admin';
-      const storiesCount = profile.total_stories_count || 0;
-      const score = (isAdmin ? 1000 : 0) + storiesCount;
-      return { member: m, profile, isAdmin, score };
+
+      // Stories posted in this community
+      const communityStoriesCount = (stories || []).filter(s => s.user_id === m.user_id && planIds.has(s.plan_id)).length;
+      // Challenge stories (stories with challenge_id in this community)
+      const challengeStoriesCount = (stories || []).filter(s => s.user_id === m.user_id && planIds.has(s.plan_id) && !!s.challenge_id).length;
+      // Challenge score points
+      const userChallengeScore = challengeScores
+        .filter(cs => cs.user_id === m.user_id)
+        .reduce((sum, cs) => sum + (cs.total_points || 0), 0);
+
+      const score =
+        (isAdmin ? 500 : 0) +
+        communityStoriesCount * 10 +
+        challengeStoriesCount * 50 +
+        userChallengeScore;
+
+      return { member: m, profile, isAdmin, score, communityStoriesCount, challengeStoriesCount };
     })
     .filter(Boolean)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 12);
+    .slice(0, 12),
+  [members, profilesMap, stories, planIds, challengeScores]);
 
   if (!enriched.length) return null;
 
@@ -40,7 +65,7 @@ export default function CommunityMembersSpotlight({ members, profilesMap, plans,
 
       {/* Top 3 podium-style */}
       <div className="flex gap-2 mb-3">
-        {topThree.map(({ member, profile, isAdmin }, i) => (
+        {topThree.map(({ member, profile, isAdmin, communityStoriesCount, challengeStoriesCount }, i) => (
           <motion.button
             key={member.id}
             whileTap={{ scale: 0.95 }}
@@ -73,16 +98,21 @@ export default function CommunityMembersSpotlight({ members, profilesMap, plans,
             <span className="text-white text-xs font-bold truncate w-full text-center">{profile.display_name || t.user}</span>
 
             {/* Badges */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap justify-center">
               {isAdmin && (
                 <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full" style={{ background: `${tc}25`, color: tc }}>
                   {t.admin.toUpperCase()}
                 </span>
               )}
               {profile.is_verified && <ShieldCheck className="w-3 h-3 text-blue-400" />}
-              {(profile.total_stories_count || 0) > 0 && (
+              {communityStoriesCount > 0 && (
                 <span className="flex items-center gap-0.5 text-[9px] text-orange-400">
-                  <Flame className="w-2.5 h-2.5" />{profile.total_stories_count}
+                  <Flame className="w-2.5 h-2.5" />{communityStoriesCount}
+                </span>
+              )}
+              {challengeStoriesCount > 0 && (
+                <span className="flex items-center gap-0.5 text-[9px] text-yellow-400">
+                  <Trophy className="w-2.5 h-2.5" />{challengeStoriesCount}
                 </span>
               )}
             </div>
@@ -93,13 +123,16 @@ export default function CommunityMembersSpotlight({ members, profilesMap, plans,
       {/* Rest as compact list */}
       {rest.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
-          {rest.map(({ member, profile, isAdmin }) => (
+          {rest.map(({ member, profile, isAdmin, challengeStoriesCount }) => (
             <motion.button
               key={member.id}
               whileTap={{ scale: 0.93 }}
               onClick={() => navigate(createPageUrl('UserProfile') + `?id=${member.user_id}`)}
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border"
-              style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)' }}
+              style={{
+                background: challengeStoriesCount > 0 ? 'rgba(251,146,60,0.08)' : 'rgba(255,255,255,0.04)',
+                borderColor: challengeStoriesCount > 0 ? 'rgba(251,146,60,0.25)' : 'rgba(255,255,255,0.08)',
+              }}
             >
               <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0">
                 {profile.photos?.[0]
@@ -109,6 +142,7 @@ export default function CommunityMembersSpotlight({ members, profilesMap, plans,
               <span className="text-white text-xs">{profile.display_name || t.user}</span>
               {isAdmin && <span className="text-[8px] font-bold" style={{ color: tc }}>★</span>}
               {profile.is_verified && <ShieldCheck className="w-2.5 h-2.5 text-blue-400" />}
+              {challengeStoriesCount > 0 && <Trophy className="w-2.5 h-2.5 text-yellow-400" />}
             </motion.button>
           ))}
         </div>

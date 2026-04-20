@@ -432,6 +432,8 @@ export default function CommunityView() {
                   members={members}
                   profilesMap={profilesMap}
                   plans={plans}
+                  stories={stories}
+                  communityId={communityId}
                   tc={tc}
                   currentUser={currentUser}
                 />

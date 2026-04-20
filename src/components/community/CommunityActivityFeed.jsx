@@ -12,6 +12,17 @@ export default function CommunityActivityFeed({ community, members, plans, stori
   const navigate = useNavigate();
   const { t } = useLanguage();
 
+  // Fetch challenges for this community to resolve challenge names
+  const { data: challenges = [] } = useQuery({
+    queryKey: ['communityChallenges', community?.id],
+    queryFn: () => base44.entities.CommunityChallenge.filter({ community_id: community.id }),
+    enabled: !!community?.id,
+  });
+
+  const challengesMap = useMemo(() =>
+    challenges.reduce((acc, c) => { acc[c.id] = c; return acc; }, {}),
+  [challenges]);
+
   const activities = useMemo(() => {
     const items = [];
 
@@ -40,18 +51,21 @@ export default function CommunityActivityFeed({ community, members, plans, stori
 
     stories.forEach(s => {
       const profile = profilesMap[s.user_id];
+      const isChallenge = !!s.challenge_id;
+      const challenge = isChallenge ? challengesMap[s.challenge_id] : null;
       items.push({
         id: `story-${s.id}`,
-        type: 'story_posted',
+        type: isChallenge ? 'challenge_story' : 'story_posted',
         date: new Date(s.created_date),
         story: s,
         profile,
         userId: s.user_id,
+        challenge,
       });
     });
 
     return items.sort((a, b) => b.date - a.date).slice(0, 30);
-  }, [members, plans, stories, profilesMap]);
+  }, [members, plans, stories, profilesMap, challengesMap]);
 
   const stats = useMemo(() => {
     const now = new Date();
@@ -70,12 +84,14 @@ export default function CommunityActivityFeed({ community, members, plans, stori
     if (type === 'member_join') return <UserPlus className="w-3.5 h-3.5 text-green-400" />;
     if (type === 'plan_created') return <CalendarDays className="w-3.5 h-3.5 text-blue-400" />;
     if (type === 'story_posted') return <Camera className="w-3.5 h-3.5 text-purple-400" />;
+    if (type === 'challenge_story') return <Trophy className="w-3.5 h-3.5 text-orange-400" />;
   };
 
   const activityColor = (type) => {
     if (type === 'member_join') return 'bg-green-500/15 border-green-500/20';
     if (type === 'plan_created') return 'bg-blue-500/15 border-blue-500/20';
     if (type === 'story_posted') return 'bg-purple-500/15 border-purple-500/20';
+    if (type === 'challenge_story') return 'bg-orange-500/15 border-orange-500/30';
   };
 
   const activityText = (item) => {
@@ -89,6 +105,16 @@ export default function CommunityActivityFeed({ community, members, plans, stori
     if (item.type === 'story_posted') {
       const name = item.profile?.display_name || t.someone;
       return { main: name, sub: t.postedStory };
+    }
+    if (item.type === 'challenge_story') {
+      const name = item.profile?.display_name || t.someone;
+      const challengeName = item.challenge?.title || (t.challenge || 'Desafio');
+      return {
+        main: name,
+        sub: `🏆 ${t.completedChallenge || 'Completou o desafio'}: ${challengeName}`,
+        challengeEmoji: item.challenge?.emoji || '🏆',
+        challengeName,
+      };
     }
   };
 
@@ -157,7 +183,7 @@ export default function CommunityActivityFeed({ community, members, plans, stori
             const text = activityText(item);
             if (!text) return null;
 
-            const isClickable = item.type === 'member_join' || item.type === 'story_posted';
+            const isClickable = item.type === 'member_join' || item.type === 'story_posted' || item.type === 'challenge_story';
             const isPlanClickable = item.type === 'plan_created';
 
             return (
@@ -173,23 +199,30 @@ export default function CommunityActivityFeed({ community, members, plans, stori
                 className={`flex items-center gap-3 p-3 rounded-2xl border ${activityColor(item.type)} ${isClickable || isPlanClickable ? 'cursor-pointer active:scale-98' : ''}`}
               >
                 <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center border border-white/10"
-                  style={{ background: 'rgba(255,255,255,0.06)' }}>
-                  {(item.type === 'member_join' || item.type === 'story_posted') && item.profile?.photos?.[0]
+                  style={{ background: item.type === 'challenge_story' ? 'rgba(251,146,60,0.15)' : 'rgba(255,255,255,0.06)' }}>
+                  {(item.type === 'member_join' || item.type === 'story_posted' || item.type === 'challenge_story') && item.profile?.photos?.[0]
                     ? <img src={item.profile.photos[0]} alt="" className="w-full h-full object-cover" />
                     : item.type === 'plan_created' && item.plan?.cover_image
                       ? <img src={item.plan.cover_image} alt="" className="w-full h-full object-cover" />
                       : <div className="flex items-center justify-center w-full h-full text-sm">
-                          {item.type === 'member_join' ? '👤' : item.type === 'plan_created' ? '🎉' : '📸'}
+                          {item.type === 'member_join' ? '👤' : item.type === 'plan_created' ? '🎉' : item.type === 'challenge_story' ? (item.challenge?.emoji || '🏆') : '📸'}
                         </div>}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <p className="text-white text-xs font-bold truncate">{text.main}</p>
-                  <p className="text-gray-500 text-[10px] truncate">{text.sub}</p>
+                  <p className={`text-[10px] truncate ${item.type === 'challenge_story' ? 'text-orange-400 font-semibold' : 'text-gray-500'}`}>{text.sub}</p>
+                  {item.type === 'challenge_story' && text.challengeName && (
+                    <div className="mt-1 flex items-center gap-1">
+                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-orange-500/25 text-orange-300 truncate max-w-[120px]">
+                        {text.challengeEmoji} {text.challengeName}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: item.type === 'challenge_story' ? 'rgba(251,146,60,0.15)' : 'rgba(255,255,255,0.06)' }}>
                     {activityIcon(item.type)}
                   </div>
                   <p className="text-[9px] text-gray-600">
