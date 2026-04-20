@@ -202,17 +202,13 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
   const { data: existingFriendship, isLoading: isLoadingFriendship } = useQuery({
     queryKey: ['friendship', notification.user_id, notification.related_user_id],
     queryFn: async () => {
-      console.log('[DEBUG] Buscando amizade (Direção A):', { user: notification.user_id, friend: notification.related_user_id });
       const resA = await base44.entities.Friendship.filter({ user_id: notification.user_id, friend_id: notification.related_user_id });
       
       if (resA && resA.length > 0) {
-        console.log('[DEBUG] Resultado A:', resA);
         return resA;
       }
 
-      console.log('[DEBUG] Buscando amizade (Direção B):', { user: notification.related_user_id, friend: notification.user_id });
       const resB = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
-      console.log('[DEBUG] Resultado B:', resB);
       return resB;
     },
     select: (data) => data?.find(f => f.status === 'accepted') || data?.[0] || null,
@@ -229,22 +225,11 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
     (notification.is_read ? 'removed' : null)
   );
 
-  console.log('[DEBUG] FriendRequestRow Render:', {
-    notificationId: notification.id,
-    isRead: notification.is_read,
-    localStatus,
-    existingFriendshipStatus: existingFriendship?.status,
-    derivedStatus,
-    isLoadingFriendship
-  });
-
   const accept = useMutation({
     onMutate: () => {
-      console.log('[DEBUG] onMutate: Definindo localStatus como accepted');
       setLocalStatus('accepted');
     },
     mutationFn: async () => {
-      console.log('[DEBUG] Iniciando Accept Mutation');
       
       // 1. Find all related friendship records
       const [reqsA, reqsB] = await Promise.all([
@@ -253,12 +238,10 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
       ]);
       
       const allReqs = [...(reqsA || []), ...(reqsB || [])];
-      console.log('[DEBUG] Todos os registros encontrados:', allReqs);
       
       // 2. Update all to accepted
       const updates = allReqs.map(item => {
         if (item.status !== 'accepted') {
-          console.log('[DEBUG] Atualizando para accepted:', item.id);
           return base44.entities.Friendship.update(item.id, { status: 'accepted' });
         }
         return null;
@@ -268,11 +251,9 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
 
       // 3. Ensure both directions exist
       if (!allReqs.some(r => r.user_id === notification.user_id && r.friend_id === notification.related_user_id)) {
-        console.log('[DEBUG] Criando direção A->B');
         await base44.entities.Friendship.create({ user_id: notification.user_id, friend_id: notification.related_user_id, status: 'accepted' });
       }
       if (!allReqs.some(r => r.user_id === notification.related_user_id && r.friend_id === notification.user_id)) {
-        console.log('[DEBUG] Criando direção B->A');
         await base44.entities.Friendship.create({ user_id: notification.related_user_id, friend_id: notification.user_id, status: 'accepted' });
       }
 
@@ -290,27 +271,23 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
       } catch (e) { console.error('Erro ao disparar notificação:', e); }
     },
     onSuccess: () => {
-      console.log('[DEBUG] Mutation Success');
       queryClient.invalidateQueries({ queryKey: ['friendship', notification.user_id, notification.related_user_id] });
       queryClient.invalidateQueries({ queryKey: ['notifications', notification.user_id] });
       onMark(notification.id);
     },
     onError: (err) => {
-      console.error('[DEBUG] Mutation Error:', err);
       setLocalStatus(null);
     }
   });
 
   const decline = useMutation({
     mutationFn: async () => {
-      console.log('[DEBUG] Iniciando Decline Mutation');
       const reqsA = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
       const reqsB = await base44.entities.Friendship.filter({ user_id: notification.user_id, friend_id: notification.related_user_id });
       const allReqs = [...(reqsA || []), ...(reqsB || [])];
       
       for (const item of allReqs) {
         if (item.status === 'pending') {
-          console.log('[DEBUG] Declinando registro:', item.id);
           await base44.entities.Friendship.update(item.id, { status: 'declined' });
         }
       }
