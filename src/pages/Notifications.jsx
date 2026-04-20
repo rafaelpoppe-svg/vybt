@@ -196,18 +196,6 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
   const queryClient = useQueryClient();
   const { t } = useLanguage();
   const [localStatus, setLocalStatus] = useState(null);
-  const status = localStatus || friendship?.status;
-
-  const { data: friendship } = useQuery({
-    queryKey: ['friendship', notification.user_id, notification.related_user_id],
-    queryFn: async () => {
-      const res = await base44.entities.Friendship.filter({
-        user_id: notification.related_user_id,
-        friend_id: notification.user_id
-      });
-      return res[0];
-    }
-  });
 
   const accept = useMutation({
     mutationFn: async () => {
@@ -283,9 +271,9 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
         <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date, t)}</p>
       </div>
 
-      {status === 'accepted' ? (
+      {useStatus === 'accepted' ? (
         <span className="text-[11px] font-bold text-[#00c6d2] px-3 py-1 rounded-lg bg-[#00c6d2]/15">{t.friends} ✓</span>
-      ) : status === 'declined' ? (
+      ) : useStatus === 'declined' ? (
         <span className="text-[11px] text-gray-600">{t.removed}</span>
       ) : (
         <div className="flex gap-2 flex-shrink-0">
