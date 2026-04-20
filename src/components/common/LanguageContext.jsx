@@ -956,6 +956,7 @@ export const translations = {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Acesso a funcionalidades e estratégia de marketing',
+    pending: 'Pendente...'
   },
 
 en: {
@@ -1913,6 +1914,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Access to marketing features & strategy',
+    pending: 'Pending...'
   },
 
   es: {
@@ -2870,6 +2872,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Acceso a funciones y estrategia de marketing',
+    pending: 'Pendiente...'
 
   },
 
@@ -3828,6 +3831,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Accès aux fonctionnalités et à la stratégie marketing',
+    pending: 'En attente...'
   },
 
   it: {
@@ -4785,6 +4789,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Accesso alle funzionalità e alla strategia di marketing',
+    pending: 'In attesa...',
   },
 };
 
