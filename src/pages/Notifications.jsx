@@ -365,10 +365,10 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
         <motion.button whileTap={{ scale: 0.92 }}
           onClick={() => addFriend.mutate()} disabled={addFriend.isPending}
           className="px-3.5 py-1.5 rounded-lg text-[12px] font-bold text-white bg-[#00c6d2]">
-          {addFriend.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : "Adicionar"}
+          {addFriend.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : t.add}
         </motion.button>
       ) : derivedStatus === 'pending' ? (
-        <span className="text-[11px] text-gray-500 italic">Pendente...</span>
+        <span className="text-[11px] text-gray-500 italic">{t.pending}</span>
       ) : (
         <div className="flex gap-2 flex-shrink-0">
           <motion.button whileTap={{ scale: 0.92 }}
