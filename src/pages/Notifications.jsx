@@ -198,16 +198,25 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
   const [localStatus, setLocalStatus] = useState(null);
 
   // Fetch the real friendship status to handle page re-enters correctly
+  // We check both directions to ensure we find the friendship regardless of who initiated it
   const { data: existingFriendship, isLoading: isLoadingFriendship } = useQuery({
-    queryKey: ['friendship', notification.related_user_id, notification.user_id],
+    queryKey: ['friendship', notification.user_id, notification.related_user_id],
     queryFn: async () => {
-      console.log('[DEBUG] Buscando amizade:', { requester: notification.related_user_id, target: notification.user_id });
-      const res = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
-      console.log('[DEBUG] Resultado da busca:', res);
-      return res;
+      console.log('[DEBUG] Buscando amizade (Direção A):', { user: notification.user_id, friend: notification.related_user_id });
+      const resA = await base44.entities.Friendship.filter({ user_id: notification.user_id, friend_id: notification.related_user_id });
+      
+      if (resA && resA.length > 0) {
+        console.log('[DEBUG] Resultado A:', resA);
+        return resA;
+      }
+
+      console.log('[DEBUG] Buscando amizade (Direção B):', { user: notification.related_user_id, friend: notification.user_id });
+      const resB = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
+      console.log('[DEBUG] Resultado B:', resB);
+      return resB;
     },
-    select: (data) => data?.[0] || null,
-    staleTime: 30000,
+    select: (data) => data?.find(f => f.status === 'accepted') || data?.[0] || null,
+    staleTime: 0, // Set to 0 to ensure fresh data on re-entry
   });
 
   // Derive the display status: localStatus takes priority (optimistic), then real DB value
