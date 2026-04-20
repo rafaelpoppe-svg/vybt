@@ -219,11 +219,14 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
     staleTime: 0, // Set to 0 to ensure fresh data on re-entry
   });
 
-  // Derive the display status: localStatus takes priority (optimistic), then real DB value
+  // Derive the display status: 
+  // 1. localStatus (optimistic update)
+  // 2. existingFriendship (real-time DB status)
+  // 3. notification.is_read (fallback for old notifications where friendship might have been removed)
   const derivedStatus = localStatus || (
     existingFriendship?.status === 'accepted' ? 'accepted' :
     existingFriendship?.status === 'declined' ? 'declined' :
-    null
+    (notification.is_read ? 'accepted' : null)
   );
 
   console.log('[DEBUG] FriendRequestRow Render:', {
