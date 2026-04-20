@@ -197,6 +197,21 @@ export default function CommunityView() {
   const upcomingPlans = plans.filter(p => p.date && new Date(p.date) >= new Date(now.toDateString())).sort((a, b) => new Date(a.date) - new Date(b.date));
   const pastPlans = plans.filter(p => p.date && new Date(p.date) < new Date(now.toDateString())).sort((a, b) => new Date(b.date) - new Date(a.date));
 
+  // The happening plan linked to the active challenge (or any happening plan in the community)
+  const challengeLinkedPlan = activeChallenge?.plan_id
+    ? plans.find(p => p.id === activeChallenge.plan_id)
+    : plans.find(p => p.status === 'happening');
+
+  const handleChallengeTap = () => {
+    if (!isMember) { setShowChallengeDetail(true); return; }
+    if (challengeLinkedPlan) {
+      navigate(createPageUrl('AddStory') + `?planId=${challengeLinkedPlan.id}&challengeId=${activeChallenge.id}`);
+    } else {
+      // No happening plan — show detail so they can see what's needed
+      setShowChallengeDetail(true);
+    }
+  };
+
   const canCreatePlan = () => {
     if (!isMember) return false;
     if (community?.plan_creation_policy === 'admins_only') return isAdmin;
@@ -308,7 +323,7 @@ export default function CommunityView() {
             {activeTab === 'plans' && (
               <motion.div key="plans" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }} className="space-y-4">
                 {activeChallenge && (
-                  <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setShowChallengeDetail(true)} />
+                  <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={handleChallengeTap} />
                 )}
                 {upcomingPlans.length === 0 && pastPlans.length === 0 ? (
                   <div className="text-center py-20">
@@ -358,7 +373,7 @@ export default function CommunityView() {
               <motion.div key="stories" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
                 {activeChallenge && (
                   <div className="mb-4">
-                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setShowChallengeDetail(true)} />
+                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={handleChallengeTap} />
                   </div>
                 )}
                 {liveStories.length > 0 && (
@@ -424,7 +439,7 @@ export default function CommunityView() {
               <motion.div key="activity" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.18 }}>
                 {activeChallenge ? (
                   <div className="mb-4">
-                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={() => setShowChallengeDetail(true)} />
+                    <CommunityChallengeBanner challenge={activeChallenge} tc={tc} onTap={handleChallengeTap} />
                     {isAdmin && (
                       <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowCreateChallenge(true)}
                         className="w-full mt-2 py-2.5 rounded-xl text-xs font-bold border border-white/10 text-gray-400">
