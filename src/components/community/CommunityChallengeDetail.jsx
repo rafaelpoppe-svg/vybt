@@ -1,34 +1,38 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { X, Trophy, Clock, Flame, Camera, Crown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Trophy, Clock, Flame, Camera, Crown, ChevronRight } from 'lucide-react';
 import { formatDistanceToNow, isPast } from 'date-fns';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import ChallengeRankingTop3 from './ChallengeRankingTop3';
-import { useCalculateChallengeScores } from './useCalculateChallengeScores';
 import { useLanguage } from '../common/LanguageContext';
 
 const typeStyles = {
-  night: { gradient: 'linear-gradient(135deg, #1a0a3e, #2d1b69)', accent: '#a78bfa', label: '🌙 Night Challenge' },
-  day: { gradient: 'linear-gradient(135deg, #3d1a00, #7c3d00)', accent: '#fb923c', label: '☀️ Day Challenge' },
+  night:   { gradient: 'linear-gradient(135deg, #1a0a3e, #2d1b69)', accent: '#a78bfa', label: '🌙 Night Challenge' },
+  day:     { gradient: 'linear-gradient(135deg, #3d1a00, #7c3d00)',  accent: '#fb923c', label: '☀️ Day Challenge' },
   weekend: { gradient: 'linear-gradient(135deg, #3d0a2e, #7c1a5c)', accent: '#f472b6', label: '🎉 Weekend Challenge' },
-  custom: { gradient: 'linear-gradient(135deg, #0f172a, #1e293b)', accent: '#00c6d2', label: '⚡ Challenge' },
+  custom:  { gradient: 'linear-gradient(135deg, #0f172a, #1e293b)',  accent: '#00c6d2', label: '⚡ Challenge' },
 };
 
 export default function CommunityChallengeDetail({ challenge, communityId, profilesMap, isAdmin, currentUser, tc, onClose }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [selectingWinner, setSelectingWinner] = useState(false);
   const { t } = useLanguage();
+
   const s = typeStyles[challenge.type] || typeStyles.custom;
   const ended = challenge.ends_at ? isPast(new Date(challenge.ends_at)) : false;
   const timeLeft = !ended && challenge.ends_at ? formatDistanceToNow(new Date(challenge.ends_at), { addSuffix: false }) : null;
 
+  // Fetch all stories submitted for this challenge
   const { data: challengeStories = [] } = useQuery({
     queryKey: ['challengeStories', challenge.id],
     queryFn: async () => {
+      // Stories directly linked to this challenge
+      const direct = await base44.entities.ExperienceStory.filter({ challenge_id: challenge.id });
+      if (direct.length > 0) return direct;
+
+      // Fallback: stories from the plan (or all community plans) posted during the challenge window
       let planIds = [];
       if (challenge.plan_id) {
         planIds = [challenge.plan_id];
@@ -39,23 +43,19 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
       if (!planIds.length) return [];
       const all = await base44.entities.ExperienceStory.list('-created_date', 200);
       const challengeStart = challenge.starts_at ? new Date(challenge.starts_at) : new Date(0);
-      return all.filter(s =>
-        planIds.includes(s.plan_id) &&
-        new Date(s.created_date) >= challengeStart
-      );
+      return all.filter(s => planIds.includes(s.plan_id) && new Date(s.created_date) >= challengeStart);
     },
   });
 
-  const { data: storyReactions = [] } = useQuery({
-    queryKey: ['storyReactions', challenge.id],
-    queryFn: async () => {
-      const allReactions = await base44.entities.StoryReaction.list('-created_date', 500);
-      return allReactions.filter(r => challengeStories.some(s => s.id === r.story_id));
-    },
-    enabled: challengeStories.length > 0,
-  });
+  // Group stories by user
+  const participantMap = challengeStories.reduce((acc, story) => {
+    if (!acc[story.user_id]) acc[story.user_id] = { user_id: story.user_id, stories: [] };
+    acc[story.user_id].stories.push(story);
+    return acc;
+  }, {});
+  const participants = Object.values(participantMap).sort((a, b) => b.stories.length - a.stories.length);
 
-  const scores = useCalculateChallengeScores(challengeStories, storyReactions);
+  const winner = challenge.winner_user_id ? profilesMap[challenge.winner_user_id] : null;
 
   const selectWinnerMutation = useMutation({
     mutationFn: (userId) => base44.entities.CommunityChallenge.update(challenge.id, {
@@ -64,28 +64,19 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
     }),
     onSuccess: () => {
       queryClient.invalidateQueries(['communityChallenge', communityId]);
-      setSelectingWinner(false);
     },
   });
 
   const handleParticipate = () => {
+    onClose();
     if (challenge.plan_id) {
       navigate(createPageUrl('AddStory') + `?planId=${challenge.plan_id}&challengeId=${challenge.id}`);
-    } else {
-      onClose();
     }
+    // If no specific plan, the user selects a plan in AddStory — challengeId is not passed (they pick from happening plans)
   };
 
-  const userStories = Object.values(
-    challengeStories.reduce((acc, story) => {
-      if (!acc[story.user_id]) acc[story.user_id] = { user_id: story.user_id, stories: [], totalViews: 0 };
-      acc[story.user_id].stories.push(story);
-      acc[story.user_id].totalViews += story.view_count || 0;
-      return acc;
-    }, {})
-  ).sort((a, b) => b.totalViews - a.totalViews);
-
-  const winner = challenge.winner_user_id ? profilesMap[challenge.winner_user_id] : null;
+  const myStoryCount = participantMap[currentUser?.id]?.stories?.length || 0;
+  const hasParticipated = myStoryCount > 0;
 
   return (
     <motion.div
@@ -143,7 +134,34 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
         </div>
 
         <div className="px-4 pt-4 space-y-5">
-          <ChallengeRankingTop3 scores={scores} profilesMap={profilesMap} tc={tc} />
+
+          {/* My participation status */}
+          {!ended && currentUser && (
+            <div className="rounded-2xl p-3 border flex items-center justify-between"
+              style={hasParticipated
+                ? { background: `${s.accent}15`, borderColor: `${s.accent}40` }
+                : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div>
+                <p className="text-white text-sm font-bold">
+                  {hasParticipated ? `✅ ${t.challengeYouParticipated || 'Participaste!'}` : `📸 ${t.challengeNotParticipated || 'Ainda não participaste'}`}
+                </p>
+                {hasParticipated && (
+                  <p className="text-xs mt-0.5" style={{ color: s.accent }}>
+                    {myStoryCount} {myStoryCount === 1 ? (t.storySingular || 'story') : (t.storiesPlural || 'stories')} {t.storiesSubmitted || 'submetidas'}
+                  </p>
+                )}
+              </div>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={handleParticipate}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black text-white"
+                style={{ background: `linear-gradient(135deg, ${s.accent}, ${tc})` }}
+              >
+                <Camera className="w-3.5 h-3.5" />
+                {hasParticipated ? (t.challengePostAgain || 'Postar outra') : (t.challengePostToParticipate || 'Participar')}
+              </motion.button>
+            </div>
+          )}
 
           {/* Winner announcement */}
           {winner && (
@@ -164,27 +182,14 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
             </motion.div>
           )}
 
-          {/* Participate button */}
-          {!ended && !winner && (
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={handleParticipate}
-              className="w-full py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 text-white"
-              style={{ background: `linear-gradient(135deg, ${s.accent}, ${tc})` }}
-            >
-              <Camera className="w-5 h-5" />
-              {t.challengePostToParticipate}
-            </motion.button>
-          )}
-
-          {/* Leaderboard */}
-          {userStories.length > 0 && (
+          {/* Participants list */}
+          {participants.length > 0 ? (
             <div>
               <p className="text-xs font-black uppercase tracking-wider text-gray-500 mb-3">
-                {ended ? t.challengeFinalLeaderboard : t.challengeLiveLeaderboard}
+                {ended ? (t.challengeFinalLeaderboard || 'Resultado Final') : (t.challengeParticipants || 'Participantes')}
               </p>
               <div className="space-y-2">
-                {userStories.slice(0, 10).map((entry, idx) => {
+                {participants.slice(0, 15).map((entry, idx) => {
                   const profile = profilesMap[entry.user_id];
                   const isWinner = challenge.winner_user_id === entry.user_id;
                   const medals = ['🥇', '🥈', '🥉'];
@@ -205,6 +210,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
                         {isWinner ? '👑' : medals[idx] || `#${idx + 1}`}
                       </span>
 
+                      {/* Story thumbnail */}
                       {topStory && (
                         <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0">
                           {topStory.media_type === 'video'
@@ -213,6 +219,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
                         </div>
                       )}
 
+                      {/* Avatar */}
                       {profile?.photos?.[0]
                         ? <img src={profile.photos[0]} alt="" className="w-9 h-9 rounded-full object-cover flex-shrink-0" />
                         : <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0"
@@ -223,10 +230,11 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
                       <div className="flex-1 min-w-0">
                         <p className="text-white text-sm font-bold truncate">{profile?.display_name || t.member}</p>
                         <p className="text-gray-500 text-[10px]">
-                          {entry.stories.length} {entry.stories.length === 1 ? t.storySingular : t.storiesPlural} · {entry.totalViews} {t.views}
+                          {entry.stories.length} {entry.stories.length === 1 ? (t.storySingular || 'story') : (t.storiesPlural || 'stories')}
                         </p>
                       </div>
 
+                      {/* Admin pick winner */}
                       {isAdmin && ended && !challenge.winner_user_id && (
                         <motion.button
                           whileTap={{ scale: 0.93 }}
@@ -234,7 +242,7 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
                           className="px-3 py-1.5 rounded-xl text-[10px] font-black text-black flex-shrink-0"
                           style={{ background: 'rgba(250,204,21,0.9)' }}
                         >
-                          {t.challengePickWinner}
+                          {t.challengePickWinner || 'Escolher'}
                         </motion.button>
                       )}
                     </motion.div>
@@ -242,14 +250,11 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
                 })}
               </div>
             </div>
-          )}
-
-          {/* Empty state */}
-          {challengeStories.length === 0 && (
+          ) : (
             <div className="text-center py-12">
               <p className="text-4xl mb-3">📸</p>
               <p className="text-gray-400 font-bold">{t.noStoriesYet}</p>
-              <p className="text-gray-600 text-xs mt-1">{t.challengeBeFirst}</p>
+              <p className="text-gray-600 text-xs mt-1">{t.challengeBeFirst || 'Sê o primeiro a participar!'}</p>
             </div>
           )}
         </div>

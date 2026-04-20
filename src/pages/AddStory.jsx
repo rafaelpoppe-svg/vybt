@@ -63,6 +63,7 @@ export default function AddStory() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const planIdFromUrl = urlParams.get('planId');
+  const challengeIdFromUrl = urlParams.get('challengeId');
 
   const [phase, setPhase] = useState(planIdFromUrl ? 'camera' : 'plan_select');
   const [mode, setMode] = useState('photo');
@@ -223,6 +224,7 @@ export default function AddStory() {
       await base44.entities.ExperienceStory.create({
         user_id: currentUser.id,
         plan_id: selectedPlan.id,
+        challenge_id: challengeIdFromUrl || undefined,
         media_url: file_url,
         media_type: capturedMedia.type,
         caption: caption.trim() || undefined,
@@ -230,6 +232,15 @@ export default function AddStory() {
         moderation_status: 'pending',
         expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       });
+      // Increment challenge submissions count
+      if (challengeIdFromUrl) {
+        const challenges = await base44.entities.CommunityChallenge.filter({ id: challengeIdFromUrl });
+        if (challenges[0]) {
+          await base44.entities.CommunityChallenge.update(challengeIdFromUrl, {
+            submissions_count: (challenges[0].submissions_count || 0) + 1,
+          });
+        }
+      }
       const profiles = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
       if (profiles[0]) {
         await base44.entities.UserProfile.update(profiles[0].id, {
@@ -311,6 +322,16 @@ export default function AddStory() {
       {/* CAMERA PHASE */}
       {phase === 'camera' && (
         <>
+          {/* Challenge badge */}
+          {challengeIdFromUrl && (
+            <div className="absolute top-0 left-0 right-0 z-20 flex justify-center pointer-events-none"
+              style={{ top: 'calc(env(safe-area-inset-top,0px) + 60px)' }}>
+              <div className="px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center gap-2">
+                <span className="text-base">🔥</span>
+                <span className="text-white text-xs font-bold">{t.challengePostingFor || 'A postar para o desafio'}</span>
+              </div>
+            </div>
+          )}
           <video
             ref={videoRef} autoPlay playsInline muted disablePictureInPicture
             x-webkit-airplay="deny" controlsList="nodownload nofullscreen noremoteplayback"

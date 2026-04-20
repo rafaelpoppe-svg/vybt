@@ -9,6 +9,10 @@
       "type": "string",
       "description": "Optional: if set, this story belongs to a plan group"
     },
+    "challenge_id": {
+      "type": "string",
+      "description": "Optional: if set, this story is a submission for a community challenge"
+    },
     "media_url": {
       "type": "string"
     },
@@ -96,5 +100,17 @@
   "required": [
     "user_id",
     "media_url"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "read": {},
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.user_id": "{{user.id}}"
+    }
+  }
 }
