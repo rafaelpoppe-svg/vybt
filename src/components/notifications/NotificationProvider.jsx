@@ -94,28 +94,25 @@ export function NotificationProvider({ children }) {
   useEffect(() => {
     if (!currentUser?.id) return;
 
-    const unsubscribe = base44.entities.Notification.subscribe((event) => {
+    const unsubscribe = base44.entities.Notification.subscribe(async (event) => {
       const notification = event.data;
       if (!notification || notification.user_id !== currentUser.id) return;
 
-      // Handle updates (mark as read) — decrement counter
-      if (event.type === 'update') {
-        if (notification.is_read) {
-          setUnreadCount(prev => Math.max(0, prev - 1));
-          queryClient.invalidateQueries(['notifications', currentUser.id]);
-        }
-        return;
+      // Em qualquer create ou update, re-sincronizar o count com a BD
+      if (event.type === 'create' || event.type === 'update') {
+        // Re-fetch o count real da BD em vez de incrementar/decrementar
+        const unread = await base44.entities.Notification.filter({
+          user_id: currentUser.id,
+          is_read: false,
+        });
+        setUnreadCount(unread.length);
+        queryClient.invalidateQueries(['notifications', currentUser.id]);
       }
 
       if (event.type !== 'create') return;
 
-      // Deduplicate — never show the same notification twice
       if (shownIds.current.has(notification.id)) return;
       shownIds.current.add(notification.id);
-
-      // Update unread count
-      setUnreadCount(prev => prev + 1);
-      queryClient.invalidateQueries(['notifications', currentUser.id]);
     });
 
     return () => unsubscribe();
