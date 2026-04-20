@@ -198,15 +198,17 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
   const [localStatus, setLocalStatus] = useState(null);
 
   // Fetch the real friendship status to handle page re-enters correctly
-  const { data: existingFriendship } = useQuery({
-    queryKey: ['friendship', notification.user_id, notification.related_user_id],
-    queryFn: () => base44.entities.Friendship.filter({ 
-      user_id: notification.user_id, 
-      friend_id: notification.related_user_id 
-    }),
+  const { data: existingFriendship, isLoading: isLoadingFriendship } = useQuery({
+    queryKey: ['friendship', notification.related_user_id, notification.user_id],
+    queryFn: async () => {
+      console.log('[DEBUG] Buscando amizade:', { requester: notification.related_user_id, target: notification.user_id });
+      const res = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
+      console.log('[DEBUG] Resultado da busca:', res);
+      return res;
+    },
     select: (data) => data?.[0] || null,
+    staleTime: 30000,
   });
-
 
   // Derive the display status: localStatus takes priority (optimistic), then real DB value
   const derivedStatus = localStatus || (
@@ -215,16 +217,32 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
     null
   );
 
+  console.log('[DEBUG] FriendRequestRow Render:', {
+    notificationId: notification.id,
+    isRead: notification.is_read,
+    localStatus,
+    existingFriendshipStatus: existingFriendship?.status,
+    derivedStatus,
+    isLoadingFriendship
+  });
+
   const accept = useMutation({
     mutationFn: async () => {
+      console.log('[DEBUG] Iniciando Accept Mutation');
       // 1. Find the pending friendship: Alice → Bob (requester → current user)
       const reqs = await base44.entities.Friendship.filter({ user_id: notification.related_user_id, friend_id: notification.user_id });
+      console.log('[DEBUG] Pedidos encontrados para atualizar:', reqs);
       const pending = reqs.find(r => r.status === 'pending');
-      if (pending) await base44.entities.Friendship.update(pending.id, { status: 'accepted' });
+      if (pending) {
+        console.log('[DEBUG] Atualizando pedido pendente para accepted:', pending.id);
+        await base44.entities.Friendship.update(pending.id, { status: 'accepted' });
+      }
 
       // 2. Create the symmetric friendship: Bob → Alice (so Bob appears in Alice's friend list too)
       const existing = await base44.entities.Friendship.filter({ user_id: notification.user_id, friend_id: notification.related_user_id });
+      console.log('[DEBUG] Verificando amizade simétrica existente:', existing);
       if (existing.length === 0) {
+        console.log('[DEBUG] Criando amizade simétrica');
         await base44.entities.Friendship.create({
           user_id: notification.user_id,
           friend_id: notification.related_user_id,
