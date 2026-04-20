@@ -271,9 +271,9 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
         <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date, t)}</p>
       </div>
 
-      {useStatus === 'accepted' ? (
+      {localStatus === 'accepted' ? (
         <span className="text-[11px] font-bold text-[#00c6d2] px-3 py-1 rounded-lg bg-[#00c6d2]/15">{t.friends} ✓</span>
-      ) : useStatus === 'declined' ? (
+      ) : localStatus === 'declined' ? (
         <span className="text-[11px] text-gray-600">{t.removed}</span>
       ) : (
         <div className="flex gap-2 flex-shrink-0">
