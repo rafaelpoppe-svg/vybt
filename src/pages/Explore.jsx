@@ -5,7 +5,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PullToRefresh from '../components/common/PullToRefresh';
-import { Search, Loader2, LayoutGrid, User } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 import UserCard from '../components/explore/UserCard';
 import { useMutation } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
@@ -303,7 +303,7 @@ export default function Explore() {
           />
           <button onClick={() => setActiveView('plans')}
             className={`relative flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ${activeView === 'plans' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}>
-            <LayoutGrid className="w-3 h-3" />{t.plans}
+            🎉 {t.plans}
           </button>
           <button onClick={() => setActiveView('communities')}
             className={`relative flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ${activeView === 'communities' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}>
@@ -311,7 +311,7 @@ export default function Explore() {
           </button>
           <button onClick={() => setActiveView('users')}
             className={`relative flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ${activeView === 'users' ? 'text-[#0b0b0b]' : 'text-gray-400'}`}>
-            <User className="w-3 h-3" />{t.people}
+            🕺 {t.people}
             {receivedFriendRequests.length > 0 && (
               <span className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold">
                 {receivedFriendRequests.length}

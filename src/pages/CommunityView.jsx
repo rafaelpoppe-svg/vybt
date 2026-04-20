@@ -110,8 +110,11 @@ export default function CommunityView() {
   const { data: activeChallenge } = useQuery({
     queryKey: ['communityChallenge', communityId],
     queryFn: async () => {
-      const all = await base44.entities.CommunityChallenge.filter({ community_id: communityId, status: 'active' }, '-created_date', 1);
-      return all[0] || null;
+      const all = await base44.entities.CommunityChallenge.filter({ community_id: communityId }, '-created_date', 10);
+      const now = new Date();
+      // Find an active or upcoming challenge that hasn't ended yet
+      const active = all.find(c => c.status !== 'ended' && (!c.ends_at || new Date(c.ends_at) > now));
+      return active || null;
     },
     enabled: !!communityId,
   });
@@ -207,8 +210,8 @@ export default function CommunityView() {
     if (challengeLinkedPlan) {
       navigate(createPageUrl('AddStory') + `?planId=${challengeLinkedPlan.id}&challengeId=${activeChallenge.id}`);
     } else {
-      // No happening plan — show detail so they can see what's needed
-      setShowChallengeDetail(true);
+      // No happening plan — navigate to AddStory with challengeId so user picks a plan
+      navigate(createPageUrl('AddStory') + `?challengeId=${activeChallenge.id}`);
     }
   };
 

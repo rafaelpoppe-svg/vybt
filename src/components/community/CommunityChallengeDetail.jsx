@@ -67,12 +67,24 @@ export default function CommunityChallengeDetail({ challenge, communityId, profi
     },
   });
 
-  const handleParticipate = () => {
+  const handleParticipate = async () => {
     onClose();
     if (challenge.plan_id) {
       navigate(createPageUrl('AddStory') + `?planId=${challenge.plan_id}&challengeId=${challenge.id}`);
+      return;
     }
-    // If no specific plan, the user selects a plan in AddStory — challengeId is not passed (they pick from happening plans)
+    // No specific plan linked — find any happening plan in the community
+    try {
+      const communityPlans = await base44.entities.PartyPlan.filter({ community_id: communityId, status: 'happening' });
+      if (communityPlans.length > 0) {
+        navigate(createPageUrl('AddStory') + `?planId=${communityPlans[0].id}&challengeId=${challenge.id}`);
+      } else {
+        // No happening plan — go to AddStory without planId so user sees plan selector
+        navigate(createPageUrl('AddStory') + `?challengeId=${challenge.id}`);
+      }
+    } catch {
+      navigate(createPageUrl('AddStory') + `?challengeId=${challenge.id}`);
+    }
   };
 
   const myStoryCount = participantMap[currentUser?.id]?.stories?.length || 0;
