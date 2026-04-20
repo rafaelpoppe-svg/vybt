@@ -279,9 +279,11 @@ function FriendRequestRow({ notification, requesterProfile, onMark }) {
       // 4. Notification and trigger
       await base44.entities.Notification.update(notification.id, { is_read: true });
       try {
+        // Use a generic 'friend_accepted' or similar type if available, 
+        // but the key is to NOT use 'friend_request' here to avoid triggering the request UI on the other side
         const { createNotification } = await import('../components/notifications/NotificationTriggers');
         const bobProfile = await base44.entities.UserProfile.filter({ user_id: notification.user_id }).then(r => r[0]);
-        await createNotification(notification.related_user_id, 'friend_request', 
+        await createNotification(notification.related_user_id, 'friend_accepted', 
           `${bobProfile?.display_name || 'Alguém'} aceitou seu pedido de amizade!`, 
           { related_user_id: notification.user_id }
         );
