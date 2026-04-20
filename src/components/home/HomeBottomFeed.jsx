@@ -274,10 +274,15 @@ export default function HomeBottomFeed({
 
   const TABS = [
     { id: 'foryou', label: t.forYou, emoji: '✨' },
-    { id: 'myspace', label: t.mySpace, emoji: '🗓️' },
+    { id: 'myplans', label: t.myPlans || 'My Plans', emoji: '🗓️' },
+    { id: 'mycommunities', label: t.myCommunities || 'My Communities', emoji: '🏠' },
   ];
 
-  const items = activeTab === 'foryou' ? forYouItems : mySpaceItems;
+  const items = activeTab === 'foryou'
+    ? forYouItems
+    : activeTab === 'myplans'
+    ? myPlans.map(p => ({ type: 'plan', data: p }))
+    : myCommunities.map(c => ({ type: 'community', data: c }));
 
   const participantCounts = allParticipants.reduce((acc, p) => {
     acc[p.plan_id] = (acc[p.plan_id] || 0) + 1;
@@ -330,7 +335,7 @@ export default function HomeBottomFeed({
         >
           {items.length === 0 ? (
             <div className="text-center py-10 text-gray-600 text-sm">
-              {activeTab === 'myspace' ? t.notJoinedYet : t.nothingToShow}
+              {activeTab === 'myplans' || activeTab === 'mycommunities' ? t.notJoinedYet : t.nothingToShow}
             </div>
           ) : (
             <div className="flex flex-col gap-4">
