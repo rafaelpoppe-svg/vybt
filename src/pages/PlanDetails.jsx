@@ -22,6 +22,8 @@ import AdminEditModal from '../components/plan/AdminEditModal';
 import InviteToPlanModal from '../components/plan/InviteToPlanModal';
 import { notifyNewGroupMember } from '../components/notifications/NotificationTriggers';
 import { useLanguage } from '../components/common/LanguageContext';
+import CommunityChallengeBanner from '../components/community/CommunityChallengeBanner';
+import { isPast } from 'date-fns';
 
 export default function PlanDetails() {
   const navigate = useNavigate();
@@ -75,6 +77,23 @@ export default function PlanDetails() {
   const { data: planCommunity } = useQuery({
     queryKey: ['planCommunity', plan?.community_id],
     queryFn: () => base44.entities.Community.filter({ id: plan.community_id }).then(r => r[0]),
+    enabled: !!plan?.community_id,
+  });
+
+  // Fetch active challenges for this plan's community
+  const { data: communityChallenge } = useQuery({
+    queryKey: ['planCommunityChallenge', plan?.community_id, planId],
+    queryFn: async () => {
+      const challenges = await base44.entities.CommunityChallenge.filter({ community_id: plan.community_id });
+      // Find an active challenge linked to this plan or any active challenge in the community
+      const now = new Date();
+      const active = challenges.find(c =>
+        !isPast(new Date(c.ends_at)) &&
+        c.status !== 'ended' &&
+        (c.plan_id === planId || !c.plan_id)
+      );
+      return active || null;
+    },
     enabled: !!plan?.community_id,
   });
 
@@ -331,6 +350,17 @@ export default function PlanDetails() {
           </motion.button>
         )}
 
+        {/* Active Challenge Banner */}
+        {communityChallenge && (
+          <CommunityChallengeBanner
+            challenge={communityChallenge}
+            tc={planCommunity?.theme_color || '#00c6d2'}
+            onTap={() => navigate(
+              createPageUrl('AddStory') + `?planId=${planId}&challengeId=${communityChallenge.id}`
+            )}
+          />
+        )}
+
         {/* Info card with tags inside */}
         <div 
           className="space-y-3 p-4 rounded-xl"
@@ -474,12 +504,16 @@ export default function PlanDetails() {
         {isJoined && plan.status === 'happening' && (
           <motion.button
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate(createPageUrl('AddStory') + `?planId=${planId}`)}
+            onClick={() => {
+              const url = createPageUrl('AddStory') + `?planId=${planId}` +
+                (communityChallenge ? `&challengeId=${communityChallenge.id}` : '');
+              navigate(url);
+            }}
             className="w-full py-3 rounded-xl border flex items-center justify-center gap-2"
-          style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+            style={{ background: 'var(--surface)', borderColor: 'var(--border)', color: 'var(--text-muted)' }}
           >
             <Camera className="w-5 h-5" />
-            {t.shareYourExperience}
+            {communityChallenge ? `${communityChallenge.emoji || '🔥'} ${t.shareYourExperience}` : t.shareYourExperience}
           </motion.button>
         )}
         {isJoined && isVoting && (
