@@ -118,7 +118,7 @@ export default function BottomNav() {
                 <motion.div
                   layoutId="nav-pill"
                   className="absolute inset-0 rounded-2xl"
-                  style={{ background: 'linear-gradient(135deg, #00c6d222, #542b9b22)' }}
+                  style={{ background: 'var(--nav-pill-bg, rgba(255,255,255,0.08))' }}
                   transition={{ type: 'spring', bounce: 0.35, duration: 0.45 }}
                 />
               )}
@@ -136,7 +136,8 @@ export default function BottomNav() {
                 <>
                   <div className="relative">
                     <Icon
-                      className={`w-5 h-5 transition-colors duration-200 ${active ? 'text-[#00c6d2]' : 'text-gray-500'}`}
+                      className={`w-5 h-5 transition-colors duration-200 ${active ? 'text-gray-500' : 'text-gray-500'}`}
+                      style={active ? { color: 'var(--nav-icon-active, white)' } : {}}
                       strokeWidth={active ? 2.5 : 1.8}
                     />
                     {name === 'Chat' && unreadDMCount > 0 && (
@@ -147,12 +148,16 @@ export default function BottomNav() {
                     {active && (
                       <motion.div
                         layoutId={`dot-${name}`}
-                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#00c6d2]"
+                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                        style={{ background: 'var(--nav-icon-active, white)' }}
                         transition={{ type: 'spring', bounce: 0.5 }}
                       />
                     )}
                   </div>
-                  <span className={`text-[10px] font-semibold transition-colors duration-200 ${active ? 'text-[#00c6d2]' : 'text-gray-600'}`}>
+                  <span
+                    style={active ? { color: 'var(--nav-icon-active, white)' } : {}}
+                    className={`text-[10px] font-semibold transition-colors duration-200 ${active ? '' : 'text-gray-600'}`}
+                  >
                     {label}
                   </span>
                 </>

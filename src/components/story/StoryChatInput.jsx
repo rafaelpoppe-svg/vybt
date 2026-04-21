@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Send, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Send, X, CheckCircle2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useLanguage } from '../common/LanguageContext';
 
 export default function StoryChatInput({ story, storyUser, onMessageSent, onClose }) {
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
   const [keyboardOffset, setKeyboardOffset] = useState(0);
   const inputRef = useRef(null);
   const { t } = useLanguage();
@@ -56,7 +57,11 @@ export default function StoryChatInput({ story, storyUser, onMessageSent, onClos
       });
 
       setMessage('');
-      onMessageSent?.();
+      setSent(true);
+      setTimeout(() => {
+        setSent(false);
+        onMessageSent?.();
+      }, 1800);
     } finally {
       setSending(false);
     }
@@ -70,6 +75,22 @@ export default function StoryChatInput({ story, storyUser, onMessageSent, onClos
       className="fixed left-0 right-0 z-[100] px-4 pb-3"
       style={{ bottom: keyboardOffset }}
     >
+      <AnimatePresence>
+        {sent && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.95 }}
+            className="flex items-center gap-2 justify-center mb-2 px-4 py-2 rounded-2xl mx-auto w-fit"
+            style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            <CheckCircle2 className="w-4 h-4 text-[#00c6d2]" />
+            <span className="text-white text-sm font-semibold">
+              {(t.messageSentTo || 'Sent to {name}').replace('{name}', storyUser?.display_name || '')}
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {story?.media_url && (
         <div className="mb-2 flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-xl px-3 py-2 border border-white/10">
           {story.media_type === 'video'

@@ -61,12 +61,16 @@ export const notifyNewGroupMember = async (planId, newMemberId, newMemberName) =
     const participants = await base44.entities.PlanParticipant.filter({ plan_id: planId });
     const plan = (await base44.entities.PartyPlan.filter({ id: planId }))[0];
     
+    // Notify admins with a specific message; notify others with the generic message
     for (const participant of participants) {
       if (participant.user_id !== newMemberId) {
+        const isAdmin = participant.is_admin || participant.user_id === plan?.creator_id;
         await createNotification(
           participant.user_id,
           'new_group_member',
-          `${newMemberName} entrou em ${plan?.title || 'o plano'}`,
+          isAdmin
+            ? `${newMemberName} joined your plan "${plan?.title || 'the plan'}"`
+            : `${newMemberName} entrou em ${plan?.title || 'o plano'}`,
           { planId, relatedUserId: newMemberId }
         );
       }

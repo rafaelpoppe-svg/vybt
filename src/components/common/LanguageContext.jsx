@@ -956,7 +956,7 @@ export const translations = {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Acesso a funcionalidades e estratégia de marketing',
-    pending: 'Pendente...'
+    pending: 'Pendente...', messageSentTo: 'Enviado para {name}', notifAdminNewMember: '{name} entrou no teu plano "{plan}"',
   },
 
 en: {
@@ -1914,7 +1914,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Access to marketing features & strategy',
-    pending: 'Pending...'
+    pending: 'Pending...', messageSentTo: 'Sent to {name}', notifAdminNewMember: '{name} joined your plan "{plan}"',
   },
 
   es: {
@@ -2872,8 +2872,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Acceso a funciones y estrategia de marketing',
-    pending: 'Pendiente...'
-
+    pending: 'Pendiente...', messageSentTo: 'Enviado a {name}', notifAdminNewMember: '{name} se unió a tu plan "{plan}"',
   },
 
   fr: {
@@ -3831,7 +3830,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Accès aux fonctionnalités et à la stratégie marketing',
-    pending: 'En attente...'
+    pending: 'En attente...', messageSentTo: 'Envoyé à {name}', notifAdminNewMember: '{name} a rejoint ton plan "{plan}"',
   },
 
   it: {
@@ -4789,7 +4788,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Accesso alle funzionalità e alla strategia di marketing',
-    pending: 'In attesa...',
+    pending: 'In attesa...', messageSentTo: 'Inviato a {name}', notifAdminNewMember: '{name} è entrato nel tuo piano "{plan}"',
   },
 };
 

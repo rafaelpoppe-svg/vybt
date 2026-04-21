@@ -289,7 +289,17 @@ export default function Home() {
               className="w-8 h-8 rounded-xl object-contain"
               onError={(e) => e.target.style.display = 'none'}
             />
-            <h1 className="text-3xl font-black" style={{ color: 'var(--text-primary)' }}>Vybt</h1>
+            <h1
+              className="text-3xl font-black tracking-tight"
+              style={{
+                background: 'linear-gradient(135deg, #ffffff 0%, #00c6d2 60%, #542b9b 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                letterSpacing: '-0.03em',
+                filter: 'drop-shadow(0 0 12px rgba(0,198,210,0.35))',
+              }}
+            >Vybt</h1>
           </div>
           <div className="flex items-center gap-2">
 
