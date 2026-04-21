@@ -417,6 +417,52 @@ const typeConfig = {
   challenge_launched:    { emoji: '🏆', ring: 'linear-gradient(135deg,#f59e0b,#f97316)', badge: '#f59e0b' },
 };
 
+// Returns a translated message for known notification types
+function getTranslatedMessage(notification, relatedProfile, t) {
+  const name = relatedProfile?.display_name || t.someone || 'Someone';
+  switch (notification.type) {
+    case 'story_reaction': {
+      const emojiMatch = notification.message?.match(/(\p{Emoji}+)\s*$/u);
+      const emoji = emojiMatch ? emojiMatch[1] : '❤️';
+      return t.notifStoryReaction
+        ? t.notifStoryReaction.replace('{emoji}', emoji)
+        : `reacted to your story ${emoji}`;
+    }
+    case 'challenge_launched':
+      return notification.description || notification.message || t.challengeNewNotifMessage;
+    case 'new_group_member':
+      return t.notifNewGroupMember
+        ? t.notifNewGroupMember.replace('{name}', name).replace('{plan}', notification.title || '')
+        : notification.message;
+    case 'friend_created_plan':
+      return t.notifFriendCreatedPlan
+        ? t.notifFriendCreatedPlan
+        : notification.message;
+    case 'plan_renewed':
+      return notification.message;
+    case 'plan_successful':
+      return notification.message;
+    case 'plan_unsuccessful':
+      return notification.message;
+    case 'voting_started':
+      return notification.message;
+    case 'plan_time_changed':
+      return notification.message;
+    case 'plan_location_changed':
+      return notification.message;
+    case 'new_story_in_plan':
+      return notification.message;
+    case 'friend_posted_story':
+      return notification.message;
+    case 'plan_highlighted':
+      return notification.message;
+    case 'story_highlighted':
+      return notification.message;
+    default:
+      return notification.message;
+  }
+}
+
 function NotifRow({ notification, plan, relatedProfile, onMark, t }) {
   const navigate = useNavigate();
   const cfg = typeConfig[notification.type] || { emoji: '🔔', ring: 'linear-gradient(135deg,#6b7280,#374151)', badge: '#6b7280' };
@@ -435,6 +481,8 @@ function NotifRow({ notification, plan, relatedProfile, onMark, t }) {
     }
   };
 
+  const translatedMessage = getTranslatedMessage(notification, relatedProfile, t);
+
   return (
     <motion.button
       whileTap={{ scale: 0.985 }}
@@ -450,8 +498,10 @@ function NotifRow({ notification, plan, relatedProfile, onMark, t }) {
 
       <div className="flex-1 min-w-0">
         <p className={`text-[13.5px] leading-snug ${notification.is_read ? 'text-gray-300' : 'text-white'}`}>
-          {relatedProfile && <span className="font-bold text-white">{relatedProfile.display_name} </span>}
-          <span>{notification.message}</span>
+          {relatedProfile && notification.type !== 'challenge_launched' && (
+            <span className="font-bold text-white">{relatedProfile.display_name} </span>
+          )}
+          <span>{translatedMessage}</span>
         </p>
         <p className="text-gray-500 text-[11px] mt-0.5">{timeAgo(notification.created_date, t)}</p>
       </div>
