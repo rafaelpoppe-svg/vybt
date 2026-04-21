@@ -956,7 +956,7 @@ export const translations = {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Acesso a funcionalidades e estratégia de marketing',
-    pending: 'Pendente...', messageSentTo: 'Enviado para {name}', notifAdminNewMember: '{name} entrou no teu plano "{plan}"',
+    pending: 'Pendente...', messageSentTo: 'Enviado para {name}', notifAdminNewMember: '{name} entrou no teu plano "{plan}"', myGroups: 'Os meus grupos',
   },
 
 en: {
@@ -1914,7 +1914,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Access to marketing features & strategy',
-    pending: 'Pending...', messageSentTo: 'Sent to {name}', notifAdminNewMember: '{name} joined your plan "{plan}"',
+    pending: 'Pending...', messageSentTo: 'Sent to {name}', notifAdminNewMember: '{name} joined your plan "{plan}"', myGroups: 'My Groups',
   },
 
   es: {
@@ -2872,7 +2872,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Acceso a funciones y estrategia de marketing',
-    pending: 'Pendiente...', messageSentTo: 'Enviado a {name}', notifAdminNewMember: '{name} se unió a tu plan "{plan}"',
+    pending: 'Pendiente...', messageSentTo: 'Enviado a {name}', notifAdminNewMember: '{name} se unió a tu plan "{plan}"', myGroups: 'Mis grupos',
   },
 
   fr: {
@@ -3830,7 +3830,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Accès aux fonctionnalités et à la stratégie marketing',
-    pending: 'En attente...', messageSentTo: 'Envoyé à {name}', notifAdminNewMember: '{name} a rejoint ton plan "{plan}"',
+    pending: 'En attente...', messageSentTo: 'Envoyé à {name}', notifAdminNewMember: '{name} a rejoint ton plan "{plan}"', myGroups: 'Mes groupes',
   },
 
   it: {
@@ -4788,7 +4788,7 @@ en: {
     ambassadorPerk8: '🧠 Build Social Think',
     ambassadorPerk9: '💬 Feedbacks',
     ambassadorPerk10: '📣 Accesso alle funzionalità e alla strategia di marketing',
-    pending: 'In attesa...', messageSentTo: 'Inviato a {name}', notifAdminNewMember: '{name} è entrato nel tuo piano "{plan}"',
+    pending: 'In attesa...', messageSentTo: 'Inviato a {name}', notifAdminNewMember: '{name} è entrato nel tuo piano "{plan}"', myGroups: 'I miei gruppi',
   },
 };
 

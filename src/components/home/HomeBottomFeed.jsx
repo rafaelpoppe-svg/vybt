@@ -275,7 +275,7 @@ export default function HomeBottomFeed({
   const TABS = [
     { id: 'foryou', label: t.forYou, emoji: '✨' },
     { id: 'myplans', label: t.myPlans || 'My Plans', emoji: '🗓️' },
-    { id: 'mycommunities', label: t.myCommunities || 'My Communities', emoji: '🏠' },
+    { id: 'mycommunities', label: t.myGroups || 'My Groups', emoji: '⭐' },
   ];
 
   const items = activeTab === 'foryou'
