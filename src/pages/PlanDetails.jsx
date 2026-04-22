@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -39,7 +39,8 @@ export default function PlanDetails() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [joinRequestSent, setJoinRequestSent] = useState(false);
-
+  const joinCancelledRef = useRef(false);
+  
   useEffect(() => {
     const getUser = async () => {
       try {
