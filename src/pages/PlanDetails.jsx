@@ -207,7 +207,7 @@ export default function PlanDetails() {
       }
     },
     onSuccess: () => {
-      setJoinedOverride(null);
+      setJoinedOverride(false);
       queryClient.invalidateQueries(['planParticipants', planId]);
       setShowLeaveModal(false);
     },
