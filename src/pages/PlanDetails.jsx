@@ -161,58 +161,87 @@ export default function PlanDetails() {
     }
   });
 
-  const joinMutation = useMutation({
-    mutationFn: async () => {
-      if (!currentUser) {
-        base44.auth.redirectToLogin();
-        return;
-      }
-      if (!canJoinMorePlans && !isJoined) {
-        throw new Error('Plan limit reached');
-      }
+ const joinMutation = useMutation({
+  mutationFn: async () => {
+    joinCancelledRef.current = false;
+    if (!currentUser) {
+      base44.auth.redirectToLogin();
+      return;
+    }
+    if (!canJoinMorePlans) {
+      throw new Error('Plan limit reached');
+    }
+    const existing = await base44.entities.PlanParticipant.filter({
+      plan_id: planId,
+      user_id: currentUser.id,
+    });
+    if (existing.length > 0) return;
 
-      // Verificar se já existe participação antes de criar (evita duplicados)
-      const existing = await base44.entities.PlanParticipant.filter({
+    if (joinCancelledRef.current) return;
+
+    await base44.entities.PlanParticipant.create({
+      plan_id: planId,
+      user_id: currentUser.id,
+      status: 'going',
+      is_admin: false,
+      joined_at: new Date().toISOString(),
+      stories_posted: 0
+    });
+
+    if (joinCancelledRef.current) return;
+
+    const profile = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
+    await notifyNewGroupMember(planId, currentUser.id, profile[0]?.display_name || currentUser.full_name || 'Alguém');
+  },
+  onSuccess: () => {
+    if (joinCancelledRef.current) {
+      base44.entities.PlanParticipant.filter({
         plan_id: planId,
         user_id: currentUser.id,
+      }).then(records => {
+        records.forEach(r => base44.entities.PlanParticipant.delete(r.id));
       });
-      if (existing.length > 0) return; // já existe, não criar duplicado
-
-      await base44.entities.PlanParticipant.create({
-        plan_id: planId,
-        user_id: currentUser.id,
-        status: 'going',
-        is_admin: false,
-        joined_at: new Date().toISOString(),
-        stories_posted: 0
-      });
-
-      const profile = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
-      await notifyNewGroupMember(planId, currentUser.id, profile[0]?.display_name || currentUser.full_name || 'Alguém');
-    },
-    onSuccess: () => {
-      setJoinedOverride(true);
-      queryClient.invalidateQueries(['planParticipants', planId]);
-    },
-    onError: (err) => {
-      setJoinedOverride(null);
-      toast.error(err?.message || 'Não foi possível entrar no plano.');
-    },
-  });
-
-  const leaveMutation = useMutation({
-    mutationFn: async () => {
-      const myParticipation = participants.find(p => p.user_id === currentUser.id);
-      if (myParticipation) {
-        await base44.entities.PlanParticipant.delete(myParticipation.id);
-      }
-    },
-    onSuccess: () => {
       setJoinedOverride(false);
-      queryClient.invalidateQueries(['planParticipants', planId]);
-      setShowLeaveModal(false);
-    },
-  });
+      return;
+    }
+    setJoinedOverride(true);
+    queryClient.invalidateQueries(['planParticipants', planId]);
+  },
+  onError: (err) => {
+    setJoinedOverride(null);
+    toast.error(err?.message || 'Não foi possível entrar no plano.');
+  },
+});
+
+const leaveMutation = useMutation({
+  mutationFn: async () => {
+    joinCancelledRef.current = true;
+
+    if (joinMutation.isPending) {
+      await new Promise(resolve => {
+        const interval = setInterval(() => {
+          if (!joinMutation.isPending) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 100);
+      });
+    }
+
+    const records = await base44.entities.PlanParticipant.filter({
+      plan_id: planId,
+      user_id: currentUser.id,
+    });
+    for (const r of records) {
+      await base44.entities.PlanParticipant.delete(r.id);
+    }
+  },
+  onSuccess: () => {
+    setJoinedOverride(false);
+    queryClient.invalidateQueries(['planParticipants', planId]);
+    setShowLeaveModal(false);
+  },
+});
 
   const isJoinedFromServer = participants.some(p => p.user_id === currentUser?.id);
   const isJoined = joinMutation.isPending ? true
