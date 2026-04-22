@@ -412,16 +412,19 @@ export default function AddStory() {
           <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-4 z-10"
             style={{ paddingTop: 'calc(env(safe-area-inset-top,0px) + 16px)' }}>
             <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)}
-              className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              className="w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center"
+              style={{ backgroundColor: 'var(--btn-bg)' }}>
               <X className="w-5 h-5 text-white" />
             </motion.button>
             <div className="flex gap-3">
               <motion.button whileTap={{ scale: 0.9 }} onClick={() => setFlashOn(f => !f)}
-                className={`w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center transition-colors ${flashOn ? 'bg-yellow-400/80' : 'bg-black/50'}`}>
+                className={`w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center transition-colors ${flashOn ? 'bg-yellow-400/80' : ''}`}
+                style={!flashOn ? { backgroundColor: 'var(--btn-bg)' } : {}}>
                 {flashOn ? <Zap className="w-5 h-5 text-black" /> : <ZapOff className="w-5 h-5 text-white" />}
               </motion.button>
               <motion.button whileTap={{ scale: 0.9 }} onClick={flipCamera}
-                className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                className="w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center"
+                style={{ backgroundColor: 'var(--btn-bg)' }}>
                 <RotateCcw className="w-5 h-5 text-white" />
               </motion.button>
             </div>
