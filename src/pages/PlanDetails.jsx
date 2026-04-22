@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -140,6 +141,9 @@ export default function PlanDetails() {
   const isVoting = plan?.status === 'voting';
   const canJoinOrLeave = !isVoting;
 
+  // Persistent optimistic join state — survives mutation going idle
+  const [joinedOverride, setJoinedOverride] = useState(null);
+
   const requestJoinMutation = useMutation({
     mutationFn: async (message = '') => {
       if (!currentUser) { base44.auth.redirectToLogin(); return; }
@@ -191,7 +195,12 @@ export default function PlanDetails() {
       await notifyNewGroupMember(planId, currentUser.id, profile[0]?.display_name || currentUser.full_name || 'Alguém');
     },
     onSuccess: () => {
+      setJoinedOverride(true);
       queryClient.invalidateQueries(['planParticipants', planId]);
+    },
+    onError: (err) => {
+      setJoinedOverride(null);
+      toast.error(err?.message || 'Não foi possível entrar no plano.');
     },
   });
 
@@ -203,6 +212,7 @@ export default function PlanDetails() {
       }
     },
     onSuccess: () => {
+      setJoinedOverride(null);
       queryClient.invalidateQueries(['planParticipants', planId]);
       setShowLeaveModal(false);
     },
@@ -211,6 +221,7 @@ export default function PlanDetails() {
   const isJoinedFromServer = participants.some(p => p.user_id === currentUser?.id);
   const isJoined = joinMutation.isPending ? true
     : leaveMutation.isPending ? false
+    : joinedOverride !== null ? joinedOverride
     : isJoinedFromServer;
 
   const reportPlanMutation = useMutation({
