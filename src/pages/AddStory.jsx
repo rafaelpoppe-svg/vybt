@@ -479,7 +479,7 @@ export default function AddStory() {
 
             <motion.button whileTap={{ scale: 0.9 }} onClick={retake}
               className="absolute top-4 left-4 z-20 p-2.5 rounded-full bg-black/60 backdrop-blur-sm"
-              style={{ top: 'calc(env(safe-area-inset-top,0px) + 12px)' }}>
+              style={{ top: 'calc(env(safe-area-inset-top,0px) + 12px)', backgroundColor: 'var(--btn-bg)' }}>
               <ChevronLeft className="w-5 h-5 text-white" />
             </motion.button>
 
