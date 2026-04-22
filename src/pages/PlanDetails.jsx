@@ -135,11 +135,10 @@ export default function PlanDetails() {
   const canJoinMorePlans = myPlansInRegion.length < 3;
 
   useEffect(() => {
-    if (!currentUser || joinMutation.isPending || leaveMutation.isPending) return;
-    if (participants.length > 0) {
+    if (currentUser && participants.length > 0) {
       setIsJoined(participants.some(p => p.user_id === currentUser.id));
     }
-  }, [currentUser, participants, joinMutation.isPending, leaveMutation.isPending]);
+  }, [currentUser, participants]);
 
   const isCreator = plan?.creator_id === currentUser?.id;
   const myParticipationRecord = participants.find(p => p.user_id === currentUser?.id);
