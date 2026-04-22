@@ -40,6 +40,7 @@ export default function Home() {
   const [activeSort, setActiveSort] = useState('foryou');
   const [overlayStoryId, setOverlayStoryId] = useState(null);
   const [overlayScope, setOverlayScope] = useState(null);
+  const [overlayOriginRect, setOverlayOriginRect] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
   const [showMyCommunities, setShowMyCommunities] = useState(false);
   const [mapFilters, setMapFilters] = useState({ partyTags: [], startTime: '', endTime: '', planDate: '' });
@@ -336,13 +337,15 @@ export default function Home() {
             plans={visiblePlans}
             currentUserId={currentUser?.id}
             happeningPlan={happeningPlan}
-            onStoryClick={(story) => {
+            onStoryClick={(story, rect) => {
+              setOverlayOriginRect(rect || null);
               setOverlayScope({ type: 'friend', userId: story.user_id });
               setOverlayStoryId(story.id);
             }}
-            onPlanStoriesClick={(plan, planStories) => {
+            onPlanStoriesClick={(plan, planStories, rect) => {
               const firstStory = planStories.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))[0];
               if (firstStory) {
+                setOverlayOriginRect(rect || null);
                 setOverlayScope({ type: 'plan', planId: plan.id });
                 setOverlayStoryId(firstStory.id);
               }
@@ -433,7 +436,7 @@ export default function Home() {
 
       <BottomNav />
 
-      <StoryViewOverlay storyId={overlayStoryId} onClose={() => { setOverlayStoryId(null); setOverlayScope(null); }} scope={overlayScope} />
+      <StoryViewOverlay storyId={overlayStoryId} onClose={() => { setOverlayStoryId(null); setOverlayScope(null); setOverlayOriginRect(null); }} scope={overlayScope} originRect={overlayOriginRect} />
 
       <MyCommunitiesDrawer
         isOpen={showMyCommunities}

@@ -60,10 +60,14 @@ function PlanCircle({ plan, onClick, index }) {
   const planImage = plan.group_image || plan.cover_image;
   const themeColor = plan.theme_color || colors[0];
   const isHappening = isPlanLiveNow(plan);
+  const handleClick = (e) => {
+    const rect = e.currentTarget.querySelector('.story-plan-ring')?.getBoundingClientRect();
+    onClick(rect || null);
+  };
 
   return (
     <motion.button
-      whileTap={{ scale: 0.92 }} whileHover={{ scale: 1.05 }} onClick={onClick}
+      whileTap={{ scale: 0.92 }} whileHover={{ scale: 1.05 }} onClick={handleClick}
       initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.04, type: 'spring', stiffness: 280, damping: 22 }}
       className="flex flex-col items-center gap-1.5 flex-shrink-0"
@@ -76,7 +80,7 @@ function PlanCircle({ plan, onClick, index }) {
             transition={{ repeat: Infinity, duration: 1.6, ease: 'easeOut' }}
           />
         )}
-        <div className="w-16 h-16 rounded-full p-[2.5px] relative z-10" style={{
+        <div className="story-plan-ring w-16 h-16 rounded-full p-[2.5px] relative z-10" style={{
           background: `linear-gradient(135deg, ${themeColor}, ${themeColor}88)`,
           boxShadow: `0 0 12px ${themeColor}55`,
         }}>
@@ -102,9 +106,13 @@ function PlanCircle({ plan, onClick, index }) {
 function UserCircle({ story, user, isOwn, onClick }) {
   const { t } = useLanguage();
   const colors = isOwn ? ['#00c6d2', '#542b9b'] : getColorsForId(story?.user_id);
+  const handleClick = (e) => {
+    const rect = e.currentTarget.querySelector('.story-avatar-ring')?.getBoundingClientRect();
+    onClick(rect || null);
+  };
   return (
-    <motion.button whileTap={{ scale: 0.92 }} whileHover={{ scale: 1.05 }} onClick={onClick} className="flex flex-col items-center gap-1.5 flex-shrink-0">
-      <div className="w-16 h-16 rounded-full p-[2.5px]" style={{
+    <motion.button whileTap={{ scale: 0.92 }} whileHover={{ scale: 1.05 }} onClick={handleClick} className="flex flex-col items-center gap-1.5 flex-shrink-0">
+      <div className="story-avatar-ring w-16 h-16 rounded-full p-[2.5px]" style={{
         background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`,
         boxShadow: `0 0 12px ${colors[0]}55`,
       }}>
@@ -180,15 +188,15 @@ export default function HomeStoriesBar({
         <AddCircle happeningPlan={happeningPlan} onClick={onAddStory} />
 
         {ownStories.length > 0 && (
-          <UserCircle story={ownStories[0]} user={userProfiles[currentUserId]} isOwn onClick={() => onStoryClick(ownStories[0])} />
+          <UserCircle story={ownStories[0]} user={userProfiles[currentUserId]} isOwn onClick={(rect) => onStoryClick(ownStories[0], rect)} />
         )}
 
         {friendStoryGroups.map(({ userId, stories: us }) => (
-          <UserCircle key={userId} story={us[0]} user={userProfiles[userId]} onClick={() => onStoryClick(us[0])} />
+          <UserCircle key={userId} story={us[0]} user={userProfiles[userId]} onClick={(rect) => onStoryClick(us[0], rect)} />
         ))}
 
         {planGroups.map(({ plan, stories: ps }, idx) => (
-          <PlanCircle key={plan.id} plan={plan} index={idx} onClick={() => onPlanStoriesClick(plan, ps)} />
+          <PlanCircle key={plan.id} plan={plan} index={idx} onClick={(rect) => onPlanStoriesClick(plan, ps, rect)} />
         ))}
       </div>
     </div>

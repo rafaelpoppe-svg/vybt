@@ -1,0 +1,65 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "sender_id": {
+      "type": "string"
+    },
+    "receiver_id": {
+      "type": "string",
+      "description": "For direct messages"
+    },
+    "plan_id": {
+      "type": "string",
+      "description": "For group chats"
+    },
+    "message_type": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "group"
+      ],
+      "default": "direct"
+    },
+    "content": {
+      "type": "string"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "sender_id",
+    "content",
+    "message_type"
+  ],
+  "rls": {
+    "create": {
+      "data.sender_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.sender_id": "{{user.id}}"
+        },
+        {
+          "data.receiver_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.sender_id": "{{user.id}}"
+        },
+        {
+          "data.receiver_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "data.sender_id": "{{user.id}}"
+    }
+  }
+}
