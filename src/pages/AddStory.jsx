@@ -302,7 +302,7 @@ export default function AddStory() {
           <div className="flex items-center justify-between px-4 pb-4 border-b border-gray-800">
             <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)}
               className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center">
-              <X className="w-5 h-5 text-white" />
+              <X className="w-5 h-5 text-white" stroke="currentColor" />
             </motion.button>
             <h1 className="text-white font-bold text-base">{t.postToPlan}</h1>
             <div className="w-10" />
