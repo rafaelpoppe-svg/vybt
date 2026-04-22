@@ -172,6 +172,14 @@ export default function PlanDetails() {
       if (!canJoinMorePlans && !isJoined) {
         throw new Error('Plan limit reached');
       }
+
+      // Verificar se já existe participação antes de criar (evita duplicados)
+      const existing = await base44.entities.PlanParticipant.filter({
+        plan_id: planId,
+        user_id: currentUser.id,
+      });
+      if (existing.length > 0) return; // já existe, não criar duplicado
+
       await base44.entities.PlanParticipant.create({
         plan_id: planId,
         user_id: currentUser.id,
@@ -180,19 +188,25 @@ export default function PlanDetails() {
         joined_at: new Date().toISOString(),
         stories_posted: 0
       });
-      // Update recent joins count for OnFire
+
       const currentJoins = plan.recent_joins || 0;
       await base44.entities.PartyPlan.update(planId, {
         recent_joins: currentJoins + 1
       });
 
-      // Notify other members
       const profile = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
       await notifyNewGroupMember(planId, currentUser.id, profile[0]?.display_name || currentUser.full_name || 'Alguém');
     },
+    onMutate: () => {
+      // Optimistic update — atualiza UI imediatamente
+      setIsJoined(true);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['planParticipants', planId]);
-      setIsJoined(true);
+    },
+    onError: () => {
+      // Reverter se falhar
+      setIsJoined(false);
     }
   });
 
@@ -203,9 +217,17 @@ export default function PlanDetails() {
         await base44.entities.PlanParticipant.delete(myParticipation.id);
       }
     },
+    onMutate: () => {
+      // Optimistic update — sair imediatamente
+      setIsJoined(false);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['planParticipants', planId]);
-      setIsJoined(false);
+      setShowLeaveModal(false);
+    },
+    onError: () => {
+      // Reverter se falhar
+      setIsJoined(true);
     }
   });
 
