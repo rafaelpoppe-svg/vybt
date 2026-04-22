@@ -501,7 +501,7 @@ export default function AddStory() {
                   ? <img src={selectedPlan.cover_image} className="w-6 h-6 rounded-lg object-cover" alt="" />
                   : <MapPin className="w-4 h-4 text-white/80" />
                 }
-                <span className="text-white text-sm font-medium max-w-[120px] truncate">
+                <span className="text-white placeholder:text-white/60 text-sm font-medium max-w-[120px] truncate">
                   {selectedPlan ? selectedPlan.title : t.selectPlan}
                 </span>
               </motion.button>
