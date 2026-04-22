@@ -186,11 +186,6 @@ export default function PlanDetails() {
         stories_posted: 0
       });
 
-      const currentJoins = plan.recent_joins || 0;
-      await base44.entities.PartyPlan.update(planId, {
-        recent_joins: currentJoins + 1
-      });
-
       const profile = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
       await notifyNewGroupMember(planId, currentUser.id, profile[0]?.display_name || currentUser.full_name || 'Alguém');
     },
@@ -264,7 +259,14 @@ export default function PlanDetails() {
     );
   }
 
-  const isOnFire = plan.is_on_fire || (plan.recent_joins && plan.recent_joins >= 100);
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+  const recentJoins = participants.filter(p => 
+    p.joined_at && new Date(p.joined_at) > oneMonthAgo
+  ).length;
+
+  const isOnFire = plan.is_on_fire || recentJoins >= 100;
   const pendingJoinRequest = myJoinRequests.find(r => r.plan_id === planId && r.status === 'pending');
   const declinedJoinRequest = myJoinRequests.find(r => r.plan_id === planId && r.status === 'declined');
 
