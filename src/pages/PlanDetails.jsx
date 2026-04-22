@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -32,7 +32,6 @@ export default function PlanDetails() {
   const planId = urlParams.get('id');
   const {t} = useLanguage();
   const [currentUser, setCurrentUser] = useState(null);
-  const [isJoined, setIsJoined] = useState(false);
   const [showHighlightModal, setShowHighlightModal] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
@@ -134,6 +133,11 @@ export default function PlanDetails() {
   });
   const canJoinMorePlans = myPlansInRegion.length < 3;
 
+  const isJoinedFromServer = participants.some(p => p.user_id === currentUser?.id);
+  const isJoined = joinMutation.isPending ? true
+    : leaveMutation.isPending ? false
+    : isJoinedFromServer;
+
   const isCreator = plan?.creator_id === currentUser?.id;
   const myParticipationRecord = participants.find(p => p.user_id === currentUser?.id);
   const isAdminOfPlan = isCreator || myParticipationRecord?.is_admin;
@@ -191,17 +195,9 @@ export default function PlanDetails() {
       const profile = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
       await notifyNewGroupMember(planId, currentUser.id, profile[0]?.display_name || currentUser.full_name || 'Alguém');
     },
-    onMutate: () => {
-      // Optimistic update — atualiza UI imediatamente
-      setIsJoined(true);
-    },
     onSuccess: () => {
       queryClient.invalidateQueries(['planParticipants', planId]);
     },
-    onError: () => {
-      // Reverter se falhar
-      setIsJoined(false);
-    }
   });
 
   const leaveMutation = useMutation({
@@ -211,26 +207,11 @@ export default function PlanDetails() {
         await base44.entities.PlanParticipant.delete(myParticipation.id);
       }
     },
-    onMutate: () => {
-      // Optimistic update — sair imediatamente
-      setIsJoined(false);
-    },
     onSuccess: () => {
       queryClient.invalidateQueries(['planParticipants', planId]);
       setShowLeaveModal(false);
     },
-    onError: () => {
-      // Reverter se falhar
-      setIsJoined(true);
-    }
   });
-
-  useEffect(() => {
-    if (!currentUser || joinMutation.isPending || leaveMutation.isPending) return;
-    if (participants.length > 0) {
-      setIsJoined(participants.some(p => p.user_id === currentUser.id));
-    }
-  }, [currentUser, participants, joinMutation.isPending, leaveMutation.isPending]);
 
   const reportPlanMutation = useMutation({
     mutationFn: ({ reason, details }) => base44.entities.Report.create({
