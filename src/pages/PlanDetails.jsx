@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -135,10 +135,12 @@ export default function PlanDetails() {
   const canJoinMorePlans = myPlansInRegion.length < 3;
 
   useEffect(() => {
-    if (currentUser && participants.length > 0) {
+    if (!currentUser || participants.length === 0) return;
+    // Só deixa o servidor sobrepor o estado se não houver mutation em curso
+    if (!joinMutation.isPending && !leaveMutation.isPending) {
       setIsJoined(participants.some(p => p.user_id === currentUser.id));
     }
-  }, [currentUser, participants]);
+  }, [currentUser, participants, joinMutation.isPending, leaveMutation.isPending]);
 
   const isCreator = plan?.creator_id === currentUser?.id;
   const myParticipationRecord = participants.find(p => p.user_id === currentUser?.id);
