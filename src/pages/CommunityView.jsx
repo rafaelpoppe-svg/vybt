@@ -64,10 +64,12 @@ export default function CommunityView() {
     touchStartX.current = null;
   };
 
-  const { data: community, isLoading: loadingCommunity } = useQuery({
+  const { data: community, isLoading: loadingCommunity, isFetched: communityFetched } = useQuery({
     queryKey: ['community', communityId],
     queryFn: () => base44.entities.Community.filter({ id: communityId }).then(r => r[0]),
     enabled: !!communityId,
+    staleTime: 30 * 1000,
+    retry: 2,
   });
 
   const { data: members = [] } = useQuery({
@@ -224,7 +226,7 @@ export default function CommunityView() {
 
   const handleCreatePlan = () => navigate(createPageUrl('CreatePlan') + `?communityId=${communityId}`);
 
-  if (loadingCommunity) {
+  if (loadingCommunity || !communityFetched) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#00c6d2' }} />

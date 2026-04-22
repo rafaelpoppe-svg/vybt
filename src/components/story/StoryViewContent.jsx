@@ -71,7 +71,16 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
 
-  const { data: allStoriesData = [], isLoading } = useQuery({
+  // Fetch the specific story directly if an initialStoryId is provided (profile/notification/groupchat navigation)
+  // This ensures we always have the target story even if it's past 24h
+  const { data: specificStory, isLoading: specificLoading } = useQuery({
+    queryKey: ['specificStory', initialStoryId],
+    queryFn: () => base44.entities.ExperienceStory.filter({ id: initialStoryId }).then(r => r[0] || null),
+    enabled: !!initialStoryId,
+    staleTime: 60 * 1000,
+  });
+
+  const { data: allStoriesData = [], isLoading: allStoriesLoading } = useQuery({
     queryKey: ['allStories'],
     queryFn: async () => {
       const all = await base44.entities.ExperienceStory.list('-created_date', 100);
@@ -83,6 +92,9 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
     },
     staleTime: 2 * 60 * 1000,
   });
+
+  // isLoading: if we have a specificStoryId, wait for that query; otherwise wait for allStories
+  const isLoading = initialStoryId ? specificLoading : allStoriesLoading;
 
   const { data: userProfiles = [] } = useQuery({
     queryKey: ['userProfiles'],
@@ -129,7 +141,9 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
 
   const currentGroup = groupedStories[currentGroupIndex];
   const currentGroupStory = currentGroup?.stories?.[currentStoryInGroupIndex];
-  const story = currentGroupStory || allStories[currentStoryIndex];
+  // Fall back to the directly-fetched specific story when navigating from profile/notification/groupchat
+  // and the story is not in the live grouped feed (e.g. it's expired but still in DB)
+  const story = currentGroupStory || allStories[currentStoryIndex] || (initialStoryId ? specificStory : null);
   const currentStoryId = story?.id || initialStoryId;
 
   const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
@@ -251,7 +265,9 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
   }, [allStoriesData]);
 
   useEffect(() => {
-    if (initialStoryId && groupedStories.length > 0 && allStories.length > 0) {
+    if (!initialStoryId) return;
+    // Try to find the story in grouped stories (live stories)
+    if (groupedStories.length > 0) {
       for (let gi = 0; gi < groupedStories.length; gi++) {
         const si = groupedStories[gi].stories.findIndex(s => s.id === initialStoryId);
         if (si !== -1) {
@@ -266,6 +282,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
         setCurrentStoryInGroupIndex(position.storyIndex);
       }
     }
+    // If story not found in grouped (e.g. expired), it will be shown via specificStory fallback below
   }, [initialStoryId, groupedStories]);
 
   const deleteMutation = useMutation({
