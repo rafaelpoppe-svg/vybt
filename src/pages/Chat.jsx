@@ -15,7 +15,7 @@ import { useLanguage } from '../components/common/LanguageContext';
 export default function Chat() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const urlParams = new URLSearchParams(window.location.search);
   const directUserId = urlParams.get('userId');
   const groupPlanId = urlParams.get('planId');
@@ -179,11 +179,13 @@ export default function Chat() {
     }
   });
 
+  const storyReplyLabels = { pt: 'Respondeu ao seu story', en: 'Answered your story', es: 'Respondió a tu story', fr: 'A répondu à ton story' };
   const getMsgPreview = (content) => {
     if (!content) return null;
     if (content.startsWith('sticker:')) return t.stickerPreview;
     if (content.startsWith('community_invite:')) return t.communityInvitePreview;
     if (content.startsWith('plan_invite:')) return t.planInvitePreview;
+    if (content.startsWith('story_reply:')) return storyReplyLabels[language] || storyReplyLabels.en;
     return content;
   };
 
