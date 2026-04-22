@@ -226,9 +226,8 @@ export default function PlanDetails() {
   });
 
   useEffect(() => {
-    if (!currentUser || participants.length === 0) return;
-    // Só deixa o servidor sobrepor o estado se não houver mutation em curso
-    if (!joinMutation.isPending && !leaveMutation.isPending) {
+    if (!currentUser || joinMutation.isPending || leaveMutation.isPending) return;
+    if (participants.length > 0) {
       setIsJoined(participants.some(p => p.user_id === currentUser.id));
     }
   }, [currentUser, participants, joinMutation.isPending, leaveMutation.isPending]);
