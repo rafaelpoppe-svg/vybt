@@ -134,12 +134,6 @@ export default function PlanDetails() {
   });
   const canJoinMorePlans = myPlansInRegion.length < 3;
 
-  useEffect(() => {
-    if (currentUser && participants.length > 0) {
-      setIsJoined(participants.some(p => p.user_id === currentUser.id));
-    }
-  }, [currentUser, participants]);
-
   const isCreator = plan?.creator_id === currentUser?.id;
   const myParticipationRecord = participants.find(p => p.user_id === currentUser?.id);
   const isAdminOfPlan = isCreator || myParticipationRecord?.is_admin;
@@ -230,6 +224,14 @@ export default function PlanDetails() {
       setIsJoined(true);
     }
   });
+
+  useEffect(() => {
+    if (!currentUser || participants.length === 0) return;
+    // Só deixa o servidor sobrepor o estado se não houver mutation em curso
+    if (!joinMutation.isPending && !leaveMutation.isPending) {
+      setIsJoined(participants.some(p => p.user_id === currentUser.id));
+    }
+  }, [currentUser, participants, joinMutation.isPending, leaveMutation.isPending]);
 
   const reportPlanMutation = useMutation({
     mutationFn: ({ reason, details }) => base44.entities.Report.create({
