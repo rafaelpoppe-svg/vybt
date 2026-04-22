@@ -133,11 +133,6 @@ export default function PlanDetails() {
   });
   const canJoinMorePlans = myPlansInRegion.length < 3;
 
-  const isJoinedFromServer = participants.some(p => p.user_id === currentUser?.id);
-  const isJoined = joinMutation.isPending ? true
-    : leaveMutation.isPending ? false
-    : isJoinedFromServer;
-
   const isCreator = plan?.creator_id === currentUser?.id;
   const myParticipationRecord = participants.find(p => p.user_id === currentUser?.id);
   const isAdminOfPlan = isCreator || myParticipationRecord?.is_admin;
@@ -212,6 +207,11 @@ export default function PlanDetails() {
       setShowLeaveModal(false);
     },
   });
+
+  const isJoinedFromServer = participants.some(p => p.user_id === currentUser?.id);
+  const isJoined = joinMutation.isPending ? true
+    : leaveMutation.isPending ? false
+    : isJoinedFromServer;
 
   const reportPlanMutation = useMutation({
     mutationFn: ({ reason, details }) => base44.entities.Report.create({
