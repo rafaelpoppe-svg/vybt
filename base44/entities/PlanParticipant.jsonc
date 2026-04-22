@@ -1,0 +1,54 @@
+{
+  "name": "PlanParticipant",
+  "type": "object",
+  "properties": {
+    "plan_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "going",
+        "maybe",
+        "invited"
+      ],
+      "default": "going"
+    },
+    "is_admin": {
+      "type": "boolean",
+      "default": false
+    },
+    "joined_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "stories_posted": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of stories posted for this plan (max 2)"
+    }
+  },
+  "required": [
+    "plan_id",
+    "user_id"
+  ],
+  "unique_together": [
+    "plan_id",
+    "user_id"
+  ],
+  "rls": {
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "read": {},
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.user_id": "{{user.id}}"
+    }
+  }
+}
