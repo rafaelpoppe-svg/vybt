@@ -84,7 +84,8 @@ export default function GroupChat() {
     queryFn: () => base44.entities.ChatMessage.filter({ plan_id: planId, message_type: 'group' }),
     enabled: !!planId,
     staleTime: 0,
-    refetchInterval: false,
+    refetchInterval: 5000,  // ← polling de 5s como fallback
+    refetchIntervalInBackground: false,
   });
 
   const { data: stories = [] } = useQuery({
