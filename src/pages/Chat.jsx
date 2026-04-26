@@ -49,17 +49,21 @@ export default function Chat() {
   const { data: allGroupMessages = [] } = useQuery({
     queryKey: ['allGroupMessages', currentUser?.id],
     queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'group' }),
-    enabled: !!currentUser?.id, staleTime: 0, refetchOnMount: true, refetchOnWindowFocus: true,
+    enabled: !!currentUser?.id,
+    staleTime: 30 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myParticipations', currentUser?.id],
     queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
     enabled: !!currentUser?.id,
+    staleTime: 2 * 60 * 1000,
   });
   const { data: plans = [] } = useQuery({
     queryKey: ['allPlans'],
     queryFn: () => base44.entities.PartyPlan.list('-created_date', 50),
+    staleTime: 2 * 60 * 1000,
   });
   const myPlanIds = myParticipations.map(p => p.plan_id);
   const myPlans = plans.filter(p => myPlanIds.includes(p.id));
@@ -68,10 +72,12 @@ export default function Chat() {
     queryKey: ['myFriendships', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
     enabled: !!currentUser?.id,
+    staleTime: 5 * 60 * 1000,
   });
   const { data: userProfiles = [] } = useQuery({
     queryKey: ['userProfiles'],
     queryFn: () => base44.entities.UserProfile.list('-created_date', 100),
+    staleTime: 5 * 60 * 1000,
   });
   const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
   const selectedFriendProfile = profilesMap[selectedFriendId];
@@ -79,13 +85,17 @@ export default function Chat() {
   const { data: allDMMessages = [] } = useQuery({
     queryKey: ['allDMMessages', currentUser?.id],
     queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'direct' }),
-    enabled: !!currentUser?.id, staleTime: 0,
+    enabled: !!currentUser?.id,
+    staleTime: 30 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const { data: dmMessages = [], isLoading: dmLoading } = useQuery({
     queryKey: ['dmMessages', selectedFriendId, currentUser?.id],
     queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'direct' }),
-    enabled: !!selectedFriendId && !!currentUser?.id, staleTime: 0,
+    enabled: !!selectedFriendId && !!currentUser?.id,
+    staleTime: 30 * 1000,
+    refetchOnWindowFocus: false,
   });
   const sortedDMs = [...dmMessages]
     .filter(m =>

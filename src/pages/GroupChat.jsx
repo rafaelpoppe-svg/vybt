@@ -68,6 +68,7 @@ export default function GroupChat() {
       }
       return base44.entities.PartyPlan.list('-created_date', 100);
     },
+    staleTime: 2 * 60 * 1000,
   });
   const plan = plans.find(p => p.id === planId);
 
@@ -75,6 +76,7 @@ export default function GroupChat() {
     queryKey: ['planParticipants', planId],
     queryFn: () => base44.entities.PlanParticipant.filter({ plan_id: planId }),
     enabled: !!planId,
+    staleTime: 60 * 1000,
   });
 
   const { data: messages = [], isLoading: messagesLoading } = useQuery({
@@ -82,17 +84,20 @@ export default function GroupChat() {
     queryFn: () => base44.entities.ChatMessage.filter({ plan_id: planId, message_type: 'group' }),
     enabled: !!planId,
     staleTime: 0,
+    refetchInterval: false,
   });
 
   const { data: stories = [] } = useQuery({
     queryKey: ['planStories', planId],
     queryFn: () => base44.entities.ExperienceStory.filter({ plan_id: planId }),
     enabled: !!planId,
+    staleTime: 2 * 60 * 1000,
   });
 
   const { data: userProfiles = [] } = useQuery({
     queryKey: ['userProfiles'],
     queryFn: () => base44.entities.UserProfile.list('-created_date', 200),
+    staleTime: 5 * 60 * 1000,
   });
   const profilesMap = userProfiles.reduce((acc, p) => { acc[p.user_id] = p; return acc; }, {});
 
@@ -100,6 +105,7 @@ export default function GroupChat() {
     queryKey: ['myFriendships', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
     enabled: !!currentUser?.id,
+    staleTime: 5 * 60 * 1000,
   });
   const friendProfiles = myFriendships.map(f => profilesMap[f.friend_id]).filter(Boolean);
 
