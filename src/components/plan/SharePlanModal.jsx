@@ -197,7 +197,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
                         : { background: 'linear-gradient(135deg, #00c6d2, #542b9b)', color: 'white' }
                       }
                     >
-                      {sentTo.has(profile.user_id) ? '✓ Enviado' : t.invite }
+                      {sentTo.has(profile.user_id) ? t.sent  : t.invite }
                     </motion.button>
                   </div>
                 ))}
