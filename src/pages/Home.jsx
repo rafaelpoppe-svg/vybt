@@ -121,7 +121,7 @@ export default function Home() {
   });
 
   const { data: stories = [] } = useQuery({
-    queryKey: ['stories'],
+    queryKey: ['stories', currentUser?.id],
     queryFn: async () => {
       const all = await base44.entities.ExperienceStory.list('-created_date');
       const now = new Date();
@@ -130,6 +130,7 @@ export default function Home() {
         return (now - new Date(s.created_date)) < 24 * 3600 * 1000;
       });
     },
+    enabled: !!currentUser?.id,
   });
 
   const { data: allParticipants = [] } = useQuery({
