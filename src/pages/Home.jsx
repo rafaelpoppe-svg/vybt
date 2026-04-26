@@ -156,7 +156,8 @@ export default function Home() {
 
   const { data: communities = [] } = useQuery({
     queryKey: ['communities', city],
-    queryFn: () => city ? base44.entities.Community.filter({ city }) : base44.entities.Community.list('-created_date', 20),
+    queryFn: () => base44.entities.Community.filter({ city }),
+    enabled: !!city,  // ← CRÍTICO
   });
 
   const { data: myParticipations = [] } = useQuery({
