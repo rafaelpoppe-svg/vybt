@@ -91,7 +91,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
 
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800">
-            <h2 className="text-white font-bold text-base">Partilhar Plano</h2>
+            <h2 className="text-white font-bold text-base">{ t.sharePlan }</h2>
             <motion.button whileTap={{ scale: 0.9 }} onClick={onClose}
               className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
               <X className="w-4 h-4 text-gray-400" />
@@ -112,7 +112,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
 
           {/* External share options */}
           <div className="px-5 mb-4">
-            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-3">Partilha externa</p>
+            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-3">{ t.externalShare }</p>
             <div className="flex gap-3 justify-around">
               {/* Copy link */}
               <motion.button whileTap={{ scale: 0.9 }} onClick={handleCopyLink}
@@ -121,7 +121,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
                   style={{ background: copied ? '#00c6d220' : 'var(--surface-2)', border: '1px solid var(--border)' }}>
                   {copied ? <Check className="w-6 h-6 text-[#00c6d2]" /> : <Copy className="w-6 h-6 text-gray-300" />}
                 </div>
-                <span className="text-gray-400 text-[10px]">Copiar Link</span>
+                <span className="text-gray-400 text-[10px]"> { t.copyLink } </span>
               </motion.button>
 
               {/* Native share / more */}
@@ -131,7 +131,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
                   style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
                   <Send className="w-6 h-6 text-gray-300" />
                 </div>
-                <span className="text-gray-400 text-[10px]">Partilhar</span>
+                <span className="text-gray-400 text-[10px]"> { t.share } </span>
               </motion.button>
 
               {/* WhatsApp */}
@@ -169,7 +169,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
           {/* Friends on platform */}
           {friendProfiles.length > 0 && (
             <div className="px-5">
-              <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-3">Convidar amigos na plataforma</p>
+              <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-3"> { t.inviteFriendsPlatform } </p>
               <div className="space-y-2 max-h-52 overflow-y-auto">
                 {friendProfiles.map(profile => (
                   <div key={profile.user_id}
@@ -197,7 +197,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
                         : { background: 'linear-gradient(135deg, #00c6d2, #542b9b)', color: 'white' }
                       }
                     >
-                      {sentTo.has(profile.user_id) ? '✓ Enviado' : 'Convidar'}
+                      {sentTo.has(profile.user_id) ? '✓ Enviado' : t.invite }
                     </motion.button>
                   </div>
                 ))}
