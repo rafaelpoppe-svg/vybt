@@ -106,9 +106,16 @@ export default function Chat() {
 
   useEffect(() => {
     if (!selectedFriendId || !currentUser?.id) return;
-    const unread = allDMMessages.filter(m => m.sender_id === selectedFriendId && m.receiver_id === currentUser.id && !m.is_read);
-    unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }));
-    if (unread.length > 0) queryClient.invalidateQueries(['allDMMessages', currentUser.id]);
+    // Only mark as read messages where I am the receiver (RLS allows this)
+    const unread = allDMMessages.filter(m =>
+      m.message_type === 'direct' &&
+      m.sender_id === selectedFriendId &&
+      m.receiver_id === currentUser.id &&
+      !m.is_read
+    );
+    if (unread.length === 0) return;
+    unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }).catch(() => {}));
+    queryClient.invalidateQueries(['allDMMessages', currentUser.id]);
   }, [selectedFriendId, allDMMessages, currentUser?.id, queryClient]);
 
   useEffect(() => {
@@ -133,7 +140,7 @@ export default function Chat() {
           return [...withoutOptimistic, event.data];
         });
         if (sender_id === selectedFriendId && receiver_id === currentUser.id) {
-          base44.entities.ChatMessage.update(id, { is_read: true });
+          base44.entities.ChatMessage.update(id, { is_read: true }).catch(() => {});
         }
       }
     });
