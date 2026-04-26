@@ -88,8 +88,6 @@ export default function GroupChat() {
     refetchIntervalInBackground: false,
   });
 
-  console.log('messages from query:', messages);
-
   const { data: stories = [] } = useQuery({
     queryKey: ['planStories', planId],
     queryFn: () => base44.entities.ExperienceStory.filter({ plan_id: planId }),
