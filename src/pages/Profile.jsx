@@ -56,6 +56,7 @@ export default function Profile() {
     profileStatus,
     isLoading,
     isError,
+    profileError,  // ← novo
     hasProfile: !!profile,
   });
 
