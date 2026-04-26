@@ -34,7 +34,6 @@ const AuthenticatedApp = () => {
     }
   }, [isLoadingAuth, authError]);
 
-
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
