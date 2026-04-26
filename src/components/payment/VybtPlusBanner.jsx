@@ -5,9 +5,10 @@ import VybtPlusModal from './VybtPlusModal';
 import { useQueryClient } from '@tanstack/react-query';
 import {useLanguage} from '../common/LanguageContext.jsx';
 
-const t = useLanguage();
+
 
 export default function VybtPlusBanner({ profile, currentUser, compact = false }) {
+  const t = useLanguage();
   const HIGHLIGHTS = [t.unlimitedHighlights, t.exclusiveBadge, t.anyCity, t.prioritySupport];
   const [showModal, setShowModal] = useState(false);
   const queryClient = useQueryClient();
