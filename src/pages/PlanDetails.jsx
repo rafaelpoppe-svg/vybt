@@ -21,6 +21,7 @@ import AttendingToggle from '../components/plan/AttendingToggle';
 import AttendingAvatars from '../components/plan/AttendingAvatars';
 import AdminEditModal from '../components/plan/AdminEditModal';
 import InviteToPlanModal from '../components/plan/InviteToPlanModal';
+import SharePlanModal from '../components/plan/SharePlanModal';
 import { notifyNewGroupMember } from '../components/notifications/NotificationTriggers';
 import { useLanguage } from '../components/common/LanguageContext';
 import CommunityChallengeBanner from '../components/community/CommunityChallengeBanner';
@@ -38,6 +39,7 @@ export default function PlanDetails() {
   const [showReportModal, setShowReportModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const [joinRequestSent, setJoinRequestSent] = useState(false);
   const joinCancelledRef = useRef(false);
   
@@ -328,7 +330,7 @@ export default function PlanDetails() {
 
         {/* Share + Report buttons */}
         <div className="absolute top-4 right-4 flex gap-2">
-          <motion.button whileTap={{ scale: 0.9 }} className="p-2 rounded-full bg-black/50 backdrop-blur-sm" style={{ backgroundColor: 'var(--btn-bg)' }}>
+          <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowShareModal(true)} className="p-2 rounded-full backdrop-blur-sm" style={{ backgroundColor: 'var(--btn-bg)' }}>
             <Share2 className="w-5 h-5 text-white" />
           </motion.button>
           {currentUser && !isCreator && (
@@ -717,6 +719,17 @@ export default function PlanDetails() {
           onClose={() => setShowInviteModal(false)}
         />
       )}
+
+      {/* Share Modal */}
+      <SharePlanModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        plan={plan}
+        planId={planId}
+        friendIds={friendIds}
+        profilesMap={profilesMap}
+        currentUser={currentUser}
+      />
 
       {/* Leave Modal */}
       <LeavePlanModal
