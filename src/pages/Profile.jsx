@@ -40,7 +40,7 @@ export default function Profile() {
     retry: 2,
   });
 
-  const { data: profile, isLoading, isError, status: profileStatus } = useQuery({
+  const { data: profile, isLoading, isError, error: profileError, status: profileStatus } = useQuery({
     queryKey: ['myProfile', currentUser?.id],
     queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser.id }),
     select: d => d[0],
