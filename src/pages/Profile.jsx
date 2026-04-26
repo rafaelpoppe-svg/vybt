@@ -37,13 +37,16 @@ export default function Profile() {
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
     staleTime: 5 * 60 * 1000,
+    retry: 2,
   });
 
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading, isError } = useQuery({
     queryKey: ['myProfile', currentUser?.id],
     queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser.id }),
     select: d => d[0],
     enabled: !!currentUser?.id,
+    staleTime: 2 * 60 * 1000,  // ← evita re-fetch desnecessário
+    retry: 2,                   // ← tenta 2x antes de desistir
   });
 
   const { data: friendships = [] } = useQuery({
@@ -100,7 +103,20 @@ export default function Profile() {
   }, [profile?.profile_background_theme]);
 
   // Only block render while we don't have the profile yet (currentUser loads fast from cache)
-  if (!profile) {
+  if (isError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center flex-col gap-3" style={{ background: 'var(--bg)' }}>
+        <p style={{ color: 'var(--text-muted)' }}>Erro ao carregar perfil</p>
+        <button onClick={() => window.location.reload()} 
+          className="px-4 py-2 rounded-xl text-sm font-bold"
+          style={{ background: '#00c6d2', color: '#000' }}>
+          Tentar novamente
+        </button>
+      </div>
+    );
+  }
+
+  if (isLoading || !profile) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
