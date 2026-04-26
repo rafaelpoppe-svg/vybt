@@ -973,6 +973,7 @@ export const translations = {
     vybtPlusUntil: 'até',
     unlockFullPotential: 'Desbloqueia o potencial máximo',
     tryVybtPlus: 'Experimentar VybtPlus',
+    perMonth: '/mês',
   },
 
 en: {
@@ -1947,6 +1948,7 @@ en: {
     vybtPlusUntil: 'until {date}',
     unlockFullPotential: 'Unlock your full potential',
     tryVybtPlus: 'Try VybtPlus',
+    perMonth: '/month',
   },
 
   es: {
@@ -2921,6 +2923,7 @@ en: {
     vybtPlusUntil: 'hasta {date}',
     unlockFullPotential: 'Desbloquea todo tu potencial',
     tryVybtPlus: 'Probar VybtPlus',
+    perMonth: '/mes',
   },
 
   fr: {
@@ -3895,6 +3898,7 @@ en: {
     vybtPlusUntil: 'jusqu’au {date}',
     unlockFullPotential: 'Débloque ton plein potentiel',
     tryVybtPlus: 'Essayer VybtPlus',
+    perMonth: '/mois',
   },
 
   it: {
@@ -4869,6 +4873,7 @@ en: {
     vybtPlusUntil: 'fino al {date}',
     unlockFullPotential: 'Sblocca il tuo pieno potenziale',
     tryVybtPlus: 'Prova VybtPlus',
+    perMonth: '/mese',
   },
 };
 
