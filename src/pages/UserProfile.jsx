@@ -272,7 +272,8 @@ export default function UserProfile() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <motion.button whileTap={{ scale: 0.9 }} className="relative z-10 p-2 rounded-full bg-black/40 backdrop-blur-md">
-                  <MoreVertical className="w-5 h-5 text-white" />
+                  <MoreVertical className="w-5 h-5 text-white"
+                  style={{ backgroundColor: 'var(--btn-bg)' }}/>
                 </motion.button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-gray-900 border-gray-800">
