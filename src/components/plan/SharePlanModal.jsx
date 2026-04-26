@@ -7,7 +7,8 @@ import { useLanguage } from '../common/LanguageContext';
 export default function SharePlanModal({ isOpen, onClose, plan, planId, friendIds = [], profilesMap = {}, currentUser }) {
   const [copied, setCopied] = useState(false);
   const [sentTo, setSentTo] = useState(new Set());
-
+  const { t } = useLanguage();
+  
   if (!isOpen || !plan) return null;
 
   const shareUrl = `${window.location.origin}/PlanDetails?id=${planId}`;
