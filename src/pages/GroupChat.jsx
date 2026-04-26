@@ -118,13 +118,8 @@ export default function GroupChat() {
     return () => unsubscribe();
   }, [planId, currentUser?.id, queryClient]);
 
-  useEffect(() => {
-    if (!currentUser?.id || messages.length === 0) return;
-    const unread = messages.filter(m => m.sender_id !== currentUser.id && !m.is_read);
-    if (unread.length === 0) return;
-    unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }));
-    queryClient.invalidateQueries(['allGroupMessages', currentUser.id]);
-  }, [messages, currentUser?.id, queryClient]);
+  // Group chat messages don't support is_read updates (RLS only allows update by sender/receiver)
+  // Read state for group chats is not tracked per-message
 
   const sortedMessages = [...messages].sort(
     (a, b) => new Date(a.created_date) - new Date(b.created_date)
