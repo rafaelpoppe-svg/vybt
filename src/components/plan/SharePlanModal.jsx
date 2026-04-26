@@ -138,7 +138,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
               <motion.button whileTap={{ scale: 0.9 }} onClick={handleWhatsApp}
                 className="flex flex-col items-center gap-1.5">
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
-                  style={{ background: '#25D36620', border: '1px solid #25D36630' }}>
+                  style={{ background: 'var(--surface-2)', border: '1px solid #25D36630' }}>
                   💬
                 </div>
                 <span className="text-gray-400 text-[10px]">WhatsApp</span>
@@ -148,7 +148,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
               <motion.button whileTap={{ scale: 0.9 }} onClick={handleTelegram}
                 className="flex flex-col items-center gap-1.5">
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
-                  style={{ background: '#229ED920', border: '1px solid #229ED930' }}>
+                  style={{ background: 'var(--surface-2)', border: '1px solid #229ED930' }}>
                   ✈️
                 </div>
                 <span className="text-gray-400 text-[10px]">Telegram</span>
@@ -158,7 +158,7 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
               <motion.button whileTap={{ scale: 0.9 }} onClick={handleTwitter}
                 className="flex flex-col items-center gap-1.5">
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
-                  style={{ background: '#00000080', border: '1px solid #33333380' }}>
+                  style={{ background: 'var(--surface-2)', border: '1px solid #33333380' }}>
                   𝕏
                 </div>
                 <span className="text-gray-400 text-[10px]">Twitter</span>
