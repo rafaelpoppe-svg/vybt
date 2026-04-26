@@ -44,13 +44,9 @@ export default function Profile() {
     queryKey: ['myProfile', currentUser?.id],
     queryFn: async () => {
       const result = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
-      console.log('=== PROFILE QUERY RESULT ===', result); // ← novo
       return result;
     },
-    select: d => {
-      console.log('=== SELECT INPUT ===', d); // ← novo
-      return d[0];
-    },
+    select: d => Array.isArray(d) ? d[0] : d,
     enabled: !!currentUser?.id,
     staleTime: 2 * 60 * 1000,
     retry: 2,
