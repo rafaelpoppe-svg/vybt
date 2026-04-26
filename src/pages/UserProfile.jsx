@@ -255,7 +255,8 @@ export default function UserProfile() {
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3">
         <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="p-2 rounded-full bg-black/40 backdrop-blur-md">
-          <ChevronLeft className="w-5 h-5 text-white" />
+          <ChevronLeft className="w-5 h-5 text-white"
+          style={{ backgroundColor: 'var(--btn-bg)' }}/>
         </motion.button>
         {/* Username in header */}
         <div className="flex flex-col items-center absolute left-0 right-0 pointer-events-none">
