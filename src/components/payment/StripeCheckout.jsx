@@ -13,6 +13,7 @@ function CheckoutForm({ onSuccess, onError, buttonLabel }) {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,10 +36,10 @@ function CheckoutForm({ onSuccess, onError, buttonLabel }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <PaymentElement options={{ layout: 'tabs' }} />
+      <PaymentElement options={{ layout: 'tabs' }} onReady={() => setIsReady(true)} />
       <Button
         type="submit"
-        disabled={!stripe || isProcessing}
+        disabled={!isReady || isProcessing}
         className="w-full py-6 rounded-full font-bold text-lg bg-gradient-to-r from-[#00c6d2] to-[#542b9b] text-white"
       >
         {isProcessing ? (
