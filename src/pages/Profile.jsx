@@ -17,7 +17,6 @@ import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
 import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
 import FriendsListModal from '../components/profile/FriendsListModal';
 import { useLanguage } from '../components/common/LanguageContext';
-import VybtPlusBanner from '../components/payment/VybtPlusBanner';
 
 const THEME_ACCENTS = {
   default: '#00c6d2', beer: '#f59e0b', dance: '#8b5cf6',
@@ -238,11 +237,6 @@ export default function Profile() {
               {profile.vibes.map(vibe => <VibeTag key={vibe} vibe={vibe} size="sm" />)}
             </div>
           )}
-        </div>
-
-        {/* VybtPlus Banner */}
-        <div className="mt-4">
-          <VybtPlusBanner profile={profile} currentUser={currentUser} />
         </div>
 
         {/* Action buttons */}
