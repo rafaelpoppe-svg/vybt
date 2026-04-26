@@ -594,7 +594,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
 
           <div className="absolute top-0 left-0 right-0 z-40 flex gap-1 px-2 pt-2">
             {(currentGroup?.stories || []).map((_, index) => (
-              <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 bg-gray-800 rounded-full overflow-hidden">
+              <div key={`${currentGroupIndex}-${index}`} className="flex-1 h-0.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.35)' }}>
                 {index < currentStoryInGroupIndex
                   ? <div className="h-full bg-white w-full" />
                   : index === currentStoryInGroupIndex
