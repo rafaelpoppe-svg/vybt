@@ -1,0 +1,223 @@
+{
+  "name": "UserProfile",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Reference to the user"
+    },
+    "username": {
+      "type": "string",
+      "description": "Unique @username for the user (lowercase, no spaces)"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string",
+      "description": "User bio/description"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "female",
+        "male",
+        "other"
+      ]
+    },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date",
+      "description": "User's date of birth (must be 18+)"
+    },
+    "nationality": {
+      "type": "string",
+      "description": "User's nationality (ISO country code, e.g. PT, US, BR)"
+    },
+    "is_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "verification_selfie_url": {
+      "type": "string"
+    },
+    "vibes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Music preferences"
+    },
+    "party_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Preferred party types"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Up to 5 profile photos"
+    },
+    "city": {
+      "type": "string"
+    },
+    "radius_km": {
+      "type": "number",
+      "default": 10
+    },
+    "onboarding_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "tutorial_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "current_story_plan_id": {
+      "type": "string"
+    },
+    "total_stories_count": {
+      "type": "number",
+      "default": 0
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time the user was active in the app"
+    },
+    "notification_prefs": {
+      "type": "object",
+      "properties": {
+        "new_plan_push": {
+          "type": "boolean",
+          "default": true
+        },
+        "new_plan_email": {
+          "type": "boolean",
+          "default": false
+        },
+        "friend_story_push": {
+          "type": "boolean",
+          "default": true
+        },
+        "friend_story_email": {
+          "type": "boolean",
+          "default": false
+        },
+        "plan_update_push": {
+          "type": "boolean",
+          "default": true
+        },
+        "plan_update_email": {
+          "type": "boolean",
+          "default": false
+        },
+        "friend_request_push": {
+          "type": "boolean",
+          "default": true
+        },
+        "friend_request_email": {
+          "type": "boolean",
+          "default": false
+        },
+        "group_message_push": {
+          "type": "boolean",
+          "default": true
+        },
+        "group_message_email": {
+          "type": "boolean",
+          "default": false
+        },
+        "voting_push": {
+          "type": "boolean",
+          "default": true
+        },
+        "voting_email": {
+          "type": "boolean",
+          "default": false
+        },
+        "plan_reminder_1day": {
+          "type": "boolean",
+          "default": false
+        },
+        "plan_reminder_1hour": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "programs_shown": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_ambassador": {
+      "type": "boolean",
+      "default": false
+    },
+    "ambassador_opted_in": {
+      "type": "boolean",
+      "default": false
+    },
+    "referral_code": {
+      "type": "string"
+    },
+    "referred_by": {
+      "type": "string"
+    },
+    "referred_count": {
+      "type": "number",
+      "default": 0
+    },
+    "profile_background_theme": {
+      "type": "string",
+      "enum": [
+        "default",
+        "beer",
+        "dance",
+        "champagne",
+        "money",
+        "luxury",
+        "party"
+      ],
+      "default": "default"
+    },
+    "is_private": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, stories/plans/friends are hidden from non-friends"
+    },
+    "vybt_plus": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user has an active VybtPlus subscription"
+    },
+    "vybt_plus_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the VybtPlus subscription expires"
+    },
+    "vybt_plus_stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe customer ID for VybtPlus"
+    }
+  },
+  "required": [
+    "user_id"
+  ],
+  "rls": {
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "read": null,
+    "update": {
+      "data.user_id": "{{user.id}}"
+    },
+    "delete": {
+      "data.user_id": "{{user.id}}"
+    }
+  }
+}

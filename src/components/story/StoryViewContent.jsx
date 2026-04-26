@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { X, Loader2, ChevronRight, ChevronLeft, MoreVertical, Trash2, Volume2, VolumeX, Flag, MessageCircle } from 'lucide-react';
+import { X, Loader2, ChevronRight, ChevronLeft, MoreVertical, Trash2, Volume2, VolumeX, Flag, MessageCircle, Sparkles } from 'lucide-react';
+import HighlightStoryModal from './HighlightStoryModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import StoryReactions from './StoryReactions';
 import ReportContentModal from '../moderation/ReportContentModal';
@@ -38,6 +39,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
   const [allStories, setAllStories] = useState([]);
   const [isMuted, setIsMuted] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showHighlightStoryModal, setShowHighlightStoryModal] = useState(false);
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const [currentStoryInGroupIndex, setCurrentStoryInGroupIndex] = useState(0);
   const [showChatInput, setShowChatInput] = useState(false);
@@ -704,16 +706,21 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                         </motion.button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="bg-gray-900 border-gray-800">
-                        {canDelete && (
-                          <DropdownMenuItem onClick={() => deleteMutation.mutate()} className="text-red-400 hover:text-red-300">
-                            <Trash2 className="w-4 h-4 mr-2" />{t.delete} Story
-                          </DropdownMenuItem>
-                        )}
-                        {!canDelete && currentUser && (
-                          <DropdownMenuItem onClick={() => setShowReportModal(true)} className="text-orange-400 hover:text-orange-300">
-                            <Flag className="w-4 h-4 mr-2" />{t.report}
-                          </DropdownMenuItem>
-                        )}
+                       {canDelete && !story?.is_highlighted && (
+                         <DropdownMenuItem onClick={() => { setShowHighlightStoryModal(true); isPausedRef.current = true; }} className="text-[#00c6d2] hover:text-[#00c6d2]/80">
+                           <Sparkles className="w-4 h-4 mr-2" />{t.highlightStoryTitle || 'Destacar Story'}
+                         </DropdownMenuItem>
+                       )}
+                       {canDelete && (
+                         <DropdownMenuItem onClick={() => deleteMutation.mutate()} className="text-red-400 hover:text-red-300">
+                           <Trash2 className="w-4 h-4 mr-2" />{t.delete} Story
+                         </DropdownMenuItem>
+                       )}
+                       {!canDelete && currentUser && (
+                         <DropdownMenuItem onClick={() => setShowReportModal(true)} className="text-orange-400 hover:text-orange-300">
+                           <Flag className="w-4 h-4 mr-2" />{t.report}
+                         </DropdownMenuItem>
+                       )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <motion.button whileTap={{ scale: 0.9 }} onClick={() => { queryClient.removeQueries(['allStories']); onClose(); }}
@@ -789,6 +796,22 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
       <ReportContentModal isOpen={showReportModal} onClose={() => setShowReportModal(false)}
         onReport={(data) => reportMutation.mutate(data)}
         contentType="story" contentTitle={storyPlan?.title} isLoading={reportMutation.isPending} />
+
+      <HighlightStoryModal
+        isOpen={showHighlightStoryModal}
+        onClose={() => { setShowHighlightStoryModal(false); isPausedRef.current = false; }}
+        planCity={storyPlan?.city || ''}
+        onConfirm={async ({ targetVibes, targetPartyTypes }) => {
+          await base44.entities.ExperienceStory.update(story.id, {
+            is_highlighted: true,
+            target_vibes: targetVibes,
+            target_party_types: targetPartyTypes,
+          });
+          queryClient.invalidateQueries(['allStories']);
+          setShowHighlightStoryModal(false);
+          isPausedRef.current = false;
+        }}
+      />
 
       {floatingReactions.map(({ id, emoji }) => (
         <motion.div key={id} className="fixed text-4xl pointer-events-none z-50" style={{ bottom: '20%', right: '10%' }}

@@ -17,6 +17,7 @@ import { NATIONALITIES } from '../components/onboarding/NationalitySelect';
 import ProfileStoryGrid from '../components/profile/ProfileStoryGrid';
 import FriendsListModal from '../components/profile/FriendsListModal';
 import { useLanguage } from '../components/common/LanguageContext';
+import VybtPlusBanner from '../components/payment/VybtPlusBanner';
 
 const THEME_ACCENTS = {
   default: '#00c6d2', beer: '#f59e0b', dance: '#8b5cf6',
@@ -220,8 +221,13 @@ export default function Profile() {
           )}
         </div>
 
+        {/* VybtPlus Banner */}
+        <div className="mt-4">
+          <VybtPlusBanner profile={profile} currentUser={currentUser} />
+        </div>
+
         {/* Action buttons */}
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 mt-3">
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => navigate(createPageUrl('EditProfile'))}
             className="flex-1 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5"
             style={{ background: 'var(--surface-2)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}>

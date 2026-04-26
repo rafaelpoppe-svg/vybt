@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import DeleteAccountModal from '../components/profile/DeleteAccountModal';
 import { useLanguage } from '../components/common/LanguageContext';
+import VybtPlusBanner from '../components/payment/VybtPlusBanner';
 import { useTheme } from '../lib/ThemeContext';
 import { Sun, Moon } from 'lucide-react';
 
@@ -103,6 +104,11 @@ export default function Settings() {
       </header>
 
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-16" style={{ WebkitOverflowScrolling: 'touch' }}>
+
+        {/* VybtPlus */}
+        {profile && (
+          <VybtPlusBanner profile={profile} currentUser={currentUser} />
+        )}
 
         {/* Appearance */}
         <Section title={t.appearance}>
