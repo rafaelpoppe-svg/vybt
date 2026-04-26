@@ -42,8 +42,15 @@ export default function Profile() {
 
   const { data: profile, isLoading, isError, error: profileError, status: profileStatus } = useQuery({
     queryKey: ['myProfile', currentUser?.id],
-    queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser.id }),
-    select: d => d[0],
+    queryFn: async () => {
+      const result = await base44.entities.UserProfile.filter({ user_id: currentUser.id });
+      console.log('=== PROFILE QUERY RESULT ===', result); // ← novo
+      return result;
+    },
+    select: d => {
+      console.log('=== SELECT INPUT ===', d); // ← novo
+      return d[0];
+    },
     enabled: !!currentUser?.id,
     staleTime: 2 * 60 * 1000,
     retry: 2,
