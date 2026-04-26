@@ -52,17 +52,6 @@ export default function Profile() {
     retry: 2,
   });
 
-  // Adiciona mesmo aqui, antes de qualquer return
-  console.log('=== PROFILE DEBUG ===', {
-    userStatus,
-    userId: currentUser?.id,
-    profileStatus,
-    isLoading,
-    isError,
-    profileError,  // ← novo
-    hasProfile: !!profile,
-  });
-
   const { data: friendships = [] } = useQuery({
     queryKey: ['myFriendships', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser.id, status: 'accepted' }),
