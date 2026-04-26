@@ -116,6 +116,7 @@ export default function Home() {
   const { data: plans = [], isLoading: plansLoading } = useQuery({
     queryKey: ['plans', city],
     queryFn: () => base44.entities.PartyPlan.filter({ city }, '-created_date', 100),
+    enabled: !!city,  // ← CRÍTICO
   });
 
   const { data: stories = [] } = useQuery({
