@@ -254,9 +254,9 @@ export default function UserProfile() {
     >
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3">
-        <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="p-2 rounded-full bg-black/40 backdrop-blur-md">
-          <ChevronLeft className="w-5 h-5 text-white"
-          style={{ backgroundColor: 'var(--btn-bg)' }}/>
+        <motion.button whileTap={{ scale: 0.9 }} onClick={() => navigate(-1)} className="p-2 rounded-full bg-black/40 backdrop-blur-md"
+          style={{ backgroundColor: 'var(--btn-bg)' }}>
+          <ChevronLeft className="w-5 h-5 text-white"/>
         </motion.button>
         {/* Username in header */}
         <div className="flex flex-col items-center absolute left-0 right-0 pointer-events-none">
@@ -271,9 +271,9 @@ export default function UserProfile() {
             {currentUser && currentUser.id !== userId && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <motion.button whileTap={{ scale: 0.9 }} className="relative z-10 p-2 rounded-full bg-black/40 backdrop-blur-md">
-                  <MoreVertical className="w-5 h-5 text-white"
-                  style={{ backgroundColor: 'var(--btn-bg)' }}/>
+                <motion.button whileTap={{ scale: 0.9 }} className="relative z-10 p-2 rounded-full bg-black/40 backdrop-blur-md"
+                style={{ backgroundColor: 'var(--btn-bg)' }}>
+                  <MoreVertical className="w-5 h-5 text-white"/>
                 </motion.button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-gray-900 border-gray-800">
