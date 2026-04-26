@@ -97,10 +97,13 @@ export default function Chat() {
     staleTime: 30 * 1000,
     refetchOnWindowFocus: false,
   });
+  // receiver_id is now an array — helper to check if a user is in receiver_id
+  const hasReceiver = (m, userId) => Array.isArray(m.receiver_id) ? m.receiver_id.includes(userId) : m.receiver_id === userId;
+
   const sortedDMs = [...dmMessages]
     .filter(m =>
-      (m.sender_id === currentUser?.id && m.receiver_id === selectedFriendId) ||
-      (m.sender_id === selectedFriendId && m.receiver_id === currentUser?.id)
+      (m.sender_id === currentUser?.id && hasReceiver(m, selectedFriendId)) ||
+      (m.sender_id === selectedFriendId && hasReceiver(m, currentUser?.id))
     )
     .sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
 
@@ -110,7 +113,7 @@ export default function Chat() {
     const unread = allDMMessages.filter(m =>
       m.message_type === 'direct' &&
       m.sender_id === selectedFriendId &&
-      m.receiver_id === currentUser.id &&
+      hasReceiver(m, currentUser.id) &&
       !m.is_read
     );
     if (unread.length === 0) return;
@@ -131,15 +134,16 @@ export default function Chat() {
     if (!selectedFriendId || !currentUser?.id) return;
     const unsubscribe = base44.entities.ChatMessage.subscribe((event) => {
       if (event.type === 'create' && event.data?.message_type === 'direct') {
-        const { sender_id, receiver_id, id } = event.data;
-        const isThisConvo = (sender_id === selectedFriendId && receiver_id === currentUser.id) || (sender_id === currentUser.id && receiver_id === selectedFriendId);
+        const { sender_id, id } = event.data;
+        const rxIds = Array.isArray(event.data.receiver_id) ? event.data.receiver_id : [event.data.receiver_id];
+        const isThisConvo = (sender_id === selectedFriendId && rxIds.includes(currentUser.id)) || (sender_id === currentUser.id && rxIds.includes(selectedFriendId));
         if (!isThisConvo) return;
         queryClient.setQueryData(['dmMessages', selectedFriendId, currentUser.id], (old = []) => {
           const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
           if (withoutOptimistic.some(m => m.id === id)) return old;
           return [...withoutOptimistic, event.data];
         });
-        if (sender_id === selectedFriendId && receiver_id === currentUser.id) {
+        if (sender_id === selectedFriendId && rxIds.includes(currentUser.id)) {
           base44.entities.ChatMessage.update(id, { is_read: true }).catch(() => {});
         }
       }
@@ -155,7 +159,7 @@ export default function Chat() {
     mutationFn: async (content) => {
       if (!currentUser?.id || !selectedFriendId) return;
       const msg = await base44.entities.ChatMessage.create({
-        sender_id: currentUser.id, receiver_id: selectedFriendId,
+        sender_id: currentUser.id, receiver_id: [selectedFriendId],
         message_type: 'direct', content, is_read: false,
       });
       notifyNewDirectMessage(selectedFriendId, currentUser.id, myProfile?.display_name || currentUser.full_name || t.someone);
@@ -163,7 +167,7 @@ export default function Chat() {
     },
     onMutate: (content) => {
       const optimisticMsg = {
-        id: `optimistic-${Date.now()}`, sender_id: currentUser.id, receiver_id: selectedFriendId,
+        id: `optimistic-${Date.now()}`, sender_id: currentUser.id, receiver_id: [selectedFriendId],
         message_type: 'direct', content, is_read: false, created_date: new Date().toISOString(),
       };
       queryClient.setQueryData(['dmMessages', selectedFriendId, currentUser.id], (old = []) => [...old, optimisticMsg]);
@@ -183,8 +187,8 @@ export default function Chat() {
   const clearChatMutation = useMutation({
     mutationFn: async () => {
       const msgs = [...dmMessages].filter(m =>
-        (m.sender_id === currentUser?.id && m.receiver_id === selectedFriendId) ||
-        (m.sender_id === selectedFriendId && m.receiver_id === currentUser?.id)
+        (m.sender_id === currentUser?.id && hasReceiver(m, selectedFriendId)) ||
+        (m.sender_id === selectedFriendId && hasReceiver(m, currentUser?.id))
       );
       await Promise.all(msgs.map(m => base44.entities.ChatMessage.delete(m.id)));
     },
@@ -355,7 +359,7 @@ export default function Chat() {
 
   // ── Chat List ─────────────────────────────────────────────────────────────
   const totalUnreadDMs = friendships.reduce((acc, f) => {
-    return acc + allDMMessages.filter(m => m.sender_id === f.friend_id && m.receiver_id === currentUser?.id && !m.is_read).length;
+    return acc + allDMMessages.filter(m => m.sender_id === f.friend_id && hasReceiver(m, currentUser?.id) && !m.is_read).length;
   }, 0);
   const totalUnreadGroups = myPlans.reduce((acc, plan) => {
     return acc + allGroupMessages.filter(m => m.plan_id === plan.id && m.sender_id !== currentUser?.id && !m.is_read).length;
@@ -461,11 +465,11 @@ export default function Chat() {
             friendships.map((f, idx) => {
               const friend = profilesMap[f.friend_id];
               const convoMsgs = allDMMessages.filter(m =>
-                (m.sender_id === currentUser?.id && m.receiver_id === f.friend_id) ||
-                (m.sender_id === f.friend_id && m.receiver_id === currentUser?.id)
+                (m.sender_id === currentUser?.id && hasReceiver(m, f.friend_id)) ||
+                (m.sender_id === f.friend_id && hasReceiver(m, currentUser?.id))
               ).sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
               const lastMsg = convoMsgs[0];
-              const unreadCount = convoMsgs.filter(m => m.sender_id === f.friend_id && m.receiver_id === currentUser?.id && !m.is_read).length;
+              const unreadCount = convoMsgs.filter(m => m.sender_id === f.friend_id && hasReceiver(m, currentUser?.id) && !m.is_read).length;
               const isLastMine = lastMsg?.sender_id === currentUser?.id;
               const previewText = lastMsg ? getMsgPreview(lastMsg.content) : null;
 

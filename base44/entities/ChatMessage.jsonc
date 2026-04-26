@@ -6,8 +6,11 @@
       "type": "string"
     },
     "receiver_id": {
-      "type": "string",
-      "description": "For direct messages"
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "For direct messages: [receiverUserId]. For group messages: array of all participant IDs except sender."
     },
     "plan_id": {
       "type": "string",
@@ -44,7 +47,9 @@
           "data.sender_id": "{{user.id}}"
         },
         {
-          "data.receiver_id": "{{user.id}}"
+          "data.receiver_id": {
+            "$contains": "{{user.id}}"
+          }
         }
       ]
     },
@@ -54,7 +59,9 @@
           "data.sender_id": "{{user.id}}"
         },
         {
-          "data.receiver_id": "{{user.id}}"
+          "data.receiver_id": {
+            "$contains": "{{user.id}}"
+          }
         }
       ]
     },

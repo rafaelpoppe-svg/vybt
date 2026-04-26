@@ -167,12 +167,16 @@ export default function GroupChat() {
   const sendMutation = useMutation({
     mutationFn: async (content) => {
       if (!currentUser?.id || !planId) return;
+      const receiverIds = participants
+        .map(p => p.user_id)
+        .filter(id => id !== currentUser.id);
       const msgPromise = base44.entities.ChatMessage.create({
         sender_id: currentUser.id,
         plan_id: planId,
         message_type: 'group',
         content,
         is_read: false,
+        receiver_id: receiverIds,
       });
       notifyNewGroupMessage(
         planId, currentUser.id,
@@ -253,12 +257,14 @@ export default function GroupChat() {
         bad_votes: 0,
         voted_users: [],
       });
+      const renewReceiverIds = participants.map(p => p.user_id).filter(id => id !== currentUser.id);
       await base44.entities.ChatMessage.create({
         sender_id: currentUser.id,
         plan_id: planId,
         message_type: 'group',
         content: t.planRenewed,
         is_read: false,
+        receiver_id: renewReceiverIds,
       });
     },
     onSuccess: () => {
@@ -287,12 +293,14 @@ export default function GroupChat() {
         updateData.is_on_fire = false;
       }
       await base44.entities.PartyPlan.update(planId, updateData);
+      const terminateReceiverIds = participants.map(p => p.user_id).filter(id => id !== currentUser.id);
       await base44.entities.ChatMessage.create({
         sender_id: currentUser.id,
         plan_id: planId,
         message_type: 'group',
         content: t.planTerminatedMsg,
         is_read: false,
+        receiver_id: terminateReceiverIds,
       });
     },
     onSuccess: () => {
@@ -331,12 +339,14 @@ export default function GroupChat() {
       await base44.entities.PartyPlan.update(planId, data);
 
       if (changes.length > 0 && currentUser?.id) {
+        const editReceiverIds = participants.map(p => p.user_id).filter(id => id !== currentUser.id);
         await base44.entities.ChatMessage.create({
           sender_id: currentUser.id,
           plan_id: planId,
           message_type: 'group',
           content: `plan_update:${changes.join('\n')}`,
           is_read: false,
+          receiver_id: editReceiverIds,
         });
       }
     },
