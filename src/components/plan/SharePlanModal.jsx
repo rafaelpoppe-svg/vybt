@@ -99,7 +99,8 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
           </div>
 
           {/* Plan preview */}
-          <div className="mx-5 mt-4 mb-4 flex items-center gap-3 p-3 rounded-xl bg-gray-900/60 border border-gray-800">
+          <div className="mx-5 mt-4 mb-4 flex items-center gap-3 p-3 rounded-xl border border-gray-800"
+          style={{background: 'var(--bg-secondary)'}}>
             {plan.cover_image
               ? <img src={plan.cover_image} alt="" className="w-12 h-12 rounded-xl object-cover flex-shrink-0" />
               : <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00c6d2]/30 to-[#542b9b]/30 flex items-center justify-center text-2xl flex-shrink-0">🎉</div>
