@@ -110,7 +110,8 @@ export default function Home() {
 
   const { data: pois = [] } = useQuery({
     queryKey: ['pois', city],
-    queryFn: () => city ? base44.entities.PointOfInterest.filter({ city }) : base44.entities.PointOfInterest.list(),
+    queryFn: () => base44.entities.PointOfInterest.filter({ city }),
+    enabled: !!city,  // ← CRÍTICO
   });
 
   const { data: plans = [], isLoading: plansLoading } = useQuery({
