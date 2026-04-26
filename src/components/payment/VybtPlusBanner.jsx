@@ -3,12 +3,11 @@ import { motion } from 'framer-motion';
 import { Zap, ChevronRight, CheckCircle2, X } from 'lucide-react';
 import VybtPlusModal from './VybtPlusModal';
 import { useQueryClient } from '@tanstack/react-query';
-import {useLanguage} from '../common/LanguageContext.jsx';
-
-
+import { useLanguage } from '../common/LanguageContext.jsx';
 
 export default function VybtPlusBanner({ profile, currentUser, compact = false }) {
-  const t = useLanguage();
+  const { t } = useLanguage();
+
   const HIGHLIGHTS = [t.unlimitedHighlights, t.exclusiveBadge, t.anyCity, t.prioritySupport];
   const [showModal, setShowModal] = useState(false);
   const queryClient = useQueryClient();
@@ -20,14 +19,13 @@ export default function VybtPlusBanner({ profile, currentUser, compact = false }
   };
 
   if (isActive) {
-    // Active badge
     return (
       <div className="flex items-center gap-2 px-3 py-2 rounded-2xl" style={{ background: 'linear-gradient(135deg, rgba(0,198,210,0.15), rgba(84,43,155,0.15))', border: '1px solid rgba(0,198,210,0.3)' }}>
         <Zap className="w-4 h-4 text-[#00c6d2]" />
         <span className="text-[#00c6d2] font-bold text-sm">{t.vybtPlusActive}</span>
         {profile.vybt_plus_expires_at && (
           <span className="text-gray-500 text-xs ml-auto">
-            {t.vybtPlusUntil} {new Date(profile.vybt_plus_expires_at).toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })}
+            {t.vybtPlusUntil.replace('{date}', new Date(profile.vybt_plus_expires_at).toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' }))}
           </span>
         )}
       </div>
@@ -45,7 +43,7 @@ export default function VybtPlusBanner({ profile, currentUser, compact = false }
         >
           <Zap className="w-4 h-4 text-white" />
           <span className="text-white font-bold text-sm flex-1 text-left">VybtPlus</span>
-          <span className="text-white/70 text-xs">€4.99/mês</span>
+          <span className="text-white/70 text-xs">€4.99{t.perMonth}</span>
           <ChevronRight className="w-4 h-4 text-white/70" />
         </motion.button>
         <VybtPlusModal isOpen={showModal} onClose={() => setShowModal(false)} onSuccess={handleSuccess} />
@@ -61,7 +59,6 @@ export default function VybtPlusBanner({ profile, currentUser, compact = false }
         className="w-full rounded-3xl overflow-hidden relative"
         style={{ background: 'linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 100%)', border: '1px solid rgba(0,198,210,0.25)' }}
       >
-        {/* Glow */}
         <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #00c6d2, transparent)' }} />
 
         <div className="p-4">
@@ -69,16 +66,20 @@ export default function VybtPlusBanner({ profile, currentUser, compact = false }
             <div className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}>
               <Zap className="w-5 h-5 text-white" />
             </div>
+
             <div className="flex-1 text-left">
               <div className="flex items-center gap-2">
                 <span className="text-white font-black text-base">VybtPlus</span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-black text-white" style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}>PRO</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-black text-white" style={{ background: 'linear-gradient(135deg, #00c6d2, #542b9b)' }}>
+                  PRO
+                </span>
               </div>
               <p className="text-gray-400 text-xs mt-0.5">{t.unlockFullPotential}</p>
             </div>
+
             <div className="text-right flex-shrink-0">
               <p className="text-white font-black text-lg">€4.99</p>
-              <p className="text-gray-500 text-xs">/mês</p>
+              <p className="text-gray-500 text-xs">{t.perMonth}</p>
             </div>
           </div>
 
