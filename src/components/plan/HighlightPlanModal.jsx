@@ -25,13 +25,14 @@ export default function HighlightPlanModal({ isOpen, onClose, onConfirm, planTit
       {isOpen && (
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
+          className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
           onClick={onClose}
         >
           <motion.div
             initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md bg-gray-900 rounded-2xl border border-gray-800"
+            className="w-full max-w-md bg-gray-900 rounded-2xl border border-gray-800 max-h-[85vh] overflow-y-auto"
+            style={{ touchAction: 'pan-y' }}
           >
             {/* Header */}
             <div className="p-4 border-b border-gray-800 flex items-center justify-between">

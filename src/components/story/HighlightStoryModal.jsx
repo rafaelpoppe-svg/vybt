@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Music, PartyPopper, MapPin, Info } from 'lucide-react';
-import VibeTag, { vibeConfig } from '../common/VibeTag';
-import PartyTag, { partyTagConfig } from '../common/PartyTag';
+import VibeTag, { ALL_VIBES } from '../common/VibeTag';
+import PartyTag, { ALL_PARTY_TYPES } from '../common/PartyTag';
 import StripeCheckout from '../payment/StripeCheckout';
 import { toast } from 'sonner';
 import { useLanguage } from '../common/LanguageContext';
-
-const vibeOptions = Object.keys(vibeConfig);
-const partyTagOptions = Object.keys(partyTagConfig);
 
 export default function HighlightStoryModal({ 
   isOpen, 
@@ -56,7 +53,7 @@ export default function HighlightStoryModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
+          className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
           onClick={onClose}
         >
           <motion.div
@@ -65,6 +62,7 @@ export default function HighlightStoryModal({
             exit={{ y: 100, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
             className="w-full max-w-md bg-gray-900 rounded-2xl border border-gray-800 max-h-[85vh] overflow-y-auto"
+            style={{ touchAction: 'pan-y' }}
           >
             {/* Header */}
             <div className="sticky top-0 bg-gray-900 p-4 border-b border-gray-800 flex items-center justify-between">
@@ -101,7 +99,7 @@ export default function HighlightStoryModal({
                 </label>
                 <p className="text-xs text-gray-500 mb-3">{t.highlightStoryTargetVibesDesc}</p>
                 <div className="flex flex-wrap gap-2">
-                  {vibeOptions.slice(0, -1).map(vibe => (
+                  {ALL_VIBES.map(vibe => (
                     <VibeTag
                       key={vibe}
                       vibe={vibe}
@@ -122,7 +120,7 @@ export default function HighlightStoryModal({
                 </label>
                 <p className="text-xs text-gray-500 mb-3">{t.highlightStoryTargetPartyDesc}</p>
                 <div className="flex flex-wrap gap-2">
-                  {partyTagOptions.map(tag => (
+                  {ALL_PARTY_TYPES.map(tag => (
                     <PartyTag
                       key={tag}
                       tag={tag}
