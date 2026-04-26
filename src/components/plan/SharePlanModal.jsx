@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Check, MessageCircle, Send } from 'lucide-react';
 import { toast } from 'sonner';
+import { useLanguage } from '../common/LanguageContext';
 
 export default function SharePlanModal({ isOpen, onClose, plan, planId, friendIds = [], profilesMap = {}, currentUser }) {
   const [copied, setCopied] = useState(false);
