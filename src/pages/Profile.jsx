@@ -33,20 +33,30 @@ export default function Profile() {
   const [expandedPhoto, setExpandedPhoto] = useState(null);
   const [showFriends, setShowFriends] = useState(false);
 
-  const { data: currentUser } = useQuery({
+  const { data: currentUser, status: userStatus } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me(),
     staleTime: 5 * 60 * 1000,
     retry: 2,
   });
 
-  const { data: profile, isLoading, isError } = useQuery({
+  const { data: profile, isLoading, isError, status: profileStatus } = useQuery({
     queryKey: ['myProfile', currentUser?.id],
     queryFn: () => base44.entities.UserProfile.filter({ user_id: currentUser.id }),
     select: d => d[0],
     enabled: !!currentUser?.id,
-    staleTime: 2 * 60 * 1000,  // ← evita re-fetch desnecessário
-    retry: 2,                   // ← tenta 2x antes de desistir
+    staleTime: 2 * 60 * 1000,
+    retry: 2,
+  });
+
+  // Adiciona mesmo aqui, antes de qualquer return
+  console.log('=== PROFILE DEBUG ===', {
+    userStatus,
+    userId: currentUser?.id,
+    profileStatus,
+    isLoading,
+    isError,
+    hasProfile: !!profile,
   });
 
   const { data: friendships = [] } = useQuery({
