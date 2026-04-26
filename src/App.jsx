@@ -10,6 +10,8 @@ import { TabHistoryProvider } from '@/lib/TabHistoryContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import AddStory from './pages/AddStory';
 import StoryView from './pages/StoryView';
+import { useQueryClient } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -21,6 +23,18 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const queryClient = useQueryClient();
+
+  // Prefetch currentUser assim que a auth carrega
+  useEffect(() => {
+    if (!isLoadingAuth && !authError) {
+      queryClient.prefetchQuery({
+        queryKey: ['currentUser'],
+        queryFn: () => base44.auth.me(),
+        staleTime: 5 * 60 * 1000,
+      });
+    }
+  }, [isLoadingAuth, authError]);
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
