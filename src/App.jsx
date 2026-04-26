@@ -12,6 +12,7 @@ import AddStory from './pages/AddStory';
 import StoryView from './pages/StoryView';
 import { useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import React, { useEffect } from 'react';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
