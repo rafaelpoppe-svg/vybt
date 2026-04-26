@@ -173,7 +173,8 @@ export default function SharePlanModal({ isOpen, onClose, plan, planId, friendId
               <div className="space-y-2 max-h-52 overflow-y-auto">
                 {friendProfiles.map(profile => (
                   <div key={profile.user_id}
-                    className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-800 bg-gray-900/40">
+                    className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-800"
+                    style={{background: 'var(--bg-secondary)'}}>
                     {profile.photos?.[0]
                       ? <img src={profile.photos[0]} alt="" className="w-9 h-9 rounded-full object-cover flex-shrink-0" />
                       : <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#00c6d2]/40 to-[#542b9b]/40 flex items-center justify-center flex-shrink-0">
