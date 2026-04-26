@@ -127,7 +127,8 @@ export default function GroupChatHeader({
 
           {/* Awaiting admin decision banner (non-admin members) */}
           {planStatus === 'ended' && plan?.status !== 'terminated' && plan?.status !== 'renewed' && !isAdmin && (
-            <div className="w-full py-2.5 rounded-xl bg-gray-800/60 border border-gray-700/50 text-gray-400 text-xs font-medium flex items-center justify-center gap-2">
+            <div className="w-full py-2.5 rounded-xl border border-gray-700/50 text-xs font-medium flex items-center justify-center gap-2"
+          style={{ backgroundColor: 'var(--input-bg)', color: 'var(--text-primary)' }}>
               {t.awaitingAdminDecision}
             </div>
           )}
