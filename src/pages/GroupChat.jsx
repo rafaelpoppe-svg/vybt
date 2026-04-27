@@ -126,17 +126,11 @@ export default function GroupChat() {
     return () => unsubscribe();
   }, [planId, queryClient]);
 
-  // Mark group messages as read when user opens the chat
+  // Record last-visited timestamp when user opens the group chat
   useEffect(() => {
-    if (!currentUser?.id || !planId || messages.length === 0) return;
-    const unread = messages.filter(m => m.sender_id !== currentUser.id && !m.is_read);
-    if (unread.length === 0) return;
-    unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }).catch(() => {}));
-    queryClient.setQueryData(['groupMessages', planId], (old = []) =>
-      old.map(m => (m.sender_id !== currentUser.id && !m.is_read) ? { ...m, is_read: true } : m)
-    );
-    queryClient.invalidateQueries({ queryKey: ['allGroupMessages', currentUser.id] });
-  }, [planId, currentUser?.id]); // eslint-disable-line
+    if (!planId) return;
+    try { localStorage.setItem(`chat_visited_${planId}`, new Date().toISOString()); } catch {}
+  }, [planId]);
 
   const sortedMessages = [...messages].sort(
     (a, b) => new Date(a.created_date) - new Date(b.created_date)
@@ -462,6 +456,7 @@ export default function GroupChat() {
         isAdmin={isAdmin}
         themeColor={themeColor}
         onBack={() => {
+          try { localStorage.setItem(`chat_visited_${planId}`, new Date().toISOString()); } catch {}
           queryClient.invalidateQueries({ queryKey: ['allGroupMessages', currentUser?.id] });
           navigate(createPageUrl('Chat'));
         }}

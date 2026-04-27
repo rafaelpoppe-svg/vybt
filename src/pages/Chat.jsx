@@ -109,7 +109,6 @@ export default function Chat() {
 
   useEffect(() => {
     if (!selectedFriendId || !currentUser?.id) return;
-    // Only mark as read messages where I am the receiver (RLS allows this)
     const unread = allDMMessages.filter(m =>
       m.message_type === 'direct' &&
       m.sender_id === selectedFriendId &&
@@ -117,9 +116,17 @@ export default function Chat() {
       !m.is_read
     );
     if (unread.length === 0) return;
+    // Optimistically update local cache immediately so UI reflects read state
+    queryClient.setQueryData(['allDMMessages', currentUser.id], (old = []) =>
+      old.map(m =>
+        (m.sender_id === selectedFriendId && hasReceiver(m, currentUser.id) && !m.is_read)
+          ? { ...m, is_read: true }
+          : m
+      )
+    );
+    // Persist to DB in background
     unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }).catch(() => {}));
-    queryClient.invalidateQueries(['allDMMessages', currentUser.id]);
-  }, [selectedFriendId, allDMMessages, currentUser?.id, queryClient]);
+  }, [selectedFriendId, currentUser?.id]); // intentionally omit allDMMessages to avoid loop
 
   useEffect(() => {
     if (!currentUser?.id) return;
@@ -217,10 +224,7 @@ export default function Chat() {
         {/* Header */}
         <header className="flex-shrink-0 backdrop-blur-xl border-b px-4 pb-3 flex items-center gap-3"
           style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)', position: 'relative', zIndex: 50, background: 'var(--header-bg)', borderColor: 'var(--border)' }}>
-          <motion.button whileTap={{ scale: 0.9 }} onClick={() => {
-              queryClient.invalidateQueries({ queryKey: ['allDMMessages', currentUser?.id] });
-              setSelectedFriendId(null);
-            }}
+          <motion.button whileTap={{ scale: 0.9 }} onClick={() => setSelectedFriendId(null)}
             className="w-11 h-11 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0"
             style={{ touchAction: 'manipulation' }}>
             <ChevronLeft className="w-5 h-5 text-white" />
@@ -361,11 +365,21 @@ export default function Chat() {
   }
 
   // ── Chat List ─────────────────────────────────────────────────────────────
+  // Helper: get last-visited timestamp for a group chat from localStorage
+  const getGroupLastVisited = (planId) => {
+    try { return localStorage.getItem(`chat_visited_${planId}`) || '1970-01-01'; } catch { return '1970-01-01'; }
+  };
+
   const totalUnreadDMs = friendships.reduce((acc, f) => {
     return acc + allDMMessages.filter(m => m.sender_id === f.friend_id && hasReceiver(m, currentUser?.id) && !m.is_read).length;
   }, 0);
   const totalUnreadGroups = myPlans.reduce((acc, plan) => {
-    return acc + allGroupMessages.filter(m => m.plan_id === plan.id && m.sender_id !== currentUser?.id && !m.is_read).length;
+    const lastVisited = getGroupLastVisited(plan.id);
+    return acc + allGroupMessages.filter(m =>
+      m.plan_id === plan.id &&
+      m.sender_id !== currentUser?.id &&
+      new Date(m.created_date) > new Date(lastVisited)
+    ).length;
   }, 0);
 
   return (
@@ -409,12 +423,19 @@ export default function Chat() {
             myPlans.map((plan, idx) => {
               const planMsgs = allGroupMessages.filter(m => m.plan_id === plan.id).sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
               const lastGroupMsg = planMsgs[0];
-              const groupUnread = planMsgs.filter(m => m.sender_id !== currentUser?.id && !m.is_read).length;
+              const lastVisited = getGroupLastVisited(plan.id);
+              const groupUnread = planMsgs.filter(m =>
+                m.sender_id !== currentUser?.id &&
+                new Date(m.created_date) > new Date(lastVisited)
+              ).length;
               const color = plan.theme_color || '#00c6d2';
               return (
                 <motion.button key={plan.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.04 }} whileTap={{ scale: 0.97 }}
-                  onClick={() => navigate(createPageUrl('GroupChat') + `?planId=${plan.id}`)}
+                  onClick={() => {
+                    try { localStorage.setItem(`chat_visited_${plan.id}`, new Date().toISOString()); } catch {}
+                    navigate(createPageUrl('GroupChat') + `?planId=${plan.id}`);
+                  }}
                   className="w-full rounded-2xl overflow-hidden text-left"
                   style={{ background: 'linear-gradient(135deg, #111 0%, #181818 100%)', border: `1px solid ${color}25` }}>
                   <div className="flex items-center gap-3 p-3.5" style={{ background: 'var(--bg-secondary)' }}>
@@ -479,7 +500,17 @@ export default function Chat() {
               return (
                 <motion.button key={f.id} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.04 }} whileTap={{ scale: 0.97 }}
-                  onClick={() => setSelectedFriendId(f.friend_id)}
+                  onClick={() => {
+                    // Optimistically mark DMs as read immediately in local cache
+                    queryClient.setQueryData(['allDMMessages', currentUser?.id], (old = []) =>
+                      old.map(m =>
+                        (m.sender_id === f.friend_id && hasReceiver(m, currentUser?.id) && !m.is_read)
+                          ? { ...m, is_read: true }
+                          : m
+                      )
+                    );
+                    setSelectedFriendId(f.friend_id);
+                  }}
                   className="w-full text-left flex items-center gap-3.5 px-2 py-3 rounded-2xl active:bg-white/5 transition-colors">
                   <div className="relative flex-shrink-0">
                     <div className={`w-[58px] h-[58px] rounded-full overflow-hidden ${unreadCount > 0 ? 'ring-2 ring-[#00c6d2] ring-offset-2 ring-offset-[#0b0b0b]' : ''}`}>
