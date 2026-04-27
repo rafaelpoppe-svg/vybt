@@ -81,10 +81,10 @@ export default function GroupChat() {
 
   const { data: messages = [], isLoading: messagesLoading } = useQuery({
     queryKey: ['groupMessages', planId],
-    queryFn: () => base44.entities.ChatMessage.filter({ plan_id: planId, message_type: 'group' }),
+    queryFn: () => base44.entities.ChatMessage.filter({ plan_id: planId }),
     enabled: !!planId,
     staleTime: 0,
-    refetchInterval: 5000,  // ← polling de 5s como fallback
+    refetchInterval: 5000,
     refetchIntervalInBackground: false,
   });
 
@@ -111,19 +111,20 @@ export default function GroupChat() {
   const friendProfiles = myFriendships.map(f => profilesMap[f.friend_id]).filter(Boolean);
 
   useEffect(() => {
-    if (!planId || !currentUser?.id) return;
+    if (!planId) return;
     const unsubscribe = base44.entities.ChatMessage.subscribe((event) => {
-      if (event.type === 'create' && event.data?.plan_id === planId) {
-        const { id } = event.data;
-        queryClient.setQueryData(['groupMessages', planId], (old = []) => {
-          const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
-          if (withoutOptimistic.some(m => m.id === id)) return old;
-          return [...withoutOptimistic, event.data];
-        });
-      }
+      if (event.type !== 'create') return;
+      const msg = event.data;
+      if (!msg || msg.plan_id !== planId) return;
+      queryClient.setQueryData(['groupMessages', planId], (old = []) => {
+        // Remove any optimistic placeholder then add real message (avoid duplicates)
+        const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
+        if (withoutOptimistic.some(m => m.id === msg.id)) return withoutOptimistic;
+        return [...withoutOptimistic, msg];
+      });
     });
     return () => unsubscribe();
-  }, [planId, currentUser?.id, queryClient]);
+  }, [planId, queryClient]);
 
   // Group chat messages don't support is_read updates (RLS only allows update by sender/receiver)
   // Read state for group chats is not tracked per-message
@@ -205,13 +206,15 @@ export default function GroupChat() {
       }
     },
     onSuccess: (realMsg) => {
-      if (realMsg) {
-        queryClient.setQueryData(['groupMessages', planId], (old = []) => {
-          const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
-          if (withoutOptimistic.some(m => m.id === realMsg.id)) return withoutOptimistic;
+      // The WebSocket subscribe handler already handles adding the real message.
+      // Just remove any remaining optimistic placeholders to avoid duplicates.
+      queryClient.setQueryData(['groupMessages', planId], (old = []) => {
+        const withoutOptimistic = old.filter(m => !m.id.startsWith('optimistic-'));
+        if (realMsg && !withoutOptimistic.some(m => m.id === realMsg.id)) {
           return [...withoutOptimistic, realMsg];
-        });
-      }
+        }
+        return withoutOptimistic;
+      });
     },
   });
 
