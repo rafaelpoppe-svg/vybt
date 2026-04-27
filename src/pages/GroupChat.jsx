@@ -126,8 +126,17 @@ export default function GroupChat() {
     return () => unsubscribe();
   }, [planId, queryClient]);
 
-  // Group chat messages don't support is_read updates (RLS only allows update by sender/receiver)
-  // Read state for group chats is not tracked per-message
+  // Mark group messages as read when user opens the chat
+  useEffect(() => {
+    if (!currentUser?.id || !planId || messages.length === 0) return;
+    const unread = messages.filter(m => m.sender_id !== currentUser.id && !m.is_read);
+    if (unread.length === 0) return;
+    unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }).catch(() => {}));
+    queryClient.setQueryData(['groupMessages', planId], (old = []) =>
+      old.map(m => (m.sender_id !== currentUser.id && !m.is_read) ? { ...m, is_read: true } : m)
+    );
+    queryClient.invalidateQueries({ queryKey: ['allGroupMessages', currentUser.id] });
+  }, [planId, currentUser?.id]); // eslint-disable-line
 
   const sortedMessages = [...messages].sort(
     (a, b) => new Date(a.created_date) - new Date(b.created_date)
@@ -452,7 +461,10 @@ export default function GroupChat() {
         hasVoted={hasVoted}
         isAdmin={isAdmin}
         themeColor={themeColor}
-        onBack={() => navigate(createPageUrl('Chat'))}
+        onBack={() => {
+          queryClient.invalidateQueries({ queryKey: ['allGroupMessages', currentUser?.id] });
+          navigate(createPageUrl('Chat'));
+        }}
         onInfo={() => navigate(createPageUrl('PlanDetails') + '?id=' + planId)}
         onAdminActions={() => setShowAdminActions(true)}
         onVote={() => setShowVotingModal(true)}

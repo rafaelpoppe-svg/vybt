@@ -50,7 +50,7 @@ export default function Chat() {
     queryKey: ['allGroupMessages', currentUser?.id],
     queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'group' }),
     enabled: !!currentUser?.id,
-    staleTime: 30 * 1000,
+    staleTime: 0,
     refetchOnWindowFocus: false,
   });
 
@@ -86,7 +86,7 @@ export default function Chat() {
     queryKey: ['allDMMessages', currentUser?.id],
     queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'direct' }),
     enabled: !!currentUser?.id,
-    staleTime: 30 * 1000,
+    staleTime: 0,
     refetchOnWindowFocus: false,
   });
 
@@ -217,7 +217,10 @@ export default function Chat() {
         {/* Header */}
         <header className="flex-shrink-0 backdrop-blur-xl border-b px-4 pb-3 flex items-center gap-3"
           style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)', position: 'relative', zIndex: 50, background: 'var(--header-bg)', borderColor: 'var(--border)' }}>
-          <motion.button whileTap={{ scale: 0.9 }} onClick={() => setSelectedFriendId(null)}
+          <motion.button whileTap={{ scale: 0.9 }} onClick={() => {
+              queryClient.invalidateQueries({ queryKey: ['allDMMessages', currentUser?.id] });
+              setSelectedFriendId(null);
+            }}
             className="w-11 h-11 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0"
             style={{ touchAction: 'manipulation' }}>
             <ChevronLeft className="w-5 h-5 text-white" />
