@@ -305,12 +305,8 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
   const canChat = !isStoryOwner && currentUser && story;
 
   useEffect(() => {
-    if (story && currentUser && !story.viewed_by?.includes(currentUser.id)) {
-      const viewedBy = story.viewed_by || [];
-      base44.entities.ExperienceStory.update(story.id, {
-        view_count: (story.view_count || 0) + 1,
-        viewed_by: [...viewedBy, currentUser.id]
-      });
+    if (story?.id && currentUser?.id && !story.viewed_by?.includes(currentUser.id)) {
+      base44.functions.invoke('trackStoryView', { story_id: story.id }).catch(() => {});
     }
   }, [story?.id, currentUser?.id]);
 
