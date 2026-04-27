@@ -289,7 +289,7 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
 
   const deleteMutation = useMutation({
     mutationFn: () => base44.entities.ExperienceStory.delete(story.id),
-    onSuccess: () => { queryClient.removeQueries(['allStories']); queryClient.invalidateQueries(['allStories']); onClose(); }
+    onSuccess: () => { queryClient.invalidateQueries(['allStories']); onClose(); }
   });
 
   const reportMutation = useMutation({
@@ -414,6 +414,8 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
   }, [currentStoryInGroupIndex, currentGroupIndex, groupedStories]);
 
   const goToGroupCube = useCallback((newGroupIndex, newStoryIndex, dir) => {
+    // Cancel any in-progress animation before starting a new one
+    cancelAnimationFrame(animFrameRef.current);
     setCubeDirection(dir);
     setIsDragging(true);
     setIsAnimating(true);
@@ -423,12 +425,12 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
     const startTime = performance.now();
     const duration = 280;
     const tick = (now) => {
-      const t = Math.min((now - startTime) / duration, 1);
-      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const elapsed = Math.min((now - startTime) / duration, 1);
+      const eased = elapsed < 0.5 ? 2 * elapsed * elapsed : -1 + (4 - 2 * elapsed) * elapsed;
       const val = target * eased;
       dragProgressRef.current = val;
       setDragProgress(val);
-      if (t < 1) {
+      if (elapsed < 1) {
         animFrameRef.current = requestAnimationFrame(tick);
       } else {
         dragProgressRef.current = 0;
@@ -444,8 +446,10 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
   }, []);
 
   const handleNext = () => {
+    if (isAnimating) return;
     if (progressBarRef.current) { progressBarRef.current.style.transition = 'none'; progressBarRef.current.style.width = '100%'; }
     clearTimeout(progressTimerRef.current);
+    cancelAnimationFrame(progressRafRef.current);
     if (groupedStories.length > 0) {
       const group = groupedStories[currentGroupIndex];
       if (currentStoryInGroupIndex < group.stories.length - 1) {
@@ -463,8 +467,10 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
   };
 
   const handlePrevious = () => {
+    if (isAnimating) return;
     if (progressBarRef.current) { progressBarRef.current.style.transition = 'none'; progressBarRef.current.style.width = '0%'; }
     clearTimeout(progressTimerRef.current);
+    cancelAnimationFrame(progressRafRef.current);
     if (groupedStories.length > 0) {
       if (currentStoryInGroupIndex > 0) {
         setCurrentStoryInGroupIndex(currentStoryInGroupIndex - 1);
@@ -472,8 +478,8 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
         const prevGroup = groupedStories[currentGroupIndex - 1];
         goToGroupCube(currentGroupIndex - 1, prevGroup.stories.length - 1, -1);
       } else {
-        goToGroupCube(currentGroupIndex, 0, -1);
-        setTimeout(() => onClose(), 300);
+        // Already at first story of first group — close without animation to avoid RAF loop
+        onClose();
       }
     } else if (currentStoryIndex > 0) {
       setCurrentStoryIndex(currentStoryIndex - 1);
@@ -527,12 +533,20 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
     return t.timeAgoNow;
   };
 
-  if (isLoading || !story) {
+  // Only show global loader on initial load — not on every story change.
+  // If we already have a story in state, keep showing it even if queries are refetching.
+  if (isLoading && !story) {
     return (
       <div className="fixed inset-0 flex items-center justify-center z-50" style={{ color: 'white' }}>
         <Loader2 className="w-8 h-8 text-[#00c6d2] animate-spin" />
       </div>
     );
+  }
+
+  // Nothing to show at all — close gracefully
+  if (!story) {
+    onClose();
+    return null;
   }
 
   const prevGroup = currentGroupIndex > 0 ? groupedStories[currentGroupIndex - 1] : null;
@@ -723,8 +737,8 @@ export default function StoryViewContent({ initialStoryId, onClose, scope = null
                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    <motion.button whileTap={{ scale: 0.9 }} onClick={() => { queryClient.removeQueries(['allStories']); onClose(); }}
-                      className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
+                    <motion.button whileTap={{ scale: 0.9 }} onClick={() => onClose()}
+                                     className="p-2 rounded-full bg-black/50 backdrop-blur-sm">
                       <X className="w-6 h-6" style={{ color: 'white' }}/>
                     </motion.button>
                   </div>

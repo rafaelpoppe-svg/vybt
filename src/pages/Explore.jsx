@@ -73,25 +73,29 @@ export default function Explore() {
   const { data: friendships = [] } = useQuery({
     queryKey: ['myFriendshipsExplore', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id, status: 'accepted' }),
-    enabled: !!currentUser?.id
+    enabled: !!currentUser?.id,
+    staleTime: 5 * 60 * 1000,
   });
 
   const { data: receivedFriendRequests = [], refetch: refetchRequests } = useQuery({
     queryKey: ['receivedFriendRequestsExplore', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ friend_id: currentUser?.id, status: 'pending' }),
-    enabled: !!currentUser?.id
+    enabled: !!currentUser?.id,
+    staleTime: 60 * 1000,
   });
 
   const { data: myParticipations = [] } = useQuery({
     queryKey: ['myParticipationsExplore', currentUser?.id],
     queryFn: () => base44.entities.PlanParticipant.filter({ user_id: currentUser?.id }),
-    enabled: !!currentUser?.id
+    enabled: !!currentUser?.id,
+    staleTime: 2 * 60 * 1000,
   });
 
   const { data: sentFriendRequests = [] } = useQuery({
     queryKey: ['sentFriendRequests', currentUser?.id],
     queryFn: () => base44.entities.Friendship.filter({ user_id: currentUser?.id }),
-    enabled: !!currentUser?.id
+    enabled: !!currentUser?.id,
+    staleTime: 2 * 60 * 1000,
   });
 
   const profilesMap = userProfiles.reduce((acc, p) => {
@@ -207,7 +211,16 @@ export default function Explore() {
     });
   }
 
-  const handleRefresh = async () => { await queryClient.invalidateQueries(); };
+  const handleRefresh = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['allPlans'] }),
+      queryClient.invalidateQueries({ queryKey: ['allCommunities'] }),
+      queryClient.invalidateQueries({ queryKey: ['userProfiles'] }),
+      queryClient.invalidateQueries({ queryKey: ['allParticipants'] }),
+      queryClient.invalidateQueries({ queryKey: ['myFriendshipsExplore', currentUser?.id] }),
+      queryClient.invalidateQueries({ queryKey: ['receivedFriendRequestsExplore', currentUser?.id] }),
+    ]);
+  };
 
   const acceptMutation = useMutation({
     mutationFn: (friendshipId) => base44.entities.Friendship.update(friendshipId, { status: 'accepted' }),

@@ -41,18 +41,7 @@
     "create": {
       "data.sender_id": "{{user.id}}"
     },
-    "read": {
-      "$or": [
-        {
-          "data.sender_id": "{{user.id}}"
-        },
-        {
-          "data.receiver_id": {
-            "$contains": "{{user.id}}"
-          }
-        }
-      ]
-    },
+    "read": {},
     "update": {
       "$or": [
         {
