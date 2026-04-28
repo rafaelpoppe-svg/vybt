@@ -188,12 +188,9 @@ export default function Home() {
   const visiblePlans = useMemo(() => plans.filter(plan => {
     const isMember = myParticipations.some(p => p.plan_id === plan.id);
     if (plan.status === 'terminated' || plan.status === 'ended' || plan.status === 'voting' || plan.status === "renewed") return isMember;
-    // Client-side: if happening but past end time, hide from non-members (backend may not have updated yet)
-    if (plan.status === 'happening' && plan.date) {
-      const endDateTime = plan.end_time
-        ? new Date(`${plan.date}T${plan.end_time}:00`)
-        : new Date(new Date(`${plan.date}T${plan.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
-      if (new Date() > endDateTime) return isMember;
+    // Client-side: if happening but past end_time, hide from non-members
+    if (plan.status === 'happening' && plan.date && plan.end_time) {
+      if (new Date() > new Date(`${plan.date}T${plan.end_time}:00`)) return isMember;
     }
     return true;
   }), [plans, myParticipations]);
@@ -237,12 +234,9 @@ export default function Home() {
   const myPlanIds = myParticipations.map(p => p.plan_id);
   const happeningPlan = visiblePlans.find(p => {
     if (!myPlanIds.includes(p.id) || p.status !== 'happening') return false;
-    // Check end_time client-side
-    if (p.date) {
-      const endDateTime = p.end_time
-        ? new Date(`${p.date}T${p.end_time}:00`)
-        : new Date(new Date(`${p.date}T${p.time || '23:59'}:00`).getTime() + 8 * 60 * 60 * 1000);
-      if (new Date() > endDateTime) return false;
+    // Only hide if end_time has clearly passed
+    if (p.date && p.end_time) {
+      if (new Date() > new Date(`${p.date}T${p.end_time}:00`)) return false;
     }
     return true;
   }) || null;

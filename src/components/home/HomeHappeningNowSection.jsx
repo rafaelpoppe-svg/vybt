@@ -8,15 +8,14 @@ export default function HomeHappeningNowSection({ plans = [], allParticipants = 
 
   const now = new Date();
   const happeningPlans = plans.filter(p => {
-    if (!p.date || !p.time) return false;
-    if (['ended', 'terminated', 'voting'].includes(p.status)) return false;
-    const startDateTime = new Date(`${p.date}T${p.time}:00`);
-    const endDateTime = p.end_time
-      ? new Date(`${p.date}T${p.end_time}:00`)
-      : new Date(startDateTime.getTime() + 8 * 60 * 60 * 1000);
-    if (!(now >= startDateTime && now <= endDateTime)) return false;
-    const goingCount = allParticipants.filter(pp => pp.plan_id === p.id).length;
-    return goingCount >= 3;
+    // Trust the DB status as source of truth
+    if (p.status !== 'happening') return false;
+    // But still hide if end time has clearly passed
+    if (p.date && p.end_time) {
+      const endDateTime = new Date(`${p.date}T${p.end_time}:00`);
+      if (now > endDateTime) return false;
+    }
+    return true;
   });
 
   if (happeningPlans.length === 0) return null;

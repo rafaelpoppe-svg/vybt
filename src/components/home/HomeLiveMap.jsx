@@ -58,7 +58,10 @@ const TAG_EMOJI = {
 };
 
 function isPlanActuallyLive(plan) {
+  // Trust the DB status as source of truth
+  if (plan.status === 'happening') return true;
   if (['ended', 'terminated', 'voting'].includes(plan.status)) return false;
+  // Fallback for plans where status hasn't been updated yet by the cron
   if (!plan.date || !plan.time) return false;
   const now = new Date();
   const start = new Date(`${plan.date}T${plan.time}:00`);
