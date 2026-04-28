@@ -7,8 +7,11 @@ import { format } from 'date-fns';
 import { useLanguage } from '../common/LanguageContext';
 
 const isLiveNow = (p) => {
-  if (!p.date || !p.time) return false;
+  // Trust the DB status as source of truth
+  if (p.status === 'happening') return true;
   if (['ended', 'terminated', 'voting'].includes(p.status)) return false;
+  // Fallback for plans not yet updated by cron
+  if (!p.date || !p.time) return false;
   const now = new Date();
   const start = new Date(`${p.date}T${p.time}:00`);
   const end = p.end_time

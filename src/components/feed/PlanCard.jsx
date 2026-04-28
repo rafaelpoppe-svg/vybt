@@ -8,8 +8,28 @@ function useLiveCountdown(plan) {
   const [state, setState] = useState({ isLive: false, timeLeft: null });
   useEffect(() => {
     const calc = () => {
-      if (!plan.date || !plan.time) { setState({ isLive: false, timeLeft: null }); return; }
       if (['ended', 'terminated', 'voting'].includes(plan.status)) { setState({ isLive: false, timeLeft: null }); return; }
+      // Trust DB status as source of truth
+      if (plan.status === 'happening') {
+        // Calculate countdown from end_time if available
+        if (plan.date && plan.end_time) {
+          const end = new Date(`${plan.date}T${plan.end_time}:00`);
+          const diff = end - new Date();
+          if (diff > 0) {
+            const h = Math.floor(diff / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            const timeLeft = h > 0 ? `${h}h ${m}m` : m > 0 ? `${m}m ${s}s` : `${s}s`;
+            setState({ isLive: true, timeLeft });
+          } else {
+            setState({ isLive: true, timeLeft: null });
+          }
+        } else {
+          setState({ isLive: true, timeLeft: null });
+        }
+        return;
+      }
+      if (!plan.date || !plan.time) { setState({ isLive: false, timeLeft: null }); return; }
       const now = new Date();
       const start = new Date(`${plan.date}T${plan.time}:00`);
       const end = plan.end_time
