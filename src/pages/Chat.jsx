@@ -10,12 +10,14 @@ import ChatMessage from '../components/chat/ChatMessage';
 import StickerPicker from '../components/chat/StickerPicker';
 import PartyTag from '../components/common/PartyTag';
 import { notifyNewDirectMessage } from '../components/notifications/NotificationTriggers';
+import { useNotifications } from '../components/notifications/NotificationProvider';
 import { useLanguage } from '../components/common/LanguageContext';
 
 export default function Chat() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { t, language } = useLanguage();
+  const { resetDMCountForFriend } = useNotifications();
   const urlParams = new URLSearchParams(window.location.search);
   const directUserId = urlParams.get('userId');
   const groupPlanId = urlParams.get('planId');
@@ -125,7 +127,7 @@ export default function Chat() {
     // Only persist to DB if not already done this session
     if (!readFriendIdsRef.current.has(selectedFriendId)) {
       readFriendIdsRef.current.add(selectedFriendId);
-      // Fetch fresh unread from DB and mark them
+      // Fetch fresh unread from DB and mark them, then refresh nav badge
       base44.entities.ChatMessage.filter({ message_type: 'direct' }).then(msgs => {
         const unread = msgs.filter(m =>
           m.sender_id === selectedFriendId &&
@@ -133,6 +135,8 @@ export default function Chat() {
           !m.is_read
         );
         unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }).catch(() => {}));
+        // Refresh the navbar badge count
+        if (unread.length > 0) resetDMCountForFriend(selectedFriendId);
       }).catch(() => {});
     }
   }, [selectedFriendId, currentUser?.id]); // intentionally omit allDMMessages to avoid loop
@@ -234,7 +238,6 @@ export default function Chat() {
         <header className="flex-shrink-0 backdrop-blur-xl border-b px-4 pb-3 flex items-center gap-3"
           style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)', position: 'relative', zIndex: 50, background: 'var(--header-bg)', borderColor: 'var(--border)' }}>
           <motion.button whileTap={{ scale: 0.9 }} onClick={() => {
-              // Ensure read state stays in cache when going back
               queryClient.setQueryData(['allDMMessages', currentUser?.id], (old = []) =>
                 old.map(m =>
                   (m.sender_id === selectedFriendId && hasReceiver(m, currentUser?.id) && !m.is_read)
@@ -242,6 +245,7 @@ export default function Chat() {
                     : m
                 )
               );
+              resetDMCountForFriend(selectedFriendId);
               setSelectedFriendId(null);
             }}
             className="w-11 h-11 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0"

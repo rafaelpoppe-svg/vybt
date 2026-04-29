@@ -132,16 +132,20 @@ export function NotificationProvider({ children }) {
   // Real-time DM unread count
   useEffect(() => {
     if (!currentUser?.id) return;
+    const hasReceiver = (msg) => Array.isArray(msg.receiver_id)
+      ? msg.receiver_id.includes(currentUser.id)
+      : msg.receiver_id === currentUser.id;
+
     const unsub = base44.entities.ChatMessage.subscribe((event) => {
       const msg = event.data;
       if (!msg || msg.message_type !== 'direct') return;
-      if (event.type === 'create' && msg.receiver_id === currentUser.id && !msg.is_read) {
+      if (event.type === 'create' && hasReceiver(msg) && !msg.is_read) {
         setUnreadDMCount(prev => prev + 1);
       }
-      if (event.type === 'update' && msg.receiver_id === currentUser.id && msg.is_read) {
+      if (event.type === 'update' && hasReceiver(msg) && msg.is_read) {
         setUnreadDMCount(prev => Math.max(0, prev - 1));
       }
-      if (event.type === 'delete' && msg.receiver_id === currentUser.id && !msg.is_read) {
+      if (event.type === 'delete' && hasReceiver(msg) && !msg.is_read) {
         setUnreadDMCount(prev => Math.max(0, prev - 1));
       }
     });
@@ -181,8 +185,21 @@ export function NotificationProvider({ children }) {
     queryClient.invalidateQueries(['notifications', currentUser.id]);
   };
 
+  const resetDMCountForFriend = async (friendId) => {
+    if (!currentUser?.id) return;
+    // Re-fetch real count from DB and update
+    try {
+      const msgs = await base44.entities.ChatMessage.filter({ message_type: 'direct', is_read: false });
+      const count = msgs.filter(m => {
+        const rx = Array.isArray(m.receiver_id) ? m.receiver_id : [m.receiver_id];
+        return rx.includes(currentUser.id);
+      }).length;
+      setUnreadDMCount(count);
+    } catch {}
+  };
+
   return (
-    <NotificationContext.Provider value={{ unreadCount, unreadDMCount, markAllAsRead }}>
+    <NotificationContext.Provider value={{ unreadCount, unreadDMCount, markAllAsRead, resetDMCountForFriend }}>
       {children}
     </NotificationContext.Provider>
   );
