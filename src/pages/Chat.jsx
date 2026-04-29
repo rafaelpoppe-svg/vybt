@@ -86,7 +86,7 @@ export default function Chat() {
     queryKey: ['allDMMessages', currentUser?.id],
     queryFn: () => base44.entities.ChatMessage.filter({ message_type: 'direct' }),
     enabled: !!currentUser?.id,
-    staleTime: 0,
+    staleTime: 30 * 1000,
     refetchOnWindowFocus: false,
   });
 
@@ -107,16 +107,13 @@ export default function Chat() {
     )
     .sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
 
+  // Track which friend IDs have been read this session
+  const readFriendIdsRef = useRef(new Set());
+
   useEffect(() => {
     if (!selectedFriendId || !currentUser?.id) return;
-    const unread = allDMMessages.filter(m =>
-      m.message_type === 'direct' &&
-      m.sender_id === selectedFriendId &&
-      hasReceiver(m, currentUser.id) &&
-      !m.is_read
-    );
-    if (unread.length === 0) return;
-    // Optimistically update local cache immediately so UI reflects read state
+
+    // Mark as read in local cache immediately (idempotent)
     queryClient.setQueryData(['allDMMessages', currentUser.id], (old = []) =>
       old.map(m =>
         (m.sender_id === selectedFriendId && hasReceiver(m, currentUser.id) && !m.is_read)
@@ -124,8 +121,20 @@ export default function Chat() {
           : m
       )
     );
-    // Persist to DB in background
-    unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }).catch(() => {}));
+
+    // Only persist to DB if not already done this session
+    if (!readFriendIdsRef.current.has(selectedFriendId)) {
+      readFriendIdsRef.current.add(selectedFriendId);
+      // Fetch fresh unread from DB and mark them
+      base44.entities.ChatMessage.filter({ message_type: 'direct' }).then(msgs => {
+        const unread = msgs.filter(m =>
+          m.sender_id === selectedFriendId &&
+          hasReceiver(m, currentUser.id) &&
+          !m.is_read
+        );
+        unread.forEach(m => base44.entities.ChatMessage.update(m.id, { is_read: true }).catch(() => {}));
+      }).catch(() => {});
+    }
   }, [selectedFriendId, currentUser?.id]); // intentionally omit allDMMessages to avoid loop
 
   useEffect(() => {
@@ -224,7 +233,17 @@ export default function Chat() {
         {/* Header */}
         <header className="flex-shrink-0 backdrop-blur-xl border-b px-4 pb-3 flex items-center gap-3"
           style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)', position: 'relative', zIndex: 50, background: 'var(--header-bg)', borderColor: 'var(--border)' }}>
-          <motion.button whileTap={{ scale: 0.9 }} onClick={() => setSelectedFriendId(null)}
+          <motion.button whileTap={{ scale: 0.9 }} onClick={() => {
+              // Ensure read state stays in cache when going back
+              queryClient.setQueryData(['allDMMessages', currentUser?.id], (old = []) =>
+                old.map(m =>
+                  (m.sender_id === selectedFriendId && hasReceiver(m, currentUser?.id) && !m.is_read)
+                    ? { ...m, is_read: true }
+                    : m
+                )
+              );
+              setSelectedFriendId(null);
+            }}
             className="w-11 h-11 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0"
             style={{ touchAction: 'manipulation' }}>
             <ChevronLeft className="w-5 h-5 text-white" />
